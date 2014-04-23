@@ -1,5 +1,5 @@
 /*
-Name: specctrUI.js
+File-Name: specctrUI.js
 Description: Includes all the methods related to UI component like change event handlers, click event handlers etc. 
 */
 
@@ -11,7 +11,7 @@ function tab_clickHandler()
 {
     var current = this.parentNode.getAttribute("data-current");
     
-    //remove class of active tab header and hide old contents
+    //Remove class of active tab header and hide old contents
     document.getElementById("tabHeader_" + current).removeAttribute("class");
     document.getElementById("tabpage_" + current).style.display = "none";
 
@@ -212,37 +212,5 @@ function canvasExpandSize_changeHandler()
 function canvasExpandSize_changeHandler()
 {
 	model.canvasExpandSize = Number(document.getElementById("canvasExpandSize").value);
-}
-
-/**
- * FunctionName	: mainTab_creationCompleteHandler()
- * Description	: Set the canvas expand text value.
- * */
-function mainTab_creationCompleteHandler()
-{
-	document.getElementById("canvasExpandSize").value = model.canvasExpandSize;
-}
-
-/**
- * FunctionName	: settings_creationCompleteHandler()
- * Description	: Set the values of the objects(check boxes in setting tab) from model.
- * */
-function settings_creationCompleteHandler()
-{
-	//load settings from model
-	document.getElementById("shapeFill").checked			= model.shapeFill;
-	document.getElementById("shapeStroke").checked			= model.shapeStroke;
-	document.getElementById("shapeAlpha").checked			= model.shapeAlpha;
-	document.getElementById("shapeEffects").checked			= model.shapeEffects;
-	document.getElementById("shapeBorderRadius").checked	= model.shapeBorderRadius;
-	document.getElementById("textFont").checked				= model.textFont;
-	document.getElementById("textSize").checked				= model.textSize;
-	document.getElementById("textColor").checked			= model.textColor;
-	document.getElementById("textStyle").checked			= model.textStyle;
-	document.getElementById("textAlignment").checked		= model.textAlignment;
-	document.getElementById("textLeading").checked			= model.textLeading;
-	document.getElementById("textTracking").checked			= model.textTracking;
-	document.getElementById("textAlpha").checked			= model.textAlpha;
-	document.getElementById("textEffects").checked			= model.textEffects;
 }
 

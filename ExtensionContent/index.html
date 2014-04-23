@@ -1,13 +1,15 @@
 <!doctype html>
 
+<!-- 
+* FileName:		index.html
+* Description:	It contains all the UI code of the main panel window.
+-->
+
 <html>
 <head>
 <meta charset="utf-8">
 <script src="./lib/CSInterface-4.0.0.js"></script>
-<script src="./lib/CEPEngine_extensions.js"></script>
-<script src="./lib/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
-<script src="./lib/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
-<script src="./lib/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.js">"></script>
+<script src="./lib/jquery-1.9.1.js"></script>
 <script src="./ext.js"></script>
 <script src="./specctrUI.js"></script>
 <script src="./appModel.js"></script>
@@ -188,7 +190,66 @@
 
             <!-- Starting of responsive tab. -->
             <div id="tabpage_3" class="tabpage">
-
+            
+            	<div class="tabPage2Header">
+                    RESPONSIVE OPTIONS
+                </div>
+                
+                <span class="boldText tabPage2SubHeader">Distance/Spacing</span>
+                
+                <div class="tabPageContentSubHeaderRow">
+                    <input type="checkbox" value="1" id="chkDistanceSpec" />
+                    <label for="chkDistanceSpec">
+                        Spec Distance by %</label>
+                </div>
+                
+                <div class="tabPageContentRow">
+                    <div class="tabPageContentLeft">
+                        <label>100% Width:</label>
+                    </div>
+                    <div class="tabPageContentRight">
+                        <input type="text" class="inputStyle" id="txtWidth" />px
+                    </div>
+                </div>
+                
+                <div class="tabPageContentRow">
+                    <div class="tabPageContentLeft">
+                        100% Height:
+                    </div>
+                    <div class="tabPageContentRight">
+                        <input type="text" class="inputStyle" id="txtHeight" />px
+                    </div>
+                </div>
+                
+                <div class="tabPageContentSubHeaderRow"></div>
+                
+                <span class="boldText tabPage2SubHeader">Base Typography</span><br />
+                
+                <div class="tabPageContentSubHeaderRow">
+                    <input type="checkbox" value="1" id="chkEmSpec" />
+                    <label for="chkEmSpec">
+                        Spec in em</label>
+                </div>
+                
+                <div class="tabPageContentRow">
+                    <div class="tabPageContentLeft">
+                        Base font size:<br />
+                    </div>
+                    <div class="tabPageContentRight">
+                        <input type="text" class="inputStyle" id="txtFontSize" />
+                        px<br />
+                    </div>
+                </div>
+                
+                <div class="tabPageContentRow">
+                    <div class="tabPageContentLeft">
+                        Base line height:
+                    </div>
+                    <div class="tabPageContentRight">
+                        <input type="text" class="inputStyle" id="txtBaseLineHeight" />px
+                    </div>
+                </div>
+                
             </div>
             <!-- Ending of responsive tab. -->
             

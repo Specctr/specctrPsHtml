@@ -1,19 +1,128 @@
+/*
+File-Name: ext.js
+Description: This file is used to communicate between extend script file and html file. It also include function to execute when panel loads
+and reading and writing preferences methods.  
+*/
+
 /**
- * Update the theme with the AppSkinInfo retrieved from the host product.
- */
-function onLoaded() 
+ * FunctionName	: mainTab_creationCompleteHandler()
+ * Description	: Set the canvas expand text value.
+ * */
+function mainTab_creationCompleteHandler()
 {
-	var csInterface = new CSInterface();
-	loadJSX();
-    updateThemeWithAppSkinInfo(csInterface.hostEnvironment.appSkinInfo);
-    
-    // Update the color of the panel when the theme color of the product changed.
-    csInterface.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, onAppThemeColorChanged);
+	document.getElementById("canvasExpandSize").value = model.canvasExpandSize;
 }
 
 /**
- * Update the theme with the AppSkinInfo retrieved from the host product.
- */
+ * FunctionName	: settings_creationCompleteHandler()
+ * Description	: Set the values of the objects(check boxes in setting tab) from model.
+ * */
+function settings_creationCompleteHandler()
+{
+	try
+	{
+		//Load settings from model
+		document.getElementById("shapeFill").checked			= model.shapeFill;
+		document.getElementById("shapeStroke").checked			= model.shapeStroke;
+		document.getElementById("shapeAlpha").checked			= model.shapeAlpha;
+		document.getElementById("shapeEffects").checked			= model.shapeEffects;
+		document.getElementById("shapeBorderRadius").checked	= model.shapeBorderRadius;
+		document.getElementById("textFont").checked				= model.textFont;
+		document.getElementById("textSize").checked				= model.textSize;
+		document.getElementById("textColor").checked			= model.textColor;
+		document.getElementById("textStyle").checked			= model.textStyle;
+		document.getElementById("textAlignment").checked		= model.textAlignment;
+		document.getElementById("textLeading").checked			= model.textLeading;
+		document.getElementById("textTracking").checked			= model.textTracking;
+		document.getElementById("textAlpha").checked			= model.textAlpha;
+		document.getElementById("textEffects").checked			= model.textEffects;
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: responsiveTab_creationCompleteHandler()
+ * Description	: Set the values of the objects(check boxes in responsive tab) from model and enable/disable the text boxes.
+ * */
+function responsiveTab_creationCompleteHandler()
+{
+	//For spec in distance.
+//	document.getElementById("chkDistanceSpec").checked	= model.specInPrcntg;
+//	if(!model.specInPrcntg)
+//	{
+//		document.getElementById("txtWidth").classList.add("disableTextStyle");
+//	}
+//	//document.getElementById("txtWidth").disabled 		= !model.specInPrcntg;
+//	document.getElementById("txtHeight").disabled		= !model.specInPrcntg;
+//	
+//	//For spec in EM.
+//	document.getElementById("chkEmSpec").checked			= model.specInEM;
+//	document.getElementById("txtFontSize").disabled 		= !model.specInEM;
+//	document.getElementById("txtBaseLineHeight").disabled 	= !model.specInEM;
+}
+
+/**
+ * FunctionName	: updateThemeWithAppSkinInfo()
+ * Description	: Update the theme with the AppSkinInfo retrieved from the host product.
+ * */
+function onLoaded() 
+{
+	try
+	{
+		var csInterface = new CSInterface();
+		loadJSX();
+	    updateThemeWithAppSkinInfo(csInterface.hostEnvironment.appSkinInfo);
+	    
+	    //Update the color of the panel when the theme color of the product changed.
+	    csInterface.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, onAppThemeColorChanged);
+	    
+	    //Get tab container
+	    var container = document.getElementById("tabContainer");
+	    
+	    //Set current tab
+	    var navitem = container.querySelector(".tabs ul li");
+	    
+	    //Store which tab we are on
+	    var ident = navitem.id.split("_")[1];
+	    navitem.parentNode.setAttribute("data-current", ident);
+	    
+	    //Set Current Tab with proper Image
+	    changeImagesOfTabs(parseInt(ident));
+	    
+	    //Set current tab with class of active tab header
+	    navitem.setAttribute("class", "tabActiveHeader");
+	
+	    //Hide two tab contents we don't need
+	    var pages = container.querySelectorAll(".tabpage");
+	    for(var i = 1; i < pages.length; i++) 
+	    {
+	        pages[i].style.display = "none";
+	    }
+	
+	    //Register click events to tabs.
+	    var tabs = container.querySelectorAll(".tabs ul li");
+	    for(var i = 0; i < tabs.length; i++) 
+	    {
+	        tabs[i].onclick = tab_clickHandler;
+	    }
+	    
+	    mainTab_creationCompleteHandler();
+	    settings_creationCompleteHandler();
+	    responsiveTab_creationCompleteHandler();
+    }
+	catch(e)
+	{
+		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: updateThemeWithAppSkinInfo()
+ * Description	: Update the theme with the AppSkinInfo retrieved from the host product.
+ * */
 function updateThemeWithAppSkinInfo(appSkinInfo) 
 {
 	//Update the background color of the panel
@@ -76,6 +185,10 @@ function updateThemeWithAppSkinInfo(appSkinInfo)
     addRule(styleId, "input[type=text]:focus", "color: #000000;");
 }
 
+/**
+ * FunctionName	: addRule()
+ * Description	: Apply style to the UI component passed.
+ * */
 function addRule(stylesheetId, selector, rule) 
 {
     var stylesheet = document.getElementById(stylesheetId);
@@ -91,15 +204,19 @@ function addRule(stylesheetId, selector, rule)
 	}
 }
 
-
+/**
+ * FunctionName	: reverseColor()
+ * Description	: Reverse the value of given color.
+ * */
 function reverseColor(color, delta) 
 {
 	return toHex({red:Math.abs(255-color.red), green:Math.abs(255-color.green), blue:Math.abs(255-color.blue)}, delta);
 }
 
 /**
- * Convert the Color object to string in hexadecimal format;
- */
+ * FunctionName	: toHex()
+ * Description	: Convert the Color object to string in hexadecimal format.
+ * */
 function toHex(color, delta) 
 {
     function computeValue(value, delta) 
@@ -129,6 +246,10 @@ function toHex(color, delta)
     return "#" + hex;
 }
 
+/**
+ * FunctionName	: onAppThemeColorChanged()
+ * Description	: This function is called when host application theme changes.
+ * */
 function onAppThemeColorChanged(event) 
 {
     // Should get a latest HostEnvironment object from application.
@@ -139,9 +260,9 @@ function onAppThemeColorChanged(event)
 } 
 
 /**
- * Load JSX file into the scripting context of the product. All the jsx files in 
- * folder [ExtensionRoot]/jsx will be loaded. 
- */
+ * FunctionName	: loadJSX()
+ * Description	: Load JSX file into the scripting context of the product. All the jsx files in folder [ExtensionRoot]/jsx will be loaded.
+ * */
 function loadJSX() 
 {
     var csInterface = new CSInterface();
@@ -149,6 +270,10 @@ function loadJSX()
     csInterface.evalScript('$._ext.evalFiles("' + extensionRoot + '")');
 }
 
+/**
+ * FunctionName	: evalScript()
+ * Description	: Evaluates the scripting method.
+ * */
 function evalScript(script, callback) 
 {
     new CSInterface().evalScript(script, callback);
@@ -181,6 +306,96 @@ function expandCanvas()
 	{
 		setModel();
 		var extScript = "ext_expandCanvas()";
+		evalScript(extScript);
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: createDimensionSpecs()
+ * Description	: Call the 'createDimensionSpecsForItem' method from ./jsx/specctr.jsx.
+ * */
+function createDimensionSpecs()
+{
+	try
+	{
+		setModel();
+		var extScript = "ext_createDimensionSpecs()";
+		evalScript(extScript);
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: createSpacingSpecs()
+ * Description	: Call the 'createSpacingSpecs' method from ./jsx/specctr.jsx.
+ * */
+function createSpacingSpecs()
+{
+	try
+	{
+		setModel();
+		var extScript = "ext_createSpacingSpecs()";
+		evalScript(extScript);
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: createCoordinateSpecs()
+ * Description	: Call the 'createCoordinateSpecs' method from ./jsx/specctr.jsx.
+ * */
+function createCoordinateSpecs()
+{
+	try
+	{
+		setModel();
+		var extScript = "ext_createCoordinateSpecs()";
+		evalScript(extScript);
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: createPropertySpecs()
+ * Description	: Call the 'createPropertySpecsForItem' method from ./jsx/specctr.jsx.
+ * */
+function createPropertySpecs()
+{
+	try
+	{
+		setModel();
+		var extScript = "ext_createPropertySpecs()";
+		evalScript(extScript);
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: exportCss()
+ * Description	: Call the 'exportCss' method from ./jsx/specctr.jsx.
+ * */
+function exportCss()
+{
+	try
+	{
+		setModel();
+		var extScript = "ext_exportCss()";
 		evalScript(extScript);
 	}
 	catch(e)
