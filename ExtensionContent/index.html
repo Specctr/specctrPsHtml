@@ -124,29 +124,24 @@
                         Shape Object
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="1" id="shapeFill" />
-                        <label for="shapeFill">
-                            Fill</label>
+                        <input type="checkbox" value="1" id="shapeFill" onclick="shapeFill_changeHandler()"/>
+                        <label for="shapeFill">Fill</label>
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="2" id="shapeStroke" />
-                        <label for="shapeStroke">
-                            Stroke</label>
+                        <input type="checkbox" value="2" id="shapeStroke" onclick="shapeStroke_changeHandler()"/>
+                        <label for="shapeStroke">Stroke</label>
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="3" id="shapeAlpha" />
-                        <label for="shapeAlpha">
-                            Alpha</label>
+                        <input type="checkbox" value="3" id="shapeAlpha" onclick="shapeAlpha_changeHandler()"/>
+                        <label for="shapeAlpha">Alpha</label>
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="4" id="shapeEffects" />
-                        <label for="shapeEffects">
-                            Effects</label>
+                        <input type="checkbox" value="4" id="shapeEffects" onclick="shapeEffects_changeHandler()"/>
+                        <label for="shapeEffects">Effects</label>
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="5" id="shapeBorderRadius" />
-                        <label for="shapeBorderRadius">
-                            Border Radius</label>
+                        <input type="checkbox" value="5" id="shapeBorderRadius" onclick="shapeBorderRadius_changeHandler()"/>
+                        <label for="shapeBorderRadius">Border Radius</label>
                     </div>
                 </div>
                 <div class="floatRight">
@@ -154,35 +149,40 @@
                         Text Object
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="6" id="textFont" /><label for="textFont">Font
-                                                                                  Family</label>
+                        <input type="checkbox" value="6" id="textFont" onclick="textFont_changeHandler()"/>
+                        <label for="textFont">Font Family</label>
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="7" id="textSize" /><label for="textSize">Font Size</label>
+                        <input type="checkbox" value="7" id="textSize" onclick="textSize_changeHandler()"/>
+                        <label for="textSize">Font Size</label>
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="8" id="textColor" /><label for="textColor">Color</label>
+                        <input type="checkbox" value="8" id="textColor" onclick="textColor_changeHandler()"/>
+                        <label for="textColor">Color</label>
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="9" id="textStyle" /><label for="textStyle">Font
-                                                                                  Style</label>
+                        <input type="checkbox" value="9" id="textStyle" onclick="textStyle_changeHandler()"/>
+                        <label for="textStyle">Font Style</label>
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="10" id="textAlignment" /><label for="textAlignment">Text-Align</label>
+                        <input type="checkbox" value="10" id="textAlignment" onclick="textAlignment_changeHandler()"/>
+                        <label for="textAlignment">Text-Align</label>
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="11" id="textLeading" /><label for="textLeading">Line
-                                                                                   Height</label>
+                        <input type="checkbox" value="11" id="textLeading" onclick="textLeading_changeHandler()"/>
+                        <label for="textLeading">Line Height</label>
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="12" id="textTracking" /><label for=textTracking>Letter
-                                                                                      Spacing</label>
+                        <input type="checkbox" value="12" id="textTracking" onclick="textTracking_changeHandler()"/>
+                        <label for=textTracking>Letter Spacing</label>
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="13" id="textAlpha" /><label for="textAlpha">Alpha</label>
+                        <input type="checkbox" value="13" id="textAlpha" onclick="textAlpha_changeHandler()"/>
+                        <label for="textAlpha">Alpha</label>
                     </div>
                     <div class="tabPage2Content">
-                        <input type="checkbox" value="14" id="textEffects" /><label for="textEffects">Effects</label>
+                        <input type="checkbox" value="14" id="textEffects" onclick="textEffects_changeHandler()"/>
+                        <label for="textEffects">Effects</label>
                     </div>
                 </div>
             </div>
@@ -198,7 +198,7 @@
                 <span class="boldText tabPage2SubHeader">Distance/Spacing</span>
                 
                 <div class="tabPageContentSubHeaderRow">
-                    <input type="checkbox" value="1" id="chkDistanceSpec" />
+                    <input type="checkbox" value="1" id="chkDistanceSpec" onchange="chkDistanceSpec_changeHandler()"/>
                     <label for="chkDistanceSpec">
                         Spec Distance by %</label>
                 </div>
@@ -208,7 +208,7 @@
                         <label>100% Width:</label>
                     </div>
                     <div class="tabPageContentRight">
-                        <input type="text" class="inputStyle" id="txtWidth" />px
+                        <input type="text" class="inputStyle" id="txtWidth" onchange="txtWidth_changeHandler()" />px
                     </div>
                 </div>
                 
@@ -217,7 +217,7 @@
                         100% Height:
                     </div>
                     <div class="tabPageContentRight">
-                        <input type="text" class="inputStyle" id="txtHeight" />px
+                        <input type="text" class="inputStyle" id="txtHeight" onchange="txtHeight_changeHandler()"/>px
                     </div>
                 </div>
                 
@@ -226,7 +226,7 @@
                 <span class="boldText tabPage2SubHeader">Base Typography</span><br />
                 
                 <div class="tabPageContentSubHeaderRow">
-                    <input type="checkbox" value="1" id="chkEmSpec" />
+                    <input type="checkbox" value="1" id="chkEmSpec" onchange="chkEmSpec_changeHandler()"/>
                     <label for="chkEmSpec">
                         Spec in em</label>
                 </div>
@@ -236,7 +236,7 @@
                         Base font size:<br />
                     </div>
                     <div class="tabPageContentRight">
-                        <input type="text" class="inputStyle" id="txtFontSize" />
+                        <input type="text" class="inputStyle" id="txtFontSize" onchange="txtFontSize_changeHandler()"/>
                         px<br />
                     </div>
                 </div>
@@ -246,7 +246,7 @@
                         Base line height:
                     </div>
                     <div class="tabPageContentRight">
-                        <input type="text" class="inputStyle" id="txtBaseLineHeight" />px
+                        <input type="text" class="inputStyle" id="txtBaseLineHeight" onchange="txtBaseLineHeight_changeHandler()"/>px
                     </div>
                 </div>
                 

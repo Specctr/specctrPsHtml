@@ -9,22 +9,41 @@ Description: Includes all the methods related to UI component like change event 
  * */
 function tab_clickHandler() 
 {
-    var current = this.parentNode.getAttribute("data-current");
-    
-    //Remove class of active tab header and hide old contents
-    document.getElementById("tabHeader_" + current).removeAttribute("class");
-    document.getElementById("tabpage_" + current).style.display = "none";
-
-    var ident = this.id.split("_")[1];
-
-    //Set Image of Active Tab
-    changeImagesOfTabs(parseInt(ident));
-
-    //Set class of active tab
-    this.setAttribute("class", "tabActiveHeader");
-    
-    document.getElementById("tabpage_" + ident).style.display = "block";
-    this.parentNode.setAttribute("data-current", ident);
+	try
+	{
+		var ident = this.id.split("_")[1];
+	    var current = this.parentNode.getAttribute("data-current");
+	    
+	    //Remove class of active tab header and hide old contents
+	    var currentTabHeader = document.getElementById("tabHeader_" + current);
+	    var currentTabPage = document.getElementById("tabpage_" + current);
+	    
+	    if(currentTabHeader && currentTabPage && (ident >= '1' && ident <= '4'))
+    	{
+	    	currentTabHeader.removeAttribute("class");
+	    	currentTabPage.style.display = "none";
+    	}
+	    else
+		{
+	    	return false;
+    	}
+	
+	    //Set Image of Active Tab
+	    changeImagesOfTabs(parseInt(ident));
+	
+	    //Set class of active tab
+	    this.setAttribute("class", "tabActiveHeader");
+	    
+	    document.getElementById("tabpage_" + ident).style.display = "block";
+	    this.parentNode.setAttribute("data-current", ident);
+	}
+	catch(e)
+	{
+		alert(e);
+		return false;
+	}
+	
+	return true;
 }
 
 /**
@@ -33,41 +52,56 @@ function tab_clickHandler()
  * */
 function changeImagesOfTabs(selectedTab)
 {
-	var tab1Image = document.getElementById("tabImage_1");
-    var tab2Image = document.getElementById("tabImage_2");
-    var tab3Image = document.getElementById("tabImage_3");
-    var tab4Image = document.getElementById("tabImage_4");
-    
-    switch(selectedTab) 
-    {
-        case 1: 
-        	tab1Image.src = "Images/Icon_main_active.png";
-        	tab2Image.src = "Images/Icon_settings.png";
-        	tab3Image.src = "Images/Icon_responsive.png";
-        	tab4Image.src = "Images/Icon_prefs.png";
-            break;
-        
-        case 2: 
-        	tab1Image.src = "Images/Icon_main.png";
-        	tab2Image.src = "Images/Icon_settings_active.png";
-        	tab3Image.src = "Images/Icon_responsive.png";
-        	tab4Image.src = "Images/Icon_prefs.png";
-            break;
-        
-        case 3:
-        	tab1Image.src = "Images/Icon_main.png";
-        	tab2Image.src = "Images/Icon_settings.png";
-        	tab3Image.src = "Images/Icon_responsive_active.png";
-        	tab4Image.src = "Images/Icon_prefs.png";
-            break;
-            
-        case 4: 
-        	tab1Image.src = "Images/Icon_main.png";
-        	tab2Image.src = "Images/Icon_settings.png";
-        	tab3Image.src = "Images/Icon_responsive.png";
-        	tab4Image.src = "Images/Icon_prefs_active.png";
-            break;
-    } 
+	try
+	{
+		var isImageChanged = true;
+		
+		var tab1Image = document.getElementById("tabImage_1");
+	    var tab2Image = document.getElementById("tabImage_2");
+	    var tab3Image = document.getElementById("tabImage_3");
+	    var tab4Image = document.getElementById("tabImage_4");
+	    
+	    switch(selectedTab) 
+	    {
+	        case 1: 
+	        	tab1Image.src = "Images/Icon_main_active.png";
+	        	tab2Image.src = "Images/Icon_settings.png";
+	        	tab3Image.src = "Images/Icon_responsive.png";
+	        	tab4Image.src = "Images/Icon_prefs.png";
+	            break;
+	        
+	        case 2: 
+	        	tab1Image.src = "Images/Icon_main.png";
+	        	tab2Image.src = "Images/Icon_settings_active.png";
+	        	tab3Image.src = "Images/Icon_responsive.png";
+	        	tab4Image.src = "Images/Icon_prefs.png";
+	            break;
+	        
+	        case 3:
+	        	tab1Image.src = "Images/Icon_main.png";
+	        	tab2Image.src = "Images/Icon_settings.png";
+	        	tab3Image.src = "Images/Icon_responsive_active.png";
+	        	tab4Image.src = "Images/Icon_prefs.png";
+	            break;
+	            
+	        case 4: 
+	        	tab1Image.src = "Images/Icon_main.png";
+	        	tab2Image.src = "Images/Icon_settings.png";
+	        	tab3Image.src = "Images/Icon_responsive.png";
+	        	tab4Image.src = "Images/Icon_prefs_active.png";
+	        	break;
+	        	
+        	default:
+        		isImageChanged = false;
+	    } 
+	    
+	}
+	catch(e)
+	{
+		isImageChanged = false;
+	}
+	
+	return isImageChanged;
 }
 
 /**
@@ -76,7 +110,14 @@ function changeImagesOfTabs(selectedTab)
  * */
 function shapeFill_changeHandler()
 {
-	model.shapeFill = document.getElementById("shapeFill").checked;
+	try
+	{
+		model.shapeFill = document.getElementById("shapeFill").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
   
 /**
@@ -85,7 +126,14 @@ function shapeFill_changeHandler()
  * */
 function shapeStroke_changeHandler()
 {
+	try
+	{
 	model.shapeStroke = document.getElementById("shapeStroke").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 	
 /**
@@ -94,107 +142,191 @@ function shapeStroke_changeHandler()
  * */
 function shapeAlpha_changeHandler()
 {
+	try
+	{
 	model.shapeAlpha = document.getElementById("shapeAlpha").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 
 /**
  * FunctionName	: shapeEffects_changeHandler()
  * Description	: Set the value of gradient when changed.
  * */
- function shapeEffects_changeHandler()
+function shapeEffects_changeHandler()
 {
-	model.shapeEffects = document.getElementById("shapeEffects").checked;
+	try
+	{
+		model.shapeEffects = document.getElementById("shapeEffects").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 
 /**
  * FunctionName	: shapeBorderRadius_changeHandler()
  * Description	: Set the value of border radius when changed.
  * */
- function shapeBorderRadius_changeHandler()
+function shapeBorderRadius_changeHandler()
 {
-	model.shapeBorderRadius = document.getElementById("shapeBorderRadius").checked;
+	try
+	{
+		model.shapeBorderRadius = document.getElementById("shapeBorderRadius").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 
 /**
  * FunctionName	: textFont_changeHandler()
  * Description	: Set the value of text font when changed.
  * */
- function textFont_changeHandler()
+function textFont_changeHandler()
 {
-	model.textFont = document.getElementById("textFont").checked;
+	try
+	{
+		model.textFont = document.getElementById("textFont").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 
 /**
  * FunctionName	: textSize_changeHandler()
  * Description	: Set the value of text size when changed.
  * */
- function textSize_changeHandler()
+function textSize_changeHandler()
 {
-	model.textSize = document.getElementById("textSize").checked;
+	try
+	{
+		model.textSize = document.getElementById("textSize").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 
 /**
  * FunctionName	: textColor_changeHandler()
  * Description	: Set the value of text color when changed.
  * */
- function textColor_changeHandler()
+function textColor_changeHandler()
 {
-	model.textColor = document.getElementById("textColor").checked;
+	try
+	{
+		model.textColor = document.getElementById("textColor").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 
 /**
  * FunctionName	: textStyle_changeHandler()
  * Description	: Set the value of text style when changed.
  * */
- function textStyle_changeHandler()
+function textStyle_changeHandler()
 {
-	model.textStyle = document.getElementById("textStyle").checked;
+	try
+	{
+		model.textStyle = document.getElementById("textStyle").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 
 /**
  * FunctionName	: textAlignment_changeHandler()
  * Description	: Set the value of text alignment when changed.
  * */
- function textAlignment_changeHandler()
+function textAlignment_changeHandler()
 {
-	model.textAlignment = document.getElementById("textAlignment").checked;
+	try
+	{
+		model.textAlignment = document.getElementById("textAlignment").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 
 /**
  * FunctionName	: textLeading_changeHandler()
  * Description	: Set the value of text leading when changed.
  * */
- function textLeading_changeHandler()
+function textLeading_changeHandler()
 {
-	model.textLeading = document.getElementById("textLeading").checked;
+	try
+	{
+		model.textLeading = document.getElementById("textLeading").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 
 /**
  * FunctionName	: textTracking_changeHandler()
  * Description	: Set the value of text tracking when changed.
  * */
- function textTracking_changeHandler()
+function textTracking_changeHandler()
 {
-   model.textTracking = document.getElementById("textTracking").checked;
+	try
+	{
+		model.textTracking = document.getElementById("textTracking").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 
 /**
  * FunctionName	: shapeFillStyle_changeHandler()
  * Description	: Set the value of style when changed.
  * */
- function textAlpha_changeHandler()
+function textAlpha_changeHandler()
 {
-	model.textAlpha = document.getElementById("textAlpha").checked;
+	try
+	{
+		model.textAlpha = document.getElementById("textAlpha").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 
  /**
   * FunctionName	: textEffects_changeHandler()
   * Description	: Set the value of effects when changed.
   * */
-  function textEffects_changeHandler()
- {
- 	model.textEffects = document.getElementById("textEffects").checked;
- }
+function textEffects_changeHandler()
+{
+	try
+	{
+		model.textEffects = document.getElementById("textEffects").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
+}
  
  /**
  * FunctionName	: canvasExpandSize_changeHandler()
@@ -202,15 +334,141 @@ function shapeAlpha_changeHandler()
  * */
 function canvasExpandSize_changeHandler()
 {
-	model.canvasExpandSize = Number(document.getElementById("canvasExpandSize").value);
+	try
+	{
+		model.canvasExpandSize = Number(document.getElementById("canvasExpandSize").value);
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
 }
 
 /**
- * FunctionName	: canvasExpandSize_changeHandler()
- * Description	: Set the value of canvasExpandSize when changed.
+ * FunctionName	: chkDistanceSpec_changeHandler()
+ * Description	: Enable/Disable the width and height text boxes and set the value of model's specInPrcntg when changed.
  * */
-function canvasExpandSize_changeHandler()
+function chkDistanceSpec_changeHandler()
 {
-	model.canvasExpandSize = Number(document.getElementById("canvasExpandSize").value);
+	try
+	{
+		model.specInPrcntg = document.getElementById("chkDistanceSpec").checked;
+		if(model.specInPrcntg)
+		{
+			enableTextField(document.getElementById("txtWidth"));
+			enableTextField(document.getElementById("txtHeight"));
+		}
+		else
+		{
+			disableTextField(document.getElementById("txtWidth"));
+			disableTextField(document.getElementById("txtHeight"));
+		}
+	}
+	catch(e)
+	{
+		alert(e);
+	}
 }
 
+/**
+ * FunctionName	: chkEmSpec_changeHandler()
+ * Description	: Enable/Disable the baseFontSize and baseLineHeight text boxes and set the value of model's specInEM when changed.
+ * */
+function chkEmSpec_changeHandler()
+{
+	try
+	{
+		var textFontSize = document.getElementById("txtFontSize");
+		var textBaseLineHeight = document.getElementById("txtBaseLineHeight");
+		model.specInEM = document.getElementById("chkEmSpec").checked;
+		
+		if(model.specInEM)
+		{
+			enableTextField(textFontSize);
+			enableTextField(textBaseLineHeight);
+		}
+		else
+		{
+			disableTextField(textFontSize);
+			disableTextField(textBaseLineHeight);
+			return;
+		}
+		
+		if (textFontSize.value.length == 0)
+			textFontSize.value = "16";
+		
+		if (textBaseLineHeight.value.length == 0)
+		{
+			textBaseLineHeight.value = Number(Math.round(Number(textFontSize.value) * 140) / 100).toString();
+			model.baseLineHeight = Number(textBaseLineHeight.value);
+		}
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: chkEmSpec_changeHandler()
+ * Description	: Set the value of model's rltvWidth when changed.
+ * */
+function txtWidth_changeHandler()
+{
+	try
+	{
+		model.rltvWidth = Number(document.getElementById("txtWidth").value);
+	}
+	catch(e)
+	{
+		
+	}
+}
+
+/**
+ * FunctionName	: txtHeight_changeHandler()
+ * Description	: Set the value of model's rltvHeight when changed.
+ * */
+function txtHeight_changeHandler() 
+{
+	try
+	{
+		model.rltvHeight = Number(document.getElementById("txtHeight").value);
+	}
+	catch(e)
+	{
+		
+	}
+}
+
+/**
+ * FunctionName	: txtFontSize_changeHandler()
+ * Description	: Set the value of model's baseFontSize when changed.
+ * */
+function txtFontSize_changeHandler()
+{
+	try
+	{
+		model.baseFontSize = Number(document.getElementById("txtFontSize").value);
+	}
+	catch(e)
+	{
+		
+	}
+}
+
+/**
+ * FunctionName	: txtBaseLineHeight_changeHandler()
+ * Description	: Set the value of model's baseLineHeight when changed.
+ * */
+function txtBaseLineHeight_changeHandler() 
+{
+	try
+	{
+		model.baseLineHeight = Number(document.getElementById("txtBaseLineHeight").value);
+	}
+	catch(e)
+	{
+		
+	}
+}

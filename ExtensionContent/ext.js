@@ -10,7 +10,14 @@ and reading and writing preferences methods.
  * */
 function mainTab_creationCompleteHandler()
 {
-	document.getElementById("canvasExpandSize").value = model.canvasExpandSize;
+	try
+	{
+		document.getElementById("canvasExpandSize").value = model.canvasExpandSize;
+	}
+	catch(e)
+	{
+		alert(e);
+	}
 }
 
 /**
@@ -49,19 +56,39 @@ function settings_creationCompleteHandler()
  * */
 function responsiveTab_creationCompleteHandler()
 {
-	//For spec in distance.
-//	document.getElementById("chkDistanceSpec").checked	= model.specInPrcntg;
-//	if(!model.specInPrcntg)
-//	{
-//		document.getElementById("txtWidth").classList.add("disableTextStyle");
-//	}
-//	//document.getElementById("txtWidth").disabled 		= !model.specInPrcntg;
-//	document.getElementById("txtHeight").disabled		= !model.specInPrcntg;
-//	
-//	//For spec in EM.
-//	document.getElementById("chkEmSpec").checked			= model.specInEM;
-//	document.getElementById("txtFontSize").disabled 		= !model.specInEM;
-//	document.getElementById("txtBaseLineHeight").disabled 	= !model.specInEM;
+	try
+	{
+		//For spec in distance.
+		document.getElementById("chkDistanceSpec").checked = model.specInPrcntg;
+		if(model.specInPrcntg)
+		{
+			enableTextField(document.getElementById("txtWidth"));
+			enableTextField(document.getElementById("txtHeight"));
+		}
+		else
+		{
+			disableTextField(document.getElementById("txtWidth"));
+			disableTextField(document.getElementById("txtHeight"));
+		}
+		
+		//For spec in EM.
+		document.getElementById("chkEmSpec").checked = model.specInEM;
+		if(model.specInEM)
+		{
+			enableTextField(document.getElementById("txtFontSize"));
+			enableTextField(document.getElementById("txtBaseLineHeight"));
+		}
+		else
+		{
+			disableTextField(document.getElementById("txtFontSize"));
+			disableTextField(document.getElementById("txtBaseLineHeight"));
+		}
+		
+	}
+	catch(e)
+	{
+		alert(e);
+	}
 }
 
 /**
@@ -258,6 +285,39 @@ function onAppThemeColorChanged(event)
     // and redraw all UI controls of your extension according to the style info.
     updateThemeWithAppSkinInfo(skinInfo);
 } 
+
+/**
+ * FunctionName	: disableTextField()
+ * Description	: Disable the text input.
+ * */
+function disableTextField(textField)
+{
+	try
+	{
+		textField.disabled = true;
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: enableTextField()
+ * Description	: Enable the text input and change the background color to white.
+ * */
+function enableTextField(textField)
+{
+	try
+	{
+		textField.disabled = false;
+		textField.style.backgroundColor = '#ffffff';
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+}
 
 /**
  * FunctionName	: loadJSX()
