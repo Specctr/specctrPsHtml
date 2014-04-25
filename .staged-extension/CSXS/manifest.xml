@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="4.0" ExtensionBundleId="com.example.specctrPsHtml" ExtensionBundleVersion="1.0.0"
-		ExtensionBundleName="specctrPsHtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<ExtensionManifest Version="4.0" ExtensionBundleId="specctrPsHtml" ExtensionBundleVersion="1.0.0"
+		ExtensionBundleName="Specctr-Pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<ExtensionList>
 		<Extension Id="com.example.specctrPsHtml.extension1" Version="1.0" />
 	</ExtensionList>
@@ -30,12 +30,20 @@
 				</Lifecycle>
 				<UI>
 					<Type>Panel</Type>
-					<Menu>specctrPsHtml</Menu>
+					<Menu>Specctr-Pro</Menu>
 					<Geometry>
 						<Size>
-							<Height>200</Height>
-							<Width>200</Width>
+							<Height>495</Height>
+							<Width>228</Width>
 						</Size>
+						<MaxSize>
+							<Height>495</Height>
+							<Width>228</Width>
+						</MaxSize>
+						<MinSize>
+							<Height>495</Height>
+							<Width>228</Width>
+						</MinSize>
 					</Geometry>
 				</UI>
 			</DispatchInfo>

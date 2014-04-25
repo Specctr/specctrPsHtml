@@ -472,3 +472,23 @@ function txtBaseLineHeight_changeHandler()
 		
 	}
 }
+
+
+/**
+ * FunctionName	: chkScaleBy_changeHandler()
+ * Description	: Set the value of useScaleBy when changed.
+ * */
+ function chkScaleBy_changeHandler()
+{
+	model.useScaleBy	= document.getElementById("chkScaleBy").checked;
+	
+	if(model.useScaleBy)
+	{
+		enableTextField(document.getElementById("txtScaleBy"));
+	}
+	else
+	{
+		disableTextField(document.getElementById("txtScaleBy"));
+	}
+}
+ 

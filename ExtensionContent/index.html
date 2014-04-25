@@ -255,6 +255,119 @@
             
             <!-- Starting of options tab. -->
             <div id="tabpage_4" class="tabpage">
+            <div class="tabPage2Header">
+                    SPEC OPTIONS
+                </div>
+                <div class="tabPageContentRow">
+                    <div class="tabPage4ContentLeft">
+                        <label>Font</label>
+                        <select class="dropdown" id="lstFont">
+                            <option value="1">Arial</option>
+                        </select>
+                    </div>
+                    <div class="tabPage4ContentRight">
+                        <label>
+                            Size</label><br />
+                        <select class="smalldropdown" id="lstSize">
+                        	<option value="8">8</option>
+                        	<option value="9">9</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                            <option value="14">14</option>
+                            <option value="16">16</option>
+                            <option value="18">18</option>
+                            <option value="24">24</option>
+                            <option value="36">36</option>
+                            <option value="48">48</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="tabPageEmptyRow">
+                </div>
+                <div class="tabPageCheckBoxRow">
+                    <div class="tabPage4ContentLeft">
+                        <label>
+                            Spec Color</label>
+                    </div>
+                    <div class="tabPage4ContentRight">
+                        <label>
+                            Line Weight</label>
+                    </div>
+                </div>
+                <div class="tabPageCheckBoxRow">
+                    <div class="tabPage4ContentLeft">
+                        <label style="font-weight: normal">
+                            Shape:
+                        </label>
+                        <input type="color" id="colShape" style="margin-left: 17px; height: 20px;" value="#FF0000" />
+                    </div>
+                    <div class="tabPage4ContentRight">
+                        <select class="smalldropdown" id="lstLineWeight">
+                            <option value="0.25">0.25</option>
+                        	<option value="0.5">0.5</option>
+                            <option value="1">1</option>
+                            <option value="1.5">1.5</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="tabPageContentRow">
+                    <div class="tabPage4ContentLeft">
+                        <label style="font-weight: normal">
+                            Type:
+                        </label>
+                        <input type="color" id="colType" style="margin-left: 24px; height: 20px;" value="#00ffff" />
+                    </div>
+                    <div class="tabPage4ContentRight">
+                    </div>
+                </div>
+                <div class="tabPageContentRow" style="margin-top: -4px;">
+                    <div class="tabPage4ContentLeft">
+                        <label style="font-weight: normal">
+                            Spacing:
+                        </label>
+                        <input type="color" id="colSpacing" style="height: 20px; margin-left: 9px;" value="#FF0000" />
+                    </div>
+                    <div class="tabPage4ContentRight">
+                    </div>
+                </div>
+                <div class="tabPageContentRow" style="padding-top: 15px;">
+                    <div class="tabPage4ContentLeft">
+                        <label>Color Mode</label>
+                        	<div id="radio">                        
+                        		<input type="radio" id="rgbRadioButton" name="radio" checked="checked"><span>RGB</span>
+		      					<input type="radio" id="hsbRadioButton" name="radio"><span>HSB</span>
+		      					<input type="radio" id="cmykRadioButton" name="radio"><span style='margin-right: 38px;'>CMYK</span>
+		      					<input type="radio" id="hslRadioButton" name="radio"><span>HSL</span>
+						</div>
+                    </div>
+                    <div class="tabPage4ContentRight">
+                    </div>
+                </div>
+                
+                <div class="tabPageCheckBoxRow">
+                    <input type="checkbox" value="DisplayRGBAsHex" id="chkDisplayRGBAsHex" />
+                    <label for="chkDisplayRGBAsHex">
+                        Display RGB As Hex</label>
+                </div>
+                
+                <div class="tabPageContentRow" style="padding-top: 10px;">
+                    <div class="tabPage4ContentLeft">
+                        <label>Scale Specs</label>
+                    </div>
+                </div>
+                
+                <div class="tabPageCheckBoxRow" style="margin-top: -15px;">
+                    <input type="checkbox" value="ScaleBy" id="chkScaleBy" style="vertical-align: middle" onchange="chkScaleBy_changeHandler()"/>
+                    <label for="chkScaleBy">Scale By</label>
+                    <input type="text" class="inputStyleSmall" id="txtScaleBy" value=" x1" />
+                    (e.g. x2 or /2)
+                </div>
+                
             </div>
             <!-- Ending of options tab. -->
         

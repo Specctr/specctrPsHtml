@@ -92,6 +92,40 @@ function responsiveTab_creationCompleteHandler()
 }
 
 /**
+ * FunctionName	: prefs_creationCompleteHandler()
+ * Description	: Load the data provider values to the combo box in spec options tab.
+ * */
+function prefs_creationCompleteHandler()
+{
+	//Set the values for font size combobox.
+	//fontSizeCombobox.text			= model.legendFontSize.toString();
+	
+	document.getElementById("chkDisplayRGBAsHex").checked = model.useHexColor;
+	
+//	specColorObject.selectedColor	= model.legendColorObject;
+//	specColorType.selectedColor		= model.legendColorType;
+//	specColorSpacing.selectedColor	= model.legendColorSpacing;
+	
+//	fontsCombobox.dataProvider		= allFonts;
+//	fontsCombobox.selectedIndex		= myFindIndex(allFonts,model.legendFont,model.legendFontIndex);
+	
+	//Set the values for arm weights.
+	//WeightCombobox.text			= model.armWeight.toString();
+	
+//	colorModeGroup.selectedValue	= model.legendColorMode;
+	document.getElementById("chkScaleBy").checked = model.useScaleBy;
+	
+	if(model.useScaleBy)
+	{
+		enableTextField(document.getElementById("txtScaleBy"));
+	}
+	else
+	{
+		disableTextField(document.getElementById("txtScaleBy"));
+	}
+}
+
+/**
  * FunctionName	: updateThemeWithAppSkinInfo()
  * Description	: Update the theme with the AppSkinInfo retrieved from the host product.
  * */
@@ -139,6 +173,7 @@ function onLoaded()
 	    mainTab_creationCompleteHandler();
 	    settings_creationCompleteHandler();
 	    responsiveTab_creationCompleteHandler();
+	    prefs_creationCompleteHandler();
     }
 	catch(e)
 	{
