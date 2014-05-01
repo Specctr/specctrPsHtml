@@ -421,7 +421,7 @@ function txtWidth_changeHandler()
 	}
 	catch(e)
 	{
-		
+		console.log(e);
 	}
 }
 
@@ -437,7 +437,7 @@ function txtHeight_changeHandler()
 	}
 	catch(e)
 	{
-		
+		console.log(e);
 	}
 }
 
@@ -453,7 +453,7 @@ function txtFontSize_changeHandler()
 	}
 	catch(e)
 	{
-		
+		console.log(e);
 	}
 }
 
@@ -469,10 +469,9 @@ function txtBaseLineHeight_changeHandler()
 	}
 	catch(e)
 	{
-		
+		console.log(e);
 	}
 }
-
 
 /**
  * FunctionName	: chkScaleBy_changeHandler()
@@ -491,4 +490,125 @@ function txtBaseLineHeight_changeHandler()
 		disableTextField(document.getElementById("txtScaleBy"));
 	}
 }
+
+ /**
+ * FunctionName	: txtScaleBy_changeHandler()
+ * Description	: Allow the input greater than 1 only and set the value of scaleValue when changed.
+ * */
+function txtScaleBy_changeHandler()
+{
+	var scaleByHandler = document.getElementById("txtScaleBy");
+	var firstChar = scaleByHandler.value.charAt(0);
+	
+	//if first character is other than 'x', 'X' or '/' then empty the text box.
+	if (!(firstChar == "x" || firstChar == "/" || firstChar == "X"))
+		scaleByHandler.value = "";
+	
+	//Restrict the text inputs to satisfy the values like x1, x2, /1, /2 etc.
+						
+	model.scaleValue = scaleByHandler.value;
+}
+
+/**
+ * FunctionName	: rgbRadioButton_clickHandler()
+ * Description	: Set the value of legendColorMode when selection of radio button changed.
+ * */
+ function rgbRadioButton_clickHandler()
+ {
+	 model.legendColorMode	= document.getElementById("rgbRadioButton").value;
+ }
  
+ /**
+  * FunctionName	: hsbRadioButton_clickHandler()
+  * Description	: Set the value of legendColorMode when selection of radio button changed.
+  * */
+ function hsbRadioButton_clickHandler()
+ {
+	 model.legendColorMode	= document.getElementById("hsbRadioButton").value;
+ }
+ 
+ /**
+  * FunctionName	: cmykRadioButton_clickHandler()
+  * Description	: Set the value of legendColorMode when selection of radio button changed.
+  * */
+ function cmykRadioButton_clickHandler()
+ {
+	 model.legendColorMode	= document.getElementById("cmykRadioButton").value;
+ }
+
+ /**
+  * FunctionName	: hslRadioButton_clickHandler()
+  * Description	: Set the value of legendColorMode when selection of radio button changed.
+  * */
+ function hslRadioButton_clickHandler()
+ {
+	 model.legendColorMode	= document.getElementById("hslRadioButton").value;
+ }
+ 
+ /**
+ * FunctionName	: chkDisplayRGBAsHex_changeHandler()
+ * Description	: Set the value of useHexColor when changed.
+ * */
+function chkDisplayRGBAsHex_changeHandler()
+{
+	model.useHexColor = document.getElementById("chkDisplayRGBAsHex").checked;
+}
+
+/**
+ * FunctionName	: lstSize_changeHandler()
+ * Description	: Set the value of font size when changed.
+ * */
+function lstSize_changeHandler()
+{
+	var fontSizeHandler = document.getElementById("lstSize");
+	model.legendFontSize = Number(fontSizeHandler.options[fontSizeHandler.selectedIndex].value);
+}
+
+/**
+ * FunctionName	: lstLineWeight_changeHandler()
+ * Description	: Set the value of armWeight when changed.
+ * */
+function lstLineWeight_changeHandler()
+{
+	var armWeightHandler = document.getElementById("lstLineWeight");
+	model.armWeight = Number(armWeightHandler.options[armWeightHandler.selectedIndex].value);
+}
+
+/**
+ * FunctionName	: lstFont_changeHandler()
+ * Description	: Set the value of font when changed.
+ * */
+function lstFont_changeHandler()
+{
+	var fontListHandler = document.getElementById("lstFont");
+	model.legenFontIndex = Number(fontListHandler.options[fontListHandler.selectedIndex].value);
+	mdoel.legendFont = fontListHandler.options[fontListHandler.selectedIndex].text;
+}
+
+/**
+ * FunctionName	: applyFontToList()
+ * Description	: Apply the model's font value to the font list of fourth tab.
+ * */
+function applyFontToList()
+{
+	var fontListHandler = document.getElementById("lstFont");		//Get font combo-box handler.
+	
+	//Select the font if the index text value matches with the legendFont.
+	if(fontListHandler.options[model.legendFontIndex].text == model.legendFont)
+	{
+		fontListHandler.options[model.legendFontIndex].selected = true;
+		return;
+	}
+	
+	//Select the font from the legendFont value and apply it.
+	var listLength = fontListHandler.option.length;
+	for (var i = 0; i < listLength; i++)
+	{
+		if(fontListHandler.options[i].text == model.legendFont)
+		{
+			model.legendFontIndex = i;
+			fontListHandler.options[i].selected = true;
+			break;
+		}
+	}
+}

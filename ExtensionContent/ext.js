@@ -98,7 +98,14 @@ function responsiveTab_creationCompleteHandler()
 function prefs_creationCompleteHandler()
 {
 	//Set the values for font size combobox.
-	//fontSizeCombobox.text			= model.legendFontSize.toString();
+	var fontSizeHandler = document.getElementById("lstSize");
+	fontSizeHandler.selectedIndex = -1;
+	fontSizeHandler.value = model.legendFontSize.toString();
+	
+	//Set the values for arm weight combobox.
+	var armWeightHandler = document.getElementById("lstLineWeight");
+	armWeightHandler.selectedIndex = -1;
+	armWeightHandler.value = model.armWeight.toString();
 	
 	document.getElementById("chkDisplayRGBAsHex").checked = model.useHexColor;
 	
@@ -106,13 +113,27 @@ function prefs_creationCompleteHandler()
 //	specColorType.selectedColor		= model.legendColorType;
 //	specColorSpacing.selectedColor	= model.legendColorSpacing;
 	
-//	fontsCombobox.dataProvider		= allFonts;
-//	fontsCombobox.selectedIndex		= myFindIndex(allFonts,model.legendFont,model.legendFontIndex);
+	switch(model.legendColorMode)
+	{
+		case "HSB": 
+			document.getElementById("hsbRadioButton").checked = true;
+			break;
+			
+		case "CMYK": 
+			document.getElementById("cmykRadioButton").checked = true;
+			break;
+			
+		case "HSL": 
+			document.getElementById("hslRadioButton").checked = true;
+			break;
+		
+		case "RGB":
+		default:
+			document.getElementById("rgbRadioButton").checked = true;
+			break;
+		
+	}
 	
-	//Set the values for arm weights.
-	//WeightCombobox.text			= model.armWeight.toString();
-	
-//	colorModeGroup.selectedValue	= model.legendColorMode;
 	document.getElementById("chkScaleBy").checked = model.useScaleBy;
 	
 	if(model.useScaleBy)
@@ -123,10 +144,13 @@ function prefs_creationCompleteHandler()
 	{
 		disableTextField(document.getElementById("txtScaleBy"));
 	}
+	
+	var extScript = "ext_getFonts()";
+	evalScript(extScript, loadFontsToList);
 }
 
 /**
- * FunctionName	: updateThemeWithAppSkinInfo()
+ * FunctionName	: onLoaded()
  * Description	: Update the theme with the AppSkinInfo retrieved from the host product.
  * */
 function onLoaded() 
@@ -320,6 +344,24 @@ function onAppThemeColorChanged(event)
     // and redraw all UI controls of your extension according to the style info.
     updateThemeWithAppSkinInfo(skinInfo);
 } 
+
+/**
+ * FunctionName	: loadFontsToList()
+ * Description	: This is a callback function which takes the font list from jsx and load the list to the font combo-box of fourth tab.
+ * */
+function loadFontsToList(result)
+{
+	var font = JSON.parse(result);
+	var fontLength = font.length;
+	var fontList = document.getElementById("lstFont");
+    for (var i = 0; i < fontLength; i++) 
+    {
+    	var option = document.createElement("option");
+    	option.text = font[i].font;
+    	option.value = i;
+    	fontList.add(option, i);
+    }
+}
 
 /**
  * FunctionName	: disableTextField()

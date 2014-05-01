@@ -20,6 +20,30 @@ ext_createSpacingSpecs = createSpacingSpecs;
 ext_createCoordinateSpecs = createCoordinateSpecs;
 ext_createPropertySpecs = createPropertySpecsForItem;
 ext_exportCss = exportCss;
+ext_getFonts = getFontList;
+
+//Get the post script name of the font.
+function getFontList()
+{
+    var font = app.fonts;
+    var appFontLength = font.length;
+    var result = new Array();
+    
+	//Set the spec text properties.
+	for (var i = 0; i < appFontLength; i++)
+	{
+        var currFont = font[i];
+        if(currFont.style == "Regular")
+        {
+            var object = new Object();
+            object.label = currFont.family;
+            object.font = currFont.name;
+            result.push(object);
+        }
+	}
+
+    return JSON.stringify(result);
+ }
 
 //Get the updated value of UI's component from html file.
 function setModel(currModel)

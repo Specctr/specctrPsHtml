@@ -25,7 +25,7 @@ var model =
 
  	//legend settings
  	legendFont: 			"Arial",
-	legendFontIndex:		0,
+	legendFontIndex:		1,
 	legendFontSize:			12,
 	legendColorObject:		'0xFF0000',
 	legendColorType:		'0xFF0000',

@@ -30,7 +30,7 @@
                 <li id="tabHeader_3">
                     <img id="tabImage_3" src="Images/Icon_responsive.png" /></li>
                 <li id="tabHeader_4">
-                    <img id="tabImage_4" src="Images/Icon_prefs.png" /></li>
+                    <img id="tabImage_4" src="Images/Icon_prefs.png" onclick="applyFontToList()"/></li>
             </ul>
         </div>
         
@@ -261,14 +261,13 @@
                 <div class="tabPageContentRow">
                     <div class="tabPage4ContentLeft">
                         <label>Font</label>
-                        <select class="dropdown" id="lstFont">
-                            <option value="1">Arial</option>
+                        <select class="dropdown" id="lstFont" onchange="lstFont_changeHandler()">
                         </select>
                     </div>
                     <div class="tabPage4ContentRight">
                         <label>
                             Size</label><br />
-                        <select class="smalldropdown" id="lstSize">
+                        <select class="smalldropdown" id="lstSize" onchange="lstSize_changeHandler()">
                         	<option value="8">8</option>
                         	<option value="9">9</option>
                             <option value="10">10</option>
@@ -303,7 +302,7 @@
                         <input type="color" id="colShape" style="margin-left: 17px; height: 20px;" value="#FF0000" />
                     </div>
                     <div class="tabPage4ContentRight">
-                        <select class="smalldropdown" id="lstLineWeight">
+                        <select class="smalldropdown" id="lstLineWeight" onchange="lstLineWeight_changeHandler()">
                             <option value="0.25">0.25</option>
                         	<option value="0.5">0.5</option>
                             <option value="1">1</option>
@@ -320,7 +319,7 @@
                         <label style="font-weight: normal">
                             Type:
                         </label>
-                        <input type="color" id="colType" style="margin-left: 24px; height: 20px;" value="#00ffff" />
+                        <input type="color" id="colType" style="margin-left: 24px; height: 20px;" />
                     </div>
                     <div class="tabPage4ContentRight">
                     </div>
@@ -339,10 +338,10 @@
                     <div class="tabPage4ContentLeft">
                         <label>Color Mode</label>
                         	<div id="radio">                        
-                        		<input type="radio" id="rgbRadioButton" name="radio" checked="checked"><span>RGB</span>
-		      					<input type="radio" id="hsbRadioButton" name="radio"><span>HSB</span>
-		      					<input type="radio" id="cmykRadioButton" name="radio"><span style='margin-right: 38px;'>CMYK</span>
-		      					<input type="radio" id="hslRadioButton" name="radio"><span>HSL</span>
+                        		<input type="radio" id="rgbRadioButton" name="radio" value="RGB" checked="checked" onclick="rgbRadioButton_clickHandler()"><span>RGB</span>
+		      					<input type="radio" id="hsbRadioButton" name="radio" value="HSB" onclick="hsbRadioButton_clickHandler()"><span>HSB</span>
+		      					<input type="radio" id="cmykRadioButton" name="radio" value="CMYK" onclick="cmykRadioButton_clickHandler()"><span style='margin-right: 38px;'>CMYK</span>
+		      					<input type="radio" id="hslRadioButton" name="radio" value="HSL" onclick="hslRadioButton_clickHandler()"><span>HSL</span>
 						</div>
                     </div>
                     <div class="tabPage4ContentRight">
@@ -350,7 +349,7 @@
                 </div>
                 
                 <div class="tabPageCheckBoxRow">
-                    <input type="checkbox" value="DisplayRGBAsHex" id="chkDisplayRGBAsHex" />
+                    <input type="checkbox" value="DisplayRGBAsHex" id="chkDisplayRGBAsHex" onchange="chkDisplayRGBAsHex_changeHandler()"/>
                     <label for="chkDisplayRGBAsHex">
                         Display RGB As Hex</label>
                 </div>
@@ -364,7 +363,7 @@
                 <div class="tabPageCheckBoxRow" style="margin-top: -15px;">
                     <input type="checkbox" value="ScaleBy" id="chkScaleBy" style="vertical-align: middle" onchange="chkScaleBy_changeHandler()"/>
                     <label for="chkScaleBy">Scale By</label>
-                    <input type="text" class="inputStyleSmall" id="txtScaleBy" value=" x1" />
+                    <input type="text" class="inputStyleSmall" id="txtScaleBy" value=" x1" onchange="txtScaleBy_changeHandler()"/>
                     (e.g. x2 or /2)
                 </div>
                 
