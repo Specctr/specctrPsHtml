@@ -12,18 +12,18 @@ function spacingButton_clickHandler()
 {
 	try
 	{
+		$('#liSpacing').toggleClass('isOpen');
 		if (!model.spaceTop && !model.spaceRight && !model.spaceLeft && !model.spaceBottom)
 		{
 			$('#liSpacing .options').slideDown(100);
 			$('#imgSpacingDdlArrow').addClass('dropdownArrowUp');
-			$('#liSpacing').toggleClass('isOpen', true);
+			
 	        $('#btnSpacing').removeClass('buttonSelected');
 		}
 		else
 		{
 			$('#liSpacing .options').slideUp(100);
 			$('#imgSpacingDdlArrow').removeClass('dropdownArrowUp');
-			$('#liSpacing').toggleClass('isOpen');
 	        $('#btnSpacing').addClass('buttonSelected');
 			createSpacingSpecs();
 		}

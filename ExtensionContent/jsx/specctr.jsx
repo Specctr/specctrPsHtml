@@ -22,7 +22,7 @@ ext_createPropertySpecs = createPropertySpecsForItem;
 ext_exportCss = exportCss;
 ext_getFonts = getFontList;
 
-//Get the post script name of the font.
+//Get the application font's name and font's family.
 function getFontList()
 {
     var font = app.fonts;

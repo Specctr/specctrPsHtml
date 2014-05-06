@@ -10,15 +10,17 @@
 <meta charset="utf-8">
 <script src="./lib/CSInterface-4.0.0.js"></script>
 <script src="./lib/jquery-1.9.1.js"></script>
-<script src="./ext.js"></script>
-<script src="./specctrUI.js"></script>
 <script src="./appModel.js"></script>
+<script src="./specctrUI.js"></script>
+<script src="./ext.js"></script>
+<script src="./spacingButtonHandlers.js"></script>
+<script src="./dimensionButtonHandlers.js"></script>
 
 <link id="ppstyle" rel="stylesheet" type="text/css" href="./style.css">
 <title>Specctr-Pro</title>
 </head>
 
-<body onLoad="onLoaded()">
+<body onLoad="onLoaded()" onunload="writeAppPrefs()">
 <div class="container" id="tabContainer">
         
         <div class="tabs">
@@ -49,35 +51,35 @@
                     
                     <li class="border" id="liWh">
                         <div class="button imgButton" id="btnWh">
-                            <img src="Images/DimensionButtonIcons/WH_11.png" alt="Width / Height" />
-                            <label onclick="createDimensionSpecs()">Width / Height</label>
+                            <img id="dimensionIcon" src="Images/DimensionButtonIcons/WH_11.png" alt="Width / Height" />
+                            <label onclick="dimensionButton_clickHandler()">Width / Height</label>
                             <div class="dropdownArrow" id="imgWhDdlArrow">
                             </div>
                         </div>
                         <div class="options">
-                            <div class="option" id="imgNoSelectionWidth"></div>
-                            <div class="option" id="imgWidthTop"></div>
-                            <div class="option" id="imgWidthBottom"></div>
-                            <div class="option" id="imgWidthCenter"></div>
-                            <div class="option" id="imgNoSelectionHeight"></div>
-                            <div class="option" id="imgHeightLeft"></div>
-                            <div class="option" id="imgHeightRight"></div>
-                            <div class="option" id="imgHeightCenter"></div>
+                            <div class="option" id="imgNoSelectionWidth" onclick="imgNoSelectionWidth_clickHandler()"></div>
+                            <div class="option widthTopSelected" id="imgWidthTop" onclick="imgWidthTop_clickHandler()"></div>
+                            <div class="option" id="imgWidthBottom" onclick="imgWidthBottom_clickHandler()"></div>
+                            <div class="option" id="imgWidthCenter" onclick="imgWidthCenter_clickHandler()"></div>
+                            <div class="option" id="imgNoSelectionHeight" onclick="imgNoSelectionHeight_clickHandler()"></div>
+                            <div class="option heightLeftSelected" id="imgHeightLeft" onclick="imgHeightLeft_clickHandler()"></div>
+                            <div class="option" id="imgHeightRight" onclick="imgHeightRight_clickHandler()"></div>
+                            <div class="option" id="imgHeightCenter" onclick="imgHeightCenter_clickHandler()"></div>
                         </div>
                     </li>
                     
                     <li class="border" id="liSpacing">
                         <div class="button imgButton" id="btnSpacing">
-                            <img src="Images/SpacingButtonIcons/Spacing_All.png" alt="Spacing" />
-                            <label onclick="createSpacingSpecs()">Spacing</label>
+                            <img id="spacingIcon" src="Images/SpacingButtonIcons/Spacing_TL.png" alt="Spacing" />
+                            <label onclick="spacingButton_clickHandler()">Spacing</label>
                             <div id="imgSpacingDdlArrow" class="dropdownArrow">
                             </div>
                         </div>
-                        <div class="options">
-                            <div class="option" id="imgSpaceTop"></div>
-                            <div class="option" id="imgSpaceRight"></div>
-                            <div class="option" id="imgSpaceBottom"></div>
-                            <div class="option" id="imgSpaceLeft"></div>
+                        <div class="options" id="spacingDropDown">
+                            <div class="option topSelected" id="imgSpaceTop" onclick="imgSpaceTop_clickHandler()"></div>
+                            <div class="option" id="imgSpaceRight" onclick="imgSpaceRight_clickHandler()"></div>
+                            <div class="option" id="imgSpaceBottom" onclick="imgSpaceBottom_clickHandler()"></div>
+                            <div class="option leftSelected" id="imgSpaceLeft" onclick="imgSpaceLeft_clickHandler()"></div>
                         </div>
                     </li>
                     
