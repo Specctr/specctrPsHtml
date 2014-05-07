@@ -3,6 +3,20 @@ File-Name: specctrUI.js
 Description: Includes all the methods related to UI component like change event handlers, click event handlers etc. 
 */
 
+function activateButton_clickHandler()
+{
+	try
+	{
+		document.getElementById("loginContainer").style.display = "none";
+		document.getElementById("tabContainer").style.display = "block";
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+
+}
+
 /**
  * FunctionName	: tab_clickHandler()
  * Description	: Click event handler of tabs. Modify styles to tabs and call the function to change images on tab.
@@ -128,7 +142,7 @@ function shapeStroke_changeHandler()
 {
 	try
 	{
-	model.shapeStroke = document.getElementById("shapeStroke").checked;
+		model.shapeStroke = document.getElementById("shapeStroke").checked;
 	}
 	catch(e)
 	{
@@ -144,7 +158,7 @@ function shapeAlpha_changeHandler()
 {
 	try
 	{
-	model.shapeAlpha = document.getElementById("shapeAlpha").checked;
+		model.shapeAlpha = document.getElementById("shapeAlpha").checked;
 	}
 	catch(e)
 	{
@@ -474,21 +488,26 @@ function txtBaseLineHeight_changeHandler()
 }
 
 /**
- * FunctionName	: chkScaleBy_changeHandler()
+ * FunctionName	: chkScaleBy_clickHandler()
  * Description	: Set the value of useScaleBy when changed.
  * */
- function chkScaleBy_changeHandler()
+function chkScaleBy_clickHandler()
 {
-	model.useScaleBy	= document.getElementById("chkScaleBy").checked;
+	try
+	{
+		model.useScaleBy	= document.getElementById("chkScaleBy").checked;
+			
+		if(model.useScaleBy)
+			enableTextField(document.getElementById("txtScaleBy"));
+		else
+			disableTextField(document.getElementById("txtScaleBy"));
+		
+	 }
+	 catch(e)
+	 {
+		 console.log(e);
+	 }
 	
-	if(model.useScaleBy)
-	{
-		enableTextField(document.getElementById("txtScaleBy"));
-	}
-	else
-	{
-		disableTextField(document.getElementById("txtScaleBy"));
-	}
 }
 
  /**
@@ -497,61 +516,56 @@ function txtBaseLineHeight_changeHandler()
  * */
 function txtScaleBy_changeHandler()
 {
-	var scaleByHandler = document.getElementById("txtScaleBy");
-	var firstChar = scaleByHandler.value.charAt(0);
-	
-	//if first character is other than 'x', 'X' or '/' then empty the text box.
-	if (!(firstChar == "x" || firstChar == "/" || firstChar == "X"))
-		scaleByHandler.value = "";
-	
-	//Restrict the text inputs to satisfy the values like x1, x2, /1, /2 etc.
-						
-	model.scaleValue = scaleByHandler.value;
+	try
+	{
+		var scaleByHandler = document.getElementById("txtScaleBy");
+		var firstChar = scaleByHandler.value.charAt(0);
+		
+		//if first character is other than 'x', 'X' or '/' then empty the text box.
+		if (!(firstChar == "x" || firstChar == "/" || firstChar == "X"))
+			scaleByHandler.value = "";
+		
+		//Restrict the text inputs to satisfy the values like x1, x2, /1, /2 etc.
+		model.scaleValue = scaleByHandler.value;
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
 }
 
 /**
- * FunctionName	: rgbRadioButton_clickHandler()
+ * FunctionName	: radioButton_clickHandler()
  * Description	: Set the value of legendColorMode when selection of radio button changed.
  * */
- function rgbRadioButton_clickHandler()
+ function radioButton_clickHandler(event)
  {
-	 model.legendColorMode	= document.getElementById("rgbRadioButton").value;
+	 try
+	 {
+		 var colorMode = event.target.value;
+		 if(colorMode != undefined)
+			 model.legendColorMode	= colorMode;
+	 }
+	 catch(e)
+	 {
+		 console.log(e);
+	 }
  }
  
  /**
-  * FunctionName	: hsbRadioButton_clickHandler()
-  * Description	: Set the value of legendColorMode when selection of radio button changed.
-  * */
- function hsbRadioButton_clickHandler()
- {
-	 model.legendColorMode	= document.getElementById("hsbRadioButton").value;
- }
- 
- /**
-  * FunctionName	: cmykRadioButton_clickHandler()
-  * Description	: Set the value of legendColorMode when selection of radio button changed.
-  * */
- function cmykRadioButton_clickHandler()
- {
-	 model.legendColorMode	= document.getElementById("cmykRadioButton").value;
- }
-
- /**
-  * FunctionName	: hslRadioButton_clickHandler()
-  * Description	: Set the value of legendColorMode when selection of radio button changed.
-  * */
- function hslRadioButton_clickHandler()
- {
-	 model.legendColorMode	= document.getElementById("hslRadioButton").value;
- }
- 
- /**
- * FunctionName	: chkDisplayRGBAsHex_changeHandler()
+ * FunctionName	: chkDisplayRGBAsHex_clickHandler()
  * Description	: Set the value of useHexColor when changed.
  * */
-function chkDisplayRGBAsHex_changeHandler()
+function chkDisplayRGBAsHex_clickHandler()
 {
-	model.useHexColor = document.getElementById("chkDisplayRGBAsHex").checked;
+	try
+	 {
+		model.useHexColor = document.getElementById("chkDisplayRGBAsHex").checked;
+	 }
+	 catch(e)
+	 {
+		 console.log(e);
+	 }
 }
 
 /**
@@ -560,8 +574,15 @@ function chkDisplayRGBAsHex_changeHandler()
  * */
 function lstSize_changeHandler()
 {
-	var fontSizeHandler = document.getElementById("lstSize");
-	model.legendFontSize = Number(fontSizeHandler.options[fontSizeHandler.selectedIndex].value);
+	try
+	 {
+		var fontSizeHandler = document.getElementById("lstSize");
+		model.legendFontSize = Number(fontSizeHandler.options[fontSizeHandler.selectedIndex].value);
+	 }
+	 catch(e)
+	 {
+		 console.log(e);
+	 }
 }
 
 /**
@@ -570,8 +591,15 @@ function lstSize_changeHandler()
  * */
 function lstLineWeight_changeHandler()
 {
-	var armWeightHandler = document.getElementById("lstLineWeight");
-	model.armWeight = Number(armWeightHandler.options[armWeightHandler.selectedIndex].value);
+	try
+	 {
+		var armWeightHandler = document.getElementById("lstLineWeight");
+		model.armWeight = Number(armWeightHandler.options[armWeightHandler.selectedIndex].value);
+	 }
+	 catch(e)
+	 {
+		 console.log(e);
+	 }
 }
 
 /**
@@ -580,9 +608,16 @@ function lstLineWeight_changeHandler()
  * */
 function lstFont_changeHandler()
 {
-	var fontListHandler = document.getElementById("lstFont");
-	model.legenFontIndex = Number(fontListHandler.options[fontListHandler.selectedIndex].value);
-	mdoel.legendFont = fontListHandler.options[fontListHandler.selectedIndex].text;
+	try
+	{
+		var fontListHandler = document.getElementById("lstFont");
+		model.legenFontIndex = Number(fontListHandler.options[fontListHandler.selectedIndex].value);
+		model.legendFont = fontListHandler.options[fontListHandler.selectedIndex].text;
+	}
+	catch(e)
+	{
+		alert(e);
+	}
 }
 
 /**
@@ -591,24 +626,31 @@ function lstFont_changeHandler()
  * */
 function applyFontToList()
 {
-	var fontListHandler = document.getElementById("lstFont");		//Get font combo-box handler.
-	
-	//Select the font if the index text value matches with the legendFont.
-	if(fontListHandler.options[model.legendFontIndex].text == model.legendFont)
+	try
 	{
-		fontListHandler.options[model.legendFontIndex].selected = true;
-		return;
-	}
-	
-	//Select the font from the legendFont value and apply it.
-	var listLength = fontListHandler.option.length;
-	for (var i = 0; i < listLength; i++)
-	{
-		if(fontListHandler.options[i].text == model.legendFont)
+		var fontListHandler = document.getElementById("lstFont");		//Get font combo-box handler.
+		
+		//Select the font if the index text value matches with the legendFont.
+		if(fontListHandler.options[model.legendFontIndex].text == model.legendFont)
 		{
-			model.legendFontIndex = i;
-			fontListHandler.options[i].selected = true;
-			break;
+			fontListHandler.options[model.legendFontIndex].selected = true;
+			return;
 		}
+		
+		//Select the font from the legendFont value and apply it.
+		var listLength = fontListHandler.options.length;
+		for (var i = 0; i < listLength; i++)
+		{
+			if(fontListHandler.options[i].text == model.legendFont)
+			{
+				model.legendFontIndex = i;
+				fontListHandler.options[i].selected = true;
+				break;
+			}
+		}
+	}
+	catch(e)
+	{
+		alert(e);
 	}
 }

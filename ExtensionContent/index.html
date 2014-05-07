@@ -11,6 +11,7 @@
 <script src="./lib/CSInterface-4.0.0.js"></script>
 <script src="./lib/jquery-1.9.1.js"></script>
 <script src="./appModel.js"></script>
+
 <script src="./specctrUI.js"></script>
 <script src="./ext.js"></script>
 <script src="./spacingButtonHandlers.js"></script>
@@ -21,18 +22,49 @@
 </head>
 
 <body onLoad="onLoaded()" onunload="writeAppPrefs()">
-<div class="container" id="tabContainer">
+
+	<div class="container" id="loginContainer" style="display: none;">
+        <!-- Login container start here -->
+        <div id="dvLoginContainer">
+
+            <div class="logo"></div>
+
+            <div class="row">
+                <label for="txtEmail">Email:</label>
+                <input type="text" id="registrationCodeInput" name="txtEmail" style="background-color: #ffffff;" />
+            </div>
+            <div class="row">
+                <label for="txtEmail">16- Digit License Code:</label>
+                <input type="password" id="emailInput" name="txt16Digit" placeholder="xxxx-xxxx-xxxx-xxxx" />
+            </div>
+
+            <ul class="menu">
+                <li class="border">
+                    <div class="button" onclick="activateButton_clickHandler()">
+                        <label>Activate Specctr</label>
+                    </div>
+                </li>
+            </ul>
+
+            <div class="help">
+                <label class="link">Need Help?</label>
+            </div>
+        </div>
+       <!-- Login container end here -->
+	</div>
+    
+<div class="container" id="tabContainer" style="display: none;">
         
         <div class="tabs">
             <ul>
                 <li id="tabHeader_1">
                     <img id="tabImage_1" src="Images/Icon_main.png" /></li>
                 <li id="tabHeader_2">
-                    <img id="tabImage_2" src="Images/Icon_settings.png" /></li>
+                    <img id="tabImage_2" src="Images/Icon_settings.png"/></li>
                 <li id="tabHeader_3">
-                    <img id="tabImage_3" src="Images/Icon_responsive.png" /></li>
+                    <img id="tabImage_3" src="Images/Icon_responsive.png"/></li>
                 <li id="tabHeader_4">
-                    <img id="tabImage_4" src="Images/Icon_prefs.png" onclick="applyFontToList()"/></li>
+                    <img id="tabImage_4" src="Images/Icon_prefs.png"/></li>
             </ul>
         </div>
         
@@ -339,19 +371,19 @@
                 <div class="tabPageContentRow" style="padding-top: 15px;">
                     <div class="tabPage4ContentLeft">
                         <label>Color Mode</label>
-                        	<div id="radio">                        
-                        		<input type="radio" id="rgbRadioButton" name="radio" value="RGB" checked="checked" onclick="rgbRadioButton_clickHandler()"><span>RGB</span>
-		      					<input type="radio" id="hsbRadioButton" name="radio" value="HSB" onclick="hsbRadioButton_clickHandler()"><span>HSB</span>
-		      					<input type="radio" id="cmykRadioButton" name="radio" value="CMYK" onclick="cmykRadioButton_clickHandler()"><span style='margin-right: 38px;'>CMYK</span>
-		      					<input type="radio" id="hslRadioButton" name="radio" value="HSL" onclick="hslRadioButton_clickHandler()"><span>HSL</span>
-						</div>
+                        	<div id="radio" onclick="radioButton_clickHandler(event)">                       
+                        		<input type="radio" id="rgbRadioButton" name="radio" value="RGB" checked="checked"><span>RGB</span>
+		      					<input type="radio" id="hsbRadioButton" name="radio" value="HSB"><span>HSB</span>
+		      					<input type="radio" id="cmykRadioButton" name="radio" value="CMYK"><span style='margin-right: 38px;'>CMYK</span>
+		      					<input type="radio" id="hslRadioButton" name="radio" value="HSL"><span>HSL</span>
+							</div>
                     </div>
                     <div class="tabPage4ContentRight">
                     </div>
                 </div>
                 
                 <div class="tabPageCheckBoxRow">
-                    <input type="checkbox" value="DisplayRGBAsHex" id="chkDisplayRGBAsHex" onchange="chkDisplayRGBAsHex_changeHandler()"/>
+                    <input type="checkbox" value="DisplayRGBAsHex" id="chkDisplayRGBAsHex" onclick="chkDisplayRGBAsHex_clickHandler()"/>
                     <label for="chkDisplayRGBAsHex">
                         Display RGB As Hex</label>
                 </div>
@@ -363,7 +395,7 @@
                 </div>
                 
                 <div class="tabPageCheckBoxRow" style="margin-top: -15px;">
-                    <input type="checkbox" value="ScaleBy" id="chkScaleBy" style="vertical-align: middle" onchange="chkScaleBy_changeHandler()"/>
+                    <input type="checkbox" value="ScaleBy" id="chkScaleBy" style="vertical-align: middle" onclick="chkScaleBy_clickHandler()"/>
                     <label for="chkScaleBy">Scale By</label>
                     <input type="text" class="inputStyleSmall" id="txtScaleBy" value=" x1" onchange="txtScaleBy_changeHandler()"/>
                     (e.g. x2 or /2)

@@ -57,7 +57,7 @@ body
 
 .logo
 {
-    background: url(../Images/SpecctrLogo_regpanel.png);
+    background: url(Images/SpecctrLogo_regpanel.png);
     margin: 25px 40px;
     height: 39px;
     background-repeat: no-repeat;
@@ -83,6 +83,7 @@ input[type="text"], input[type="password"]
     padding: 2px;
     border-top: 1px solid #6D6F70 !important;
     width: 187px;
+    -webkit-user-select: auto;
 }
 
 .menu
@@ -906,7 +907,8 @@ input[type="color"]
 
 #radio input
 {
-margin: 7px;}
+margin: 7px;
+}
 
 #radio span
 {

@@ -4,6 +4,8 @@ Description: This file is used to communicate between extend script file and htm
 and reading and writing preferences methods.  
 */
 
+var preferencePath;
+
 /**
  * FunctionName	: mainTab_creationCompleteHandler()
  * Description	: Set the canvas expand text value.
@@ -153,16 +155,12 @@ function prefs_creationCompleteHandler()
  * FunctionName	: onLoaded()
  * Description	: Update the theme with the AppSkinInfo retrieved from the host product.
  * */
-function onLoaded() 
+function onLoaded()
 {
 	try
 	{
-		var csInterface = new CSInterface();
+		//Load the jsx files present in \jsx folder.
 		loadJSX();
-	    updateThemeWithAppSkinInfo(csInterface.hostEnvironment.appSkinInfo);
-	    
-	    //Update the color of the panel when the theme color of the product changed.
-	    csInterface.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, onAppThemeColorChanged);
 	    
 	    //Get tab container
 	    var container = document.getElementById("tabContainer");
@@ -193,6 +191,21 @@ function onLoaded()
 	    {
 	        tabs[i].onclick = tab_clickHandler;
 	    }
+	  
+	    //Check whether config exists, if not initialize and save in file on disk.
+	    var prefFileExists = readAppPrefs();
+	    if(!prefFileExists)
+		{
+			model.isLicensed = false;
+			writeAppPrefs();
+		}
+	    
+	    model.isLicensed = true;
+	    if(model.isLicensed)
+    	{
+	    	document.getElementById("loginContainer").style.display = "none";
+	   	 	document.getElementById("tabContainer").style.display = "block";
+    	}
 	    
 	    mainTab_creationCompleteHandler();
 	    settings_creationCompleteHandler();
@@ -206,161 +219,214 @@ function onLoaded()
 }
 
 /**
- * FunctionName	: updateThemeWithAppSkinInfo()
- * Description	: Update the theme with the AppSkinInfo retrieved from the host product.
+ * FunctionName	: readAppPrefs()
+ * Description	: Return JSON object representing Specctr configuration file.
  * */
-function updateThemeWithAppSkinInfo(appSkinInfo) 
+function readAppPrefs()
 {
-	//Update the background color of the panel
-    var panelBackgroundColor = appSkinInfo.panelBackgroundColor.color;
-    document.body.bgColor = toHex(panelBackgroundColor);
-    
-    var styleId = "ppstyle";
-    addRule(styleId, "button, select, input[type=button], input[type=submit]", "border-radius:3px;");
+	try
+	{
+		var specctrConfig = 'specctrPhotoshopConfig.json';
+		
+		var csInterface = new CSInterface();
+		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
+		prefsFile += "/LocalStore";
+		preferencePath = prefsFile + "/" + specctrConfig;
+		
+		var result = cep.fs.readdir(prefsFile);
+		if(cep.fs.ERR_NOT_FOUND == result.err)
+		{
+			cep.fs.makedir(prefsFile);
+			return false;
+		}
+		
+		result = cep.fs.readFile(preferencePath);
+		if(cep.fs.ERR_NOT_FOUND == result.err)
+			return false;
+		
+		console.log(result.data);
+		var appPrefs = JSON.parse(result.data);
+		
+		setModelValueFromPreferences(appPrefs);
 	
-    var gradientBg = "background-image: -webkit-linear-gradient(top, " + 
-    					toHex(panelBackgroundColor, 40) + " , " + toHex(panelBackgroundColor, 10) + ");";
-    
-    var gradientDisabledBg = "background-image: -webkit-linear-gradient(top, " + 
-    							toHex(panelBackgroundColor, 15) + " , " + toHex(panelBackgroundColor, 5) + ");";
-    
-    var boxShadow = "-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);";
-    var boxActiveShadow = "-webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);";
-    
-    var isPanelThemeLight = panelBackgroundColor.red > 127;
-    var fontColor, disabledFontColor;
-    var borderColor;
-    var inputBackgroundColor;
-    var gradientHighlightBg;
-    
-    if(isPanelThemeLight) 
-    {
-    	fontColor = "#000000;";
-    	disabledFontColor = "color:" + toHex(panelBackgroundColor, -70) + ";";
-    	borderColor = "border-color: " + toHex(panelBackgroundColor, -90) + ";";
-    	inputBackgroundColor = toHex(panelBackgroundColor, 54) + ";";
-    	gradientHighlightBg = "background-image: -webkit-linear-gradient(top, " + 
-    							toHex(panelBackgroundColor, -40) + " , " + toHex(panelBackgroundColor,-50) + ");";
-    } 
-    else 
-    {
-    	fontColor = "#ffffff;";
-    	disabledFontColor = "color:" + toHex(panelBackgroundColor, 100) + ";";
-    	borderColor = "border-color: " + toHex(panelBackgroundColor, -45) + ";";
-    	inputBackgroundColor = toHex(panelBackgroundColor, -20) + ";";
-    	gradientHighlightBg = "background-image: -webkit-linear-gradient(top, " + 
-    							toHex(panelBackgroundColor, -20) + " , " + toHex(panelBackgroundColor, -30) + ");";
-    }
-    
-
-    //Update the default text style with pp values
-    
-    addRule(styleId, ".default", "font-size:" + appSkinInfo.baseFontSize + "px" + 
-				"; color:" + fontColor + "; background-color:" + toHex(panelBackgroundColor) + ";");
-    
-    addRule(styleId, "button, select, input[type=text], input[type=button], input[type=submit]", borderColor);    
-    addRule(styleId, "button, select, input[type=button], input[type=submit]", gradientBg);    
-    addRule(styleId, "button, select, input[type=button], input[type=submit]", boxShadow);
-    addRule(styleId, "button:enabled:active, input[type=button]:enabled:active, input[type=submit]:enabled:active", gradientHighlightBg);
-    addRule(styleId, "button:enabled:active, input[type=button]:enabled:active, input[type=submit]:enabled:active", boxActiveShadow);
-    addRule(styleId, "[disabled]", gradientDisabledBg);
-    addRule(styleId, "[disabled]", disabledFontColor);
-    addRule(styleId, "input[type=text]", "padding:1px 3px;");
-    addRule(styleId, "input[type=text]", "background-color: " + inputBackgroundColor) + ";";
-    addRule(styleId, "input[type=text]:focus", "background-color: #ffffff;");
-    addRule(styleId, "input[type=text]:focus", "color: #000000;");
-}
-
-/**
- * FunctionName	: addRule()
- * Description	: Apply style to the UI component passed.
- * */
-function addRule(stylesheetId, selector, rule) 
-{
-    var stylesheet = document.getElementById(stylesheetId);
-    
-    if(stylesheet) 
-    {
-    	stylesheet = stylesheet.sheet;
-    	
-    	if(stylesheet.addRule)
-    		stylesheet.addRule(selector, rule);
-    	else if(stylesheet.insertRule )
-    		stylesheet.insertRule(selector + ' { ' + rule + ' }', stylesheet.cssRules.length);
+		return true;
+	}
+	catch(e)
+	{
+		console.log(e);
 	}
 }
 
-/**
- * FunctionName	: reverseColor()
- * Description	: Reverse the value of given color.
- * */
-function reverseColor(color, delta) 
+function writeAppPrefs()
 {
-	return toHex({red:Math.abs(255-color.red), green:Math.abs(255-color.green), blue:Math.abs(255-color.blue)}, delta);
+	try
+	{
+		var appPrefs = new Object();
+		
+		appPrefs.shapeFill			= model.shapeFill;
+		appPrefs.shapeStroke		= model.shapeStroke;
+		appPrefs.shapeAlpha			= model.shapeAlpha;
+		appPrefs.shapeEffects		= model.shapeEffects;
+		appPrefs.shapeBorderRadius	= model.shapeBorderRadius;
+	
+		appPrefs.textFont			= model.textFont;
+		appPrefs.textSize			= model.textSize;
+		appPrefs.textAlignment		= model.textAlignment;
+		appPrefs.textColor			= model.textColor;
+		appPrefs.textStyle			= model.textStyle;
+		appPrefs.textLeading		= model.textLeading;
+		appPrefs.textTracking		= model.textTracking;
+		appPrefs.textAlpha			= model.textAlpha;
+		appPrefs.textEffects		= model.textEffects;
+		appPrefs.canvasExpandSize	= model.canvasExpandSize.toString();
+		
+		appPrefs.legendFont			= model.legendFont.toString();
+		appPrefs.legendFontSize		= model.legendFontSize.toString();
+		appPrefs.armWeight			= model.armWeight.toString();
+		appPrefs.legendColorObject	= model.legendColorObject;
+		appPrefs.legendColorType	= model.legendColorType;
+		appPrefs.legendColorSpacing	= model.legendColorSpacing;
+		appPrefs.legendColorMode	= model.legendColorMode;
+		appPrefs.useHexColor		= model.useHexColor;
+		appPrefs.specInPrcntg		= model.specInPrcntg;
+		appPrefs.specInEM			= model.specInEM;
+		appPrefs.useScaleBy			= model.useScaleBy;
+		appPrefs.useLegendBackground = model.useLegendBackground;
+		
+		appPrefs.isLicensed			= model.isLicensed;
+		
+		cep.fs.writeFile(preferencePath, JSON.stringify(appPrefs));
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
 }
 
-/**
- * FunctionName	: toHex()
- * Description	: Convert the Color object to string in hexadecimal format.
- * */
-function toHex(color, delta) 
+function setModelValueFromPreferences(appPrefs)
 {
-    function computeValue(value, delta) 
-    {
-        var computedValue = !isNaN(delta) ? value + delta : value;
-        if (computedValue < 0) 
-        {
-            computedValue = 0;
-        } 
-        else if (computedValue > 255) 
-        {
-            computedValue = 255;
-        }
-
-        computedValue = computedValue.toString(16);
-        return computedValue.length == 1 ? "0" + computedValue : computedValue;
-    }
-
-    var hex = "";
-    if (color) 
-    {
-        with (color) 
-        {
-             hex = computeValue(red, delta) + computeValue(green, delta) + computeValue(blue, delta);
-        };
-    }
-    return "#" + hex;
+	try
+	{
+		if (appPrefs.hasOwnProperty('shapeFill'))
+			model.shapeFill = appPrefs.shapeFill;
+		
+		if (appPrefs.hasOwnProperty('shapeStroke'))
+			model.shapeStroke = appPrefs.shapeStroke;
+		
+		if (appPrefs.hasOwnProperty('shapeAlpha'))
+			model.shapeAlpha = appPrefs.shapeAlpha;
+		
+		if (appPrefs.hasOwnProperty('shapeEffects'))
+			model.shapeEffects = appPrefs.shapeEffects;
+		
+		if (appPrefs.hasOwnProperty('shapeBorderRadius'))
+			model.shapeBorderRadius = appPrefs.shapeBorderRadius;
+		
+		if (appPrefs.hasOwnProperty('textFont'))
+			model.textFont = appPrefs.textFont;
+		
+		if (appPrefs.hasOwnProperty('textSize'))
+			model.textSize = appPrefs.textSize;
+		
+		if (appPrefs.hasOwnProperty('textAlignment'))
+			model.textAlignment = appPrefs.textAlignment;
+		
+		if (appPrefs.hasOwnProperty('textColor'))
+			model.textColor = appPrefs.textColor;
+		
+		if (appPrefs.hasOwnProperty('textStyle'))
+			model.textStyle = appPrefs.textStyle;
+		
+		if (appPrefs.hasOwnProperty('textLeading'))
+			model.textLeading = appPrefs.textLeading;
+		
+		if (appPrefs.hasOwnProperty('textTracking'))
+			model.textTracking = appPrefs.textTracking;
+		
+		if (appPrefs.hasOwnProperty('textAlpha'))
+			model.textAlpha = appPrefs.textAlpha;
+		
+		if (appPrefs.hasOwnProperty('textEffects'))
+			model.textEffects = appPrefs.textEffects;
+		
+		if (appPrefs.hasOwnProperty('canvasExpandSize'))
+			model.canvasExpandSize = Number(appPrefs.canvasExpandSize);
+		
+		if (appPrefs.hasOwnProperty('legendFont'))
+		{
+			model.legendFont = appPrefs.legendFont;
+		}
+		else
+		{
+			model.legendFont = "Arial";
+		}
+		
+		if (appPrefs.hasOwnProperty('legendFontSize'))
+			model.legendFontSize = Number(appPrefs.legendFontSize);
+		
+		if (appPrefs.hasOwnProperty('armWeight'))
+			model.armWeight = Number(appPrefs.armWeight);
+		
+		if (appPrefs.hasOwnProperty('legendColorObject'))
+			model.legendColorObject = appPrefs.legendColorObject;
+		
+		if (appPrefs.hasOwnProperty('legendColorType'))
+			model.legendColorType = appPrefs.legendColorType;
+		
+		if (appPrefs.hasOwnProperty('legendColorSpacing'))
+			model.legendColorSpacing = appPrefs.legendColorSpacing;
+		
+		if (appPrefs.hasOwnProperty('legendColorMode'))
+			model.legendColorMode = appPrefs.legendColorMode;
+		
+		if (appPrefs.hasOwnProperty('useHexColor'))
+			model.useHexColor = appPrefs.useHexColor;
+		
+		if (appPrefs.hasOwnProperty('useLegendBackground'))
+			model.useLegendBackground = appPrefs.useLegendBackground;
+		
+		if (appPrefs.hasOwnProperty('specInPrcntg'))
+			model.specInPrcntg = appPrefs.specInPrcntg;
+		
+		if (appPrefs.hasOwnProperty('specInEM'))
+			model.specInEM = appPrefs.specInEM;
+		
+		if (appPrefs.hasOwnProperty('useScaleBy'))
+			model.useScaleBy = appPrefs.useScaleBy;
+		
+		if (appPrefs.hasOwnProperty('isLicensed'))
+			model.isLicensed = appPrefs.isLicensed;
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
 }
-
-/**
- * FunctionName	: onAppThemeColorChanged()
- * Description	: This function is called when host application theme changes.
- * */
-function onAppThemeColorChanged(event) 
-{
-    // Should get a latest HostEnvironment object from application.
-    var skinInfo = JSON.parse(window.__adobe_cep__.getHostEnvironment()).appSkinInfo;
-    // Gets the style information such as color info from the skinInfo, 
-    // and redraw all UI controls of your extension according to the style info.
-    updateThemeWithAppSkinInfo(skinInfo);
-} 
-
 /**
  * FunctionName	: loadFontsToList()
  * Description	: This is a callback function which takes the font list from jsx and load the list to the font combo-box of fourth tab.
  * */
 function loadFontsToList(result)
 {
-	var font = JSON.parse(result);
-	var fontLength = font.length;
-	var fontList = document.getElementById("lstFont");
-    for (var i = 0; i < fontLength; i++) 
-    {
-    	var option = document.createElement("option");
-    	option.text = font[i].font;
-    	option.value = i;
-    	fontList.add(option, i);
-    }
+	try
+	{
+		var font = JSON.parse(result);
+		var fontLength = font.length;
+		var fontList = document.getElementById("lstFont");
+	    for (var i = 0; i < fontLength; i++) 
+	    {
+	    	var option = document.createElement("option");
+	    	option.text = font[i].font;
+	    	option.value = i;
+	    	fontList.add(option, i);
+	    }
+	    
+	    applyFontToList();
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
 }
 
 /**
@@ -444,6 +510,7 @@ function expandCanvas()
 		setModel();
 		var extScript = "ext_expandCanvas()";
 		evalScript(extScript);
+		writeAppPrefs();
 	}
 	catch(e)
 	{
@@ -462,6 +529,7 @@ function createDimensionSpecs()
 		setModel();
 		var extScript = "ext_createDimensionSpecs()";
 		evalScript(extScript);
+		writeAppPrefs();
 	}
 	catch(e)
 	{
@@ -480,6 +548,7 @@ function createSpacingSpecs()
 		setModel();
 		var extScript = "ext_createSpacingSpecs()";
 		evalScript(extScript);
+		writeAppPrefs();
 	}
 	catch(e)
 	{
@@ -498,6 +567,7 @@ function createCoordinateSpecs()
 		setModel();
 		var extScript = "ext_createCoordinateSpecs()";
 		evalScript(extScript);
+		writeAppPrefs();
 	}
 	catch(e)
 	{
@@ -516,6 +586,7 @@ function createPropertySpecs()
 		setModel();
 		var extScript = "ext_createPropertySpecs()";
 		evalScript(extScript);
+		writeAppPrefs();
 	}
 	catch(e)
 	{
@@ -540,3 +611,26 @@ function exportCss()
 		alert(e);
 	}
 }
+
+
+//Jquery code..
+jQuery().ready(function () {
+    $('#liWh #imgWhDdlArrow').click(function () {
+
+        //Rest other buttons
+        $('#liSpacing .options').slideUp(100);
+        $('#btnSpacing').removeClass('buttonSelected');
+        $('#imgSpacingDdlArrow').removeClass().addClass('dropdownArrow');
+    	$('#liWh').toggleClass('isOpen');
+        $('#liWh .options').slideToggle(100);
+        $('#imgWhDdlArrow').toggleClass('dropdownArrowUp');
+        $('#btnWh').toggleClass('buttonSelected');
+    });
+
+    $('#liSpacing #imgSpacingDdlArrow').click(function () {
+    	$('#liSpacing').toggleClass('isOpen');
+    	$('#liSpacing .options').slideToggle(100);
+        $('#imgSpacingDdlArrow').toggleClass('dropdownArrowUp');
+        $('#btnSpacing').toggleClass('buttonSelected');
+    });
+});
