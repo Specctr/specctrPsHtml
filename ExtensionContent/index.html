@@ -85,10 +85,10 @@
                         <div class="button imgButton" id="btnWh">
                             <img id="dimensionIcon" src="Images/DimensionButtonIcons/WH_11.png" alt="Width / Height" />
                             <label onclick="dimensionButton_clickHandler()">Width / Height</label>
-                            <div class="dropdownArrow" id="imgWhDdlArrow">
+                            <div class="dropdownArrow" id="imgWhDdlArrow" onclick="dimensionDropDown_clickHandler()">
                             </div>
                         </div>
-                        <div class="options">
+                        <div class="options" id="dimensionDropDown">
                             <div class="option" id="imgNoSelectionWidth" onclick="imgNoSelectionWidth_clickHandler()"></div>
                             <div class="option widthTopSelected" id="imgWidthTop" onclick="imgWidthTop_clickHandler()"></div>
                             <div class="option" id="imgWidthBottom" onclick="imgWidthBottom_clickHandler()"></div>
@@ -104,7 +104,7 @@
                         <div class="button imgButton" id="btnSpacing">
                             <img id="spacingIcon" src="Images/SpacingButtonIcons/Spacing_TL.png" alt="Spacing" />
                             <label onclick="spacingButton_clickHandler()">Spacing</label>
-                            <div id="imgSpacingDdlArrow" class="dropdownArrow">
+                            <div id="imgSpacingDdlArrow" class="dropdownArrow" onclick="spacingDropDown_clickHandler()">
                             </div>
                         </div>
                         <div class="options" id="spacingDropDown">
@@ -134,7 +134,9 @@
                     <li>
                         <div class="tblCell pxWidth">
                             <label class="lbl10Px" for="txtPx">By(px)</label>
-                            <input id="canvasExpandSize" onchange="canvasExpandSize_changeHandler()" maxlength="4" style="width:30px; height:20px; font-family:Verdana; font-size:11px; -webkit-user-select: auto;" />
+                            <input id="canvasExpandSize" onchange="canvasExpandSize_changeHandler()" maxlength="4" 
+                            	style="width:30px; height:20px; font-family:Verdana; font-size:11px; -webkit-user-select: auto;" 
+                            	onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
                         </div>
 
                         <div class="border tblCell" style="width: 122px;">
@@ -242,7 +244,8 @@
                         <label>100% Width:</label>
                     </div>
                     <div class="tabPageContentRight">
-                        <input type="text" class="inputStyle" id="txtWidth" onchange="txtWidth_changeHandler()" />px
+                        <input type="text" class="inputStyle" id="txtWidth" maxlength="6"  
+                        	onchange="txtWidth_changeHandler()" onkeypress="return restrictInputToDecimal(event)"/>px
                     </div>
                 </div>
                 
@@ -251,7 +254,8 @@
                         100% Height:
                     </div>
                     <div class="tabPageContentRight">
-                        <input type="text" class="inputStyle" id="txtHeight" onchange="txtHeight_changeHandler()"/>px
+                        <input type="text" class="inputStyle" id="txtHeight" maxlength="6"  
+                        	onchange="txtHeight_changeHandler()" onkeypress="return restrictInputToDecimal(event)"/>px
                     </div>
                 </div>
                 
@@ -270,7 +274,8 @@
                         Base font size:<br />
                     </div>
                     <div class="tabPageContentRight">
-                        <input type="text" class="inputStyle" id="txtFontSize" onchange="txtFontSize_changeHandler()"/>
+                        <input type="text" class="inputStyle" id="txtFontSize" maxlength="6"  
+                       		onchange="txtFontSize_changeHandler()" onkeypress="return restrictInputToDecimal(event)"/>
                         px<br />
                     </div>
                 </div>
@@ -280,7 +285,8 @@
                         Base line height:
                     </div>
                     <div class="tabPageContentRight">
-                        <input type="text" class="inputStyle" id="txtBaseLineHeight" onchange="txtBaseLineHeight_changeHandler()"/>px
+                        <input type="text" class="inputStyle" id="txtBaseLineHeight"  maxlength="6"  
+                        	onchange="txtBaseLineHeight_changeHandler()" onkeypress="return restrictInputToDecimal(event)"/>px
                     </div>
                 </div>
                 

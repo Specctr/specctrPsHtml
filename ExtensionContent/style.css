@@ -348,21 +348,19 @@ input[type="text"], input[type="password"]
     border: 1px solid transparent !important;
     background-image: none;
     width: 198px;	
-
 }
 
 #tabpage_1 .isOpen:hover .buttonSelected
 {
-margin-left:-1px;
+	margin-left:-1px;
 }
 
-#tabpage_1 .isOpen  .buttonSelected
+#tabpage_1 .isOpen .buttonSelected
 {
-  border: 0px solid #000 !important;
-border-width: 1px 1px 0px 1px !important;
-background-image: none;
-width: 198px;
-	
+	border: 0px solid #000 !important;
+	border-width: 1px 1px 0px 1px !important;
+	background-image: none;
+	width: 198px;	
 }
 
 .imgButton img
@@ -424,7 +422,6 @@ width: 198px;
     font-size: 10px;
     color: #4B4B4B;
 }
-
 
 .tblCell
 {
@@ -837,7 +834,7 @@ label
 
 .downButtonStyle
 {
-    background: url(../Images/dropdown_arrow.JPG);
+    background: url(Images/dropdown_arrow.JPG);
     background-position: center;
     background-repeat: no-repeat;
     height: 21px;
@@ -907,12 +904,11 @@ input[type="color"]
 
 #radio input
 {
-margin: 7px;
+	margin: 7px;
 }
 
 #radio span
 {
-margin-right: 46px;
-margin-top: 6px;
+	margin-right: 46px;
+	margin-top: 6px;
 }
-

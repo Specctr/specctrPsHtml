@@ -4,7 +4,7 @@ Description: This file is used to communicate between extend script file and htm
 and reading and writing preferences methods.  
 */
 
-var preferencePath;
+var preferencePath;		//path of the Specctr config file.
 
 /**
  * FunctionName	: mainTab_creationCompleteHandler()
@@ -99,56 +99,63 @@ function responsiveTab_creationCompleteHandler()
  * */
 function prefs_creationCompleteHandler()
 {
-	//Set the values for font size combobox.
-	var fontSizeHandler = document.getElementById("lstSize");
-	fontSizeHandler.selectedIndex = -1;
-	fontSizeHandler.value = model.legendFontSize.toString();
-	
-	//Set the values for arm weight combobox.
-	var armWeightHandler = document.getElementById("lstLineWeight");
-	armWeightHandler.selectedIndex = -1;
-	armWeightHandler.value = model.armWeight.toString();
-	
-	document.getElementById("chkDisplayRGBAsHex").checked = model.useHexColor;
-	
-//	specColorObject.selectedColor	= model.legendColorObject;
-//	specColorType.selectedColor		= model.legendColorType;
-//	specColorSpacing.selectedColor	= model.legendColorSpacing;
-	
-	switch(model.legendColorMode)
+	try
 	{
-		case "HSB": 
-			document.getElementById("hsbRadioButton").checked = true;
-			break;
-			
-		case "CMYK": 
-			document.getElementById("cmykRadioButton").checked = true;
-			break;
-			
-		case "HSL": 
-			document.getElementById("hslRadioButton").checked = true;
-			break;
+		//Set the values for font size combobox.
+		var fontSizeHandler = document.getElementById("lstSize");
+		fontSizeHandler.selectedIndex = -1;
+		fontSizeHandler.value = model.legendFontSize.toString();
 		
-		case "RGB":
-		default:
-			document.getElementById("rgbRadioButton").checked = true;
-			break;
+		//Set the values for arm weight combobox.
+		var armWeightHandler = document.getElementById("lstLineWeight");
+		armWeightHandler.selectedIndex = -1;
+		armWeightHandler.value = model.armWeight.toString();
 		
+		document.getElementById("chkDisplayRGBAsHex").checked = model.useHexColor;
+		
+//		specColorObject.selectedColor	= model.legendColorObject;
+//		specColorType.selectedColor		= model.legendColorType;
+//		specColorSpacing.selectedColor	= model.legendColorSpacing;
+		
+		switch(model.legendColorMode)
+		{
+			case "HSB": 
+				document.getElementById("hsbRadioButton").checked = true;
+				break;
+				
+			case "CMYK": 
+				document.getElementById("cmykRadioButton").checked = true;
+				break;
+				
+			case "HSL": 
+				document.getElementById("hslRadioButton").checked = true;
+				break;
+			
+			case "RGB":
+			default:
+				document.getElementById("rgbRadioButton").checked = true;
+				break;
+			
+		}
+		
+		document.getElementById("chkScaleBy").checked = model.useScaleBy;
+		
+		if(model.useScaleBy)
+		{
+			enableTextField(document.getElementById("txtScaleBy"));
+		}
+		else
+		{
+			disableTextField(document.getElementById("txtScaleBy"));
+		}
+		
+		var extScript = "ext_getFonts()";
+		evalScript(extScript, loadFontsToList);
 	}
-	
-	document.getElementById("chkScaleBy").checked = model.useScaleBy;
-	
-	if(model.useScaleBy)
+	catch(e)
 	{
-		enableTextField(document.getElementById("txtScaleBy"));
+		console.log(e);
 	}
-	else
-	{
-		disableTextField(document.getElementById("txtScaleBy"));
-	}
-	
-	var extScript = "ext_getFonts()";
-	evalScript(extScript, loadFontsToList);
 }
 
 /**
@@ -257,6 +264,10 @@ function readAppPrefs()
 	}
 }
 
+/**
+ * FunctionName	: writeAppPrefs()
+ * Description	: Write Specctr configuration to file.
+ * */
 function writeAppPrefs()
 {
 	try
@@ -303,6 +314,10 @@ function writeAppPrefs()
 	}
 }
 
+/**
+ * FunctionName	: setModelValueFromPreferences()
+ * Description	: Set the Specctr configuration file data to model values.
+ * */
 function setModelValueFromPreferences(appPrefs)
 {
 	try
@@ -353,13 +368,9 @@ function setModelValueFromPreferences(appPrefs)
 			model.canvasExpandSize = Number(appPrefs.canvasExpandSize);
 		
 		if (appPrefs.hasOwnProperty('legendFont'))
-		{
 			model.legendFont = appPrefs.legendFont;
-		}
 		else
-		{
 			model.legendFont = "Arial";
-		}
 		
 		if (appPrefs.hasOwnProperty('legendFontSize'))
 			model.legendFontSize = Number(appPrefs.legendFontSize);
@@ -611,26 +622,3 @@ function exportCss()
 		alert(e);
 	}
 }
-
-
-//Jquery code..
-jQuery().ready(function () {
-    $('#liWh #imgWhDdlArrow').click(function () {
-
-        //Rest other buttons
-        $('#liSpacing .options').slideUp(100);
-        $('#btnSpacing').removeClass('buttonSelected');
-        $('#imgSpacingDdlArrow').removeClass().addClass('dropdownArrow');
-    	$('#liWh').toggleClass('isOpen');
-        $('#liWh .options').slideToggle(100);
-        $('#imgWhDdlArrow').toggleClass('dropdownArrowUp');
-        $('#btnWh').toggleClass('buttonSelected');
-    });
-
-    $('#liSpacing #imgSpacingDdlArrow').click(function () {
-    	$('#liSpacing').toggleClass('isOpen');
-    	$('#liSpacing .options').slideToggle(100);
-        $('#imgSpacingDdlArrow').toggleClass('dropdownArrowUp');
-        $('#btnSpacing').toggleClass('buttonSelected');
-    });
-});

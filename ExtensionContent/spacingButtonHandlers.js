@@ -12,21 +12,49 @@ function spacingButton_clickHandler()
 {
 	try
 	{
-		$('#liSpacing').toggleClass('isOpen');
 		if (!model.spaceTop && !model.spaceRight && !model.spaceLeft && !model.spaceBottom)
 		{
 			$('#liSpacing .options').slideDown(100);
+			$('#btnSpacing').addClass('buttonSelected');
 			$('#imgSpacingDdlArrow').addClass('dropdownArrowUp');
-			
-	        $('#btnSpacing').removeClass('buttonSelected');
+			$('#liSpacing').addClass('isOpen');
 		}
 		else
 		{
 			$('#liSpacing .options').slideUp(100);
 			$('#imgSpacingDdlArrow').removeClass('dropdownArrowUp');
-	        $('#btnSpacing').addClass('buttonSelected');
+			$('#btnSpacing').removeClass('buttonSelected');
+			$('#liSpacing').removeClass('isOpen');
 			createSpacingSpecs();
 		}
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+}
+
+/**
+ * FunctionName	: spacingDropDown_clickHandler()
+ * Description	: Adding/Removing style classes on opening/closing of spacing drop-down.
+ * */
+function spacingDropDown_clickHandler()
+{
+	try
+	{
+		if($("#spacingDropDown").is(":visible"))
+		{
+    		$('#liSpacing').removeClass('isOpen');
+    		$('#btnSpacing').removeClass('buttonSelected');
+		}
+    	else
+		{
+    		$('#liSpacing').addClass('isOpen');
+    		$('#btnSpacing').addClass('buttonSelected');
+		}
+    	
+    	$('#liSpacing .options').slideToggle(100);
+        $('#imgSpacingDdlArrow').toggleClass('dropdownArrowUp');
 	}
 	catch(e)
 	{

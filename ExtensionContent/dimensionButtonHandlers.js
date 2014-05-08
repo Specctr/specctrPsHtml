@@ -16,20 +16,61 @@ function dimensionButton_clickHandler()
 		{
 			$('#liWh .options').slideUp(100);
 			$('#imgWhDdlArrow').removeClass('dropdownArrowUp');
-	        $('#btnWh').addClass('buttonSelected');
+	        $('#btnWh').removeClass('buttonSelected');
+	        $('#liWh').removeClass('isOpen');
 			createDimensionSpecs();
 		}
 		else
 		{
+			//Close the spacing drop down, if open.
+			if($("#spacingDropDown").is(":visible"))
+			{
+		        $('#liSpacing .options').slideUp(100);
+		        $('#liSpacing').removeClass('isOpen');
+		        $('#btnSpacing').removeClass('buttonSelected');
+		        $('#imgSpacingDdlArrow').removeClass().addClass('dropdownArrow');
+			}
+			
 			$('#liWh .options').slideDown(100);
 			$('#imgWhDdlArrow').addClass('dropdownArrowUp');
-	        $('#btnWh').removeClass('buttonSelected');
+	        $('#btnWh').addClass('buttonSelected');
+	        $('#liWh').addClass('isOpen');
 		}
 	}
 	catch(e)
 	{
 		console.log(e);
 	}
+}
+
+/**
+ * FunctionName	: dimensionDropDown_clickHandler()
+ * Description	: Adding/Removing style classes on opening/closing of width/height drop-down.
+ * */
+function dimensionDropDown_clickHandler()
+{
+	//Close the spacing drop down, if open.
+	if($("#spacingDropDown").is(":visible"))
+	{
+        $('#liSpacing .options').slideUp(100);
+        $('#liSpacing').removeClass('isOpen');
+        $('#btnSpacing').removeClass('buttonSelected');
+        $('#imgSpacingDdlArrow').removeClass().addClass('dropdownArrow');
+	}
+
+	if($("#dimensionDropDown").is(":visible"))
+	{
+		$('#liWh').removeClass('isOpen');
+		$('#btnWh').removeClass('buttonSelected');
+	}
+	else
+	{
+		$('#liWh').addClass('isOpen');
+		$('#btnWh').addClass('buttonSelected');
+	}
+	
+    $('#liWh .options').slideToggle(100);
+    $('#imgWhDdlArrow').toggleClass('dropdownArrowUp');
 }
 
 /**

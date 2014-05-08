@@ -3,6 +3,10 @@ File-Name: specctrUI.js
 Description: Includes all the methods related to UI component like change event handlers, click event handlers etc. 
 */
 
+/**
+ * FunctionName	: activateButton_clickHandler()
+ * Description	: Validate the license of the user and move to the tab container if user's credentials valid.
+ * */
 function activateButton_clickHandler()
 {
 	try
@@ -654,3 +658,31 @@ function applyFontToList()
 		alert(e);
 	}
 }
+
+/**
+ * FunctionName	: restrictInputToDecimal()
+ * Description	: Restrict the input to decimal value.
+ * */
+function restrictInputToDecimal(event)
+{
+	try
+	{
+		var charCode = (event.which) ? event.which : event.keyCode;
+		
+		if(charCode == 48 && !event.srcElement.value.length)
+			return false;
+		
+		if (charCode == 46 && event.srcElement.value.split('.').length>1)
+	        return false;
+	    
+	    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+	        return false;
+	    
+	    return true;
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+}
+
