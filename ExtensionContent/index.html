@@ -23,7 +23,7 @@
 
 <body onLoad="onLoaded()" onunload="writeAppPrefs()">
 
-	<div class="container" id="loginContainer" style="display: none;">
+	<div class="container" id="loginContainer" style="display: block;">
         <!-- Login container start here -->
         <div id="dvLoginContainer">
 
@@ -31,11 +31,11 @@
 
             <div class="row">
                 <label for="txtEmail">Email:</label>
-                <input type="text" id="registrationCodeInput" name="txtEmail" style="background-color: #ffffff;" />
+                <input type="text" id="emailInput" name="txtEmail" style="background-color: #ffffff;" />
             </div>
             <div class="row">
                 <label for="txtEmail">16- Digit License Code:</label>
-                <input type="password" id="emailInput" name="txt16Digit" placeholder="xxxx-xxxx-xxxx-xxxx" />
+                <input type="text" id="license" name="txt16Digit" placeholder="xxxx-xxxx-xxxx-xxxx" />
             </div>
 
             <ul class="menu">
@@ -359,7 +359,26 @@
                         <label style="font-weight: normal">
                             Type:
                         </label>
-                        <input type="color" id="colType" style="margin-left: 24px; height: 20px;" />
+                        <input type="color" id="colType" 
+                        style="margin-left:24px; background-color:#ff0000; height:18px; cursor:pointer; border: 2px #000000 solid ;" />
+                        <div id='colorTypeDropDown' class="colorPicker">
+                       		<div class="mainColorBlock" style="background-color: #ff0000; display: inline-block;"></div>
+                       		<input type="text" id="txtColorCode" />
+                        	<br>
+                        	<br>
+                        	<div class="colorBlock" style="background-color: #ff0000"></div>
+                        	<div class="colorBlock" style="background-color: #7bd148"></div>
+                        	<div class="colorBlock" style="background-color: #5484ed"></div>
+                        	<div class="colorBlock" style="background-color: #a4bdfc"></div>
+                        	<div class="colorBlock" style="background-color: #7ae7bf"></div>
+                        	<div class="colorBlock" style="background-color: #51b749"></div>
+                        	<div class="colorBlock" style="background-color: #fbd75b"></div>
+                        	<div class="colorBlock" style="background-color: #ff887c"></div>
+                        	<div class="colorBlock" style="background-color: #dc2127"></div>
+                        	<div class="colorBlock" style="background-color: #dbadff"></div>
+                        	<div class="colorBlock" style="background-color: #e1e1e1"></div>
+						</div>
+						
                     </div>
                     <div class="tabPage4ContentRight">
                     </div>

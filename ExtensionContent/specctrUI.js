@@ -11,14 +11,52 @@ function activateButton_clickHandler()
 {
 	try
 	{
-		document.getElementById("loginContainer").style.display = "none";
-		document.getElementById("tabContainer").style.display = "block";
+		// Get Extension Id and matching productCode.
+		var extensionId = "SpecctrPs-Pro";
+		
+		var urlRequest = "http://specctr-license.herokuapp.com?";
+		urlRequest += "product=" + extensionId;
+		urlRequest += "&license=" + document.getElementById("license").value;
+		urlRequest += "&email=" + document.getElementById("emailInput").value;
+		
+		$.get(urlRequest, completeHandler);		
 	}
 	catch(e)
 	{
 		alert(e);
 	}
 
+}
+
+/**
+ * FunctionName	: completeHandler()
+ * Description	: Callback function which is called when validation of user's license take place.
+ * */
+function completeHandler(data, status)
+{
+	try
+    {
+    	var response = data;
+    	alert(response["message"]);
+        var arr = response["registered"];
+        if(arr.length != 0) 
+    	{	
+    		model.isLicensed = true;
+    		
+    		var specctrConfig = 'specctrPhotoshopConfig.json';
+    		var csInterface = new CSInterface();
+    		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
+    		prefsFile += "/LocalStore";
+    		preferencePath = prefsFile + "/" + specctrConfig;
+    		
+    		writeAppPrefs();
+    		init();
+    	}
+    }
+    catch(e)
+    {
+    	console.log(e);
+    }
 }
 
 /**
@@ -345,7 +383,7 @@ function textEffects_changeHandler()
 		console.log(e);	//For debugging.
 	}
 }
- 
+
  /**
  * FunctionName	: canvasExpandSize_changeHandler()
  * Description	: Set the value of canvasExpandSize when changed.

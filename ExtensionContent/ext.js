@@ -160,7 +160,7 @@ function prefs_creationCompleteHandler()
 
 /**
  * FunctionName	: onLoaded()
- * Description	: Update the theme with the AppSkinInfo retrieved from the host product.
+ * Description	: Load the jsx and show/hide the login container according to the license value in preferences.
  * */
 function onLoaded()
 {
@@ -169,7 +169,38 @@ function onLoaded()
 		//Load the jsx files present in \jsx folder.
 		loadJSX();
 	    
-	    //Get tab container
+		//Check whether config exists, if not initialize and save in file on disk.
+	    var prefFileExists = readAppPrefs();
+	    if(!prefFileExists)
+		{
+			model.isLicensed = false;
+			writeAppPrefs();
+		}
+	    
+	    if(model.isLicensed)
+    	{
+	   	 	init();
+    	}
+    }
+	catch(e)
+	{
+		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: init()
+ * Description	: Initialize the values of the tab conatainer's components.
+ * */
+function init()
+{
+	try
+	{
+		//Load tab container..
+		document.getElementById("loginContainer").style.display = "none";
+   	 	document.getElementById("tabContainer").style.display = "block";
+   	 	
+		//Get tab container
 	    var container = document.getElementById("tabContainer");
 	    
 	    //Set current tab
@@ -199,29 +230,14 @@ function onLoaded()
 	        tabs[i].onclick = tab_clickHandler;
 	    }
 	  
-	    //Check whether config exists, if not initialize and save in file on disk.
-	    var prefFileExists = readAppPrefs();
-	    if(!prefFileExists)
-		{
-			model.isLicensed = false;
-			writeAppPrefs();
-		}
-	    
-	    model.isLicensed = true;
-	    if(model.isLicensed)
-    	{
-	    	document.getElementById("loginContainer").style.display = "none";
-	   	 	document.getElementById("tabContainer").style.display = "block";
-    	}
-	    
 	    mainTab_creationCompleteHandler();
 	    settings_creationCompleteHandler();
 	    responsiveTab_creationCompleteHandler();
 	    prefs_creationCompleteHandler();
-    }
+	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -251,9 +267,7 @@ function readAppPrefs()
 		if(cep.fs.ERR_NOT_FOUND == result.err)
 			return false;
 		
-		console.log(result.data);
 		var appPrefs = JSON.parse(result.data);
-		
 		setModelValueFromPreferences(appPrefs);
 	
 		return true;
@@ -306,7 +320,8 @@ function writeAppPrefs()
 		
 		appPrefs.isLicensed			= model.isLicensed;
 		
-		cep.fs.writeFile(preferencePath, JSON.stringify(appPrefs));
+		if(appPrefs)
+			cep.fs.writeFile(preferencePath, JSON.stringify(appPrefs));
 	}
 	catch(e)
 	{
@@ -622,3 +637,12 @@ function exportCss()
 		alert(e);
 	}
 }
+
+jQuery().ready(function () {
+   	 
+	  $('#colType').click(function () 
+	  {
+		//$('#colors .icon').click();
+        $('#colorTypeDropDown').slideToggle(200);
+    });			
+});

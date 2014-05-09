@@ -912,3 +912,42 @@ input[type="color"]
 	margin-right: 46px;
 	margin-top: 6px;
 }
+
+.colorBlock
+{
+    float: left;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.tabPage4ContentLeft .colorPicker
+{
+    display: none;
+    margin-left: 55px !important;
+    margin-top: 2px !important;
+    width: 120px;
+    height: 100px;
+    border: 1px solid #000;
+    position: absolute;
+    background-image: linear-gradient(to bottom, #E1E1E1 0%, #F8F8F8 20%);
+    
+}
+
+.tabPage4ContentLeft #txtColorCode
+{
+	width:50px;
+	margin-left: 5px !important;
+	margin-top: 6px !important;
+	display: inline-block;
+}
+
+.tabPage4ContentLeft .mainColorBlock
+{
+	float: left;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    margin-left: 3px !important;
+    margin-top: 2px !important;
+}
