@@ -1,10 +1,84 @@
 /*
-File-Name: ext.js
+File-Name: main.js
 Description: This file is used to communicate between extend script file and html file. It also include function to execute when panel loads
 and reading and writing preferences methods.  
 */
 
 var preferencePath;		//path of the Specctr config file.
+var appPrefs;			//Store the preference of UI.
+
+/**
+ * FunctionName	: activateButton_clickHandler()
+ * Description	: Validate the license of the user and move to the tab container if user's credentials valid.
+ * */
+function activateButton_clickHandler()
+{
+	try
+	{
+		// Get Extension Id and matching productCode.
+		var productCodes = [ "SpecctrPs-Pro",
+				"SpecctrPs-10",
+				"SpecctrPs-20",
+				"SpecctrPs-30",
+				"SpecctrPs-Site"
+			];
+		
+		var csInterface = new CSInterface();
+		var arrayOfExtensionIds = csInterface.getExtensions(productCodes);
+		
+		if(!arrayOfExtensionIds.length)
+		{
+			alert("Incorrect product code!");
+			return;
+		}
+			
+		var extensionId = arrayOfExtensionIds[0].id;
+		
+		var urlRequest = "http://specctr-license.herokuapp.com?";
+		urlRequest += "product=" + extensionId;
+		urlRequest += "&license=" + document.getElementById("license").value;
+		urlRequest += "&email=" + document.getElementById("emailInput").value;
+		
+		$.get(urlRequest, completeHandler);		
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+
+}
+
+/**
+ * FunctionName	: completeHandler()
+ * Description	: Callback function which is called when validation of user's license take place.
+ * */
+function completeHandler(data, status)
+{
+	try
+    {
+    	var response = data;
+    	alert(response["message"]);
+        var arr = response["registered"];
+        if(arr.length != 0) 
+    	{
+        	appPrefs.isLicensed = true;
+    		model.isLicensed = true;
+    		
+    		var specctrConfig = 'specctrPhotoshopConfig.json';
+    		var csInterface = new CSInterface();
+    		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
+    		prefsFile += "/LocalStore";
+    		preferencePath = prefsFile + "/" + specctrConfig;
+    		
+    		writeAppPrefs(appPrefs);
+    		init();
+    	}
+    }
+    catch(e)
+    {
+    	console.log(e);
+    }
+}
 
 /**
  * FunctionName	: mainTab_creationCompleteHandler()
@@ -113,9 +187,9 @@ function prefs_creationCompleteHandler()
 		
 		document.getElementById("chkDisplayRGBAsHex").checked = model.useHexColor;
 		
-//		specColorObject.selectedColor	= model.legendColorObject;
-//		specColorType.selectedColor		= model.legendColorType;
-//		specColorSpacing.selectedColor	= model.legendColorSpacing;
+		document.getElementById("colShape").style.backgroundColor = model.legendColorObject;
+		document.getElementById("colType").style.backgroundColor = model.legendColorType;
+		document.getElementById("colSpacing").style.backgroundColor = model.legendColorSpacing;
 		
 		switch(model.legendColorMode)
 		{
@@ -141,13 +215,9 @@ function prefs_creationCompleteHandler()
 		document.getElementById("chkScaleBy").checked = model.useScaleBy;
 		
 		if(model.useScaleBy)
-		{
 			enableTextField(document.getElementById("txtScaleBy"));
-		}
 		else
-		{
 			disableTextField(document.getElementById("txtScaleBy"));
-		}
 		
 		var extScript = "ext_getFonts()";
 		evalScript(extScript, loadFontsToList);
@@ -170,17 +240,20 @@ function onLoaded()
 		loadJSX();
 	    
 		//Check whether config exists, if not initialize and save in file on disk.
-	    var prefFileExists = readAppPrefs();
-	    if(!prefFileExists)
+	    appPrefs = readAppPrefs();
+	    if(appPrefs == null)
 		{
+	    	appPrefs = new Object();
+			appPrefs.isLicensed = false;
 			model.isLicensed = false;
-			writeAppPrefs();
+			writeAppPrefs(appPrefs);
 		}
 	    
+	    //Check if Specctr is licensed, if not leave registration screen.
+		model.isLicensed = appPrefs.isLicensed;
+		
 	    if(model.isLicensed)
-    	{
 	   	 	init();
-    	}
     }
 	catch(e)
 	{
@@ -200,6 +273,8 @@ function init()
 		document.getElementById("loginContainer").style.display = "none";
    	 	document.getElementById("tabContainer").style.display = "block";
    	 	
+   	 	setModelValueFromPreferences(appPrefs);
+   	 
 		//Get tab container
 	    var container = document.getElementById("tabContainer");
 	    
@@ -260,40 +335,37 @@ function readAppPrefs()
 		if(cep.fs.ERR_NOT_FOUND == result.err)
 		{
 			cep.fs.makedir(prefsFile);
-			return false;
+			return null;
 		}
 		
 		result = cep.fs.readFile(preferencePath);
 		if(cep.fs.ERR_NOT_FOUND == result.err)
-			return false;
+			return null;
 		
-		var appPrefs = JSON.parse(result.data);
-		setModelValueFromPreferences(appPrefs);
-	
-		return true;
+		appPrefs = JSON.parse(result.data);
+		return appPrefs;
 	}
 	catch(e)
 	{
 		console.log(e);
+		return null;
 	}
 }
 
 /**
- * FunctionName	: writeAppPrefs()
- * Description	: Write Specctr configuration to file.
+ * FunctionName	: onClose()
+ * Description	: Load the model value to preference on closing the panel. 
  * */
-function writeAppPrefs()
+function onClose()
 {
 	try
 	{
-		var appPrefs = new Object();
-		
 		appPrefs.shapeFill			= model.shapeFill;
 		appPrefs.shapeStroke		= model.shapeStroke;
 		appPrefs.shapeAlpha			= model.shapeAlpha;
 		appPrefs.shapeEffects		= model.shapeEffects;
 		appPrefs.shapeBorderRadius	= model.shapeBorderRadius;
-	
+
 		appPrefs.textFont			= model.textFont;
 		appPrefs.textSize			= model.textSize;
 		appPrefs.textAlignment		= model.textAlignment;
@@ -318,10 +390,32 @@ function writeAppPrefs()
 		appPrefs.useScaleBy			= model.useScaleBy;
 		appPrefs.useLegendBackground = model.useLegendBackground;
 		
-		appPrefs.isLicensed			= model.isLicensed;
+		writeAppPrefs(appPrefs);
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+}
+
+/**
+ * FunctionName	: writeAppPrefs()
+ * Description	: Write Specctr configuration to file.
+ * */
+function writeAppPrefs(appPrefs)
+{
+	try
+	{
+		if(!preferencePath.length)
+		{
+			var specctrConfig = 'specctrPhotoshopConfig.json';
+			var csInterface = new CSInterface();
+			var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
+			prefsFile += "/LocalStore";
+			preferencePath = prefsFile + "/" + specctrConfig;
+		}
 		
-		if(appPrefs)
-			cep.fs.writeFile(preferencePath, JSON.stringify(appPrefs));
+		cep.fs.writeFile(preferencePath, JSON.stringify(appPrefs));
 	}
 	catch(e)
 	{
@@ -419,15 +513,13 @@ function setModelValueFromPreferences(appPrefs)
 		
 		if (appPrefs.hasOwnProperty('useScaleBy'))
 			model.useScaleBy = appPrefs.useScaleBy;
-		
-		if (appPrefs.hasOwnProperty('isLicensed'))
-			model.isLicensed = appPrefs.isLicensed;
 	}
 	catch(e)
 	{
 		console.log(e);
 	}
 }
+
 /**
  * FunctionName	: loadFontsToList()
  * Description	: This is a callback function which takes the font list from jsx and load the list to the font combo-box of fourth tab.
@@ -456,47 +548,22 @@ function loadFontsToList(result)
 }
 
 /**
- * FunctionName	: disableTextField()
- * Description	: Disable the text input.
- * */
-function disableTextField(textField)
-{
-	try
-	{
-		textField.disabled = true;
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-}
-
-/**
- * FunctionName	: enableTextField()
- * Description	: Enable the text input and change the background color to white.
- * */
-function enableTextField(textField)
-{
-	try
-	{
-		textField.disabled = false;
-		textField.style.backgroundColor = '#ffffff';
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-}
-
-/**
  * FunctionName	: loadJSX()
  * Description	: Load JSX file into the scripting context of the product. All the jsx files in folder [ExtensionRoot]/jsx will be loaded.
  * */
 function loadJSX() 
 {
-    var csInterface = new CSInterface();
-    var extensionRoot = csInterface.getSystemPath(SystemPath.EXTENSION) + "/jsx/";
-    csInterface.evalScript('$._ext.evalFiles("' + extensionRoot + '")');
+	try
+	{
+		var csInterface = new CSInterface();
+		var extensionRoot = csInterface.getSystemPath(SystemPath.EXTENSION) + "/jsx/";
+		csInterface.evalScript('$._ext.evalFiles("' + extensionRoot + '")');
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+  
 }
 
 /**
@@ -505,7 +572,14 @@ function loadJSX()
  * */
 function evalScript(script, callback) 
 {
-    new CSInterface().evalScript(script, callback);
+	try
+	{
+	    new CSInterface().evalScript(script, callback);
+	}
+	catch(e)
+	{
+		consol.log(e);
+	}
 }
 
 /**
@@ -536,7 +610,7 @@ function expandCanvas()
 		setModel();
 		var extScript = "ext_expandCanvas()";
 		evalScript(extScript);
-		writeAppPrefs();
+		onClose();
 	}
 	catch(e)
 	{
@@ -555,7 +629,7 @@ function createDimensionSpecs()
 		setModel();
 		var extScript = "ext_createDimensionSpecs()";
 		evalScript(extScript);
-		writeAppPrefs();
+		onClose();
 	}
 	catch(e)
 	{
@@ -574,7 +648,7 @@ function createSpacingSpecs()
 		setModel();
 		var extScript = "ext_createSpacingSpecs()";
 		evalScript(extScript);
-		writeAppPrefs();
+		onClose();
 	}
 	catch(e)
 	{
@@ -593,7 +667,7 @@ function createCoordinateSpecs()
 		setModel();
 		var extScript = "ext_createCoordinateSpecs()";
 		evalScript(extScript);
-		writeAppPrefs();
+		onClose();
 	}
 	catch(e)
 	{
@@ -612,7 +686,7 @@ function createPropertySpecs()
 		setModel();
 		var extScript = "ext_createPropertySpecs()";
 		evalScript(extScript);
-		writeAppPrefs();
+		onClose();
 	}
 	catch(e)
 	{
@@ -638,11 +712,37 @@ function exportCss()
 	}
 }
 
-jQuery().ready(function () {
-   	 
-	  $('#colType').click(function () 
-	  {
-		//$('#colors .icon').click();
-        $('#colorTypeDropDown').slideToggle(200);
-    });			
-});
+/**
+ * FunctionName	: applyFontToList()
+ * Description	: Apply the model's font value to the font list of fourth tab.
+ * */
+function applyFontToList()
+{
+	try
+	{
+		var fontListHandler = document.getElementById("lstFont");		//Get font combo-box handler.
+		
+		//Select the font if the index text value matches with the legendFont.
+		if(fontListHandler.options[model.legendFontIndex].text == model.legendFont)
+		{
+			fontListHandler.options[model.legendFontIndex].selected = true;
+			return;
+		}
+		
+		//Select the font from the legendFont value and apply it.
+		var listLength = fontListHandler.options.length;
+		for (var i = 0; i < listLength; i++)
+		{
+			if(fontListHandler.options[i].text == model.legendFont)
+			{
+				model.legendFontIndex = i;
+				fontListHandler.options[i].selected = true;
+				break;
+			}
+		}
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+}

@@ -1,7 +1,7 @@
 <!doctype html>
 
 <!-- 
-* FileName:		index.html
+* FileName:		specctrPhotoshop.html
 * Description:	It contains all the UI code of the main panel window.
 -->
 
@@ -13,7 +13,7 @@
 <script src="./appModel.js"></script>
 
 <script src="./specctrUI.js"></script>
-<script src="./ext.js"></script>
+<script src="./main.js"></script>
 <script src="./spacingButtonHandlers.js"></script>
 <script src="./dimensionButtonHandlers.js"></script>
 
@@ -21,7 +21,7 @@
 <title>Specctr-Pro</title>
 </head>
 
-<body onLoad="onLoaded()" onunload="writeAppPrefs()">
+<body onLoad="onLoaded()" onunload="onClose()">
 
 	<div class="container" id="loginContainer" style="display: block;">
         <!-- Login container start here -->
@@ -339,7 +339,37 @@
                         <label style="font-weight: normal">
                             Shape:
                         </label>
-                        <input type="color" id="colShape" style="margin-left: 17px; height: 20px;" value="#FF0000" />
+                        <input type="color" id="colShape" onclick="colShape_clickHandler()"
+						style="margin-left:16px; background-color:#ff0000;" />
+						<div id='colorShapeDropDown' class="colorPicker">
+                       		<div id="shapeColorBlock" class="mainColorBlock" style="display: inline-block;"></div>
+                       		<input type="text" id="txtShapeColor" class="colorText"/>
+                        	<br>
+                        	<div class="colorBlock" title="000000" style="background-color: #000000" 
+                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+                        	<div class="colorBlock" title="FF0000" style="background-color: #FF0000" 
+                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+                        	<div class="colorBlock" title="FF8800" style="background-color: #FF8800" 
+                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+                        	<div class="colorBlock" title="FFFF00" style="background-color: #FFFF00" 
+                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+                        	<div class="colorBlock" title="88FF00" style="background-color: #88FF00" 
+                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+                        	<div class="colorBlock" title="00FF00" style="background-color: #00FF00" 
+                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+                        	<div class="colorBlock" title="00FF88" style="background-color: #00FF88" 
+                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+                        	<div class="colorBlock" title="00FFFF" style="background-color: #00FFFF" 
+                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+                        	<div class="colorBlock" title="0000FF" style="background-color: #0000FF" 
+                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+                        	<div class="colorBlock" title="8800FF" style="background-color: #8800FF" 
+                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+                        	<div class="colorBlock" title="FF00FF" style="background-color: #FF00FF" 
+                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+                        	<div class="colorBlock" title="FFFFFF" style="background-color: #FFFFFF" 
+                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+						</div>
                     </div>
                     <div class="tabPage4ContentRight">
                         <select class="smalldropdown" id="lstLineWeight" onchange="lstLineWeight_changeHandler()">
@@ -359,24 +389,36 @@
                         <label style="font-weight: normal">
                             Type:
                         </label>
-                        <input type="color" id="colType" 
-                        style="margin-left:24px; background-color:#ff0000; height:18px; cursor:pointer; border: 2px #000000 solid ;" />
+                        <input type="color" id="colType" onclick="colType_clickHandler()"
+                        style="margin-left:24px; background-color:#ff0000;" />
                         <div id='colorTypeDropDown' class="colorPicker">
-                       		<div class="mainColorBlock" style="background-color: #ff0000; display: inline-block;"></div>
-                       		<input type="text" id="txtColorCode" />
+                       		<div id="typeColorBlock" class="mainColorBlock" style="display: inline-block;"></div>
+                       		<input type="text" id="txtTypeColor" class="colorText" />
                         	<br>
-                        	<br>
-                        	<div class="colorBlock" style="background-color: #ff0000"></div>
-                        	<div class="colorBlock" style="background-color: #7bd148"></div>
-                        	<div class="colorBlock" style="background-color: #5484ed"></div>
-                        	<div class="colorBlock" style="background-color: #a4bdfc"></div>
-                        	<div class="colorBlock" style="background-color: #7ae7bf"></div>
-                        	<div class="colorBlock" style="background-color: #51b749"></div>
-                        	<div class="colorBlock" style="background-color: #fbd75b"></div>
-                        	<div class="colorBlock" style="background-color: #ff887c"></div>
-                        	<div class="colorBlock" style="background-color: #dc2127"></div>
-                        	<div class="colorBlock" style="background-color: #dbadff"></div>
-                        	<div class="colorBlock" style="background-color: #e1e1e1"></div>
+                        	<div class="colorBlock" title="000000" style="background-color: #000000" 
+                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
+                        	<div class="colorBlock" title="FF0000" style="background-color: #FF0000" 
+                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
+                        	<div class="colorBlock" title="FF8800" style="background-color: #FF8800" 
+                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
+                        	<div class="colorBlock" title="FFFF00" style="background-color: #FFFF00" 
+                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
+                        	<div class="colorBlock" title="88FF00" style="background-color: #88FF00" 
+                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
+                        	<div class="colorBlock" title="00FF00" style="background-color: #00FF00" 
+                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
+                        	<div class="colorBlock" title="00FF88" style="background-color: #00FF88" 
+                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
+                        	<div class="colorBlock" title="00FFFF" style="background-color: #00FFFF" 
+                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
+                        	<div class="colorBlock" title="0000FF" style="background-color: #0000FF" 
+                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
+                        	<div class="colorBlock" title="8800FF" style="background-color: #8800FF" 
+                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
+                        	<div class="colorBlock" title="FF00FF" style="background-color: #FF00FF" 
+                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
+                        	<div class="colorBlock" title="FFFFFF" style="background-color: #FFFFFF" 
+                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
 						</div>
 						
                     </div>
@@ -388,7 +430,37 @@
                         <label style="font-weight: normal">
                             Spacing:
                         </label>
-                        <input type="color" id="colSpacing" style="height: 20px; margin-left: 9px;" value="#FF0000" />
+                        <input type="color" id="colSpacing" onclick="colSpacing_clickHandler()"
+                        style="margin-left:9px; background-color:#ff0000;" />
+                        <div id='colorSpaceDropDown' class="colorPicker">
+                       		<div id="spaceColorBlock" class="mainColorBlock" style="display: inline-block;"></div>
+                       		<input type="text" id="txtSpaceColor" class="colorText"/>
+                        	<br>
+                        	<div class="colorBlock" title="000000" style="background-color: #000000" 
+                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+                        	<div class="colorBlock" title="FF0000" style="background-color: #FF0000" 
+                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+                        	<div class="colorBlock" title="FF8800" style="background-color: #FF8800" 
+                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+                        	<div class="colorBlock" title="FFFF00" style="background-color: #FFFF00" 
+                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+                        	<div class="colorBlock" title="88FF00" style="background-color: #88FF00" 
+                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+                        	<div class="colorBlock" title="00FF00" style="background-color: #00FF00" 
+                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+                        	<div class="colorBlock" title="00FF88" style="background-color: #00FF88" 
+                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+                        	<div class="colorBlock" title="00FFFF" style="background-color: #00FFFF" 
+                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+                        	<div class="colorBlock" title="0000FF" style="background-color: #0000FF" 
+                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+                        	<div class="colorBlock" title="8800FF" style="background-color: #8800FF" 
+                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+                        	<div class="colorBlock" title="FF00FF" style="background-color: #FF00FF" 
+                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+                        	<div class="colorBlock" title="FFFFFF" style="background-color: #FFFFFF" 
+                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+						</div>
                     </div>
                     <div class="tabPage4ContentRight">
                     </div>

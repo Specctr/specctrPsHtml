@@ -4,62 +4,6 @@ Description: Includes all the methods related to UI component like change event 
 */
 
 /**
- * FunctionName	: activateButton_clickHandler()
- * Description	: Validate the license of the user and move to the tab container if user's credentials valid.
- * */
-function activateButton_clickHandler()
-{
-	try
-	{
-		// Get Extension Id and matching productCode.
-		var extensionId = "SpecctrPs-Pro";
-		
-		var urlRequest = "http://specctr-license.herokuapp.com?";
-		urlRequest += "product=" + extensionId;
-		urlRequest += "&license=" + document.getElementById("license").value;
-		urlRequest += "&email=" + document.getElementById("emailInput").value;
-		
-		$.get(urlRequest, completeHandler);		
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-
-}
-
-/**
- * FunctionName	: completeHandler()
- * Description	: Callback function which is called when validation of user's license take place.
- * */
-function completeHandler(data, status)
-{
-	try
-    {
-    	var response = data;
-    	alert(response["message"]);
-        var arr = response["registered"];
-        if(arr.length != 0) 
-    	{	
-    		model.isLicensed = true;
-    		
-    		var specctrConfig = 'specctrPhotoshopConfig.json';
-    		var csInterface = new CSInterface();
-    		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
-    		prefsFile += "/LocalStore";
-    		preferencePath = prefsFile + "/" + specctrConfig;
-    		
-    		writeAppPrefs();
-    		init();
-    	}
-    }
-    catch(e)
-    {
-    	console.log(e);
-    }
-}
-
-/**
  * FunctionName	: tab_clickHandler()
  * Description	: Click event handler of tabs. Modify styles to tabs and call the function to change images on tab.
  * */
@@ -663,43 +607,8 @@ function lstFont_changeHandler()
 }
 
 /**
- * FunctionName	: applyFontToList()
- * Description	: Apply the model's font value to the font list of fourth tab.
- * */
-function applyFontToList()
-{
-	try
-	{
-		var fontListHandler = document.getElementById("lstFont");		//Get font combo-box handler.
-		
-		//Select the font if the index text value matches with the legendFont.
-		if(fontListHandler.options[model.legendFontIndex].text == model.legendFont)
-		{
-			fontListHandler.options[model.legendFontIndex].selected = true;
-			return;
-		}
-		
-		//Select the font from the legendFont value and apply it.
-		var listLength = fontListHandler.options.length;
-		for (var i = 0; i < listLength; i++)
-		{
-			if(fontListHandler.options[i].text == model.legendFont)
-			{
-				model.legendFontIndex = i;
-				fontListHandler.options[i].selected = true;
-				break;
-			}
-		}
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-}
-
-/**
  * FunctionName	: restrictInputToDecimal()
- * Description	: Restrict the input to decimal value.
+ * Description	: Restrict the text input to decimal value.
  * */
 function restrictInputToDecimal(event)
 {
@@ -724,3 +633,236 @@ function restrictInputToDecimal(event)
 	}
 }
 
+/**
+ * FunctionName	: setTextToShapeColor()
+ * Description	: Set the color value to the textbox of the shape color-picker dropdown on hovering the color blocks.
+ * */
+function setTextToShapeColor(element)
+{
+	try
+	{
+		document.getElementById("txtShapeColor").value = element.title;
+		document.getElementById("shapeColorBlock").style.backgroundColor = "#" + element.title; 
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+}
+
+/**
+ * FunctionName	: setColorToShapeColor()
+ * Description	: Set the color to the shape color on clicking any color block and close the dropdown.
+ * */
+function setColorToShapeColor(element)
+{
+	try
+	{
+		var color = "#" + element.title;
+		document.getElementById("colShape").style.backgroundColor = color;
+		$('#colorShapeDropDown').slideUp(100);
+		model.legendColorObject = color;
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+}
+
+/**
+ * FunctionName	: colShape_clickHandler()
+ * Description	: Click handler of shape color-picker. Toggle the dropdown and set the color to 
+ * the main color block in color picker.
+ * */
+function colShape_clickHandler()
+{
+	try
+	{
+		var shapeColor = document.getElementById("colShape").style.backgroundColor;
+		shapeColor = rgbToHex(shapeColor);
+		$('#colorShapeDropDown').slideToggle(100);
+		document.getElementById("shapeColorBlock").style.backgroundColor = shapeColor;
+		model.legendColorObject = shapeColor;
+		$('#colorSpaceDropDown').slideUp(100);
+		$('#colorTypeDropDown').slideUp(100);
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+}
+
+/**
+ * FunctionName	: setTextToTypeColor()
+ * Description	: Set the color value to the textbox of the type color-picker dropdown on hovering the color blocks.
+ * */
+function setTextToTypeColor(element)
+{
+	try
+	{
+		document.getElementById("txtTypeColor").value = element.title;
+		document.getElementById("typeColorBlock").style.backgroundColor = "#" + element.title; 
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+}
+
+/**
+ * FunctionName	: setColorToTypeColor()
+ * Description	: Set the color to the type color on clicking any color block and close the dropdown.
+ * */
+function setColorToTypeColor(element)
+{
+	try
+	{
+		var color = "#" + element.title;
+		document.getElementById("colType").style.backgroundColor = color;
+		model.legendColorType = color;
+		$('#colorTypeDropDown').slideUp(100);
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+}
+
+/**
+ * FunctionName	: colType_clickHandler()
+ * Description	: Click handler of type color-picker. Toggle the dropdown and set the color to 
+ * the main color block in color picker.
+ * */
+function colType_clickHandler()
+{
+	try
+	{
+		var typeColor = document.getElementById("colType").style.backgroundColor;
+		typeColor = rgbToHex(typeColor);
+		$('#colorTypeDropDown').slideToggle(100);
+		document.getElementById("typeColorBlock").style.backgroundColor = typeColor;
+		model.legendColorType = typeColor;
+		$('#colorSpaceDropDown').slideUp(100);
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+}
+
+/**
+ * FunctionName	: setTextToSpacingColor()
+ * Description	: Set the color value to the textbox of the spacing color-picker dropdown on hovering the color blocks.
+ * */
+function setTextToSpacingColor(element)
+{
+	try
+	{
+		document.getElementById("txtSpaceColor").value = element.title;
+		document.getElementById("spaceColorBlock").style.backgroundColor = "#" + element.title; 
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+}
+
+/**
+ * FunctionName	: setColorToSpacingColor()
+ * Description	: Set the color to the spacing color on clicking any color block and close the dropdown.
+ * */
+function setColorToSpacingColor(element)
+{
+	try
+	{
+		var color = "#" + element.title;
+		document.getElementById("colSpacing").style.backgroundColor = color;
+		model.legendColorSpacing = color;
+		$('#colorSpaceDropDown').slideUp(100);
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+}
+
+/**
+ * FunctionName	: colSpacing_clickHandler()
+ * Description	: Click handler of spacing color-picker. Toggle the dropdown and set the color to 
+ * the main color block in color picker.
+ * */
+function colSpacing_clickHandler()
+{
+	try
+	{
+		var spaceColor = document.getElementById("colSpacing").style.backgroundColor;
+		spaceColor = rgbToHex(spaceColor);
+		$('#colorSpaceDropDown').slideToggle(100);
+		document.getElementById("spaceColorBlock").style.backgroundColor = spaceColor;
+		model.legendColorSpacing = spaceColor;
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+}
+
+/**
+ * FunctionName	: disableTextField()
+ * Description	: Disable the text input.
+ * */
+function disableTextField(textField)
+{
+	try
+	{
+		textField.disabled = true;
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: enableTextField()
+ * Description	: Enable the text input and change the background color to white.
+ * */
+function enableTextField(textField)
+{
+	try
+	{
+		textField.disabled = false;
+		textField.style.backgroundColor = '#ffffff';
+	}
+	catch(e)
+	{
+		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: rgbToHex()
+ * Description	: Convert the rgb value into hex.
+ * */
+function rgbToHex(colorVal) 
+{
+	try
+	{
+		var parts = colorVal.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
+	    delete(parts[0]);
+		for (var i = 1; i <= 3; ++i)
+		{
+			parts[i] = parseInt(parts[i]).toString(16);
+		    if (parts[i].length == 1) parts[i] = '0' + parts[i];
+		}
+		
+		var color = '#' + parts.join('');
+	    return color;
+	}
+	catch(e)
+	{
+		console.log(e);
+	}
+	
+	return colorVal;
+}

@@ -3,7 +3,7 @@
 <ExtensionManifest Version="4.0" ExtensionBundleId="specctrPsHtml" ExtensionBundleVersion="1.0.0"
 		ExtensionBundleName="Specctr-Pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<ExtensionList>
-		<Extension Id="com.example.specctrPsHtml.extension1" Version="1.0" />
+		<Extension Id="SpecctrPs-Pro" Version="1.0" />
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
@@ -19,10 +19,10 @@
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
-		<Extension Id="com.example.specctrPsHtml.extension1">
+		<Extension Id="SpecctrPs-Pro">
 			<DispatchInfo >
 				<Resources>
-				<MainPath>./index.html</MainPath>
+				<MainPath>./specctrPhotoshop.html</MainPath>
 				<ScriptPath>./specctrPsHtml.jsx</ScriptPath>
 				</Resources>
 				<Lifecycle>
