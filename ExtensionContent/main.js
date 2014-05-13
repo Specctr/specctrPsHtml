@@ -388,7 +388,6 @@ function onClose()
 		appPrefs.specInPrcntg		= model.specInPrcntg;
 		appPrefs.specInEM			= model.specInEM;
 		appPrefs.useScaleBy			= model.useScaleBy;
-		appPrefs.useLegendBackground = model.useLegendBackground;
 		
 		writeAppPrefs(appPrefs);
 	}
@@ -501,9 +500,6 @@ function setModelValueFromPreferences(appPrefs)
 		
 		if (appPrefs.hasOwnProperty('useHexColor'))
 			model.useHexColor = appPrefs.useHexColor;
-		
-		if (appPrefs.hasOwnProperty('useLegendBackground'))
-			model.useLegendBackground = appPrefs.useLegendBackground;
 		
 		if (appPrefs.hasOwnProperty('specInPrcntg'))
 			model.specInPrcntg = appPrefs.specInPrcntg;

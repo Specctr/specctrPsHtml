@@ -58,6 +58,7 @@ function setModel(currModel)
     }
 }
 
+//Get the list of selected layers.
 function getSelectedLayers()
 {
     var selectedLayers; 
@@ -3683,19 +3684,19 @@ function placeBorderBefore(lyr)
 //Get the red color value from the color hex value.
 function rChannel(value)
 {
-	return value >> 16 & 0xFF;
+	return parseInt(value.substring(1, 3), 16);
 }
 
 //Get the green color value from the color hex value.
 function gChannel(value) 
 {
-	return value >> 8 & 0xFF;
+	return parseInt(value.substring(3, 5), 16);
 }
 
 //Get the blue color value from the color hex value.
 function bChannel(value)
 {
-	return value >> 0 & 0xFF;
+	return parseInt(value.substring(5, 7), 16);
 } 
 
 //Calculate the diameter of circle.
