@@ -152,6 +152,7 @@ each party and (ii) in a written contract signed by both parties.]]>
 		<HostList>
 			<Host Name="PHSP" Version="[14.0,14.9]" />
 			<Host Name="PHXS" Version="[14.0,14.9]" />
+			<Host Name="ILST" Version="[17.0,17.9]" />
 		</HostList>
 		<LocaleList>
 			<Locale Code="All" />
@@ -190,7 +191,6 @@ each party and (ii) in a written contract signed by both parties.]]>
 					</Geometry>
 				</UI>
 			</DispatchInfo>
-
 		</Extension>
 	</DispatchInfoList>
 </ExtensionManifest>

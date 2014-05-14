@@ -24,8 +24,8 @@ var model =
  	canvasExpandSize: 250,
 
  	//legend settings
- 	legendFont: 			"Arial",
-	legendFontIndex:		1,
+ 	legendFont: 			"Aparajita",
+	legendFontIndex:		0,
 	legendFontSize:			12,
 	legendColorObject:		'#FF0000',
 	legendColorType:		'#FF0000',
