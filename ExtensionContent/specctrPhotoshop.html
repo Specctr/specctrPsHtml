@@ -155,15 +155,35 @@
                 <div class="tabPage2Header">
                     SELECT DETAILS
                 </div>
-                <div class="floatLeft">
+                <div class="floatLeft" id="shapePropertyForPHXS">
                     <div class="tabPage2Content tabPage2SubHeader boldText">
                         Shape Object
                     </div>
-                    <div class="tabPage2Content">
+                    <div class="tabPage2Content" id="fillColorForILST" style="display: none;">
+                        <input type="checkbox" value="1" id="shapeFillColor" onclick="shapeFillColor_changeHandler()"/>
+                        <label for="shapeFillColor">Fill Color</label>
+                    </div>
+                    <div class="tabPage2Content" id="fillStyleForILST" style="display: none;">
+                        <input type="checkbox" value="2" id="shapeFillStyle" onclick="shapeFillStyle_changeHandler()"/>
+                        <label for="shapeFillColor">Fill Style</label>
+                    </div>
+                    <div class="tabPage2Content" id="strokeColorForILST" style="display: none;">
+                        <input type="checkbox" value="3" id="shapeStrokeColor" onclick="shapeStrokeColor_changeHandler()"/>
+                        <label for="shapeStrokeColor">Stroke Color</label>
+                    </div>
+                     <div class="tabPage2Content" id="strokeStyleForILST" style="display: none;">
+                        <input type="checkbox" value="4" id="shapeStrokeStyle" onclick="shapeStrokeStyle_changeHandler()"/>
+                        <label for="shapeStrokeStyle">Stroke Style</label>
+                    </div>
+                     <div class="tabPage2Content" id="strokeSizeForILST" style="display: none;">
+                        <input type="checkbox" value="5" id="shapeStrokeSize" onclick="shapeStrokeSize_changeHandler()"/>
+                        <label for="shapeStrokeSize">Stroke Size</label>
+                    </div>
+                    <div class="tabPage2Content" id="fillForPHXS">
                         <input type="checkbox" value="1" id="shapeFill" onclick="shapeFill_changeHandler()"/>
                         <label for="shapeFill">Fill</label>
                     </div>
-                    <div class="tabPage2Content">
+                    <div class="tabPage2Content" id="strokeForPHXS">
                         <input type="checkbox" value="2" id="shapeStroke" onclick="shapeStroke_changeHandler()"/>
                         <label for="shapeStroke">Stroke</label>
                     </div>
@@ -171,7 +191,7 @@
                         <input type="checkbox" value="3" id="shapeAlpha" onclick="shapeAlpha_changeHandler()"/>
                         <label for="shapeAlpha">Alpha</label>
                     </div>
-                    <div class="tabPage2Content">
+                    <div class="tabPage2Content" id="shapeEffectsForPHXS">
                         <input type="checkbox" value="4" id="shapeEffects" onclick="shapeEffects_changeHandler()"/>
                         <label for="shapeEffects">Effects</label>
                     </div>
@@ -180,7 +200,8 @@
                         <label for="shapeBorderRadius">Border Radius</label>
                     </div>
                 </div>
-                <div class="floatRight">
+                
+               <div class="floatRight">
                     <div class="tabPage2Content tabPage2SubHeader boldText">
                         Text Object
                     </div>
@@ -216,7 +237,7 @@
                         <input type="checkbox" value="13" id="textAlpha" onclick="textAlpha_changeHandler()"/>
                         <label for="textAlpha">Alpha</label>
                     </div>
-                    <div class="tabPage2Content">
+                    <div class="tabPage2Content" id="textEffectsForPHXS">
                         <input type="checkbox" value="14" id="textEffects" onclick="textEffects_changeHandler()"/>
                         <label for="textEffects">Effects</label>
                     </div>
@@ -466,7 +487,8 @@
                     </div>
                 </div>
                 <div class="tabPageContentRow" style="padding-top: 15px;">
-                    <div class="tabPage4ContentLeft">
+                    
+                    <div class="tabPage4ContentLeft" id="radioForPHXS">
                         <label>Color Mode</label>
                         	<div id="radio" onclick="radioButton_clickHandler(event)">                       
                         		<input type="radio" id="rgbRadioButton" name="radio" value="RGB" checked="checked"><span>RGB</span>
@@ -475,14 +497,34 @@
 		      					<input type="radio" id="hslRadioButton" name="radio" value="HSL"><span>HSL</span>
 							</div>
                     </div>
+                    
+                    <div class="tabPage4ContentLeft" id="colorListForILST" style="display: none;">
+                        <label>Color Mode</label>
+                        <select class="dropdown" id="lstColorMode" onchange="lstColorMode_changeHandler()">
+                            <option value="1">CMYK</option>
+                            <option value="2">HSB</option>
+                            <option value="3">HSL</option>
+                            <option value="4">RGB</option>
+                        </select>
+                    </div>
+                    
                     <div class="tabPage4ContentRight">
                     </div>
+                </div>
+                
+                 <div class="tabPageEmptyRow">
                 </div>
                 
                 <div class="tabPageCheckBoxRow">
                     <input type="checkbox" value="DisplayRGBAsHex" id="chkDisplayRGBAsHex" onclick="chkDisplayRGBAsHex_clickHandler()"/>
                     <label for="chkDisplayRGBAsHex">
                         Display RGB As Hex</label>
+                </div>
+                
+                <div class="tabPageCheckBoxRow" id="specToEdgeCheckbox" style="display: none;">
+                    <input type="checkbox" value="CanvasEdge" id="chkCanvasEdge" onclick="chkCanvasEdge_clickHandler()"/>
+                    <label for="chkCanvasEdge">
+                        Print Spec to Canvas edge</label>
                 </div>
                 
                 <div class="tabPageContentRow" style="padding-top: 10px;">

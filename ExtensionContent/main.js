@@ -6,6 +6,11 @@ and reading and writing preferences methods.
 
 var preferencePath;		//path of the Specctr config file.
 var appPrefs;			//Store the preference of UI.
+var hostApplication = null;	//Store the current host application.
+var photoshopId = "PHXS";
+var illustratorId = "ILST";
+var psConfig = "specctrPhotoshopConfig.json";
+var illConfig = "specctrIllustratorConfig.json";
 
 /**
  * FunctionName	: activateButton_clickHandler()
@@ -64,7 +69,7 @@ function completeHandler(data, status)
         	appPrefs.isLicensed = true;
     		model.isLicensed = true;
     		
-    		var specctrConfig = 'specctrPhotoshopConfig.json';
+    		var specctrConfig = getConfigFileName();			
     		var csInterface = new CSInterface();
     		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
     		prefsFile += "/LocalStore";
@@ -105,10 +110,23 @@ function settings_creationCompleteHandler()
 	try
 	{
 		//Load settings from model
-		document.getElementById("shapeFill").checked			= model.shapeFill;
-		document.getElementById("shapeStroke").checked			= model.shapeStroke;
+		if(hostApplication == illustratorId)
+		{
+			document.getElementById("shapeFillColor").checked			= model.shapeFillColor;
+			document.getElementById("shapeFillStyle").checked			= model.shapeFillStyle;
+			document.getElementById("shapeStrokeColor").checked			= model.shapeStrokeColor;
+			document.getElementById("shapeStrokeStyle").checked			= model.shapeStrokeStyle;
+			document.getElementById("shapeStrokeSize").checked			= model.shapeStrokeSize;
+		}
+		else
+		{
+			document.getElementById("shapeFill").checked			= model.shapeFill;
+			document.getElementById("shapeStroke").checked			= model.shapeStroke;
+			document.getElementById("shapeEffects").checked			= model.shapeEffects;
+			document.getElementById("textEffects").checked			= model.textEffects;
+		}
+		
 		document.getElementById("shapeAlpha").checked			= model.shapeAlpha;
-		document.getElementById("shapeEffects").checked			= model.shapeEffects;
 		document.getElementById("shapeBorderRadius").checked	= model.shapeBorderRadius;
 		document.getElementById("textFont").checked				= model.textFont;
 		document.getElementById("textSize").checked				= model.textSize;
@@ -118,7 +136,6 @@ function settings_creationCompleteHandler()
 		document.getElementById("textLeading").checked			= model.textLeading;
 		document.getElementById("textTracking").checked			= model.textTracking;
 		document.getElementById("textAlpha").checked			= model.textAlpha;
-		document.getElementById("textEffects").checked			= model.textEffects;
 	}
 	catch(e)
 	{
@@ -175,6 +192,9 @@ function prefs_creationCompleteHandler()
 {
 	try
 	{
+		if(hostApplication == null)
+			hostApplication = getHostApp();
+		
 		//Set the values for font size combobox.
 		var fontSizeHandler = document.getElementById("lstSize");
 		fontSizeHandler.selectedIndex = -1;
@@ -187,30 +207,46 @@ function prefs_creationCompleteHandler()
 		
 		document.getElementById("chkDisplayRGBAsHex").checked = model.useHexColor;
 		
+		if(hostApplication == illustratorId)
+		{
+			document.getElementById("chkCanvasEdge").checked = model.specToEdge;
+			
+			var colorModeHandler = document.getElementById("lstColorMode");
+			for (var i = 0; i < 4; i++)
+			{
+				if(colorModeHandler.options[i].text == model.legendColorMode)
+				{
+					colorModeHandler.options[i].selected = true;
+					break;
+				}
+			}
+		}
+		else
+		{
+			switch(model.legendColorMode)
+			{
+				case "HSB": 
+					document.getElementById("hsbRadioButton").checked = true;
+					break;
+					
+				case "CMYK": 
+					document.getElementById("cmykRadioButton").checked = true;
+					break;
+					
+				case "HSL": 
+					document.getElementById("hslRadioButton").checked = true;
+					break;
+				
+				case "RGB":
+				default:
+					document.getElementById("rgbRadioButton").checked = true;
+					break;
+			}
+		}
+		
 		document.getElementById("colShape").style.backgroundColor = model.legendColorObject;
 		document.getElementById("colType").style.backgroundColor = model.legendColorType;
 		document.getElementById("colSpacing").style.backgroundColor = model.legendColorSpacing;
-		
-		switch(model.legendColorMode)
-		{
-			case "HSB": 
-				document.getElementById("hsbRadioButton").checked = true;
-				break;
-				
-			case "CMYK": 
-				document.getElementById("cmykRadioButton").checked = true;
-				break;
-				
-			case "HSL": 
-				document.getElementById("hslRadioButton").checked = true;
-				break;
-			
-			case "RGB":
-			default:
-				document.getElementById("rgbRadioButton").checked = true;
-				break;
-			
-		}
 		
 		document.getElementById("chkScaleBy").checked = model.useScaleBy;
 		
@@ -219,7 +255,7 @@ function prefs_creationCompleteHandler()
 		else
 			disableTextField(document.getElementById("txtScaleBy"));
 		
-		var extScript = "ext_getFonts()";
+		var extScript = "ext_" + hostApplication + "_getFonts()";
 		evalScript(extScript, loadFontsToList);
 	}
 	catch(e)
@@ -236,11 +272,37 @@ function onLoaded()
 {
 	try
 	{
+		var appName = getHostApp();
+		hostApplication = appName;
+		
+		if(hostApplication == null)
+		{
+			alert("Cannot load the extension.\nRequuired adobe product not found! ");
+			return;
+		}
+		
 		//Load the jsx files present in \jsx folder.
 		loadJSX();
-	    
+		
+		if(hostApplication == illustratorId)
+		{
+			document.getElementById("fillForPHXS").style.display = "none";
+			document.getElementById("strokeForPHXS").style.display = "none";
+			document.getElementById("shapeEffectsForPHXS").style.display = "none";
+			document.getElementById("textEffectsForPHXS").style.display = "none";
+			document.getElementById("radioForPHXS").style.display = "none";
+			
+			document.getElementById("fillColorForILST").style.display = "block";
+			document.getElementById("fillStyleForILST").style.display = "block";
+			document.getElementById("strokeColorForILST").style.display = "block";
+			document.getElementById("strokeStyleForILST").style.display = "block";
+			document.getElementById("strokeSizeForILST").style.display = "block";
+			document.getElementById("specToEdgeCheckbox").style.display = "block";
+			document.getElementById("colorListForILST").style.display = "block";
+		}
+		
 		//Check whether config exists, if not initialize and save in file on disk.
-	    appPrefs = readAppPrefs();
+	    appPrefs = readAppPrefs(hostApplication);
 	    if(appPrefs == null)
 		{
 	    	appPrefs = new Object();
@@ -273,7 +335,7 @@ function init()
 		document.getElementById("loginContainer").style.display = "none";
    	 	document.getElementById("tabContainer").style.display = "block";
    	 	
-   	 	setModelValueFromPreferences(appPrefs);
+   	 	setModelValueFromPreferences();
    	 
 		//Get tab container
 	    var container = document.getElementById("tabContainer");
@@ -320,26 +382,29 @@ function init()
  * FunctionName	: readAppPrefs()
  * Description	: Return JSON object representing Specctr configuration file.
  * */
-function readAppPrefs()
+function readAppPrefs(id)
 {
 	try
 	{
-		var specctrConfig = 'specctrPhotoshopConfig.json';
+		var specctrConfig = psConfig;
+		
+		if(id == illustratorId)
+			specctrConfig = illConfig;
 		
 		var csInterface = new CSInterface();
 		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
 		prefsFile += "/LocalStore";
 		preferencePath = prefsFile + "/" + specctrConfig;
 		
-		var result = cep.fs.readdir(prefsFile);
-		if(cep.fs.ERR_NOT_FOUND == result.err)
+		var result = window.cep.fs.readdir(prefsFile);
+		if(window.cep.fs.ERR_NOT_FOUND == result.err)
 		{
-			cep.fs.makedir(prefsFile);
+			window.cep.fs.makedir(prefsFile);
 			return null;
 		}
 		
-		result = cep.fs.readFile(preferencePath);
-		if(cep.fs.ERR_NOT_FOUND == result.err)
+		result = window.cep.fs.readFile(preferencePath);
+		if(window.cep.fs.ERR_NOT_FOUND == result.err)
 			return null;
 		
 		appPrefs = JSON.parse(result.data);
@@ -360,10 +425,24 @@ function onClose()
 {
 	try
 	{
-		appPrefs.shapeFill			= model.shapeFill;
-		appPrefs.shapeStroke		= model.shapeStroke;
+		if(hostApplication == illustratorId)
+		{
+			appPrefs.shapeFillColor			= model.shapeFillColor;
+			appPrefs.shapeFillStyle			= model.shapeFillStyle;
+			appPrefs.shapeStrokeColor		= model.shapeStrokeColor;
+			appPrefs.shapeStrokeStyle		= model.shapeStrokeStyle;
+			appPrefs.shapeStrokeSize		= model.shapeStrokeSize;
+			appPrefs.specToEdge				= model.specToEdge;
+		}
+		else
+		{
+			appPrefs.shapeFill			= model.shapeFill;
+			appPrefs.shapeStroke		= model.shapeStroke;
+			appPrefs.shapeEffects		= model.shapeEffects;
+			appPrefs.textEffects		= model.textEffects;
+		}
+		
 		appPrefs.shapeAlpha			= model.shapeAlpha;
-		appPrefs.shapeEffects		= model.shapeEffects;
 		appPrefs.shapeBorderRadius	= model.shapeBorderRadius;
 
 		appPrefs.textFont			= model.textFont;
@@ -374,7 +453,6 @@ function onClose()
 		appPrefs.textLeading		= model.textLeading;
 		appPrefs.textTracking		= model.textTracking;
 		appPrefs.textAlpha			= model.textAlpha;
-		appPrefs.textEffects		= model.textEffects;
 		appPrefs.canvasExpandSize	= model.canvasExpandSize.toString();
 		
 		appPrefs.legendFont			= model.legendFont.toString();
@@ -407,14 +485,14 @@ function writeAppPrefs(appPrefs)
 	{
 		if(!preferencePath.length)
 		{
-			var specctrConfig = 'specctrPhotoshopConfig.json';
+			var specctrConfig = getConfigFileName();
 			var csInterface = new CSInterface();
 			var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
 			prefsFile += "/LocalStore";
 			preferencePath = prefsFile + "/" + specctrConfig;
 		}
 		
-		cep.fs.writeFile(preferencePath, JSON.stringify(appPrefs));
+		window.cep.fs.writeFile(preferencePath, JSON.stringify(appPrefs));
 	}
 	catch(e)
 	{
@@ -426,21 +504,48 @@ function writeAppPrefs(appPrefs)
  * FunctionName	: setModelValueFromPreferences()
  * Description	: Set the Specctr configuration file data to model values.
  * */
-function setModelValueFromPreferences(appPrefs)
+function setModelValueFromPreferences()
 {
 	try
 	{
-		if (appPrefs.hasOwnProperty('shapeFill'))
-			model.shapeFill = appPrefs.shapeFill;
-		
-		if (appPrefs.hasOwnProperty('shapeStroke'))
-			model.shapeStroke = appPrefs.shapeStroke;
+		if(hostApplication == illustratorId)
+		{
+			if (appPrefs.hasOwnProperty('shapeFillColor'))
+				model.shapeFillColor = appPrefs.shapeFillColor;
+			
+			if (appPrefs.hasOwnProperty('shapeFillStyle'))
+				model.shapeFillStyle = appPrefs.shapeFillStyle;
+			
+			if (appPrefs.hasOwnProperty('shapeStrokeColor'))
+				model.shapeStrokeColor = appPrefs.shapeStrokeColor;
+			
+			if (appPrefs.hasOwnProperty('shapeStrokeStyle'))
+				model.shapeStrokeStyle = appPrefs.shapeStrokeStyle;
+			
+			if (appPrefs.hasOwnProperty('shapeStrokeSize'))
+				model.shapeStrokeSize = appPrefs.shapeStrokeSize;
+			
+			if (appPrefs.hasOwnProperty('specToEdge'))
+				model.specToEdge = appPrefs.specToEdge;
+		}
+		else
+		{
+
+			if (appPrefs.hasOwnProperty('shapeFill'))
+				model.shapeFill = appPrefs.shapeFill;
+			
+			if (appPrefs.hasOwnProperty('shapeStroke'))
+				model.shapeStroke = appPrefs.shapeStroke;
+			
+			if (appPrefs.hasOwnProperty('shapeEffects'))
+				model.shapeEffects = appPrefs.shapeEffects;
+			
+			if (appPrefs.hasOwnProperty('textEffects'))
+				model.textEffects = appPrefs.textEffects;
+		}
 		
 		if (appPrefs.hasOwnProperty('shapeAlpha'))
 			model.shapeAlpha = appPrefs.shapeAlpha;
-		
-		if (appPrefs.hasOwnProperty('shapeEffects'))
-			model.shapeEffects = appPrefs.shapeEffects;
 		
 		if (appPrefs.hasOwnProperty('shapeBorderRadius'))
 			model.shapeBorderRadius = appPrefs.shapeBorderRadius;
@@ -469,16 +574,13 @@ function setModelValueFromPreferences(appPrefs)
 		if (appPrefs.hasOwnProperty('textAlpha'))
 			model.textAlpha = appPrefs.textAlpha;
 		
-		if (appPrefs.hasOwnProperty('textEffects'))
-			model.textEffects = appPrefs.textEffects;
-		
 		if (appPrefs.hasOwnProperty('canvasExpandSize'))
 			model.canvasExpandSize = Number(appPrefs.canvasExpandSize);
 		
 		if (appPrefs.hasOwnProperty('legendFont'))
 			model.legendFont = appPrefs.legendFont;
 		else
-			model.legendFont = "Arial";
+			model.legendFont = "Aparajita";
 		
 		if (appPrefs.hasOwnProperty('legendFontSize'))
 			model.legendFontSize = Number(appPrefs.legendFontSize);
@@ -563,6 +665,39 @@ function loadJSX()
 }
 
 /**
+ * FunctionName	: getHostApp()
+ * Description	: Get the current host application name.
+ * */
+function getHostApp()
+{
+	try
+	{
+		var csInterface = new CSInterface();
+		var appName = csInterface.hostEnvironment.appName;
+	    var appNames = ["PHXS","ILST"];
+	    var currentApplication = "";
+	    
+	    for(var i = 0; i < appNames.length; i++) 
+	    {
+	    	var name = appNames[i];
+	        if(appName.indexOf(name) >= 0) 
+	        {
+	        	currentApplication = name;
+	        	break;
+	        }
+	    }
+	    
+	    return currentApplication;
+	}
+	catch(e)
+	{
+		console.log(e);
+		return null;
+	}
+	
+}
+
+/**
  * FunctionName	: evalScript()
  * Description	: Evaluates the scripting method.
  * */
@@ -580,13 +715,13 @@ function evalScript(script, callback)
 
 /**
  * FunctionName	: setModel()
- * Description	: Evaluates the script and pass the model object to extendscript file(specctr.jx).
+ * Description	: Evaluates the script and pass the model object to extendscript file(.jsx).
  * */
 function setModel()
 {
 	try
 	{
-		var extScript = "ext_setModel('" + JSON.stringify(model) + "')";
+		var extScript = "ext_" + hostApplication + "_setModel('" + JSON.stringify(model) + "')";
 		evalScript(extScript);
 	}
 	catch(e)
@@ -604,7 +739,7 @@ function expandCanvas()
 	try
 	{
 		setModel();
-		var extScript = "ext_expandCanvas()";
+		var extScript = "ext_" + hostApplication + "_expandCanvas()";
 		evalScript(extScript);
 		onClose();
 	}
@@ -623,7 +758,7 @@ function createDimensionSpecs()
 	try
 	{
 		setModel();
-		var extScript = "ext_createDimensionSpecs()";
+		var extScript = "ext_" + hostApplication + "_createDimensionSpecs()";
 		evalScript(extScript);
 		onClose();
 	}
@@ -642,7 +777,7 @@ function createSpacingSpecs()
 	try
 	{
 		setModel();
-		var extScript = "ext_createSpacingSpecs()";
+		var extScript = "ext_" + hostApplication + "_createSpacingSpecs()";
 		evalScript(extScript);
 		onClose();
 	}
@@ -661,7 +796,7 @@ function createCoordinateSpecs()
 	try
 	{
 		setModel();
-		var extScript = "ext_createCoordinateSpecs()";
+		var extScript = "ext_" + hostApplication + "_createCoordinateSpecs()";
 		evalScript(extScript);
 		onClose();
 	}
@@ -680,7 +815,7 @@ function createPropertySpecs()
 	try
 	{
 		setModel();
-		var extScript = "ext_createPropertySpecs()";
+		var extScript = "ext_" + hostApplication + "_createPropertySpecs()";
 		evalScript(extScript);
 		onClose();
 	}
@@ -699,7 +834,7 @@ function exportCss()
 	try
 	{
 		setModel();
-		var extScript = "ext_exportCss()";
+		var extScript = "ext_" + hostApplication + "_exportCss()";
 		evalScript(extScript);
 	}
 	catch(e)
@@ -740,5 +875,30 @@ function applyFontToList()
 	catch(e)
 	{
 		alert(e);
+	}
+}
+
+/**
+ * FunctionName	: getConfigFileName()
+ * Description	: Get the config file name according to the current host application.
+ * */
+function getConfigFileName()
+{
+	try
+	{
+		var specctrConfig = psConfig;
+		
+		if(hostApplication == null)
+			hostApplication = getHostApp();
+		
+		if(hostApplication == illustratorId)
+			specctrConfig = illConfig;
+		
+		return specctrConfig;
+	}
+	catch(e)
+	{
+		console.log(e);
+		return "";
 	}
 }

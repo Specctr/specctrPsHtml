@@ -7,8 +7,15 @@ var model =
 {
 	shapeFill:			true,
 	shapeStroke:		true,
-	shapeAlpha:			true,
 	shapeEffects:		true,
+	
+	shapeFillColor:		true,
+	shapeFillStyle:		true,
+	shapeStrokeColor:	true,
+	shapeStrokeStyle:	true,
+	shapeStrokeSize:	true,
+
+	shapeAlpha:			true,
 	shapeBorderRadius: 	true,
 
 	textFont:		true,
@@ -32,7 +39,8 @@ var model =
 	legendColorSpacing:		'#FF0000',
 	useHexColor:			true,
 	legendColorMode:		"RGB",
-
+	specToEdge:				false,
+	
 	armWeight:		1,
 	isLicensed: 	false,
 	typeUnits: 		"pt",
