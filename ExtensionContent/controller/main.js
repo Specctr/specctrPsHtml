@@ -530,7 +530,6 @@ function setModelValueFromPreferences()
 		}
 		else
 		{
-
 			if (appPrefs.hasOwnProperty('shapeFill'))
 				model.shapeFill = appPrefs.shapeFill;
 			

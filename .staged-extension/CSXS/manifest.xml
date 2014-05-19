@@ -166,8 +166,8 @@ each party and (ii) in a written contract signed by both parties.]]>
 		<Extension Id="SpecctrPs-Pro">
 			<DispatchInfo >
 				<Resources>
-				<MainPath>./specctrPhotoshop.html</MainPath>
-				<ScriptPath>./specctrPsHtml.jsx</ScriptPath>
+				<MainPath>./html/specctr.html</MainPath>
+				<ScriptPath>./loadFilesOfJsxFolder.jsx</ScriptPath>
 				</Resources>
 				<Lifecycle>
 					<AutoVisible>true</AutoVisible>

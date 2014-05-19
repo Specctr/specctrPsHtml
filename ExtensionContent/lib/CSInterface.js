@@ -1,14 +1,17 @@
-/*
-ADOBE SYSTEMS INCORPORATED
-Copyright 2013 Adobe Systems Incorporated. All Rights Reserved.
+/**************************************************************************************************
+*
+* ADOBE SYSTEMS INCORPORATED
+* Copyright 2013 Adobe Systems Incorporated
+* All Rights Reserved.
+*
+* NOTICE:  Adobe permits you to use, modify, and distribute this file in accordance with the
+* terms of the Adobe license agreement accompanying it.  If you have received this file from a
+* source other than Adobe, then your use, modification, or distribution of it requires the prior
+* written permission of Adobe.
+*
+**************************************************************************************************/
 
-NOTICE:  Adobe permits you to use, modify, and distribute this file in 
-accordance with the terms of the Adobe license agreement accompanying it.  
-If you have received this file from a source other than Adobe, then your 
-use, modification, or distribution of it requires the prior written 
-permission of Adobe.
-*/
-
+/** CSInterface - v5.0.0 */
 
 /**
  * Stores constants for the window types supported by the CSXS infrastructure.
@@ -312,7 +315,7 @@ function UIColor(type, antialiasLevel, color)
 
 /**
  * @class AppSkinInfo
- * Stores window-skin properties, such as color and font. All color parameter values are \c #UIColor objects.
+ * Stores window-skin properties, such as color and font. All color parameter values are \c #UIColor objects except that systemHighlightColor is \c #RGBColor object.
  *
  * @param baseFontFamily        The base font family of the application.
  * @param baseFontSize          The base font size of the application.
@@ -344,20 +347,60 @@ function AppSkinInfo(baseFontFamily, baseFontSize, appBarBackgroundColor, panelB
  * @param appLocale The application's current license locale.
  * @param appUILocale   The application's current UI locale.
  * @param appId     The application's unique identifier.
- * @param isAppOffline  True if the application is currently offline.
+ * @param isAppOnline  True if the application is currently online.
  * @param appSkinInfo   An \c #AppSkinInfo object containing the application's default color and font styles.
  *
  * @return A new \c HostEnvironment object.
  */
-function HostEnvironment(appName, appVersion, appLocale, appUILocale, appId, isAppOffline, appSkinInfo)
+function HostEnvironment(appName, appVersion, appLocale, appUILocale, appId, isAppOnline, appSkinInfo)
 {
     this.appName = appName;
     this.appVersion = appVersion;
     this.appLocale = appLocale;
     this.appUILocale = appUILocale;
     this.appId = appId;
-    this.isAppOffline = isAppOffline;
+    this.isAppOnline = isAppOnline;
     this.appSkinInfo = appSkinInfo;
+};
+
+/**
+ * @class HostCapabilities
+ * Stores information about the host capabilities.
+ *
+ * @param EXTENDED_PANEL_MENU True if the application supports panel menu.
+ * @param EXTENDED_PANEL_ICONS True if the application supports panel icon.
+ * @param DELEGATE_APE_ENGINE True if the application supports delegated APE engine.
+ * @param SUPPORT_HTML_EXTENSIONS True if the application supports HTML extensions.
+ * @param DISABLE_FLASH_EXTENSIONS True if the application disables FLASH extensions.
+ *
+ * @return A new \c HostCapabilities object.
+ */
+function HostCapabilities(EXTENDED_PANEL_MENU, EXTENDED_PANEL_ICONS, DELEGATE_APE_ENGINE, SUPPORT_HTML_EXTENSIONS, DISABLE_FLASH_EXTENSIONS)
+{
+    this.EXTENDED_PANEL_MENU = EXTENDED_PANEL_MENU;
+    this.EXTENDED_PANEL_ICONS = EXTENDED_PANEL_ICONS;
+    this.DELEGATE_APE_ENGINE = DELEGATE_APE_ENGINE;
+    this.SUPPORT_HTML_EXTENSIONS = SUPPORT_HTML_EXTENSIONS;
+	this.DISABLE_FLASH_EXTENSIONS = DISABLE_FLASH_EXTENSIONS; // Since 5.0.0
+};
+
+/**
+ * @class ApiVersion
+ * Stores current api version.
+ *
+ * Since 4.2.0
+ *
+ * @param major  The major version
+ * @param minor  The minor version.
+ * @param micro  The micro version.
+ *
+ * @return ApiVersion object.
+ */
+function ApiVersion(major, minor, micro)
+{
+    this.major = major;
+    this.minor = minor;
+    this.micro = micro;
 };
 
 //------------------------------ CSInterface ----------------------------------
@@ -471,7 +514,7 @@ CSInterface.prototype.getApplicationID = function()
  * Retrieves host capability information for the application
  * in which the extension is currently running.
  *
- * @return A JavaScript object that contains the capabilities.
+ * @return A \c #HostCapabilities object.
  */
 CSInterface.prototype.getHostCapabilities = function()
 {
@@ -701,6 +744,8 @@ CSInterface.prototype.getOSInformation = function()
 /**
  * Opens a page in the default system browser.
  *
+ * Since 4.2.0
+ *
  * @param url   The URL of the page to open. Must use HTTP or HTTPS protocol.
  *
  * @return One of these error codes:\n
@@ -714,4 +759,60 @@ CSInterface.prototype.getOSInformation = function()
 CSInterface.prototype.openURLInDefaultBrowser = function(url)
 {
     return cep.util.openURLInDefaultBrowser(url);
+};
+
+/**
+ * Retrieves extension ID.
+ *
+ * Since 4.2.0
+ *
+ * @return extension ID.
+ */
+CSInterface.prototype.getExtensionID = function()
+{
+     return window.__adobe_cep__.getExtensionId();
+};
+
+/**
+ * Retrieves scale factor of screen. This only works on Mac.
+ *
+ * Since 4.2.0
+ *
+ * @return One of the following integer.
+ *      <ul>\n
+ *          <li>-1 means fail to get scale factor or this API has not been available on Windows yet</li>\n
+ *          <li>1 means normal screen</li>\n
+ *          <li>2 means HiDPI screen</li>\n
+ *      </ul>\n
+ */
+CSInterface.prototype.getScaleFactor = function()
+{
+    return window.__adobe_cep__.getScaleFactor();
+};
+
+/**
+ * Set a handler to detect any changes of scale factor. This only works on Mac.
+ *
+ * Since 4.2.0
+ *
+ * @param handler   The function to be called when scale factor is changed.
+ *
+ */
+CSInterface.prototype.setScaleFactorChangedHandler = function(handler)
+{
+    window.__adobe_cep__.setScaleFactorChangedHandler(handler);
+};
+
+/**
+ * Retrieves current API version.
+ *
+ * Since 4.2.0
+ *
+ * @return ApiVersion object.
+ *
+ */
+CSInterface.prototype.getCurrentApiVersion = function()
+{
+    var apiVersion = JSON.parse(window.__adobe_cep__.getCurrentApiVersion());
+    return apiVersion;
 };

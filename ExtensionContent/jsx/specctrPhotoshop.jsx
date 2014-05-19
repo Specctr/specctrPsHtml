@@ -1,5 +1,5 @@
 ﻿/*//////////////////////////////////////////////////////////////////////////////
- * File Name: specctr.jsx
+ * File Name: specctrPhotoshop.jsx
  * Description: This file includes all the functions which create specs i.e. property spec,
     width/height spec, spacing spec, coordinate spec and expand canvas feature.
 //////////////////////////////////////////////////////////////////////////////*/
@@ -13,14 +13,14 @@ var cssText = "";
 var cssBodyText = "";
 var lyrBound;
 
-ext_setModel = setModel;
-ext_expandCanvas = createCanvasBorder;
-ext_createDimensionSpecs = createDimensionSpecsForItem;
-ext_createSpacingSpecs = createSpacingSpecs;
-ext_createCoordinateSpecs = createCoordinateSpecs;
-ext_createPropertySpecs = createPropertySpecsForItem;
-ext_exportCss = exportCss;
-ext_getFonts = getFontList;
+ext_PHXS_setModel = setModel;
+ext_PHXS_expandCanvas = createCanvasBorder;
+ext_PHXS_createDimensionSpecs = createDimensionSpecsForItem;
+ext_PHXS_createSpacingSpecs = createSpacingSpecs;
+ext_PHXS_createCoordinateSpecs = createCoordinateSpecs;
+ext_PHXS_createPropertySpecs = createPropertySpecsForItem;
+ext_PHXS_exportCss = exportCss;
+ext_PHXS_getFonts = getFontList;
 
 //Get the application font's name and font's family.
 function getFontList()

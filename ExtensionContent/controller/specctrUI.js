@@ -105,6 +105,86 @@ function changeImagesOfTabs(selectedTab)
 }
 
 /**
+ * FunctionName	: shapeFillColor_changeHandler()
+ * Description	: Set the value of shape fill color when changed.
+ * */
+function shapeFillColor_changeHandler()
+{
+	try
+	{
+		model.shapeFillColor = document.getElementById("shapeFillColor").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
+}
+
+/**
+ * FunctionName	: shapeFillStyle_changeHandler()
+ * Description	: Set the value of shape fill style when changed.
+ * */
+function shapeFillStyle_changeHandler()
+{
+	try
+	{
+		model.shapeFillStyle = document.getElementById("shapeFillStyle").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
+}
+
+/**
+ * FunctionName	: shapeStrokeColor_changeHandler()
+ * Description	: Set the value of shape stroke color when changed.
+ * */
+function shapeStrokeColor_changeHandler()
+{
+	try
+	{
+		model.shapeStrokeColor = document.getElementById("shapeStrokeColor").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
+}
+
+/**
+ * FunctionName	: shapeStrokeStyle_changeHandler()
+ * Description	: Set the value of shape stroke style when changed.
+ * */
+function shapeStrokeStyle_changeHandler()
+{
+	try
+	{
+		model.shapeStrokeStyle = document.getElementById("shapeStrokeStyle").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
+}
+
+/**
+ * FunctionName	: shapeStrokeSize_changeHandler()
+ * Description	: Set the value of shape stroke size when changed.
+ * */
+function shapeStrokeSize_changeHandler()
+{
+	try
+	{
+		model.shapeStrokeSize = document.getElementById("shapeStrokeSize").checked;
+	}
+	catch(e)
+	{
+		console.log(e);	//For debugging.
+	}
+}
+
+/**
  * FunctionName	: shapeFill_changeHandler()
  * Description	: Set the value of shape fill when changed.
  * */
@@ -555,6 +635,22 @@ function chkDisplayRGBAsHex_clickHandler()
 }
 
 /**
+ * FunctionName	: chkCanvasEdge_clickHandler()
+ * Description	: Set the value of specToEdge when changed.
+ * */
+function chkCanvasEdge_clickHandler()
+{
+	try
+	 {
+		model.specToEdge = document.getElementById("chkCanvasEdge").checked;
+	 }
+	 catch(e)
+	 {
+		 console.log(e);
+	 }
+}
+
+/**
  * FunctionName	: lstSize_changeHandler()
  * Description	: Set the value of font size when changed.
  * */
@@ -604,6 +700,23 @@ function lstFont_changeHandler()
 	{
 		alert(e);
 	}
+}
+
+/**
+ * FunctionName	: lstColorMode_changeHandler()
+ * Description	: Set the value of legend color mode when changed.
+ * */
+function lstColorMode_changeHandler()
+{
+	try
+	 {
+		var listColorModeHandler = document.getElementById("lstColorMode");
+		model.legendColorMode = listColorModeHandler.options[listColorModeHandler.selectedIndex].text;
+	 }
+	 catch(e)
+	 {
+		 console.log(e);
+	 }
 }
 
 /**

@@ -39,7 +39,7 @@ var model =
 	legendColorSpacing:		'#FF0000',
 	useHexColor:			true,
 	legendColorMode:		"RGB",
-	specToEdge:				false,
+	specToEdge:				true,
 	
 	armWeight:		1,
 	isLicensed: 	false,
