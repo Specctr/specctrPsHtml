@@ -64,31 +64,30 @@ function changeImagesOfTabs(selectedTab)
 	    switch(selectedTab) 
 	    {
 	        case 1: 
-	        	tab1Image.src = "Images/Icon_main_active.png";
-	        	tab2Image.src = "Images/Icon_settings.png";
-	        	tab3Image.src = "Images/Icon_responsive.png";
-	        	tab4Image.src = "Images/Icon_prefs.png";
+	        	tab1Image.src = "../Images/Icon_main_active.png";
+	        	tab2Image.src = "../Images/Icon_settings.png";
+	        	tab3Image.src = "../Images/Icon_responsive.png";
+	        	tab4Image.src = "../Images/Icon_prefs.png";
 	            break;
 	        
 	        case 2: 
-	        	tab1Image.src = "Images/Icon_main.png";
-	        	tab2Image.src = "Images/Icon_settings_active.png";
-	        	tab3Image.src = "Images/Icon_responsive.png";
-	        	tab4Image.src = "Images/Icon_prefs.png";
+	        	tab1Image.src = "../Images/Icon_main.png";
+	        	tab2Image.src = "../Images/Icon_settings_active.png";
+	        	tab3Image.src = "../Images/Icon_responsive.png";
+	        	tab4Image.src = "../Images/Icon_prefs.png";
 	            break;
 	        
 	        case 3:
-	        	tab1Image.src = "Images/Icon_main.png";
-	        	tab2Image.src = "Images/Icon_settings.png";
-	        	tab3Image.src = "Images/Icon_responsive_active.png";
-	        	tab4Image.src = "Images/Icon_prefs.png";
+	        	tab1Image.src = "../Images/Icon_main.png";
+	        	tab2Image.src = "../Images/Icon_settings.png";
+	        	tab3Image.src = "../Images/Icon_responsive_active.png";
+	        	tab4Image.src = "../Images/Icon_prefs.png";
 	            break;
 	            
 	        case 4: 
-	        	tab1Image.src = "Images/Icon_main.png";
-	        	tab2Image.src = "Images/Icon_settings.png";
-	        	tab3Image.src = "Images/Icon_responsive.png";
-	        	tab4Image.src = "Images/Icon_prefs_active.png";
+	        	tab1Image.src = "../Images/Icon_main.png";
+	        	tab2Image.src = "../Images/Icon_settings.png";
+	        	tab3Image.src = "../Images/Icon_responsive.png";
 	        	break;
 	        	
         	default:

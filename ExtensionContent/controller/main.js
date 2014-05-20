@@ -30,7 +30,7 @@ function activateButton_clickHandler()
 		
 		var csInterface = new CSInterface();
 		var arrayOfExtensionIds = csInterface.getExtensions(productCodes);
-		
+
 		if(!arrayOfExtensionIds.length)
 		{
 			alert("Incorrect product code!");
@@ -43,8 +43,20 @@ function activateButton_clickHandler()
 		urlRequest += "product=" + extensionId;
 		urlRequest += "&license=" + document.getElementById("license").value;
 		urlRequest += "&email=" + document.getElementById("emailInput").value;
+				
+		$.get(urlRequest, completeHandler);
 		
-		$.get(urlRequest, completeHandler);		
+//		var dataObject = new Object();
+//		dataObject.product = extensionId;
+//		dataObject.license = document.getElementById("license").value;
+//		dataObject.email = document.getElementById("emailInput").value;
+//		
+//		$.ajax({url:"http://specctr-license.herokuapp.com",
+//			 type:"Get",
+//			 dataType:"json",
+//			 data: dataObject,
+//			 success:completeHandler
+//			  });
 	}
 	catch(e)
 	{
@@ -274,7 +286,7 @@ function onLoaded()
 	{
 		var appName = getHostApp();
 		hostApplication = appName;
-		
+
 		if(hostApplication == null)
 		{
 			alert("Cannot load the extension.\nRequuired adobe product not found! ");

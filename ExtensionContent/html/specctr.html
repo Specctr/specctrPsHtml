@@ -8,16 +8,16 @@
 <html>
 <head>
 <meta charset="utf-8">
-<script src="./lib/CSInterface.js"></script>
-<script src="./lib/jquery-1.9.1.js"></script>
-<script src="./model/appModel.js"></script>
+<script src="../lib/CSInterface.js"></script>
+<script src="../lib/jquery-1.9.1.js"></script>
+<script src="../model/appModel.js"></script>
 
-<script src="./controller/specctrUI.js"></script>
-<script src="./controller/main.js"></script>
-<script src="./controller/spacingButtonHandlers.js"></script>
-<script src="./controller/dimensionButtonHandlers.js"></script>
+<script src="../controller/specctrUI.js"></script>
+<script src="../controller/main.js"></script>
+<script src="../controller/spacingButtonHandlers.js"></script>
+<script src="../controller/dimensionButtonHandlers.js"></script>
 
-<link id="ppstyle" rel="stylesheet" type="text/css" href="./css/style.css">
+<link id="ppstyle" rel="stylesheet" type="text/css" href="../css/style.css">
 <title>Specctr-Pro</title>
 </head>
 
@@ -58,13 +58,13 @@
         <div class="tabs">
             <ul>
                 <li id="tabHeader_1">
-                    <img id="tabImage_1" src="Images/Icon_main.png" /></li>
+                    <img id="tabImage_1" src="../Images/Icon_main.png" /></li>
                 <li id="tabHeader_2">
-                    <img id="tabImage_2" src="Images/Icon_settings.png"/></li>
+                    <img id="tabImage_2" src="../Images/Icon_settings.png"/></li>
                 <li id="tabHeader_3">
-                    <img id="tabImage_3" src="Images/Icon_responsive.png"/></li>
+                    <img id="tabImage_3" src="../Images/Icon_responsive.png"/></li>
                 <li id="tabHeader_4">
-                    <img id="tabImage_4" src="Images/Icon_prefs.png"/></li>
+                    <img id="tabImage_4" src="../Images/Icon_prefs.png"/></li>
             </ul>
         </div>
         
@@ -76,14 +76,14 @@
                 
                    <li class="border" onclick="createPropertySpecs()">
                         <div class="button imgButton">
-                            <img src="Images/Icon_object.png" alt="Shape/Text" />
+                            <img src="../Images/Icon_object.png" alt="Shape/Text" />
                             <label>Shape / Text</label>
                         </div>
                     </li>
                     
                     <li class="border" id="liWh">
                         <div class="button imgButton" id="btnWh">
-                            <img id="dimensionIcon" src="Images/DimensionButtonIcons/WH_11.png" alt="Width / Height" />
+                            <img id="dimensionIcon" src="../Images/DimensionButtonIcons/WH_11.png" alt="Width / Height" />
                             <label onclick="dimensionButton_clickHandler()">Width / Height</label>
                             <div class="dropdownArrow" id="imgWhDdlArrow" onclick="dimensionDropDown_clickHandler()">
                             </div>
@@ -102,7 +102,7 @@
                     
                     <li class="border" id="liSpacing">
                         <div class="button imgButton" id="btnSpacing">
-                            <img id="spacingIcon" src="Images/SpacingButtonIcons/Spacing_TL.png" alt="Spacing" />
+                            <img id="spacingIcon" src="../Images/SpacingButtonIcons/Spacing_TL.png" alt="Spacing" />
                             <label onclick="spacingButton_clickHandler()">Spacing</label>
                             <div id="imgSpacingDdlArrow" class="dropdownArrow" onclick="spacingDropDown_clickHandler()">
                             </div>
@@ -117,7 +117,7 @@
                     
                     <li class="border mb20Px" onclick="createCoordinateSpecs()">
                         <div class="button imgButton">
-                            <img src="Images/Icon_coordinates.png" alt="Coordinates" />
+                            <img src="../Images/Icon_coordinates.png" alt="Coordinates" />
                             <label>Coordinates</label>
                         </div>
                     </li>
@@ -141,7 +141,7 @@
 
                         <div class="border tblCell" style="width: 122px;">
                             <div class="button imgButton" id="dvExpand" onclick="expandCanvas()">
-                                <img src="Images/Icon_expand.png" alt="Spacing" />
+                                <img src="../Images/Icon_expand.png" alt="Spacing" />
                                 <label>Expand</label>
                             </div>
                         </div>
