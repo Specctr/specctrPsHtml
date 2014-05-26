@@ -13,6 +13,26 @@ var psConfig = "specctrPhotoshopConfig.json";
 var illConfig = "specctrIllustratorConfig.json";
 
 /**
+ * FunctionName	: generateUUID()
+ * Description	: Generate the UUID.
+ * */
+function generateUUID()
+{
+	//reference from http://www.ietf.org/rfc/rfc4122.txt
+    var s = [];
+    var hexDigits = "0123456789abcdef";
+    for (var i = 0; i < 36; i++) {
+        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+    }
+    s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+    s[8] = s[13] = s[18] = s[23] = "-";
+
+    var uuid = s.join("");
+    return uuid;
+}
+
+/**
  * FunctionName	: activateButton_clickHandler()
  * Description	: Validate the license of the user and move to the tab container if user's credentials valid.
  * */
@@ -20,43 +40,45 @@ function activateButton_clickHandler()
 {
 	try
 	{
-		// Get Extension Id and matching productCode.
-		var productCodes = [ "SpecctrPs-Pro",
-				"SpecctrPs-10",
-				"SpecctrPs-20",
-				"SpecctrPs-30",
-				"SpecctrPs-Site"
-			];
+		if(hostApplication == null)
+			hostApplication = getHostApp();
 		
-		var csInterface = new CSInterface();
-		var arrayOfExtensionIds = csInterface.getExtensions(productCodes);
-
-		if(!arrayOfExtensionIds.length)
+		var urlRequest = "http://specctr-license.herokuapp.com";
+		
+		if(hostApplication == illustratorId)
 		{
-			alert("Incorrect product code!");
-			return;
-		}
+			// Get Extension Id and matching productCode.
+			var productCodes = [ "SpecctrPs-Pro",
+					"SpecctrPs-10",
+					"SpecctrPs-20",
+					"SpecctrPs-30",
+					"SpecctrPs-Site"
+				];
 			
-		var extensionId = arrayOfExtensionIds[0].id;
-		
-		var urlRequest = "http://specctr-license.herokuapp.com?";
-		urlRequest += "product=" + extensionId;
-		urlRequest += "&license=" + document.getElementById("license").value;
-		urlRequest += "&email=" + document.getElementById("emailInput").value;
+			var csInterface = new CSInterface();
+			var arrayOfExtensionIds = csInterface.getExtensions(productCodes);
+
+			if(!arrayOfExtensionIds.length)
+			{
+				alert("Incorrect product code!");
+				return;
+			}
 				
-		$.get(urlRequest, completeHandler);
+			var extensionId = arrayOfExtensionIds[0].id;
+			
+			urlRequest += "?product=" + extensionId;
+			urlRequest += "&license=" + document.getElementById("license").value;
+			urlRequest += "&email=" + document.getElementById("emailInput").value;
+		}
+		else
+		{
+			//get apiKey, machineName from registration screen and macAddress:uuID from the code and pass it to the actual endpoint.
+			//given endpoint is temporary.
+			urlRequest = "http://specctr-subscription.herokuapp.com/subscriptions/status_mock?apiKey=apiKeySuccess";
+		}
 		
-//		var dataObject = new Object();
-//		dataObject.product = extensionId;
-//		dataObject.license = document.getElementById("license").value;
-//		dataObject.email = document.getElementById("emailInput").value;
-//		
-//		$.ajax({url:"http://specctr-license.herokuapp.com",
-//			 type:"Get",
-//			 dataType:"json",
-//			 data: dataObject,
-//			 success:completeHandler
-//			  });
+		$.get(urlRequest, completeHandler);
+				
 	}
 	catch(e)
 	{
@@ -73,26 +95,81 @@ function completeHandler(data, status)
 {
 	try
     {
-    	var response = data;
-    	alert(response["message"]);
-        var arr = response["registered"];
-        if(arr.length != 0) 
-    	{
-        	appPrefs.isLicensed = true;
-    		model.isLicensed = true;
-    		
-    		var specctrConfig = getConfigFileName();			
-    		var csInterface = new CSInterface();
-    		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
-    		prefsFile += "/LocalStore";
-    		preferencePath = prefsFile + "/" + specctrConfig;
-    		
-    		writeAppPrefs(appPrefs);
-    		init();
-    	}
+		var response = data;
+
+		if(hostApplication == illustratorId)
+		{
+			alert(response.message);
+	        var arr = response.registered;
+	        if(arr.length != 0) 
+	    	{
+	        	appPrefs.isLicensed = true;
+	    		model.isLicensed = true;
+	    	}
+	        else
+        	{
+	        	return;
+        	}
+		}
+		else
+		{
+			var statusFromEndPoint = response.name;
+			alert(statusFromEndPoint);
+			
+			if(statusFromEndPoint == 'active')
+			{
+				var apiKey = "";
+				var machineName =  "";
+				var uuid = "";
+				
+				//Check the subscription api again.
+				appPrefs = readAppPrefs();
+				
+				if(appPrefs == null || appPrefs.status == 'error')
+				{
+					apiKey = "apiKeySuccess";	//get the api key from text input of registration screen.
+					machineName = "Admin";	//get the machine name from text input of registration screen.
+					uuid = generateUUID();
+					appPrefs.apiKey = apiKey;
+					appPrefs.machineName = machineName;
+					appPrefs.macAddress = uuid;
+				}
+				else
+				{
+					apiKey = appPrefs.apiKey;
+					machineName = appPrefs.machineName;
+					uuid = appPrefs.macAddress;
+				}
+				
+				var lastLoginDate = new Date().getDate();
+				appPrefs.status = statusFromEndPoint;
+				appPrefs.lastLoginDate = lastLoginDate;
+				
+				model.status = statusFromEndPoint;
+				model.lastLoginDate = lastLoginDate;
+				model.apiKey = apiKey;
+				model.macAddress = uuid;
+				model.machineName = machineName;
+			}
+			else
+			{
+				alert(response.message);
+				return;
+			}
+		}
+		
+		var specctrConfig = getConfigFileName();
+		var csInterface = new CSInterface();
+		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
+		prefsFile += "/LocalStore";
+		preferencePath = prefsFile + "/" + specctrConfig;
+		
+		writeAppPrefs(appPrefs);
+		init();
     }
     catch(e)
     {
+    	alert(e);
     	console.log(e);
     }
 }
@@ -293,12 +370,12 @@ function onLoaded()
 			return;
 		}
 		
-		//Load the jsx files present in \jsx folder.
-		loadJSX();
-		
-		if(hostApplication == illustratorId)
+		loadJSX();		//Load the jsx files present in \jsx folder.
+		appPrefs = readAppPrefs();	//Check whether config exists, if not initialize and save in file on disk.
+	    
+	    if(hostApplication == illustratorId)
 		{
-			document.getElementById("fillForPHXS").style.display = "none";
+	    	document.getElementById("fillForPHXS").style.display = "none";
 			document.getElementById("strokeForPHXS").style.display = "none";
 			document.getElementById("shapeEffectsForPHXS").style.display = "none";
 			document.getElementById("textEffectsForPHXS").style.display = "none";
@@ -311,23 +388,50 @@ function onLoaded()
 			document.getElementById("strokeSizeForILST").style.display = "block";
 			document.getElementById("specToEdgeCheckbox").style.display = "block";
 			document.getElementById("colorListForILST").style.display = "block";
+			
+	    	if(appPrefs == null)
+			{
+		    	appPrefs = new Object();
+				appPrefs.isLicensed = false;
+				model.isLicensed = false;
+				writeAppPrefs(appPrefs);
+			}
+	    	
+		    //Check if Specctr is licensed, if not leave registration screen.
+			model.isLicensed = appPrefs.isLicensed;
+			
+		    if(model.isLicensed)
+		   	 	init();
 		}
-		
-		//Check whether config exists, if not initialize and save in file on disk.
-	    appPrefs = readAppPrefs(hostApplication);
-	    if(appPrefs == null)
-		{
-	    	appPrefs = new Object();
-			appPrefs.isLicensed = false;
-			model.isLicensed = false;
-			writeAppPrefs(appPrefs);
-		}
-	    
-	    //Check if Specctr is licensed, if not leave registration screen.
-		model.isLicensed = appPrefs.isLicensed;
-		
-	    if(model.isLicensed)
-	   	 	init();
+	    else
+    	{
+	    	if(appPrefs == null)
+			{
+		    	appPrefs = new Object();
+				appPrefs.status = "error";
+				model.status = "error";
+				writeAppPrefs(appPrefs);
+			}
+	    	
+	    	//Here we have to subscribe the API once in a day by reading appKey, macAddress and machineName..
+	    	model.status = appPrefs.status;
+	    	
+	    	if(model.status == 'active')
+    		{
+	    		model.lastLoginDate = appPrefs.lastLoginDate;
+	    		var timeDifference = model.lastLoginDate - new Date().getDate();
+	    		if(Math.abs(timeDifference))
+    			{
+	    			//get the machine name, apiKey and uuid and create url.
+	    			var urlRequest = "http://specctr-subscription.herokuapp.com/subscriptions/status_mock?apiKey=apiKeySuccess";
+	    			$.get(urlRequest, completeHandler);
+    			}
+	    		else
+    			{
+	    			init();
+    			}
+    		}
+    	}
     }
 	catch(e)
 	{
@@ -394,13 +498,15 @@ function init()
  * FunctionName	: readAppPrefs()
  * Description	: Return JSON object representing Specctr configuration file.
  * */
-function readAppPrefs(id)
+function readAppPrefs()
 {
 	try
 	{
 		var specctrConfig = psConfig;
+		if(hostApplication == null)
+			hostApplication = getHostApp();
 		
-		if(id == illustratorId)
+		if(hostApplication == illustratorId)
 			specctrConfig = illConfig;
 		
 		var csInterface = new CSInterface();
@@ -685,7 +791,7 @@ function getHostApp()
 	{
 		var csInterface = new CSInterface();
 		var appName = csInterface.hostEnvironment.appName;
-	    var appNames = ["PHXS","ILST"];
+	    var appNames = ["PHXS", "ILST"];
 	    var currentApplication = "";
 	    
 	    for(var i = 0; i < appNames.length; i++) 

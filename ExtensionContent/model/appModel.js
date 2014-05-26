@@ -66,6 +66,13 @@ var model =
 
 	//Scaling specs
 	useScaleBy: false,
-	scaleValue: "x1"
+	scaleValue: "x1",
+		
+	//For api subscription
+	status: '',
+	apiKey: '',
+	machineName: '',
+	macAddress: '',
+	lastLoginDate: 0
 };
 
