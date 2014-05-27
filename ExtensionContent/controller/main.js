@@ -2,7 +2,7 @@
 File-Name: main.js
 Description: This file is used to communicate between extend script file and html file. It also include function to execute when panel loads
 and reading and writing preferences methods.  
-*/
+ */
 
 var preferencePath;		//path of the Specctr config file.
 var appPrefs;			//Store the preference of UI.
@@ -19,17 +19,19 @@ var illConfig = "specctrIllustratorConfig.json";
 function generateUUID()
 {
 	//reference from http://www.ietf.org/rfc/rfc4122.txt
-    var s = [];
-    var hexDigits = "0123456789abcdef";
-    for (var i = 0; i < 36; i++) {
-        s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-    }
-    s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
-    s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
-    s[8] = s[13] = s[18] = s[23] = "-";
+	var s = [];
+	var hexDigits = "0123456789abcdef";
+	for(var i = 0; i < 36; i++) 
+	{
+		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+	}
 
-    var uuid = s.join("");
-    return uuid;
+	s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
+	s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
+	s[8] = s[13] = s[18] = s[23] = "-";
+
+	var uuid = s.join("");
+	return uuid;
 }
 
 /**
@@ -40,21 +42,21 @@ function activateButton_clickHandler()
 {
 	try
 	{
+		var urlRequest = "";
+
 		if(hostApplication == null)
 			hostApplication = getHostApp();
-		
-		var urlRequest = "http://specctr-license.herokuapp.com";
-		
+
 		if(hostApplication == illustratorId)
 		{
 			// Get Extension Id and matching productCode.
 			var productCodes = [ "SpecctrPs-Pro",
-					"SpecctrPs-10",
-					"SpecctrPs-20",
-					"SpecctrPs-30",
-					"SpecctrPs-Site"
-				];
-			
+			                     "SpecctrPs-10",
+			                     "SpecctrPs-20",
+			                     "SpecctrPs-30",
+			                     "SpecctrPs-Site"
+			                     ];
+
 			var csInterface = new CSInterface();
 			var arrayOfExtensionIds = csInterface.getExtensions(productCodes);
 
@@ -63,9 +65,10 @@ function activateButton_clickHandler()
 				alert("Incorrect product code!");
 				return;
 			}
-				
+
 			var extensionId = arrayOfExtensionIds[0].id;
-			
+
+			urlRequest = "http://specctr-license.herokuapp.com";
 			urlRequest += "?product=" + extensionId;
 			urlRequest += "&license=" + document.getElementById("license").value;
 			urlRequest += "&email=" + document.getElementById("emailInput").value;
@@ -74,11 +77,11 @@ function activateButton_clickHandler()
 		{
 			//get apiKey, machineName from registration screen and macAddress:uuID from the code and pass it to the actual endpoint.
 			//given endpoint is temporary.
-			urlRequest = "http://specctr-subscription.herokuapp.com/subscriptions/status_mock?apiKey=apiKeySuccess";
+			urlRequest = "http://specctr-subscription.herokuapp.com/subscriptions/status_mock";
+			urlRequest += "?apiKey=" + document.getElementById("license").value;
 		}
-		
-		$.get(urlRequest, completeHandler);
-				
+
+		$.get(urlRequest, completeHandler);		
 	}
 	catch(e)
 	{
@@ -94,38 +97,38 @@ function activateButton_clickHandler()
 function completeHandler(data, status)
 {
 	try
-    {
+	{
 		var response = data;
 
 		if(hostApplication == illustratorId)
 		{
 			alert(response.message);
-	        var arr = response.registered;
-	        if(arr.length != 0) 
-	    	{
-	        	appPrefs.isLicensed = true;
-	    		model.isLicensed = true;
-	    	}
-	        else
-        	{
-	        	return;
-        	}
+			var arr = response.registered;
+			if(arr.length != 0) 
+			{
+				appPrefs.isLicensed = true;
+				model.isLicensed = true;
+			}
+			else
+			{
+				return;
+			}
 		}
 		else
 		{
 			var statusFromEndPoint = response.name;
 			alert(statusFromEndPoint);
-			
-			if(statusFromEndPoint == 'active')
+
+			if(statusFromEndPoint == "active")
 			{
 				var apiKey = "";
 				var machineName =  "";
 				var uuid = "";
-				
+
 				//Check the subscription api again.
 				appPrefs = readAppPrefs();
-				
-				if(appPrefs == null || appPrefs.status == 'error')
+
+				if(appPrefs == null || appPrefs.status == "error")
 				{
 					apiKey = "apiKeySuccess";	//get the api key from text input of registration screen.
 					machineName = "Admin";	//get the machine name from text input of registration screen.
@@ -140,11 +143,11 @@ function completeHandler(data, status)
 					machineName = appPrefs.machineName;
 					uuid = appPrefs.macAddress;
 				}
-				
+
 				var lastLoginDate = new Date().getDate();
 				appPrefs.status = statusFromEndPoint;
 				appPrefs.lastLoginDate = lastLoginDate;
-				
+
 				model.status = statusFromEndPoint;
 				model.lastLoginDate = lastLoginDate;
 				model.apiKey = apiKey;
@@ -157,21 +160,21 @@ function completeHandler(data, status)
 				return;
 			}
 		}
-		
+
 		var specctrConfig = getConfigFileName();
 		var csInterface = new CSInterface();
 		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
 		prefsFile += "/LocalStore";
 		preferencePath = prefsFile + "/" + specctrConfig;
-		
+
 		writeAppPrefs(appPrefs);
 		init();
-    }
-    catch(e)
-    {
-    	alert(e);
-    	console.log(e);
-    }
+	}
+	catch(e)
+	{
+		alert(e);
+		console.log(e);
+	}
 }
 
 /**
@@ -214,7 +217,7 @@ function settings_creationCompleteHandler()
 			document.getElementById("shapeEffects").checked			= model.shapeEffects;
 			document.getElementById("textEffects").checked			= model.textEffects;
 		}
-		
+
 		document.getElementById("shapeAlpha").checked			= model.shapeAlpha;
 		document.getElementById("shapeBorderRadius").checked	= model.shapeBorderRadius;
 		document.getElementById("textFont").checked				= model.textFont;
@@ -252,7 +255,7 @@ function responsiveTab_creationCompleteHandler()
 			disableTextField(document.getElementById("txtWidth"));
 			disableTextField(document.getElementById("txtHeight"));
 		}
-		
+
 		//For spec in EM.
 		document.getElementById("chkEmSpec").checked = model.specInEM;
 		if(model.specInEM)
@@ -265,7 +268,7 @@ function responsiveTab_creationCompleteHandler()
 			disableTextField(document.getElementById("txtFontSize"));
 			disableTextField(document.getElementById("txtBaseLineHeight"));
 		}
-		
+
 	}
 	catch(e)
 	{
@@ -283,25 +286,25 @@ function prefs_creationCompleteHandler()
 	{
 		if(hostApplication == null)
 			hostApplication = getHostApp();
-		
+
 		//Set the values for font size combobox.
 		var fontSizeHandler = document.getElementById("lstSize");
 		fontSizeHandler.selectedIndex = -1;
 		fontSizeHandler.value = model.legendFontSize.toString();
-		
+
 		//Set the values for arm weight combobox.
 		var armWeightHandler = document.getElementById("lstLineWeight");
 		armWeightHandler.selectedIndex = -1;
 		armWeightHandler.value = model.armWeight.toString();
-		
+
 		document.getElementById("chkDisplayRGBAsHex").checked = model.useHexColor;
-		
+
 		if(hostApplication == illustratorId)
 		{
 			document.getElementById("chkCanvasEdge").checked = model.specToEdge;
-			
+
 			var colorModeHandler = document.getElementById("lstColorMode");
-			for (var i = 0; i < 4; i++)
+			for(var i = 0; i < 4; i++)
 			{
 				if(colorModeHandler.options[i].text == model.legendColorMode)
 				{
@@ -314,36 +317,36 @@ function prefs_creationCompleteHandler()
 		{
 			switch(model.legendColorMode)
 			{
-				case "HSB": 
-					document.getElementById("hsbRadioButton").checked = true;
-					break;
-					
-				case "CMYK": 
-					document.getElementById("cmykRadioButton").checked = true;
-					break;
-					
-				case "HSL": 
-					document.getElementById("hslRadioButton").checked = true;
-					break;
-				
-				case "RGB":
-				default:
-					document.getElementById("rgbRadioButton").checked = true;
-					break;
+			case "HSB": 
+				document.getElementById("hsbRadioButton").checked = true;
+				break;
+
+			case "CMYK": 
+				document.getElementById("cmykRadioButton").checked = true;
+				break;
+
+			case "HSL": 
+				document.getElementById("hslRadioButton").checked = true;
+				break;
+
+			case "RGB":
+			default:
+				document.getElementById("rgbRadioButton").checked = true;
+			break;
 			}
 		}
-		
+
 		document.getElementById("colShape").style.backgroundColor = model.legendColorObject;
 		document.getElementById("colType").style.backgroundColor = model.legendColorType;
 		document.getElementById("colSpacing").style.backgroundColor = model.legendColorSpacing;
-		
+
 		document.getElementById("chkScaleBy").checked = model.useScaleBy;
-		
+
 		if(model.useScaleBy)
 			enableTextField(document.getElementById("txtScaleBy"));
 		else
 			disableTextField(document.getElementById("txtScaleBy"));
-		
+
 		var extScript = "ext_" + hostApplication + "_getFonts()";
 		evalScript(extScript, loadFontsToList);
 	}
@@ -369,18 +372,18 @@ function onLoaded()
 			alert("Cannot load the extension.\nRequuired adobe product not found! ");
 			return;
 		}
-		
+
 		loadJSX();		//Load the jsx files present in \jsx folder.
 		appPrefs = readAppPrefs();	//Check whether config exists, if not initialize and save in file on disk.
-	    
-	    if(hostApplication == illustratorId)
+
+		if(hostApplication == illustratorId)
 		{
-	    	document.getElementById("fillForPHXS").style.display = "none";
+			document.getElementById("fillForPHXS").style.display = "none";
 			document.getElementById("strokeForPHXS").style.display = "none";
 			document.getElementById("shapeEffectsForPHXS").style.display = "none";
 			document.getElementById("textEffectsForPHXS").style.display = "none";
 			document.getElementById("radioForPHXS").style.display = "none";
-			
+
 			document.getElementById("fillColorForILST").style.display = "block";
 			document.getElementById("fillStyleForILST").style.display = "block";
 			document.getElementById("strokeColorForILST").style.display = "block";
@@ -388,51 +391,52 @@ function onLoaded()
 			document.getElementById("strokeSizeForILST").style.display = "block";
 			document.getElementById("specToEdgeCheckbox").style.display = "block";
 			document.getElementById("colorListForILST").style.display = "block";
-			
-	    	if(appPrefs == null)
+
+			if(appPrefs == null)
 			{
-		    	appPrefs = new Object();
+				appPrefs = new Object();
 				appPrefs.isLicensed = false;
 				model.isLicensed = false;
 				writeAppPrefs(appPrefs);
 			}
-	    	
-		    //Check if Specctr is licensed, if not leave registration screen.
+
+			//Check if Specctr is licensed, if not leave registration screen.
 			model.isLicensed = appPrefs.isLicensed;
-			
-		    if(model.isLicensed)
-		   	 	init();
+
+			if(model.isLicensed)
+				init();
 		}
-	    else
-    	{
-	    	if(appPrefs == null)
+		else
+		{
+			if(appPrefs == null)
 			{
-		    	appPrefs = new Object();
+				appPrefs = new Object();
 				appPrefs.status = "error";
 				model.status = "error";
 				writeAppPrefs(appPrefs);
 			}
-	    	
-	    	//Here we have to subscribe the API once in a day by reading appKey, macAddress and machineName..
-	    	model.status = appPrefs.status;
-	    	
-	    	if(model.status == 'active')
-    		{
-	    		model.lastLoginDate = appPrefs.lastLoginDate;
-	    		var timeDifference = model.lastLoginDate - new Date().getDate();
-	    		if(Math.abs(timeDifference))
-    			{
-	    			//get the machine name, apiKey and uuid and create url.
-	    			var urlRequest = "http://specctr-subscription.herokuapp.com/subscriptions/status_mock?apiKey=apiKeySuccess";
-	    			$.get(urlRequest, completeHandler);
-    			}
-	    		else
-    			{
-	    			init();
-    			}
-    		}
-    	}
-    }
+
+			//Here we have to subscribe the API once in a day by reading appKey, macAddress and machineName..
+			model.status = appPrefs.status;
+
+			if(model.status == "active")
+			{
+				model.lastLoginDate = appPrefs.lastLoginDate;
+				var timeDifference = model.lastLoginDate - new Date().getDate();
+				if(Math.abs(timeDifference))
+				{
+					//get the machine name, apiKey and uuid and create url.
+					var urlRequest = "http://specctr-subscription.herokuapp.com/subscriptions/status_mock?";
+					urlRequest += "apiKey=" + appPrefs.apiKey;
+					$.get(urlRequest, completeHandler);
+				}
+				else
+				{
+					init();
+				}
+			}
+		}
+	}
 	catch(e)
 	{
 		alert(e);
@@ -449,44 +453,44 @@ function init()
 	{
 		//Load tab container..
 		document.getElementById("loginContainer").style.display = "none";
-   	 	document.getElementById("tabContainer").style.display = "block";
-   	 	
-   	 	setModelValueFromPreferences();
-   	 
+		document.getElementById("tabContainer").style.display = "block";
+
+		setModelValueFromPreferences();
+
 		//Get tab container
-	    var container = document.getElementById("tabContainer");
-	    
-	    //Set current tab
-	    var navitem = container.querySelector(".tabs ul li");
-	    
-	    //Store which tab we are on
-	    var ident = navitem.id.split("_")[1];
-	    navitem.parentNode.setAttribute("data-current", ident);
-	    
-	    //Set Current Tab with proper Image
-	    changeImagesOfTabs(parseInt(ident));
-	    
-	    //Set current tab with class of active tab header
-	    navitem.setAttribute("class", "tabActiveHeader");
-	
-	    //Hide two tab contents we don't need
-	    var pages = container.querySelectorAll(".tabpage");
-	    for(var i = 1; i < pages.length; i++) 
-	    {
-	        pages[i].style.display = "none";
-	    }
-	
-	    //Register click events to tabs.
-	    var tabs = container.querySelectorAll(".tabs ul li");
-	    for(var i = 0; i < tabs.length; i++) 
-	    {
-	        tabs[i].onclick = tab_clickHandler;
-	    }
-	  
-	    mainTab_creationCompleteHandler();
-	    settings_creationCompleteHandler();
-	    responsiveTab_creationCompleteHandler();
-	    prefs_creationCompleteHandler();
+		var container = document.getElementById("tabContainer");
+
+		//Set current tab
+		var navitem = container.querySelector(".tabs ul li");
+
+		//Store which tab we are on
+		var ident = navitem.id.split("_")[1];
+		navitem.parentNode.setAttribute("data-current", ident);
+
+		//Set Current Tab with proper Image
+		changeImagesOfTabs(parseInt(ident));
+
+		//Set current tab with class of active tab header
+		navitem.setAttribute("class", "tabActiveHeader");
+
+		//Hide two tab contents we don't need
+		var pages = container.querySelectorAll(".tabpage");
+		for(var i = 1; i < pages.length; i++) 
+		{
+			pages[i].style.display = "none";
+		}
+
+		//Register click events to tabs.
+		var tabs = container.querySelectorAll(".tabs ul li");
+		for(var i = 0; i < tabs.length; i++) 
+		{
+			tabs[i].onclick = tab_clickHandler;
+		}
+
+		mainTab_creationCompleteHandler();
+		settings_creationCompleteHandler();
+		responsiveTab_creationCompleteHandler();
+		prefs_creationCompleteHandler();
 	}
 	catch(e)
 	{
@@ -505,26 +509,26 @@ function readAppPrefs()
 		var specctrConfig = psConfig;
 		if(hostApplication == null)
 			hostApplication = getHostApp();
-		
+
 		if(hostApplication == illustratorId)
 			specctrConfig = illConfig;
-		
+
 		var csInterface = new CSInterface();
 		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
 		prefsFile += "/LocalStore";
 		preferencePath = prefsFile + "/" + specctrConfig;
-		
+
 		var result = window.cep.fs.readdir(prefsFile);
 		if(window.cep.fs.ERR_NOT_FOUND == result.err)
 		{
 			window.cep.fs.makedir(prefsFile);
 			return null;
 		}
-		
+
 		result = window.cep.fs.readFile(preferencePath);
 		if(window.cep.fs.ERR_NOT_FOUND == result.err)
 			return null;
-		
+
 		appPrefs = JSON.parse(result.data);
 		return appPrefs;
 	}
@@ -559,7 +563,7 @@ function onClose()
 			appPrefs.shapeEffects		= model.shapeEffects;
 			appPrefs.textEffects		= model.textEffects;
 		}
-		
+
 		appPrefs.shapeAlpha			= model.shapeAlpha;
 		appPrefs.shapeBorderRadius	= model.shapeBorderRadius;
 
@@ -572,7 +576,7 @@ function onClose()
 		appPrefs.textTracking		= model.textTracking;
 		appPrefs.textAlpha			= model.textAlpha;
 		appPrefs.canvasExpandSize	= model.canvasExpandSize.toString();
-		
+
 		appPrefs.legendFont			= model.legendFont.toString();
 		appPrefs.legendFontSize		= model.legendFontSize.toString();
 		appPrefs.armWeight			= model.armWeight.toString();
@@ -584,7 +588,7 @@ function onClose()
 		appPrefs.specInPrcntg		= model.specInPrcntg;
 		appPrefs.specInEM			= model.specInEM;
 		appPrefs.useScaleBy			= model.useScaleBy;
-		
+
 		writeAppPrefs(appPrefs);
 	}
 	catch(e)
@@ -609,7 +613,7 @@ function writeAppPrefs(appPrefs)
 			prefsFile += "/LocalStore";
 			preferencePath = prefsFile + "/" + specctrConfig;
 		}
-		
+
 		window.cep.fs.writeFile(preferencePath, JSON.stringify(appPrefs));
 	}
 	catch(e)
@@ -628,105 +632,105 @@ function setModelValueFromPreferences()
 	{
 		if(hostApplication == illustratorId)
 		{
-			if (appPrefs.hasOwnProperty('shapeFillColor'))
+			if(appPrefs.hasOwnProperty("shapeFillColor"))
 				model.shapeFillColor = appPrefs.shapeFillColor;
-			
-			if (appPrefs.hasOwnProperty('shapeFillStyle'))
+
+			if(appPrefs.hasOwnProperty("shapeFillStyle"))
 				model.shapeFillStyle = appPrefs.shapeFillStyle;
-			
-			if (appPrefs.hasOwnProperty('shapeStrokeColor'))
+
+			if(appPrefs.hasOwnProperty("shapeStrokeColor"))
 				model.shapeStrokeColor = appPrefs.shapeStrokeColor;
-			
-			if (appPrefs.hasOwnProperty('shapeStrokeStyle'))
+
+			if(appPrefs.hasOwnProperty("shapeStrokeStyle"))
 				model.shapeStrokeStyle = appPrefs.shapeStrokeStyle;
-			
-			if (appPrefs.hasOwnProperty('shapeStrokeSize'))
+
+			if(appPrefs.hasOwnProperty("shapeStrokeSize"))
 				model.shapeStrokeSize = appPrefs.shapeStrokeSize;
-			
-			if (appPrefs.hasOwnProperty('specToEdge'))
+
+			if(appPrefs.hasOwnProperty("specToEdge"))
 				model.specToEdge = appPrefs.specToEdge;
 		}
 		else
 		{
-			if (appPrefs.hasOwnProperty('shapeFill'))
+			if(appPrefs.hasOwnProperty("shapeFill"))
 				model.shapeFill = appPrefs.shapeFill;
-			
-			if (appPrefs.hasOwnProperty('shapeStroke'))
+
+			if(appPrefs.hasOwnProperty("shapeStroke"))
 				model.shapeStroke = appPrefs.shapeStroke;
-			
-			if (appPrefs.hasOwnProperty('shapeEffects'))
+
+			if(appPrefs.hasOwnProperty("shapeEffects"))
 				model.shapeEffects = appPrefs.shapeEffects;
-			
-			if (appPrefs.hasOwnProperty('textEffects'))
+
+			if(appPrefs.hasOwnProperty("textEffects"))
 				model.textEffects = appPrefs.textEffects;
 		}
-		
-		if (appPrefs.hasOwnProperty('shapeAlpha'))
+
+		if(appPrefs.hasOwnProperty("shapeAlpha"))
 			model.shapeAlpha = appPrefs.shapeAlpha;
-		
-		if (appPrefs.hasOwnProperty('shapeBorderRadius'))
+
+		if(appPrefs.hasOwnProperty("shapeBorderRadius"))
 			model.shapeBorderRadius = appPrefs.shapeBorderRadius;
-		
-		if (appPrefs.hasOwnProperty('textFont'))
+
+		if(appPrefs.hasOwnProperty("textFont"))
 			model.textFont = appPrefs.textFont;
-		
-		if (appPrefs.hasOwnProperty('textSize'))
+
+		if(appPrefs.hasOwnProperty("textSize"))
 			model.textSize = appPrefs.textSize;
-		
-		if (appPrefs.hasOwnProperty('textAlignment'))
+
+		if(appPrefs.hasOwnProperty("textAlignment"))
 			model.textAlignment = appPrefs.textAlignment;
-		
-		if (appPrefs.hasOwnProperty('textColor'))
+
+		if(appPrefs.hasOwnProperty("textColor"))
 			model.textColor = appPrefs.textColor;
-		
-		if (appPrefs.hasOwnProperty('textStyle'))
+
+		if(appPrefs.hasOwnProperty("textStyle"))
 			model.textStyle = appPrefs.textStyle;
-		
-		if (appPrefs.hasOwnProperty('textLeading'))
+
+		if(appPrefs.hasOwnProperty("textLeading"))
 			model.textLeading = appPrefs.textLeading;
-		
-		if (appPrefs.hasOwnProperty('textTracking'))
+
+		if(appPrefs.hasOwnProperty("textTracking"))
 			model.textTracking = appPrefs.textTracking;
-		
-		if (appPrefs.hasOwnProperty('textAlpha'))
+
+		if(appPrefs.hasOwnProperty("textAlpha"))
 			model.textAlpha = appPrefs.textAlpha;
-		
-		if (appPrefs.hasOwnProperty('canvasExpandSize'))
+
+		if(appPrefs.hasOwnProperty("canvasExpandSize"))
 			model.canvasExpandSize = Number(appPrefs.canvasExpandSize);
-		
-		if (appPrefs.hasOwnProperty('legendFont'))
+
+		if(appPrefs.hasOwnProperty("legendFont"))
 			model.legendFont = appPrefs.legendFont;
 		else
 			model.legendFont = "Aparajita";
-		
-		if (appPrefs.hasOwnProperty('legendFontSize'))
+
+		if(appPrefs.hasOwnProperty("legendFontSize"))
 			model.legendFontSize = Number(appPrefs.legendFontSize);
-		
-		if (appPrefs.hasOwnProperty('armWeight'))
+
+		if(appPrefs.hasOwnProperty("armWeight"))
 			model.armWeight = Number(appPrefs.armWeight);
-		
-		if (appPrefs.hasOwnProperty('legendColorObject'))
+
+		if(appPrefs.hasOwnProperty("legendColorObject"))
 			model.legendColorObject = appPrefs.legendColorObject;
-		
-		if (appPrefs.hasOwnProperty('legendColorType'))
+
+		if(appPrefs.hasOwnProperty("legendColorType"))
 			model.legendColorType = appPrefs.legendColorType;
-		
-		if (appPrefs.hasOwnProperty('legendColorSpacing'))
+
+		if(appPrefs.hasOwnProperty("legendColorSpacing"))
 			model.legendColorSpacing = appPrefs.legendColorSpacing;
-		
-		if (appPrefs.hasOwnProperty('legendColorMode'))
+
+		if(appPrefs.hasOwnProperty("legendColorMode"))
 			model.legendColorMode = appPrefs.legendColorMode;
-		
-		if (appPrefs.hasOwnProperty('useHexColor'))
+
+		if(appPrefs.hasOwnProperty("useHexColor"))
 			model.useHexColor = appPrefs.useHexColor;
-		
-		if (appPrefs.hasOwnProperty('specInPrcntg'))
+
+		if(appPrefs.hasOwnProperty("specInPrcntg"))
 			model.specInPrcntg = appPrefs.specInPrcntg;
-		
-		if (appPrefs.hasOwnProperty('specInEM'))
+
+		if(appPrefs.hasOwnProperty("specInEM"))
 			model.specInEM = appPrefs.specInEM;
-		
-		if (appPrefs.hasOwnProperty('useScaleBy'))
+
+		if(appPrefs.hasOwnProperty("useScaleBy"))
 			model.useScaleBy = appPrefs.useScaleBy;
 	}
 	catch(e)
@@ -746,15 +750,15 @@ function loadFontsToList(result)
 		var font = JSON.parse(result);
 		var fontLength = font.length;
 		var fontList = document.getElementById("lstFont");
-	    for (var i = 0; i < fontLength; i++) 
-	    {
-	    	var option = document.createElement("option");
-	    	option.text = font[i].font;
-	    	option.value = i;
-	    	fontList.add(option, i);
-	    }
-	    
-	    applyFontToList();
+		for(var i = 0; i < fontLength; i++) 
+		{
+			var option = document.createElement("option");
+			option.text = font[i].font;
+			option.value = i;
+			fontList.add(option, i);
+		}
+
+		applyFontToList();
 	}
 	catch(e)
 	{
@@ -778,7 +782,7 @@ function loadJSX()
 	{
 		console.log(e);
 	}
-  
+
 }
 
 /**
@@ -791,27 +795,27 @@ function getHostApp()
 	{
 		var csInterface = new CSInterface();
 		var appName = csInterface.hostEnvironment.appName;
-	    var appNames = ["PHXS", "ILST"];
-	    var currentApplication = "";
-	    
-	    for(var i = 0; i < appNames.length; i++) 
-	    {
-	    	var name = appNames[i];
-	        if(appName.indexOf(name) >= 0) 
-	        {
-	        	currentApplication = name;
-	        	break;
-	        }
-	    }
-	    
-	    return currentApplication;
+		var appNames = ["PHXS", "ILST"];
+		var currentApplication = "";
+
+		for(var i = 0; i < appNames.length; i++) 
+		{
+			var name = appNames[i];
+			if(appName.indexOf(name) >= 0) 
+			{
+				currentApplication = name;
+				break;
+			}
+		}
+
+		return currentApplication;
 	}
 	catch(e)
 	{
 		console.log(e);
 		return null;
 	}
-	
+
 }
 
 /**
@@ -822,7 +826,7 @@ function evalScript(script, callback)
 {
 	try
 	{
-	    new CSInterface().evalScript(script, callback);
+		new CSInterface().evalScript(script, callback);
 	}
 	catch(e)
 	{
@@ -969,17 +973,17 @@ function applyFontToList()
 	try
 	{
 		var fontListHandler = document.getElementById("lstFont");		//Get font combo-box handler.
-		
+
 		//Select the font if the index text value matches with the legendFont.
 		if(fontListHandler.options[model.legendFontIndex].text == model.legendFont)
 		{
 			fontListHandler.options[model.legendFontIndex].selected = true;
 			return;
 		}
-		
+
 		//Select the font from the legendFont value and apply it.
 		var listLength = fontListHandler.options.length;
-		for (var i = 0; i < listLength; i++)
+		for(var i = 0; i < listLength; i++)
 		{
 			if(fontListHandler.options[i].text == model.legendFont)
 			{
@@ -1004,13 +1008,13 @@ function getConfigFileName()
 	try
 	{
 		var specctrConfig = psConfig;
-		
+
 		if(hostApplication == null)
 			hostApplication = getHostApp();
-		
+
 		if(hostApplication == illustratorId)
 			specctrConfig = illConfig;
-		
+
 		return specctrConfig;
 	}
 	catch(e)

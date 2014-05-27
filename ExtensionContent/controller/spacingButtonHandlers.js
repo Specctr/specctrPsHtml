@@ -12,19 +12,19 @@ function spacingButton_clickHandler()
 {
 	try
 	{
-		if (!model.spaceTop && !model.spaceRight && !model.spaceLeft && !model.spaceBottom)
+		if(!model.spaceTop && !model.spaceRight && !model.spaceLeft && !model.spaceBottom)
 		{
-			$('#liSpacing .options').slideDown(100);
-			$('#btnSpacing').addClass('buttonSelected');
-			$('#imgSpacingDdlArrow').addClass('dropdownArrowUp');
-			$('#liSpacing').addClass('isOpen');
+			$("#liSpacing .options").slideDown(100);
+			$("#btnSpacing").addClass("buttonSelected");
+			$("#imgSpacingDdlArrow").addClass("dropdownArrowUp");
+			$("#liSpacing").addClass("isOpen");
 		}
 		else
 		{
-			$('#liSpacing .options').slideUp(100);
-			$('#imgSpacingDdlArrow').removeClass('dropdownArrowUp');
-			$('#btnSpacing').removeClass('buttonSelected');
-			$('#liSpacing').removeClass('isOpen');
+			$("#liSpacing .options").slideUp(100);
+			$("#imgSpacingDdlArrow").removeClass("dropdownArrowUp");
+			$("#btnSpacing").removeClass("buttonSelected");
+			$("#liSpacing").removeClass("isOpen");
 			createSpacingSpecs();
 		}
 	}
@@ -44,17 +44,17 @@ function spacingDropDown_clickHandler()
 	{
 		if($("#spacingDropDown").is(":visible"))
 		{
-    		$('#liSpacing').removeClass('isOpen');
-    		$('#btnSpacing').removeClass('buttonSelected');
+    		$("#liSpacing").removeClass("isOpen");
+    		$("#btnSpacing").removeClass("buttonSelected");
 		}
     	else
 		{
-    		$('#liSpacing').addClass('isOpen');
-    		$('#btnSpacing').addClass('buttonSelected');
+    		$("#liSpacing").addClass("isOpen");
+    		$("#btnSpacing").addClass("buttonSelected");
 		}
     	
-    	$('#liSpacing .options').slideToggle(100);
-        $('#imgSpacingDdlArrow').toggleClass('dropdownArrowUp');
+    	$("#liSpacing .options").slideToggle(100);
+        $("#imgSpacingDdlArrow").toggleClass("dropdownArrowUp");
 	}
 	catch(e)
 	{
@@ -70,7 +70,7 @@ function imgSpaceTop_clickHandler()
 {
 	try
 	{
-		$('#imgSpaceTop').toggleClass('topSelected');
+		$("#imgSpaceTop").toggleClass("topSelected");
 		model.spaceTop = !model.spaceTop;
 		changeSpacingBtnIcon();
 	}
@@ -88,7 +88,7 @@ function imgSpaceRight_clickHandler()
 {
 	try
 	{
-		$('#imgSpaceRight').toggleClass('rightSelected');
+		$("#imgSpaceRight").toggleClass("rightSelected");
 		model.spaceRight = !model.spaceRight;
 		changeSpacingBtnIcon();
 	}
@@ -106,7 +106,7 @@ function imgSpaceBottom_clickHandler()
 {
 	try
 	{
-		$('#imgSpaceBottom').toggleClass('bottomSelected');
+		$("#imgSpaceBottom").toggleClass("bottomSelected");
 		model.spaceBottom = !model.spaceBottom;
 		changeSpacingBtnIcon();
 	}
@@ -124,7 +124,7 @@ function imgSpaceLeft_clickHandler()
 {
 	try
 	{
-		$('#imgSpaceLeft').toggleClass('leftSelected');
+		$("#imgSpaceLeft").toggleClass("leftSelected");
 		model.spaceLeft = !model.spaceLeft;
 		changeSpacingBtnIcon();
 	}
@@ -143,77 +143,77 @@ function changeSpacingBtnIcon()
 	try
 	{
 		var spacingIcon = document.getElementById("spacingIcon");
-		if (model.spaceTop)
+		if(model.spaceTop)
 		{
-			if (model.spaceRight)
+			if(model.spaceRight)
 			{
-				if (model.spaceLeft)
+				if(model.spaceLeft)
 				{
-					if (model.spaceBottom)
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_All.png";		//Apply all 4 selected cell icon.
+					if(model.spaceBottom)
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_All.png";		//Apply all 4 selected cell icon.
 					else
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_LTR.png";		//Apply top, left, right selected cell icon.
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_LTR.png";		//Apply top, left, right selected cell icon.
 				}
 				else
 				{
-					if (model.spaceBottom)
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_BTR.png";		//Apply top, right, bottom selected cell icon.
+					if(model.spaceBottom)
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_BTR.png";		//Apply top, right, bottom selected cell icon.
 					else
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_TR.png";			//Apply top, right selected cell icon.
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_TR.png";			//Apply top, right selected cell icon.
 				}
 			}
 			else
 			{
-				if (model.spaceLeft)
+				if(model.spaceLeft)
 				{
-					if (model.spaceBottom)
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_LTB.png";	//Apply top, left, bottom selected cell icon.
+					if(model.spaceBottom)
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_LTB.png";	//Apply top, left, bottom selected cell icon.
 					else
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_TL.png";	//Apply top, left selected cell icon.
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_TL.png";	//Apply top, left selected cell icon.
 				}
 				else
 				{
-					if (model.spaceBottom)
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_BT.png";			//Apply top, bottom selected cell icon.
+					if(model.spaceBottom)
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_BT.png";			//Apply top, bottom selected cell icon.
 					else
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_T.png";				//Apply top selected cell icon.
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_T.png";				//Apply top selected cell icon.
 				}
 			}
 		}
 		else
 		{
-			if (model.spaceRight)
+			if(model.spaceRight)
 			{
-				if (model.spaceLeft)
+				if(model.spaceLeft)
 				{
-					if (model.spaceBottom)
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_BLR.png";	//Apply right, bottom, left selected cell icon.
+					if(model.spaceBottom)
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_BLR.png";	//Apply right, bottom, left selected cell icon.
 					else
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_LR.png";	//Apply left, right selected cell icon.
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_LR.png";	//Apply left, right selected cell icon.
 				}
 				else
 				{
-					if (model.spaceBottom)
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_BR.png";		//Apply right, bottom selected cell icon.
+					if(model.spaceBottom)
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_BR.png";		//Apply right, bottom selected cell icon.
 					else
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_R.png";		//Apply right selected cell icon.
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_R.png";		//Apply right selected cell icon.
 				}
 			}
 			else
 			{
-				if (model.spaceLeft)
+				if(model.spaceLeft)
 				{
-					if (model.spaceBottom)
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_BL.png"; 		//Apply left, bottom selected cell icon.
+					if(model.spaceBottom)
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_BL.png"; 		//Apply left, bottom selected cell icon.
 					else
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_L.png";		//Apply left selected cell icon.
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_L.png";		//Apply left selected cell icon.
 				}
 				else
 				{
-					if (model.spaceBottom)
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_B.png";	//Apply bottom selected cell icon.
+					if(model.spaceBottom)
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_B.png";	//Apply bottom selected cell icon.
 					else
-						spacingIcon.src = "Images/SpacingButtonIcons/Spacing_None.png";	//Apply no selected cell icon.
+						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_None.png";	//Apply no selected cell icon.
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 /*
 File-Name: dimensionButtonHandlers.js
-Description: This file includes all the handlers and methods related to dimension popup button.  
-*/
+Description: This file includes all the handlers and methods related to dimension popup button.
+ */
 
 /**
  * FunctionName	: dimensionButton_clickHandler()
@@ -12,12 +12,12 @@ function dimensionButton_clickHandler()
 {
 	try
 	{
-		if (model.widthPos != 0 || model.heightPos != 0)
+		if(model.widthPos != 0 || model.heightPos != 0)
 		{
-			$('#liWh .options').slideUp(100);
-			$('#imgWhDdlArrow').removeClass('dropdownArrowUp');
-	        $('#btnWh').removeClass('buttonSelected');
-	        $('#liWh').removeClass('isOpen');
+			$("#liWh .options").slideUp(100);
+			$("#imgWhDdlArrow").removeClass("dropdownArrowUp");
+			$("#btnWh").removeClass("buttonSelected");
+			$("#liWh").removeClass("isOpen");
 			createDimensionSpecs();
 		}
 		else
@@ -25,16 +25,16 @@ function dimensionButton_clickHandler()
 			//Close the spacing drop down, if open.
 			if($("#spacingDropDown").is(":visible"))
 			{
-		        $('#liSpacing .options').slideUp(100);
-		        $('#liSpacing').removeClass('isOpen');
-		        $('#btnSpacing').removeClass('buttonSelected');
-		        $('#imgSpacingDdlArrow').removeClass().addClass('dropdownArrow');
+				$("#liSpacing .options").slideUp(100);
+				$("#liSpacing").removeClass("isOpen");
+				$("#btnSpacing").removeClass("buttonSelected");
+				$("#imgSpacingDdlArrow").removeClass().addClass("dropdownArrow");
 			}
-			
-			$('#liWh .options').slideDown(100);
-			$('#imgWhDdlArrow').addClass('dropdownArrowUp');
-	        $('#btnWh').addClass('buttonSelected');
-	        $('#liWh').addClass('isOpen');
+
+			$("#liWh .options").slideDown(100);
+			$("#imgWhDdlArrow").addClass("dropdownArrowUp");
+			$("#btnWh").addClass("buttonSelected");
+			$("#liWh").addClass("isOpen");
 		}
 	}
 	catch(e)
@@ -52,25 +52,25 @@ function dimensionDropDown_clickHandler()
 	//Close the spacing drop down, if open.
 	if($("#spacingDropDown").is(":visible"))
 	{
-        $('#liSpacing .options').slideUp(100);
-        $('#liSpacing').removeClass('isOpen');
-        $('#btnSpacing').removeClass('buttonSelected');
-        $('#imgSpacingDdlArrow').removeClass().addClass('dropdownArrow');
+		$("#liSpacing .options").slideUp(100);
+		$("#liSpacing").removeClass("isOpen");
+		$("#btnSpacing").removeClass("buttonSelected");
+		$("#imgSpacingDdlArrow").removeClass().addClass("dropdownArrow");
 	}
 
 	if($("#dimensionDropDown").is(":visible"))
 	{
-		$('#liWh').removeClass('isOpen');
-		$('#btnWh').removeClass('buttonSelected');
+		$("#liWh").removeClass("isOpen");
+		$("#btnWh").removeClass("buttonSelected");
 	}
 	else
 	{
-		$('#liWh').addClass('isOpen');
-		$('#btnWh').addClass('buttonSelected');
+		$("#liWh").addClass("isOpen");
+		$("#btnWh").addClass("buttonSelected");
 	}
-	
-    $('#liWh .options').slideToggle(100);
-    $('#imgWhDdlArrow').toggleClass('dropdownArrowUp');
+
+	$("#liWh .options").slideToggle(100);
+	$("#imgWhDdlArrow").toggleClass("dropdownArrowUp");
 }
 
 /**
@@ -83,7 +83,7 @@ function imgNoSelectionWidth_clickHandler()
 	{
 		//Remove all other selection classes for width row.
 		removeSelectionClassesForWidth();
-		$('#imgNoSelectionWidth').addClass('noSelectionSelected');
+		$("#imgNoSelectionWidth").addClass("noSelectionSelected");
 		model.widthPos = 0;
 		changeDimensionButtonnIcon();
 	}
@@ -103,7 +103,7 @@ function imgWidthTop_clickHandler()
 	{
 		//Remove all other selection classes for width row.
 		removeSelectionClassesForWidth();
-		$('#imgWidthTop').addClass('widthTopSelected');
+		$("#imgWidthTop").addClass("widthTopSelected");
 		model.widthPos = 1;
 		changeDimensionButtonnIcon();
 	}
@@ -123,7 +123,7 @@ function imgWidthBottom_clickHandler()
 	{
 		//Remove all other selection classes for width row.
 		removeSelectionClassesForWidth();
-		$('#imgWidthBottom').addClass('widthBottomSelected');
+		$("#imgWidthBottom").addClass("widthBottomSelected");
 		model.widthPos = 2;
 		changeDimensionButtonnIcon();
 	}
@@ -143,7 +143,7 @@ function imgWidthCenter_clickHandler()
 	{
 		//Remove all other selection classes for width row.
 		removeSelectionClassesForWidth();
-		$('#imgWidthCenter').addClass('widthCenterSelected');
+		$("#imgWidthCenter").addClass("widthCenterSelected");
 		model.widthPos = 3;
 		changeDimensionButtonnIcon();
 	}
@@ -163,7 +163,7 @@ function imgNoSelectionHeight_clickHandler()
 	{
 		//Remove all other selection classes for height row.
 		removeSelectionClassesForHeight();
-		$('#imgNoSelectionHeight').addClass('noSelectionSelected');
+		$("#imgNoSelectionHeight").addClass("noSelectionSelected");
 		model.heightPos = 0;
 		changeDimensionButtonnIcon();
 	}
@@ -183,7 +183,7 @@ function imgHeightLeft_clickHandler()
 	{
 		//Remove all other selection classes for height row.
 		removeSelectionClassesForHeight();
-		$('#imgHeightLeft').addClass('heightLeftSelected');
+		$("#imgHeightLeft").addClass("heightLeftSelected");
 		model.heightPos = 1;
 		changeDimensionButtonnIcon();
 	}
@@ -203,7 +203,7 @@ function imgHeightRight_clickHandler()
 	{
 		//Remove all other selection classes for height row.
 		removeSelectionClassesForHeight();
-		$('#imgHeightRight').addClass('heightRightSelected');
+		$("#imgHeightRight").addClass("heightRightSelected");
 		model.heightPos = 2;
 		changeDimensionButtonnIcon();
 	}
@@ -223,7 +223,7 @@ function imgHeightCenter_clickHandler()
 	{
 		//Remove all other selection classes for height row.
 		removeSelectionClassesForHeight();
-		$('#imgHeightCenter').addClass('heightCenterSelected');
+		$("#imgHeightCenter").addClass("heightCenterSelected");
 		model.heightPos = 3;
 		changeDimensionButtonnIcon();
 	}
@@ -241,10 +241,10 @@ function removeSelectionClassesForWidth()
 {
 	try
 	{
-		$('#imgNoSelectionWidth').removeClass('noSelectionSelected');
-		$('#imgWidthTop').removeClass('widthTopSelected');
-		$('#imgWidthBottom').removeClass('widthBottomSelected');
-		$('#imgWidthCenter').removeClass('widthCenterSelected');
+		$("#imgNoSelectionWidth").removeClass("noSelectionSelected");
+		$("#imgWidthTop").removeClass("widthTopSelected");
+		$("#imgWidthBottom").removeClass("widthBottomSelected");
+		$("#imgWidthCenter").removeClass("widthCenterSelected");
 	}
 	catch(e)
 	{
@@ -260,10 +260,10 @@ function removeSelectionClassesForHeight()
 {
 	try
 	{
-		$('#imgNoSelectionHeight').removeClass('noSelectionSelected');
-		$('#imgHeightLeft').removeClass('heightLeftSelected');
-		$('#imgHeightRight').removeClass('heightRightSelected');
-		$('#imgHeightCenter').removeClass('heightCenterSelected');
+		$("#imgNoSelectionHeight").removeClass("noSelectionSelected");
+		$("#imgHeightLeft").removeClass("heightLeftSelected");
+		$("#imgHeightRight").removeClass("heightRightSelected");
+		$("#imgHeightCenter").removeClass("heightCenterSelected");
 	}
 	catch(e)
 	{
@@ -282,133 +282,133 @@ function changeDimensionButtonnIcon()
 		var dimensionIcon = document.getElementById("dimensionIcon");
 		switch (model.widthPos)
 		{
-			case 0:												//No width option.	
+		case 0:												//No width option.
+		{
+			switch (model.heightPos)
 			{
-				switch (model.heightPos)
-				{
-					case 0:									//No height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_00.png";
-						break;
-					}
-					
-					case 1:									//Left height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_01.png";
-						break;
-					}
-					
-					case 2:									//Right height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_02.png";
-						break;
-					}
-						
-					case 3:									//Center height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_03.png";
-					}
-				}
-				
+			case 0:									//No height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_00.png";
 				break;
 			}
-				
-			case 1:												//Top width option.
+
+			case 1:									//Left height option.
 			{
-				switch (model.heightPos)
-				{
-					case 0:									//No height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_10.png";
-						break;
-					}
-					
-					case 1:									//Left height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_11.png";
-						break;
-					}
-					
-					case 2:									//Right height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_12.png";
-						break;
-					}
-					
-					case 3:									//Center height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_13.png";
-					}
-				}
-				
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_01.png";
 				break;
 			}
-			
-			case 2:												//Bottom width option.
+
+			case 2:									//Right height option.
 			{
-				switch (model.heightPos)
-				{
-					case 0:									//No height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_20.png";
-						break;
-					}
-					
-					case 1:									//Left height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_21.png";
-						break;
-					}
-						
-					case 2:									//Right height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_22.png";
-						break;
-					}
-					
-					case 3:									//Center height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_23.png";
-					}
-				}
-				
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_02.png";
 				break;
 			}
-			
-			case 3:												//Center width option.
+
+			case 3:									//Center height option.
 			{
-				switch (model.heightPos)
-				{
-					case 0:									//No height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_30.png";
-						break;
-					}
-					
-					case 1:									//Left height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_31.png";
-						break;
-					}
-					
-					
-					case 2:									//Right height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_32.png";
-						break;
-					}
-					
-					case 3:									//Center height option.
-					{
-						dimensionIcon.src = "Images/DimensionButtonIcons/WH_33.png";
-					}
-				}
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_03.png";
 			}
+			}
+
+			break;
+		}
+
+		case 1:												//Top width option.
+		{
+			switch (model.heightPos)
+			{
+			case 0:									//No height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_10.png";
+				break;
+			}
+
+			case 1:									//Left height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_11.png";
+				break;
+			}
+
+			case 2:									//Right height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_12.png";
+				break;
+			}
+
+			case 3:									//Center height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_13.png";
+			}
+			}
+
+			break;
+		}
+
+		case 2:												//Bottom width option.
+		{
+			switch (model.heightPos)
+			{
+			case 0:									//No height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_20.png";
+				break;
+			}
+
+			case 1:									//Left height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_21.png";
+				break;
+			}
+
+			case 2:									//Right height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_22.png";
+				break;
+			}
+
+			case 3:									//Center height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_23.png";
+			}
+			}
+
+			break;
+		}
+
+		case 3:												//Center width option.
+		{
+			switch (model.heightPos)
+			{
+			case 0:									//No height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_30.png";
+				break;
+			}
+
+			case 1:									//Left height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_31.png";
+				break;
+			}
+
+
+			case 2:									//Right height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_32.png";
+				break;
+			}
+
+			case 3:									//Center height option.
+			{
+				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_33.png";
+			}
+			}
+		}
 		}
 	}
 	catch(e)
 	{
 		console.log(e);
 	}
-	
+
 }

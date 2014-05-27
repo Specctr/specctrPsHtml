@@ -17,536 +17,629 @@
 <script src="../controller/spacingButtonHandlers.js"></script>
 <script src="../controller/dimensionButtonHandlers.js"></script>
 
-<link id="ppstyle" rel="stylesheet" type="text/css" href="../css/style.css">
+<link id="ppstyle" rel="stylesheet" type="text/css"
+	href="../css/style.css">
 <title>Specctr-Pro</title>
 </head>
 
 <body onLoad="onLoaded()" onunload="onClose()">
 
 	<div class="container" id="loginContainer" style="display: block;">
-        <!-- Login container start here -->
-        <div id="dvLoginContainer">
+		<!-- Login container start here -->
+		<div id="dvLoginContainer">
 
-            <div class="logo"></div>
+			<div class="logo"></div>
 
-            <div class="row">
-                <label for="txtEmail">Email:</label>
-                <input type="text" id="emailInput" name="txtEmail" style="background-color: #ffffff;" />
-            </div>
-            <div class="row">
-                <label for="txtEmail">16- Digit License Code:</label>
-                <input type="text" id="license" name="txt16Digit" placeholder="xxxx-xxxx-xxxx-xxxx" />
-            </div>
+			<div class="row">
+				<label for="txtEmail">Email:</label> <input type="text"
+					id="emailInput" name="txtEmail" style="background-color: #ffffff;" />
+			</div>
+			<div class="row">
+				<label for="txtEmail">16- Digit License Code:</label> <input
+					type="text" id="license" name="txt16Digit"
+					placeholder="xxxx-xxxx-xxxx-xxxx" />
+			</div>
 
-            <ul class="menu">
-                <li class="border">
-                    <div class="button" onclick="activateButton_clickHandler()">
-                        <label>Activate Specctr</label>
-                    </div>
-                </li>
-            </ul>
+			<ul class="menu">
+				<li class="border">
+					<div class="button" onclick="activateButton_clickHandler()">
+						<label>Activate Specctr</label>
+					</div>
+				</li>
+			</ul>
 
-            <div class="help">
-                <label class="link">Need Help?</label>
-            </div>
-        </div>
-       <!-- Login container end here -->
+			<div class="help">
+				<label class="link">Need Help?</label>
+			</div>
+		</div>
+		<!-- Login container end here -->
 	</div>
-    
-<div class="container" id="tabContainer" style="display: none;">
-        
-        <div class="tabs">
-            <ul>
-                <li id="tabHeader_1">
-                    <img id="tabImage_1" src="../Images/Icon_main.png" /></li>
-                <li id="tabHeader_2">
-                    <img id="tabImage_2" src="../Images/Icon_settings.png"/></li>
-                <li id="tabHeader_3">
-                    <img id="tabImage_3" src="../Images/Icon_responsive.png"/></li>
-                <li id="tabHeader_4">
-                    <img id="tabImage_4" src="../Images/Icon_prefs.png"/></li>
-            </ul>
-        </div>
-        
-        <div class="tabscontent">
-           
-			<!-- Starting of main tab. -->
-            <div id="tabpage_1" class="tabpage">
-                <ul class="menu">
-                
-                   <li class="border" onclick="createPropertySpecs()">
-                        <div class="button imgButton">
-                            <img src="../Images/Icon_object.png" alt="Shape/Text" />
-                            <label>Shape / Text</label>
-                        </div>
-                    </li>
-                    
-                    <li class="border" id="liWh">
-                        <div class="button imgButton" id="btnWh">
-                            <img id="dimensionIcon" src="../Images/DimensionButtonIcons/WH_11.png" alt="Width / Height" />
-                            <label onclick="dimensionButton_clickHandler()">Width / Height</label>
-                            <div class="dropdownArrow" id="imgWhDdlArrow" onclick="dimensionDropDown_clickHandler()">
-                            </div>
-                        </div>
-                        <div class="options" id="dimensionDropDown">
-                            <div class="option" id="imgNoSelectionWidth" onclick="imgNoSelectionWidth_clickHandler()"></div>
-                            <div class="option widthTopSelected" id="imgWidthTop" onclick="imgWidthTop_clickHandler()"></div>
-                            <div class="option" id="imgWidthBottom" onclick="imgWidthBottom_clickHandler()"></div>
-                            <div class="option" id="imgWidthCenter" onclick="imgWidthCenter_clickHandler()"></div>
-                            <div class="option" id="imgNoSelectionHeight" onclick="imgNoSelectionHeight_clickHandler()"></div>
-                            <div class="option heightLeftSelected" id="imgHeightLeft" onclick="imgHeightLeft_clickHandler()"></div>
-                            <div class="option" id="imgHeightRight" onclick="imgHeightRight_clickHandler()"></div>
-                            <div class="option" id="imgHeightCenter" onclick="imgHeightCenter_clickHandler()"></div>
-                        </div>
-                    </li>
-                    
-                    <li class="border" id="liSpacing">
-                        <div class="button imgButton" id="btnSpacing">
-                            <img id="spacingIcon" src="../Images/SpacingButtonIcons/Spacing_TL.png" alt="Spacing" />
-                            <label onclick="spacingButton_clickHandler()">Spacing</label>
-                            <div id="imgSpacingDdlArrow" class="dropdownArrow" onclick="spacingDropDown_clickHandler()">
-                            </div>
-                        </div>
-                        <div class="options" id="spacingDropDown">
-                            <div class="option topSelected" id="imgSpaceTop" onclick="imgSpaceTop_clickHandler()"></div>
-                            <div class="option" id="imgSpaceRight" onclick="imgSpaceRight_clickHandler()"></div>
-                            <div class="option" id="imgSpaceBottom" onclick="imgSpaceBottom_clickHandler()"></div>
-                            <div class="option leftSelected" id="imgSpaceLeft" onclick="imgSpaceLeft_clickHandler()"></div>
-                        </div>
-                    </li>
-                    
-                    <li class="border mb20Px" onclick="createCoordinateSpecs()">
-                        <div class="button imgButton">
-                            <img src="../Images/Icon_coordinates.png" alt="Coordinates" />
-                            <label>Coordinates</label>
-                        </div>
-                    </li>
-                    
-                    <li>
-                        <div class="line"></div>
-                        <div class="border2 button2" onclick="exportCss()">
-                            <label>Export CSS</label>
-                        </div>
-                        <div class="line mb20Px"></div>
-                        <label class="textNormal">EXPAND CANVAS</label>
-                    </li>
-                    
-                    <li>
-                        <div class="tblCell pxWidth">
-                            <label class="lbl10Px" for="txtPx">By(px)</label>
-                            <input id="canvasExpandSize" onchange="canvasExpandSize_changeHandler()" maxlength="4" 
-                            	style="width:30px; height:20px; font-family:Verdana; font-size:11px; -webkit-user-select: auto;" 
-                            	onkeypress='return event.charCode >= 48 && event.charCode <= 57'/>
-                        </div>
 
-                        <div class="border tblCell" style="width: 122px;">
-                            <div class="button imgButton" id="dvExpand" onclick="expandCanvas()">
-                                <img src="../Images/Icon_expand.png" alt="Spacing" />
-                                <label>Expand</label>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-            <!-- Ending of main tab. -->
+	<div class="container" id="tabContainer" style="display: none;">
+
+		<div class="tabs">
+			<ul>
+				<li id="tabHeader_1"><img id="tabImage_1"
+					src="../Images/Icon_main.png" /></li>
+				<li id="tabHeader_2"><img id="tabImage_2"
+					src="../Images/Icon_settings.png" /></li>
+				<li id="tabHeader_3"><img id="tabImage_3"
+					src="../Images/Icon_responsive.png" /></li>
+				<li id="tabHeader_4"><img id="tabImage_4"
+					src="../Images/Icon_prefs.png" /></li>
+			</ul>
+		</div>
+
+		<div class="tabscontent">
+
+			<!-- Starting of main tab. -->
+			<div id="tabpage_1" class="tabpage">
+				<ul class="menu">
+
+					<li class="border" onclick="createPropertySpecs()">
+						<div class="button imgButton">
+							<img src="../Images/Icon_object.png" alt="Shape/Text" /> <label>Shape
+								/ Text</label>
+						</div>
+					</li>
+
+					<li class="border" id="liWh">
+						<div class="button imgButton" id="btnWh">
+							<img id="dimensionIcon"
+								src="../Images/DimensionButtonIcons/WH_11.png"
+								alt="Width / Height" /> <label
+								onclick="dimensionButton_clickHandler()">Width / Height</label>
+							<div class="dropdownArrow" id="imgWhDdlArrow"
+								onclick="dimensionDropDown_clickHandler()"></div>
+						</div>
+						<div class="options" id="dimensionDropDown">
+							<div class="option" id="imgNoSelectionWidth"
+								onclick="imgNoSelectionWidth_clickHandler()"></div>
+							<div class="option widthTopSelected" id="imgWidthTop"
+								onclick="imgWidthTop_clickHandler()"></div>
+							<div class="option" id="imgWidthBottom"
+								onclick="imgWidthBottom_clickHandler()"></div>
+							<div class="option" id="imgWidthCenter"
+								onclick="imgWidthCenter_clickHandler()"></div>
+							<div class="option" id="imgNoSelectionHeight"
+								onclick="imgNoSelectionHeight_clickHandler()"></div>
+							<div class="option heightLeftSelected" id="imgHeightLeft"
+								onclick="imgHeightLeft_clickHandler()"></div>
+							<div class="option" id="imgHeightRight"
+								onclick="imgHeightRight_clickHandler()"></div>
+							<div class="option" id="imgHeightCenter"
+								onclick="imgHeightCenter_clickHandler()"></div>
+						</div>
+					</li>
+
+					<li class="border" id="liSpacing">
+						<div class="button imgButton" id="btnSpacing">
+							<img id="spacingIcon"
+								src="../Images/SpacingButtonIcons/Spacing_TL.png" alt="Spacing" />
+							<label onclick="spacingButton_clickHandler()">Spacing</label>
+							<div id="imgSpacingDdlArrow" class="dropdownArrow"
+								onclick="spacingDropDown_clickHandler()"></div>
+						</div>
+						<div class="options" id="spacingDropDown">
+							<div class="option topSelected" id="imgSpaceTop"
+								onclick="imgSpaceTop_clickHandler()"></div>
+							<div class="option" id="imgSpaceRight"
+								onclick="imgSpaceRight_clickHandler()"></div>
+							<div class="option" id="imgSpaceBottom"
+								onclick="imgSpaceBottom_clickHandler()"></div>
+							<div class="option leftSelected" id="imgSpaceLeft"
+								onclick="imgSpaceLeft_clickHandler()"></div>
+						</div>
+					</li>
+
+					<li class="border mb20Px" onclick="createCoordinateSpecs()">
+						<div class="button imgButton">
+							<img src="../Images/Icon_coordinates.png" alt="Coordinates" /> <label>Coordinates</label>
+						</div>
+					</li>
+
+					<li>
+						<div class="line"></div>
+						<div class="border2 button2" onclick="exportCss()">
+							<label>Export CSS</label>
+						</div>
+						<div class="line mb20Px"></div> <label class="textNormal">EXPAND
+							CANVAS</label>
+					</li>
+
+					<li>
+						<div class="tblCell pxWidth">
+							<label class="lbl10Px" for="txtPx">By(px)</label> <input
+								id="canvasExpandSize"
+								onchange="canvasExpandSize_changeHandler()" maxlength="4"
+								style="width: 30px; height: 20px; font-family: Verdana; font-size: 11px; -webkit-user-select: auto;"
+								onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
+						</div>
+
+						<div class="border tblCell" style="width: 122px;">
+							<div class="button imgButton" id="dvExpand"
+								onclick="expandCanvas()">
+								<img src="../Images/Icon_expand.png" alt="Spacing" /> <label>Expand</label>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<!-- Ending of main tab. -->
 
 			<!-- Starting of setting tab. -->
-            <div id="tabpage_2" class="tabpage">
-                <div class="tabPage2Header">
-                    SELECT DETAILS
-                </div>
-                <div class="floatLeft" id="shapePropertyForPHXS">
-                    <div class="tabPage2Content tabPage2SubHeader boldText">
-                        Shape Object
-                    </div>
-                    <div class="tabPage2Content" id="fillColorForILST" style="display: none;">
-                        <input type="checkbox" value="1" id="shapeFillColor" onclick="shapeFillColor_changeHandler()"/>
-                        <label for="shapeFillColor">Fill Color</label>
-                    </div>
-                    <div class="tabPage2Content" id="fillStyleForILST" style="display: none;">
-                        <input type="checkbox" value="2" id="shapeFillStyle" onclick="shapeFillStyle_changeHandler()"/>
-                        <label for="shapeFillColor">Fill Style</label>
-                    </div>
-                    <div class="tabPage2Content" id="strokeColorForILST" style="display: none;">
-                        <input type="checkbox" value="3" id="shapeStrokeColor" onclick="shapeStrokeColor_changeHandler()"/>
-                        <label for="shapeStrokeColor">Stroke Color</label>
-                    </div>
-                     <div class="tabPage2Content" id="strokeStyleForILST" style="display: none;">
-                        <input type="checkbox" value="4" id="shapeStrokeStyle" onclick="shapeStrokeStyle_changeHandler()"/>
-                        <label for="shapeStrokeStyle">Stroke Style</label>
-                    </div>
-                     <div class="tabPage2Content" id="strokeSizeForILST" style="display: none;">
-                        <input type="checkbox" value="5" id="shapeStrokeSize" onclick="shapeStrokeSize_changeHandler()"/>
-                        <label for="shapeStrokeSize">Stroke Size</label>
-                    </div>
-                    <div class="tabPage2Content" id="fillForPHXS">
-                        <input type="checkbox" value="1" id="shapeFill" onclick="shapeFill_changeHandler()"/>
-                        <label for="shapeFill">Fill</label>
-                    </div>
-                    <div class="tabPage2Content" id="strokeForPHXS">
-                        <input type="checkbox" value="2" id="shapeStroke" onclick="shapeStroke_changeHandler()"/>
-                        <label for="shapeStroke">Stroke</label>
-                    </div>
-                    <div class="tabPage2Content">
-                        <input type="checkbox" value="3" id="shapeAlpha" onclick="shapeAlpha_changeHandler()"/>
-                        <label for="shapeAlpha">Alpha</label>
-                    </div>
-                    <div class="tabPage2Content" id="shapeEffectsForPHXS">
-                        <input type="checkbox" value="4" id="shapeEffects" onclick="shapeEffects_changeHandler()"/>
-                        <label for="shapeEffects">Effects</label>
-                    </div>
-                    <div class="tabPage2Content">
-                        <input type="checkbox" value="5" id="shapeBorderRadius" onclick="shapeBorderRadius_changeHandler()"/>
-                        <label for="shapeBorderRadius">Border Radius</label>
-                    </div>
-                </div>
-                
-               <div class="floatRight">
-                    <div class="tabPage2Content tabPage2SubHeader boldText">
-                        Text Object
-                    </div>
-                    <div class="tabPage2Content">
-                        <input type="checkbox" value="6" id="textFont" onclick="textFont_changeHandler()"/>
-                        <label for="textFont">Font Family</label>
-                    </div>
-                    <div class="tabPage2Content">
-                        <input type="checkbox" value="7" id="textSize" onclick="textSize_changeHandler()"/>
-                        <label for="textSize">Font Size</label>
-                    </div>
-                    <div class="tabPage2Content">
-                        <input type="checkbox" value="8" id="textColor" onclick="textColor_changeHandler()"/>
-                        <label for="textColor">Color</label>
-                    </div>
-                    <div class="tabPage2Content">
-                        <input type="checkbox" value="9" id="textStyle" onclick="textStyle_changeHandler()"/>
-                        <label for="textStyle">Font Style</label>
-                    </div>
-                    <div class="tabPage2Content">
-                        <input type="checkbox" value="10" id="textAlignment" onclick="textAlignment_changeHandler()"/>
-                        <label for="textAlignment">Text-Align</label>
-                    </div>
-                    <div class="tabPage2Content">
-                        <input type="checkbox" value="11" id="textLeading" onclick="textLeading_changeHandler()"/>
-                        <label for="textLeading">Line Height</label>
-                    </div>
-                    <div class="tabPage2Content">
-                        <input type="checkbox" value="12" id="textTracking" onclick="textTracking_changeHandler()"/>
-                        <label for=textTracking>Letter Spacing</label>
-                    </div>
-                    <div class="tabPage2Content">
-                        <input type="checkbox" value="13" id="textAlpha" onclick="textAlpha_changeHandler()"/>
-                        <label for="textAlpha">Alpha</label>
-                    </div>
-                    <div class="tabPage2Content" id="textEffectsForPHXS">
-                        <input type="checkbox" value="14" id="textEffects" onclick="textEffects_changeHandler()"/>
-                        <label for="textEffects">Effects</label>
-                    </div>
-                </div>
-            </div>
-            <!-- Ending of setting tab. -->
+			<div id="tabpage_2" class="tabpage">
+				<div class="tabPage2Header">SELECT DETAILS</div>
+				<div class="floatLeft" id="shapePropertyForPHXS">
+					<div class="tabPage2Content tabPage2SubHeader boldText">
+						Shape Object</div>
+					<div class="tabPage2Content" id="fillColorForILST"
+						style="display: none;">
+						<input type="checkbox" value="1" id="shapeFillColor"
+							onclick="shapeFillColor_changeHandler()" /> <label
+							for="shapeFillColor">Fill Color</label>
+					</div>
+					<div class="tabPage2Content" id="fillStyleForILST"
+						style="display: none;">
+						<input type="checkbox" value="2" id="shapeFillStyle"
+							onclick="shapeFillStyle_changeHandler()" /> <label
+							for="shapeFillColor">Fill Style</label>
+					</div>
+					<div class="tabPage2Content" id="strokeColorForILST"
+						style="display: none;">
+						<input type="checkbox" value="3" id="shapeStrokeColor"
+							onclick="shapeStrokeColor_changeHandler()" /> <label
+							for="shapeStrokeColor">Stroke Color</label>
+					</div>
+					<div class="tabPage2Content" id="strokeStyleForILST"
+						style="display: none;">
+						<input type="checkbox" value="4" id="shapeStrokeStyle"
+							onclick="shapeStrokeStyle_changeHandler()" /> <label
+							for="shapeStrokeStyle">Stroke Style</label>
+					</div>
+					<div class="tabPage2Content" id="strokeSizeForILST"
+						style="display: none;">
+						<input type="checkbox" value="5" id="shapeStrokeSize"
+							onclick="shapeStrokeSize_changeHandler()" /> <label
+							for="shapeStrokeSize">Stroke Size</label>
+					</div>
+					<div class="tabPage2Content" id="fillForPHXS">
+						<input type="checkbox" value="1" id="shapeFill"
+							onclick="shapeFill_changeHandler()" /> <label for="shapeFill">Fill</label>
+					</div>
+					<div class="tabPage2Content" id="strokeForPHXS">
+						<input type="checkbox" value="2" id="shapeStroke"
+							onclick="shapeStroke_changeHandler()" /> <label
+							for="shapeStroke">Stroke</label>
+					</div>
+					<div class="tabPage2Content">
+						<input type="checkbox" value="3" id="shapeAlpha"
+							onclick="shapeAlpha_changeHandler()" /> <label for="shapeAlpha">Alpha</label>
+					</div>
+					<div class="tabPage2Content" id="shapeEffectsForPHXS">
+						<input type="checkbox" value="4" id="shapeEffects"
+							onclick="shapeEffects_changeHandler()" /> <label
+							for="shapeEffects">Effects</label>
+					</div>
+					<div class="tabPage2Content">
+						<input type="checkbox" value="5" id="shapeBorderRadius"
+							onclick="shapeBorderRadius_changeHandler()" /> <label
+							for="shapeBorderRadius">Border Radius</label>
+					</div>
+				</div>
 
-            <!-- Starting of responsive tab. -->
-            <div id="tabpage_3" class="tabpage">
-            
-            	<div class="tabPage2Header">
-                    RESPONSIVE OPTIONS
-                </div>
-                
-                <span class="boldText tabPage2SubHeader">Distance/Spacing</span>
-                
-                <div class="tabPageContentSubHeaderRow">
-                    <input type="checkbox" value="1" id="chkDistanceSpec" onchange="chkDistanceSpec_changeHandler()"/>
-                    <label for="chkDistanceSpec">
-                        Spec Distance by %</label>
-                </div>
-                
-                <div class="tabPageContentRow">
-                    <div class="tabPageContentLeft">
-                        <label>100% Width:</label>
-                    </div>
-                    <div class="tabPageContentRight">
-                        <input type="text" class="inputStyle" id="txtWidth" maxlength="6"  
-                        	onchange="txtWidth_changeHandler()" onkeypress="return restrictInputToDecimal(event)"/>px
-                    </div>
-                </div>
-                
-                <div class="tabPageContentRow">
-                    <div class="tabPageContentLeft">
-                        100% Height:
-                    </div>
-                    <div class="tabPageContentRight">
-                        <input type="text" class="inputStyle" id="txtHeight" maxlength="6"  
-                        	onchange="txtHeight_changeHandler()" onkeypress="return restrictInputToDecimal(event)"/>px
-                    </div>
-                </div>
-                
-                <div class="tabPageContentSubHeaderRow"></div>
-                
-                <span class="boldText tabPage2SubHeader">Base Typography</span><br />
-                
-                <div class="tabPageContentSubHeaderRow">
-                    <input type="checkbox" value="1" id="chkEmSpec" onchange="chkEmSpec_changeHandler()"/>
-                    <label for="chkEmSpec">
-                        Spec in em</label>
-                </div>
-                
-                <div class="tabPageContentRow">
-                    <div class="tabPageContentLeft">
-                        Base font size:<br />
-                    </div>
-                    <div class="tabPageContentRight">
-                        <input type="text" class="inputStyle" id="txtFontSize" maxlength="6"  
-                       		onchange="txtFontSize_changeHandler()" onkeypress="return restrictInputToDecimal(event)"/>
-                        px<br />
-                    </div>
-                </div>
-                
-                <div class="tabPageContentRow">
-                    <div class="tabPageContentLeft">
-                        Base line height:
-                    </div>
-                    <div class="tabPageContentRight">
-                        <input type="text" class="inputStyle" id="txtBaseLineHeight"  maxlength="6"  
-                        	onchange="txtBaseLineHeight_changeHandler()" onkeypress="return restrictInputToDecimal(event)"/>px
-                    </div>
-                </div>
-                
-            </div>
-            <!-- Ending of responsive tab. -->
-            
-            <!-- Starting of options tab. -->
-            <div id="tabpage_4" class="tabpage">
-            <div class="tabPage2Header">
-                    SPEC OPTIONS
-                </div>
-                <div class="tabPageContentRow">
-                    <div class="tabPage4ContentLeft">
-                        <label>Font</label>
-                        <select class="dropdown" id="lstFont" onchange="lstFont_changeHandler()">
-                        </select>
-                    </div>
-                    <div class="tabPage4ContentRight">
-                        <label>
-                            Size</label><br />
-                        <select class="smalldropdown" id="lstSize" onchange="lstSize_changeHandler()">
-                        	<option value="8">8</option>
-                        	<option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                            <option value="12">12</option>
-                            <option value="14">14</option>
-                            <option value="16">16</option>
-                            <option value="18">18</option>
-                            <option value="24">24</option>
-                            <option value="36">36</option>
-                            <option value="48">48</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="tabPageEmptyRow">
-                </div>
-                <div class="tabPageCheckBoxRow">
-                    <div class="tabPage4ContentLeft">
-                        <label>
-                            Spec Color</label>
-                    </div>
-                    <div class="tabPage4ContentRight">
-                        <label>
-                            Line Weight</label>
-                    </div>
-                </div>
-                <div class="tabPageCheckBoxRow">
-                    <div class="tabPage4ContentLeft">
-                        <label style="font-weight: normal">
-                            Shape:
-                        </label>
-                        <input type="color" id="colShape" onclick="colShape_clickHandler()"
-						style="margin-left:16px; background-color:#ff0000;" />
+				<div class="floatRight">
+					<div class="tabPage2Content tabPage2SubHeader boldText">Text
+						Object</div>
+					<div class="tabPage2Content">
+						<input type="checkbox" value="6" id="textFont"
+							onclick="textFont_changeHandler()" /> <label for="textFont">Font
+							Family</label>
+					</div>
+					<div class="tabPage2Content">
+						<input type="checkbox" value="7" id="textSize"
+							onclick="textSize_changeHandler()" /> <label for="textSize">Font
+							Size</label>
+					</div>
+					<div class="tabPage2Content">
+						<input type="checkbox" value="8" id="textColor"
+							onclick="textColor_changeHandler()" /> <label for="textColor">Color</label>
+					</div>
+					<div class="tabPage2Content">
+						<input type="checkbox" value="9" id="textStyle"
+							onclick="textStyle_changeHandler()" /> <label for="textStyle">Font
+							Style</label>
+					</div>
+					<div class="tabPage2Content">
+						<input type="checkbox" value="10" id="textAlignment"
+							onclick="textAlignment_changeHandler()" /> <label
+							for="textAlignment">Text-Align</label>
+					</div>
+					<div class="tabPage2Content">
+						<input type="checkbox" value="11" id="textLeading"
+							onclick="textLeading_changeHandler()" /> <label
+							for="textLeading">Line Height</label>
+					</div>
+					<div class="tabPage2Content">
+						<input type="checkbox" value="12" id="textTracking"
+							onclick="textTracking_changeHandler()" /> <label
+							for=textTracking>Letter Spacing</label>
+					</div>
+					<div class="tabPage2Content">
+						<input type="checkbox" value="13" id="textAlpha"
+							onclick="textAlpha_changeHandler()" /> <label for="textAlpha">Alpha</label>
+					</div>
+					<div class="tabPage2Content" id="textEffectsForPHXS">
+						<input type="checkbox" value="14" id="textEffects"
+							onclick="textEffects_changeHandler()" /> <label
+							for="textEffects">Effects</label>
+					</div>
+				</div>
+			</div>
+			<!-- Ending of setting tab. -->
+
+			<!-- Starting of responsive tab. -->
+			<div id="tabpage_3" class="tabpage">
+
+				<div class="tabPage2Header">RESPONSIVE OPTIONS</div>
+
+				<span class="boldText tabPage2SubHeader">Distance/Spacing</span>
+
+				<div class="tabPageContentSubHeaderRow">
+					<input type="checkbox" value="1" id="chkDistanceSpec"
+						onchange="chkDistanceSpec_changeHandler()" /> <label
+						for="chkDistanceSpec"> Spec Distance by %</label>
+				</div>
+
+				<div class="tabPageContentRow">
+					<div class="tabPageContentLeft">
+						<label>100% Width:</label>
+					</div>
+					<div class="tabPageContentRight">
+						<input type="text" class="inputStyle" id="txtWidth" maxlength="6"
+							onchange="txtWidth_changeHandler()"
+							onkeypress="return restrictInputToDecimal(event)" />px
+					</div>
+				</div>
+
+				<div class="tabPageContentRow">
+					<div class="tabPageContentLeft">100% Height:</div>
+					<div class="tabPageContentRight">
+						<input type="text" class="inputStyle" id="txtHeight" maxlength="6"
+							onchange="txtHeight_changeHandler()"
+							onkeypress="return restrictInputToDecimal(event)" />px
+					</div>
+				</div>
+
+				<div class="tabPageContentSubHeaderRow"></div>
+
+				<span class="boldText tabPage2SubHeader">Base Typography</span><br />
+
+				<div class="tabPageContentSubHeaderRow">
+					<input type="checkbox" value="1" id="chkEmSpec"
+						onchange="chkEmSpec_changeHandler()" /> <label for="chkEmSpec">
+						Spec in em</label>
+				</div>
+
+				<div class="tabPageContentRow">
+					<div class="tabPageContentLeft">
+						Base font size:<br />
+					</div>
+					<div class="tabPageContentRight">
+						<input type="text" class="inputStyle" id="txtFontSize"
+							maxlength="6" onchange="txtFontSize_changeHandler()"
+							onkeypress="return restrictInputToDecimal(event)" /> px<br />
+					</div>
+				</div>
+
+				<div class="tabPageContentRow">
+					<div class="tabPageContentLeft">Base line height:</div>
+					<div class="tabPageContentRight">
+						<input type="text" class="inputStyle" id="txtBaseLineHeight"
+							maxlength="6" onchange="txtBaseLineHeight_changeHandler()"
+							onkeypress="return restrictInputToDecimal(event)" />px
+					</div>
+				</div>
+
+			</div>
+			<!-- Ending of responsive tab. -->
+
+			<!-- Starting of options tab. -->
+			<div id="tabpage_4" class="tabpage">
+				<div class="tabPage2Header">SPEC OPTIONS</div>
+				<div class="tabPageContentRow">
+					<div class="tabPage4ContentLeft">
+						<label>Font</label> <select class="dropdown" id="lstFont"
+							onchange="lstFont_changeHandler()">
+						</select>
+					</div>
+					<div class="tabPage4ContentRight">
+						<label> Size</label><br /> <select class="smalldropdown"
+							id="lstSize" onchange="lstSize_changeHandler()">
+							<option value="8">8</option>
+							<option value="9">9</option>
+							<option value="10">10</option>
+							<option value="11">11</option>
+							<option value="12">12</option>
+							<option value="14">14</option>
+							<option value="16">16</option>
+							<option value="18">18</option>
+							<option value="24">24</option>
+							<option value="36">36</option>
+							<option value="48">48</option>
+						</select>
+					</div>
+				</div>
+				<div class="tabPageEmptyRow"></div>
+				<div class="tabPageCheckBoxRow">
+					<div class="tabPage4ContentLeft">
+						<label> Spec Color</label>
+					</div>
+					<div class="tabPage4ContentRight">
+						<label> Line Weight</label>
+					</div>
+				</div>
+				<div class="tabPageCheckBoxRow">
+					<div class="tabPage4ContentLeft">
+						<label style="font-weight: normal"> Shape: </label> <input
+							type="color" id="colShape" onclick="colShape_clickHandler()"
+							style="margin-left: 16px; background-color: #ff0000;" />
 						<div id='colorShapeDropDown' class="colorPicker">
-                       		<div id="shapeColorBlock" class="mainColorBlock" style="display: inline-block;"></div>
-                       		<input type="text" id="txtShapeColor" class="colorText"/>
-                        	<br>
-                        	<div class="colorBlock" title="000000" style="background-color: #000000" 
-                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
-                        	<div class="colorBlock" title="FF0000" style="background-color: #FF0000" 
-                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
-                        	<div class="colorBlock" title="FF8800" style="background-color: #FF8800" 
-                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
-                        	<div class="colorBlock" title="FFFF00" style="background-color: #FFFF00" 
-                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
-                        	<div class="colorBlock" title="88FF00" style="background-color: #88FF00" 
-                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
-                        	<div class="colorBlock" title="00FF00" style="background-color: #00FF00" 
-                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
-                        	<div class="colorBlock" title="00FF88" style="background-color: #00FF88" 
-                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
-                        	<div class="colorBlock" title="00FFFF" style="background-color: #00FFFF" 
-                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
-                        	<div class="colorBlock" title="0000FF" style="background-color: #0000FF" 
-                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
-                        	<div class="colorBlock" title="8800FF" style="background-color: #8800FF" 
-                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
-                        	<div class="colorBlock" title="FF00FF" style="background-color: #FF00FF" 
-                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
-                        	<div class="colorBlock" title="FFFFFF" style="background-color: #FFFFFF" 
-                        		onmouseover="setTextToShapeColor(this)" onclick="setColorToShapeColor(this)"></div>
+							<div id="shapeColorBlock" class="mainColorBlock"
+								style="display: inline-block;"></div>
+							<input type="text" id="txtShapeColor" class="colorText" /> <br>
+							<div class="colorBlock" title="000000"
+								style="background-color: #000000"
+								onmouseover="setTextToShapeColor(this)"
+								onclick="setColorToShapeColor(this)"></div>
+							<div class="colorBlock" title="FF0000"
+								style="background-color: #FF0000"
+								onmouseover="setTextToShapeColor(this)"
+								onclick="setColorToShapeColor(this)"></div>
+							<div class="colorBlock" title="FF8800"
+								style="background-color: #FF8800"
+								onmouseover="setTextToShapeColor(this)"
+								onclick="setColorToShapeColor(this)"></div>
+							<div class="colorBlock" title="FFFF00"
+								style="background-color: #FFFF00"
+								onmouseover="setTextToShapeColor(this)"
+								onclick="setColorToShapeColor(this)"></div>
+							<div class="colorBlock" title="88FF00"
+								style="background-color: #88FF00"
+								onmouseover="setTextToShapeColor(this)"
+								onclick="setColorToShapeColor(this)"></div>
+							<div class="colorBlock" title="00FF00"
+								style="background-color: #00FF00"
+								onmouseover="setTextToShapeColor(this)"
+								onclick="setColorToShapeColor(this)"></div>
+							<div class="colorBlock" title="00FF88"
+								style="background-color: #00FF88"
+								onmouseover="setTextToShapeColor(this)"
+								onclick="setColorToShapeColor(this)"></div>
+							<div class="colorBlock" title="00FFFF"
+								style="background-color: #00FFFF"
+								onmouseover="setTextToShapeColor(this)"
+								onclick="setColorToShapeColor(this)"></div>
+							<div class="colorBlock" title="0000FF"
+								style="background-color: #0000FF"
+								onmouseover="setTextToShapeColor(this)"
+								onclick="setColorToShapeColor(this)"></div>
+							<div class="colorBlock" title="8800FF"
+								style="background-color: #8800FF"
+								onmouseover="setTextToShapeColor(this)"
+								onclick="setColorToShapeColor(this)"></div>
+							<div class="colorBlock" title="FF00FF"
+								style="background-color: #FF00FF"
+								onmouseover="setTextToShapeColor(this)"
+								onclick="setColorToShapeColor(this)"></div>
+							<div class="colorBlock" title="FFFFFF"
+								style="background-color: #FFFFFF"
+								onmouseover="setTextToShapeColor(this)"
+								onclick="setColorToShapeColor(this)"></div>
 						</div>
-                    </div>
-                    <div class="tabPage4ContentRight">
-                        <select class="smalldropdown" id="lstLineWeight" onchange="lstLineWeight_changeHandler()">
-                            <option value="0.25">0.25</option>
-                        	<option value="0.5">0.5</option>
-                            <option value="1">1</option>
-                            <option value="1.5">1.5</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="tabPageContentRow">
-                    <div class="tabPage4ContentLeft">
-                        <label style="font-weight: normal">
-                            Type:
-                        </label>
-                        <input type="color" id="colType" onclick="colType_clickHandler()"
-                        style="margin-left:24px; background-color:#ff0000;" />
-                        <div id='colorTypeDropDown' class="colorPicker">
-                       		<div id="typeColorBlock" class="mainColorBlock" style="display: inline-block;"></div>
-                       		<input type="text" id="txtTypeColor" class="colorText" />
-                        	<br>
-                        	<div class="colorBlock" title="000000" style="background-color: #000000" 
-                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
-                        	<div class="colorBlock" title="FF0000" style="background-color: #FF0000" 
-                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
-                        	<div class="colorBlock" title="FF8800" style="background-color: #FF8800" 
-                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
-                        	<div class="colorBlock" title="FFFF00" style="background-color: #FFFF00" 
-                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
-                        	<div class="colorBlock" title="88FF00" style="background-color: #88FF00" 
-                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
-                        	<div class="colorBlock" title="00FF00" style="background-color: #00FF00" 
-                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
-                        	<div class="colorBlock" title="00FF88" style="background-color: #00FF88" 
-                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
-                        	<div class="colorBlock" title="00FFFF" style="background-color: #00FFFF" 
-                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
-                        	<div class="colorBlock" title="0000FF" style="background-color: #0000FF" 
-                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
-                        	<div class="colorBlock" title="8800FF" style="background-color: #8800FF" 
-                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
-                        	<div class="colorBlock" title="FF00FF" style="background-color: #FF00FF" 
-                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
-                        	<div class="colorBlock" title="FFFFFF" style="background-color: #FFFFFF" 
-                        		onmouseover="setTextToTypeColor(this)" onclick="setColorToTypeColor(this)"></div>
+					</div>
+					<div class="tabPage4ContentRight">
+						<select class="smalldropdown" id="lstLineWeight"
+							onchange="lstLineWeight_changeHandler()">
+							<option value="0.25">0.25</option>
+							<option value="0.5">0.5</option>
+							<option value="1">1</option>
+							<option value="1.5">1.5</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+						</select>
+					</div>
+				</div>
+				<div class="tabPageContentRow">
+					<div class="tabPage4ContentLeft">
+						<label style="font-weight: normal"> Type: </label> <input
+							type="color" id="colType" onclick="colType_clickHandler()"
+							style="margin-left: 24px; background-color: #ff0000;" />
+						<div id='colorTypeDropDown' class="colorPicker">
+							<div id="typeColorBlock" class="mainColorBlock"
+								style="display: inline-block;"></div>
+							<input type="text" id="txtTypeColor" class="colorText" /> <br>
+							<div class="colorBlock" title="000000"
+								style="background-color: #000000"
+								onmouseover="setTextToTypeColor(this)"
+								onclick="setColorToTypeColor(this)"></div>
+							<div class="colorBlock" title="FF0000"
+								style="background-color: #FF0000"
+								onmouseover="setTextToTypeColor(this)"
+								onclick="setColorToTypeColor(this)"></div>
+							<div class="colorBlock" title="FF8800"
+								style="background-color: #FF8800"
+								onmouseover="setTextToTypeColor(this)"
+								onclick="setColorToTypeColor(this)"></div>
+							<div class="colorBlock" title="FFFF00"
+								style="background-color: #FFFF00"
+								onmouseover="setTextToTypeColor(this)"
+								onclick="setColorToTypeColor(this)"></div>
+							<div class="colorBlock" title="88FF00"
+								style="background-color: #88FF00"
+								onmouseover="setTextToTypeColor(this)"
+								onclick="setColorToTypeColor(this)"></div>
+							<div class="colorBlock" title="00FF00"
+								style="background-color: #00FF00"
+								onmouseover="setTextToTypeColor(this)"
+								onclick="setColorToTypeColor(this)"></div>
+							<div class="colorBlock" title="00FF88"
+								style="background-color: #00FF88"
+								onmouseover="setTextToTypeColor(this)"
+								onclick="setColorToTypeColor(this)"></div>
+							<div class="colorBlock" title="00FFFF"
+								style="background-color: #00FFFF"
+								onmouseover="setTextToTypeColor(this)"
+								onclick="setColorToTypeColor(this)"></div>
+							<div class="colorBlock" title="0000FF"
+								style="background-color: #0000FF"
+								onmouseover="setTextToTypeColor(this)"
+								onclick="setColorToTypeColor(this)"></div>
+							<div class="colorBlock" title="8800FF"
+								style="background-color: #8800FF"
+								onmouseover="setTextToTypeColor(this)"
+								onclick="setColorToTypeColor(this)"></div>
+							<div class="colorBlock" title="FF00FF"
+								style="background-color: #FF00FF"
+								onmouseover="setTextToTypeColor(this)"
+								onclick="setColorToTypeColor(this)"></div>
+							<div class="colorBlock" title="FFFFFF"
+								style="background-color: #FFFFFF"
+								onmouseover="setTextToTypeColor(this)"
+								onclick="setColorToTypeColor(this)"></div>
 						</div>
-						
-                    </div>
-                    <div class="tabPage4ContentRight">
-                    </div>
-                </div>
-                <div class="tabPageContentRow" style="margin-top: -4px;">
-                    <div class="tabPage4ContentLeft">
-                        <label style="font-weight: normal">
-                            Spacing:
-                        </label>
-                        <input type="color" id="colSpacing" onclick="colSpacing_clickHandler()"
-                        style="margin-left:9px; background-color:#ff0000;" />
-                        <div id='colorSpaceDropDown' class="colorPicker">
-                       		<div id="spaceColorBlock" class="mainColorBlock" style="display: inline-block;"></div>
-                       		<input type="text" id="txtSpaceColor" class="colorText"/>
-                        	<br>
-                        	<div class="colorBlock" title="000000" style="background-color: #000000" 
-                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
-                        	<div class="colorBlock" title="FF0000" style="background-color: #FF0000" 
-                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
-                        	<div class="colorBlock" title="FF8800" style="background-color: #FF8800" 
-                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
-                        	<div class="colorBlock" title="FFFF00" style="background-color: #FFFF00" 
-                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
-                        	<div class="colorBlock" title="88FF00" style="background-color: #88FF00" 
-                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
-                        	<div class="colorBlock" title="00FF00" style="background-color: #00FF00" 
-                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
-                        	<div class="colorBlock" title="00FF88" style="background-color: #00FF88" 
-                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
-                        	<div class="colorBlock" title="00FFFF" style="background-color: #00FFFF" 
-                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
-                        	<div class="colorBlock" title="0000FF" style="background-color: #0000FF" 
-                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
-                        	<div class="colorBlock" title="8800FF" style="background-color: #8800FF" 
-                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
-                        	<div class="colorBlock" title="FF00FF" style="background-color: #FF00FF" 
-                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
-                        	<div class="colorBlock" title="FFFFFF" style="background-color: #FFFFFF" 
-                        		onmouseover="setTextToSpacingColor(this)" onclick="setColorToSpacingColor(this)"></div>
+
+					</div>
+					<div class="tabPage4ContentRight"></div>
+				</div>
+				<div class="tabPageContentRow" style="margin-top: -4px;">
+					<div class="tabPage4ContentLeft">
+						<label style="font-weight: normal"> Spacing: </label> <input
+							type="color" id="colSpacing" onclick="colSpacing_clickHandler()"
+							style="margin-left: 9px; background-color: #ff0000;" />
+						<div id='colorSpaceDropDown' class="colorPicker">
+							<div id="spaceColorBlock" class="mainColorBlock"
+								style="display: inline-block;"></div>
+							<input type="text" id="txtSpaceColor" class="colorText" /> <br>
+							<div class="colorBlock" title="000000"
+								style="background-color: #000000"
+								onmouseover="setTextToSpacingColor(this)"
+								onclick="setColorToSpacingColor(this)"></div>
+							<div class="colorBlock" title="FF0000"
+								style="background-color: #FF0000"
+								onmouseover="setTextToSpacingColor(this)"
+								onclick="setColorToSpacingColor(this)"></div>
+							<div class="colorBlock" title="FF8800"
+								style="background-color: #FF8800"
+								onmouseover="setTextToSpacingColor(this)"
+								onclick="setColorToSpacingColor(this)"></div>
+							<div class="colorBlock" title="FFFF00"
+								style="background-color: #FFFF00"
+								onmouseover="setTextToSpacingColor(this)"
+								onclick="setColorToSpacingColor(this)"></div>
+							<div class="colorBlock" title="88FF00"
+								style="background-color: #88FF00"
+								onmouseover="setTextToSpacingColor(this)"
+								onclick="setColorToSpacingColor(this)"></div>
+							<div class="colorBlock" title="00FF00"
+								style="background-color: #00FF00"
+								onmouseover="setTextToSpacingColor(this)"
+								onclick="setColorToSpacingColor(this)"></div>
+							<div class="colorBlock" title="00FF88"
+								style="background-color: #00FF88"
+								onmouseover="setTextToSpacingColor(this)"
+								onclick="setColorToSpacingColor(this)"></div>
+							<div class="colorBlock" title="00FFFF"
+								style="background-color: #00FFFF"
+								onmouseover="setTextToSpacingColor(this)"
+								onclick="setColorToSpacingColor(this)"></div>
+							<div class="colorBlock" title="0000FF"
+								style="background-color: #0000FF"
+								onmouseover="setTextToSpacingColor(this)"
+								onclick="setColorToSpacingColor(this)"></div>
+							<div class="colorBlock" title="8800FF"
+								style="background-color: #8800FF"
+								onmouseover="setTextToSpacingColor(this)"
+								onclick="setColorToSpacingColor(this)"></div>
+							<div class="colorBlock" title="FF00FF"
+								style="background-color: #FF00FF"
+								onmouseover="setTextToSpacingColor(this)"
+								onclick="setColorToSpacingColor(this)"></div>
+							<div class="colorBlock" title="FFFFFF"
+								style="background-color: #FFFFFF"
+								onmouseover="setTextToSpacingColor(this)"
+								onclick="setColorToSpacingColor(this)"></div>
 						</div>
-                    </div>
-                    <div class="tabPage4ContentRight">
-                    </div>
-                </div>
-                <div class="tabPageContentRow" style="padding-top: 15px;">
-                    
-                    <div class="tabPage4ContentLeft" id="radioForPHXS">
-                        <label>Color Mode</label>
-                        	<div id="radio" onclick="radioButton_clickHandler(event)">                       
-                        		<input type="radio" id="rgbRadioButton" name="radio" value="RGB" checked="checked"><span>RGB</span>
-		      					<input type="radio" id="hsbRadioButton" name="radio" value="HSB"><span>HSB</span>
-		      					<input type="radio" id="cmykRadioButton" name="radio" value="CMYK"><span style='margin-right: 38px;'>CMYK</span>
-		      					<input type="radio" id="hslRadioButton" name="radio" value="HSL"><span>HSL</span>
-							</div>
-                    </div>
-                    
-                    <div class="tabPage4ContentLeft" id="colorListForILST" style="display: none;">
-                        <label>Color Mode</label>
-                        <select class="dropdown" id="lstColorMode" onchange="lstColorMode_changeHandler()">
-                            <option value="1">CMYK</option>
-                            <option value="2">HSB</option>
-                            <option value="3">HSL</option>
-                            <option value="4">RGB</option>
-                        </select>
-                    </div>
-                    
-                    <div class="tabPage4ContentRight">
-                    </div>
-                </div>
-                
-                 <div class="tabPageEmptyRow">
-                </div>
-                
-                <div class="tabPageCheckBoxRow">
-                    <input type="checkbox" value="DisplayRGBAsHex" id="chkDisplayRGBAsHex" onclick="chkDisplayRGBAsHex_clickHandler()"/>
-                    <label for="chkDisplayRGBAsHex">
-                        Display RGB As Hex</label>
-                </div>
-                
-                <div class="tabPageCheckBoxRow" id="specToEdgeCheckbox" style="display: none;">
-                    <input type="checkbox" value="CanvasEdge" id="chkCanvasEdge" onclick="chkCanvasEdge_clickHandler()"/>
-                    <label for="chkCanvasEdge">
-                        Print Spec to Canvas edge</label>
-                </div>
-                
-                <div class="tabPageContentRow" style="padding-top: 10px;">
-                    <div class="tabPage4ContentLeft">
-                        <label>Scale Specs</label>
-                    </div>
-                </div>
-                
-                <div class="tabPageCheckBoxRow" style="margin-top: -15px;">
-                    <input type="checkbox" value="ScaleBy" id="chkScaleBy" style="vertical-align: middle" onclick="chkScaleBy_clickHandler()"/>
-                    <label for="chkScaleBy">Scale By</label>
-                    <input type="text" class="inputStyleSmall" id="txtScaleBy" value=" x1" onchange="txtScaleBy_changeHandler()"/>
-                    (e.g. x2 or /2)
-                </div>
-                
-            </div>
-            <!-- Ending of options tab. -->
-        
-        </div>
-    
-    </div>
-    
-    </body>
+					</div>
+					<div class="tabPage4ContentRight"></div>
+				</div>
+				<div class="tabPageContentRow" style="padding-top: 15px;">
+
+					<div class="tabPage4ContentLeft" id="radioForPHXS">
+						<label>Color Mode</label>
+						<div id="radio" onclick="radioButton_clickHandler(event)">
+							<input type="radio" id="rgbRadioButton" name="radio" value="RGB"
+								checked="checked"><span>RGB</span> <input type="radio"
+								id="hsbRadioButton" name="radio" value="HSB"><span>HSB</span>
+							<input type="radio" id="cmykRadioButton" name="radio"
+								value="CMYK"><span style='margin-right: 38px;'>CMYK</span>
+							<input type="radio" id="hslRadioButton" name="radio" value="HSL"><span>HSL</span>
+						</div>
+					</div>
+
+					<div class="tabPage4ContentLeft" id="colorListForILST"
+						style="display: none;">
+						<label>Color Mode</label> <select class="dropdown"
+							id="lstColorMode" onchange="lstColorMode_changeHandler()">
+							<option value="1">CMYK</option>
+							<option value="2">HSB</option>
+							<option value="3">HSL</option>
+							<option value="4">RGB</option>
+						</select>
+					</div>
+
+					<div class="tabPage4ContentRight"></div>
+				</div>
+
+				<div class="tabPageEmptyRow"></div>
+
+				<div class="tabPageCheckBoxRow">
+					<input type="checkbox" value="DisplayRGBAsHex"
+						id="chkDisplayRGBAsHex"
+						onclick="chkDisplayRGBAsHex_clickHandler()" /> <label
+						for="chkDisplayRGBAsHex"> Display RGB As Hex</label>
+				</div>
+
+				<div class="tabPageCheckBoxRow" id="specToEdgeCheckbox"
+					style="display: none;">
+					<input type="checkbox" value="CanvasEdge" id="chkCanvasEdge"
+						onclick="chkCanvasEdge_clickHandler()" /> <label
+						for="chkCanvasEdge"> Print Spec to Canvas edge</label>
+				</div>
+
+				<div class="tabPageContentRow" style="padding-top: 10px;">
+					<div class="tabPage4ContentLeft">
+						<label>Scale Specs</label>
+					</div>
+				</div>
+
+				<div class="tabPageCheckBoxRow" style="margin-top: -15px;">
+					<input type="checkbox" value="ScaleBy" id="chkScaleBy"
+						style="vertical-align: middle" onclick="chkScaleBy_clickHandler()" />
+					<label for="chkScaleBy">Scale By</label> <input type="text"
+						class="inputStyleSmall" id="txtScaleBy" value=" x1"
+						onchange="txtScaleBy_changeHandler()" /> (e.g. x2 or /2)
+				</div>
+
+			</div>
+			<!-- Ending of options tab. -->
+
+		</div>
+
+	</div>
+
+</body>
 
 </html>

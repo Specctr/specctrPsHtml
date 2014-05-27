@@ -18,7 +18,7 @@ function tab_clickHandler()
 	    var currentTabHeader = document.getElementById("tabHeader_" + current);
 	    var currentTabPage = document.getElementById("tabpage_" + current);
 	    
-	    if(currentTabHeader && currentTabPage && (ident >= '1' && ident <= '4'))
+	    if(currentTabHeader && currentTabPage && (ident >= "1" && ident <= "4"))
     	{
 	    	currentTabHeader.removeAttribute("class");
 	    	currentTabPage.style.display = "none";
@@ -473,10 +473,10 @@ function chkEmSpec_changeHandler()
 			return;
 		}
 		
-		if (textFontSize.value.length == 0)
+		if(textFontSize.value.length == 0)
 			textFontSize.value = "16";
 		
-		if (textBaseLineHeight.value.length == 0)
+		if(textBaseLineHeight.value.length == 0)
 		{
 			textBaseLineHeight.value = Number(Math.round(Number(textFontSize.value) * 140) / 100).toString();
 			model.baseLineHeight = Number(textBaseLineHeight.value);
@@ -587,7 +587,7 @@ function txtScaleBy_changeHandler()
 		var firstChar = scaleByHandler.value.charAt(0);
 		
 		//if first character is other than 'x', 'X' or '/' then empty the text box.
-		if (!(firstChar == "x" || firstChar == "/" || firstChar == "X"))
+		if(!(firstChar == "x" || firstChar == "/" || firstChar == "X"))
 			scaleByHandler.value = "";
 		
 		//Restrict the text inputs to satisfy the values like x1, x2, /1, /2 etc.
@@ -731,10 +731,10 @@ function restrictInputToDecimal(event)
 		if(charCode == 48 && !event.srcElement.value.length)
 			return false;
 		
-		if (charCode == 46 && event.srcElement.value.split('.').length>1)
+		if(charCode == 46 && event.srcElement.value.split(".").length>1)
 	        return false;
 	    
-	    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
+	    if(charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57))
 	        return false;
 	    
 	    return true;
@@ -772,7 +772,7 @@ function setColorToShapeColor(element)
 	{
 		var color = "#" + element.title;
 		document.getElementById("colShape").style.backgroundColor = color;
-		$('#colorShapeDropDown').slideUp(100);
+		$("#colorShapeDropDown").slideUp(100);
 		model.legendColorObject = color;
 	}
 	catch(e)
@@ -792,11 +792,11 @@ function colShape_clickHandler()
 	{
 		var shapeColor = document.getElementById("colShape").style.backgroundColor;
 		shapeColor = rgbToHex(shapeColor);
-		$('#colorShapeDropDown').slideToggle(100);
+		$("#colorShapeDropDown").slideToggle(100);
 		document.getElementById("shapeColorBlock").style.backgroundColor = shapeColor;
 		model.legendColorObject = shapeColor;
-		$('#colorSpaceDropDown').slideUp(100);
-		$('#colorTypeDropDown').slideUp(100);
+		$("#colorSpaceDropDown").slideUp(100);
+		$("#colorTypeDropDown").slideUp(100);
 	}
 	catch(e)
 	{
@@ -832,7 +832,7 @@ function setColorToTypeColor(element)
 		var color = "#" + element.title;
 		document.getElementById("colType").style.backgroundColor = color;
 		model.legendColorType = color;
-		$('#colorTypeDropDown').slideUp(100);
+		$("#colorTypeDropDown").slideUp(100);
 	}
 	catch(e)
 	{
@@ -851,10 +851,10 @@ function colType_clickHandler()
 	{
 		var typeColor = document.getElementById("colType").style.backgroundColor;
 		typeColor = rgbToHex(typeColor);
-		$('#colorTypeDropDown').slideToggle(100);
+		$("#colorTypeDropDown").slideToggle(100);
 		document.getElementById("typeColorBlock").style.backgroundColor = typeColor;
 		model.legendColorType = typeColor;
-		$('#colorSpaceDropDown').slideUp(100);
+		$("#colorSpaceDropDown").slideUp(100);
 	}
 	catch(e)
 	{
@@ -890,7 +890,7 @@ function setColorToSpacingColor(element)
 		var color = "#" + element.title;
 		document.getElementById("colSpacing").style.backgroundColor = color;
 		model.legendColorSpacing = color;
-		$('#colorSpaceDropDown').slideUp(100);
+		$("#colorSpaceDropDown").slideUp(100);
 	}
 	catch(e)
 	{
@@ -909,7 +909,7 @@ function colSpacing_clickHandler()
 	{
 		var spaceColor = document.getElementById("colSpacing").style.backgroundColor;
 		spaceColor = rgbToHex(spaceColor);
-		$('#colorSpaceDropDown').slideToggle(100);
+		$("#colorSpaceDropDown").slideToggle(100);
 		document.getElementById("spaceColorBlock").style.backgroundColor = spaceColor;
 		model.legendColorSpacing = spaceColor;
 	}
@@ -944,7 +944,7 @@ function enableTextField(textField)
 	try
 	{
 		textField.disabled = false;
-		textField.style.backgroundColor = '#ffffff';
+		textField.style.backgroundColor = "#ffffff";
 	}
 	catch(e)
 	{
@@ -962,13 +962,13 @@ function rgbToHex(colorVal)
 	{
 		var parts = colorVal.match(/^rgb\((\d+),\s*(\d+),\s*(\d+)\)$/);
 	    delete(parts[0]);
-		for (var i = 1; i <= 3; ++i)
+		for(var i = 1; i <= 3; ++i)
 		{
 			parts[i] = parseInt(parts[i]).toString(16);
-		    if (parts[i].length == 1) parts[i] = '0' + parts[i];
+		    if(parts[i].length == 1) parts[i] = "0" + parts[i];
 		}
 		
-		var color = '#' + parts.join('');
+		var color = "#" + parts.join("");
 	    return color;
 	}
 	catch(e)
