@@ -142,81 +142,23 @@ function changeSpacingBtnIcon()
 {
 	try
 	{
-		var spacingIcon = document.getElementById("spacingIcon");
-		if(model.spaceTop)
-		{
-			if(model.spaceRight)
-			{
-				if(model.spaceLeft)
-				{
-					if(model.spaceBottom)
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_All.png";		//Apply all 4 selected cell icon.
-					else
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_LTR.png";		//Apply top, left, right selected cell icon.
-				}
-				else
-				{
-					if(model.spaceBottom)
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_BTR.png";		//Apply top, right, bottom selected cell icon.
-					else
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_TR.png";			//Apply top, right selected cell icon.
-				}
-			}
-			else
-			{
-				if(model.spaceLeft)
-				{
-					if(model.spaceBottom)
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_LTB.png";	//Apply top, left, bottom selected cell icon.
-					else
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_TL.png";	//Apply top, left selected cell icon.
-				}
-				else
-				{
-					if(model.spaceBottom)
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_BT.png";			//Apply top, bottom selected cell icon.
-					else
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_T.png";				//Apply top selected cell icon.
-				}
-			}
-		}
-		else
-		{
-			if(model.spaceRight)
-			{
-				if(model.spaceLeft)
-				{
-					if(model.spaceBottom)
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_BLR.png";	//Apply right, bottom, left selected cell icon.
-					else
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_LR.png";	//Apply left, right selected cell icon.
-				}
-				else
-				{
-					if(model.spaceBottom)
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_BR.png";		//Apply right, bottom selected cell icon.
-					else
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_R.png";		//Apply right selected cell icon.
-				}
-			}
-			else
-			{
-				if(model.spaceLeft)
-				{
-					if(model.spaceBottom)
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_BL.png"; 		//Apply left, bottom selected cell icon.
-					else
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_L.png";		//Apply left selected cell icon.
-				}
-				else
-				{
-					if(model.spaceBottom)
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_B.png";	//Apply bottom selected cell icon.
-					else
-						spacingIcon.src = "../Images/SpacingButtonIcons/Spacing_None.png";	//Apply no selected cell icon.
-				}
-			}
-		}
+		var spacingIconHandler = document.getElementById("spacingIcon");
+		var iconPath = "../Images/SpacingButtonIcons/Spacing_";
+		
+		//Array of spacing button icons.
+		var spacingIcons = [
+            iconPath + "None.png", iconPath + "B.png", iconPath + "L.png", iconPath + "BL.png",
+            iconPath + "R.png", iconPath + "BR.png", iconPath + "LR.png", iconPath + "BLR.png",
+            iconPath + "T.png", iconPath + "BT.png", iconPath + "TL.png", iconPath + "LTB.png",
+            iconPath + "TR.png", iconPath + "BTR.png", iconPath + "LTR.png", iconPath + "All.png"];
+		
+		//Calculate the index of button icon.
+		var indexSpacingIcon = (model.spaceTop | 0) * 8 
+								+ (model.spaceRight | 0) * 4
+									+ (model.spaceLeft | 0) * 2
+										+ (model.spaceBottom | 0);
+		
+		spacingIconHandler.src = spacingIcons[indexSpacingIcon];
 	}
 	catch(e)
 	{

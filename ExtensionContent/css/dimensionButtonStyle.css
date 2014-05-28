@@ -1,0 +1,140 @@
+/*
+File-Name: dimensionButtonStyle.css
+Description: Includes styling code related to dimension button. 
+*/
+
+#liWh .options
+{
+    height: 100px;
+}
+
+#liWh:hover .options
+{
+    margin-left: -1px !important;
+}
+
+#imgNoSelectionWidth
+{
+    background-image: url('../Images/DimensionDropDownIcons/NoSelection.png');
+    background-position: 4px 0px;
+}
+
+    #imgNoSelectionWidth:hover
+    {
+        background-image: url('../Images/DimensionDropDownIcons/NoSelectionOver.png');
+    }
+
+.noSelectionSelected
+{
+	background-image: url('../Images/DimensionDropDownIcons/NoSelectionSelected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgWidthTop
+{
+    background-image: url('../Images/DimensionDropDownIcons/WidthTop.png');
+}
+
+    #imgWidthTop:hover
+    {
+        background-image: url('../Images/DimensionDropDownIcons/WidthTopOver.png');
+    }
+
+.widthTopSelected
+{
+	background-image: url('../Images/DimensionDropDownIcons/WidthTopSelected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgWidthBottom
+{
+    background-image: url('../Images/DimensionDropDownIcons/WidthBottom.png');
+}
+
+    #imgWidthBottom:hover
+    {
+        background-image: url('../Images/DimensionDropDownIcons/WidthBottomOver.png');
+    }
+
+.widthBottomSelected
+{
+	background-image: url('../Images/DimensionDropDownIcons/WidthBottomSelected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgWidthCenter
+{
+    background-image: url('../Images/DimensionDropDownIcons/WidthCenter.png');
+}
+
+    #imgWidthCenter:hover
+    {
+        background-image: url('../Images/DimensionDropDownIcons/WidthCenterOver.png');
+    }
+
+.widthCenterSelected
+{
+	background-image: url('../Images/DimensionDropDownIcons/WidthCenterSelected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgNoSelectionHeight
+{
+    background-image: url('../Images/DimensionDropDownIcons/NoSelection.png');
+    background-position: 4px 0px;
+}
+
+    #imgNoSelectionHeight:hover
+    {
+        background-image: url('../Images/DimensionDropDownIcons/NoSelectionOver.png');
+    }
+
+#imgHeightLeft
+{
+    background-image: url('../Images/DimensionDropDownIcons/HeightLeft.png');
+    background-position: 4px 0px;
+}
+
+    #imgHeightLeft:hover
+    {
+        background-image: url('../Images/DimensionDropDownIcons/HeightLeftOver.png');
+    }
+
+.heightLeftSelected
+{
+	background-image: url('../Images/DimensionDropDownIcons/HeightLeftSelected.png') !important;
+	background-color: #D2D2D2;
+}
+
+
+#imgHeightRight
+{
+    background-image: url('../Images/DimensionDropDownIcons/HeightRight.png');
+}
+
+    #imgHeightRight:hover
+    {
+        background-image: url('../Images/DimensionDropDownIcons/HeightRightOver.png');
+    }
+
+.heightRightSelected
+{
+	background-image: url('../Images/DimensionDropDownIcons/HeightRightSelected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgHeightCenter
+{
+    background-image: url('../Images/DimensionDropDownIcons/HeightCenter.png');
+}
+
+    #imgHeightCenter:hover
+    {
+        background-image: url('../Images/DimensionDropDownIcons/HeightCenterOver.png');
+    }
+
+.heightCenterSelected
+{
+	background-image: url('../Images/DimensionDropDownIcons/HeightCenterSelected.png') !important;
+	background-color: #D2D2D2;
+}

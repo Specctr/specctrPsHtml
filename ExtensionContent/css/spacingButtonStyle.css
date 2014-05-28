@@ -1,0 +1,85 @@
+/*
+File-Name: spacingButtonStyle.css
+Description: Includes styling code related to spacing button. 
+*/
+
+#liSpacing .option
+{
+    background-repeat: no-repeat;
+    background-position: 0px 3px;
+}
+
+#liSpacing .options
+{
+    height: 50px;
+}
+
+#liSpacing:hover .options
+{
+    margin-left: -1px !important;
+}
+
+#imgSpaceTop
+{
+    background-image: url('../Images/SpacingDropDownIcons/SpaceTop.png');
+    background-position: 4px 0px;
+}
+
+    #imgSpaceTop:hover
+    {
+        background-image: url('../Images/SpacingDropDownIcons/SpaceTopOver.png');
+    }
+
+.topSelected
+{
+	background-image: url('../Images/SpacingDropDownIcons/SpaceTopSelected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgSpaceRight
+{
+    background-image: url('../Images/SpacingDropDownIcons/SpaceRight.png');
+}
+
+    #imgSpaceRight:hover
+    {
+        background-image: url('../Images/SpacingDropDownIcons/SpaceRightOver.png');
+    }
+
+.rightSelected
+{
+	background-image: url('../Images/SpacingDropDownIcons/SpaceRightSelected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgSpaceBottom
+{
+    background-image: url('../Images/SpacingDropDownIcons/SpaceBottom.png');
+}
+
+    #imgSpaceBottom:hover
+    {
+        background-image: url('../Images/SpacingDropDownIcons/SpaceBottomOver.png');
+    }
+
+.bottomSelected
+{
+	background-image: url('../Images/SpacingDropDownIcons/SpaceBottomSelected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgSpaceLeft
+{
+    background-image: url('../Images/SpacingDropDownIcons/SpaceLeft.png');
+}
+
+    #imgSpaceLeft:hover
+    {
+        background-image: url('../Images/SpacingDropDownIcons/SpaceLeftOver.png');
+    }
+
+.leftSelected
+{
+	background-image: url('../Images/SpacingDropDownIcons/SpaceLeftSelected.png') !important;
+	background-color: #D2D2D2;
+}

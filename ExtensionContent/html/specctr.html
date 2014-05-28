@@ -17,8 +17,10 @@
 <script src="../controller/spacingButtonHandlers.js"></script>
 <script src="../controller/dimensionButtonHandlers.js"></script>
 
-<link id="ppstyle" rel="stylesheet" type="text/css"
-	href="../css/style.css">
+<link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/style.css">
+<link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/dimensionButtonStyle.css">
+<link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/spacingButtonStyle.css">
+
 <title>Specctr-Pro</title>
 </head>
 
@@ -93,22 +95,22 @@
 								onclick="dimensionDropDown_clickHandler()"></div>
 						</div>
 						<div class="options" id="dimensionDropDown">
-							<div class="option" id="imgNoSelectionWidth"
-								onclick="imgNoSelectionWidth_clickHandler()"></div>
-							<div class="option widthTopSelected" id="imgWidthTop"
-								onclick="imgWidthTop_clickHandler()"></div>
-							<div class="option" id="imgWidthBottom"
-								onclick="imgWidthBottom_clickHandler()"></div>
-							<div class="option" id="imgWidthCenter"
-								onclick="imgWidthCenter_clickHandler()"></div>
-							<div class="option" id="imgNoSelectionHeight"
-								onclick="imgNoSelectionHeight_clickHandler()"></div>
-							<div class="option heightLeftSelected" id="imgHeightLeft"
-								onclick="imgHeightLeft_clickHandler()"></div>
-							<div class="option" id="imgHeightRight"
-								onclick="imgHeightRight_clickHandler()"></div>
-							<div class="option" id="imgHeightCenter"
-								onclick="imgHeightCenter_clickHandler()"></div>
+							<div class="option" id="imgNoSelectionWidth" title="width"
+								onclick="dimensionCell_clickHandler(this.id, 'noSelectionSelected')"></div>
+							<div class="option widthTopSelected" id="imgWidthTop" title="width"
+								onclick="dimensionCell_clickHandler(this.id, 'widthTopSelected')"></div>
+							<div class="option" id="imgWidthBottom" title="width"
+								onclick="dimensionCell_clickHandler(this.id, 'widthBottomSelected')"></div>
+							<div class="option" id="imgWidthCenter" title="width"
+								onclick="dimensionCell_clickHandler(this.id, 'widthCenterSelected')"></div>
+							<div class="option" id="imgNoSelectionHeight" title="height"
+								onclick="dimensionCell_clickHandler(this.id, 'noSelectionSelected')"></div>
+							<div class="option heightLeftSelected" id="imgHeightLeft" title="height"
+								onclick="dimensionCell_clickHandler(this.id, 'heightLeftSelected')"></div>
+							<div class="option" id="imgHeightRight" title="height"
+								onclick="dimensionCell_clickHandler(this.id, 'heightRightSelected')"></div>
+							<div class="option" id="imgHeightCenter" title="height"
+								onclick="dimensionCell_clickHandler(this.id, 'heightCenterSelected')"></div>
 						</div>
 					</li>
 

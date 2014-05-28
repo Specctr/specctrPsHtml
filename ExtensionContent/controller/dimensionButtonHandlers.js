@@ -74,341 +74,92 @@ function dimensionDropDown_clickHandler()
 }
 
 /**
- * FunctionName	: imgNoSelectionWidth_clickHandler()
- * Description	: Select the "no width" spec option cell in the dimension dropdown.
+ * FunctionName	: dimensionCell_clickHandler()
+ * Description	: Change the appearance of selected cell in the dimension dropdown.
  * */
-function imgNoSelectionWidth_clickHandler()
+function dimensionCell_clickHandler(cellId, selectionClass)
 {
-	try
+	var cellHandler = $("#" + cellId);
+	var selectedRow = cellHandler.attr("title");
+	var selectedCellIndex = cellHandler.index() % 4;
+	
+	removeSelectedCell(selectedRow, cellHandler.parent());
+		
+	//Set values according to cell selection in dimension button. 
+	if(selectedRow == "width")
+		model.widthPos = selectedCellIndex;
+	else
+		model.heightPos = selectedCellIndex;
+	
+	cellHandler.addClass(selectionClass);	//Select the cell.
+	changeDimensionButtonIcon();			//Change button icon.
+}
+
+/**
+ * FunctionName	: removeSelectedCell()
+ * Description	: Remove selected cells in a given row of dimension dropdown.
+ * */
+function removeSelectedCell(selectedRow, parent)
+{
+	var classForSelection;
+	
+	//Remove the selected cell in the selected row.
+	if(selectedRow == "width")
 	{
-		//Remove all other selection classes for width row.
-		removeSelectionClassesForWidth();
-		$("#imgNoSelectionWidth").addClass("noSelectionSelected");
-		model.widthPos = 0;
-		changeDimensionButtonnIcon();
+		//Selection classes for each cell in width row.
+		classForSelection = ["noSelectionSelected",
+		                     "widthTopSelected",
+		                     "widthBottomSelected",
+		                     "widthCenterSelected"];
+		
+		//Remove selection classes from each cell.
+		for(var i = 0; i <= 3; i++)
+			parent.children().eq(i).removeClass(classForSelection[i]);
 	}
-	catch(e)
+	else
 	{
-		console.log(e);
+		//Selection classes for each cell in height row.
+		classForSelection = ["noSelectionSelected", 
+		                     "heightLeftSelected", 
+		                     "heightRightSelected",
+		                     "heightCenterSelected"];
+		
+		//Remove selection classes from each cell.
+		for(var i = 4; i <= 7; i++)
+			parent.children().eq(i).removeClass(classForSelection[i - 4]);
 	}
 }
 
 /**
- * FunctionName	: imgWidthTop_clickHandler()
- * Description	: Select the top width spec option cell in the dimension dropdown.
- * */
-function imgWidthTop_clickHandler()
-{
-	try
-	{
-		//Remove all other selection classes for width row.
-		removeSelectionClassesForWidth();
-		$("#imgWidthTop").addClass("widthTopSelected");
-		model.widthPos = 1;
-		changeDimensionButtonnIcon();
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: imgWidthBottom_clickHandler()
- * Description	: Select the bottom width spec option cell in the dimension dropdown.
- * */
-function imgWidthBottom_clickHandler()
-{
-	try
-	{
-		//Remove all other selection classes for width row.
-		removeSelectionClassesForWidth();
-		$("#imgWidthBottom").addClass("widthBottomSelected");
-		model.widthPos = 2;
-		changeDimensionButtonnIcon();
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: imgWidthCenter_clickHandler()
- * Description	: Select the center width spec option cell in the dimension dropdown.
- * */
-function imgWidthCenter_clickHandler()
-{
-	try
-	{
-		//Remove all other selection classes for width row.
-		removeSelectionClassesForWidth();
-		$("#imgWidthCenter").addClass("widthCenterSelected");
-		model.widthPos = 3;
-		changeDimensionButtonnIcon();
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: imgNoSelectionHeight_clickHandler()
- * Description	: Select the "no height" spec option cell in the dimension dropdown.
- * */
-function imgNoSelectionHeight_clickHandler()
-{
-	try
-	{
-		//Remove all other selection classes for height row.
-		removeSelectionClassesForHeight();
-		$("#imgNoSelectionHeight").addClass("noSelectionSelected");
-		model.heightPos = 0;
-		changeDimensionButtonnIcon();
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: imgHeightLeft_clickHandler()
- * Description	: Select the left height spec option cell in the dimension dropdown.
- * */
-function imgHeightLeft_clickHandler()
-{
-	try
-	{
-		//Remove all other selection classes for height row.
-		removeSelectionClassesForHeight();
-		$("#imgHeightLeft").addClass("heightLeftSelected");
-		model.heightPos = 1;
-		changeDimensionButtonnIcon();
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: imgHeightRight_clickHandler()
- * Description	: Select the right height spec option cell in the dimension dropdown.
- * */
-function imgHeightRight_clickHandler()
-{
-	try
-	{
-		//Remove all other selection classes for height row.
-		removeSelectionClassesForHeight();
-		$("#imgHeightRight").addClass("heightRightSelected");
-		model.heightPos = 2;
-		changeDimensionButtonnIcon();
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: imgHeightCenter_clickHandler()
- * Description	: Select the center height spec option cell in the dimension dropdown.
- * */
-function imgHeightCenter_clickHandler()
-{
-	try
-	{
-		//Remove all other selection classes for height row.
-		removeSelectionClassesForHeight();
-		$("#imgHeightCenter").addClass("heightCenterSelected");
-		model.heightPos = 3;
-		changeDimensionButtonnIcon();
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: removeSelectionClassesForWidth()
- * Description	: Remove all the selected cells of width row in dimension dropdown.
- * */
-function removeSelectionClassesForWidth()
-{
-	try
-	{
-		$("#imgNoSelectionWidth").removeClass("noSelectionSelected");
-		$("#imgWidthTop").removeClass("widthTopSelected");
-		$("#imgWidthBottom").removeClass("widthBottomSelected");
-		$("#imgWidthCenter").removeClass("widthCenterSelected");
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: removeSelectionClassesForHeight()
- * Description	: Remove all the selected cells of height row in dimension dropdown.
- * */
-function removeSelectionClassesForHeight()
-{
-	try
-	{
-		$("#imgNoSelectionHeight").removeClass("noSelectionSelected");
-		$("#imgHeightLeft").removeClass("heightLeftSelected");
-		$("#imgHeightRight").removeClass("heightRightSelected");
-		$("#imgHeightCenter").removeClass("heightCenterSelected");
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: changeDimensionButtonnIcon()
+ * FunctionName	: changeDimensionButtonIcon()
  * Description	: Change the dimension button icon according to the selection of cells in the grid.
  * */
-function changeDimensionButtonnIcon()
+function changeDimensionButtonIcon()
 {
+	//Handle the exceptions like no image is found..
 	try
 	{
-		var dimensionIcon = document.getElementById("dimensionIcon");
-		switch (model.widthPos)
+		var dimensionIconHandler = document.getElementById("dimensionIcon");
+		var imagePath = "../Images/DimensionButtonIcons/WH_";
+		
+		var dimensionIcons = [];
+		var min = 0, max = 3;
+		
+		//Creating and initializing 2D array with dimension button icons.
+		for (var i = min; i <= max; i++)
 		{
-		case 0:												//No width option.
-		{
-			switch (model.heightPos)
+			dimensionIcons.push([]);
+			dimensionIcons[i].push(new Array(max));
+			for(var j = min; j <= max; j++)
 			{
-			case 0:									//No height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_00.png";
-				break;
-			}
-
-			case 1:									//Left height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_01.png";
-				break;
-			}
-
-			case 2:									//Right height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_02.png";
-				break;
-			}
-
-			case 3:									//Center height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_03.png";
-			}
-			}
-
-			break;
-		}
-
-		case 1:												//Top width option.
-		{
-			switch (model.heightPos)
-			{
-			case 0:									//No height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_10.png";
-				break;
-			}
-
-			case 1:									//Left height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_11.png";
-				break;
-			}
-
-			case 2:									//Right height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_12.png";
-				break;
-			}
-
-			case 3:									//Center height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_13.png";
-			}
-			}
-
-			break;
-		}
-
-		case 2:												//Bottom width option.
-		{
-			switch (model.heightPos)
-			{
-			case 0:									//No height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_20.png";
-				break;
-			}
-
-			case 1:									//Left height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_21.png";
-				break;
-			}
-
-			case 2:									//Right height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_22.png";
-				break;
-			}
-
-			case 3:									//Center height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_23.png";
-			}
-			}
-
-			break;
-		}
-
-		case 3:												//Center width option.
-		{
-			switch (model.heightPos)
-			{
-			case 0:									//No height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_30.png";
-				break;
-			}
-
-			case 1:									//Left height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_31.png";
-				break;
-			}
-
-
-			case 2:									//Right height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_32.png";
-				break;
-			}
-
-			case 3:									//Center height option.
-			{
-				dimensionIcon.src = "../Images/DimensionButtonIcons/WH_33.png";
-			}
+				dimensionIcons[i][j] = imagePath + i + "" + j + ".png";
 			}
 		}
-		}
+		
+		dimensionIconHandler.src = dimensionIcons[model.widthPos][model.heightPos];
 	}
 	catch(e)
 	{
-		console.log(e);
+		alert(e);
 	}
-
 }
