@@ -13,28 +13,6 @@ var psConfig = "specctrPhotoshopConfig.json";
 var illConfig = "specctrIllustratorConfig.json";
 
 /**
- * FunctionName	: generateUUID()
- * Description	: Generate the UUID.
- * */
-function generateUUID()
-{
-	//reference from http://www.ietf.org/rfc/rfc4122.txt
-	var s = [];
-	var hexDigits = "0123456789abcdef";
-	for(var i = 0; i < 36; i++) 
-	{
-		s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
-	}
-
-	s[14] = "4";  // bits 12-15 of the time_hi_and_version field to 0010
-	s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1);  // bits 6-7 of the clock_seq_hi_and_reserved to 01
-	s[8] = s[13] = s[18] = s[23] = "-";
-
-	var uuid = s.join("");
-	return uuid;
-}
-
-/**
  * FunctionName	: activateButton_clickHandler()
  * Description	: Validate the license of the user and move to the tab container if user's credentials valid.
  * */
@@ -117,7 +95,6 @@ function completeHandler(data, status)
 		else
 		{
 			var statusFromEndPoint = response.name;
-			alert(statusFromEndPoint);
 
 			if(statusFromEndPoint == "active")
 			{
@@ -247,28 +224,27 @@ function responsiveTab_creationCompleteHandler()
 		document.getElementById("chkDistanceSpec").checked = model.specInPrcntg;
 		if(model.specInPrcntg)
 		{
-			enableTextField(document.getElementById("txtWidth"));
-			enableTextField(document.getElementById("txtHeight"));
+			enableTextField(document.getElementById("relativeWidth"));
+			enableTextField(document.getElementById("relativeHeight"));
 		}
 		else
 		{
-			disableTextField(document.getElementById("txtWidth"));
-			disableTextField(document.getElementById("txtHeight"));
+			disableTextField(document.getElementById("relativeWidth"));
+			disableTextField(document.getElementById("relativeHeight"));
 		}
 
 		//For spec in EM.
 		document.getElementById("chkEmSpec").checked = model.specInEM;
 		if(model.specInEM)
 		{
-			enableTextField(document.getElementById("txtFontSize"));
-			enableTextField(document.getElementById("txtBaseLineHeight"));
+			enableTextField(document.getElementById("baseFontSize"));
+			enableTextField(document.getElementById("baseLineHeight"));
 		}
 		else
 		{
-			disableTextField(document.getElementById("txtFontSize"));
-			disableTextField(document.getElementById("txtBaseLineHeight"));
+			disableTextField(document.getElementById("baseFontSize"));
+			disableTextField(document.getElementById("baseLineHeight"));
 		}
-
 	}
 	catch(e)
 	{
@@ -297,11 +273,11 @@ function prefs_creationCompleteHandler()
 		armWeightHandler.selectedIndex = -1;
 		armWeightHandler.value = model.armWeight.toString();
 
-		document.getElementById("chkDisplayRGBAsHex").checked = model.useHexColor;
+		document.getElementById("useHexColor").checked = model.useHexColor;
 
 		if(hostApplication == illustratorId)
 		{
-			document.getElementById("chkCanvasEdge").checked = model.specToEdge;
+			document.getElementById("specToEdge").checked = model.specToEdge;
 
 			var colorModeHandler = document.getElementById("lstColorMode");
 			for(var i = 0; i < 4; i++)
@@ -336,7 +312,7 @@ function prefs_creationCompleteHandler()
 			}
 		}
 
-		document.getElementById("colShape").style.backgroundColor = model.legendColorObject;
+		document.getElementById("colObject").style.backgroundColor = model.legendColorObject;
 		document.getElementById("colType").style.backgroundColor = model.legendColorType;
 		document.getElementById("colSpacing").style.backgroundColor = model.legendColorSpacing;
 
@@ -593,7 +569,7 @@ function onClose()
 	}
 	catch(e)
 	{
-		console.log(e);
+		alert(e);
 	}
 }
 
@@ -618,7 +594,7 @@ function writeAppPrefs(appPrefs)
 	}
 	catch(e)
 	{
-		console.log(e);
+		alert(e);
 	}
 }
 

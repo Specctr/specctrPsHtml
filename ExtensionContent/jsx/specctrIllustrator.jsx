@@ -572,13 +572,13 @@ function createDimensionSpecsForItem(pageItem)
             var relativeHeight = '', relativeWidth = '';
             var originalArtboardSize = originalArtboardRect();       //Get the original size of artboard.
             
-            if(model.rltvHeight != 0)
-                relativeHeight = model.rltvHeight;
+            if(model.relativeHeight != 0)
+                relativeHeight = model.relativeHeight;
             else
                 relativeHeight = -originalArtboardSize[3];
                 
-            if(model.rltvWidth != 0)
-                relativeWidth = model.rltvWidth;
+            if(model.relativeWidth != 0)
+                relativeWidth = model.relativeWidth;
             else
                 relativeWidth = originalArtboardSize[2];
 
@@ -792,13 +792,13 @@ function createCoordinateSpecsForItem(pageItem)
             var relativeTop = '', relativeLeft = '';
             var originalArtboardSize = originalArtboardRect();       //Get the original size of artboard.
             
-            if(model.rltvHeight != 0)
-                relativeTop = model.rltvHeight;
+            if(model.relativeHeight != 0)
+                relativeTop = model.relativeHeight;
             else
                 relativeTop = -originalArtboardSize[3];
                 
-            if(model.rltvWidth != 0)
-                relativeLeft = model.rltvWidth;
+            if(model.relativeWidth != 0)
+                relativeLeft = model.relativeWidth;
             else
                 relativeLeft = originalArtboardSize[2];
 
@@ -913,8 +913,8 @@ function createSpacingVerticalSpec(x, y1, y2, itemsGroup)
             var relativeHeight = '';
             var originalArtboardSize = originalArtboardRect();       //Get the original size of artboard.
             
-            if(model.rltvHeight != 0)
-                relativeHeight = model.rltvHeight;
+            if(model.relativeHeight != 0)
+                relativeHeight = model.relativeHeight;
             else
                 relativeHeight = -originalArtboardSize[3];
 
@@ -978,8 +978,8 @@ function createSpacingHorizontalSpec(y, x1, x2, itemsGroup)
             var relativeWidth = '';
             var originalArtboardSize = originalArtboardRect();       //Get the original size of artboard.
             
-            if(model.rltvWidth != 0)
-                relativeWidth = model.rltvWidth;
+            if(model.relativeWidth != 0)
+                relativeWidth = model.relativeWidth;
             else
                 relativeWidth = originalArtboardSize[2];
 
@@ -1224,13 +1224,13 @@ function createSpacingSpecsForItem(pageItem)
             var relativeHeight = '', relativeWidth = '';
             var originalArtboardSize = originalArtboardRect();       //Get the original size of artboard.
             
-            if(model.rltvHeight != 0)
-                relativeHeight = model.rltvHeight;
+            if(model.relativeHeight != 0)
+                relativeHeight = model.relativeHeight;
             else
                 relativeHeight = -originalArtboardSize[3];
                 
-            if(model.rltvWidth != 0)
-                relativeWidth = model.rltvWidth;
+            if(model.relativeWidth != 0)
+                relativeWidth = model.relativeWidth;
             else
                 relativeWidth = originalArtboardSize[2];
 

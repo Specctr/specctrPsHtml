@@ -679,13 +679,13 @@ function calculateDmnsns(artLayer, bounds)
             var relativeHeight='', relativeWidth='';
             var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
             
-            if(model.rltvHeight != 0)
-                relativeHeight = model.rltvHeight;
+            if(model.relativeHeight != 0)
+                relativeHeight = model.relativeHeight;
             else
                 relativeHeight = orgnlCanvas[3];
                 
-            if(model.rltvWidth != 0)
-                relativeWidth = model.rltvWidth;
+            if(model.relativeWidth != 0)
+                relativeWidth = model.relativeWidth;
             else
                 relativeWidth = orgnlCanvas[2];
 
@@ -918,8 +918,8 @@ function createHrzntlSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
             var relativeWidth='';
             var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
             
-            if(model.rltvWidth != 0)
-                relativeWidth = model.rltvWidth;
+            if(model.relativeWidth != 0)
+                relativeWidth = model.relativeWidth;
             else
                 relativeWidth = orgnlCanvas[2];
 
@@ -987,8 +987,8 @@ function createVertSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
             var relativeHeight='';
             var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
             
-            if(model.rltvHeight != 0)
-                relativeHeight = model.rltvHeight;
+            if(model.relativeHeight != 0)
+                relativeHeight = model.relativeHeight;
             else
                 relativeHeight = orgnlCanvas[3];
 
@@ -1353,13 +1353,13 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
         var relativeHeight='', relativeWidth='';
         var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
             
-        if(model.rltvHeight != 0)
-            relativeHeight = model.rltvHeight;
+        if(model.relativeHeight != 0)
+            relativeHeight = model.relativeHeight;
         else
             relativeHeight = orgnlCanvas[3];
                 
-        if(model.rltvWidth != 0)
-            relativeWidth = model.rltvWidth;
+        if(model.relativeWidth != 0)
+            relativeWidth = model.relativeWidth;
         else
             relativeWidth = orgnlCanvas[2];
 
@@ -1976,13 +1976,13 @@ function createCoordinates(sourceItem, bounds)
             var relativeTop='', relativeLeft='';
             var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
             
-            if(model.rltvHeight != 0)
-                relativeTop = model.rltvHeight;
+            if(model.relativeHeight != 0)
+                relativeTop = model.relativeHeight;
             else
                 relativeTop = orgnlCanvas[3];
                 
-            if(model.rltvWidth != 0)
-                relativeLeft = model.rltvWidth;
+            if(model.relativeWidth != 0)
+                relativeLeft = model.relativeWidth;
             else
                 relativeLeft = orgnlCanvas[2];
 

@@ -59,8 +59,8 @@ var model =
 	//Responsive tab options
 	specInPrcntg:	false,
 	specInEM:		false,
-	rltvHeight:		0,
-	rltvWidth:		0,
+	relativeHeight:		0,
+	relativeWidth:		0,
 	baseFontSize:	16,
 	baseLineHeight: 22.4,
 

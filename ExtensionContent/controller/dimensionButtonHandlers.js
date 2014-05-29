@@ -82,15 +82,15 @@ function dimensionCell_clickHandler(cellId, selectionClass)
 	var cellHandler = $("#" + cellId);
 	var selectedRow = cellHandler.attr("title");
 	var selectedCellIndex = cellHandler.index() % 4;
-	
+
 	removeSelectedCell(selectedRow, cellHandler.parent());
-		
+
 	//Set values according to cell selection in dimension button. 
 	if(selectedRow == "width")
 		model.widthPos = selectedCellIndex;
 	else
 		model.heightPos = selectedCellIndex;
-	
+
 	cellHandler.addClass(selectionClass);	//Select the cell.
 	changeDimensionButtonIcon();			//Change button icon.
 }
@@ -102,7 +102,7 @@ function dimensionCell_clickHandler(cellId, selectionClass)
 function removeSelectedCell(selectedRow, parent)
 {
 	var classForSelection;
-	
+
 	//Remove the selected cell in the selected row.
 	if(selectedRow == "width")
 	{
@@ -111,7 +111,7 @@ function removeSelectedCell(selectedRow, parent)
 		                     "widthTopSelected",
 		                     "widthBottomSelected",
 		                     "widthCenterSelected"];
-		
+
 		//Remove selection classes from each cell.
 		for(var i = 0; i <= 3; i++)
 			parent.children().eq(i).removeClass(classForSelection[i]);
@@ -123,7 +123,7 @@ function removeSelectedCell(selectedRow, parent)
 		                     "heightLeftSelected", 
 		                     "heightRightSelected",
 		                     "heightCenterSelected"];
-		
+
 		//Remove selection classes from each cell.
 		for(var i = 4; i <= 7; i++)
 			parent.children().eq(i).removeClass(classForSelection[i - 4]);
@@ -141,21 +141,19 @@ function changeDimensionButtonIcon()
 	{
 		var dimensionIconHandler = document.getElementById("dimensionIcon");
 		var imagePath = "../Images/DimensionButtonIcons/WH_";
-		
+
 		var dimensionIcons = [];
 		var min = 0, max = 3;
-		
+
 		//Creating and initializing 2D array with dimension button icons.
 		for (var i = min; i <= max; i++)
 		{
 			dimensionIcons.push([]);
 			dimensionIcons[i].push(new Array(max));
 			for(var j = min; j <= max; j++)
-			{
 				dimensionIcons[i][j] = imagePath + i + "" + j + ".png";
-			}
 		}
-		
+
 		dimensionIconHandler.src = dimensionIcons[model.widthPos][model.heightPos];
 	}
 	catch(e)

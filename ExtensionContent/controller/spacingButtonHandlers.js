@@ -1,7 +1,7 @@
 /*
 File-Name: spacingButtonHandlers.js
 Description: This file includes all the handlers and methods related to spacing popup button.  
-*/
+ */
 
 /**
  * FunctionName	: spacingButton_clickHandler()
@@ -44,17 +44,17 @@ function spacingDropDown_clickHandler()
 	{
 		if($("#spacingDropDown").is(":visible"))
 		{
-    		$("#liSpacing").removeClass("isOpen");
-    		$("#btnSpacing").removeClass("buttonSelected");
+			$("#liSpacing").removeClass("isOpen");
+			$("#btnSpacing").removeClass("buttonSelected");
 		}
-    	else
+		else
 		{
-    		$("#liSpacing").addClass("isOpen");
-    		$("#btnSpacing").addClass("buttonSelected");
+			$("#liSpacing").addClass("isOpen");
+			$("#btnSpacing").addClass("buttonSelected");
 		}
-    	
-    	$("#liSpacing .options").slideToggle(100);
-        $("#imgSpacingDdlArrow").toggleClass("dropdownArrowUp");
+
+		$("#liSpacing .options").slideToggle(100);
+		$("#imgSpacingDdlArrow").toggleClass("dropdownArrowUp");
 	}
 	catch(e)
 	{
@@ -63,69 +63,16 @@ function spacingDropDown_clickHandler()
 }
 
 /**
- * FunctionName	: imgSpaceTop_clickHandler()
- * Description	: Select/unselect the spacing top option cell in the spacing dropdown.
+ * FunctionName	: spacingCell_clickHandler()
+ * Description	: Toggle the appearance of cells in the spacing dropdown on selection.
  * */
-function imgSpaceTop_clickHandler()
+function spacingCell_clickHandler(cellId, selectionClass, cellName)
 {
 	try
 	{
-		$("#imgSpaceTop").toggleClass("topSelected");
-		model.spaceTop = !model.spaceTop;
-		changeSpacingBtnIcon();
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: imgSpaceRight_clickHandler()
- * Description	: Select/unselect the spacing right option cell in the spacing dropdown.
- * */
-function imgSpaceRight_clickHandler()
-{
-	try
-	{
-		$("#imgSpaceRight").toggleClass("rightSelected");
-		model.spaceRight = !model.spaceRight;
-		changeSpacingBtnIcon();
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: imgSpaceBottom_clickHandler()
- * Description	: Select/unselect the spacing bottom option cell in the spacing dropdown.
- * */
-function imgSpaceBottom_clickHandler()
-{
-	try
-	{
-		$("#imgSpaceBottom").toggleClass("bottomSelected");
-		model.spaceBottom = !model.spaceBottom;
-		changeSpacingBtnIcon();
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: imgSpaceLeft_clickHandler()
- * Description	: Select/unselect the spacing left option cell in the spacing dropdown.
- * */
-function imgSpaceLeft_clickHandler()
-{
-	try
-	{
-		$("#imgSpaceLeft").toggleClass("leftSelected");
-		model.spaceLeft = !model.spaceLeft;
+		var cellHandler = $("#" + cellId);
+		cellHandler.toggleClass(selectionClass);
+		model[cellName] = !model[cellName];
 		changeSpacingBtnIcon();
 	}
 	catch(e)
@@ -144,20 +91,20 @@ function changeSpacingBtnIcon()
 	{
 		var spacingIconHandler = document.getElementById("spacingIcon");
 		var iconPath = "../Images/SpacingButtonIcons/Spacing_";
-		
+
 		//Array of spacing button icons.
 		var spacingIcons = [
-            iconPath + "None.png", iconPath + "B.png", iconPath + "L.png", iconPath + "BL.png",
-            iconPath + "R.png", iconPath + "BR.png", iconPath + "LR.png", iconPath + "BLR.png",
-            iconPath + "T.png", iconPath + "BT.png", iconPath + "TL.png", iconPath + "LTB.png",
-            iconPath + "TR.png", iconPath + "BTR.png", iconPath + "LTR.png", iconPath + "All.png"];
-		
+		                    iconPath + "None.png", iconPath + "B.png", iconPath + "L.png", iconPath + "BL.png",
+		                    iconPath + "R.png", iconPath + "BR.png", iconPath + "LR.png", iconPath + "BLR.png",
+		                    iconPath + "T.png", iconPath + "BT.png", iconPath + "TL.png", iconPath + "LTB.png",
+		                    iconPath + "TR.png", iconPath + "BTR.png", iconPath + "LTR.png", iconPath + "All.png"];
+
 		//Calculate the index of button icon.
 		var indexSpacingIcon = (model.spaceTop | 0) * 8 
-								+ (model.spaceRight | 0) * 4
-									+ (model.spaceLeft | 0) * 2
-										+ (model.spaceBottom | 0);
-		
+		+ (model.spaceRight | 0) * 4
+		+ (model.spaceLeft | 0) * 2
+		+ (model.spaceBottom | 0);
+
 		spacingIconHandler.src = spacingIcons[indexSpacingIcon];
 	}
 	catch(e)
