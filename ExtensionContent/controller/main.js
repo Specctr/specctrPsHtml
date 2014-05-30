@@ -4,13 +4,9 @@ Description: This file is used to communicate between extend script file and htm
 and reading and writing preferences methods.  
  */
 
-var preferencePath;		//path of the Specctr config file.
-var appPrefs;			//Store the preference of UI.
-var hostApplication = null;	//Store the current host application.
 var photoshopId = "PHXS";
 var illustratorId = "ILST";
-var psConfig = "specctrPhotoshopConfig.json";
-var illConfig = "specctrIllustratorConfig.json";
+var hostApplication;
 
 /**
  * FunctionName	: activateButton_clickHandler()
@@ -20,11 +16,10 @@ function activateButton_clickHandler()
 {
 	try
 	{
-		var urlRequest = "";
-
-		if(hostApplication == null)
-			hostApplication = getHostApp();
-
+		var urlRequest;
+		var hostApplication = getHostApp();
+		
+		//License validation code for Illustrator.
 		if(hostApplication == illustratorId)
 		{
 			// Get Extension Id and matching productCode.
@@ -32,8 +27,7 @@ function activateButton_clickHandler()
 			                     "SpecctrPs-10",
 			                     "SpecctrPs-20",
 			                     "SpecctrPs-30",
-			                     "SpecctrPs-Site"
-			                     ];
+			                     "SpecctrPs-Site"];
 
 			var csInterface = new CSInterface();
 			var arrayOfExtensionIds = csInterface.getExtensions(productCodes);
@@ -65,7 +59,6 @@ function activateButton_clickHandler()
 	{
 		alert(e);
 	}
-
 }
 
 /**
@@ -76,8 +69,10 @@ function completeHandler(data, status)
 {
 	try
 	{
+		var appPrefs = new Object();
 		var response = data;
-
+		hostApplication = getHostApp();
+		
 		if(hostApplication == illustratorId)
 		{
 			alert(response.message);
@@ -95,56 +90,33 @@ function completeHandler(data, status)
 		else
 		{
 			var statusFromEndPoint = response.name;
-
+			
 			if(statusFromEndPoint == "active")
 			{
-				var apiKey = "";
-				var machineName =  "";
-				var uuid = "";
-
-				//Check the subscription api again.
+				storeCredentials();
+				
 				appPrefs = readAppPrefs();
-
-				if(appPrefs == null || appPrefs.status == "error")
-				{
-					apiKey = "apiKeySuccess";	//get the api key from text input of registration screen.
-					machineName = "Admin";	//get the machine name from text input of registration screen.
-					uuid = generateUUID();
-					appPrefs.apiKey = apiKey;
-					appPrefs.machineName = machineName;
-					appPrefs.macAddress = uuid;
-				}
-				else
-				{
-					apiKey = appPrefs.apiKey;
-					machineName = appPrefs.machineName;
-					uuid = appPrefs.macAddress;
-				}
-
+				if(!appPrefs)
+					appPrefs = new Object();
+				
 				var lastLoginDate = new Date().getDate();
-				appPrefs.status = statusFromEndPoint;
-				appPrefs.lastLoginDate = lastLoginDate;
-
-				model.status = statusFromEndPoint;
 				model.lastLoginDate = lastLoginDate;
-				model.apiKey = apiKey;
-				model.macAddress = uuid;
-				model.machineName = machineName;
+				model.status = statusFromEndPoint;
+				appPrefs.lastLoginDate = lastLoginDate;
+				appPrefs.status = statusFromEndPoint;
 			}
 			else
 			{
 				alert(response.message);
+				createLog(response);
 				return;
 			}
+			
+			createLog(response);
 		}
-
-		var specctrConfig = getConfigFileName();
-		var csInterface = new CSInterface();
-		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
-		prefsFile += "/LocalStore";
-		preferencePath = prefsFile + "/" + specctrConfig;
-
-		writeAppPrefs(appPrefs);
+		
+		setPreferencePath();
+		writeAppPrefs(JSON.stringify(appPrefs));
 		init();
 	}
 	catch(e)
@@ -340,8 +312,7 @@ function onLoaded()
 {
 	try
 	{
-		var appName = getHostApp();
-		hostApplication = appName;
+		hostApplication = getHostApp();
 
 		if(hostApplication == null)
 		{
@@ -350,7 +321,7 @@ function onLoaded()
 		}
 
 		loadJSX();		//Load the jsx files present in \jsx folder.
-		appPrefs = readAppPrefs();	//Check whether config exists, if not initialize and save in file on disk.
+		var appPrefs = readAppPrefs();	//Check whether config exists, if not initialize and save in file on disk.
 
 		if(hostApplication == illustratorId)
 		{
@@ -368,12 +339,12 @@ function onLoaded()
 			document.getElementById("specToEdgeCheckbox").style.display = "block";
 			document.getElementById("colorListForILST").style.display = "block";
 
-			if(appPrefs == null)
+			if(!appPrefs)
 			{
 				appPrefs = new Object();
 				appPrefs.isLicensed = false;
 				model.isLicensed = false;
-				writeAppPrefs(appPrefs);
+				writeAppPrefs(JSON.stringify(appPrefs));
 			}
 
 			//Check if Specctr is licensed, if not leave registration screen.
@@ -384,21 +355,12 @@ function onLoaded()
 		}
 		else
 		{
-			if(appPrefs == null)
+			if(appPrefs && appPrefs.status == "active")
 			{
-				appPrefs = new Object();
-				appPrefs.status = "error";
-				model.status = "error";
-				writeAppPrefs(appPrefs);
-			}
-
-			//Here we have to subscribe the API once in a day by reading appKey, macAddress and machineName..
-			model.status = appPrefs.status;
-
-			if(model.status == "active")
-			{
+				model.status = appPrefs.status;
 				model.lastLoginDate = appPrefs.lastLoginDate;
 				var timeDifference = model.lastLoginDate - new Date().getDate();
+				
 				if(Math.abs(timeDifference))
 				{
 					//get the machine name, apiKey and uuid and create url.
@@ -475,47 +437,6 @@ function init()
 }
 
 /**
- * FunctionName	: readAppPrefs()
- * Description	: Return JSON object representing Specctr configuration file.
- * */
-function readAppPrefs()
-{
-	try
-	{
-		var specctrConfig = psConfig;
-		if(hostApplication == null)
-			hostApplication = getHostApp();
-
-		if(hostApplication == illustratorId)
-			specctrConfig = illConfig;
-
-		var csInterface = new CSInterface();
-		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
-		prefsFile += "/LocalStore";
-		preferencePath = prefsFile + "/" + specctrConfig;
-
-		var result = window.cep.fs.readdir(prefsFile);
-		if(window.cep.fs.ERR_NOT_FOUND == result.err)
-		{
-			window.cep.fs.makedir(prefsFile);
-			return null;
-		}
-
-		result = window.cep.fs.readFile(preferencePath);
-		if(window.cep.fs.ERR_NOT_FOUND == result.err)
-			return null;
-
-		appPrefs = JSON.parse(result.data);
-		return appPrefs;
-	}
-	catch(e)
-	{
-		console.log(e);
-		return null;
-	}
-}
-
-/**
  * FunctionName	: onClose()
  * Description	: Load the model value to preference on closing the panel. 
  * */
@@ -523,6 +444,8 @@ function onClose()
 {
 	try
 	{
+		var appPrefs = new Object();
+		
 		if(hostApplication == illustratorId)
 		{
 			appPrefs.shapeFillColor			= model.shapeFillColor;
@@ -531,6 +454,7 @@ function onClose()
 			appPrefs.shapeStrokeStyle		= model.shapeStrokeStyle;
 			appPrefs.shapeStrokeSize		= model.shapeStrokeSize;
 			appPrefs.specToEdge				= model.specToEdge;
+			appPrefs.isLicensed				= model.isLicensed;
 		}
 		else
 		{
@@ -538,6 +462,8 @@ function onClose()
 			appPrefs.shapeStroke		= model.shapeStroke;
 			appPrefs.shapeEffects		= model.shapeEffects;
 			appPrefs.textEffects		= model.textEffects;
+			appPrefs.lastLoginDate		= model.lastLoginDate;
+			appPrefs.status				= model.status;
 		}
 
 		appPrefs.shapeAlpha			= model.shapeAlpha;
@@ -564,33 +490,8 @@ function onClose()
 		appPrefs.specInPrcntg		= model.specInPrcntg;
 		appPrefs.specInEM			= model.specInEM;
 		appPrefs.useScaleBy			= model.useScaleBy;
-
-		writeAppPrefs(appPrefs);
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-}
-
-/**
- * FunctionName	: writeAppPrefs()
- * Description	: Write Specctr configuration to file.
- * */
-function writeAppPrefs(appPrefs)
-{
-	try
-	{
-		if(!preferencePath.length)
-		{
-			var specctrConfig = getConfigFileName();
-			var csInterface = new CSInterface();
-			var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
-			prefsFile += "/LocalStore";
-			preferencePath = prefsFile + "/" + specctrConfig;
-		}
-
-		window.cep.fs.writeFile(preferencePath, JSON.stringify(appPrefs));
+		
+		writeAppPrefs(JSON.stringify(appPrefs));
 	}
 	catch(e)
 	{
@@ -604,115 +505,59 @@ function writeAppPrefs(appPrefs)
  * */
 function setModelValueFromPreferences()
 {
-	try
+	var appPrefs = readAppPrefs();
+	
+	if(!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha"))
+		return;
+	
+	if(hostApplication == illustratorId)
 	{
-		if(hostApplication == illustratorId)
-		{
-			if(appPrefs.hasOwnProperty("shapeFillColor"))
-				model.shapeFillColor = appPrefs.shapeFillColor;
-
-			if(appPrefs.hasOwnProperty("shapeFillStyle"))
-				model.shapeFillStyle = appPrefs.shapeFillStyle;
-
-			if(appPrefs.hasOwnProperty("shapeStrokeColor"))
-				model.shapeStrokeColor = appPrefs.shapeStrokeColor;
-
-			if(appPrefs.hasOwnProperty("shapeStrokeStyle"))
-				model.shapeStrokeStyle = appPrefs.shapeStrokeStyle;
-
-			if(appPrefs.hasOwnProperty("shapeStrokeSize"))
-				model.shapeStrokeSize = appPrefs.shapeStrokeSize;
-
-			if(appPrefs.hasOwnProperty("specToEdge"))
-				model.specToEdge = appPrefs.specToEdge;
-		}
-		else
-		{
-			if(appPrefs.hasOwnProperty("shapeFill"))
-				model.shapeFill = appPrefs.shapeFill;
-
-			if(appPrefs.hasOwnProperty("shapeStroke"))
-				model.shapeStroke = appPrefs.shapeStroke;
-
-			if(appPrefs.hasOwnProperty("shapeEffects"))
-				model.shapeEffects = appPrefs.shapeEffects;
-
-			if(appPrefs.hasOwnProperty("textEffects"))
-				model.textEffects = appPrefs.textEffects;
-		}
-
-		if(appPrefs.hasOwnProperty("shapeAlpha"))
-			model.shapeAlpha = appPrefs.shapeAlpha;
-
-		if(appPrefs.hasOwnProperty("shapeBorderRadius"))
-			model.shapeBorderRadius = appPrefs.shapeBorderRadius;
-
-		if(appPrefs.hasOwnProperty("textFont"))
-			model.textFont = appPrefs.textFont;
-
-		if(appPrefs.hasOwnProperty("textSize"))
-			model.textSize = appPrefs.textSize;
-
-		if(appPrefs.hasOwnProperty("textAlignment"))
-			model.textAlignment = appPrefs.textAlignment;
-
-		if(appPrefs.hasOwnProperty("textColor"))
-			model.textColor = appPrefs.textColor;
-
-		if(appPrefs.hasOwnProperty("textStyle"))
-			model.textStyle = appPrefs.textStyle;
-
-		if(appPrefs.hasOwnProperty("textLeading"))
-			model.textLeading = appPrefs.textLeading;
-
-		if(appPrefs.hasOwnProperty("textTracking"))
-			model.textTracking = appPrefs.textTracking;
-
-		if(appPrefs.hasOwnProperty("textAlpha"))
-			model.textAlpha = appPrefs.textAlpha;
-
-		if(appPrefs.hasOwnProperty("canvasExpandSize"))
-			model.canvasExpandSize = Number(appPrefs.canvasExpandSize);
-
-		if(appPrefs.hasOwnProperty("legendFont"))
-			model.legendFont = appPrefs.legendFont;
-		else
-			model.legendFont = "Aparajita";
-
-		if(appPrefs.hasOwnProperty("legendFontSize"))
-			model.legendFontSize = Number(appPrefs.legendFontSize);
-
-		if(appPrefs.hasOwnProperty("armWeight"))
-			model.armWeight = Number(appPrefs.armWeight);
-
-		if(appPrefs.hasOwnProperty("legendColorObject"))
-			model.legendColorObject = appPrefs.legendColorObject;
-
-		if(appPrefs.hasOwnProperty("legendColorType"))
-			model.legendColorType = appPrefs.legendColorType;
-
-		if(appPrefs.hasOwnProperty("legendColorSpacing"))
-			model.legendColorSpacing = appPrefs.legendColorSpacing;
-
-		if(appPrefs.hasOwnProperty("legendColorMode"))
-			model.legendColorMode = appPrefs.legendColorMode;
-
-		if(appPrefs.hasOwnProperty("useHexColor"))
-			model.useHexColor = appPrefs.useHexColor;
-
-		if(appPrefs.hasOwnProperty("specInPrcntg"))
-			model.specInPrcntg = appPrefs.specInPrcntg;
-
-		if(appPrefs.hasOwnProperty("specInEM"))
-			model.specInEM = appPrefs.specInEM;
-
-		if(appPrefs.hasOwnProperty("useScaleBy"))
-			model.useScaleBy = appPrefs.useScaleBy;
+		model.shapeFillColor = appPrefs.shapeFillColor ? true : false;
+		model.shapeFillStyle = appPrefs.shapeFillStyle ? true : false;
+		model.shapeStrokeColor = appPrefs.shapeStrokeColor ? true : false;
+		model.shapeStrokeStyle = appPrefs.shapeStrokeStyle ? true : false;
+		model.shapeStrokeSize = appPrefs.shapeStrokeSize ? true : false;
+		model.specToEdge = appPrefs.specToEdge ? true : false;
 	}
-	catch(e)
+	else
 	{
-		console.log(e);
+		model.shapeFill = appPrefs.shapeFill ? true : false;
+		model.shapeStroke = appPrefs.shapeStroke ? true : false;
+		model.shapeEffects = appPrefs.shapeEffects ? true : false;
+		model.textEffects = appPrefs.textEffects ? true : false;
 	}
+
+	model.shapeAlpha = appPrefs.shapeAlpha ? true : false;
+	model.shapeBorderRadius = appPrefs.shapeBorderRadius ? true : false;
+	model.textFont = appPrefs.textFont ? true : false;
+	model.textSize = appPrefs.textSize ? true : false;
+	model.textAlignment = appPrefs.textAlignment ? true : false;
+	model.textColor = appPrefs.textColor ? true : false;
+	model.textStyle = appPrefs.textStyle ? true : false;
+	model.textLeading = appPrefs.textLeading ? true : false;
+	model.textTracking = appPrefs.textTracking ? true : false;
+	model.useHexColor = appPrefs.useHexColor ? true : false;
+	model.specInPrcntg = appPrefs.specInPrcntg ? true : false;
+	model.specInEM = appPrefs.specInEM ? true : false;
+	model.useScaleBy = appPrefs.useScaleBy ? true : false;
+	
+	model.canvasExpandSize = Number(appPrefs.canvasExpandSize);
+	model.legendFont = appPrefs.legendFont ? appPrefs.legendFont : model.legendFont;
+	model.legendFontSize = Number(appPrefs.legendFontSize);
+	model.armWeight = Number(appPrefs.armWeight);
+	
+	if(appPrefs.hasOwnProperty("legendColorObject"))
+		model.legendColorObject = appPrefs.legendColorObject;
+
+	if(appPrefs.hasOwnProperty("legendColorType"))
+		model.legendColorType = appPrefs.legendColorType;
+
+	if(appPrefs.hasOwnProperty("legendColorSpacing"))
+		model.legendColorSpacing = appPrefs.legendColorSpacing;
+
+	if(appPrefs.hasOwnProperty("legendColorMode"))
+		model.legendColorMode = appPrefs.legendColorMode;
+
 }
 
 /**
@@ -762,39 +607,6 @@ function loadJSX()
 }
 
 /**
- * FunctionName	: getHostApp()
- * Description	: Get the current host application name.
- * */
-function getHostApp()
-{
-	try
-	{
-		var csInterface = new CSInterface();
-		var appName = csInterface.hostEnvironment.appName;
-		var appNames = ["PHXS", "ILST"];
-		var currentApplication = "";
-
-		for(var i = 0; i < appNames.length; i++) 
-		{
-			var name = appNames[i];
-			if(appName.indexOf(name) >= 0) 
-			{
-				currentApplication = name;
-				break;
-			}
-		}
-
-		return currentApplication;
-	}
-	catch(e)
-	{
-		console.log(e);
-		return null;
-	}
-
-}
-
-/**
  * FunctionName	: evalScript()
  * Description	: Evaluates the scripting method.
  * */
@@ -838,7 +650,6 @@ function expandCanvas()
 		setModel();
 		var extScript = "ext_" + hostApplication + "_expandCanvas()";
 		evalScript(extScript);
-		onClose();
 	}
 	catch(e)
 	{
@@ -857,7 +668,6 @@ function createDimensionSpecs()
 		setModel();
 		var extScript = "ext_" + hostApplication + "_createDimensionSpecs()";
 		evalScript(extScript);
-		onClose();
 	}
 	catch(e)
 	{
@@ -876,7 +686,6 @@ function createSpacingSpecs()
 		setModel();
 		var extScript = "ext_" + hostApplication + "_createSpacingSpecs()";
 		evalScript(extScript);
-		onClose();
 	}
 	catch(e)
 	{
@@ -895,7 +704,6 @@ function createCoordinateSpecs()
 		setModel();
 		var extScript = "ext_" + hostApplication + "_createCoordinateSpecs()";
 		evalScript(extScript);
-		onClose();
 	}
 	catch(e)
 	{
@@ -914,7 +722,6 @@ function createPropertySpecs()
 		setModel();
 		var extScript = "ext_" + hostApplication + "_createPropertySpecs()";
 		evalScript(extScript);
-		onClose();
 	}
 	catch(e)
 	{
@@ -975,27 +782,3 @@ function applyFontToList()
 	}
 }
 
-/**
- * FunctionName	: getConfigFileName()
- * Description	: Get the config file name according to the current host application.
- * */
-function getConfigFileName()
-{
-	try
-	{
-		var specctrConfig = psConfig;
-
-		if(hostApplication == null)
-			hostApplication = getHostApp();
-
-		if(hostApplication == illustratorId)
-			specctrConfig = illConfig;
-
-		return specctrConfig;
-	}
-	catch(e)
-	{
-		console.log(e);
-		return "";
-	}
-}

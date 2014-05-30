@@ -70,9 +70,6 @@ var model =
 		
 	//For api subscription
 	status: '',
-	apiKey: '',
-	machineName: '',
-	macAddress: '',
 	lastLoginDate: 0
 };
 

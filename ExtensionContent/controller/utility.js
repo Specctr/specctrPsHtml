@@ -26,6 +26,37 @@ function generateUUID()
 }
 
 /**
+ * FunctionName	: getHostApp()
+ * Description	: Get the current host application name.
+ * */
+function getHostApp()
+{
+	try
+	{
+		var csInterface = new CSInterface();
+		var appName = csInterface.hostEnvironment.appName;
+		var appNames = ["PHXS", "ILST"];
+		var currentApplication = "";
+
+		for(var i = 0; i < appNames.length; i++) 
+		{
+			var name = appNames[i];
+			if(appName.indexOf(name) >= 0) 
+			{
+				currentApplication = name;
+				break;
+			}
+		}
+
+		return currentApplication;
+	}
+	catch(e)
+	{
+		return null;
+	}
+}
+
+/**
  * FunctionName	: disableTextField()
  * Description	: Disable the text input.
  * */
