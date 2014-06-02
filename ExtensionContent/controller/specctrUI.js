@@ -264,6 +264,7 @@ function radioButton_clickHandler(event)
 		var colorMode = event.target.value;
 		if(colorMode != undefined)
 			model.legendColorMode	= colorMode;
+		alert(model.legendColorMode);
 	}
 	catch(e)
 	{

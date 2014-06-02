@@ -62,14 +62,7 @@ function getHostApp()
  * */
 function disableTextField(textField)
 {
-	try
-	{
-		textField.disabled = true;
-	}
-	catch(e)
-	{
-		alert(e);
-	}
+	textField.disabled = true;
 }
 
 /**
@@ -78,15 +71,8 @@ function disableTextField(textField)
  * */
 function enableTextField(textField)
 {
-	try
-	{
-		textField.disabled = false;
-		textField.style.backgroundColor = "#ffffff";
-	}
-	catch(e)
-	{
-		alert(e);
-	}
+	textField.disabled = false;
+	textField.style.backgroundColor = "#ffffff";
 }
 
 /**
