@@ -28,49 +28,61 @@
 
 <body onLoad="onLoaded()" onunload="onClose()">
 
+	<!-- Login container start here -->
 	<div class="container" id="loginContainer" style="display: block;">
-		<!-- Login container start here -->
+		
 		<div id="dvLoginContainer">
-
+			
 			<div class="logo"></div>
-
+			
 			<div class="row">
-				<label for="txtEmail">Email:</label> <input type="text"
-					id="emailInput" name="txtEmail" style="background-color: #ffffff;" />
+				<label for="txtEmail">Email:</label> 
+				<input type="text" id="emailInput" 
+					name="txtEmail" style="background-color: #ffffff;"
+					onkeydown="text_KeyDownHandler(event)"/>
 			</div>
+			
 			<div class="row">
-				<label for="txtEmail">16- Digit License Code:</label> <input
-					type="text" id="license" name="txt16Digit"
-					placeholder="xxxx-xxxx-xxxx-xxxx" />
+				<label for="txtEmail">16- Digit License Code:</label> 
+				<input type="text" id="license" name="txt16Digit"
+					placeholder="xxxx-xxxx-xxxx-xxxx" 
+					onkeydown="text_KeyDownHandler(event)"/>
 			</div>
-
+			
 			<ul class="menu">
 				<li class="border">
-					<div class="button" onclick="activateButton_clickHandler()">
+					<div id="activateButton" class="button" 
+						onclick="activateButton_clickHandler()">
 						<label>Activate Specctr</label>
 					</div>
 				</li>
 			</ul>
-
+			
 			<div class="help">
 				<label class="link">Need Help?</label>
 			</div>
+		
 		</div>
-		<!-- Login container end here -->
+	
 	</div>
+	<!-- Login container end here -->
 
 	<div class="container" id="tabContainer" style="display: none;">
 
 		<div class="tabs">
 			<ul>
-				<li id="tabHeader_1"><img id="tabImage_1"
-					src="../Images/Icon_main.png" /></li>
-				<li id="tabHeader_2"><img id="tabImage_2"
-					src="../Images/Icon_settings.png" /></li>
-				<li id="tabHeader_3"><img id="tabImage_3"
-					src="../Images/Icon_responsive.png" /></li>
-				<li id="tabHeader_4"><img id="tabImage_4"
-					src="../Images/Icon_prefs.png" /></li>
+				<li id="tabHeader_1">
+					<img id="tabImage_1" src="../Images/Icon_main.png" />
+				</li>
+				<li id="tabHeader_2">
+					<img id="tabImage_2" src="../Images/Icon_settings.png" />
+				</li>
+				<li id="tabHeader_3">
+					<img id="tabImage_3" src="../Images/Icon_responsive.png" />
+				</li>
+				<li id="tabHeader_4">
+					<img id="tabImage_4" src="../Images/Icon_prefs.png" />
+				</li>
 			</ul>
 		</div>
 
@@ -80,22 +92,27 @@
 			<div id="tabpage_1" class="tabpage">
 				<ul class="menu">
 
+					<!-- Shape/Text button. -->
 					<li class="border" onclick="createPropertySpecs()">
 						<div class="button imgButton">
-							<img src="../Images/Icon_object.png" alt="Shape/Text" /> <label>Shape
-								/ Text</label>
+							<img src="../Images/Icon_object.png" alt="Shape/Text" /> 
+							<label>Shape / Text</label>
 						</div>
 					</li>
 
+					<!-- Width/Height button. -->
 					<li class="border" id="liWh">
+					
 						<div class="button imgButton" id="btnWh">
 							<img id="dimensionIcon"
 								src="../Images/DimensionButtonIcons/WH_11.png"
-								alt="Width / Height" /> <label
-								onclick="dimensionButton_clickHandler()">Width / Height</label>
+								alt="Width / Height" /> 
+							<label onclick="dimensionButton_clickHandler()">
+								Width / Height</label>
 							<div class="dropdownArrow" id="imgWhDdlArrow"
 								onclick="dimensionDropDown_clickHandler()"></div>
 						</div>
+						
 						<div class="options" id="dimensionDropDown">
 							<div class="option" id="imgNoSelectionWidth" title="width"
 								onclick="dimensionCell_clickHandler(this.id, 'noSelectionSelected')"></div>
@@ -114,8 +131,10 @@
 							<div class="option" id="imgHeightCenter" title="height"
 								onclick="dimensionCell_clickHandler(this.id, 'heightCenterSelected')"></div>
 						</div>
+						
 					</li>
 
+					<!-- Spacing button. -->
 					<li class="border" id="liSpacing">
 						<div class="button imgButton" id="btnSpacing">
 							<img id="spacingIcon"
@@ -136,9 +155,11 @@
 						</div>
 					</li>
 
+					<!-- Coordinate button. -->
 					<li class="border mb20Px" onclick="createCoordinateSpecs()">
 						<div class="button imgButton">
-							<img src="../Images/Icon_coordinates.png" alt="Coordinates" /> <label>Coordinates</label>
+							<img src="../Images/Icon_coordinates.png" alt="Coordinates" /> 
+							<label>Coordinates</label>
 						</div>
 					</li>
 
@@ -147,8 +168,8 @@
 						<div class="border2 button2" onclick="exportCss()">
 							<label>Export CSS</label>
 						</div>
-						<div class="line mb20Px"></div> <label class="textNormal">EXPAND
-							CANVAS</label>
+						<div class="line mb20Px"></div> 
+						<label class="textNormal">EXPAND CANVAS</label>
 					</li>
 
 					<li>
@@ -156,14 +177,14 @@
 							<label class="lbl10Px" for="txtPx">By(px)</label> 
 							<input	id="canvasExpandSize"
 								onchange="textBox_changeHandler(this.id)" maxlength="4"
-								style="width: 30px; height: 20px; font-family: Verdana; font-size: 11px; -webkit-user-select: auto;"
 								onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
 						</div>
 
 						<div class="border tblCell" style="width: 122px;">
 							<div class="button imgButton" id="dvExpand"
 								onclick="expandCanvas()">
-								<img src="../Images/Icon_expand.png" alt="Spacing" /> <label>Expand</label>
+								<img src="../Images/Icon_expand.png" alt="Spacing" /> 
+								<label>Expand</label>
 							</div>
 						</div>
 					</li>
@@ -180,55 +201,57 @@
 					<div class="tabPage2Content" id="fillColorForILST"
 						style="display: none;">
 						<input type="checkbox" value="1" id="shapeFillColor"
-							onclick="checkBox_changeHandler(this.id)" /> <label
-							for="shapeFillColor">Fill Color</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="shapeFillColor">Fill Color</label>
 					</div>
 					<div class="tabPage2Content" id="fillStyleForILST"
 						style="display: none;">
 						<input type="checkbox" value="2" id="shapeFillStyle"
-							onclick="checkBox_changeHandler(this.id)" /> <label
-							for="shapeFillColor">Fill Style</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="shapeFillColor">Fill Style</label>
 					</div>
 					<div class="tabPage2Content" id="strokeColorForILST"
 						style="display: none;">
 						<input type="checkbox" value="3" id="shapeStrokeColor"
-							onclick="checkBox_changeHandler(this.id)" /> <label
-							for="shapeStrokeColor">Stroke Color</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="shapeStrokeColor">Stroke Color</label>
 					</div>
 					<div class="tabPage2Content" id="strokeStyleForILST"
 						style="display: none;">
 						<input type="checkbox" value="4" id="shapeStrokeStyle"
-							onclick="checkBox_changeHandler(this.id)" /> <label
-							for="shapeStrokeStyle">Stroke Style</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="shapeStrokeStyle">Stroke Style</label>
 					</div>
 					<div class="tabPage2Content" id="strokeSizeForILST"
 						style="display: none;">
 						<input type="checkbox" value="5" id="shapeStrokeSize"
-							onclick="checkBox_changeHandler(this.id)" /> <label
-							for="shapeStrokeSize">Stroke Size</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="shapeStrokeSize">Stroke Size</label>
 					</div>
 					<div class="tabPage2Content" id="fillForPHXS">
 						<input type="checkbox" value="1" id="shapeFill"
-							onclick="checkBox_changeHandler(this.id)" /> <label for="shapeFill">Fill</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="shapeFill">Fill</label>
 					</div>
 					<div class="tabPage2Content" id="strokeForPHXS">
 						<input type="checkbox" value="2" id="shapeStroke"
-							onclick="checkBox_changeHandler(this.id)" /> <label
-							for="shapeStroke">Stroke</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="shapeStroke">Stroke</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="3" id="shapeAlpha"
-							onclick="checkBox_changeHandler(this.id)" /> <label for="shapeAlpha">Alpha</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="shapeAlpha">Alpha</label>
 					</div>
 					<div class="tabPage2Content" id="shapeEffectsForPHXS">
 						<input type="checkbox" value="4" id="shapeEffects"
-							onclick="checkBox_changeHandler(this.id)" /> <label
-							for="shapeEffects">Effects</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="shapeEffects">Effects</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="5" id="shapeBorderRadius"
-							onclick="checkBox_changeHandler(this.id)" /> <label
-							for="shapeBorderRadius">Border Radius</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="shapeBorderRadius">Border Radius</label>
 					</div>
 				</div>
 
@@ -237,46 +260,48 @@
 						Object</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="6" id="textFont"
-							onclick="checkBox_changeHandler(this.id)" /> <label for="textFont">Font
-							Family</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="textFont">Font Family</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="7" id="textSize"
-							onclick="checkBox_changeHandler(this.id)" /> <label for="textSize">Font
-							Size</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="textSize">Font Size</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="8" id="textColor"
-							onclick="checkBox_changeHandler(this.id)" /> <label for="textColor">Color</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="textColor">Color</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="9" id="textStyle"
-							onclick="checkBox_changeHandler(this.id)" /> <label for="textStyle">Font
-							Style</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="textStyle">Font Style</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="10" id="textAlignment"
-							onclick="checkBox_changeHandler(this.id)" /> <label
-							for="textAlignment">Text-Align</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="textAlignment">Text-Align</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="11" id="textLeading"
-							onclick="checkBox_changeHandler(this.id)" /> <label
-							for="textLeading">Line Height</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="textLeading">Line Height</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="12" id="textTracking"
-							onclick="checkBox_changeHandler(this.id)" /> <label
-							for=textTracking>Letter Spacing</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for=textTracking>Letter Spacing</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="13" id="textAlpha"
-							onclick="checkBox_changeHandler(this.id)" /> <label for="textAlpha">Alpha</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="textAlpha">Alpha</label>
 					</div>
 					<div class="tabPage2Content" id="textEffectsForPHXS">
 						<input type="checkbox" value="14" id="textEffects"
-							onclick="checkBox_changeHandler(this.id)" /> <label
-							for="textEffects">Effects</label>
+							onclick="checkBox_changeHandler(this.id)" /> 
+						<label for="textEffects">Effects</label>
 					</div>
 				</div>
 			</div>
@@ -291,8 +316,8 @@
 
 				<div class="tabPageContentSubHeaderRow">
 					<input type="checkbox" value="1" id="chkDistanceSpec"
-						onchange="chkDistanceSpec_changeHandler()" /> <label
-						for="chkDistanceSpec"> Spec Distance by %</label>
+						onchange="chkDistanceSpec_changeHandler()" /> 
+					<label for="chkDistanceSpec"> Spec Distance by %</label>
 				</div>
 
 				<div class="tabPageContentRow">
@@ -321,8 +346,8 @@
 
 				<div class="tabPageContentSubHeaderRow">
 					<input type="checkbox" value="1" id="chkEmSpec"
-						onchange="chkEmSpec_changeHandler()" /> <label for="chkEmSpec">
-						Spec in em</label>
+						onchange="chkEmSpec_changeHandler()" /> 
+					<label for="chkEmSpec">Spec in em</label>
 				</div>
 
 				<div class="tabPageContentRow">
@@ -353,13 +378,15 @@
 				<div class="tabPage2Header">SPEC OPTIONS</div>
 				<div class="tabPageContentRow">
 					<div class="tabPage4ContentLeft">
-						<label>Font</label> <select class="dropdown" id="lstFont"
+						<label>Font</label> 
+						<select class="dropdown" id="lstFont"
 							onchange="lstFont_changeHandler()">
 						</select>
 					</div>
 					<div class="tabPage4ContentRight">
-						<label> Size</label><br /> <select class="smalldropdown"
-							id="lstSize" onchange="comboBox_changeHandler(this.id, 'legendFontSize')">
+						<label> Size</label><br /> 
+						<select class="smalldropdown" id="lstSize" 
+							onchange="comboBox_changeHandler(this.id, 'legendFontSize')">
 							<option value="8">8</option>
 							<option value="9">9</option>
 							<option value="10">10</option>
@@ -385,8 +412,9 @@
 				</div>
 				<div class="tabPageCheckBoxRow">
 					<div class="tabPage4ContentLeft">
-						<label style="font-weight: normal"> Shape: </label> <input
-							type="color" id="colObject" onclick="colorPicker_clickHandler(this.id, 'Shape')"
+						<label style="font-weight: normal"> Shape: </label> 
+						<input type="color" id="colObject" 
+							onclick="colorPicker_clickHandler(this.id, 'Shape')"
 							style="margin-left: 16px; background-color: #ff0000;" />
 						<div id='colorShapeDropDown' class="colorPicker">
 							<div id="shapeColorBlock" class="mainColorBlock"
@@ -595,8 +623,9 @@
 
 					<div class="tabPage4ContentLeft" id="colorListForILST"
 						style="display: none;">
-						<label>Color Mode</label> <select class="dropdown"
-							id="lstColorMode" onchange="comboBox_changeHandler(this.id, 'legendColorMode')">
+						<label>Color Mode</label> 
+						<select class="dropdown" id="lstColorMode" 
+							onchange="comboBox_changeHandler(this.id, 'legendColorMode')">
 							<option value="1">CMYK</option>
 							<option value="2">HSB</option>
 							<option value="3">HSL</option>
@@ -619,8 +648,8 @@
 				<div class="tabPageCheckBoxRow" id="specToEdgeCheckbox"
 					style="display: none;">
 					<input type="checkbox" value="CanvasEdge" id="specToEdge"
-						onclick="checkBox_changeHandler(this.id)" /> <label
-						for="specToEdge"> Print Spec to Canvas edge</label>
+						onclick="checkBox_changeHandler(this.id)" /> 
+					<label for="specToEdge"> Print Spec to Canvas edge</label>
 				</div>
 
 				<div class="tabPageContentRow" style="padding-top: 10px;">

@@ -4,6 +4,53 @@ Description: Includes all the methods related to UI component like change event 
  */
 
 /**
+ * FunctionName	: activateButton_clickHandler()
+ * Description	: Validate the license of the user and move to the tab container if user's credentials valid.
+ * */
+function activateButton_clickHandler()
+{
+	var urlRequest;
+	var application = getHostApp();
+
+	//License validation code for Illustrator and Photoshop, depends on host application.
+	if(application == "ILST")
+	{
+		// Get Extension Id and matching productCode.
+		var productCodes = [ "SpecctrPs-Pro",
+		                     "SpecctrPs-10",
+		                     "SpecctrPs-20",
+		                     "SpecctrPs-30",
+		                     "SpecctrPs-Site"];
+
+		var csInterface = new CSInterface();
+		var arrayOfExtensionIds = csInterface.getExtensions(productCodes);
+
+		//If no installed extension is matched with productCodes values.
+		if(!arrayOfExtensionIds.length)
+		{
+			alert("Incorrect product code!");
+			return;
+		}
+
+		var extensionId = arrayOfExtensionIds[0].id;
+
+		urlRequest = "http://specctr-license.herokuapp.com";
+		urlRequest += "?product=" + extensionId;
+		urlRequest += "&license=" + document.getElementById("license").value;
+		urlRequest += "&email=" + document.getElementById("emailInput").value;
+	}
+	else
+	{
+		//get apiKey, machineName from registration screen and macAddress:uuID from the code and pass it to the actual endpoint.
+		//given endpoint is temporary.
+		urlRequest = "http://specctr-subscription.herokuapp.com/subscriptions/status_mock";
+		urlRequest += "?apiKey=" + document.getElementById("license").value;
+	}
+
+	$.get(urlRequest, completeHandler);		
+}
+
+/**
  * FunctionName	: tab_clickHandler()
  * Description	: Click event handler of tabs. Modify styles to tabs and call the function to change images on tab.
  * */
@@ -264,7 +311,6 @@ function radioButton_clickHandler(event)
 		var colorMode = event.target.value;
 		if(colorMode != undefined)
 			model.legendColorMode	= colorMode;
-		alert(model.legendColorMode);
 	}
 	catch(e)
 	{
@@ -385,6 +431,19 @@ function colorPicker_clickHandler(elementId, colorPickerBlock)
 	catch(e)
 	{
 		console.log(e);
+	}
+}
+
+function text_KeyDownHandler(event)
+{
+	try
+	{
+		if(event.keyCode == 13) 
+			document.getElementById("activateButton").click();
+	}
+	catch(e)
+	{
+		alert(e);
 	}
 }
 

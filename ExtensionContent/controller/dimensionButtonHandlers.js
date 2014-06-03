@@ -85,7 +85,7 @@ function dimensionCell_clickHandler(cellId, selectionClass)
 
 	removeSelectedCell(selectedRow, cellHandler.parent());
 
-	//Set values according to cell selection in dimension button. 
+	//Set values according to cell selection in dimension button.
 	if(selectedRow == "width")
 		model.widthPos = selectedCellIndex;
 	else
@@ -119,8 +119,8 @@ function removeSelectedCell(selectedRow, parent)
 	else
 	{
 		//Selection classes for each cell in height row.
-		classForSelection = ["noSelectionSelected", 
-		                     "heightLeftSelected", 
+		classForSelection = ["noSelectionSelected",
+		                     "heightLeftSelected",
 		                     "heightRightSelected",
 		                     "heightCenterSelected"];
 

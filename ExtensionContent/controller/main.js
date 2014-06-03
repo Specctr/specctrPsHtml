@@ -9,52 +9,6 @@ var illustratorId = "ILST";
 var hostApplication;
 
 /**
- * FunctionName	: activateButton_clickHandler()
- * Description	: Validate the license of the user and move to the tab container if user's credentials valid.
- * */
-function activateButton_clickHandler()
-{
-	var urlRequest;
-
-	//License validation code for Illustrator and Photoshop, depends on host application.
-	if(hostApplication == illustratorId)
-	{
-		// Get Extension Id and matching productCode.
-		var productCodes = [ "SpecctrPs-Pro",
-		                     "SpecctrPs-10",
-		                     "SpecctrPs-20",
-		                     "SpecctrPs-30",
-		                     "SpecctrPs-Site"];
-
-		var csInterface = new CSInterface();
-		var arrayOfExtensionIds = csInterface.getExtensions(productCodes);
-
-		//If no installed extension is matched with productCodes values.
-		if(!arrayOfExtensionIds.length)
-		{
-			alert("Incorrect product code!");
-			return;
-		}
-
-		var extensionId = arrayOfExtensionIds[0].id;
-
-		urlRequest = "http://specctr-license.herokuapp.com";
-		urlRequest += "?product=" + extensionId;
-		urlRequest += "&license=" + document.getElementById("license").value;
-		urlRequest += "&email=" + document.getElementById("emailInput").value;
-	}
-	else
-	{
-		//get apiKey, machineName from registration screen and macAddress:uuID from the code and pass it to the actual endpoint.
-		//given endpoint is temporary.
-		urlRequest = "http://specctr-subscription.herokuapp.com/subscriptions/status_mock";
-		urlRequest += "?apiKey=" + document.getElementById("license").value;
-	}
-
-	$.get(urlRequest, completeHandler);		
-}
-
-/**
  * FunctionName	: completeHandler()
  * Description	: Callback function which is called when validation of user's license take place.
  * */
@@ -235,7 +189,7 @@ function prefs_creationCompleteHandler()
 	{
 		if(!model.legendColorMode)
 			model.legendColorMode = "RGB";
-		
+
 		var radioButton = model.legendColorMode.toLowerCase() + "RadioButton";
 		document.getElementById(radioButton).checked = true;
 	}
@@ -274,8 +228,9 @@ function onLoaded()
 		}
 
 		loadJSX();		//Load the jsx files present in \jsx folder.
-		var appPrefs = readAppPrefs();	//Check whether config exists, if not initialize and save in file on disk.
+		var appPrefs = readAppPrefs();
 
+		//Change the UI appearance according to host application.
 		if(hostApplication == illustratorId)
 		{
 			document.getElementById("fillForPHXS").style.display = "none";
@@ -316,9 +271,11 @@ function onLoaded()
 
 				if(Math.abs(timeDifference))
 				{
+					var credentialObject = getCredentials();
+
 					//get the machine name, apiKey and uuid and create url.
 					var urlRequest = "http://specctr-subscription.herokuapp.com/subscriptions/status_mock?";
-					urlRequest += "apiKey=" + appPrefs.apiKey;
+					urlRequest += "apiKey=" + credentialObject.apiKey;
 					$.get(urlRequest, completeHandler);
 				}
 				else
@@ -349,21 +306,15 @@ function init()
 
 		setModelValueFromPreferences();
 
-		//Get tab container
-		var container = document.getElementById("tabContainer");
-
-		//Set current tab
-		var navitem = container.querySelector(".tabs ul li");
+		var container = document.getElementById("tabContainer");	//Get tab container
+		var navitem = container.querySelector(".tabs ul li");	//Set current tab
 
 		//Store which tab we are on
 		var ident = navitem.id.split("_")[1];
 		navitem.parentNode.setAttribute("data-current", ident);
 
-		//Set Current Tab with proper Image
-		changeImagesOfTabs(parseInt(ident));
-
-		//Set current tab with class of active tab header
-		navitem.setAttribute("class", "tabActiveHeader");
+		changeImagesOfTabs(parseInt(ident));	//Set Current Tab with proper Image
+		navitem.setAttribute("class", "tabActiveHeader");	//Set current tab with class of active tab header
 
 		//Hide two tab contents we don't need
 		var pages = container.querySelectorAll(".tabpage");
@@ -394,6 +345,7 @@ function onClose()
 {
 	var appPrefs = new Object();
 
+	//Save the values according to host application.
 	if(hostApplication == illustratorId)
 	{
 		appPrefs.shapeFillColor			= model.shapeFillColor;
@@ -438,6 +390,10 @@ function onClose()
 	appPrefs.specInPrcntg		= model.specInPrcntg;
 	appPrefs.specInEM			= model.specInEM;
 	appPrefs.useScaleBy			= model.useScaleBy;
+
+	//If object is empty then don't write.
+	if($.isEmptyObject(appPrefs))
+		return;
 
 	writeAppPrefs(JSON.stringify(appPrefs));
 }
@@ -500,7 +456,6 @@ function setModelValueFromPreferences()
 
 	if(appPrefs.hasOwnProperty("legendColorMode"))
 		model.legendColorMode = appPrefs.legendColorMode;
-
 }
 
 /**
@@ -514,6 +469,8 @@ function loadFontsToList(result)
 		var font = JSON.parse(result);
 		var fontLength = font.length;
 		var fontList = document.getElementById("lstFont");
+
+		//Set the font list to combo-box.
 		for(var i = 0; i < fontLength; i++) 
 		{
 			var option = document.createElement("option");
@@ -526,7 +483,7 @@ function loadFontsToList(result)
 	}
 	catch(e)
 	{
-		console.log(e);
+		alert(e);
 	}
 }
 
@@ -544,7 +501,7 @@ function loadJSX()
 	}
 	catch(e)
 	{
-		console.log(e);
+		alert(e);
 	}
 
 }
@@ -689,31 +646,25 @@ function exportCss()
  * */
 function applyFontToList()
 {
-	try
+	var fontListHandler = document.getElementById("lstFont");		//Get font combo-box handler.
+
+	//Select the font if the index text value matches with the legendFont.
+	if(fontListHandler.options[model.legendFontIndex].text == model.legendFont)
 	{
-		var fontListHandler = document.getElementById("lstFont");		//Get font combo-box handler.
-
-		//Select the font if the index text value matches with the legendFont.
-		if(fontListHandler.options[model.legendFontIndex].text == model.legendFont)
-		{
-			fontListHandler.options[model.legendFontIndex].selected = true;
-			return;
-		}
-
-		//Select the font from the legendFont value and apply it.
-		var listLength = fontListHandler.options.length;
-		for(var i = 0; i < listLength; i++)
-		{
-			if(fontListHandler.options[i].text == model.legendFont)
-			{
-				model.legendFontIndex = i;
-				fontListHandler.options[i].selected = true;
-				break;
-			}
-		}
+		fontListHandler.options[model.legendFontIndex].selected = true;
+		return;
 	}
-	catch(e)
+
+	var listLength = fontListHandler.options.length;
+
+	//Select the font from the legendFont value and apply it.
+	for(var i = 0; i < listLength; i++)
 	{
-		alert(e);
+		if(fontListHandler.options[i].text == model.legendFont)
+		{
+			model.legendFontIndex = i;
+			fontListHandler.options[i].selected = true;
+			break;
+		}
 	}
 }

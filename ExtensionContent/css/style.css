@@ -737,3 +737,12 @@ input[type="color"]
     margin-top: 2px !important;
     border: 1px #AEAEAE inset;
 }
+
+#canvasExpandSize
+{
+	width: 30px; 
+	height: 20px; 
+	font-family: Verdana; 
+	font-size: 11px; 
+	-webkit-user-select: auto;
+}
