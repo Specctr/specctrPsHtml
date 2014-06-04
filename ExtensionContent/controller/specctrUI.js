@@ -105,8 +105,8 @@ function changeImagesOfTabs(selectedTab)
 		var tab2ImagePath = "../Images/Icon_settings";
 		var tab3ImagePath = "../Images/Icon_responsive";
 		var tab4ImagePath = "../Images/Icon_prefs";
-		var activeImageEndString = "_active.png";
 		var imageExtension = ".png";
+		var activeImageEndString = "_active" + imageExtension;
 
 		var isImageChanged = true;
 		var tab1Image = document.getElementById("tabImage_1");
@@ -434,6 +434,10 @@ function colorPicker_clickHandler(elementId, colorPickerBlock)
 	}
 }
 
+/**
+ * FunctionName	: text_KeyDownHandler()
+ * Description	: Dispatch the click event of activeButton.
+ * */
 function text_KeyDownHandler(event)
 {
 	try
