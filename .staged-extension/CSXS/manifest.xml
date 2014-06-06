@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="4.0" ExtensionBundleId="specctrPsHtml" ExtensionBundleVersion="1.4.0"
+<ExtensionManifest Version="4.0" ExtensionBundleId="specctrPsHtml" ExtensionBundleVersion="1.0.0"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
@@ -189,6 +189,10 @@ each party and (ii) in a written contract signed by both parties.]]>
 							<Width>228</Width>
 						</MinSize>
 					</Geometry>
+					<Icons>
+						<Icon Type="Normal">./Images/specctr_panel_icon.png</Icon>
+						<Icon Type="RollOver">./Images/specctr_panel_icon_rollover.png</Icon>
+					</Icons>
 				</UI>
 			</DispatchInfo>
 		</Extension>

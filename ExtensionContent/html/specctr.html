@@ -72,16 +72,17 @@
 		<div class="tabs">
 			<ul>
 				<li id="tabHeader_1">
-					<img id="tabImage_1" src="../Images/Icon_main.png" />
+					<img id="tabImage_1" src="../Images/Icon_main.png" width="50" height="36"
+					onclick="onClose();"/>
 				</li>
 				<li id="tabHeader_2">
-					<img id="tabImage_2" src="../Images/Icon_settings.png" />
+					<img id="tabImage_2" src="../Images/Icon_settings.png" width="50" height="36"/>
 				</li>
 				<li id="tabHeader_3">
-					<img id="tabImage_3" src="../Images/Icon_responsive.png" />
+					<img id="tabImage_3" src="../Images/Icon_responsive.png" width="50" height="36"/>
 				</li>
 				<li id="tabHeader_4">
-					<img id="tabImage_4" src="../Images/Icon_prefs.png" />
+					<img id="tabImage_4" src="../Images/Icon_prefs.png" width="50" height="36"/>
 				</li>
 			</ul>
 		</div>
@@ -96,7 +97,7 @@
 					<li class="border" onclick="createPropertySpecs()">
 						<div class="button imgButton">
 							<img src="../Images/Icon_object.png" alt="Shape/Text" /> 
-							<label>Shape / Text</label>
+							<label style="margin-left: -1px;">Shape / Text</label>
 						</div>
 					</li>
 
@@ -139,7 +140,8 @@
 						<div class="button imgButton" id="btnSpacing">
 							<img id="spacingIcon"
 								src="../Images/SpacingButtonIcons/Spacing_TL.png" alt="Spacing" />
-							<label onclick="spacingButton_clickHandler()">Spacing</label>
+							<label style="margin-left: -15px;" 
+								onclick="spacingButton_clickHandler()">Spacing</label>
 							<div id="imgSpacingDdlArrow" class="dropdownArrow"
 								onclick="spacingDropDown_clickHandler()"></div>
 						</div>
@@ -159,7 +161,7 @@
 					<li class="border mb20Px" onclick="createCoordinateSpecs()">
 						<div class="button imgButton">
 							<img src="../Images/Icon_coordinates.png" alt="Coordinates" /> 
-							<label>Coordinates</label>
+							<label style="margin-left: -1px;">Coordinates</label>
 						</div>
 					</li>
 

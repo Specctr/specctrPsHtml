@@ -174,26 +174,22 @@ input[type="text"], input[type="password"]
             background-image: linear-gradient(to top, #B5B2B2 0%, #e1e1e1 100%);
             text-align: center;
             float: left;
-            width: 54.5px;
+            width: 54px;
             height: 38px;
             padding-top: 4px;
+            border-left: 1px solid #B9B9B9;
             border-right: 1px solid #B9B9B9;
-            border-top: 0px solid #B9B9B9;
+            border-top: 1px solid #B9B9B9;
             border-bottom: 2px solid #ABA9A9;
         }
-
-    .tabs ul li:last-child
-    {
-        border-right: 1px solid transparent;
-    }
 
     .tabs > ul > li:hover
     {
         background-image: linear-gradient(to top, #B5B2B2 0%, #e1e1e1 80%);
         cursor: pointer;
         border: none;
-        border-right: 1px solid transparent;
-        border-bottom: 1px solid #ABA9A9;
+        border-right: 1px solid #3199F6;
+        border-bottom: 2px solid #ABA9A9;
         border-top: 1px solid #3199F6;
         border-left: 1px solid #3199F6;
     }
@@ -308,23 +304,6 @@ input[type="text"], input[type="password"]
 .boldText
 {
     font-weight: bold;
-}
-
-#tabImage_2
-{
-    width: 23px;
-    height: 23px;
-    margin-top: 7px;
-}
-
-#tabImage_3
-{
-    margin-top: 2px;
-}
-
-#tabImage_4
-{
-    margin-top: 4px;
 }
 
 .imgButton
