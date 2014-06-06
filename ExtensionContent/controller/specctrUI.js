@@ -10,42 +10,25 @@ Description: Includes all the methods related to UI component like change event 
 function activateButton_clickHandler()
 {
 	var urlRequest;
-	var application = getHostApp();
+	
+	// Get Extension Id and matching productCode.
+	var productCodes = { 
+			"SpecctrPs-Pro":"31265",};
+	
+	var csInterface = new CSInterface();
+	var extensionId = csInterface.getExtensionID();
 
-	//License validation code for Illustrator and Photoshop, depends on host application.
-	if(application == "ILST")
+	//If no installed extension is matched with productCodes values.
+	if(!extensionId)
 	{
-		// Get Extension Id and matching productCode.
-		var productCodes = [ "SpecctrPs-Pro",
-		                     "SpecctrPs-10",
-		                     "SpecctrPs-20",
-		                     "SpecctrPs-30",
-		                     "SpecctrPs-Site"];
-
-		var csInterface = new CSInterface();
-		var arrayOfExtensionIds = csInterface.getExtensions(productCodes);
-
-		//If no installed extension is matched with productCodes values.
-		if(!arrayOfExtensionIds.length)
-		{
-			alert("Incorrect product code!");
-			return;
-		}
-
-		var extensionId = arrayOfExtensionIds[0].id;
-
-		urlRequest = "http://specctr-license.herokuapp.com";
-		urlRequest += "?product=" + extensionId;
-		urlRequest += "&license=" + document.getElementById("license").value;
-		urlRequest += "&email=" + document.getElementById("emailInput").value;
+		alert("Incorrect product code!");
+		return;
 	}
-	else
-	{
-		//get apiKey, machineName from registration screen and macAddress:uuID from the code and pass it to the actual endpoint.
-		//given endpoint is temporary.
-		urlRequest = "http://specctr-subscription.herokuapp.com/subscriptions/status_mock";
-		urlRequest += "?apiKey=" + document.getElementById("license").value;
-	}
+
+	urlRequest = "http://specctr-license.herokuapp.com";
+	urlRequest += "?product=" + productCodes[extensionId];
+	urlRequest += "&license=" + document.getElementById("license").value;
+	urlRequest += "&email=" + document.getElementById("emailInput").value;
 
 	$.get(urlRequest, completeHandler);		
 }

@@ -17,52 +17,20 @@ function completeHandler(data, status)
 	var appPrefs = new Object();
 	var response = data;
 
-	//Set the registration values in the preferences depending on host application.
-	if(hostApplication == illustratorId)
+	alert(response.message);
+	var arr = response.registered;
+	
+	//If unsuccessful, return without saving the data in config.
+	if(arr.length != 0) 
 	{
-		alert(response.message);
-		var arr = response.registered;
-
-		//If unsuccessful, return without saving the data in config.
-		if(arr.length != 0) 
-		{
-			appPrefs.isLicensed = true;
-			model.isLicensed = true;
-		}
-		else
-		{
-			return;
-		}
+		appPrefs.isLicensed = true;
+		model.isLicensed = true;
 	}
 	else
 	{
-		var statusFromEndPoint = response.name;
-
-		//On successful authentication, store preferences.
-		if(statusFromEndPoint == "active")
-		{
-			storeCredentials();
-
-			appPrefs = readAppPrefs();
-			if(!appPrefs)
-				appPrefs = new Object();
-
-			var lastLoginDate = new Date().getDate();
-			model.lastLoginDate = lastLoginDate;
-			model.status = statusFromEndPoint;
-			appPrefs.lastLoginDate = lastLoginDate;
-			appPrefs.status = statusFromEndPoint;
-
-			createLog(response);	//Store the log for subscription api.			
-		}
-		else
-		{
-			alert(response.message);	//If unsuccessful, show the message.
-			createLog(response);		//Store the log for subscription api.
-			return;
-		}
+		return;
 	}
-
+	
 	setPreferencePath();
 	writeAppPrefs(JSON.stringify(appPrefs));
 	init();
@@ -228,8 +196,7 @@ function onLoaded()
 		}
 
 		loadJSX();		//Load the jsx files present in \jsx folder.
-		var appPrefs = readAppPrefs();
-
+		
 		//Change the UI appearance according to host application.
 		if(hostApplication == illustratorId)
 		{
@@ -246,44 +213,23 @@ function onLoaded()
 			document.getElementById("strokeSizeForILST").style.display = "block";
 			document.getElementById("specToEdgeCheckbox").style.display = "block";
 			document.getElementById("colorListForILST").style.display = "block";
-
-			if(!appPrefs)
-			{
-				appPrefs = new Object();
-				appPrefs.isLicensed = false;
-				model.isLicensed = false;
-				writeAppPrefs(JSON.stringify(appPrefs));
-			}
-
-			//Check if Specctr is licensed, if not leave registration screen.
-			model.isLicensed = appPrefs.isLicensed;
-
-			if(model.isLicensed)
-				init();
 		}
-		else
+		
+		var appPrefs = readAppPrefs();
+		if(!appPrefs)
 		{
-			if(appPrefs && appPrefs.status == "active")
-			{
-				model.status = appPrefs.status;
-				model.lastLoginDate = appPrefs.lastLoginDate;
-				var timeDifference = model.lastLoginDate - new Date().getDate();
-
-				if(Math.abs(timeDifference))
-				{
-					var credentialObject = getCredentials();
-
-					//get the machine name, apiKey and uuid and create url.
-					var urlRequest = "http://specctr-subscription.herokuapp.com/subscriptions/status_mock?";
-					urlRequest += "apiKey=" + credentialObject.apiKey;
-					$.get(urlRequest, completeHandler);
-				}
-				else
-				{
-					init();
-				}
-			}
+			appPrefs = new Object();
+			appPrefs.isLicensed = false;
+			model.isLicensed = false;
+			writeAppPrefs(JSON.stringify(appPrefs));
 		}
+
+		//Check if Specctr is licensed, if not leave registration screen.
+		model.isLicensed = appPrefs.isLicensed;
+
+		if(model.isLicensed)
+			init();
+
 	}
 	catch(e)
 	{
@@ -354,7 +300,6 @@ function onClose()
 		appPrefs.shapeStrokeStyle		= model.shapeStrokeStyle;
 		appPrefs.shapeStrokeSize		= model.shapeStrokeSize;
 		appPrefs.specToEdge				= model.specToEdge;
-		appPrefs.isLicensed				= model.isLicensed;
 	}
 	else
 	{
@@ -377,6 +322,7 @@ function onClose()
 	appPrefs.textLeading		= model.textLeading;
 	appPrefs.textTracking		= model.textTracking;
 	appPrefs.textAlpha			= model.textAlpha;
+	appPrefs.isLicensed			= model.isLicensed;
 	appPrefs.canvasExpandSize	= model.canvasExpandSize.toString();
 
 	appPrefs.legendFont			= model.legendFont.toString();
