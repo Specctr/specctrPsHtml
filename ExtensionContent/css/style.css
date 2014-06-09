@@ -112,6 +112,12 @@ input[type="text"], input[type="password"]
     background-repeat: no-repeat;
 }
 
+.border:hover
+{
+    border: 1px solid red;
+    background-image: none;
+}
+
 .button
 {
     padding-top: 10px;
@@ -135,14 +141,13 @@ input[type="text"], input[type="password"]
 
     .button label, .button2 label
     {
-        cursor: pointer;
+        cursor: pointer !important;
     }
 
 #dvLoginContainer ul
 {
     margin-top: 70px;
 }
-
 
 .link
 {
@@ -314,11 +319,37 @@ input[type="text"], input[type="password"]
     text-align: left;
 }
 
-#tabpage_1 .border:hover, .border2:hover
+.imgButton img
+{
+    display: table-cell;
+    float: left;
+    width: 49px;
+    margin-left: 15px;
+}
+
+.imgButton label
+{
+    display: table-cell;
+    float: left;
+    margin-left: 5px;
+    margin-top: 15px;
+    width: 100px;
+    text-align: center;
+}
+
+#tabpage_1 .border:hover
 {
     border: 1px solid red;
     background-image: none;
     width: 198px;
+}
+
+#tabpage_1 .border2:hover
+{
+    border: 2px solid red;
+    background-image: none;
+    width: 198px;
+    margin-top: -1px;
 }
 
 #tabpage_1 .isOpen:hover
@@ -341,22 +372,11 @@ input[type="text"], input[type="password"]
 	width: 198px;	
 }
 
-.imgButton img
+.buttonTextStyle
 {
-    display: table-cell;
-    float: left;
-    width: 49px;
-    margin-left: 15px;
-}
-
-.imgButton label
-{
-    display: table-cell;
-    float: left;
-    margin-left: 5px;
-    margin-top: 15px;
-    width: 100px;
-    text-align: center;
+	font-family: Arial-BoldMT !important;
+	font-size: 14px !important;
+	color: #58585B !important;
 }
 
 #tabpage_1 ul
@@ -416,13 +436,15 @@ input[type="text"], input[type="password"]
 
     #dvExpand img
     {
-        margin-left: 0px;
+        margin-left: 9px;
+        width: 42px;
+        margin-top: 4px;
     }
 
     #dvExpand label
     {
         margin-left: 0px;
-        margin-top: 10px;
+        margin-top: 11px;
         width: 50px;
     }
 
@@ -462,7 +484,7 @@ input[type="text"]:disabled
 
 label
 {
-    color: #0C0D0D !important;
+    color: #0C0D0D;
 }
 
 .button:hover

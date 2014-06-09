@@ -97,7 +97,7 @@
 					<li class="border" onclick="createPropertySpecs()">
 						<div class="button imgButton">
 							<img src="../Images/Icon_object.png" alt="Shape/Text" /> 
-							<label style="margin-left: -1px;">Shape / Text</label>
+							<label class="buttonTextStyle" style="margin-left: -1px;">Shape / Text</label>
 						</div>
 					</li>
 
@@ -107,8 +107,8 @@
 						<div class="button imgButton" id="btnWh">
 							<img id="dimensionIcon"
 								src="../Images/DimensionButtonIcons/WH_11.png"
-								alt="Width / Height" /> 
-							<label onclick="dimensionButton_clickHandler()">
+								onclick="dimensionButton_clickHandler()"/> 
+							<label class="buttonTextStyle" onclick="dimensionButton_clickHandler()">
 								Width / Height</label>
 							<div class="dropdownArrow" id="imgWhDdlArrow"
 								onclick="dimensionDropDown_clickHandler()"></div>
@@ -139,8 +139,9 @@
 					<li class="border" id="liSpacing">
 						<div class="button imgButton" id="btnSpacing">
 							<img id="spacingIcon"
-								src="../Images/SpacingButtonIcons/Spacing_TL.png" alt="Spacing" />
-							<label style="margin-left: -15px;" 
+								src="../Images/SpacingButtonIcons/Spacing_TL.png"
+								onclick="spacingButton_clickHandler()" />
+							<label class="buttonTextStyle" style="margin-left: -15px;" 
 								onclick="spacingButton_clickHandler()">Spacing</label>
 							<div id="imgSpacingDdlArrow" class="dropdownArrow"
 								onclick="spacingDropDown_clickHandler()"></div>
@@ -161,7 +162,7 @@
 					<li class="border mb20Px" onclick="createCoordinateSpecs()">
 						<div class="button imgButton">
 							<img src="../Images/Icon_coordinates.png" alt="Coordinates" /> 
-							<label style="margin-left: -1px;">Coordinates</label>
+							<label class="buttonTextStyle" style="margin-left: -1px;">Coordinates</label>
 						</div>
 					</li>
 
@@ -176,7 +177,7 @@
 
 					<li>
 						<div class="tblCell pxWidth">
-							<label class="lbl10Px" for="txtPx">By(px)</label> 
+							<label class="lbl10Px" for="txtPx">By (px)</label> 
 							<input	id="canvasExpandSize"
 								onchange="textBox_changeHandler(this.id)" maxlength="4"
 								onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
@@ -185,7 +186,7 @@
 						<div class="border tblCell" style="width: 122px;">
 							<div class="button imgButton" id="dvExpand"
 								onclick="expandCanvas()">
-								<img src="../Images/Icon_expand.png" alt="Spacing" /> 
+								<img src="../Images/Icon_expand.png"/> 
 								<label>Expand</label>
 							</div>
 						</div>
@@ -417,7 +418,7 @@
 						<label style="font-weight: normal"> Shape: </label> 
 						<input type="color" id="colObject" 
 							onclick="colorPicker_clickHandler(this.id, 'Shape')"
-							style="margin-left: 16px; background-color: #ff0000;" />
+							style="margin-left: 17px; background-color: #ff0000;" />
 						<div id='colorShapeDropDown' class="colorPicker">
 							<div id="shapeColorBlock" class="mainColorBlock"
 								style="display: inline-block;"></div>

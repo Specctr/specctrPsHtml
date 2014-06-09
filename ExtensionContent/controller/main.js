@@ -126,6 +126,9 @@ function responsiveTab_creationCompleteHandler()
  * */
 function prefs_creationCompleteHandler()
 {
+	if(hostApplication == illustratorId && model.legendFont == "Arial")
+		model.legendFont += "MT";
+	
 	//Set the values for font size combobox.
 	var fontSizeHandler = document.getElementById("lstSize");
 	fontSizeHandler.selectedIndex = -1;
@@ -387,6 +390,7 @@ function setModelValueFromPreferences()
 	model.useScaleBy = appPrefs.useScaleBy ? true : false;
 
 	model.canvasExpandSize = Number(appPrefs.canvasExpandSize);
+
 	model.legendFont = appPrefs.legendFont ? appPrefs.legendFont : model.legendFont;
 	model.legendFontSize = Number(appPrefs.legendFontSize);
 	model.armWeight = Number(appPrefs.armWeight);
