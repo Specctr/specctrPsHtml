@@ -72,17 +72,20 @@
 		<div class="tabs">
 			<ul>
 				<li id="tabHeader_1">
-					<img id="tabImage_1" src="../Images/Icon_main.png" width="50" height="36"
+					<img id="tabImage_1" src="../Images/Icon_main.png" width="48" height="34" style="margin-top: 3px;"
 					onclick="onClose();"/>
 				</li>
 				<li id="tabHeader_2">
-					<img id="tabImage_2" src="../Images/Icon_settings.png" width="50" height="36"/>
+					<img id="tabImage_2" src="../Images/Icon_settings.png" width="48" height="34"
+					style="margin-top: 3px;"/>
 				</li>
 				<li id="tabHeader_3">
-					<img id="tabImage_3" src="../Images/Icon_responsive.png" width="50" height="36"/>
+					<img id="tabImage_3" src="../Images/Icon_responsive.png" width="48" height="34"
+					style="margin-top: 3px;"/>
 				</li>
 				<li id="tabHeader_4">
-					<img id="tabImage_4" src="../Images/Icon_prefs.png" width="50" height="36"/>
+					<img id="tabImage_4" src="../Images/Icon_prefs.png" width="48" height="34"
+					style="margin-top: 3px;"/>
 				</li>
 			</ul>
 		</div>
@@ -183,7 +186,7 @@
 								onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
 						</div>
 
-						<div class="border tblCell" style="width: 122px;">
+						<div class="border tblCell expandButton" style="width: 112px;">
 							<div class="button imgButton" id="dvExpand"
 								onclick="expandCanvas()">
 								<img src="../Images/Icon_expand.png"/> 
@@ -416,9 +419,9 @@
 				<div class="tabPageCheckBoxRow">
 					<div class="tabPage4ContentLeft">
 						<label style="font-weight: normal"> Shape: </label> 
-						<input type="color" id="colObject" 
+						<input id="colObject" class="colorPickerAppearance"
 							onclick="colorPicker_clickHandler(this.id, 'Shape')"
-							style="margin-left: 17px; background-color: #ff0000;" />
+							style="margin-left: 11px; " />
 						<div id='colorShapeDropDown' class="colorPicker">
 							<div id="shapeColorBlock" class="mainColorBlock"
 								style="display: inline-block;"></div>
@@ -489,9 +492,10 @@
 				</div>
 				<div class="tabPageContentRow">
 					<div class="tabPage4ContentLeft">
-						<label style="font-weight: normal"> Type: </label> <input
-							type="color" id="colType" onclick="colorPicker_clickHandler(this.id, 'Type')"
-							style="margin-left: 24px; background-color: #ff0000;" />
+						<label style="font-weight: normal"> Type: </label> 
+						<input id="colType" class="colorPickerAppearance"
+							onclick="colorPicker_clickHandler(this.id, 'Type')"
+							style="margin-left: 17px;" />
 						<div id='colorTypeDropDown' class="colorPicker">
 							<div id="typeColorBlock" class="mainColorBlock"
 								style="display: inline-block;"></div>
@@ -551,9 +555,10 @@
 				</div>
 				<div class="tabPageContentRow" style="margin-top: -4px;">
 					<div class="tabPage4ContentLeft">
-						<label style="font-weight: normal"> Spacing: </label> <input
-							type="color" id="colSpacing" onclick="colorPicker_clickHandler(this.id, 'Space')"
-							style="margin-left: 9px; background-color: #ff0000;" />
+						<label style="font-weight: normal"> Spacing: </label> 
+						<input id="colSpacing" class="colorPickerAppearance"
+							onclick="colorPicker_clickHandler(this.id, 'Space')"
+							style="margin-left: 3px; " />
 						<div id='colorSpaceDropDown' class="colorPicker">
 							<div id="spaceColorBlock" class="mainColorBlock"
 								style="display: inline-block;"></div>
