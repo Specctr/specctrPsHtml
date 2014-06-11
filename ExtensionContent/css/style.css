@@ -540,9 +540,10 @@ label
 .option
 {
     float: left;
-    width: 49px;
+    width: 49.5px;
     height: 50px;
     cursor: pointer;
+    background-position: center;
 }
 
 .active

@@ -19,7 +19,7 @@ function completeHandler(data, status)
 
 	alert(response.message);
 	var arr = response.registered;
-	
+
 	//If unsuccessful, return without saving the data in config.
 	if(arr.length != 0) 
 	{
@@ -30,7 +30,7 @@ function completeHandler(data, status)
 	{
 		return;
 	}
-	
+
 	setPreferencePath();
 	writeAppPrefs(JSON.stringify(appPrefs));
 	init();
@@ -128,7 +128,7 @@ function prefs_creationCompleteHandler()
 {
 	if(hostApplication == illustratorId && model.legendFont == "Arial")
 		model.legendFont += "MT";
-	
+
 	//Set the values for font size combobox.
 	var fontSizeHandler = document.getElementById("lstSize");
 	fontSizeHandler.selectedIndex = -1;
@@ -199,7 +199,7 @@ function onLoaded()
 		}
 
 		loadJSX();		//Load the jsx files present in \jsx folder.
-		
+
 		//Change the UI appearance according to host application.
 		if(hostApplication == illustratorId)
 		{
@@ -217,7 +217,7 @@ function onLoaded()
 			document.getElementById("specToEdgeCheckbox").style.display = "block";
 			document.getElementById("colorListForILST").style.display = "block";
 		}
-		
+
 		var appPrefs = readAppPrefs();
 		if(!appPrefs)
 		{

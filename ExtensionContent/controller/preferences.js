@@ -39,7 +39,8 @@ function readFile(file)
  * */
 function writeFile(file, data)
 {
-	window.cep.fs.writeFile(file, data);
+	if(data.length > 1)
+		window.cep.fs.writeFile(file, data);
 }
 
 /**
@@ -89,7 +90,8 @@ function readAppPrefs()
  * */
 function writeAppPrefs(data)
 {
-	writeFile(preferencePath, data);
+	if(data)
+		writeFile(preferencePath, data);
 }
 
 /**

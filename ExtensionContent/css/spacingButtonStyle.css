@@ -6,7 +6,7 @@ Description: Includes styling code related to spacing button.
 #liSpacing .option
 {
     background-repeat: no-repeat;
-    background-position: 0px 3px;
+    background-position: center;
 }
 
 #liSpacing .options
@@ -22,7 +22,6 @@ Description: Includes styling code related to spacing button.
 #imgSpaceTop
 {
     background-image: url('../Images/SpacingDropDownIcons/SpaceTop.png');
-    background-position: 4px 0px;
 }
 
     #imgSpaceTop:hover

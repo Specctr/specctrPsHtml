@@ -10,11 +10,11 @@ Description: Includes all the methods related to UI component like change event 
 function activateButton_clickHandler()
 {
 	var urlRequest;
-	
+
 	// Get Extension Id and matching productCode.
-	var productCodes = { 
+	var productCodes = {
 			"SpecctrPs-Pro":"31265"};
-	
+
 	var csInterface = new CSInterface();
 	var extensionId = csInterface.getExtensionID();
 

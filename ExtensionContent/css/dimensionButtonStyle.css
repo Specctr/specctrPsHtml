@@ -16,7 +16,6 @@ Description: Includes styling code related to dimension button.
 #imgNoSelectionWidth
 {
     background-image: url('../Images/DimensionDropDownIcons/NoSelection.png');
-    background-position: 4px 0px;
 }
 
     #imgNoSelectionWidth:hover
@@ -81,7 +80,6 @@ Description: Includes styling code related to dimension button.
 #imgNoSelectionHeight
 {
     background-image: url('../Images/DimensionDropDownIcons/NoSelection.png');
-    background-position: 4px 0px;
 }
 
     #imgNoSelectionHeight:hover
@@ -92,7 +90,6 @@ Description: Includes styling code related to dimension button.
 #imgHeightLeft
 {
     background-image: url('../Images/DimensionDropDownIcons/HeightLeft.png');
-    background-position: 4px 0px;
 }
 
     #imgHeightLeft:hover
