@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="4.0" ExtensionBundleId="specctrPsHtml" ExtensionBundleVersion="1.0.04"
+<ExtensionManifest Version="4.0" ExtensionBundleId="specctrPsHtml" ExtensionBundleVersion="1.0.05"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
@@ -150,9 +150,9 @@ each party and (ii) in a written contract signed by both parties.]]>
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
-			<Host Name="PHSP" Version="[14.0,14.9]" />
-			<Host Name="PHXS" Version="[14.0,14.9]" />
-			<Host Name="ILST" Version="[17.0,17.9]" />
+			<Host Name="PHSP" Version="[14.0,15.9]" />
+			<Host Name="PHXS" Version="[14.0,15.9]" />
+			<Host Name="ILST" Version="[17.0,18.9]" />
 		</HostList>
 		<LocaleList>
 			<Locale Code="All" />
