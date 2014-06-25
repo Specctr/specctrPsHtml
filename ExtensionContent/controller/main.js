@@ -190,6 +190,7 @@ function onLoaded()
 	//Handle the exceptions such as if any value or any component is not present.
 	try
 	{
+		//window.__adobe_cep__.showDevTools();		//For debugging.
 		hostApplication = getHostApp();
 
 		if(hostApplication == null)

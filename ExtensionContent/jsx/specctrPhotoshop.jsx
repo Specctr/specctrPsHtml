@@ -650,28 +650,9 @@ function calculateDmnsns(artLayer, bounds)
 
         if(!model.specInPrcntg)
         {
-            if(model.useScaleBy)
-            {
-                var scaling = Number(model.scaleValue.substring(1));
-            
-                if(!scaling)
-                    scaling = 1;
-            
-                if(model.scaleValue.charAt(0) == '/')
-                {
-                    lyrHeight = lyrHeight/scaling;
-                    lyrWidth = lyrWidth/scaling;
-                }
-                else
-                {
-                    lyrHeight = lyrHeight*scaling;
-                    lyrWidth = lyrWidth*scaling;
-                }
-            }
-        
             //Absolute distance.
-            widthValue = pointsToUnitsString(lyrWidth, startRulerUnits);
-            heightValue = pointsToUnitsString(lyrHeight, startRulerUnits);
+            widthValue = pointsToUnitsString(getScaledValue(lyrWidth), startRulerUnits);
+            heightValue = pointsToUnitsString(getScaledValue(lyrHeight), startRulerUnits);
         }
         else 
         {
@@ -896,21 +877,8 @@ function createHrzntlSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
         
         if(!model.specInPrcntg)
         {
-            if(model.useScaleBy)
-            {
-                var scaling = Number(model.scaleValue.substring(1));
-        
-                if(!scaling)
-                    scaling = 1;
-        
-                if(model.scaleValue.charAt(0) == '/')
-                    hrzntlDstnc = hrzntlDstnc/scaling;
-                else
-                    hrzntlDstnc = hrzntlDstnc*scaling;
-            }
-        
             //Absolute distance.
-            hrzntlDstnc = pointsToUnitsString(hrzntlDstnc, startRulerUnits);
+            hrzntlDstnc = pointsToUnitsString(getScaledValue(hrzntlDstnc), startRulerUnits);
         }
         else 
         {
@@ -965,21 +933,8 @@ function createVertSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
         
         if(!model.specInPrcntg)
         {
-            if(model.useScaleBy)
-            {
-                var scaling = Number(model.scaleValue.substring(1));
-        
-                if(!scaling)
-                    scaling = 1;
-        
-                if(model.scaleValue.charAt(0) == '/')
-                    vrtclDstnc = vrtclDstnc/scaling;
-                else
-                    vrtclDstnc = vrtclDstnc*scaling;
-            }
-        
-            //Absolute distance.
-            vrtclDstnc = pointsToUnitsString(vrtclDstnc, startRulerUnits);
+            //Value after applying scaling.
+            vrtclDstnc = pointsToUnitsString(getScaledValue(vrtclDstnc), startRulerUnits);
         }
         else 
         {
@@ -1318,34 +1273,11 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
   
     if(!model.specInPrcntg)
     {
-        if(model.useScaleBy)
-        {
-            var scaling = Number(model.scaleValue.substring(1));
-        
-            if(!scaling)
-                scaling = 1;
-        
-            if(model.scaleValue.charAt(0) == '/')
-            {
-                toTop = toTop/scaling;
-                toLeft = toLeft/scaling;
-                toRight = toRight/scaling;
-                toBottom = toBottom/scaling;
-            }
-            else
-            {
-                toTop = toTop*scaling;
-                toLeft = toLeft*scaling;
-                toRight = toRight*scaling;
-                toBottom = toBottom*scaling;
-            }
-        }
-        
         //Absolute distance.
-        toTop = pointsToUnitsString(toTop, startRulerUnits);
-        toLeft = pointsToUnitsString(toLeft, startRulerUnits);
-        toRight = pointsToUnitsString(toRight, startRulerUnits);
-        toBottom = pointsToUnitsString(toBottom, startRulerUnits);
+        toTop = pointsToUnitsString(getScaledValue(toTop), startRulerUnits);
+        toLeft = pointsToUnitsString(getScaledValue(toLeft), startRulerUnits);
+        toRight = pointsToUnitsString(getScaledValue(toRight), startRulerUnits);
+        toBottom = pointsToUnitsString(getScaledValue(toBottom), startRulerUnits);
     }
     else 
     {
@@ -2395,6 +2327,33 @@ function getIDOfLayer()
 	return(executeActionGet(ref).getInteger(charIDToTypeID( "LyrI" )));
 }
 
+//Apply scaling to the given value.
+function getScaledValue(value)
+{
+    var scaledValue = value;
+    try
+    {
+        if(model.useScaleBy)        //Scaling option is checked or not.
+        {
+            var scaling = Number(model.scaleValue.substring(1));
+        
+            if(!scaling)
+                scaling = 1;
+        
+            if(model.scaleValue.charAt(0) == '/')
+                scaledValue = scaledValue / scaling;
+            else
+                scaledValue = scaledValue * scaling;
+        }
+    }
+    catch(e)
+    {
+        scaledValue = value;
+    }
+
+    return scaledValue;
+}
+
 //Get spec info for general items.
 function getSpecsInfoForGeneralItem(sourceItem)
 {
@@ -2920,7 +2879,7 @@ function getSpecsInfoForTextItem(pageItem)
             }
 
             infoText += "\rFont-Size: " + fontSize;
-             cssText += "\r\tfont-size: " + fontSize + ";";
+            cssText += "\r\tfont-size: " + fontSize + ";";
         }
     
         //Get the color of text.
