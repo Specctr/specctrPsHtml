@@ -179,7 +179,7 @@ input[type="text"], input[type="password"]
             background-image: linear-gradient(to top, #B5B2B2 0%, #e1e1e1 100%);
             text-align: center;
             float: left;
-            width: 54px;
+            width: 72px;
             height: 40px;
             border-left: 1px solid #B9B9B9;
             border-right: 1px solid #B9B9B9;
@@ -269,7 +269,7 @@ input[type="text"], input[type="password"]
     font-family: "Arial";
     font-size: 11px;
     width: 180px;
-    padding-top: 5px;
+    padding-top: 1px;
     padding-bottom: 5px;
     height: 25px;
 }
@@ -399,7 +399,7 @@ input[type="text"], input[type="password"]
 .line
 {
     border: 1px solid #D6D6D6;
-    margin-top: 10px;
+    margin-top: 20px;
     margin-bottom: 10px;
 }
 
@@ -635,7 +635,7 @@ label
     font-family: "Arial";
     font-size: 11px;
     width: 220px;
-    height: 15px;
+    height: 10px;
 }
 
 .fontNormal
@@ -685,13 +685,13 @@ label
 
 #radio input
 {
-	margin: 7px;
+	margin: 6px;
 }
 
 #radio span
 {
 	margin-right: 46px;
-	margin-top: 6px;
+	margin-top: 3px;
 }
 
 .tabPage4ContentLeft .colorBlock

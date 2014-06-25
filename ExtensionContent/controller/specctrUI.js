@@ -48,7 +48,7 @@ function tab_clickHandler()
 		var currentTabHeader = document.getElementById("tabHeader_" + current);
 		var currentTabPage = document.getElementById("tabpage_" + current);
 
-		if(currentTabHeader && currentTabPage && (ident >= "1" && ident <= "4"))
+		if(currentTabHeader && currentTabPage && (ident >= "1" && ident <= "3"))
 		{
 			currentTabHeader.removeAttribute("class");
 			currentTabPage.style.display = "none";
@@ -86,8 +86,7 @@ function changeImagesOfTabs(selectedTab)
 	{
 		var tab1ImagePath = "../Images/Icon_main";
 		var tab2ImagePath = "../Images/Icon_settings";
-		var tab3ImagePath = "../Images/Icon_responsive";
-		var tab4ImagePath = "../Images/Icon_prefs";
+		var tab3ImagePath = "../Images/Icon_prefs";
 		var imageExtension = ".png";
 		var activeImageEndString = "_active" + imageExtension;
 
@@ -95,7 +94,6 @@ function changeImagesOfTabs(selectedTab)
 		var tab1Image = document.getElementById("tabImage_1");
 		var tab2Image = document.getElementById("tabImage_2");
 		var tab3Image = document.getElementById("tabImage_3");
-		var tab4Image = document.getElementById("tabImage_4");
 
 		switch(selectedTab) 
 		{
@@ -103,28 +101,18 @@ function changeImagesOfTabs(selectedTab)
 			tab1Image.src = tab1ImagePath + activeImageEndString;
 			tab2Image.src = tab2ImagePath + imageExtension;
 			tab3Image.src = tab3ImagePath + imageExtension;
-			tab4Image.src = tab4ImagePath + imageExtension;
 			break;
 
 		case 2: 
 			tab1Image.src = tab1ImagePath + imageExtension;
 			tab2Image.src = tab2ImagePath + activeImageEndString;
 			tab3Image.src = tab3ImagePath + imageExtension;
-			tab4Image.src = tab4ImagePath + imageExtension;
 			break;
 
 		case 3:
 			tab1Image.src = tab1ImagePath + imageExtension;
 			tab2Image.src = tab2ImagePath + imageExtension;
 			tab3Image.src = tab3ImagePath + activeImageEndString;
-			tab4Image.src = tab4ImagePath + imageExtension;
-			break;
-
-		case 4: 
-			tab1Image.src = tab1ImagePath + imageExtension;
-			tab2Image.src = tab2ImagePath + imageExtension;
-			tab3Image.src = tab3ImagePath + imageExtension;
-			tab4Image.src = tab4ImagePath + activeImageEndString;
 			break;
 
 		default:
@@ -169,117 +157,6 @@ function textBox_changeHandler(textBoxId)
 	catch(e)
 	{
 		console.log(e);	//For debugging.
-	}
-}
-
-/**
- * FunctionName	: chkDistanceSpec_changeHandler()
- * Description	: Enable/Disable the width and height text boxes and set the value of model's specInPrcntg when changed.
- * */
-function chkDistanceSpec_changeHandler()
-{
-	try
-	{
-		model.specInPrcntg = document.getElementById("chkDistanceSpec").checked;
-		if(model.specInPrcntg)
-		{
-			enableTextField(document.getElementById("relativeWidth"));
-			enableTextField(document.getElementById("relativeHeight"));
-		}
-		else
-		{
-			disableTextField(document.getElementById("relativeWidth"));
-			disableTextField(document.getElementById("relativeHeight"));
-		}
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-}
-
-/**
- * FunctionName	: chkEmSpec_changeHandler()
- * Description	: Enable/Disable the baseFontSize and baseLineHeight text boxes and set the value of model's specInEM when changed.
- * */
-function chkEmSpec_changeHandler()
-{
-	try
-	{
-		var textFontSize = document.getElementById("baseFontSize");
-		var textBaseLineHeight = document.getElementById("baseLineHeight");
-		model.specInEM = document.getElementById("chkEmSpec").checked;
-
-		if(model.specInEM)
-		{
-			enableTextField(textFontSize);
-			enableTextField(textBaseLineHeight);
-		}
-		else
-		{
-			disableTextField(textFontSize);
-			disableTextField(textBaseLineHeight);
-			return;
-		}
-
-		if(textFontSize.value.length == 0)
-			textFontSize.value = "16";
-
-		if(textBaseLineHeight.value.length == 0)
-		{
-			textBaseLineHeight.value = Number(Math.round(Number(textFontSize.value) * 140) / 100).toString();
-			model.baseLineHeight = Number(textBaseLineHeight.value);
-		}
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-}
-
-/**
- * FunctionName	: chkScaleBy_clickHandler()
- * Description	: Set the value of useScaleBy when changed.
- * */
-function chkScaleBy_clickHandler()
-{
-	try
-	{
-		model.useScaleBy	= document.getElementById("chkScaleBy").checked;
-
-		if(model.useScaleBy)
-			enableTextField(document.getElementById("txtScaleBy"));
-		else
-			disableTextField(document.getElementById("txtScaleBy"));
-
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
- * FunctionName	: txtScaleBy_changeHandler()
- * Description	: Allow the input greater than 1 only and set the value of scaleValue when changed.
- * */
-function txtScaleBy_changeHandler()
-{
-	try
-	{
-		var scaleByHandler = document.getElementById("txtScaleBy");
-		var firstChar = scaleByHandler.value.charAt(0);
-
-		//if first character is other than 'x', 'X' or '/' then empty the text box.
-		if(!(firstChar == "x" || firstChar == "/" || firstChar == "X"))
-			scaleByHandler.value = "";
-
-		//Restrict the text inputs to satisfy the values like x1, x2, /1, /2 etc.
-		model.scaleValue = scaleByHandler.value;
-	}
-	catch(e)
-	{
-		console.log(e);
 	}
 }
 

@@ -9,17 +9,13 @@
 var model;
 var heightChoice = { "Left" : 1 , "Right" : 2, "Center" : 3 };
 var widthChoice = { "Top" : 1 , "Bottom" : 2, "Center" : 3 };
-var cssText = "";
-var cssBodyText = "";
 var lyrBound;
 
 ext_PHXS_setModel = setModel;
 ext_PHXS_expandCanvas = createCanvasBorder;
 ext_PHXS_createDimensionSpecs = createDimensionSpecsForItem;
 ext_PHXS_createSpacingSpecs = createSpacingSpecs;
-ext_PHXS_createCoordinateSpecs = createCoordinateSpecs;
 ext_PHXS_createPropertySpecs = createPropertySpecsForItem;
-ext_PHXS_exportCss = exportCss;
 ext_PHXS_getFonts = getFontList;
 
 //Get the application font's name and font's family.
@@ -133,102 +129,6 @@ function getActiveLayer()
     
     return app.activeDocument.activeLayer;
 }
-//Convert background layer into regular layer.
-function backgroundLayerIntoNormalLayer()
-{
-    try
-    {
-        var idLyr = charIDToTypeID("Lyr ");
-        
-        var desc = new ActionDescriptor();
-        var ref = new ActionReference();
-        ref.putProperty(idLyr, charIDToTypeID("Bckg"));
-        desc.putReference(charIDToTypeID("null"), ref);
-
-        var propertyDesc = new ActionDescriptor();
-        propertyDesc.putUnitDouble(charIDToTypeID("Opct"), charIDToTypeID("#Prc"), 100.0);
-        propertyDesc.putEnumerated(charIDToTypeID("Md  "), charIDToTypeID("BlnM"), charIDToTypeID("Nrml"));
-
-        desc.putObject(charIDToTypeID("T   "), idLyr, propertyDesc);
-        executeAction(charIDToTypeID( "setd" ), desc, DialogModes.NO );
-    }
-    catch(e)
-    {}
-}
-
-//Select all layers in the layer panel.
-function selectAllLayer()
-{
-    try
-    {
-        var desc = new ActionDescriptor();
-        var ref = new ActionReference();
-        ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
-        desc.putReference(charIDToTypeID("null"), ref);
-        executeAction(stringIDToTypeID("selectAllLayers"), desc, DialogModes.NO);
-    }
-    catch(e)
-    {}
-}
-
-//Group the selected layers.
-function groupLayers()
-{
-    try
-    {
-        var desc = new ActionDescriptor();
-        var ref = new ActionReference();
-        ref.putClass(stringIDToTypeID("layerSection"));
-        desc.putReference(charIDToTypeID("null"), ref);
-        var refLyr = new ActionReference();
-        refLyr.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
-        desc.putReference(charIDToTypeID("From"), refLyr);
-        executeAction(charIDToTypeID("Mk  "), desc, DialogModes.NO);
-        return app.activeDocument.activeLayer;
-    }
-    catch(e)
-    {
-        return null;
-    }
-}
-
-//Mask the group layer.
-function layerMasking()
-{
-    try
-    {
-        var desc = new ActionDescriptor();
-        var idChnl = charIDToTypeID("Chnl");
-        desc.putClass(charIDToTypeID("Nw  "), idChnl);
-        var ref = new ActionReference();
-        ref.putEnumerated(idChnl, idChnl, charIDToTypeID("Msk "));
-        desc.putReference(charIDToTypeID("At  "), ref);
-        desc.putEnumerated(charIDToTypeID("Usng"), charIDToTypeID("UsrM"), charIDToTypeID("RvlS"));
-        executeAction(charIDToTypeID("Mk  "), desc, DialogModes.NO);
-    }
-    catch(e)
-    {}
-}
-
-//Add layer and convert it into background layer.
-function lyrIntoBckgrndLyr()
-{
-    try
-    {
-        var lyr = app.activeDocument.artLayers.add();
-        var desc = new ActionDescriptor();
-        var ref = new ActionReference();
-        ref.putClass(charIDToTypeID("BckL"));
-        desc.putReference(charIDToTypeID("null"), ref);
-        var refLayer = new ActionReference();
-        refLayer.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
-        desc.putReference(charIDToTypeID("Usng"), refLayer);
-        executeAction(charIDToTypeID("Mk  "), desc, DialogModes.NO );
-    }
-    catch(e)
-    {}
-}
-
 //Suspend the history of creating canvas border.
 function createCanvasBorder()
 {
@@ -254,366 +154,126 @@ function canvasBorder()
 	return border;
 }
 
-//Draw a dash line border of original size of the canvas.
-function drawDashBorder()
-{
-    var doc = app.activeDocument;
-    var height = doc.height;
-    var width = doc.width;
-    var newColor = new RGBColor();
-    newColor.red = 200;
-    newColor.blue = 200;
-    newColor.green = 200;
-        
-    var idsolidColorLayer = stringIDToTypeID("solidColorLayer");
-    var idClr = charIDToTypeID("Clr ");
-    var idRd = charIDToTypeID("Rd  ");
-    var idGrn = charIDToTypeID("Grn ");
-    var idBl = charIDToTypeID("Bl  ");
-    var idRGBC = charIDToTypeID("RGBC");
-    var idPxl = charIDToTypeID("#Pxl");
-        
-    var strokeDashes = 12.0;
-    var spaceBetweenStrokes = 12.0;
-    var strokeStyleResolution = 70.0;
-    var strokeOpacity = 100.0;
-    var cornerSize = -1.0;
-    var offset = 0.0;
-    var miterLimit = 100.0;
-        
-    //Border for CS 6 and CC version.
-    var idNne = charIDToTypeID("#Nne");
-    var idstrokeStyleLineCapType = stringIDToTypeID( "strokeStyleLineCapType" );
-    var idstrokeStyle = stringIDToTypeID("strokeStyle");
-    var idstrokeStyleLineJoinType = stringIDToTypeID("strokeStyleLineJoinType");
-    var idstrokeStyleLineAlignment = stringIDToTypeID("strokeStyleLineAlignment");
-        
-    var borderDesc = new ActionDescriptor();
-    var ref = new ActionReference();
-    ref.putClass(stringIDToTypeID("contentLayer"));
-    borderDesc.putReference(charIDToTypeID("null"), ref);
-        
-    var propertyDesc = new ActionDescriptor();
-    var colorDesc = new ActionDescriptor();
-    var desc = new ActionDescriptor();
-    desc.putDouble(idRd, newColor.red);
-    desc.putDouble(idGrn, newColor.green);
-    desc.putDouble(idBl, newColor.blue);
-    colorDesc.putObject(idClr, idRGBC, desc);
-    propertyDesc.putObject(charIDToTypeID("Type"), idsolidColorLayer, colorDesc);
-        
-    desc = new ActionDescriptor();
-    desc.putInteger(stringIDToTypeID("unitValueQuadVersion"), 1);
-    desc.putUnitDouble(charIDToTypeID("Top "), idPxl, 0);
-    desc.putUnitDouble(charIDToTypeID("Left"), idPxl, 0);
-    desc.putUnitDouble(charIDToTypeID("Btom"), idPxl, height);
-    desc.putUnitDouble(charIDToTypeID("Rght"), idPxl, width);
-    desc.putUnitDouble(stringIDToTypeID("topRight"), idPxl, cornerSize);
-    desc.putUnitDouble(stringIDToTypeID("topLeft"), idPxl, cornerSize);
-    desc.putUnitDouble(stringIDToTypeID("bottomLeft"), idPxl, cornerSize);
-    desc.putUnitDouble(stringIDToTypeID("bottomRight"), idPxl, cornerSize);
-    propertyDesc.putObject(charIDToTypeID("Shp "), charIDToTypeID("Rctn"), desc);
-        
-    desc = new ActionDescriptor();
-    desc.putInteger(stringIDToTypeID("strokeStyleVersion"), 2);
-    desc.putBoolean(stringIDToTypeID("strokeEnabled"), true);
-    desc.putBoolean(stringIDToTypeID("fillEnabled"), false);
-    desc.putUnitDouble(stringIDToTypeID("strokeStyleLineWidth"), idPxl, model.armWeight);
-    desc.putUnitDouble(stringIDToTypeID("strokeStyleLineDashOffset"), idPxl, offset);
-    desc.putDouble(stringIDToTypeID("strokeStyleMiterLimit"), miterLimit);
-    desc.putEnumerated(idstrokeStyleLineCapType, idstrokeStyleLineCapType, stringIDToTypeID("strokeStyleButtCap"));
-    desc.putEnumerated(idstrokeStyleLineJoinType, idstrokeStyleLineJoinType, stringIDToTypeID("strokeStyleMiterJoin"));
-    desc.putEnumerated(idstrokeStyleLineAlignment, idstrokeStyleLineAlignment, stringIDToTypeID("strokeStyleAlignCenter"));
-    desc.putBoolean(stringIDToTypeID("strokeStyleScaleLock"), false);
-    desc.putBoolean(stringIDToTypeID("strokeStyleStrokeAdjust"), false);
-        
-    var list = new ActionList();
-    list.putUnitDouble(idNne, strokeDashes);
-    list.putUnitDouble(idNne, spaceBetweenStrokes);
-     
-    desc.putList(stringIDToTypeID("strokeStyleLineDashSet"), list);
-    desc.putEnumerated(stringIDToTypeID("strokeStyleBlendMode"), charIDToTypeID("BlnM"), charIDToTypeID("Nrml"));
-    desc.putUnitDouble( stringIDToTypeID("strokeStyleOpacity"), charIDToTypeID("#Prc"), strokeOpacity);
-        
-    colorDesc = new ActionDescriptor();
-    var tmpDesc = new ActionDescriptor();
-    tmpDesc.putDouble(idRd, newColor.red);
-    tmpDesc.putDouble(idGrn, newColor.green);
-    tmpDesc.putDouble(idBl, newColor.blue);
-    colorDesc.putObject(idClr, idRGBC, tmpDesc);
-        
-    desc.putObject(stringIDToTypeID("strokeStyleContent"), idsolidColorLayer, colorDesc);
-    desc.putDouble(stringIDToTypeID("strokeStyleResolution"), strokeStyleResolution);
-    propertyDesc.putObject(idstrokeStyle, idstrokeStyle, desc);
-       
-    borderDesc.putObject(charIDToTypeID("Usng"), stringIDToTypeID("contentLayer"), propertyDesc);
-    executeAction(charIDToTypeID("Mk  "), borderDesc, DialogModes.NO);
-
-    doc.activeLayer.move(doc.layers[0] , ElementPlacement.PLACEBEFORE);
-    doc.activeLayer.name =  "Specctr Canvas Border";
-    doc.activeLayer.allLocked = true;
-}
-
 //Expand the canvas.
 function expandCanvas()
 {
     if(!app.documents.length)           //Checking document is open or not.
         return;
     
-    //Save and change the preferences of the document.
     var doc = app.activeDocument;
+    var activeLayer = doc.activeLayer;
+    
+    //Save and change the preferences of the document.
     var startRulerUnits = app.preferences.rulerUnits;
     var startTypeUnits = app.preferences.typeUnits;
-    var originalDPI = doc.resolution;
-    setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
-
-    try
+    app.preferences.rulerUnits = Units.PIXELS;
+    app.preferences.typeUnits = TypeUnits.PIXELS;
+    
+    var height = doc.height;
+    var width = doc.width;
+    
+    var border = canvasBorder();       //Checking  whether border is created or not.
+    doc.resizeCanvas(width+2*model.canvasExpandSize, height+2*model.canvasExpandSize, AnchorPosition.MIDDLECENTER);     // Expanding the canvas.
+    
+    if(border == null)
     {
-        var height = doc.height;
-        var width = doc.width;
-        var activeLayer = doc.activeLayer;
-        var border = canvasBorder();       //Checking  whether border is created or not.
-        if(border == null)
-        {
-            backgroundLayerIntoNormalLayer();              //Convert background layer into normal layer.
-            selectAllLayer();                                          //Select all layers from layer panel.
-            var group = groupLayers();
-            var groupName = "Original Canvas ["+width+" x "+height+"]"
-            group.name = groupName;
-            doc.selection.selectAll();                                    //Select the whole canvas.
-            layerMasking();                                          //Mask the group layer.
-            lyrIntoBckgrndLyr();                                     //Add layer and convert it into background layer.
-            drawDashBorder();                                       //Create the dashed border.
-            doc = app.activeDocument;
-            
-            try
-            {
-                var specctrLayer = doc.layerSets.getByName(groupName).layerSets.getByName("Specctr");
-                specctrLayer.move(doc.layers[0] , ElementPlacement.PLACEAFTER);     //Move the Specctr folder.
-            }
-            catch(e)
-            {}
-        }
+        var newColor = new RGBColor();
+        newColor.red = 200;
+        newColor.blue = 200;
+        newColor.green = 200;
         
-        doc.resizeCanvas(width+2*model.canvasExpandSize, height+2*model.canvasExpandSize, AnchorPosition.MIDDLECENTER);     // Expanding the canvas.
-    }
-    catch(e)
-    {}
-    
-    if(activeLayer)
-        doc.activeLayer = activeLayer;
-    
-    setPreferences(startRulerUnits, startTypeUnits, originalDPI);      //Setting the original preferences of the document.
-}
-
-//Get the coordinate or width/height spec style info.
-function getStyleFromOtherSpecs(specName)
-{
-    var doc = app.activeDocument;
-    var specsInfo = new Array();
-    try
-    {
-        var specLayerGroup = doc.layerSets.getByName("Specctr").layerSets.getByName(specName);
-    }
-    catch(e)
-    {
-        return specsInfo;
-    }
-    
-    var noOfSpecs = specLayerGroup.layerSets.length;
-    while(noOfSpecs)
-    {
-        try
-        {
-            var object = new Object();
-            var spec = specLayerGroup.layerSets[noOfSpecs - 1].artLayers[0];
-            object.idLayer = getXMPData(spec, "idLayer");
-            object.styleText = getXMPData(spec, "css");
-            specsInfo.push(object);
-         }
-         catch(e)
-         {}
-         noOfSpecs = noOfSpecs - 1;
-    }
-    
-    return specsInfo;
-}
-
-//Add coordinate or width/height style text into css file.
-function addSpecsStyleTextToCss(spec, text, specsInfo)
-{
-    var idLayer = getXMPData(spec, "idLayer");
-    var specCssText = "";
-    var noOfSpecs = specsInfo.length;
-    
-    for(var i = 0; i < noOfSpecs; i++)
-    {
-        if(specsInfo[i].idLayer == idLayer)
-        {
-            specCssText = specsInfo[i].styleText;
-            break;
-        }
-    }
-                
-    if(specCssText)
-        text = text.replace("}", specCssText + "\r}");
-    
-    return text;
-}
-
-//Return css text for shape objects.
-function getCssForShape(coordinateSpecsInfo)
-{
-    var doc = app.activeDocument;
-    try
-    {
-        var objectSpecGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties").layerSets.getByName("Object Specs");
-    }
-    catch(e)
-    {
-        return "";
-    }
-    
-    var styleText = "";
-    var dimensionSpecsInfo = getStyleFromOtherSpecs("Dimensions");           //Get the array of width/height specs info. 
-    var noOfDimensionSpecs = dimensionSpecsInfo.length;
-    var noOfCoordinateSpecs = coordinateSpecsInfo.length;
-    var noOfObjectSpecLayerGroups = objectSpecGroup.layerSets.length;
-    
-    while(noOfObjectSpecLayerGroups)
-    {
-        try
-        {
-            var objectSpec = objectSpecGroup.layerSets[noOfObjectSpecLayerGroups - 1].artLayers.getByName("Specs");
-            var text = getXMPData(objectSpec, "css");
-            
-            if(noOfDimensionSpecs)
-                text = addSpecsStyleTextToCss(objectSpec, text, dimensionSpecsInfo);
-            
-            if(noOfCoordinateSpecs)
-                text = addSpecsStyleTextToCss(objectSpec, text, coordinateSpecsInfo);
-                
-            styleText += text + "\r\r";
-        }
-        catch(e)
-        {}
-             
-        noOfObjectSpecLayerGroups = noOfObjectSpecLayerGroups - 1;
-    }
-
-    return styleText;
-}
-
-//Return css text for text objects.
-function getCssForText(coordinateSpecsInfo)
-{
-    var doc = app.activeDocument;
-    try
-    {
-        var textSpecGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties").layerSets.getByName("Text Specs");
-    }
-    catch(e)
-    {
-        return "";
-    }
-    
-    var styleText = "";
-    var noOfTextSpecLayerGroups = textSpecGroup.layerSets.length;
-    var noOfCoordinateSpecs = coordinateSpecsInfo.length;
-    
-    while(noOfTextSpecLayerGroups)
-    {
-        try
-        {
-            var textSpec = textSpecGroup.layerSets[noOfTextSpecLayerGroups - 1].artLayers.getByName("Specs");
-            var text = getXMPData(textSpec, "css");
-            
-            if(noOfCoordinateSpecs)
-                text = addSpecsStyleTextToCss(textSpec, text, coordinateSpecsInfo);
-                
-            styleText += text + "\r\r";
-        }
-        catch(e)
-        {}
-            
-        noOfTextSpecLayerGroups = noOfTextSpecLayerGroups - 1;
-    }
-
-    return styleText;
-}
-
-//Export the spec layer into css text file.
-function exportCss()
-{
-    if(!app.documents.length)           //Checking document is open or not.
-        return;
-    
-    var doc = app.activeDocument;
-    try
-    {
-        var propertySpecLayerGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties");
-    }
-    catch(e)
-    {
-         alert("No spec present to export.");
-         return;
-    }
-    
-    var coordinateSpecsInfo = getStyleFromOtherSpecs("Coordinates");           //Get the array of coordinate specs info.
-    
-    var styleText = cssBodyText;            //Add the body text at the top of css file.
-    styleText += getCssForText(coordinateSpecsInfo);
-    styleText += getCssForShape(coordinateSpecsInfo);
-    
-    if(styleText == "")
-    {
-        alert("No spec present to export!");
-        return;
-    }
+        var idsolidColorLayer = stringIDToTypeID("solidColorLayer");
+        var idClr = charIDToTypeID("Clr ");
+        var idRd = charIDToTypeID("Rd  ");
+        var idGrn = charIDToTypeID("Grn ");
+        var idBl = charIDToTypeID("Bl  ");
+        var idRGBC = charIDToTypeID("RGBC");
+        var idPxl = charIDToTypeID("#Pxl");
         
-    //Create the file and export it.
-    var cssFile = "";
-    var cssFilePath = "";
-    
-    try
-    {
-        var documentPath = doc.path;
-    }
-    catch(e)
-    {
-        documentPath = "";
-    }
-    
-    if(documentPath)
-        cssFilePath = documentPath + "/Styles.css";
-    else
-        cssFilePath = "~/desktop/Styles.css";
+        var strokeDashes = 12.0;
+        var spaceBetweenStrokes = 12.0;
+        var strokeStyleResolution = 70.0;
+        var strokeOpacity = 100.0;
+        var cornerSize = -1.0;
+        var offset = 0.0;
+        var miterLimit = 100.0;
         
-    cssFile = File(cssFilePath);
-    
-    if(cssFile.exists)
-    {
-        var replaceFileFlag = confirm("Styles.css already exists in this location.\rDo you want to replace it?", true, "Specctr");
-        if(!replaceFileFlag)
-            return;
-    }
+        //Border for CS 6 and CC version.
+        var idNne = charIDToTypeID("#Nne");
+        var idstrokeStyleLineCapType = stringIDToTypeID( "strokeStyleLineCapType" );
+        var idstrokeStyle = stringIDToTypeID("strokeStyle");
+        var idstrokeStyleLineJoinType = stringIDToTypeID("strokeStyleLineJoinType");
+        var idstrokeStyleLineAlignment = stringIDToTypeID("strokeStyleLineAlignment");
         
-    if(cssFile)
-    {
-        cssFile.open("w");
-        cssFile.write(styleText);
-        cssFile.close;
+        var borderDesc = new ActionDescriptor();
+        var ref = new ActionReference();
+        ref.putClass(stringIDToTypeID("contentLayer"));
+        borderDesc.putReference(charIDToTypeID("null"), ref);
         
-        if(replaceFileFlag)
-            alert("Styles.css is exported.");
-        else 
-            alert("Styles.css is exported to " + cssFilePath);
+        var propertyDesc = new ActionDescriptor();
+        var colorDesc = new ActionDescriptor();
+        var desc = new ActionDescriptor();
+        desc.putDouble(idRd, newColor.red);
+        desc.putDouble(idGrn, newColor.green);
+        desc.putDouble(idBl, newColor.blue);
+        colorDesc.putObject(idClr, idRGBC, desc);
+        propertyDesc.putObject(charIDToTypeID("Type"), idsolidColorLayer, colorDesc);
+        
+        desc = new ActionDescriptor();
+        desc.putInteger(stringIDToTypeID("unitValueQuadVersion"), 1);
+        desc.putUnitDouble(charIDToTypeID("Top "), idPxl, model.canvasExpandSize);
+        desc.putUnitDouble(charIDToTypeID("Left"), idPxl, model.canvasExpandSize);
+        desc.putUnitDouble(charIDToTypeID("Btom"), idPxl, height+model.canvasExpandSize);
+        desc.putUnitDouble(charIDToTypeID("Rght"), idPxl, width+model.canvasExpandSize);
+        desc.putUnitDouble(stringIDToTypeID("topRight"), idPxl, cornerSize);
+        desc.putUnitDouble(stringIDToTypeID("topLeft"), idPxl, cornerSize);
+        desc.putUnitDouble(stringIDToTypeID("bottomLeft"), idPxl, cornerSize);
+        desc.putUnitDouble(stringIDToTypeID("bottomRight"), idPxl, cornerSize);
+        propertyDesc.putObject(charIDToTypeID("Shp "), charIDToTypeID("Rctn"), desc);
+        
+        desc = new ActionDescriptor();
+        desc.putInteger(stringIDToTypeID("strokeStyleVersion"), 2);
+        desc.putBoolean(stringIDToTypeID("strokeEnabled"), true);
+        desc.putBoolean(stringIDToTypeID("fillEnabled"), false);
+        desc.putUnitDouble(stringIDToTypeID("strokeStyleLineWidth"), idPxl, model.armWeight);
+        desc.putUnitDouble(stringIDToTypeID("strokeStyleLineDashOffset"), idPxl, offset);
+        desc.putDouble(stringIDToTypeID("strokeStyleMiterLimit"), miterLimit);
+        desc.putEnumerated(idstrokeStyleLineCapType, idstrokeStyleLineCapType, stringIDToTypeID("strokeStyleButtCap"));
+        desc.putEnumerated(idstrokeStyleLineJoinType, idstrokeStyleLineJoinType, stringIDToTypeID("strokeStyleMiterJoin"));
+        desc.putEnumerated(idstrokeStyleLineAlignment, idstrokeStyleLineAlignment, stringIDToTypeID("strokeStyleAlignCenter"));
+        desc.putBoolean(stringIDToTypeID("strokeStyleScaleLock"), false);
+        desc.putBoolean(stringIDToTypeID("strokeStyleStrokeAdjust"), false);
+        
+        var list = new ActionList();
+        list.putUnitDouble(idNne, strokeDashes);
+        list.putUnitDouble(idNne, spaceBetweenStrokes);
+        
+        desc.putList(stringIDToTypeID("strokeStyleLineDashSet"), list);
+        desc.putEnumerated(stringIDToTypeID("strokeStyleBlendMode"), charIDToTypeID("BlnM"), charIDToTypeID("Nrml"));
+        desc.putUnitDouble( stringIDToTypeID("strokeStyleOpacity"), charIDToTypeID("#Prc"), strokeOpacity);
+        
+        colorDesc = new ActionDescriptor();
+        var tmpDesc = new ActionDescriptor();
+        tmpDesc.putDouble(idRd, newColor.red);
+        tmpDesc.putDouble(idGrn, newColor.green);
+        tmpDesc.putDouble(idBl, newColor.blue);
+        colorDesc.putObject(idClr, idRGBC, tmpDesc);
+        
+        desc.putObject(stringIDToTypeID("strokeStyleContent"), idsolidColorLayer, colorDesc);
+        desc.putDouble(stringIDToTypeID("strokeStyleResolution"), strokeStyleResolution);
+        propertyDesc.putObject(idstrokeStyle, idstrokeStyle, desc);
+        borderDesc.putObject(charIDToTypeID("Usng"), stringIDToTypeID("contentLayer"), propertyDesc);
+        executeAction(charIDToTypeID("Mk  "), borderDesc, DialogModes.NO);
+
+        doc.activeLayer.move(doc.layers[0] , ElementPlacement.PLACEBEFORE);
+        doc.activeLayer.name =  "Specctr Canvas Border";
+        doc.activeLayer.allLocked = true;
     }
-    else
-    {
-        alert("Unable to export!");
-        return;
-    }
+ 
+    doc.activeLayer = activeLayer;
+    //Reset the application preferences.
+    app.preferences.rulerUnits = startRulerUnits;
+    app.preferences.typeUnits = startTypeUnits;
 }
 
 //Suspend the history of creating dimension spec of layer.
@@ -648,31 +308,9 @@ function calculateDmnsns(artLayer, bounds)
         var lyrWidth = bounds[2] - bounds[0];
         var widthValue = "", heightValue = "";
 
-        if(!model.specInPrcntg)
-        {
-            //Absolute distance.
-            widthValue = pointsToUnitsString(getScaledValue(lyrWidth), startRulerUnits);
-            heightValue = pointsToUnitsString(getScaledValue(lyrHeight), startRulerUnits);
-        }
-        else 
-        {
-            //Relative distance with respect to original canvas.
-            var relativeHeight='', relativeWidth='';
-            var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
-            
-            if(model.relativeHeight != 0)
-                relativeHeight = model.relativeHeight;
-            else
-                relativeHeight = orgnlCanvas[3];
-                
-            if(model.relativeWidth != 0)
-                relativeWidth = model.relativeWidth;
-            else
-                relativeWidth = orgnlCanvas[2];
-
-            widthValue = Math.round(lyrWidth/relativeWidth*100) + " %";
-            heightValue = Math.round(lyrHeight/relativeHeight*100) + " %";
-        }
+        //Absolute distance.
+        widthValue = pointsToUnitsString(lyrWidth, startRulerUnits);
+        heightValue = pointsToUnitsString(lyrHeight, startRulerUnits);
 
         createDimensionSpecs(artLayer, bounds, widthValue, heightValue);
     }
@@ -686,28 +324,6 @@ function calculateDmnsns(artLayer, bounds)
 //Create the dimension spec for a selected layer.
 function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
 {
-    if(ExternalObject.AdobeXMPScript == null)
-		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
-    
-    var dimensionSpec = "";
-    var idDimensionSpec = getXMPData(artLayer, "idDimensionSpec");
-    if(idDimensionSpec)
-    {
-        dimensionSpec = getLayerByID(idDimensionSpec);
-        if(dimensionSpec)
-        {
-            var parent = dimensionSpec.parent;
-            dimensionSpec.remove();
-            if(parent.typename == "LayerSet")
-                parent.remove();
-            
-            //Delete the xmp data of the layer.
-            var layerXMP = new XMPMeta(artLayer.xmpMetadata.rawData);
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idDimensionSpec");
-            artLayer.xmpMetadata.rawData = layerXMP.serialize();
-        }
-    }
-    
     //Create the specs.
     var font = getFont();
     var doc = app.activeDocument;
@@ -843,21 +459,9 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
     selectLayers(widthText.name, heightText.name, widthLine.name, heightLine.name);
     var spec = createSmartObject();
     spec.name = "DimensionSpec";
-    idDimensionSpec = getIDOfLayer();
     doc.activeLayer = artLayer;
-    
-    if(artLayer.kind != LayerKind.TEXT)
-    {
-        var idLayer = getIDOfLayer();
-        setXmpDataForSpec(spec, idLayer, "idLayer");
-        var styleText = "\twidth: " + widthValue + ";\r\theight: " + heightValue + ";";
-        setXmpDataForSpec(spec, styleText, "css");
-    }
 
-    setXmpDataForSpec(artLayer, idDimensionSpec, "idDimensionSpec");
-    setXmpDataForSpec(spec, "true", "SpeccedObject");
     doc.resizeImage(null, null, originalDPI, ResampleMethod.NONE);
-    ExternalObject.AdobeXMPScript.unload();
 }
 
 //Create text spec for horizontal distances for spacing specs between two objects.
@@ -874,26 +478,10 @@ function createHrzntlSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
             legendLayer = legendSpacingLayer().layerSets.add();
             legendLayer.name = "Specctr Spacing Mark";
         }
+    
+        //Absolute distance.
+        hrzntlDstnc = pointsToUnitsString(hrzntlDstnc, startRulerUnits);
         
-        if(!model.specInPrcntg)
-        {
-            //Absolute distance.
-            hrzntlDstnc = pointsToUnitsString(getScaledValue(hrzntlDstnc), startRulerUnits);
-        }
-        else 
-        {
-            //Relative distance with respect to original canvas.
-            var relativeWidth='';
-            var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
-            
-            if(model.relativeWidth != 0)
-                relativeWidth = model.relativeWidth;
-            else
-                relativeWidth = orgnlCanvas[2];
-
-            hrzntlDstnc = Math.round(hrzntlDstnc/relativeWidth*100) + " %";
-        }
-
         var hrzntSpacing = legendLayer.artLayers.add();
         hrzntSpacing.kind = LayerKind.TEXT;
         var specText = hrzntSpacing.textItem;
@@ -931,25 +519,9 @@ function createVertSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
             legendLayer.name = "Specctr Spacing Mark";
         }
         
-        if(!model.specInPrcntg)
-        {
-            //Value after applying scaling.
-            vrtclDstnc = pointsToUnitsString(getScaledValue(vrtclDstnc), startRulerUnits);
-        }
-        else 
-        {
-            //Relative distance with respect to original canvas.
-            var relativeHeight='';
-            var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
+        //Value after applying scaling.
+        vrtclDstnc = pointsToUnitsString(vrtclDstnc, startRulerUnits);
             
-            if(model.relativeHeight != 0)
-                relativeHeight = model.relativeHeight;
-            else
-                relativeHeight = orgnlCanvas[3];
-
-            vrtclDstnc = Math.round(vrtclDstnc/relativeHeight*100) + " %";
-        }
-    
         var spacingSpec = legendLayer.artLayers.add();
         spacingSpec.kind = LayerKind.TEXT;
         var specText = spacingSpec.textItem;
@@ -1019,34 +591,8 @@ function createSpacingSpecs()
 //Create the spacing spec for two selected layers.
 function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
 {
-    if(ExternalObject.AdobeXMPScript == null)
-		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
-    
     var doc = app.activeDocument;
-    doc.activeLayer = artLayer2;
-    var uniqueIdOfSecondLayer = getIDOfLayer();
-    
-    //Code for updating the specs.
-    var spacingSpec = "";
-    var indexOfSpecInFirstLayerXMPArray = "";
-    var indexOfSpecInSecondLayerXMPArray = "";
-    var idSpacingSpec = getXMPDataForSpacingSpec(artLayer1, uniqueIdOfSecondLayer, "idSpacingSpec");
-    if(idSpacingSpec)
-    {
-        spacingSpec = getLayerByID(idSpacingSpec);
-        if(spacingSpec)
-        {
-            var parent = spacingSpec.parent;
-            spacingSpec.remove();
-            if(parent.typename == "LayerSet")
-                parent.remove();
-            
-            //Delete an item in the xmp data array of the layer.
-            indexOfSpecInFirstLayerXMPArray = getIndexFromXmpArray(artLayer1, idSpacingSpec, "idSpacingSpec");
-            indexOfSpecInSecondLayerXMPArray = getIndexFromXmpArray(artLayer2, idSpacingSpec, "idSpacingSpec");
-        }
-    }
-    
+        
     //Save the current preferences
     var startRulerUnits = app.preferences.rulerUnits;
     var startTypeUnits = app.preferences.typeUnits;
@@ -1059,7 +605,6 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
     var vertSpecBottom = "", hrznSpecRight = "", vertSpecTop = "", hrznSpecLeft = "";
     var uniqueIdOfSpec = "";
     doc.activeLayer = artLayer1;
-    var uniqueIdOfFirstLayer = getIDOfLayer();
     
 	// Check overlap
 	if (bounds1[0]<bounds2[2] && bounds1[2]>bounds2[0] &&
@@ -1090,10 +635,6 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
 
             var vertSpecNoOvrLapped = createVertSpec(x, x, y2, y1, font, startRulerUnits, legendLayer);
             vertSpecNoOvrLapped.name = "Spacing Spec";
-            uniqueIdOfSpec = getIDOfLayer();
-            setXmpDataForSpec(vertSpecNoOvrLapped, "true", "SpeccedObject");
-            setXmpDataForSpec(vertSpecNoOvrLapped, uniqueIdOfFirstLayer, "firstLayer");
-            setXmpDataForSpec(vertSpecNoOvrLapped, uniqueIdOfSecondLayer, "secondLayer");
         }
         else
         {
@@ -1158,10 +699,6 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
             
             var hrznSpecNoOvrlap = createHrzntlSpec(x1, x2, y, y, font, startRulerUnits, legendLayer);
             hrznSpecNoOvrlap.name = "Spacing Spec";
-            uniqueIdOfSpec = getIDOfLayer();
-            setXmpDataForSpec(hrznSpecNoOvrlap, "true", "SpeccedObject");
-            setXmpDataForSpec(hrznSpecNoOvrlap, uniqueIdOfFirstLayer, "firstLayer");
-            setXmpDataForSpec(hrznSpecNoOvrlap, uniqueIdOfSecondLayer, "secondLayer");
         } 
         else
         {
@@ -1209,48 +746,18 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
             selectLayers(vertSpecTop.name, vertSpecBottom.name, hrznSpecLeft.name, hrznSpecRight.name);
             spec = createSmartObject();
             spec.name = "SpacingSpec";
-            uniqueIdOfSpec = getIDOfLayer();
-            setXmpDataForSpec(spec, "true", "SpeccedObject");
-            setXmpDataForSpec(spec, uniqueIdOfFirstLayer, "firstLayer");
-            setXmpDataForSpec(spec, uniqueIdOfSecondLayer, "secondLayer");
         }
     }
     catch(e)
     {}
     
     selectLayers(artLayer1.name, artLayer2.name);
-    setXmpDataForSpacingSpec(artLayer1, uniqueIdOfSpec, "idSpacingSpec", indexOfSpecInFirstLayerXMPArray);
-    setXmpDataForSpacingSpec(artLayer2, uniqueIdOfSpec, "idSpacingSpec", indexOfSpecInSecondLayerXMPArray);
-    ExternalObject.AdobeXMPScript.unload();
-    
-   setPreferences(startRulerUnits, startTypeUnits, originalDPI);      //Setting the original preferences of the document.
+    setPreferences(startRulerUnits, startTypeUnits, originalDPI);      //Setting the original preferences of the document.
 }
 
 //Create the spacing spec for a selected layer.
 function createSpacingSpecsForSingleItem(artLayer, bounds)
 {
-     if(ExternalObject.AdobeXMPScript == null)
-		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
-    
-    var spacingSpec = "";
-    var idSpacingSpec = getXMPData(artLayer, "idSingleSpacingSpec");
-    if(idSpacingSpec)
-    {
-        spacingSpec = getLayerByID(idSpacingSpec);
-        if(spacingSpec)
-        {
-            var parent = spacingSpec.parent;
-            spacingSpec.remove();
-            if(parent.typename == "LayerSet")
-                parent.remove();
-            
-            //Delete the xmp data of the layer.
-            var layerXMP = new XMPMeta(artLayer.xmpMetadata.rawData);
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idSingleSpacingSpec");
-            artLayer.xmpMetadata.rawData = layerXMP.serialize();
-        }
-    }
-
     //Save the current preferences
     var doc = app.activeDocument;
     var startRulerUnits = app.preferences.rulerUnits;
@@ -1271,36 +778,12 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
     var toRight = cnvsRect[2]-bounds[2];
     var toBottom = cnvsRect[3]-bounds[3];
   
-    if(!model.specInPrcntg)
-    {
-        //Absolute distance.
-        toTop = pointsToUnitsString(getScaledValue(toTop), startRulerUnits);
-        toLeft = pointsToUnitsString(getScaledValue(toLeft), startRulerUnits);
-        toRight = pointsToUnitsString(getScaledValue(toRight), startRulerUnits);
-        toBottom = pointsToUnitsString(getScaledValue(toBottom), startRulerUnits);
-    }
-    else 
-    {
-        //Relative distance with respect to original canvas.
-        var relativeHeight='', relativeWidth='';
-        var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
-            
-        if(model.relativeHeight != 0)
-            relativeHeight = model.relativeHeight;
-        else
-            relativeHeight = orgnlCanvas[3];
-                
-        if(model.relativeWidth != 0)
-            relativeWidth = model.relativeWidth;
-        else
-            relativeWidth = orgnlCanvas[2];
-
-        toLeft = Math.round(toLeft/relativeWidth*100) + " %";
-        toTop = Math.round(toTop/relativeHeight*100) + " %";
-        toRight = Math.round(toRight/relativeWidth*100) + " %";
-        toBottom = Math.round(toBottom/relativeHeight*100) + " %";
-    }
-    
+    //Absolute distance.
+    toTop = pointsToUnitsString(toTop, startRulerUnits);
+    toLeft = pointsToUnitsString(toLeft, startRulerUnits);
+    toRight = pointsToUnitsString(toRight, startRulerUnits);
+    toBottom = pointsToUnitsString(toBottom, startRulerUnits);
+       
     var legendLayer = legendSpacingLayer().layerSets.add();
     legendLayer.name = "Specctr Spacing Mark";
     
@@ -1422,13 +905,8 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
     selectLayers(topText.name, leftText.name, rightText.name, bottomText.name);
     var spec = createSmartObject();
     spec.name = "SpacingSpec";
-    idSpacingSpec = getIDOfLayer();
     
     doc.activeLayer = artLayer;
-    setXmpDataForSpec(artLayer, idSpacingSpec, "idSingleSpacingSpec");
-    setXmpDataForSpec(spec, "true", "SpeccedObject");
-    ExternalObject.AdobeXMPScript.unload();
-    
     setPreferences(startRulerUnits, startTypeUnits, originalDPI);      //Setting the original preferences of the document.
 }
 
@@ -1682,17 +1160,12 @@ function createPropertySpecs(sourceItem, bounds)
         bullet.visible = true;
         dupBullet.visible = true;
         spec.visible = true;
-
-        
-        if(cssText == "")
-            cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
             
         setXmpDataOfLayer(artLayer, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfLayer(spec, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfLayer(bullet, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfLayer(dupBullet, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfDoc(doc, noOfSpec);
-        setXmpDataForSpec(spec, cssText, "css");
         
         ExternalObject.AdobeXMPScript.unload();
     }
@@ -1823,14 +1296,10 @@ function updateSpec(lyr, spec, idLayer, bullet, dupBullet, bounds)
         layerXMP.setArrayItem(XMPConst.NS_PHOTOSHOP, "number", 1, number.toString());
         lyr.xmpMetadata.rawData = layerXMP.serialize();
 
-        if(cssText == "")
-        cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
-
         // Set Xmp metadata for spec and bullet.
         setXmpDataOfLayer(dupBullet, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfLayer(bullet, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfLayer (spec, idLayer, idSpec, idBullet, idDupBullet, number);
-        setXmpDataForSpec(spec, cssText, "css");
     }
     catch(e)
     {}
@@ -1838,159 +1307,7 @@ function updateSpec(lyr, spec, idLayer, bullet, dupBullet, bounds)
     doc.resizeImage(null, null, originalDPI, ResampleMethod.NONE);
     // Reset the application preferences
     app.preferences.typeUnits = startTypeUnits;
-	app.preferences.rulerUnits = startRulerUnits;
-}
-
-//Suspend the history of creating coordinates spec of layers.
-function createCoordinateSpecs()
-{
-    try
-    {
-        var sourceItem = getActiveLayer();
-        if(sourceItem == null || !startUpCheckBeforeSpeccing(sourceItem))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
-            return;
-        
-        var bounds = returnBounds(sourceItem);
-        app.activeDocument.suspendHistory('Coordinate Info', 'createCoordinates(sourceItem, bounds)');
-    }
-    catch(e)
-    {}
-}
-
-//Create coordinate specs for the layer.
-function createCoordinates(sourceItem, bounds)
-{
-    try
-    {
-        if(ExternalObject.AdobeXMPScript == null)
-            ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
-    
-        var coordinateSpec = "";
-        var idCoordinateSpec = getXMPData(sourceItem, "idCoordinateSpec");
-        if(idCoordinateSpec)
-        {
-            coordinateSpec = getLayerByID(idCoordinateSpec);
-            if(coordinateSpec)
-            {
-                var parent = coordinateSpec.parent;
-                coordinateSpec.remove();
-                if(parent.typename == "LayerSet")
-                    parent.remove();
-            
-                //Delete the xmp data of the layer.
-                var layerXMP = new XMPMeta(sourceItem.xmpMetadata.rawData);
-                layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idCoordinateSpec");
-                sourceItem.xmpMetadata.rawData = layerXMP.serialize();
-            }
-        }
-    
-        //Save the current preferences
-        var doc = app.activeDocument;
-        var startRulerUnits = app.preferences.rulerUnits;
-        var startTypeUnits = app.preferences.typeUnits;
-        var originalDPI = doc.resolution;
-        setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
-    
-        var font = getFont();
-        var newColor = legendColorSpacing();
-        var left = "", top = "";
-        
-        //Responsive option selected or not.
-        if(!model.specInPrcntg)
-        {
-            //Absolute distance.
-            top = pointsToUnitsString(bounds[1], startRulerUnits).split(" ", 1);
-            left = pointsToUnitsString(bounds[0], startRulerUnits).split(" ", 1);
-        }
-        else 
-        {
-            //Relative distance with respect to original canvas.
-            var relativeTop='', relativeLeft='';
-            var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
-            
-            if(model.relativeHeight != 0)
-                relativeTop = model.relativeHeight;
-            else
-                relativeTop = orgnlCanvas[3];
-                
-            if(model.relativeWidth != 0)
-                relativeLeft = model.relativeWidth;
-            else
-                relativeLeft = orgnlCanvas[2];
-
-            left = Math.round(bounds[0]/relativeLeft*100) + "%";
-            top = Math.round(bounds[1]/relativeTop*100) + "%";
-        }
-        
-        var styleText = "\tleft: " + left + ";\r\ttop: " + top + ";";
-        var doc = app.activeDocument;
-        var spacing = 3+model.armWeight;
-        var legendLayer = legendCoordinateLayer().layerSets.add();            //To create the layer group for coordinate layer.
-        legendLayer.name = "Specctr Coordinates Mark";
-    
-        var lines = "", coordinateText = "";
-    
-        //Create the spec text for top.
-        coordinateText = legendLayer.artLayers.add();
-        coordinateText.kind = LayerKind.TEXT;
-        var specText = coordinateText.textItem;
-        specText.kind = TextType.POINTTEXT;
-        specText.justification = Justification.RIGHT;
-        specText.color.rgb = newColor;
-        specText.font = font;
-        specText.size = model.legendFontSize;
-        specText.contents = "x: "+left+" y: "+top;
-        
-        var line = "";
-        if(sourceItem.kind == LayerKind.TEXT)
-        {
-            specText.position = new Array(sourceItem.textItem.position[0]-spacing-model.armWeight/2, sourceItem.textItem.position[1]-spacing+model.armWeight);
-            spacing = spacing+5;
-            line = createLine(sourceItem.textItem.position[0]-spacing-model.armWeight, 
-                                                    sourceItem.textItem.position[1]+model.armWeight, 
-                                                        sourceItem.textItem.position[0]+spacing,
-                                                            sourceItem.textItem.position[1]+model.armWeight,
-                                                                newColor);     //Horizontal line.
-                                                            
-            setShape(sourceItem.textItem.position[0]-model.armWeight, 
-                                    sourceItem.textItem.position[1]-spacing, 
-                                        sourceItem.textItem.position[0]-model.armWeight, 
-                                            sourceItem.textItem.position[1]+spacing+model.armWeight);        //Vertical line
-        }
-        else
-        {
-            specText.position = new Array(bounds[0]-spacing, bounds[1]-spacing);
-            spacing = spacing+5;
-            line = createLine(bounds[0]-spacing, 
-                                                    bounds[1]-model.armWeight/2, 
-                                                        bounds[0]+spacing, 
-                                                            bounds[1]-model.armWeight/2, 
-                                                                newColor);     //Horizontal line.
-                                                            
-            setShape(bounds[0]-model.armWeight/2, 
-                                    bounds[1]-spacing, 
-                                        bounds[0]-model.armWeight/2, 
-                                            bounds[1]+spacing);        //Vertical line
-        }
-    
-        selectLayers(line.name, coordinateText.name);
-        var spec = createSmartObject();
-        spec.name = "CoordinatesSpec";
-        idCoordinateSpec = getIDOfLayer();
-        
-        setXmpDataForSpec(sourceItem, idCoordinateSpec, "idCoordinateSpec");
-        setXmpDataForSpec(spec, "true", "SpeccedObject");
-        setXmpDataForSpec(spec, styleText, "css");
-        doc.activeLayer = sourceItem;
-        var idLayer = getIDOfLayer();
-        setXmpDataForSpec(spec, idLayer, "idLayer");
-    }
-    catch(e)
-    {
-        doc.activeLayer = sourceItem;
-    }
-    
-    setPreferences(startRulerUnits, startTypeUnits, originalDPI);      //Setting the original preferences of the document.
+    app.preferences.rulerUnits = startRulerUnits;
 }
 
 //Check if layer is a valid layer for speccing or not.
@@ -2178,62 +1495,6 @@ function setXmpDataOfLayer(activeLayer, idLyr, idSpec,  idBullet, idDupBullet, n
 	{}
 }
 
-//Set XMPMetadata for specced Object.
-function setXmpDataForSpec(activeLayer, value, specString)
-{
-    var layerXMP;
-	try
-	{
-		layerXMP = new XMPMeta(activeLayer.xmpMetadata.rawData);
-	}
-	catch(e)
-	{
-		layerXMP = new XMPMeta();			// layer did not have metadata so create new
-	}
-
-	try
-	{
-        layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, specString, null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-        layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, specString, 1, value.toString());
-
-        activeLayer.xmpMetadata.rawData = layerXMP.serialize();
-    }
-	catch(e) 
-	{}
-}
-
-//Set XMPMetadata for the layers on which spacing specs between two object applied.
-function setXmpDataForSpacingSpec(activeLayer, value, specString, index)
-{
-     var layerXMP;
-	try
-	{
-		layerXMP = new XMPMeta(activeLayer.xmpMetadata.rawData);
-	}
-	catch(e)
-	{
-		layerXMP = new XMPMeta();			// layer did not have metadata so create new
-	}
-
-	try
-	{
-        var noOfItemsInArray = layerXMP.countArrayItems(XMPConst.NS_PHOTOSHOP, specString);
-        if(index)
-        {
-            layerXMP.setArrayItem(XMPConst.NS_PHOTOSHOP, specString, index, value.toString());
-        }
-        else
-        {
-            layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, specString, null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-            layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, specString, noOfItemsInArray - 1, value.toString());
-        }
-        
-        activeLayer.xmpMetadata.rawData = layerXMP.serialize();
-    }
-	catch(e) 
-	{}
-}
-
 //Check that layer has XMPMetadata or not, if yes return the data.
 function getXMPData(activeLayer, idStr)
 {
@@ -2249,54 +1510,6 @@ function getXMPData(activeLayer, idStr)
 	{}
 
 	return null;
-}
-
-//Get spacing spec id (spec between two objects) of the layer if present.
-function getXMPDataForSpacingSpec(activeLayer, layerId, specString)
-{
-    try
-	{
-       var layerXMP = new XMPMeta(activeLayer.xmpMetadata.rawData);
-        var noOfItemsInXmpArray = layerXMP.countArrayItems(XMPConst.NS_PHOTOSHOP, specString);
-        var specId = "", spec = "";
-        
-        for( var i = 0; i < noOfItemsInXmpArray; i++)
-        {
-            specId = layerXMP.getArrayItem(XMPConst.NS_PHOTOSHOP, specString, i + 1).toString();
-            spec = getLayerByID(specId);
-            if(spec)
-            {
-                var specXMP = new XMPMeta(spec.xmpMetadata.rawData);
-                var firstLayerId = specXMP.getArrayItem(XMPConst.NS_PHOTOSHOP, "firstLayer", 1).toString();
-                var secondLayerId = specXMP.getArrayItem(XMPConst.NS_PHOTOSHOP, "secondLayer", 1).toString();
-                if(layerId == firstLayerId || layerId == secondLayerId)
-                    return specId;
-            }
-        }
-	}
-	catch(e)
-	{}
-
-	return null;
-}
-
-//Return the index at which spec id is present from xmp array of layer.
-function getIndexFromXmpArray(artLayer, idSpec, specString)
-{     
-    var layerXMP = new XMPMeta(artLayer.xmpMetadata.rawData);
-    var noOfItemsInXmpArray = layerXMP.countArrayItems(XMPConst.NS_PHOTOSHOP, specString);
-    var id = "", pos = 0;
-    for(var i = 0; i < noOfItemsInXmpArray; i++)
-    {
-            id = layerXMP.getArrayItem(XMPConst.NS_PHOTOSHOP, specString, i + 1).toString();
-            if(id == idSpec)
-            {
-                pos = i + 1;
-                break;
-            }
-    }
-    artLayer.xmpMetadata.rawData = layerXMP.serialize();
-    return pos;
 }
 
 //Make layer active by using ID.
@@ -2327,38 +1540,10 @@ function getIDOfLayer()
 	return(executeActionGet(ref).getInteger(charIDToTypeID( "LyrI" )));
 }
 
-//Apply scaling to the given value.
-function getScaledValue(value)
-{
-    var scaledValue = value;
-    try
-    {
-        if(model.useScaleBy)        //Scaling option is checked or not.
-        {
-            var scaling = Number(model.scaleValue.substring(1));
-        
-            if(!scaling)
-                scaling = 1;
-        
-            if(model.scaleValue.charAt(0) == '/')
-                scaledValue = scaledValue / scaling;
-            else
-                scaledValue = scaledValue * scaling;
-        }
-    }
-    catch(e)
-    {
-        scaledValue = value;
-    }
-
-    return scaledValue;
-}
-
 //Get spec info for general items.
 function getSpecsInfoForGeneralItem(sourceItem)
 {
     var infoText;
-    cssText = "";
     
 	if(sourceItem.kind == undefined)
 	{
@@ -2368,7 +1553,6 @@ function getSpecsInfoForGeneralItem(sourceItem)
     
     var infoText = sourceItem.kind.toString().replace ("LayerKind.", "");
     var pageItem = sourceItem;
-    cssText = "." + pageItem.name.toLowerCase() + " {\r\t" + infoText.toLowerCase() + ";";
 
     try
 	{
@@ -2376,13 +1560,11 @@ function getSpecsInfoForGeneralItem(sourceItem)
         {
             var opacityString = "\r\tOpacity: " + Math.round(pageItem.opacity) / 100;
             infoText += opacityString;
-            cssText += opacityString.toLowerCase() + ";";
         }
     }
 	catch(e)
 	{}
      
-    cssText += "\r}";
     return infoText;
 }
 
@@ -2395,7 +1577,6 @@ function getSpecsInfoForPathItem(pageItem)
     
     // Get the layer kind and color value of that layer.
 	var infoText = "";
-    cssText = "."+pathItem.name.toLowerCase()+" {";
     
     //Gives the opacity for the art layer,
 	if(model.shapeAlpha)
@@ -2428,7 +1609,6 @@ function getSpecsInfoForPathItem(pageItem)
                 }
             
                 infoText += cssColor;
-                cssText += "\r\tbackground: " + cssColor + ";";
             }
             else if(pathItem.kind == LayerKind.GRADIENTFILL)
             {
@@ -2445,7 +1625,6 @@ function getSpecsInfoForPathItem(pageItem)
                 }
                 
                 infoText += gradientValue;
-                cssText += "\r\tbackground: " + gradientValue +";";
             }
         }
     }
@@ -2465,7 +1644,6 @@ function getSpecsInfoForPathItem(pageItem)
         if(alpha != "")
         {
             infoText += "\rOpacity: "+alpha;
-            cssText += "\r\topacity: "+alpha+";";
         }
     
         if(model.shapeEffects)          //Get the Effect values of the shape object.
@@ -2476,22 +1654,10 @@ function getSpecsInfoForPathItem(pageItem)
                 
              doc.activeLayer = pageItem;
         }
-    
-        if(model.shapeBorderRadius)         //Get the corner radius of the shape object.
-        {
-            doc.activeLayer = pageItem;
-            var roundCornerValue = getRoundCornerValue();
-            if(roundCornerValue != "")
-            {
-                infoText += "\r" + roundCornerValue;
-                cssText += "\r\t" + roundCornerValue.toLowerCase() + ";";
-            }
-        }
     }
     catch(e)
     {}
     
-    cssText += "\r}";
     doc.activeLayer = pageItem;
     return infoText;
 }
@@ -2840,8 +2006,6 @@ function getSpecsInfoForTextItem(pageItem)
         if(model.textAlpha)
             alpha = Math.round(pageItem.opacity)/100 ;
 
-        cssText = pageItem.name.toLowerCase()+" {";
-        
         //Get the text font and concat it in text info,
         if (model.textFont)
         {
@@ -2849,7 +2013,6 @@ function getSpecsInfoForTextItem(pageItem)
                 font = kDefaultFontVal;
                 
             infoText += "\rFont-Family: " + font;
-            cssText += "\r\tfont-family: " + font + ";";
         }
 
         //Get the font size.
@@ -2858,28 +2021,8 @@ function getSpecsInfoForTextItem(pageItem)
             if(size == "")
                 size = kDefaultFontSize;
                 
-            var fontSize = "";
-            
-            //Calculate the font size in 'em' units.
-            if(model.specInEM)
-            {
-                if(model.baseFontSize != 0)
-                    rltvFontSize = model.baseFontSize;
-                    
-                if(getTypeUnits() == 'mm')
-                {
-                    rltvFontSize = pointsToUnitsString(rltvFontSize, Units.MM).toString().replace(' mm','');
-                }
-                
-                fontSize = Math.round(size / rltvFontSize * 100) / 100 + " em";
-            }
-            else 
-            {   
-                fontSize = Math.round(size * 100) / 100 + " " + getTypeUnits();
-            }
-
+            var fontSize = Math.round(size * 100) / 100 + " " + getTypeUnits();
             infoText += "\rFont-Size: " + fontSize;
-            cssText += "\r\tfont-size: " + fontSize + ";";
         }
     
         //Get the color of text.
@@ -2896,7 +2039,6 @@ function getSpecsInfoForTextItem(pageItem)
             }
             
              infoText += "\rColor: " + color;
-             cssText += "\r\tcolor: "+ color.toLowerCase() + ";";
         }
 
         //Get the style of text.
@@ -2911,7 +2053,6 @@ function getSpecsInfoForTextItem(pageItem)
                 styleString += "/ italic";
 
             infoText += "\rFont-Style: " + styleString;
-            cssText += "\r\tfont-style: "+ styleString + ";";
             styleString = "";
 
             if (underline != "" && underline != "underlineOff" )
@@ -2928,7 +2069,6 @@ function getSpecsInfoForTextItem(pageItem)
             if(styleString != "")
             {
                 infoText += "\rText-Decoration: " + styleString;
-                cssText += "\r\ttext-decoration: "+ styleString + ";";
             }
         }
 
@@ -2940,14 +2080,12 @@ function getSpecsInfoForTextItem(pageItem)
                 var s = textItem.justification.toString();
                 s = s.substring(14,15).toLowerCase() + s.substring(15).toLowerCase();
                 infoText += "\rText-Align: " + s;
-                cssText += "\r\ttext-align: " + s + ";";
             }
         }
         catch(e)
         {
            var alignment = getAlignment();
            infoText += "\rText-Align: " + alignment;
-           cssText += "\r\ttext-align: " + alignment + ";";
         }
    
         if (model.textLeading)
@@ -2956,46 +2094,20 @@ function getSpecsInfoForTextItem(pageItem)
                 leading =  size / 100 * Math.round(kDefaultLeadVal);
 
             leading = leading.toString().replace("px", "");
+            leading = Math.round(leading * 100) / 100 + " " + getTypeUnits();
             
-            //Calculate the line height in 'em' units.
-            if(model.specInEM)
-            {
-                var rltvLineHeight = "";
-                
-                if(model.baseLineHeight != 0)
-                {
-                    rltvLineHeight = model.baseLineHeight;
-                }
-                else
-                {
-                    rltvLineHeight = rltvFontSize * 1.4;
-                }   
-                
-                 if(getTypeUnits() == 'mm')
-                        rltvLineHeight = pointsToUnitsString(rltvLineHeight, Units.MM).toString().replace(' mm','');
-                
-                leading = Math.round(leading / rltvLineHeight * 100) / 100 + " em";
-            }
-            else 
-            {   
-                leading = Math.round(leading * 100) / 100 + " " + getTypeUnits();
-            }
-        
             infoText += "\rLine-Height: " + leading;
-            cssText += "\r\tline-height: " + leading + ";";
         }
 
         if (model.textTracking)
         {
             var tracking = Math.round(tracking / 1000 * 100) / 100 + " em";
             infoText += "\rLetter-Spacing: " + tracking;
-            cssText += "\r\tletter-spacing: " + tracking + ";";
         }
     
         if (alpha != "")
         {
             infoText += "\rOpacity: " + alpha;
-            cssText += "\r\topacity: " + alpha + ";";
         }
     
         if (model.textEffects)
@@ -3013,12 +2125,7 @@ function getSpecsInfoForTextItem(pageItem)
     }
     catch(e)
     {}
-    
-    cssText += "\r}";
-    
-    if(model.specInEM)
-        cssBodyText = "body {\r\tfont-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;\r}\r\r";
-    
+
     return infoText;
 }
 
@@ -3132,41 +2239,6 @@ function getStrokeValOfLayer(pageItem)
         doc.activeLayer = pageItem;
         return "";
     }
-}
-
-//Get the round corner value of the shape object.
-function getRoundCornerValue()
-{
-    try
-    {
-        var infoText = "Border-radius: ";
-        var doc = app.activeDocument;
-        var anchorPoints = new Array;
-        var shape = doc.pathItems[0];
-        var pathItem = shape.subPathItems[0];
-        var points = pathItem.pathPoints;
-        var point = "";
-        
-        if(points.length < 5)
-            return infoText+"0";
-        
-        if(points.length != 8)
-            return "";
-
-        for (var k = 1; k < 3 ; k++)
-        {
-            point = points[k];
-            anchorPoints[k] =  point.anchor[0];
-        }
-    
-        infoText +=  Math.abs(parseInt(anchorPoints[2]) - parseInt(anchorPoints[1]));
-    }
-    catch(e)
-    {
-        infoText = "";
-    }
-
-    return infoText;
 }
 
 //To get the type units of the application preferences.
@@ -3575,24 +2647,6 @@ function legendObjectPropertiesLayer()
 	{
 		newLayer=legendPropertiesLayer().layerSets.add();
 		newLayer.name="Object Specs";
-	}
-
-	return newLayer;	
-}
-
-//This function create the artlayer set named 'Coordinates', if not created.
-function legendCoordinateLayer()
-{
-    var newLayer;
-
-	try
-    {
-		newLayer = legendLayer().layerSets.getByName("Coordinates");
-	}
-	catch(e)
-	{
-		newLayer = legendLayer().layerSets.add();
-		newLayer.name = "Coordinates";
 	}
 
 	return newLayer;	

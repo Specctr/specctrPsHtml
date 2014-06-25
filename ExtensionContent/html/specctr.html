@@ -80,11 +80,7 @@
 					style="margin-top: 3px;"/>
 				</li>
 				<li id="tabHeader_3">
-					<img id="tabImage_3" src="../Images/Icon_responsive.png" width="48" height="34"
-					style="margin-top: 3px;"/>
-				</li>
-				<li id="tabHeader_4">
-					<img id="tabImage_4" src="../Images/Icon_prefs.png" width="48" height="34"
+					<img id="tabImage_3" src="../Images/Icon_prefs.png" width="48" height="34"
 					style="margin-top: 3px;"/>
 				</li>
 			</ul>
@@ -161,19 +157,7 @@
 						</div>
 					</li>
 
-					<!-- Coordinate button. -->
-					<li class="border mb20Px" onclick="createCoordinateSpecs()">
-						<div class="button imgButton">
-							<img src="../Images/Icon_coordinates.png" alt="Coordinates" /> 
-							<label class="buttonTextStyle" style="margin-left: -1px;">Coordinates</label>
-						</div>
-					</li>
-
 					<li>
-						<div class="line"></div>
-						<div class="border2 button2" onclick="exportCss()">
-							<label>Export CSS</label>
-						</div>
 						<div class="line mb20Px"></div> 
 						<label class="textNormal">EXPAND CANVAS</label>
 					</li>
@@ -204,36 +188,7 @@
 				<div class="floatLeft" id="shapePropertyForPHXS">
 					<div class="tabPage2Content tabPage2SubHeader boldText">
 						Shape Object</div>
-					<div class="tabPage2Content" id="fillColorForILST"
-						style="display: none;">
-						<input type="checkbox" value="1" id="shapeFillColor"
-							onclick="checkBox_changeHandler(this.id)" /> 
-						<label for="shapeFillColor">Fill Color</label>
-					</div>
-					<div class="tabPage2Content" id="fillStyleForILST"
-						style="display: none;">
-						<input type="checkbox" value="2" id="shapeFillStyle"
-							onclick="checkBox_changeHandler(this.id)" /> 
-						<label for="shapeFillColor">Fill Style</label>
-					</div>
-					<div class="tabPage2Content" id="strokeColorForILST"
-						style="display: none;">
-						<input type="checkbox" value="3" id="shapeStrokeColor"
-							onclick="checkBox_changeHandler(this.id)" /> 
-						<label for="shapeStrokeColor">Stroke Color</label>
-					</div>
-					<div class="tabPage2Content" id="strokeStyleForILST"
-						style="display: none;">
-						<input type="checkbox" value="4" id="shapeStrokeStyle"
-							onclick="checkBox_changeHandler(this.id)" /> 
-						<label for="shapeStrokeStyle">Stroke Style</label>
-					</div>
-					<div class="tabPage2Content" id="strokeSizeForILST"
-						style="display: none;">
-						<input type="checkbox" value="5" id="shapeStrokeSize"
-							onclick="checkBox_changeHandler(this.id)" /> 
-						<label for="shapeStrokeSize">Stroke Size</label>
-					</div>
+					
 					<div class="tabPage2Content" id="fillForPHXS">
 						<input type="checkbox" value="1" id="shapeFill"
 							onclick="checkBox_changeHandler(this.id)" /> 
@@ -253,11 +208,6 @@
 						<input type="checkbox" value="4" id="shapeEffects"
 							onclick="checkBox_changeHandler(this.id)" /> 
 						<label for="shapeEffects">Effects</label>
-					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="5" id="shapeBorderRadius"
-							onclick="checkBox_changeHandler(this.id)" /> 
-						<label for="shapeBorderRadius">Border Radius</label>
 					</div>
 				</div>
 
@@ -313,74 +263,8 @@
 			</div>
 			<!-- Ending of setting tab. -->
 
-			<!-- Starting of responsive tab. -->
-			<div id="tabpage_3" class="tabpage">
-
-				<div class="tabPage2Header">RESPONSIVE OPTIONS</div>
-
-				<span class="boldText tabPage2SubHeader">Distance/Spacing</span>
-
-				<div class="tabPageContentSubHeaderRow">
-					<input type="checkbox" value="1" id="chkDistanceSpec"
-						onchange="chkDistanceSpec_changeHandler()" /> 
-					<label for="chkDistanceSpec"> Spec Distance by %</label>
-				</div>
-
-				<div class="tabPageContentRow">
-					<div class="tabPageContentLeft">
-						<label>100% Width:</label>
-					</div>
-					<div class="tabPageContentRight">
-						<input type="text" class="inputStyle" id="relativeWidth" maxlength="6"
-							onchange="textBox_changeHandler(this.id)"
-							onkeypress="return restrictInputToDecimal(event)" />px
-					</div>
-				</div>
-
-				<div class="tabPageContentRow">
-					<div class="tabPageContentLeft">100% Height:</div>
-					<div class="tabPageContentRight">
-						<input type="text" class="inputStyle" id="relativeHeight" maxlength="6"
-							onchange="textBox_changeHandler(this.id)"
-							onkeypress="return restrictInputToDecimal(event)" />px
-					</div>
-				</div>
-
-				<div class="tabPageContentSubHeaderRow"></div>
-
-				<span class="boldText tabPage2SubHeader">Base Typography</span><br />
-
-				<div class="tabPageContentSubHeaderRow">
-					<input type="checkbox" value="1" id="chkEmSpec"
-						onchange="chkEmSpec_changeHandler()" /> 
-					<label for="chkEmSpec">Spec in em</label>
-				</div>
-
-				<div class="tabPageContentRow">
-					<div class="tabPageContentLeft">
-						Base font size:<br />
-					</div>
-					<div class="tabPageContentRight">
-						<input type="text" class="inputStyle" id="baseFontSize"
-							maxlength="6" onchange="textBox_changeHandler(this.id)"
-							onkeypress="return restrictInputToDecimal(event)" /> px<br />
-					</div>
-				</div>
-
-				<div class="tabPageContentRow">
-					<div class="tabPageContentLeft">Base line height:</div>
-					<div class="tabPageContentRight">
-						<input type="text" class="inputStyle" id="baseLineHeight"
-							maxlength="6" onchange="textBox_changeHandler(this.id)"
-							onkeypress="return restrictInputToDecimal(event)" />px
-					</div>
-				</div>
-
-			</div>
-			<!-- Ending of responsive tab. -->
-
 			<!-- Starting of options tab. -->
-			<div id="tabpage_4" class="tabpage">
+			<div id="tabpage_3" class="tabpage">
 				<div class="tabPage2Header">SPEC OPTIONS</div>
 				<div class="tabPageContentRow">
 					<div class="tabPage4ContentLeft">
@@ -615,7 +499,8 @@
 					</div>
 					<div class="tabPage4ContentRight"></div>
 				</div>
-				<div class="tabPageContentRow" style="padding-top: 15px;">
+
+				<div class="tabPageContentRow" style="padding-top: 5px;">
 
 					<div class="tabPage4ContentLeft" id="radioForPHXS">
 						<label>Color Mode</label>
@@ -629,49 +514,14 @@
 						</div>
 					</div>
 
-					<div class="tabPage4ContentLeft" id="colorListForILST"
-						style="display: none;">
-						<label>Color Mode</label> 
-						<select class="dropdown" id="lstColorMode" 
-							onchange="comboBox_changeHandler(this.id, 'legendColorMode')">
-							<option value="1">CMYK</option>
-							<option value="2">HSB</option>
-							<option value="3">HSL</option>
-							<option value="4">RGB</option>
-						</select>
-					</div>
-
 					<div class="tabPage4ContentRight"></div>
 				</div>
-
-				<div class="tabPageEmptyRow"></div>
 
 				<div class="tabPageCheckBoxRow">
 					<input type="checkbox" value="DisplayRGBAsHex"
 						id="useHexColor"
 						onclick="checkBox_changeHandler(this.id)" /> <label
 						for="useHexColor"> Display RGB As Hex</label>
-				</div>
-
-				<div class="tabPageCheckBoxRow" id="specToEdgeCheckbox"
-					style="display: none;">
-					<input type="checkbox" value="CanvasEdge" id="specToEdge"
-						onclick="checkBox_changeHandler(this.id)" /> 
-					<label for="specToEdge"> Print Spec to Canvas edge</label>
-				</div>
-
-				<div class="tabPageContentRow" style="padding-top: 10px;">
-					<div class="tabPage4ContentLeft">
-						<label>Scale Specs</label>
-					</div>
-				</div>
-
-				<div class="tabPageCheckBoxRow" style="margin-top: -15px;">
-					<input type="checkbox" value="ScaleBy" id="chkScaleBy"
-						style="vertical-align: middle" onclick="chkScaleBy_clickHandler()" />
-					<label for="chkScaleBy">Scale By</label> <input type="text"
-						class="inputStyleSmall" id="txtScaleBy" value="x1"
-						onchange="txtScaleBy_changeHandler()" /> (e.g. x2 or /2)
 				</div>
 
 			</div>

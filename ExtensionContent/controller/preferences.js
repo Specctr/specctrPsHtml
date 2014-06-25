@@ -12,11 +12,6 @@ var preferencePath;		//path of the Specctr config file.
 function getConfigFileName()
 {
 	var specctrConfig = "specctrPhotoshopConfig";
-	var	hostApplication = getHostApp();
-
-	if(hostApplication == "ILST")
-		specctrConfig = "specctrIllustratorConfig";
-
 	return specctrConfig + ".json";
 }
 

@@ -8,15 +8,7 @@ var model =
 		shapeFill:			true,
 		shapeStroke:		true,
 		shapeEffects:		true,
-
-		shapeFillColor:		true,
-		shapeFillStyle:		true,
-		shapeStrokeColor:	true,
-		shapeStrokeStyle:	true,
-		shapeStrokeSize:	true,
-
 		shapeAlpha:			true,
-		shapeBorderRadius: 	true,
 
 		textFont:		true,
 		textSize:		true,
@@ -39,7 +31,6 @@ var model =
 		legendColorSpacing:		'#FF0000',
 		useHexColor:			true,
 		legendColorMode:		"RGB",
-		specToEdge:				true,
 
 		armWeight:		1,
 		isLicensed: 	false,
@@ -54,18 +45,6 @@ var model =
 
 		//Dimension spec options
 		heightPos:	1,
-		widthPos:	1,
-
-		//Responsive tab options
-		specInPrcntg:	false,
-		specInEM:		false,
-		relativeHeight:		0,
-		relativeWidth:		0,
-		baseFontSize:	16,
-		baseLineHeight: 22.4,
-
-		//Scaling specs
-		useScaleBy: false,
-		scaleValue: "x1"
+		widthPos:	1
 };
 
