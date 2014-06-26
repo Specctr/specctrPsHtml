@@ -405,6 +405,8 @@ input[type="text"], input[type="password"]
 
 .textNormal
 {
+	font-family: Arial;
+	font-size:  12px;
     font-weight: normal;
 }
 
