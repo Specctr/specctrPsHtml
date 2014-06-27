@@ -1,7 +1,7 @@
 specctrPsHtml
 ================
 
-Specctr for Photoshop
+Specctr for Photoshop version 1.0 for html
 
 Project Name: specctrPsHtml
 
@@ -39,7 +39,6 @@ Features of the Panel:
 - Units set in global preferences
 - Different color for spec Types 
 - Different modes of calculating measurements
-- Scaling specs (x2, x3, /2, /3 etc.)
 
 6. Others
 - Number system is used for Shape/Text property specs.
@@ -80,7 +79,7 @@ Tools and IDE used:
 - Extension Builder 3 (EB3)
 
 Supported platforms:
-- Photoshop version: Photoshop CC
+- Photoshop version: Photoshop CC Versions
 - OS support: Mac and Win.
 
 For more understanding of UI:
