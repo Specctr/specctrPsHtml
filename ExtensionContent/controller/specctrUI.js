@@ -30,7 +30,7 @@ function activateButton_clickHandler()
 	urlRequest += "&license=" + document.getElementById("license").value;
 	urlRequest += "&email=" + document.getElementById("emailInput").value;
 
-	$.get(urlRequest, completeHandler);		
+	$.get(urlRequest, completeHandler);
 }
 
 /**
@@ -293,7 +293,7 @@ function radioButton_clickHandler(event)
 	{
 		var colorMode = event.target.value;
 		if(colorMode != undefined)
-			model.legendColorMode	= colorMode;
+			model.legendColorMode = colorMode;
 	}
 	catch(e)
 	{

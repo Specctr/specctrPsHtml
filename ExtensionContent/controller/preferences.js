@@ -6,21 +6,6 @@ Description: This file includes all the functions related to reading/writing pre
 var preferencePath;		//path of the Specctr config file.
 
 /**
- * FunctionName	: getConfigFileName()
- * Description	: Get the config file name according to the current host application.
- * */
-function getConfigFileName()
-{
-	var specctrConfig = "specctrPhotoshopConfig";
-	var	hostApplication = getHostApp();
-
-	if(hostApplication == "ILST")
-		specctrConfig = "specctrIllustratorConfig";
-
-	return specctrConfig + ".json";
-}
-
-/**
  * FunctionName	: readFile()
  * Description	: Read the file and return its data.
  * */
@@ -100,5 +85,5 @@ function writeAppPrefs(data)
  * */
 function setPreferencePath()
 {
-	preferencePath = getPrefernceDirectory() + "/" + getConfigFileName();
+	preferencePath = getPrefernceDirectory() + "/specctrPhotoshopConfig.json";
 }

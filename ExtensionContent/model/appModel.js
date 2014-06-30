@@ -8,13 +8,6 @@ var model =
 		shapeFill:			true,
 		shapeStroke:		true,
 		shapeEffects:		true,
-
-		shapeFillColor:		true,
-		shapeFillStyle:		true,
-		shapeStrokeColor:	true,
-		shapeStrokeStyle:	true,
-		shapeStrokeSize:	true,
-
 		shapeAlpha:			true,
 		shapeBorderRadius: 	true,
 
@@ -39,7 +32,6 @@ var model =
 		legendColorSpacing:		'#FF0000',
 		useHexColor:			true,
 		legendColorMode:		"RGB",
-		specToEdge:				true,
 
 		armWeight:		1,
 		isLicensed: 	false,

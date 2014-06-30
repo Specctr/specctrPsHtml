@@ -204,36 +204,6 @@
 				<div class="floatLeft" id="shapePropertyForPHXS">
 					<div class="tabPage2Content tabPage2SubHeader boldText">
 						Shape Object</div>
-					<div class="tabPage2Content" id="fillColorForILST"
-						style="display: none;">
-						<input type="checkbox" value="1" id="shapeFillColor"
-							onclick="checkBox_changeHandler(this.id)" /> 
-						<label for="shapeFillColor">Fill Color</label>
-					</div>
-					<div class="tabPage2Content" id="fillStyleForILST"
-						style="display: none;">
-						<input type="checkbox" value="2" id="shapeFillStyle"
-							onclick="checkBox_changeHandler(this.id)" /> 
-						<label for="shapeFillColor">Fill Style</label>
-					</div>
-					<div class="tabPage2Content" id="strokeColorForILST"
-						style="display: none;">
-						<input type="checkbox" value="3" id="shapeStrokeColor"
-							onclick="checkBox_changeHandler(this.id)" /> 
-						<label for="shapeStrokeColor">Stroke Color</label>
-					</div>
-					<div class="tabPage2Content" id="strokeStyleForILST"
-						style="display: none;">
-						<input type="checkbox" value="4" id="shapeStrokeStyle"
-							onclick="checkBox_changeHandler(this.id)" /> 
-						<label for="shapeStrokeStyle">Stroke Style</label>
-					</div>
-					<div class="tabPage2Content" id="strokeSizeForILST"
-						style="display: none;">
-						<input type="checkbox" value="5" id="shapeStrokeSize"
-							onclick="checkBox_changeHandler(this.id)" /> 
-						<label for="shapeStrokeSize">Stroke Size</label>
-					</div>
 					<div class="tabPage2Content" id="fillForPHXS">
 						<input type="checkbox" value="1" id="shapeFill"
 							onclick="checkBox_changeHandler(this.id)" /> 
@@ -629,18 +599,6 @@
 						</div>
 					</div>
 
-					<div class="tabPage4ContentLeft" id="colorListForILST"
-						style="display: none;">
-						<label>Color Mode</label> 
-						<select class="dropdown" id="lstColorMode" 
-							onchange="comboBox_changeHandler(this.id, 'legendColorMode')">
-							<option value="1">CMYK</option>
-							<option value="2">HSB</option>
-							<option value="3">HSL</option>
-							<option value="4">RGB</option>
-						</select>
-					</div>
-
 					<div class="tabPage4ContentRight"></div>
 				</div>
 
@@ -651,13 +609,6 @@
 						id="useHexColor"
 						onclick="checkBox_changeHandler(this.id)" /> <label
 						for="useHexColor"> Display RGB As Hex</label>
-				</div>
-
-				<div class="tabPageCheckBoxRow" id="specToEdgeCheckbox"
-					style="display: none;">
-					<input type="checkbox" value="CanvasEdge" id="specToEdge"
-						onclick="checkBox_changeHandler(this.id)" /> 
-					<label for="specToEdge"> Print Spec to Canvas edge</label>
 				</div>
 
 				<div class="tabPageContentRow" style="padding-top: 10px;">
