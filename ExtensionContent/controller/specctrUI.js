@@ -284,24 +284,6 @@ function txtScaleBy_changeHandler()
 }
 
 /**
- * FunctionName	: radioButton_clickHandler()
- * Description	: Set the value of legendColorMode when selection of radio button changed.
- * */
-function radioButton_clickHandler(event)
-{
-	try
-	{
-		var colorMode = event.target.value;
-		if(colorMode != undefined)
-			model.legendColorMode	= colorMode;
-	}
-	catch(e)
-	{
-		console.log(e);
-	}
-}
-
-/**
  * FunctionName	: comboBox_changeHandler()
  * Description	: Set the value of font size when changed.
  * */

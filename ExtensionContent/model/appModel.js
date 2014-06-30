@@ -5,16 +5,11 @@ Description: This file initialize and keep the updated value of all objects of t
 
 var model = 
 {
-		shapeFill:			true,
-		shapeStroke:		true,
-		shapeEffects:		true,
-
 		shapeFillColor:		true,
 		shapeFillStyle:		true,
 		shapeStrokeColor:	true,
 		shapeStrokeStyle:	true,
 		shapeStrokeSize:	true,
-
 		shapeAlpha:			true,
 		shapeBorderRadius: 	true,
 
@@ -26,12 +21,11 @@ var model =
 		textLeading:	true,
 		textTracking:	true,
 		textAlpha:		true,
-		textEffects:	true,
 
 		canvasExpandSize: 250,
 
 		//legend settings
-		legendFont: 			"Arial",
+		legendFont: 			"ArialMT",
 		legendFontIndex:		0,
 		legendFontSize:			12,
 		legendColorObject:		'#FF0000',
