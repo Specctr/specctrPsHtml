@@ -430,42 +430,6 @@ function createDimensionSpecs()
 }
 
 /**
- * FunctionName	: createSpacingSpecs()
- * Description	: Call the 'createSpacingSpecs' method from ./jsx/specctr.jsx.
- * */
-function createSpacingSpecs()
-{
-	try
-	{
-		setModel();
-		var extScript = "ext_PHXS_createSpacingSpecs()";
-		evalScript(extScript);
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-}
-
-/**
- * FunctionName	: createCoordinateSpecs()
- * Description	: Call the 'createCoordinateSpecs' method from ./jsx/specctr.jsx.
- * */
-function createCoordinateSpecs()
-{
-	try
-	{
-		setModel();
-		var extScript = "ext_PHXS_createCoordinateSpecs()";
-		evalScript(extScript);
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-}
-
-/**
  * FunctionName	: createPropertySpecs()
  * Description	: Call the 'createPropertySpecsForItem' method from ./jsx/specctr.jsx.
  * */
@@ -475,24 +439,6 @@ function createPropertySpecs()
 	{
 		setModel();
 		var extScript = "ext_PHXS_createPropertySpecs()";
-		evalScript(extScript);
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-}
-
-/**
- * FunctionName	: exportCss()
- * Description	: Call the 'exportCss' method from ./jsx/specctr.jsx.
- * */
-function exportCss()
-{
-	try
-	{
-		setModel();
-		var extScript = "ext_PHXS_exportCss()";
 		evalScript(extScript);
 	}
 	catch(e)

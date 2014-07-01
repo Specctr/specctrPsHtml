@@ -118,6 +118,16 @@ input[type="text"], input[type="password"]
     background-image: none;
 }
 
+.disableBorder
+{
+	border-top: 1px solid #C9CBCC;
+    border-bottom: 1px solid #6D6F70;
+    background-image: linear-gradient(#C9CBCC, #6D6F70), linear-gradient(#C9CBCC, #6D6F70);
+    background-size: 1px 100%;
+    background-position: 0 0, 100% 0;
+    background-repeat: no-repeat;
+}
+
 .button
 {
     padding-top: 10px;
@@ -343,14 +353,6 @@ input[type="text"], input[type="password"]
     width: 198px;
 }
 
-#tabpage_1 .border2:hover
-{
-    border: 2px solid red;
-    background-image: none;
-    width: 198px;
-    margin-top: -2px;
-}
-
 #tabpage_1 .isOpen:hover
 {
     border: 1px solid transparent !important;
@@ -468,6 +470,7 @@ input[type="checkbox"]
 input[type="text"]:disabled
 {
 	background: #e1e1e1 !important;
+	-webkit-user-select: none;
 }
 
 .inputStyle
@@ -747,4 +750,9 @@ label
 	font-family: Verdana; 
 	font-size: 11px; 
 	-webkit-user-select: auto;
+}
+
+.disableDiv
+{
+	opacity: 0.6;
 }

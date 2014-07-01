@@ -85,5 +85,5 @@ function writeAppPrefs(data)
  * */
 function setPreferencePath()
 {
-	preferencePath = getPrefernceDirectory() + "/specctrPhotoshopConfig.json";
+	preferencePath = getPrefernceDirectory() + "/specctrPhotoshopLiteConfig.json";
 }

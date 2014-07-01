@@ -5,21 +5,21 @@ Description: This file initialize and keep the updated value of all objects of t
 
 var model = 
 {
-		shapeFill:			true,
-		shapeStroke:		true,
-		shapeEffects:		true,
-		shapeAlpha:			true,
-		shapeBorderRadius: 	true,
+		shapeFill:			false,
+		shapeStroke:		false,
+		shapeEffects:		false,
+		shapeAlpha:			false,
+		shapeBorderRadius: 	false,
 
 		textFont:		true,
 		textSize:		true,
-		textAlignment:	true,
+		textAlignment:	false,
 		textColor:		true,
-		textStyle:		true,
-		textLeading:	true,
-		textTracking:	true,
-		textAlpha:		true,
-		textEffects:	true,
+		textStyle:		false,
+		textLeading:	false,
+		textTracking:	false,
+		textAlpha:		false,
+		textEffects:	false,
 
 		canvasExpandSize: 250,
 
