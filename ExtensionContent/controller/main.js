@@ -96,7 +96,7 @@ function responsiveTab_creationCompleteHandler()
 	//If true, enable the text boxes for base font size and line height.
 	if(model.specInEM)
 	{
-		enableTextField(document.getElementById());
+		enableTextField(document.getElementById(baseFontSize));
 		enableTextField(document.getElementById(baseLineHeight));
 	}
 	else
@@ -444,42 +444,6 @@ function createDimensionSpecs()
 }
 
 /**
- * FunctionName	: createSpacingSpecs()
- * Description	: Call the 'createSpacingSpecs' method from ./jsx/specctr.jsx.
- * */
-function createSpacingSpecs()
-{
-	try
-	{
-		setModel();
-		var extScript = "ext_ILST_createSpacingSpecs()";
-		evalScript(extScript);
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-}
-
-/**
- * FunctionName	: createCoordinateSpecs()
- * Description	: Call the 'createCoordinateSpecs' method from ./jsx/specctr.jsx.
- * */
-function createCoordinateSpecs()
-{
-	try
-	{
-		setModel();
-		var extScript = "ext_ILST_createCoordinateSpecs()";
-		evalScript(extScript);
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-}
-
-/**
  * FunctionName	: createPropertySpecs()
  * Description	: Call the 'createPropertySpecsForItem' method from ./jsx/specctr.jsx.
  * */
@@ -489,24 +453,6 @@ function createPropertySpecs()
 	{
 		setModel();
 		var extScript = "ext_ILST_createPropertySpecs()";
-		evalScript(extScript);
-	}
-	catch(e)
-	{
-		alert(e);
-	}
-}
-
-/**
- * FunctionName	: exportCss()
- * Description	: Call the 'exportCss' method from ./jsx/specctr.jsx.
- * */
-function exportCss()
-{
-	try
-	{
-		setModel();
-		var extScript = "ext_ILST_exportCss()";
 		evalScript(extScript);
 	}
 	catch(e)

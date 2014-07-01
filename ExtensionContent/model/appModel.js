@@ -5,22 +5,22 @@ Description: This file initialize and keep the updated value of all objects of t
 
 var model = 
 {
-		shapeFillColor:		true,
-		shapeFillStyle:		true,
-		shapeStrokeColor:	true,
-		shapeStrokeStyle:	true,
-		shapeStrokeSize:	true,
-		shapeAlpha:			true,
-		shapeBorderRadius: 	true,
+		shapeFillColor:		false,
+		shapeFillStyle:		false,
+		shapeStrokeColor:	false,
+		shapeStrokeStyle:	false,
+		shapeStrokeSize:	false,
+		shapeAlpha:			false,
+		shapeBorderRadius: 	false,
 
 		textFont:		true,
 		textSize:		true,
-		textAlignment:	true,
+		textAlignment:	false,
 		textColor:		true,
-		textStyle:		true,
-		textLeading:	true,
-		textTracking:	true,
-		textAlpha:		true,
+		textStyle:		false,
+		textLeading:	false,
+		textTracking:	false,
+		textAlpha:		false,
 
 		canvasExpandSize: 250,
 

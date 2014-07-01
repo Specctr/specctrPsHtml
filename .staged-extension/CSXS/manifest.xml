@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="4.0" ExtensionBundleId="specctrAiHtml" ExtensionBundleVersion="2.1.1.h"
+<ExtensionManifest Version="4.0" ExtensionBundleId="specctrAiHtml" ExtensionBundleVersion="2.1.1.lh"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
@@ -172,18 +172,18 @@ each party and (ii) in a written contract signed by both parties.]]>
 				</Lifecycle>
 				<UI>
 					<Type>Panel</Type>
-					<Menu>Specctr-Pro</Menu>
+					<Menu>Specctr-Lite</Menu>
 					<Geometry>
 						<Size>
-							<Height>492</Height>
+							<Height>552</Height>
 							<Width>224</Width>
 						</Size>
 						<MaxSize>
-							<Height>492</Height>
+							<Height>552</Height>
 							<Width>224</Width>
 						</MaxSize>
 						<MinSize>
-							<Height>492</Height>
+							<Height>552</Height>
 							<Width>224</Width>
 						</MinSize>
 					</Geometry>

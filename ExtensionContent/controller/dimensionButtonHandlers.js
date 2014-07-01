@@ -22,15 +22,6 @@ function dimensionButton_clickHandler()
 		}
 		else
 		{
-			//Close the spacing drop down, if open.
-			if($("#spacingDropDown").is(":visible"))
-			{
-				$("#liSpacing .options").slideUp(100);
-				$("#liSpacing").removeClass("isOpen");
-				$("#btnSpacing").removeClass("buttonSelected");
-				$("#imgSpacingDdlArrow").removeClass().addClass("dropdownArrow");
-			}
-
 			$("#liWh .options").slideDown(100);
 			$("#imgWhDdlArrow").addClass("dropdownArrowUp");
 			$("#btnWh").addClass("buttonSelected");
@@ -49,15 +40,6 @@ function dimensionButton_clickHandler()
  * */
 function dimensionDropDown_clickHandler()
 {
-	//Close the spacing drop down, if open.
-	if($("#spacingDropDown").is(":visible"))
-	{
-		$("#liSpacing .options").slideUp(100);
-		$("#liSpacing").removeClass("isOpen");
-		$("#btnSpacing").removeClass("buttonSelected");
-		$("#imgSpacingDdlArrow").removeClass().addClass("dropdownArrow");
-	}
-
 	if($("#dimensionDropDown").is(":visible"))
 	{
 		$("#liWh").removeClass("isOpen");
@@ -69,6 +51,8 @@ function dimensionDropDown_clickHandler()
 		$("#btnWh").addClass("buttonSelected");
 	}
 
+	$("#liSpacing").toggleClass("disableDiv");
+	$("#liCoordinates").toggleClass("disableDiv");
 	$("#liWh .options").slideToggle(100);
 	$("#imgWhDdlArrow").toggleClass("dropdownArrowUp");
 }

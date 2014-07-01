@@ -85,7 +85,7 @@ function writeAppPrefs(data)
  * */
 function setPreferencePath()
 {
-	var path = getPrefernceDirectory() + "/specctrIllustratorConfig.json";
+	var path = getPrefernceDirectory() + "/specctrIllustratorLiteConfig.json";
 	preferencePath = path;
 	return path;
 }

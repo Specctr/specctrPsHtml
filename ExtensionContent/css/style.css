@@ -128,6 +128,16 @@ input[type="text"], input[type="password"]
     cursor: pointer;
 }
 
+.disableButton
+{
+	border-top: 1px solid #C9CBCC;
+    border-bottom: 1px solid #6D6F70;
+    background-image: linear-gradient(#C9CBCC, #6D6F70), linear-gradient(#C9CBCC, #6D6F70);
+    background-size: 1px 100%;
+    background-position: 0 0, 100% 0;
+    background-repeat: no-repeat;
+}
+
 .button2
 {
     padding-top: 10px;
@@ -343,14 +353,6 @@ input[type="text"], input[type="password"]
     width: 198px;
 }
 
-#tabpage_1 .border2:hover
-{
-    border: 2px solid red;
-    background-image: none;
-    width: 198px;
-    margin-top: -2px;
-}
-
 #tabpage_1 .isOpen:hover
 {
     border: 1px solid transparent !important;
@@ -468,6 +470,7 @@ input[type="checkbox"]
 input[type="text"]:disabled
 {
 	background: #e1e1e1 !important;
+	-webkit-user-select: none;
 }
 
 .inputStyle
@@ -676,24 +679,6 @@ label
     -webkit-appearance: none;
 }
 
-#radio
-{
-	float: left;
-	display: block;
-	width:200px;
-}
-
-#radio input
-{
-	margin: 7px;
-}
-
-#radio span
-{
-	margin-right: 46px;
-	margin-top: 6px;
-}
-
 .tabPage4ContentLeft .colorBlock
 {
     float: left;
@@ -746,5 +731,10 @@ label
 	padding-left: 3px; 
 	font-family: Verdana; 
 	font-size: 11px; 
-	-webkit-user-select: auto;
+	-webkit-user-select: none;
+}
+
+.disableDiv
+{
+	opacity: 0.6;
 }
