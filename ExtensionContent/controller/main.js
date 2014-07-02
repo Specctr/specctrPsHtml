@@ -13,7 +13,7 @@ function completeHandler(data, status)
 	var appPrefs = new Object();
 	var response = data;
 
-	alert(response.message);
+	//alert(response.message);
 	var arr = response.registered;
 
 	//If unsuccessful, return without saving the data in config.
