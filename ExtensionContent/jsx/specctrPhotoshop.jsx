@@ -62,6 +62,16 @@ function setModel(currModel)
 function getSelectedLayers()
 {
     var selectedLayers; 
+    var isBackGroundPresent;
+        
+    try
+    {
+        isBackGroundPresent = doc.backgroundLayer;
+    }
+    catch(e)
+    {
+        isBackGroundPresent = false;
+    }
     
     try
     {
@@ -79,7 +89,7 @@ function getSelectedLayers()
             var noOfSlctedLayer = listOfSlctedLyr.count;
             for(var i=0; i < noOfSlctedLayer; i++)
             { 
-                if(doc.backgroundLayer)
+                if(isBackGroundPresent)
                     selectedLayers.push(listOfSlctedLyr.getReference(i).getIndex()); 
                 else 
                     selectedLayers.push(listOfSlctedLyr.getReference(i).getIndex()+1); 
@@ -90,7 +100,7 @@ function getSelectedLayers()
             layerRef = new ActionReference(); 
             layerRef.putProperty(app.charIDToTypeID("Prpr"), app.charIDToTypeID("ItmI")); 
             layerRef.putEnumerated(app.charIDToTypeID("Lyr "), app.charIDToTypeID("Ordn"), app.charIDToTypeID("Trgt")); 
-            if(doc.backgroundLayer) 
+            if(isBackGroundPresent) 
                 selectedLayers.push(app.executeActionGet(layerRef).getInteger(app.charIDToTypeID("ItmI"))-1); 
             else 
                 selectedLayers.push(app.executeActionGet(layerRef).getInteger(app.charIDToTypeID("ItmI"))); 
