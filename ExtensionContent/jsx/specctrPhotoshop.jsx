@@ -222,15 +222,30 @@ function lyrIntoBckgrndLyr()
 {
     try
     {
-        var lyr = app.activeDocument.artLayers.add();
-        var desc = new ActionDescriptor();
-        var ref = new ActionReference();
-        ref.putClass(charIDToTypeID("BckL"));
-        desc.putReference(charIDToTypeID("null"), ref);
-        var refLayer = new ActionReference();
-        refLayer.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
-        desc.putReference(charIDToTypeID("Usng"), refLayer);
-        executeAction(charIDToTypeID("Mk  "), desc, DialogModes.NO );
+        var doc = app.activeDocument;
+        var lyr = doc.artLayers.add();
+        var isBackGroundPresent;
+        
+        try
+        {
+            isBackGroundPresent = doc.backgroundLayer;
+        }
+        catch(e)
+        {
+            isBackGroundPresent = false;
+        }
+    
+        if(isBackGroundPresent)
+        {
+            var desc = new ActionDescriptor();
+            var ref = new ActionReference();
+            ref.putClass(charIDToTypeID("BckL"));
+            desc.putReference(charIDToTypeID("null"), ref);
+            var refLayer = new ActionReference();
+            refLayer.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+            desc.putReference(charIDToTypeID("Usng"), refLayer);
+            executeAction(charIDToTypeID("Mk  "), desc, DialogModes.NO );
+        }
     }
     catch(e)
     {}
