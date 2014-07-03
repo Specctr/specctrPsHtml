@@ -158,9 +158,13 @@ function backgroundLayerIntoNormalLayer()
 
         desc.putObject(charIDToTypeID("T   "), idLyr, propertyDesc);
         executeAction(charIDToTypeID( "setd" ), desc, DialogModes.NO );
+        
+        return true;
     }
     catch(e)
-    {}
+    {
+        return false;
+    }
 }
 
 //Select all layers in the layer panel.
@@ -222,30 +226,15 @@ function lyrIntoBckgrndLyr()
 {
     try
     {
-        var doc = app.activeDocument;
-        var lyr = doc.artLayers.add();
-        var isBackGroundPresent;
-        
-        try
-        {
-            isBackGroundPresent = doc.backgroundLayer;
-        }
-        catch(e)
-        {
-            isBackGroundPresent = false;
-        }
-    
-        if(isBackGroundPresent)
-        {
-            var desc = new ActionDescriptor();
-            var ref = new ActionReference();
-            ref.putClass(charIDToTypeID("BckL"));
-            desc.putReference(charIDToTypeID("null"), ref);
-            var refLayer = new ActionReference();
-            refLayer.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
-            desc.putReference(charIDToTypeID("Usng"), refLayer);
-            executeAction(charIDToTypeID("Mk  "), desc, DialogModes.NO );
-        }
+        var lyr = app.activeDocument.artLayers.add();
+        var desc = new ActionDescriptor();
+        var ref = new ActionReference();
+        ref.putClass(charIDToTypeID("BckL"));
+        desc.putReference(charIDToTypeID("null"), ref);
+        var refLayer = new ActionReference();
+        refLayer.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+        desc.putReference(charIDToTypeID("Usng"), refLayer);
+        executeAction(charIDToTypeID("Mk  "), desc, DialogModes.NO );
     }
     catch(e)
     {}
@@ -397,14 +386,15 @@ function expandCanvas()
         var border = canvasBorder();       //Checking  whether border is created or not.
         if(border == null)
         {
-            backgroundLayerIntoNormalLayer();              //Convert background layer into normal layer.
+            var backGroundLayer = backgroundLayerIntoNormalLayer();              //Convert background layer into normal layer.
             selectAllLayer();                                          //Select all layers from layer panel.
             var group = groupLayers();
             var groupName = "Original Canvas ["+width+" x "+height+"]"
             group.name = groupName;
             doc.selection.selectAll();                                    //Select the whole canvas.
             layerMasking();                                          //Mask the group layer.
-            lyrIntoBckgrndLyr();                                     //Add layer and convert it into background layer.
+            if(backGroundLayer)
+                lyrIntoBckgrndLyr();                                     //Add layer and convert it into background layer.
             drawDashBorder();                                       //Create the dashed border.
             doc = app.activeDocument;
             

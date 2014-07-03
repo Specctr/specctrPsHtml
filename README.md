@@ -1,11 +1,25 @@
-specctrPsHtml
-================
+specctrPsHtml/PsLiteHtml-2.0
+============================
 
 Specctr for Photoshop
 
 Project Name: specctrPsHtml
 
-Description: The objective of the project is to create a panel name "Specctr-Pro" in Photoshop. The panel consists some buttons, tabs, check boxes etc. and these are used to measure the width and height of the art object created in the canvas, to measure the spacing between two art objects and between the canvas edges and single art object. It also shows the properties of the art objects like shape, color, effects, border, inner shadow etc. And for text art object it shows text font family, font size, leading, styles etc.
+Description: The objective of the project is to create a panel name "Specctr-Lite" in Photoshop. The panel consists four tabs,
+- Main tab : It consist 6 buttons and one text box.
+	- Shape / Text : Create property specs of the objects.
+	- Width / Height : Create width/height specs of the objects.
+	- Spacing : Disabled.
+	- Coordinates : Disabled.
+	- Export : Disabled.
+	- Expand : Expand the background to 250 only.
+	- Expand text box : Disabled.
+
+- Option tab : It consist checkboxes to allow which property is to be shown in property specs. Only first three check boxes of text item is enabled.
+
+- Responsive tab : Disabled.
+
+- Setting tab : Only font combo-box is enabled, rest of them are disabled. 
 
 Features of the Panel:
 1. GLOBAL FEATURES
@@ -16,9 +30,6 @@ Features of the Panel:
 
 2. MEASUREMENTS
 - Width & height
-- Spacing between object and canvas
-- Spacing between multiple objects
-- Spacing between text objects
 
 3. SMART OBJECT
 - Fill Color
@@ -29,21 +40,13 @@ Features of the Panel:
 - Font family
 - Size
 - Color 
-- Opacity, Filter
-- Alignment, Leading, kerning
 
 5. OPTIONS
-- RGB/HEX/HSB/HSL/CMYK
-- Specs style (font and color)
-- Line weights
-- Units set in global preferences
-- Different color for spec Types 
-- Different modes of calculating measurements
-- Scaling specs (x2, x3, /2, /3 etc.)
+- Font selection for specs.
 
 6. Others
 - Number system is used for Shape/Text property specs.
-- Spacing and Dimension specs can be created on user's selected position. (see dropdown feature of buttons)
+- Dimension specs can be created on user's selected position. (see dropdown feature of buttons)
  
 Importing steps:
 - To build the project, We need Eclipse 3.6 or later version with Extension Builder 3.
@@ -73,7 +76,7 @@ Exporting steps:
 
 Installing zxp steps:
 - Clicking on the zxp will installed it via Extension Manager.
-- A menu item will appear in the Window>Extensions>Specctr-Pro. On clicking this menu-item, panel will appear. 
+- A menu item will appear in the Window>Extensions>Specctr-Lite. On clicking this menu-item, panel will appear. 
 
 Tools and IDE used:
 - Eclipese 3.6 or later.

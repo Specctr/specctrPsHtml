@@ -50,7 +50,7 @@ function dimensionDropDown_clickHandler()
 		$("#liWh").addClass("isOpen");
 		$("#btnWh").addClass("buttonSelected");
 	}
-	
+
 	$("#btnSpacing").toggleClass("disableDiv");
 	$("#coordinateButton").toggleClass("disableDiv");
 	$("#liWh .options").slideToggle(100);
