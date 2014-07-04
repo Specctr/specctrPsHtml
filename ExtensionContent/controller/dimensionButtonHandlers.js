@@ -16,6 +16,8 @@ function dimensionButton_clickHandler()
 		{
 			$("#liWh .options").slideUp(100);
 			$("#imgWhDdlArrow").removeClass("dropdownArrowUp");
+			$("#btnSpacing").addClass("disableDiv");
+			$("#coordinateButton").addClass("disableDiv");
 			$("#btnWh").removeClass("buttonSelected");
 			$("#liWh").removeClass("isOpen");
 			createDimensionSpecs();
@@ -24,6 +26,8 @@ function dimensionButton_clickHandler()
 		{
 			$("#liWh .options").slideDown(100);
 			$("#imgWhDdlArrow").addClass("dropdownArrowUp");
+			$("#btnSpacing").removeClass("disableDiv");
+			$("#coordinateButton").removeClass("disableDiv");
 			$("#btnWh").addClass("buttonSelected");
 			$("#liWh").addClass("isOpen");
 		}
