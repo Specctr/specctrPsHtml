@@ -1546,39 +1546,6 @@ function rgbToHsv(rgb)
     return "H"+Math.round(h*360)+" S"+Math.round(s*100)+" B"+Math.round(v*100);
 }
 
-//Get the round corner value of the path item.
-function getRoundCornerValue(pageItem)
-{
-    try
-    {
-        var infoText = "";
-        var doc = app.activeDocument;
-        var anchorPoints = new Array;
-        var points = pageItem.selectedPathPoints;
-        var point = "";
-        
-        if(points.length < 5)
-            return infoText + "0";
-        
-        if(points.length != 8)
-            return "";
-
-        for (var k = 0; k < 2 ; k++)
-        {
-            point = points[k];
-            anchorPoints[k] =  point.anchor[0];
-        }
-    
-        infoText +=  Math.abs(parseInt(anchorPoints[1]) - parseInt(anchorPoints[0]));
-    }
-    catch(e)
-    {
-        infoText = "";
-    }
-
-    return infoText;
-}
-
 //Get spec info for items other than path item and text item.
 function getSpecsInfoForGeneralItem(sourceItem)
 {
@@ -1604,120 +1571,29 @@ function getSpecsInfoForTextItem(pageItem)
     
     if(!name)
         name = textItem.contents;
-        
-    cssText = name.toLowerCase() + " {";
-    infoText = name + "\r";
+
+    infoText = name;
     
     try
     {
-        var fontSize, leading;
-        
-        if(model.specInEM)
-        {
-            var rltvFontSize = 16, rltvLineHeight;
-            
-            if(model.baseFontSize != 0)
-                rltvFontSize = model.baseFontSize;
-             
-            if(model.baseLineHeight != 0)
-                rltvLineHeight = model.baseLineHeight;
-            else
-                rltvLineHeight = rltvFontSize * 1.4;
-            
-            fontSize = Math.round(attr.size / rltvFontSize * 100) / 100 + " em";
-            leading = Math.round(attr.leading / rltvLineHeight * 100) / 100 + " em";
-        }
-        else 
-        {   
-            fontSize = Math.round(attr.size * 10) / 10 + " " + typeUnits();
-            leading = Math.round(attr.leading * 10) / 10 + " " + typeUnits();
-        }
-        
-        infoText += "Text:";
-        
         if(model.textFont)
         {
             var fontFamily = attr.textFont.name;
-            infoText += "\r" + fontFamily;
-            cssText += "\r\tfont-family: " + fontFamily + ";";
+            infoText += "\rFont-Family: " + fontFamily;
+        }
+        
+        if(model.textSize)
+        {
+            infoText += "\rFont-Size: " + Math.round(attr.size * 10) / 10 + " " + typeUnits();
         }
     
         if(model.textColor)
         {
             var textColor = colorAsString(attr.fillColor);
-            infoText += "\r" + textColor;
-            cssText += "\r\tcolor: " + textColor.toLowerCase() + ";";
+            infoText += "\rColor: " + textColor;
         }
     
-        if(model.textSize)
-        {
-            infoText += "\r" + fontSize;
-            cssText += "\r\tfont-size: " + fontSize + ";";
-        }
-
-        if(model.textAlignment)
-        {
-            var s = paraAttr.justification.toString();
-            s = s.substring(14, 15) + s.substring(15).toLowerCase();
-            infoText += "\r" + s + " align";
-            cssText += "\r\ttext-align: " + s.toLowerCase() + ";";
-        }
-
-        if(model.textLeading)
-        {
-            infoText += "\rLeading: " + leading;
-            cssText += "\r\tline-height: " + leading + ";";
-        }
-    
-        if(model.textTracking)
-        {
-            var tracking = Math.round(attr.tracking / 1000 * 100) / 100 + " em";
-            infoText += "\rTracking: " + tracking;
-            cssText += "\r\tletter-spacing: " + tracking + ";";
-        }
-
-        if(model.textStyle)
-        {
-            var styleString;
-
-            if(attr.capitalization == FontCapsOption.ALLCAPS) 
-                styleString = "All Caps";
-            if(attr.capitalization == FontCapsOption.ALLSMALLCAPS) 
-                styleString = "All Small Caps";
-            if(attr.capitalization == FontCapsOption.SMALLCAPS) 
-                styleString = "Small Caps";
-            if(attr.capitalization == FontCapsOption.NORMALCAPS) 
-                styleString = "Normal";
-
-            if(attr.baselinePosition == FontBaselineOption.SUBSCRIPT) 
-                styleString += "\rSubscript";
-            if(attr.baselinePosition == FontBaselineOption.SUPERSCRIPT) 
-                styleString += "\rSuperscript";
-            if(attr.underline) 
-                styleString += "\rUnderline";
-            if(attr.strikeThrough) 
-                styleString += "\rStrikeThrough";
-
-            infoText += "\rStyle: " + styleString;
-            cssText += "\r\tfont-style: " + styleString.toLowerCase() + ";";
-        }
-
-        if(model.textAlpha)
-        {
-            if(infoText != "") 
-                infoText += "\r\r";
-            
-            var alpha = Math.round(pageItem.opacity);
-            infoText += "Alpha:\r" + alpha + "%";
-            cssText += "\r\topacity: " + alpha + "%;";
-        }
-
     }catch(e){};
-    
-    cssText += "\r}";
-    
-    if(model.specInEM)
-        cssBodyText = "body {\r\tfont-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;\r}\r\r";
     
     return infoText;
 }

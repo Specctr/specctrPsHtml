@@ -298,7 +298,7 @@ function setModelValueFromPreferences()
 	model.shapeStrokeSize = appPrefs.shapeStrokeSize ? true : false;
 	model.shapeAlpha = appPrefs.shapeAlpha ? true : false;
 	model.shapeBorderRadius = appPrefs.shapeBorderRadius ? true : false;
-	
+
 	model.textFont = appPrefs.textFont ? true : false;
 	model.textSize = appPrefs.textSize ? true : false;
 	model.textAlignment = appPrefs.textAlignment ? true : false;
