@@ -2483,54 +2483,60 @@ function colorAsString(c)
         
             case "RGB":
             default:
-            if(model.useHexColor)
-            {
-                var red=Math.round(color.red).toString(16);
-                if (red.length==1) red="0"+red;
-                var green=Math.round(color.green).toString(16);
-                if (green.length==1) green="0"+green;
-                var blue=Math.round(color.blue).toString(16);
-                if (blue.length==1) blue="0"+blue;
-            
-                result = "#"+red+green+blue;
-            }
-            
-            else	
-                result="R"+Math.round(color.red)+" G"+Math.round(color.green)+" B"+Math.round(color.blue);
+                if(model.useHexColor)
+                {
+                    var red = Math.round(color.red).toString(16);
+                    
+                    if(red.length == 1) 
+                        red = "0" + red;
+                        
+                    var green = Math.round(color.green).toString(16);
+                    
+                    if(green.length == 1) 
+                        green = "0" + green;
+                        
+                    var blue = Math.round(color.blue).toString(16);
+                    
+                    if(blue.length == 1) 
+                        blue = "0" + blue;
+                
+                    result = "#" + red + green + blue;
+                }
+                else
+                {
+                    result = "rgb(" + Math.round(color.red) + ", " + Math.round(color.green) + ", " + Math.round(color.blue) + ")";
+                }
             }
         break;
         
         case "CMYKColor":
-        result="C"+Math.round(color.cyan)+" M"+Math.round(color.magenta)+" Y"+Math.round(color.yellow)+" K"+Math.round(color.black);
+        result="cmyk(" + Math.round(color.cyan) + ", " + Math.round(color.magenta) + ", " + Math.round(color.yellow) + ", " + Math.round(color.black) + ")";
         break;
         
         case "LabColor":
-        result="L"+Math.round(color.l)+" a"+Math.round(color.a)+" b"+Math.round(color.b);
+        result="lab(" + Math.round(color.l) + ", " + Math.round(color.a) + ", " + Math.round(color.b) + ")";
         break;
         
         case "GrayColor":
-        result="Gray: "+Math.round(color.gray);
+        result="gray("+Math.round(color.gray) + ")";
         break;
         
         case "SpotColor":
-        result=color.spot.name+"\r"+colorAsString(color.spot.color)+" tint: "+Math.round(color.tint);
+        result=color.spot.name+" "+colorAsString(color.spot.color)+" tint: "+Math.round(color.tint);
         break;
         
         case "PatternColor":
-        result="Pattern: "+color.pattern.name;
+        result="pattern( "+color.pattern.name + ")";
         break;
         
         case "GradientColor":
         result="Gradient "+color.gradient.type.toString().slice(13).toLowerCase()+"\r";
         for(var i=0;i<color.gradient.gradientStops.length;i++)
         {
-            result+=colorAsString(color.gradient.gradientStops[i].color)+" alpha: "+Math.round(color.gradient.gradientStops[i].opacity)+"%\r";
+            result+=colorAsString(color.gradient.gradientStops[i].color)+" alpha: " + (Math.round(color.gradient.gradientStops[i].opacity) / 100)+"\r";
         }
         break;
-        
-        
     }
-    
 
     return result;
 }
@@ -2559,7 +2565,7 @@ function rgbToHsl(rgb)
         h /= 6;
     }
     
-    return "H"+Math.round(h*360)+" S"+Math.round(s*100)+" L"+Math.round(l*100);
+    return "hsl(" + Math.round(h*360) + ", " + Math.round(s*100) + ", " + Math.round(l*100) + ")";
 }
 
 function rgbToHsv(rgb)
@@ -2587,7 +2593,7 @@ function rgbToHsv(rgb)
         h /= 6;
     }
     
-    return "H"+Math.round(h*360)+" S"+Math.round(s*100)+" B"+Math.round(v*100);
+    return "hsb(" + Math.round(h*360) + ", " + Math.round(s*100) + ", " + Math.round(v*100) + ")";
 }
 
 //Get the round corner value of the path item.
@@ -2786,13 +2792,13 @@ function getSpecsInfoForTextItem(pageItem)
     
     if(!name)
         name = textItem.contents;
-        
+    
     cssText = name.toLowerCase() + " {";
-    infoText = name + "\r";
+    infoText = name;
     
     try
     {
-        var fontSize, leading;
+        var fontSize, leading, alpha;
         
         if(model.specInEM)
         {
@@ -2815,83 +2821,103 @@ function getSpecsInfoForTextItem(pageItem)
             leading = Math.round(attr.leading * 10) / 10 + " " + typeUnits();
         }
         
-        infoText += "Text:";
+         if(model.textAlpha)
+            alpha = Math.round(pageItem.opacity) / 100;
         
         if(model.textFont)
         {
             var fontFamily = attr.textFont.name;
-            infoText += "\r" + fontFamily;
+            infoText += "\rFont-Family: " + fontFamily;
             cssText += "\r\tfont-family: " + fontFamily + ";";
+        }
+    
+        if(model.textSize)
+        {
+            infoText += "\rFont-Size: " + fontSize;
+            cssText += "\r\tfont-size: " + fontSize + ";";
         }
     
         if(model.textColor)
         {
             var textColor = colorAsString(attr.fillColor);
-            infoText += "\r" + textColor;
-            cssText += "\r\tcolor: " + textColor.toLowerCase() + ";";
+            if(alpha != "" && textColor.indexOf("(") >= 0)
+            {
+                textColor = convertColorIntoCss(textColor, alpha);
+                alpha = "";
+            }
+            infoText += "\rColor: " + textColor;
+            cssText += "\r\tcolor: " + textColor + ";";
         }
     
-        if(model.textSize)
+        if(model.textStyle)
         {
-            infoText += "\r" + fontSize;
-            cssText += "\r\tfont-size: " + fontSize + ";";
-        }
+            var styleString = "normal";
 
+            if(attr.capitalization == FontCapsOption.ALLCAPS) 
+                styleString = "all caps";
+            if(attr.capitalization == FontCapsOption.ALLSMALLCAPS) 
+                styleString = "all small caps";
+            if(attr.capitalization == FontCapsOption.SMALLCAPS) 
+                styleString = "small caps";
+
+            infoText += "\rFont-Style: " + styleString;
+            cssText += "\r\tfont-style: " + styleString + ";";
+            
+            styleString = "";
+            if(attr.baselinePosition == FontBaselineOption.SUBSCRIPT) 
+                styleString = "sub-script";
+            else if(attr.baselinePosition == FontBaselineOption.SUPERSCRIPT) 
+                styleString = "super-script";
+
+            if(attr.underline)
+            {
+                if(styleString != "")
+                    styleString += " / ";
+                    
+                styleString += "underline";
+            }
+        
+            if(attr.strikeThrough) 
+            {
+                if(styleString != "")
+                    styleString += " / ";
+                
+                styleString += "strike-through";
+            }
+
+            if(styleString != "")
+            {
+                infoText += "\rText-Decoration: " + styleString;
+                cssText += "\r\ttext-decoration: " + styleString + ";";
+            }
+        }
+    
         if(model.textAlignment)
         {
             var s = paraAttr.justification.toString();
             s = s.substring(14, 15) + s.substring(15).toLowerCase();
-            infoText += "\r" + s + " align";
-            cssText += "\r\ttext-align: " + s.toLowerCase() + ";";
+            s = s.toLowerCase();
+            infoText += "\rText-Align: " + s ;
+            cssText += "\r\ttext-align: " + s + ";";
         }
 
         if(model.textLeading)
         {
-            infoText += "\rLeading: " + leading;
+            infoText += "\rLine-Height: " + leading;
             cssText += "\r\tline-height: " + leading + ";";
         }
     
         if(model.textTracking)
         {
             var tracking = Math.round(attr.tracking / 1000 * 100) / 100 + " em";
-            infoText += "\rTracking: " + tracking;
+            infoText += "\rLetter-Spacing: " + tracking;
             cssText += "\r\tletter-spacing: " + tracking + ";";
         }
 
-        if(model.textStyle)
+        if(alpha != "")
         {
-            var styleString;
-
-            if(attr.capitalization == FontCapsOption.ALLCAPS) 
-                styleString = "All Caps";
-            if(attr.capitalization == FontCapsOption.ALLSMALLCAPS) 
-                styleString = "All Small Caps";
-            if(attr.capitalization == FontCapsOption.SMALLCAPS) 
-                styleString = "Small Caps";
-            if(attr.capitalization == FontCapsOption.NORMALCAPS) 
-                styleString = "Normal";
-
-            if(attr.baselinePosition == FontBaselineOption.SUBSCRIPT) 
-                styleString += "\rSubscript";
-            if(attr.baselinePosition == FontBaselineOption.SUPERSCRIPT) 
-                styleString += "\rSuperscript";
-            if(attr.underline) 
-                styleString += "\rUnderline";
-            if(attr.strikeThrough) 
-                styleString += "\rStrikeThrough";
-
-            infoText += "\rStyle: " + styleString;
-            cssText += "\r\tfont-style: " + styleString.toLowerCase() + ";";
-        }
-
-        if(model.textAlpha)
-        {
-            if(infoText != "") 
-                infoText += "\r\r";
-            
-            var alpha = Math.round(pageItem.opacity);
-            infoText += "Alpha:\r" + alpha + "%";
-            cssText += "\r\topacity: " + alpha + "%;";
+            infoText += "\rOpacity: " + alpha;
+            cssText += "\r\topacity: " + alpha;
         }
 
     }catch(e){};
@@ -2903,7 +2929,16 @@ function getSpecsInfoForTextItem(pageItem)
     
     return infoText;
 }
-		
+
+//Convert color into css style.
+function convertColorIntoCss(color, alpha)
+{
+    var index = color.indexOf("(");
+    color = color.substr(0, index)+"a"+color.substr(index)
+    color = color.substr(0, color.length-1)+", "+alpha+")";
+    return color;
+}
+
 function originalArtboardRect()
 {		
     if(app.activeDocument)
