@@ -13,7 +13,27 @@ function activateButton_clickHandler()
 
 	// Get Extension Id and matching productCode.
 	var productCodes = {
-			"SpecctrPs-Pro":"31265"};
+        // Photoshop 2.0.
+        "SpecctrPs-Pro":"63221",
+        "SpecctrPs-10":"63222",
+        "SpecctrPs-20":"63223",
+        "SpecctrPs-30":"63224",
+        "SpecctrPs-Site":"63225",
+
+        // Illustrator 2.0.
+        "SpecctrPro":"63233", 
+        "SpecctrBusiness10":"63235",
+        "SpecctrBusiness20":"63236",
+        "SpecctrBusiness30":"63237",
+        "SpecctrBusinessSite":"63238",
+
+        // Indesign 2.0.
+        "Specctr-Pro-ID":"63240", 
+        "Specctr-Business-10":"63241", 
+        "Specctr-Business-20":"63242", 
+        "Specctr-Business-30":"63243", 
+        "Specctr-Business-Site":"63244"
+    };
 
 	var csInterface = new CSInterface();
 	var extensionId = csInterface.getExtensionID();
