@@ -96,7 +96,7 @@ function responsiveTab_creationCompleteHandler()
 	//If true, enable the text boxes for base font size and line height.
 	if(model.specInEM)
 	{
-		enableTextField(document.getElementById());
+		enableTextField(document.getElementById(baseFontSize));
 		enableTextField(document.getElementById(baseLineHeight));
 	}
 	else
