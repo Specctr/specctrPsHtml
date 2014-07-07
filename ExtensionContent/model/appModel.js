@@ -10,8 +10,8 @@ var model =
 		shapeStrokeColor:	true,
 		shapeStrokeStyle:	true,
 		shapeStrokeSize:	true,
-		shapeAlpha:			true,
-		shapeBorderRadius: 	true,
+		shapeAlpha:			false,
+		shapeBorderRadius: 	false,
 
 		textFont:		true,
 		textSize:		true,
@@ -20,7 +20,7 @@ var model =
 		textStyle:		true,
 		textLeading:	true,
 		textTracking:	true,
-		textAlpha:		true,
+		textAlpha:		false,
 
 		canvasExpandSize: 250,
 
