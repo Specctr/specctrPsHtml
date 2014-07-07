@@ -8,8 +8,8 @@ var model =
 		shapeFill:			true,
 		shapeStroke:		true,
 		shapeEffects:		true,
-		shapeAlpha:			true,
-		shapeBorderRadius: 	true,
+		shapeAlpha:			false,
+		shapeBorderRadius: 	false,
 
 		textFont:		true,
 		textSize:		true,
@@ -18,7 +18,7 @@ var model =
 		textStyle:		true,
 		textLeading:	true,
 		textTracking:	true,
-		textAlpha:		true,
+		textAlpha:		false,
 		textEffects:	true,
 
 		canvasExpandSize: 250,
