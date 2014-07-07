@@ -2798,7 +2798,7 @@ function getSpecsInfoForTextItem(pageItem)
     
     try
     {
-        var fontSize, leading, alpha;
+        var fontSize, leading, alpha = "";
         
         if(model.specInEM)
         {
