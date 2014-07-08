@@ -36,7 +36,7 @@ body
 .container
 {
     Height: 490px;
-    Width: 222px;
+    Width: 224px;
     background-color: #E8E8E8;
 	margin: 0 auto;
     border: 1px solid #B7BABC;
@@ -53,28 +53,6 @@ body
     #dvLoginContainer .button
     {
         width: 188px;
-    }
-
-.logo
-{
-    background: url(../Images/SpecctrLogo_regpanel.png);
-    margin: 25px 40px;
-    height: 39px;
-    background-repeat: no-repeat;
-}
-
-.row
-{
-    margin: 8px;
-    margin-top: 20px;
-}
-
-    .row label
-    {
-        font-weight: bold;
-        font-family: sans-serif;
-        font-size: 13px;
-        color: #4B4B4B;
     }
 
 input[type="text"], input[type="password"]
@@ -157,20 +135,6 @@ input[type="text"], input[type="password"]
 #dvLoginContainer ul
 {
     margin-top: 70px;
-}
-
-.link
-{
-    color: #3199F6;
-    font-family: sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-}
-
-.help
-{
-    text-align: center;
-    padding: 20px;
 }
 
 .tabs
