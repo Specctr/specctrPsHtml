@@ -89,7 +89,7 @@ function tab_clickHandler()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 		return false;
 	}
 
@@ -214,7 +214,7 @@ function chkDistanceSpec_changeHandler()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -253,7 +253,7 @@ function chkEmSpec_changeHandler()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -334,7 +334,7 @@ function lstFont_changeHandler()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -432,7 +432,7 @@ function text_KeyDownHandler(event)
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
