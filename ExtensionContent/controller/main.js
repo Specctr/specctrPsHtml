@@ -5,34 +5,6 @@ and reading and writing preferences methods.
  */
 
 /**
- * FunctionName	: completeHandler()
- * Description	: Callback function which is called when validation of user's license take place.
- * */
-function completeHandler(data, status)
-{
-	var appPrefs = new Object();
-	var response = data;
-
-	alert(response.message);
-	var arr = response.registered;
-
-	//If unsuccessful, return without saving the data in config.
-	if(arr.length != 0) 
-	{
-		appPrefs.isLicensed = true;
-		model.isLicensed = true;
-	}
-	else
-	{
-		return;
-	}
-
-	setPreferencePath();
-	writeAppPrefs(JSON.stringify(appPrefs));
-	init();
-}
-
-/**
  * FunctionName	: mainTab_creationCompleteHandler()
  * Description	: Set the canvas expand text value.
  * */
@@ -48,22 +20,9 @@ function mainTab_creationCompleteHandler()
 function settings_creationCompleteHandler()
 {
 	//Load settings from model according to the host application.
-	document.getElementById("shapeFillColor").checked		= model.shapeFillColor;
-	document.getElementById("shapeFillStyle").checked		= model.shapeFillStyle;
-	document.getElementById("shapeStrokeColor").checked		= model.shapeStrokeColor;
-	document.getElementById("shapeStrokeStyle").checked		= model.shapeStrokeStyle;
-	document.getElementById("shapeStrokeSize").checked		= model.shapeStrokeSize;
-	document.getElementById("shapeAlpha").checked			= model.shapeAlpha;
-	document.getElementById("shapeBorderRadius").checked	= model.shapeBorderRadius;
-
 	document.getElementById("textFont").checked				= model.textFont;
 	document.getElementById("textSize").checked				= model.textSize;
 	document.getElementById("textColor").checked			= model.textColor;
-	document.getElementById("textStyle").checked			= model.textStyle;
-	document.getElementById("textAlignment").checked		= model.textAlignment;
-	document.getElementById("textLeading").checked			= model.textLeading;
-	document.getElementById("textTracking").checked			= model.textTracking;
-	document.getElementById("textAlpha").checked			= model.textAlpha;
 }
 
 /**
@@ -72,38 +31,10 @@ function settings_creationCompleteHandler()
  * */
 function responsiveTab_creationCompleteHandler()
 {
-	var relativeWidth = "relativeWidth";
-	var relativeHeight = "relativeHeight";
-	var baseFontSize = "baseFontSize";
-	var baseLineHeight = "baseLineHeight";
-
-	//Select the checkboxes depending on the model value.
-	document.getElementById("chkDistanceSpec").checked = model.specInPrcntg;
-	document.getElementById("chkEmSpec").checked = model.specInEM;
-
-	//If true, enable the text boxes for width and height.
-	if(model.specInPrcntg)
-	{
-		enableTextField(document.getElementById(relativeWidth));
-		enableTextField(document.getElementById(relativeHeight));
-	}
-	else
-	{
-		disableTextField(document.getElementById(relativeWidth));
-		disableTextField(document.getElementById(relativeHeight));
-	}
-
-	//If true, enable the text boxes for base font size and line height.
-	if(model.specInEM)
-	{
-		enableTextField(document.getElementById(baseFontSize));
-		enableTextField(document.getElementById(baseLineHeight));
-	}
-	else
-	{
-		disableTextField(document.getElementById(baseFontSize));
-		disableTextField(document.getElementById(baseLineHeight));
-	}
+	disableTextField(document.getElementById("relativeWidth"));
+	disableTextField(document.getElementById("relativeHeight"));
+	disableTextField(document.getElementById("baseFontSize"));
+	disableTextField(document.getElementById("baseLineHeight"));
 }
 
 /**
@@ -112,40 +43,8 @@ function responsiveTab_creationCompleteHandler()
  * */
 function prefs_creationCompleteHandler()
 {
-	//Set the values for font size combobox.
-	var fontSizeHandler = document.getElementById("lstSize");
-	fontSizeHandler.selectedIndex = -1;
-	fontSizeHandler.value = model.legendFontSize.toString();
 
-	//Set the values for arm weight combobox.
-	var armWeightHandler = document.getElementById("lstLineWeight");
-	armWeightHandler.selectedIndex = -1;
-	armWeightHandler.value = model.armWeight.toString();
-
-	document.getElementById("useHexColor").checked = model.useHexColor;
-	document.getElementById("specToEdge").checked = model.specToEdge;
-
-	var colorModeHandler = document.getElementById("lstColorMode");
-	for(var i = 0; i < 4; i++)
-	{
-		if(colorModeHandler.options[i].text == model.legendColorMode)
-		{
-			colorModeHandler.options[i].selected = true;
-			break;
-		}
-	}
-
-	document.getElementById("colObject").style.backgroundColor = model.legendColorObject;
-	document.getElementById("colType").style.backgroundColor = model.legendColorType;
-	document.getElementById("colSpacing").style.backgroundColor = model.legendColorSpacing;
-
-	document.getElementById("chkScaleBy").checked = model.useScaleBy;
-
-	//Enable or disable scale text according to selection of check box.
-	if(model.useScaleBy)
-		enableTextField(document.getElementById("txtScaleBy"));
-	else
-		disableTextField(document.getElementById("txtScaleBy"));
+	disableTextField(document.getElementById("txtScaleBy"));
 
 	var extScript = "ext_ILST_getFonts()";
 	evalScript(extScript, loadFontsToList);
@@ -160,28 +59,13 @@ function onLoaded()
 	//Handle the exceptions such as if any value or any component is not present.
 	try
 	{
-		//window.__adobe_cep__.showDevTools();		//For debugging.
 		loadJSX();		//Load the jsx files present in \jsx folder.
-
-		var appPrefs = readAppPrefs();
-		if(!appPrefs)
-		{
-			appPrefs = new Object();
-			appPrefs.isLicensed = false;
-			model.isLicensed = false;
-			writeAppPrefs(JSON.stringify(appPrefs));
-		}
-
-		//Check if Specctr is licensed, if not leave registration screen.
-		model.isLicensed = appPrefs.isLicensed;
-
-		if(model.isLicensed)
-			init();
+		init();
 
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -194,10 +78,6 @@ function init()
 	//Handle the exceptions such as if any value or any component is not present.
 	try
 	{
-		//Load tab container..
-		document.getElementById("loginContainer").style.display = "none";
-		document.getElementById("tabContainer").style.display = "block";
-
 		setModelValueFromPreferences();
 
 		var container = document.getElementById("tabContainer");	//Get tab container
@@ -227,7 +107,7 @@ function init()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -240,39 +120,11 @@ function onClose()
 	var appPrefs = new Object();
 
 	//Save the values according to host application.
-	appPrefs.shapeFillColor		= model.shapeFillColor;
-	appPrefs.shapeFillStyle		= model.shapeFillStyle;
-	appPrefs.shapeStrokeColor	= model.shapeStrokeColor;
-	appPrefs.shapeStrokeStyle	= model.shapeStrokeStyle;
-	appPrefs.shapeStrokeSize	= model.shapeStrokeSize;
-	appPrefs.shapeAlpha			= model.shapeAlpha;
-	appPrefs.shapeBorderRadius	= model.shapeBorderRadius;
-
 	appPrefs.textFont			= model.textFont;
 	appPrefs.textSize			= model.textSize;
-	appPrefs.textAlignment		= model.textAlignment;
 	appPrefs.textColor			= model.textColor;
-	appPrefs.textStyle			= model.textStyle;
-	appPrefs.textLeading		= model.textLeading;
-	appPrefs.textTracking		= model.textTracking;
-	appPrefs.textAlpha			= model.textAlpha;
-
-	appPrefs.specToEdge			= model.specToEdge;
-	appPrefs.isLicensed			= model.isLicensed;
-	appPrefs.canvasExpandSize	= model.canvasExpandSize.toString();
-
 	appPrefs.legendFont			= model.legendFont.toString();
-	appPrefs.legendFontSize		= model.legendFontSize.toString();
-	appPrefs.armWeight			= model.armWeight.toString();
-	appPrefs.legendColorObject	= model.legendColorObject;
-	appPrefs.legendColorType	= model.legendColorType;
-	appPrefs.legendColorSpacing	= model.legendColorSpacing;
-	appPrefs.legendColorMode	= model.legendColorMode;
-	appPrefs.useHexColor		= model.useHexColor;
-	appPrefs.specInPrcntg		= model.specInPrcntg;
-	appPrefs.specInEM			= model.specInEM;
-	appPrefs.useScaleBy			= model.useScaleBy;
-
+	
 	//If object is empty then don't write.
 	if($.isEmptyObject(appPrefs))
 		return;
@@ -288,49 +140,13 @@ function setModelValueFromPreferences()
 {
 	var appPrefs = readAppPrefs();
 
-	if(!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha"))
+	if(!appPrefs || !appPrefs.hasOwnProperty("textFont"))
 		return;
-
-	model.shapeFillColor = appPrefs.shapeFillColor ? true : false;
-	model.shapeFillStyle = appPrefs.shapeFillStyle ? true : false;
-	model.shapeStrokeColor = appPrefs.shapeStrokeColor ? true : false;
-	model.shapeStrokeStyle = appPrefs.shapeStrokeStyle ? true : false;
-	model.shapeStrokeSize = appPrefs.shapeStrokeSize ? true : false;
-	model.shapeAlpha = appPrefs.shapeAlpha ? true : false;
-	model.shapeBorderRadius = appPrefs.shapeBorderRadius ? true : false;
 
 	model.textFont = appPrefs.textFont ? true : false;
 	model.textSize = appPrefs.textSize ? true : false;
-	model.textAlignment = appPrefs.textAlignment ? true : false;
 	model.textColor = appPrefs.textColor ? true : false;
-	model.textStyle = appPrefs.textStyle ? true : false;
-	model.textLeading = appPrefs.textLeading ? true : false;
-	model.textTracking = appPrefs.textTracking ? true : false;
-	model.textAlpha = appPrefs.textAlpha ? true : false;
-
-	model.useHexColor = appPrefs.useHexColor ? true : false;
-	model.specInPrcntg = appPrefs.specInPrcntg ? true : false;
-	model.specInEM = appPrefs.specInEM ? true : false;
-	model.useScaleBy = appPrefs.useScaleBy ? true : false;
-	model.specToEdge = appPrefs.specToEdge ? true : false;
-
-	model.canvasExpandSize = Number(appPrefs.canvasExpandSize);
-
 	model.legendFont = appPrefs.legendFont ? appPrefs.legendFont : model.legendFont;
-	model.legendFontSize = Number(appPrefs.legendFontSize);
-	model.armWeight = Number(appPrefs.armWeight);
-
-	if(appPrefs.hasOwnProperty("legendColorObject"))
-		model.legendColorObject = appPrefs.legendColorObject;
-
-	if(appPrefs.hasOwnProperty("legendColorType"))
-		model.legendColorType = appPrefs.legendColorType;
-
-	if(appPrefs.hasOwnProperty("legendColorSpacing"))
-		model.legendColorSpacing = appPrefs.legendColorSpacing;
-
-	if(appPrefs.hasOwnProperty("legendColorMode"))
-		model.legendColorMode = appPrefs.legendColorMode;
 }
 
 /**
@@ -358,7 +174,7 @@ function loadFontsToList(result)
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -376,7 +192,7 @@ function loadJSX()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 
 }
@@ -403,7 +219,7 @@ function setModel()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -421,7 +237,7 @@ function expandCanvas()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -439,7 +255,7 @@ function createDimensionSpecs()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -457,7 +273,7 @@ function createPropertySpecs()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 

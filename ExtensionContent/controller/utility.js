@@ -13,16 +13,6 @@ function disableTextField(textField)
 }
 
 /**
- * FunctionName	: enableTextField()
- * Description	: Enable the text input and change the background color to white.
- * */
-function enableTextField(textField)
-{
-	textField.disabled = false;
-	textField.style.backgroundColor = "#ffffff";
-}
-
-/**
  * FunctionName	: rgbToHex()
  * Description	: Convert the rgb value into hex.
  * */

@@ -4,36 +4,6 @@ Description: Includes all the methods related to UI component like change event 
  */
 
 /**
- * FunctionName	: activateButton_clickHandler()
- * Description	: Validate the license of the user and move to the tab container if user's credentials valid.
- * */
-function activateButton_clickHandler()
-{
-	var urlRequest;
-
-	// Get Extension Id and matching productCode.
-	var productCodes = {
-			"SpecctrPs-Pro":"31265"};
-
-	var csInterface = new CSInterface();
-	var extensionId = csInterface.getExtensionID();
-
-	//If no installed extension is matched with productCodes values.
-	if(!extensionId)
-	{
-		alert("Incorrect product code!");
-		return;
-	}
-
-	urlRequest = "http://specctr-license.herokuapp.com";
-	urlRequest += "?product=" + productCodes[extensionId];
-	urlRequest += "&license=" + document.getElementById("license").value;
-	urlRequest += "&email=" + document.getElementById("emailInput").value;
-
-	$.get(urlRequest, completeHandler);		
-}
-
-/**
  * FunctionName	: tab_clickHandler()
  * Description	: Click event handler of tabs. Modify styles to tabs and call the function to change images on tab.
  * */
@@ -69,7 +39,7 @@ function tab_clickHandler()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 		return false;
 	}
 
@@ -187,7 +157,7 @@ function lstFont_changeHandler()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 

@@ -36,7 +36,6 @@ var model =
 		specToEdge:				true,
 
 		armWeight:		1,
-		isLicensed: 	false,
 		typeUnits: 		"pt",
 		distanceUnits:	"px",
 
