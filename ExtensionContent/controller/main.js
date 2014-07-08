@@ -42,7 +42,6 @@ function responsiveTab_creationCompleteHandler()
  * */
 function prefs_creationCompleteHandler()
 {
-	document.getElementById("useHexColor").checked = model.useHexColor;
 	disableTextField(document.getElementById("txtScaleBy"));
 
 	var extScript = "ext_PHXS_getFonts()";
@@ -144,11 +143,6 @@ function setModelValueFromPreferences()
 	model.textFont = appPrefs.textFont ? true : false;
 	model.textSize = appPrefs.textSize ? true : false;
 	model.textColor = appPrefs.textColor ? true : false;
-	
-	model.useHexColor = appPrefs.useHexColor ? true : false;
-	model.specInPrcntg = appPrefs.specInPrcntg ? true : false;
-	model.specInEM = appPrefs.specInEM ? true : false;
-	model.useScaleBy = appPrefs.useScaleBy ? true : false;
 
 	model.legendFont = appPrefs.legendFont ? appPrefs.legendFont : model.legendFont;
 }
