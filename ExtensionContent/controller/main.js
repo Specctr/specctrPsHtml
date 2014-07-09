@@ -13,7 +13,6 @@ function completeHandler(data, status)
 	var appPrefs = new Object();
 	var response = data;
 
-	//alert(response.message);
 	var arr = response.registered;
 
 	//If unsuccessful, return without saving the data in config.
@@ -126,7 +125,7 @@ function onLoaded()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -171,7 +170,7 @@ function init()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -288,7 +287,7 @@ function loadFontsToList(result)
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -306,7 +305,7 @@ function loadJSX()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 
 }
@@ -333,7 +332,7 @@ function setModel()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -351,7 +350,7 @@ function expandCanvas()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -369,7 +368,7 @@ function createDimensionSpecs()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -387,7 +386,7 @@ function createSpacingSpecs()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -405,7 +404,7 @@ function createPropertySpecs()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 

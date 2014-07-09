@@ -69,7 +69,7 @@ function tab_clickHandler()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 		return false;
 	}
 
@@ -209,7 +209,7 @@ function lstFont_changeHandler()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 
@@ -243,8 +243,17 @@ function setColorToLabel(element, colorPickerBlock)
 	{
 		var labelName = "col" + colorPickerBlock;
 		var value = "legendColor" + colorPickerBlock;
-		var color = "#" + element.title;
-
+		
+		if(element.title)
+		{
+			var color = "#" + element.title;
+		}
+		else
+		{
+			color = document.getElementById(element.id).style.backgroundColor;
+			color = rgbToHex(color);
+		}
+			
 		document.getElementById(labelName).style.backgroundColor = color;
 		$("#" + element.parentNode.id).slideUp(100);
 		model[value] = color;
@@ -264,13 +273,22 @@ function colorPicker_clickHandler(elementId, colorPickerBlock)
 {
 	try
 	{
+		var colorBlockTextbox = "#txt" + colorPickerBlock + "Color";
 		var dropDownBlock = "#color" + colorPickerBlock + "DropDown";
 		var colorBlock = colorPickerBlock.toLowerCase() + "ColorBlock";
+		var valueForTextBox = "";
 
 		var color = document.getElementById(elementId).style.backgroundColor;
 		color = rgbToHex(color);
 		$(dropDownBlock).slideToggle(100);
 		document.getElementById(colorBlock).style.backgroundColor = color;
+		
+		if(color[0] == "#")
+			valueForTextBox = color.substring(1);
+		else
+			valueForTextBox = color;
+		
+		$(colorBlockTextbox).val(valueForTextBox.toUpperCase());
 
 		if(colorPickerBlock == "Shape")
 		{
@@ -294,6 +312,40 @@ function colorPicker_clickHandler(elementId, colorPickerBlock)
 	}
 }
 
+function colorPickerTextInput_validation(event)
+{
+	var charCode = (event.which) ? event.which : event.keyCode;
+
+	if((charCode < 48 && charCode != 8) || (charCode > 57 && charCode < 65)
+			|| (charCode > 70 && charCode < 97) || (charCode > 102))
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
+}
+
+/**
+ * FunctionName	: colorPickerTextInput_clickHandler()
+ * Description	: Change the color on text input in color picker block .
+ * */
+function colorPickerTextInput_clickHandler(colorPickerBlock)
+{
+	var elementId = "txt" + colorPickerBlock + "Color";
+	var textBox = document.getElementById(elementId);
+	var color = textBox.value;
+
+	for(var i = color.length; i <= 5; i++)
+		color += "0";
+
+	color = "#" + color;
+	
+	var colorBlock = colorPickerBlock.toLowerCase() + "ColorBlock";
+	document.getElementById(colorBlock).style.backgroundColor = color;
+}
+
 /**
  * FunctionName	: text_KeyDownHandler()
  * Description	: Dispatch the click event of activeButton.
@@ -307,7 +359,7 @@ function text_KeyDownHandler(event)
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 	}
 }
 

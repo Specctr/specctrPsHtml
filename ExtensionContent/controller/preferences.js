@@ -59,7 +59,7 @@ function getPrefernceDirectory()
 	}
 	catch(e)
 	{
-		alert(e);
+		console.log(e);
 		return null;
 	}
 }
