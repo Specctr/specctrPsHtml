@@ -404,8 +404,11 @@
 							style="margin-left: 11px; " />
 						<div id='colorShapeDropDown' class="colorPicker">
 							<div id="shapeColorBlock" class="mainColorBlock"
-								style="display: inline-block;"></div>
-							<input type="text" id="txtShapeColor" class="colorText" /> <br>
+								style="display: inline-block;"
+								onclick="setColorToLabel(this, 'Object')"></div>
+							<input type="text" id="txtShapeColor" class="colorText"  maxlength="6"
+								onkeydown="return colorPickerTextInput_validation(event)"
+								onkeyup="colorPickerTextInput_clickHandler('Shape')"/> <br>
 							<div class="colorBlock" title="000000"
 								style="background-color: #000000"
 								onmouseover="setColorValueToTextBox(this, 'Shape')"
@@ -478,8 +481,11 @@
 							style="margin-left: 17px;" />
 						<div id='colorTypeDropDown' class="colorPicker">
 							<div id="typeColorBlock" class="mainColorBlock"
-								style="display: inline-block;"></div>
-							<input type="text" id="txtTypeColor" class="colorText" /> <br>
+								style="display: inline-block;"
+								onclick="setColorToLabel(this, 'Type')"></div>
+							<input type="text" id="txtTypeColor" class="colorText" maxlength="6"
+								onkeydown="return colorPickerTextInput_validation(event)"
+								onkeyup="colorPickerTextInput_clickHandler('Type')"/> <br>
 							<div class="colorBlock" title="000000"
 								style="background-color: #000000"
 								onmouseover="setColorValueToTextBox(this, 'Type')"
@@ -541,8 +547,11 @@
 							style="margin-left: 3px; " />
 						<div id='colorSpaceDropDown' class="colorPicker">
 							<div id="spaceColorBlock" class="mainColorBlock"
-								style="display: inline-block;"></div>
-							<input type="text" id="txtSpaceColor" class="colorText" /> <br>
+								style="display: inline-block;"
+								onclick="setColorToLabel(this, 'Spacing')"></div>
+							<input type="text" id="txtSpaceColor" class="colorText" maxlength="6"
+								onkeydown="return colorPickerTextInput_validation(event)"
+								onkeyup="colorPickerTextInput_clickHandler('Space')"/> <br>
 							<div class="colorBlock" title="000000"
 								style="background-color: #000000"
 								onmouseover="setColorValueToTextBox(this, 'Space')"
