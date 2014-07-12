@@ -13,7 +13,12 @@ function activateButton_clickHandler()
 
 	// Get Extension Id and matching productCode.
 	var productCodes = {
-			"SpecctrPs-Pro":"31265"};
+        "SpecctrPs-Pro":"31265",
+        "SpecctrPs-10":"31279",
+        "SpecctrPs-20":"31280",
+        "SpecctrPs-30":"31281",
+        "SpecctrPs-Site":"31282"
+    };
 
 	var csInterface = new CSInterface();
 	var extensionId = csInterface.getExtensionID();
