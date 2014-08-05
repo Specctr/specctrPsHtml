@@ -15,6 +15,8 @@ function completeHandler(data, status)
 
 	var arr = response.registered;
 
+	createLog(response);
+
 	//If unsuccessful, return without saving the data in config.
 	if(arr.length != 0) 
 	{
@@ -51,7 +53,7 @@ function settings_creationCompleteHandler()
 	document.getElementById("shapeEffects").checked			= model.shapeEffects;
 	document.getElementById("shapeAlpha").checked			= model.shapeAlpha;
 	document.getElementById("shapeBorderRadius").checked	= model.shapeBorderRadius;
-	
+
 	document.getElementById("textFont").checked				= model.textFont;
 	document.getElementById("textSize").checked				= model.textSize;
 	document.getElementById("textColor").checked			= model.textColor;
@@ -152,7 +154,6 @@ function onLoaded()
 	//Handle the exceptions such as if any value or any component is not present.
 	try
 	{
-		//window.__adobe_cep__.showDevTools();		//For debugging.
 		loadJSX();		//Load the jsx files present in \jsx folder.
 
 		var appPrefs = readAppPrefs();
@@ -284,7 +285,7 @@ function setModelValueFromPreferences()
 	model.shapeEffects = appPrefs.shapeEffects ? true : false;
 	model.shapeAlpha = appPrefs.shapeAlpha ? true : false;
 	model.shapeBorderRadius = appPrefs.shapeBorderRadius ? true : false;
-	
+
 	model.textFont = appPrefs.textFont ? true : false;
 	model.textSize = appPrefs.textSize ? true : false;
 	model.textAlignment = appPrefs.textAlignment ? true : false;
@@ -293,7 +294,7 @@ function setModelValueFromPreferences()
 	model.textLeading = appPrefs.textLeading ? true : false;
 	model.textTracking = appPrefs.textTracking ? true : false;
 	model.textEffects = appPrefs.textEffects ? true : false;
-	
+
 	model.useHexColor = appPrefs.useHexColor ? true : false;
 	model.specInPrcntg = appPrefs.specInPrcntg ? true : false;
 	model.specInEM = appPrefs.specInEM ? true : false;

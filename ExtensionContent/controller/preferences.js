@@ -87,3 +87,31 @@ function setPreferencePath()
 {
 	preferencePath = getPrefernceDirectory() + "/specctrPhotoshopConfig.json";
 }
+
+/**
+ * FunctionName	: createLogData()
+ * Description	: Create the data for log, whenever user's license authenticates.  
+ * */
+function createLogData(data)
+{
+	var date = new Date();
+	var logData = date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
+	logData += " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+	logData += ' - "'  + data.message + '"\n';
+	return logData;
+}
+
+/**
+ * FunctionName	: createLog()
+ * Description	: Create the log file in the preference folder.
+ * */
+function createLog(data)
+{
+	var csInterface = new CSInterface();
+	var extensionId = csInterface.getExtensionID();
+	var logFileName = extensionId + ".log";
+	var filePath = getPrefernceDirectory() + "/" + logFileName;
+
+	var log = createLogData(data);
+	writeFile(filePath, log);
+}

@@ -9,48 +9,57 @@ Description: Includes all the methods related to UI component like change event 
  * */
 function activateButton_clickHandler()
 {
-	var urlRequest;
-
-	// Get Extension Id and matching productCode.
-	var productCodes = {
-        // Photoshop 2.0.
-        "SpecctrPs-Pro":"63221",
-        "SpecctrPs-10":"63222",
-        "SpecctrPs-20":"63223",
-        "SpecctrPs-30":"63224",
-        "SpecctrPs-Site":"63225",
-
-        // Illustrator 2.0.
-        "SpecctrPro":"63233", 
-        "SpecctrBusiness10":"63235",
-        "SpecctrBusiness20":"63236",
-        "SpecctrBusiness30":"63237",
-        "SpecctrBusinessSite":"63238",
-
-        // Indesign 2.0.
-        "Specctr-Pro-ID":"63240", 
-        "Specctr-Business-10":"63241", 
-        "Specctr-Business-20":"63242", 
-        "Specctr-Business-30":"63243", 
-        "Specctr-Business-Site":"63244"
-    };
-
-	var csInterface = new CSInterface();
-	var extensionId = csInterface.getExtensionID();
-
-	//If no installed extension is matched with productCodes values.
-	if(!extensionId)
+	try
 	{
-		alert("Incorrect product code!");
-		return;
+		// Get Extension Id and matching productCode.
+		var productCodes = {
+				// Photoshop 2.0.
+				"SpecctrPs-Pro":"63221",
+				"SpecctrPs-10":"63222",
+				"SpecctrPs-20":"63223",
+				"SpecctrPs-30":"63224",
+				"SpecctrPs-Site":"63225",
+
+				// Illustrator 2.0.
+				"SpecctrPro":"63233", 
+				"SpecctrBusiness10":"63235",
+				"SpecctrBusiness20":"63236",
+				"SpecctrBusiness30":"63237",
+				"SpecctrBusinessSite":"63238",
+
+				// Indesign 2.0.
+				"Specctr-Pro-ID":"63240", 
+				"Specctr-Business-10":"63241", 
+				"Specctr-Business-20":"63242", 
+				"Specctr-Business-30":"63243", 
+				"Specctr-Business-Site":"63244"
+		};
+
+		var csInterface = new CSInterface();
+		var extensionId = csInterface.getExtensionID();
+
+		//If no installed extension is matched with productCodes values.
+		if(!productCodes[extensionId])
+		{
+			alert("Incorrect product code!");
+			return;
+		}
+
+		var urlRequest = "http://specctr-license.herokuapp.com";
+		urlRequest += "?product=" + productCodes[extensionId];
+		urlRequest += "&license=" + document.getElementById("license").value;
+		urlRequest += "&email=" + document.getElementById("emailInput").value;
+
+		$.get(urlRequest, completeHandler).error(function(){
+			var response = {};
+			response.message = "No connection available";
+			createLog(response);
+		 });
 	}
-
-	urlRequest = "http://specctr-license.herokuapp.com";
-	urlRequest += "?product=" + productCodes[extensionId];
-	urlRequest += "&license=" + document.getElementById("license").value;
-	urlRequest += "&email=" + document.getElementById("emailInput").value;
-
-	$.get(urlRequest, completeHandler);
+	catch(e)
+	{
+		alert(e);
+	}
 }
 
 /**
@@ -386,7 +395,7 @@ function setColorToLabel(element, colorPickerBlock)
 	{
 		var labelName = "col" + colorPickerBlock;
 		var value = "legendColor" + colorPickerBlock;
-		
+
 		if(element.title)
 		{
 			var color = "#" + element.title;
@@ -396,7 +405,7 @@ function setColorToLabel(element, colorPickerBlock)
 			color = document.getElementById(element.id).style.backgroundColor;
 			color = rgbToHex(color);
 		}
-			
+
 		document.getElementById(labelName).style.backgroundColor = color;
 		$("#" + element.parentNode.id).slideUp(100);
 		model[value] = color;
@@ -425,12 +434,12 @@ function colorPicker_clickHandler(elementId, colorPickerBlock)
 		color = rgbToHex(color);
 		$(dropDownBlock).slideToggle(100);
 		document.getElementById(colorBlock).style.backgroundColor = color;
-		
+
 		if(color[0] == "#")
 			valueForTextBox = color.substring(1);
 		else
 			valueForTextBox = color;
-		
+
 		$(colorBlockTextbox).val(valueForTextBox.toUpperCase());
 
 		if(colorPickerBlock == "Shape")
@@ -483,7 +492,7 @@ function colorPickerTextInput_clickHandler(colorPickerBlock)
 		color += "0";
 
 	color = "#" + color;
-	
+
 	var colorBlock = colorPickerBlock.toLowerCase() + "ColorBlock";
 	document.getElementById(colorBlock).style.backgroundColor = color;
 }
