@@ -2890,8 +2890,9 @@ function getSpecsInfoForTextItem(pageItem)
                 fontSize = Math.round(size / rltvFontSize * 100) / 100 + " em";
             }
             else 
-            {   
-                fontSize = Math.round(size * 100) / 100 + " " + getTypeUnits();
+            {
+                fontSize = Math.round(size * 100) / 100;
+                fontSize = getScaledValue(fontSize) + " " + getTypeUnits();
             }
 
             infoText += "\rFont-Size: " + fontSize;
