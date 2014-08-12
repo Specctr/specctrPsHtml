@@ -2816,8 +2816,9 @@ function getSpecsInfoForTextItem(pageItem)
             leading = Math.round(attr.leading / rltvLineHeight * 100) / 100 + " em";
         }
         else 
-        {   
-            fontSize = Math.round(attr.size * 10) / 10 + " " + typeUnits();
+        {
+            fontSize = Math.round(attr.size * 10) / 10;
+            fontSize = getScaledValue(fontSize) + " " + typeUnits();
             leading = Math.round(attr.leading * 10) / 10 + " " + typeUnits();
         }
         
