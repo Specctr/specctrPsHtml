@@ -445,8 +445,15 @@ function colorPickerTextInput_validation(event)
 {
 	var charCode = (event.which) ? event.which : event.keyCode;
 
-	if((charCode < 48 && charCode != 8) || (charCode > 57 && charCode < 65)
-			|| (charCode > 70 && charCode < 97) || (charCode > 102) || (event.shiftKey && charCode != 51))
+	//Allowed hex value only.
+	/*charCode	= 8  : Enter key
+	 *			= 37 : Left arrow key
+	 *			= 39 : Right arrow key
+	 *			= 46 : Delete key 
+	 **/
+	if((charCode < 48 && charCode != 8 && charCode != 37 && charCode != 39 && charCode != 46) 
+			|| (charCode > 57 && charCode < 65)	|| (charCode > 70 && charCode < 97) 
+				|| (charCode > 102) || (event.shiftKey && charCode != 51))
 	{
 		return false;
 	}
