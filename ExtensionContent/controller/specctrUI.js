@@ -312,12 +312,23 @@ function colorPicker_clickHandler(elementId, colorPickerBlock)
 	}
 }
 
+/**
+ * FunctionName	: colorPickerTextInput_validation()
+ * Description	: Validate the input value in text input of color picker block.
+ * */
 function colorPickerTextInput_validation(event)
 {
 	var charCode = (event.which) ? event.which : event.keyCode;
 
-	if((charCode < 48 && charCode != 8) || (charCode > 57 && charCode < 65)
-			|| (charCode > 70 && charCode < 97) || (charCode > 102))
+	//Allows only hex value like eeffee or #eeffee.
+	/*charCode	= 8  : Enter key
+	 *			= 37 : Left arrow key
+	 *			= 39 : Right arrow key
+	 *			= 46 : Delete key 
+	 **/
+	if((charCode < 48 && charCode != 8 && charCode != 37 && charCode != 39 && charCode != 46) 
+			|| (charCode > 57 && charCode < 65)	|| (charCode > 70 && charCode < 97) 
+				|| (charCode > 102) || (event.shiftKey && charCode != 51))
 	{
 		return false;
 	}
@@ -331,19 +342,32 @@ function colorPickerTextInput_validation(event)
  * FunctionName	: colorPickerTextInput_clickHandler()
  * Description	: Change the color on text input in color picker block .
  * */
-function colorPickerTextInput_clickHandler(colorPickerBlock)
+function colorPickerTextInput_clickHandler(event, colorPickerBlock)
 {
 	var elementId = "txt" + colorPickerBlock + "Color";
 	var textBox = document.getElementById(elementId);
 	var color = textBox.value;
+	var inputSize = 7;			//Length of the input hex value.
 
-	for(var i = color.length; i <= 5; i++)
+	if(color.charAt(0) == "#")
+	{
+		textBox.maxLength = inputSize;
+	}
+	else
+	{
+		textBox.maxLength = inputSize - 1;
+		color = "#" + color;
+	}
+
+	for(var i = color.length; i < inputSize; i++)
 		color += "0";
 
-	color = "#" + color;
-	
 	var colorBlock = colorPickerBlock.toLowerCase() + "ColorBlock";
-	document.getElementById(colorBlock).style.backgroundColor = color;
+	var mainColorBlock = document.getElementById(colorBlock);
+	mainColorBlock.style.backgroundColor = color;
+
+	if(event.keyCode == 13)		//Dispatch the click event if pressed key is 'Enter'.
+		mainColorBlock.click();
 }
 
 /**
