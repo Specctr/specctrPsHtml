@@ -576,6 +576,9 @@ function exportCss()
          return;
     }
     
+    if(ExternalObject.AdobeXMPScript == null)
+		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
+        
     var coordinateSpecsInfo = getStyleFromOtherSpecs("Coordinates");           //Get the array of coordinate specs info.
     
     var styleText = cssBodyText;            //Add the body text at the top of css file.
@@ -588,9 +591,6 @@ function exportCss()
         return;
     }
     
-    if(ExternalObject.AdobeXMPScript == null)
-		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
-
     //Create the file and export it.
     var cssFile = "";
     var cssFilePath = "";
