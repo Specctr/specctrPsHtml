@@ -143,6 +143,7 @@ function getActiveLayer()
     
     return app.activeDocument.activeLayer;
 }
+
 //Convert background layer into regular layer.
 function backgroundLayerIntoNormalLayer()
 {
@@ -586,7 +587,10 @@ function exportCss()
         alert("No spec present to export!");
         return;
     }
-        
+    
+    if(ExternalObject.AdobeXMPScript == null)
+		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
+
     //Create the file and export it.
     var cssFile = "";
     var cssFilePath = "";
@@ -604,9 +608,9 @@ function exportCss()
         cssFilePath = documentPath + "/Styles.css";
     else
         cssFilePath = "~/desktop/Styles.css";
-        
+
     cssFile = File(cssFilePath);
-    
+
     if(cssFile.exists)
     {
         var replaceFileFlag = confirm("Styles.css already exists in this location.\rDo you want to replace it?", true, "Specctr");
