@@ -427,32 +427,27 @@ function expandCanvas()
 function getStyleFromOtherSpecs(specName)
 {
     var doc = app.activeDocument;
-    var specsInfo = new Array();
-    try
-    {
+    var specsInfo = [];
+
+    try {
         var specLayerGroup = doc.layerSets.getByName("Specctr").layerSets.getByName(specName);
-    }
-    catch(e)
-    {
+    } catch(e) {
         return specsInfo;
     }
-    
+
     var noOfSpecs = specLayerGroup.layerSets.length;
-    while(noOfSpecs)
-    {
-        try
-        {
-            var object = new Object();
+    while(noOfSpecs) {
+        try {
             var spec = specLayerGroup.layerSets[noOfSpecs - 1].artLayers[0];
-            object.idLayer = getXMPData(spec, "idLayer");
-            object.styleText = getXMPData(spec, "css");
+            var object = {
+                "idLayer" : getXMPData(spec, "idLayer"),
+                "styleText" : getXMPData(spec, "css")
+                };
             specsInfo.push(object);
-         }
-         catch(e)
-         {}
-         noOfSpecs = noOfSpecs - 1;
+         } catch(e) {}
+         --noOfSpecs;
     }
-    
+
     return specsInfo;
 }
 
@@ -474,7 +469,7 @@ function addSpecsStyleTextToCss(spec, text, specsInfo)
                 
     if(specCssText)
         text = text.replace("}", specCssText + "\r}");
-    
+
     return text;
 }
 
@@ -482,40 +477,33 @@ function addSpecsStyleTextToCss(spec, text, specsInfo)
 function getCssForShape(coordinateSpecsInfo)
 {
     var doc = app.activeDocument;
-    try
-    {
+    try {
         var objectSpecGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties").layerSets.getByName("Object Specs");
-    }
-    catch(e)
-    {
+    } catch(e) {
         return "";
     }
-    
+
     var styleText = "";
     var dimensionSpecsInfo = getStyleFromOtherSpecs("Dimensions");           //Get the array of width/height specs info. 
     var noOfDimensionSpecs = dimensionSpecsInfo.length;
     var noOfCoordinateSpecs = coordinateSpecsInfo.length;
     var noOfObjectSpecLayerGroups = objectSpecGroup.layerSets.length;
-    
-    while(noOfObjectSpecLayerGroups)
-    {
-        try
-        {
+
+    while(noOfObjectSpecLayerGroups) {
+        try {
             var objectSpec = objectSpecGroup.layerSets[noOfObjectSpecLayerGroups - 1].artLayers.getByName("Specs");
             var text = getXMPData(objectSpec, "css");
-            
-            if(noOfDimensionSpecs)
+
+            if(noOfDimensionSpecs > 0)
                 text = addSpecsStyleTextToCss(objectSpec, text, dimensionSpecsInfo);
-            
-            if(noOfCoordinateSpecs)
+
+            if(noOfCoordinateSpecs > 0)
                 text = addSpecsStyleTextToCss(objectSpec, text, coordinateSpecsInfo);
-                
+
             styleText += text + "\r\r";
-        }
-        catch(e)
-        {}
-             
-        noOfObjectSpecLayerGroups = noOfObjectSpecLayerGroups - 1;
+        } catch(e) {}
+
+        --noOfObjectSpecLayerGroups;
     }
 
     return styleText;
@@ -525,35 +513,28 @@ function getCssForShape(coordinateSpecsInfo)
 function getCssForText(coordinateSpecsInfo)
 {
     var doc = app.activeDocument;
-    try
-    {
+    try {
         var textSpecGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties").layerSets.getByName("Text Specs");
-    }
-    catch(e)
-    {
+    } catch(e) {
         return "";
     }
-    
+
     var styleText = "";
     var noOfTextSpecLayerGroups = textSpecGroup.layerSets.length;
     var noOfCoordinateSpecs = coordinateSpecsInfo.length;
-    
-    while(noOfTextSpecLayerGroups)
-    {
-        try
-        {
+
+    while(noOfTextSpecLayerGroups) {
+        try {
             var textSpec = textSpecGroup.layerSets[noOfTextSpecLayerGroups - 1].artLayers.getByName("Specs");
             var text = getXMPData(textSpec, "css");
-            
-            if(noOfCoordinateSpecs)
+
+            if(noOfCoordinateSpecs > 0)
                 text = addSpecsStyleTextToCss(textSpec, text, coordinateSpecsInfo);
-                
+
             styleText += text + "\r\r";
-        }
-        catch(e)
-        {}
-            
-        noOfTextSpecLayerGroups = noOfTextSpecLayerGroups - 1;
+        } catch(e) {}
+
+        --noOfTextSpecLayerGroups;
     }
 
     return styleText;
@@ -562,78 +543,79 @@ function getCssForText(coordinateSpecsInfo)
 //Export the spec layer into css text file.
 function exportCss()
 {
-    if(!app.documents.length)           //Checking document is open or not.
-        return;
-    
     var doc = app.activeDocument;
-    try
-    {
-        var propertySpecLayerGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties");
-    }
-    catch(e)
-    {
-         alert("No spec present to export.");
-         return;
-    }
-    
-    if(ExternalObject.AdobeXMPScript == null)
-		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
-        
+    var propertySpecLayerGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties");
+
+    if(ExternalObject.AdobeXMPScript === undefined)
+        ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
+
     var coordinateSpecsInfo = getStyleFromOtherSpecs("Coordinates");           //Get the array of coordinate specs info.
-    
+
     var styleText = cssBodyText;            //Add the body text at the top of css file.
     styleText += getCssForText(coordinateSpecsInfo);
     styleText += getCssForShape(coordinateSpecsInfo);
-    
-    if(styleText == "")
-    {
-        alert("No spec present to export!");
-        return;
-    }
-    
-    //Create the file and export it.
-    var cssFile = "";
-    var cssFilePath = "";
-    
-    try
-    {
-        var documentPath = doc.path;
-    }
-    catch(e)
-    {
-        documentPath = "";
-    }
-    
-    if(documentPath)
-        cssFilePath = documentPath + "/Styles.css";
-    else
-        cssFilePath = "~/desktop/Styles.css";
 
-    cssFile = File(cssFilePath);
+    if(styleText != "")
+        styleText = getJsonObjectOfCss(styleText);
 
-    if(cssFile.exists)
-    {
-        var replaceFileFlag = confirm("Styles.css already exists in this location.\rDo you want to replace it?", true, "Specctr");
-        if(!replaceFileFlag)
-            return;
-    }
-        
-    if(cssFile)
-    {
-        cssFile.open("w");
-        cssFile.write(styleText);
-        cssFile.close;
-        
-        if(replaceFileFlag)
-            alert("Styles.css is exported.");
-        else 
-            alert("Styles.css is exported to " + cssFilePath);
-    }
-    else
-    {
-        alert("Unable to export!");
-        return;
-    }
+    return styleText;
+}
+
+//Create the json object of the css style data.
+function getJsonObjectOfCss(data)
+{
+    var cssItemCounter = 1;
+    var parentArray = [];
+    var cssItems = {};
+
+    while(data.length > 1) {  //data changes in every iteration.
+        var cssItemName = "css_Item" + cssItemCounter;
+        var artItem = {};
+
+        var startIndex = data.search (" {");
+        var endIndex = data.search("}");
+        var itemName = data.slice(0, startIndex);
+        var itemData = data.slice(startIndex + 2, endIndex);
+        itemData = itemData.split(";");
+
+        var noOfProperties = itemData.length;
+        artItem["name"] = itemName;
+
+        var itemProperties = [];
+        for(var i = 0; i < noOfProperties; i++) {
+            var text = itemData[i].replace(/^\s+|\s+$/gm, "");    //Trim the string value.
+            if(text.length) {
+                text = parseResult(text);
+
+                var obj = {
+                "name" : text["name"],
+                "value" : text["value"]
+                };
+
+                itemProperties.push(obj);
+            }
+        }
+
+        artItem["css_properties_attributes"] = itemProperties;
+        cssItems[cssItemName] = artItem;
+
+        data = data.slice(endIndex + 3);
+        ++cssItemCounter;
+   }
+
+    parentArray.push(cssItems);
+    return JSON.stringify(parentArray);
+}
+
+//Parse the css file data and get the property values.
+function parseResult(str)  
+{
+    str = str.split(": ");
+    var obj = {
+        "name" : str[0],
+        "value" : str[1]
+    };
+    return obj;
 }
 
 //Suspend the history of creating dimension spec of layer.
@@ -706,7 +688,7 @@ function calculateDmnsns(artLayer, bounds)
 //Create the dimension spec for a selected layer.
 function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
 {
-    if(ExternalObject.AdobeXMPScript == null)
+    if(ExternalObject.AdobeXMPScript === undefined)
 		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
     
     var dimensionSpec = "";
@@ -1039,7 +1021,7 @@ function createSpacingSpecs()
 //Create the spacing spec for two selected layers.
 function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
 {
-    if(ExternalObject.AdobeXMPScript == null)
+    if(ExternalObject.AdobeXMPScript === undefined)
 		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
     
     var doc = app.activeDocument;
@@ -1249,7 +1231,7 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
 //Create the spacing spec for a selected layer.
 function createSpacingSpecsForSingleItem(artLayer, bounds)
 {
-     if(ExternalObject.AdobeXMPScript == null)
+     if(ExternalObject.AdobeXMPScript === undefined)
 		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
     
     var spacingSpec = "";
@@ -1509,7 +1491,7 @@ function createPropertySpecs(sourceItem, bounds)
 	if(artLayer.typename == 'LayerSet')
 		return;
     
- 	if(ExternalObject.AdobeXMPScript == null)
+ 	if(ExternalObject.AdobeXMPScript === undefined)
 		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
 	
      idSpec = getXMPData(artLayer, "idSpec");			//Check if metadata of the layer is already present or not.
@@ -1882,7 +1864,7 @@ function createCoordinates(sourceItem, bounds)
 {
     try
     {
-        if(ExternalObject.AdobeXMPScript == null)
+        if(ExternalObject.AdobeXMPScript === undefined)
             ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
     
         var coordinateSpec = "";
@@ -2025,7 +2007,7 @@ function startUpCheckBeforeSpeccing(artLayer)
             return false;
         }
         
-        if(ExternalObject.AdobeXMPScript == null)
+        if(ExternalObject.AdobeXMPScript === undefined)
             ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
     
         var isLayerSpec = getXMPData(artLayer, "SpeccedObject");

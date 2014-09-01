@@ -3,7 +3,7 @@ specctrPsHtml
 
 Specctr for Photoshop
 
-Project Name: specctrPsHtml
+Project Name: specctrPsHtml/specctrPsHtml-2.1 (Added css sync feature..)
 
 Description: The objective of the project is to create a panel name "Specctr-Pro" in Photoshop. The panel consists some buttons, tabs, check boxes etc. and these are used to measure the width and height of the art object created in the canvas, to measure the spacing between two art objects and between the canvas edges and single art object. It also shows the properties of the art objects like shape, color, effects, border, inner shadow etc. And for text art object it shows text font family, font size, leading, styles etc.
 
@@ -32,7 +32,10 @@ Features of the Panel:
 - Opacity, Filter
 - Alignment, Leading, kerning
 
-5. OPTIONS
+5. EXPORT CSS
+- Export properties of specced art items in css format.
+
+6. OPTIONS
 - RGB/HEX/HSB/HSL/CMYK
 - Specs style (font and color)
 - Line weights
@@ -41,10 +44,10 @@ Features of the Panel:
 - Different modes of calculating measurements
 - Scaling specs (x2, x3, /2, /3 etc.)
 
-6. Others
+7. Others
 - Number system is used for Shape/Text property specs.
 - Spacing and Dimension specs can be created on user's selected position. (see dropdown feature of buttons)
- 
+
 Importing steps:
 - To build the project, We need Eclipse 3.6 or later version with Extension Builder 3.
 - To import the project, Open Eclipse and click on File>Import.

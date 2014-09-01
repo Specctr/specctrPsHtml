@@ -493,7 +493,7 @@ function exportCss()
 	{
 		setModel();
 		var extScript = "ext_PHXS_exportCss()";
-		evalScript(extScript);
+		evalScript(extScript, getCss);
 	}
 	catch(e)
 	{
@@ -528,4 +528,13 @@ function applyFontToList()
 			break;
 		}
 	}
+}
+
+/**
+ * FunctionName	: getCss()
+ * Description	: Callback function of exporting css functionality.
+ * */
+function getCss(data)
+{
+	writeFile("G:\\text.txt", data);
 }
