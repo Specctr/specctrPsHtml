@@ -25,6 +25,7 @@ ext_ILST_createCoordinateSpecs = createCoordinateSpecs;
 ext_ILST_createPropertySpecs = createPropertySpecs;
 ext_ILST_exportCss = exportCss;
 ext_ILST_getFonts = getFontList;
+ext_ILST_updateConnection = updateConnection;
 
 //Get the application font's name and font's family.
 function getFontList()
@@ -2965,4 +2966,9 @@ function redColor()
     newColor.blue = 0;
     newColor.green = 0;
     return newColor;
+}
+
+function log()
+{
+
 }

@@ -1,11 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<ExtensionManifest Version="4.0" ExtensionBundleId="specctrAiHtml" ExtensionBundleVersion="2.1.3.h"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<Author>
-		<![CDATA[On Pixel Inc.]]>
-	</Author>	<Contact mailto="info@on-pixel.com"/>	<Legal>
-		<![CDATA[End User License Agreement for Specctr - Pro.
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<macromedia-extension id="specctrAiHtml" name="specctrAiHtml" requires-restart="true" version="2.1.3.h">
+  <author name="On Pixel Inc."/>
+  <description><![CDATA[Specctr supercharges Adobe Photoshop by automating spec generation. With the capability to spec dimensions, color, font, spacing, and more, Specctr enables design and development teams to collaborate more accurately, efficiently, and effortlessly.]]></description>
+  <license-agreement><![CDATA[End User License Agreement for Specctr - Pro.
 This End User Software License Agreement (this “Agreement”) is by and between You (“Recipient”), and 
 On Pixel, Inc., a Massachusetts corporation, with a primary place of business at 374 Beacon St. #2
 Somerville, Massachusetts 02464 (“Provider”). This agreement governs your use of the Specctr software 
@@ -142,57 +139,12 @@ this Agreement and those of any attachment, the terms of this main body will gov
 all prior or contemporaneous writings, negotiations, and discussions with respect to the subject 
 matter hereof. Neither party has relied upon any such prior or contemporaneous communications.
 (j) Amendment. This Agreement may not be modified except (i) by Authorized Representatives of 
-each party and (ii) in a written contract signed by both parties.]]>
-	</Legal>	<Abstract>
-		<![CDATA[Specctr supercharges Adobe Photoshop by automating spec generation. With the capability to spec dimensions, color, font, spacing, and more, Specctr enables design and development teams to collaborate more accurately, efficiently, and effortlessly.]]>
-	</Abstract>	<ExtensionList>
-		<Extension Id="SpecctrAi-Pro" Version="1.0" />
-	</ExtensionList>
-	<ExecutionEnvironment>
-		<HostList>
-			<Host Name="ILST" Version="[17.0,18.9]" />
-		</HostList>
-		<LocaleList>
-			<Locale Code="All" />
-		</LocaleList>
-		<RequiredRuntimeList>
-			<RequiredRuntime Name="CSXS" Version="4.0" />
-
-		</RequiredRuntimeList>
-	</ExecutionEnvironment>
-	<DispatchInfoList>
-		<Extension Id="SpecctrAi-Pro">
-			<DispatchInfo >
-				<Resources>
-				<MainPath>./html/specctr.html</MainPath>
-				<ScriptPath>./loadFilesOfJsxFolder.jsx</ScriptPath>
-				</Resources>
-				<Lifecycle>
-					<AutoVisible>true</AutoVisible>
-				</Lifecycle>
-				<UI>
-					<Type>Panel</Type>
-					<Menu>Specctr-Pro</Menu>
-					<Geometry>
-						<Size>
-							<Height>492</Height>
-							<Width>224</Width>
-						</Size>
-						<MaxSize>
-							<Height>492</Height>
-							<Width>224</Width>
-						</MaxSize>
-						<MinSize>
-							<Height>492</Height>
-							<Width>224</Width>
-						</MinSize>
-					</Geometry>
-					<Icons>
-						<Icon Type="Normal">./Images/specctr_panel_icon.png</Icon>
-						<Icon Type="RollOver">./Images/specctr_panel_icon_rollover.png</Icon>
-					</Icons>
-				</UI>
-			</DispatchInfo>
-		</Extension>
-	</DispatchInfoList>
-</ExtensionManifest>
+each party and (ii) in a written contract signed by both parties.]]></license-agreement>
+  <products>
+    <product familyname="Illustrator" maxversion="18.9" version="17.0"/>
+  </products>
+  <files>
+    <file destination="" file-type="CSXS" products="" source="specctrAiHtml.zxp"/>
+  <file destination="$plugin" file-type="plugin" platform="mac" products="Illustrator,Illustrator32,Illustrator64" source="ExtensionContent/SpecctrAi.aip"/>
+  </files>
+</macromedia-extension>

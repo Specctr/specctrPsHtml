@@ -228,6 +228,16 @@ function init()
 	{
 		console.log(e);
 	}
+	
+	try{
+		 var csInterface = new CSInterface();
+		 
+		 csInterface.addEventListener("com.specctr.artselectionchanged", function(event) {
+		    	
+		    	var extScript = "ext_ILST_updateConnection(false);";
+				evalScript(extScript);
+		    	} );
+	}catch(e){}
 }
 
 /**
