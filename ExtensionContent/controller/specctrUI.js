@@ -9,57 +9,51 @@ Description: Includes all the methods related to UI component like change event 
  * */
 function activateButton_clickHandler()
 {
-	try
+	// Get Extension Id and matching productCode.
+	var productCodes = {
+			// Photoshop 2.0.
+			"SpecctrPs-Pro":"63221",
+			"SpecctrPs-10":"63222",
+			"SpecctrPs-20":"63223",
+			"SpecctrPs-30":"63224",
+			"SpecctrPs-Site":"63225",
+
+			// Illustrator 2.0.
+			"SpecctrPro":"63233", 
+			"SpecctrBusiness10":"63235",
+			"SpecctrBusiness20":"63236",
+			"SpecctrBusiness30":"63237",
+			"SpecctrBusinessSite":"63238",
+
+			// Indesign 2.0.
+			"Specctr-Pro-ID":"63240", 
+			"Specctr-Business-10":"63241", 
+			"Specctr-Business-20":"63242", 
+			"Specctr-Business-30":"63243", 
+			"Specctr-Business-Site":"63244"
+	};
+
+	var csInterface = new CSInterface();
+	var extensionId = csInterface.getExtensionID();
+
+	//If no installed extension is matched with productCodes values.
+	if(!productCodes[extensionId])
 	{
-		// Get Extension Id and matching productCode.
-		var productCodes = {
-				// Photoshop 2.0.
-				"SpecctrPs-Pro":"63221",
-				"SpecctrPs-10":"63222",
-				"SpecctrPs-20":"63223",
-				"SpecctrPs-30":"63224",
-				"SpecctrPs-Site":"63225",
-
-				// Illustrator 2.0.
-				"SpecctrPro":"63233", 
-				"SpecctrBusiness10":"63235",
-				"SpecctrBusiness20":"63236",
-				"SpecctrBusiness30":"63237",
-				"SpecctrBusinessSite":"63238",
-
-				// Indesign 2.0.
-				"Specctr-Pro-ID":"63240", 
-				"Specctr-Business-10":"63241", 
-				"Specctr-Business-20":"63242", 
-				"Specctr-Business-30":"63243", 
-				"Specctr-Business-Site":"63244"
-		};
-
-		var csInterface = new CSInterface();
-		var extensionId = csInterface.getExtensionID();
-
-		//If no installed extension is matched with productCodes values.
-		if(!productCodes[extensionId])
-		{
-			alert("Incorrect product code!");
-			return;
-		}
-
-		var urlRequest = "http://specctr-license.herokuapp.com";
-		urlRequest += "?product=" + productCodes[extensionId];
-		urlRequest += "&license=" + document.getElementById("license").value;
-		urlRequest += "&email=" + document.getElementById("emailInput").value;
-
-		$.get(urlRequest, completeHandler).error(function(){
-			var response = {};
-			response.message = "No connection available";
-			createLog(response);
-		 });
+		alert("Incorrect product code!");
+		return;
 	}
-	catch(e)
-	{
-		alert(e);
-	}
+
+	var urlRequest = "http://specctr-license.herokuapp.com";
+	urlRequest += "?product=" + productCodes[extensionId];
+	urlRequest += "&license=" + document.getElementById("license").value;
+	urlRequest += "&email=" + document.getElementById("emailInput").value;
+
+	$.get(urlRequest, completeHandler).error(function(){
+		var message = "No connection available";
+		var logFilePath = getFilePath('.log');
+		var logData = createLogData(message);
+		writeFile(logFilePath, logData);
+	 });
 }
 
 /**

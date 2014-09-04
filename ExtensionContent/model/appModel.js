@@ -3,61 +3,65 @@ Name: appModel.js
 Description: This file initialize and keep the updated value of all objects of the UI. 
  */
 
-var model = 
-{
-		shapeFill:			true,
-		shapeStroke:		true,
-		shapeEffects:		true,
-		shapeAlpha:			false,
-		shapeBorderRadius: 	false,
+var model = {
+	shapeFill:			true,
+	shapeStroke:		true,
+	shapeEffects:		true,
+	shapeAlpha:			false,
+	shapeBorderRadius: 	false,
 
-		textFont:		true,
-		textSize:		true,
-		textAlignment:	true,
-		textColor:		true,
-		textStyle:		true,
-		textLeading:	true,
-		textTracking:	true,
-		textAlpha:		false,
-		textEffects:	true,
+	textFont:		true,
+	textSize:		true,
+	textAlignment:	true,
+	textColor:		true,
+	textStyle:		true,
+	textLeading:	true,
+	textTracking:	true,
+	textAlpha:		false,
+	textEffects:	true,
 
-		canvasExpandSize: 250,
+	canvasExpandSize: 250,
 
-		//legend settings
-		legendFont: 			"Arial",
-		legendFontIndex:		0,
-		legendFontSize:			12,
-		legendColorObject:		'#FF0000',
-		legendColorType:		'#FF0000',
-		legendColorSpacing:		'#FF0000',
-		useHexColor:			true,
-		legendColorMode:		"RGB",
+	//legend settings
+	legendFont: 			"Arial",
+	legendFontIndex:		0,
+	legendFontSize:			12,
+	legendColorObject:		'#FF0000',
+	legendColorType:		'#FF0000',
+	legendColorSpacing:		'#FF0000',
+	useHexColor:			true,
+	legendColorMode:		"RGB",
 
-		armWeight:		1,
-		isLicensed: 	false,
-		typeUnits: 		"pt",
-		distanceUnits:	"px",
+	armWeight:		1,
+	typeUnits: 		"pt",
+	distanceUnits:	"px",
 
-		//Spacing spec options
-		spaceLeft:		true,
-		spaceTop:		true,
-		spaceRight:		false,
-		spaceBottom:	false,
+	//Spacing spec options
+	spaceLeft:		true,
+	spaceTop:		true,
+	spaceRight:		false,
+	spaceBottom:	false,
 
-		//Dimension spec options
-		heightPos:	1,
-		widthPos:	1,
+	//Dimension spec options
+	heightPos:	1,
+	widthPos:	1,
 
-		//Responsive tab options
-		specInPrcntg:	false,
-		specInEM:		false,
-		relativeHeight:		0,
-		relativeWidth:		0,
-		baseFontSize:	16,
-		baseLineHeight: 22.4,
+	//Responsive tab options
+	specInPrcntg:	false,
+	specInEM:		false,
+	relativeHeight:		0,
+	relativeWidth:		0,
+	baseFontSize:	16,
+	baseLineHeight: 22.4,
 
-		//Scaling specs
-		useScaleBy: false,
-		scaleValue: "x1"
+	//Scaling specs
+	useScaleBy: false,
+	scaleValue: "x1"
 };
 
+var filePermission = {
+	ReadOnly : 0444,
+	WriteOnly : 0222,
+	ReadWrite : 0666,
+	ReadWriteExecute : 0777
+};

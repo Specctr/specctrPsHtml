@@ -35,23 +35,13 @@ function writeFile(file, data)
 function getPrefernceDirectory()
 {
 	var csInterface = new CSInterface();
+	var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA) + "/LocalStore";
 
-	try
-	{
-		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
-		prefsFile += "/LocalStore";
+	var result = window.cep.fs.readdir(prefsFile);
+	if(window.cep.fs.ERR_NOT_FOUND === result.err)
+		window.cep.fs.makedir(prefsFile);
 
-		var result = window.cep.fs.readdir(prefsFile);
-		if(window.cep.fs.ERR_NOT_FOUND == result.err)
-			window.cep.fs.makedir(prefsFile);
-
-		return prefsFile;
-	}
-	catch(e)
-	{
-		console.log(e);
-		return null;
-	}
+	return prefsFile;
 }
 
 /**
@@ -92,26 +82,30 @@ function setPreferencePath()
  * FunctionName	: createLogData()
  * Description	: Create the data for log, whenever user's license authenticates.  
  * */
-function createLogData(data)
-{
+function createLogData(data) {
 	var date = new Date();
 	var logData = date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
 	logData += " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-	logData += ' - "'  + data.message + '"\n';
+	logData += ' - "'  + data + '"\n';
 	return logData;
 }
 
 /**
- * FunctionName	: createLog()
- * Description	: Create the log file in the preference folder.
+ * FunctionName	: getFilePath()
+ * Description	: Get the file path i.e. license and log files.  
  * */
-function createLog(data)
-{
+function getFilePath(fileExtension) {
 	var csInterface = new CSInterface();
 	var extensionId = csInterface.getExtensionID();
-	var logFileName = extensionId + ".log";
-	var filePath = getPrefernceDirectory() + "/" + logFileName;
+	var fileName = extensionId + fileExtension;
+	var filePath = getPrefernceDirectory() + "/" + fileName;
+	return filePath;
+}
 
-	var log = createLogData(data);
-	writeFile(filePath, log);
+/**
+ * FunctionName	: setPermissionToFile()
+ * Description	: Set permissions like read only, write only etc to file or folder.  
+ * */
+function setPermissionToFile(filePath, permission) {
+	window.cep.fs.chmod(filePath, permission);
 }
