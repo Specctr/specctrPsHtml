@@ -12,9 +12,8 @@ function completeHandler(data, status) {
 	var response = data;
 	var arr = response.registered;
 
-	var logFilePath = getFilePath('.log');
 	var logData = createLogData(response.message);
-	writeFile(logFilePath, logData);
+	addFileToPreferenceFolder('.log', logData);	//Create log file.
 
 	// If unsuccessful, return without saving the data in file.
 	if (!arr.length) {
@@ -26,10 +25,7 @@ function completeHandler(data, status) {
 		};
 	}
 
-	var licenseFilePath = getFilePath('.license');
-	writeFile(licenseFilePath, JSON.stringify(activationPrefs));
-	setPermissionToFile(licenseFilePath, filePermission.ReadOnly);
-
+	addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs)); //Create license file.
 	init();
 }
 
@@ -145,22 +141,37 @@ function onLoaded() {
 	// present.
 	try {
 		loadJSX(); // Load the jsx files present in \jsx folder.
-		var licenseFilePath = getFilePath('.license');
-		var activationPrefs = readFile(licenseFilePath);
 
-		if(activationPrefs === "")
-			return;
-
-		activationPrefs = JSON.parse(activationPrefs);
-
-		if (activationPrefs.licensed) {
-			var appPrefs = readAppPrefs();
-
-			if (appPrefs !== "")
-				model = appPrefs;
-
-			init();
+		var isLicensed = false;
+		var appPrefs = readAppPrefs();	//Read the config file and look for the isLicensed value.
+		if (appPrefs !== "") {
+			if(appPrefs.hasOwnProperty("isLicensed")) {
+				isLicensed = appPrefs.isLicensed;
+				delete appPrefs.isLicensed;
+			}
+			model = appPrefs;
 		}
+
+		//Migrating license from config file to license file, if present.
+		var activationPrefs = {};
+		if(!isLicensed) {
+			var licenseFilePath = getFilePath('.license');
+			activationPrefs = readFile(licenseFilePath);	//Read the licensed file.
+
+			if(activationPrefs === "")
+				return;
+			else
+				activationPrefs = JSON.parse(activationPrefs);
+
+			isLicensed = activationPrefs.licensed;
+		} else {
+			activationPrefs.licensed = true;
+			addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs));
+		}
+
+		if (isLicensed)
+			init();
+
 	} catch (e) {
 		console.log(e);
 	}
@@ -212,50 +223,6 @@ function init() {
 	} catch (e) {
 		console.log(e);
 	}
-}
-
-/**
- * FunctionName : onClose() Description : Load the model value to preference on
- * closing the panel.
- */
-function onClose() {
-	var appPrefs = new Object();
-
-	appPrefs.shapeFill = model.shapeFill;
-	appPrefs.shapeStroke = model.shapeStroke;
-	appPrefs.shapeEffects = model.shapeEffects;
-	appPrefs.shapeAlpha = model.shapeAlpha;
-	appPrefs.shapeBorderRadius = model.shapeBorderRadius;
-
-	appPrefs.textFont = model.textFont;
-	appPrefs.textSize = model.textSize;
-	appPrefs.textAlignment = model.textAlignment;
-	appPrefs.textColor = model.textColor;
-	appPrefs.textStyle = model.textStyle;
-	appPrefs.textLeading = model.textLeading;
-	appPrefs.textTracking = model.textTracking;
-	appPrefs.textAlpha = model.textAlpha;
-	appPrefs.textEffects = model.textEffects;
-	appPrefs.isLicensed = model.isLicensed;
-	appPrefs.canvasExpandSize = model.canvasExpandSize.toString();
-
-	appPrefs.legendFont = model.legendFont.toString();
-	appPrefs.legendFontSize = model.legendFontSize.toString();
-	appPrefs.armWeight = model.armWeight.toString();
-	appPrefs.legendColorObject = model.legendColorObject;
-	appPrefs.legendColorType = model.legendColorType;
-	appPrefs.legendColorSpacing = model.legendColorSpacing;
-	appPrefs.legendColorMode = model.legendColorMode;
-	appPrefs.useHexColor = model.useHexColor;
-	appPrefs.specInPrcntg = model.specInPrcntg;
-	appPrefs.specInEM = model.specInEM;
-	appPrefs.useScaleBy = model.useScaleBy;
-
-	// If object is empty then don't write.
-	if ($.isEmptyObject(appPrefs))
-		return;
-
-	writeAppPrefs(JSON.stringify(appPrefs));
 }
 
 /**
@@ -379,6 +346,7 @@ function expandCanvas() {
 		setModel();
 		var extScript = "ext_PHXS_expandCanvas()";
 		evalScript(extScript);
+		writeAppPrefs();
 	} catch (e) {
 		console.log(e);
 	}

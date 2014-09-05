@@ -65,3 +65,5 @@ var filePermission = {
 	ReadWrite : 0666,
 	ReadWriteExecute : 0777
 };
+
+var configFilePath = '';
