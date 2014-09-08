@@ -15,6 +15,7 @@ function setPermissionToFile(filePath, permission) {
 /**
  * Read the file and return its data.
  * @param filePath {string}  The path of the file to read.
+ * @return An object with the data or empty string.
  */
 function readFile(filePath) {
 	var result = window.cep.fs.readFile(filePath);
@@ -25,16 +26,17 @@ function readFile(filePath) {
 }
 
 /**
- * FunctionName : writeFile() Description : Write the data to the given file
- * path.
+ * Writes data to the file
+ * @param filePath {string}  The path of the file to read.
+ * @param data {string} The data to write to the file.
  */
-function writeFile(file, data) {
-	window.cep.fs.writeFile(file, data);
+function writeFile(filePath, data) {
+	window.cep.fs.writeFile(filePath, data);
 }
 
 /**
- * FunctionName : getPrefernceDirectory() Description : Get the path of the
- * directory where preferences stores.
+ * Create the directory where preferences stores, if not exist.
+ * @return The path of the directory.
  */
 function getPrefernceDirectory() {
 	var csInterface = new CSInterface();
@@ -49,8 +51,10 @@ function getPrefernceDirectory() {
 }
 
 /**
- * FunctionName : getFilePath() Description : Get the file path i.e. license and
- * log files.
+ * Get the path of license or log file.
+ * @param fileExtension {string} The extension of file i.e.
+ * .log or .license.
+ * @return The path of the file according to the file extension input.
  */
 function getFilePath(fileExtension) {
 	var csInterface = new CSInterface();
@@ -61,7 +65,8 @@ function getFilePath(fileExtension) {
 }
 
 /**
- * FunctionName : getConfigFilePath() Description : Get the config file path.
+ * Get the config file path.
+ * @return The path of the config file {name: specctrPhotoshopConfig.json}.
  */
 function getConfigFilePath() {
 	var path = getPrefernceDirectory() + "/specctrPhotoshopConfig.json";
@@ -69,8 +74,8 @@ function getConfigFilePath() {
 }
 
 /**
- * FunctionName : readAppPrefs() Description : Return JSON object representing
- * Specctr configuration file.
+ * Read the config file {name: specctrPhotoshopConfig.json}.
+ * @return An object with the data or empty string.
  */
 function readAppPrefs() {
 	configFilePath = getConfigFilePath();
@@ -83,8 +88,7 @@ function readAppPrefs() {
 }
 
 /**
- * FunctionName : writeAppPrefs() Description : Store preferences in specctr
- * configuration file.
+ * Write the data to the config file.
  */
 function writeAppPrefs() {
 	if (!configFilePath.length) {
@@ -98,22 +102,24 @@ function writeAppPrefs() {
 }
 
 /**
- * FunctionName : createLogData() Description : Create the data for log,
- * whenever user's license authenticates.
+ * Create the data for log file.
+ * @param message {string} Successful or failure message of activation.
  */
-function createLogData(data) {
+function createLogData(message) {
 	var date = new Date();
 	var logData = date.getMonth() + "/" + date.getDate() + "/"
 			+ date.getFullYear();
 	logData += " " + date.getHours() + ":" + date.getMinutes() + ":"
 			+ date.getSeconds();
-	logData += ' - "' + data + '"\n';
+	logData += ' - "' + message + '"\n';
 	return logData;
 }
 
 /**
- * FunctionName : addFileToPreferenceFolder() Description : Write the license 
- * or log file. 
+ * Create the license or log file and make them read only.
+ * @param fileExtension {string} The extension of file i.e.
+ * .log or .license.
+ * @param data {string} The data to write to the file.
  */
 function addFileToPreferenceFolder(fileExtension, data) {
 	var filePath = getFilePath(fileExtension);

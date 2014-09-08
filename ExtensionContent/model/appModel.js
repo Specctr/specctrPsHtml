@@ -1,6 +1,6 @@
 /*
 Name: appModel.js
-Description: This file initialize and keep the updated value of all objects of the UI. 
+Description: This file keeps the global variables used in all other files. 
  */
 
 var model = {

@@ -4,9 +4,8 @@ Description: Includes all the methods related to UI component like change event 
  */
 
 /**
- * FunctionName : activateButton_clickHandler() Description : Validate the
- * license of the user and move to the tab container if user's credentials
- * valid.
+ * Validate the license of the user and move to the tab container
+ *  if user's credentials valid.
  */
 function activateButton_clickHandler() {
 	// Get Extension Id and matching productCode.
@@ -35,10 +34,12 @@ function activateButton_clickHandler() {
 
 	var csInterface = new CSInterface();
 	var extensionId = csInterface.getExtensionID();
+	var logData = "";
 
 	// If no installed extension is matched with productCodes values.
 	if (!productCodes[extensionId]) {
-		alert("Incorrect product code!");
+		logData = createLogData("Incorrect product code");
+		addFileToPreferenceFolder('.log', logData);	//Create log file.
 		return;
 	}
 
@@ -48,14 +49,14 @@ function activateButton_clickHandler() {
 	urlRequest += "&email=" + document.getElementById("emailInput").value;
 
 	$.get(urlRequest, completeHandler).error(function() {
-		var logData = createLogData("No connection available");
+		logData = createLogData("No connection available");
 		addFileToPreferenceFolder('.log', logData);	//Create log file.
 	});
 }
 
 /**
- * FunctionName : tab_clickHandler() Description : Click event handler of tabs.
- * Modify styles to tabs and call the function to change images on tab.
+ * Click event handler of tabs. Modify styles to tabs and 
+ * call the function to change images on tab.
  */
 function tab_clickHandler() {
 	try {
@@ -91,8 +92,8 @@ function tab_clickHandler() {
 }
 
 /**
- * FunctionName : changeImagesOfTabs() Description : Change the images of tabs
- * on their selection.
+ * Change the images of tabs on their selection.
+ * @param selectedTab {number} The position of selected tab.
  */
 function changeImagesOfTabs(selectedTab) {
 	try {
@@ -150,8 +151,8 @@ function changeImagesOfTabs(selectedTab) {
 }
 
 /**
- * FunctionName : checkBox_changeHandler() Description : Set the value of
- * checkBox model value when changed.
+ * Set the value of checkBox model value when changed.
+ * @param checkBoxId {string} The id of selected checkbox.
  */
 function checkBox_changeHandler(checkBoxId) {
 	model[checkBoxId] = document.getElementById(checkBoxId).checked;
@@ -159,17 +160,16 @@ function checkBox_changeHandler(checkBoxId) {
 }
 
 /**
- * FunctionName : textBox_changeHandler() Description : Set the model value of
- * text box when changed.
+ * Set the model value of text box when changed.
+ * @param textBoxId {string} The id of selected text box.
  */
 function textBox_changeHandler(textBoxId) {
 	model[textBoxId] = Number(document.getElementById(textBoxId).value);
 }
 
 /**
- * FunctionName : chkDistanceSpec_changeHandler() Description : Enable/Disable
- * the width and height text boxes and set the value of model's specInPrcntg
- * when changed.
+ * Enable/Disable the width and height text boxes and 
+ * set the value of model's specInPrcntg when changed.
  */
 function chkDistanceSpec_changeHandler() {
 	model.specInPrcntg = document.getElementById("chkDistanceSpec").checked;
@@ -184,9 +184,8 @@ function chkDistanceSpec_changeHandler() {
 }
 
 /**
- * FunctionName : chkEmSpec_changeHandler() Description : Enable/Disable the
- * baseFontSize and baseLineHeight text boxes and set the value of model's
- * specInEM when changed.
+ * Enable/Disable the baseFontSize and baseLineHeight text boxes and
+ * set the value of model's specInEM when changed.
  */
 function chkEmSpec_changeHandler() {
 	var textFontSize = document.getElementById("baseFontSize");
@@ -214,8 +213,7 @@ function chkEmSpec_changeHandler() {
 }
 
 /**
- * FunctionName : chkScaleBy_clickHandler() Description : Set the value of
- * useScaleBy when changed.
+ * Set the value of useScaleBy when changed.
  */
 function chkScaleBy_clickHandler() {
 	model.useScaleBy = document.getElementById("chkScaleBy").checked;
@@ -229,8 +227,7 @@ function chkScaleBy_clickHandler() {
 }
 
 /**
- * FunctionName : txtScaleBy_changeHandler() Description : Allow the input
- * greater than 1 only and set the value of scaleValue when changed.
+ *Allow the input greater than 1 only and set the value of scaleValue when changed.
  */
 function txtScaleBy_changeHandler() {
 	var scaleByHandler = document.getElementById("txtScaleBy");
@@ -245,8 +242,8 @@ function txtScaleBy_changeHandler() {
 }
 
 /**
- * FunctionName : radioButton_clickHandler() Description : Set the value of
- * legendColorMode when selection of radio button changed.
+ * Set the value of legendColorMode when selection of radio button changed.
+ * @param event {event type} The event comes after clicking radio button.
  */
 function radioButton_clickHandler(event) {
 	var colorMode = event.target.value;
@@ -258,8 +255,9 @@ function radioButton_clickHandler(event) {
 }
 
 /**
- * FunctionName : comboBox_changeHandler() Description : Set the value of font
- * size when changed.
+ * Set the value of font size when changed.
+ * @param elementId {string} The id of selected combobox.
+ * @param modelValue {string} The combobox name.
  */
 function comboBox_changeHandler(elementId, modelValue) {
 	var comboHandler = document.getElementById(elementId);
@@ -268,8 +266,7 @@ function comboBox_changeHandler(elementId, modelValue) {
 }
 
 /**
- * FunctionName : lstFont_changeHandler() Description : Set the value of font
- * when changed.
+ * Set the value of font when changed.
  */
 function lstFont_changeHandler() {
 	var fontListHandler = document.getElementById("lstFont");
@@ -279,8 +276,9 @@ function lstFont_changeHandler() {
 }
 
 /**
- * FunctionName : setColorValueToTextBox() Description : Set color value to the
- * color-picker dropdown's input text on hovering the color blocks.
+ * Set color value to the color-picker dropdown's input text on hovering the color blocks.
+ * @param element {object} The reference of color picker.
+ * @param colorPickerBlock {string} The name of color picker block.
  */
 function setColorValueToTextBox(element, colorPickerBlock) {
 	var inputTextName = "txt" + colorPickerBlock + "Color";
@@ -292,8 +290,10 @@ function setColorValueToTextBox(element, colorPickerBlock) {
 }
 
 /**
- * FunctionName : setColorToLabel() Description : Set color to the color
- * picker's label on clicking any color block and close the dropdown.
+ * Set color to the color picker's label on clicking any color block and 
+ * close the dropdown.
+ * @param element {object} The reference of color picker.
+ * @param colorPickerBlock {string} The name of color picker block.
  */
 function setColorToLabel(element, colorPickerBlock) {
 	var labelName = "col" + colorPickerBlock;
@@ -313,9 +313,10 @@ function setColorToLabel(element, colorPickerBlock) {
 }
 
 /**
- * FunctionName : colObject_clickHandler() Description : Click handler of shape
- * color-picker. Toggle the dropdown and set the color to the main color block
- * in color picker.
+ * Click handler of shape color-picker. Toggle the dropdown and 
+ * set the color to the main color block in color picker.
+ * @param elementId {string} The id of color picker.
+ * @param colorPickerBlock {string} The name of color picker block.
  */
 function colorPicker_clickHandler(elementId, colorPickerBlock) {
 	var colorBlockTextbox = "#txt" + colorPickerBlock + "Color";
@@ -348,8 +349,8 @@ function colorPicker_clickHandler(elementId, colorPickerBlock) {
 }
 
 /**
- * FunctionName : colorPickerTextInput_validation() Description : Validate the
- * input value in text input of color picker block.
+ * Validate the input value in text input of color picker block.
+ * @param event {event type} The event dispatched after clicking text input.
  */
 function colorPickerTextInput_validation(event) {
 	var charCode = (event.which) ? event.which : event.keyCode;
@@ -371,8 +372,10 @@ function colorPickerTextInput_validation(event) {
 }
 
 /**
- * FunctionName : colorPickerTextInput_clickHandler() Description : Change the
- * color on text input in color picker block .
+ * Change the color on text input in color picker block.
+ * @param event {event type} The keyDown event dispatched after pressing key
+ * in textbox.
+ * @param colorPickerBlock {string} The name of color picker block. 
  */
 function colorPickerTextInput_clickHandler(event, colorPickerBlock) {
 	var elementId = "txt" + colorPickerBlock + "Color";
@@ -400,8 +403,9 @@ function colorPickerTextInput_clickHandler(event, colorPickerBlock) {
 }
 
 /**
- * FunctionName : text_KeyDownHandler() Description : Dispatch the click event
- * of activeButton.
+ * Dispatch the click event of activeButton.
+ * @param event {event type} The keyDown event dispatched after pressing key
+ * in textbox. 
  */
 function text_KeyDownHandler(event) {
 	if (event.keyCode == 13)
@@ -409,8 +413,9 @@ function text_KeyDownHandler(event) {
 }
 
 /**
- * FunctionName : restrictInputToDecimal() Description : Restrict the text input
- * to decimal value.
+ * Restrict the text input to decimal value.
+ * @param event {event type} The keyDown event dispatched after pressing key
+ * in textbox. 
  */
 function restrictInputToDecimal(event) {
 	var charCode = (event.which) ? event.which : event.keyCode;

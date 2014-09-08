@@ -5,8 +5,9 @@ and reading and writing preferences methods.
  */
 
 /**
- * FunctionName : completeHandler() Description : Callback function which is
- * called when validation of user's license take place.
+ * Callback function which is called when validation of user's license take place.
+ * @param data {object} The object of the response came from the activation request.
+ * @param status {string} The status of the activation request.
  */
 function completeHandler(data, status) {
 	var response = data;
@@ -30,16 +31,14 @@ function completeHandler(data, status) {
 }
 
 /**
- * FunctionName : mainTab_creationCompleteHandler() Description : Set the canvas
- * expand text value.
+ * Set the canvas expand text value.
  */
 function mainTab_creationCompleteHandler() {
 	document.getElementById("canvasExpandSize").value = model.canvasExpandSize;
 }
 
 /**
- * FunctionName : settings_creationCompleteHandler() Description : Set the
- * values of the objects(check boxes in setting tab) from model.
+ * Set the values of the objects(check boxes in setting tab) from model.
  */
 function settings_creationCompleteHandler() {
 	document.getElementById("shapeFill").checked = model.shapeFill;
@@ -60,8 +59,7 @@ function settings_creationCompleteHandler() {
 }
 
 /**
- * FunctionName : responsiveTab_creationCompleteHandler() Description : Set the
- * values of the objects(check boxes in responsive tab) from model and
+ * Set the values of the objects(check boxes in responsive tab) from model and
  * enable/disable the text boxes.
  */
 function responsiveTab_creationCompleteHandler() {
@@ -94,8 +92,7 @@ function responsiveTab_creationCompleteHandler() {
 }
 
 /**
- * FunctionName : prefs_creationCompleteHandler() Description : Load the data
- * provider values to the combo box in spec options tab.
+ * Load the data provider values to the combo box in spec options tab.
  */
 function prefs_creationCompleteHandler() {
 	// Set the values for font size combobox.
@@ -133,8 +130,8 @@ function prefs_creationCompleteHandler() {
 }
 
 /**
- * FunctionName : onLoaded() Description : Load the jsx and show/hide the login
- * container according to the license value in preferences.
+ * Load the jsx and show/hide the login container 
+ * according to the license value in preferences.
  */
 function onLoaded() {
 	// Handle the exceptions such as if any value or any component is not
@@ -167,6 +164,7 @@ function onLoaded() {
 		} else {
 			activationPrefs.licensed = true;
 			addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs));
+			writeAppPrefs();
 		}
 
 		if (isLicensed)
@@ -178,8 +176,7 @@ function onLoaded() {
 }
 
 /**
- * FunctionName : init() Description : Initialize the values of the tab
- * conatainer's components.
+ * Initialize the values of the tab conatainer's components.
  */
 function init() {
 	// Handle the exceptions such as if any value or any component is not
@@ -226,8 +223,7 @@ function init() {
 }
 
 /**
- * FunctionName : setModelValueFromPreferences() Description : Set the Specctr
- * configuration file data to model values.
+ * Set the Specctr configuration file data to model values.
  */
 function setModelValueFromPreferences() {
 	var appPrefs = readAppPrefs();
@@ -276,9 +272,9 @@ function setModelValueFromPreferences() {
 }
 
 /**
- * FunctionName : loadFontsToList() Description : This is a callback function
- * which takes the font list from jsx and load the list to the font combo-box of
- * fourth tab.
+ * Callback function which takes the font list from jsx and 
+ * load the list to the font combo-box of fourth tab.
+ * @param result {string} List of font families.
  */
 function loadFontsToList(result) {
 	try {
@@ -301,9 +297,8 @@ function loadFontsToList(result) {
 }
 
 /**
- * FunctionName : loadJSX() Description : Load JSX file into the scripting
- * context of the product. All the jsx files in folder [ExtensionRoot]/jsx will
- * be loaded.
+ * Load JSX file into the scripting context of the product. 
+ * All the jsx files in folder [ExtensionRoot]/jsx will be loaded.
  */
 function loadJSX() {
 	try {
@@ -318,15 +313,16 @@ function loadJSX() {
 }
 
 /**
- * FunctionName : evalScript() Description : Evaluates the scripting method.
+ * Evaluates the scripting method.
+ * @param script {string} The function name to evaluate.
+ * @param callback {function object} The function handler. 
  */
 function evalScript(script, callback) {
 	new CSInterface().evalScript(script, callback);
 }
 
 /**
- * FunctionName : setModel() Description : Evaluates the script and pass the
- * model object to extendscript file(.jsx).
+ * Evaluates the script and pass the model object to extendscript file(.jsx).
  */
 function setModel() {
 	try {
@@ -338,8 +334,7 @@ function setModel() {
 }
 
 /**
- * FunctionName : expandCanvas() Description : Call the 'createCanvasBorder'
- * method from ./jsx/specctr.jsx.
+ * Call the 'createCanvasBorder' method from ./jsx/specctr.jsx.
  */
 function expandCanvas() {
 	try {
@@ -353,8 +348,7 @@ function expandCanvas() {
 }
 
 /**
- * FunctionName : createDimensionSpecs() Description : Call the
- * 'createDimensionSpecsForItem' method from ./jsx/specctr.jsx.
+ * Call the 'createDimensionSpecsForItem' method from ./jsx/specctr.jsx.
  */
 function createDimensionSpecs() {
 	try {
@@ -367,8 +361,7 @@ function createDimensionSpecs() {
 }
 
 /**
- * FunctionName : createSpacingSpecs() Description : Call the
- * 'createSpacingSpecs' method from ./jsx/specctr.jsx.
+ * Call the 'createSpacingSpecs' method from ./jsx/specctr.jsx.
  */
 function createSpacingSpecs() {
 	try {
@@ -381,8 +374,7 @@ function createSpacingSpecs() {
 }
 
 /**
- * FunctionName : createCoordinateSpecs() Description : Call the
- * 'createCoordinateSpecs' method from ./jsx/specctr.jsx.
+ * Call the 'createCoordinateSpecs' method from ./jsx/specctr.jsx.
  */
 function createCoordinateSpecs() {
 	try {
@@ -395,8 +387,7 @@ function createCoordinateSpecs() {
 }
 
 /**
- * FunctionName : createPropertySpecs() Description : Call the
- * 'createPropertySpecsForItem' method from ./jsx/specctr.jsx.
+ * Call the 'createPropertySpecsForItem' method from ./jsx/specctr.jsx.
  */
 function createPropertySpecs() {
 	try {
@@ -409,8 +400,7 @@ function createPropertySpecs() {
 }
 
 /**
- * FunctionName : exportCss() Description : Call the 'exportCss' method from
- * ./jsx/specctr.jsx.
+ * Call the 'exportCss' method from ./jsx/specctr.jsx.
  */
 function exportCss() {
 	try {
@@ -423,13 +413,11 @@ function exportCss() {
 }
 
 /**
- * FunctionName : applyFontToList() Description : Apply the model's font value
- * to the font list of fourth tab.
+ * Apply the model's font value to the font list of fourth tab.
  */
 function applyFontToList() {
-	var fontListHandler = document.getElementById("lstFont"); // Get font
-	// combo-box
-	// handler.
+	// Get font combo-box handler.
+	var fontListHandler = document.getElementById("lstFont"); 
 
 	// Select the font if the index text value matches with the legendFont.
 	if (fontListHandler.options[model.legendFontIndex].text == model.legendFont) {
