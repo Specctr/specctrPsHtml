@@ -142,11 +142,9 @@ function onLoaded() {
 		var isLicensed = false;
 		var appPrefs = readAppPrefs();	//Read the config file and look for the isLicensed value.
 		if (appPrefs !== "") {
-			if(appPrefs.hasOwnProperty("isLicensed")) {
+			if(appPrefs.hasOwnProperty("isLicensed"))
 				isLicensed = appPrefs.isLicensed;
-				delete appPrefs.isLicensed;
-			}
-			model = appPrefs;
+			setModelValueFromPreferences();
 		}
 
 		//Migrating license from config file to license file, if present.

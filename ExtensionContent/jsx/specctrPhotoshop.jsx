@@ -27,7 +27,7 @@ function getFontList()
 {
     var font = app.fonts;
     var appFontLength = font.length;
-    var result = new Array();
+    var result = [];
     
 	//Set the spec text properties.
 	for (var i = 0; i < appFontLength; i++)
@@ -35,7 +35,7 @@ function getFontList()
         var currFont = font[i];
         if(currFont.style == "Regular")
         {
-            var object = new Object();
+            var object = {};
             object.label = currFont.family;
             object.font = currFont.name;
             result.push(object);
@@ -66,7 +66,7 @@ function getSelectedLayers()
     try
     {
         var doc = app.activeDocument;
-        selectedLayers   = new Array();
+        selectedLayers   = [];
         var isBackGroundPresent;
         
         try
@@ -427,7 +427,7 @@ function expandCanvas()
 function getStyleFromOtherSpecs(specName)
 {
     var doc = app.activeDocument;
-    var specsInfo = new Array();
+    var specsInfo = [];
     try
     {
         var specLayerGroup = doc.layerSets.getByName("Specctr").layerSets.getByName(specName);
@@ -442,7 +442,7 @@ function getStyleFromOtherSpecs(specName)
     {
         try
         {
-            var object = new Object();
+            var object = {};
             var spec = specLayerGroup.layerSets[noOfSpecs - 1].artLayers[0];
             object.idLayer = getXMPData(spec, "idLayer");
             object.styleText = getXMPData(spec, "css");
@@ -642,18 +642,18 @@ function createDimensionSpecsForItem()
     try
     {
         var artLayer = getActiveLayer();
-        if(artLayer == null || !startUpCheckBeforeSpeccing(artLayer))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
+        if(artLayer === null || !startUpCheckBeforeSpeccing(artLayer))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
             return;
-        
+
         var bounds = returnBounds(artLayer);
-        app.activeDocument.suspendHistory('Get Dimension Info', 'calculateDmnsns(artLayer, bounds)');      //Pass bounds and layer for creating dimension spec.
+        app.activeDocument.suspendHistory('Dimension Specs', 'calculateDimensions(artLayer, bounds)');      //Pass bounds and layer for creating dimension spec.
     }
     catch(e)
     {}
 }
 
 //Calculate the width and height value of the selected art layer. These values may be fixed (in px/inches/cm) or relative to document (in %) which depends on the users choice.
-function calculateDmnsns(artLayer, bounds)
+function calculateDimensions(artLayer, bounds)
 {
     //Save the current preferences
     var doc = app.activeDocument;
@@ -690,8 +690,8 @@ function calculateDmnsns(artLayer, bounds)
             else
                 relativeWidth = orgnlCanvas[2];
 
-            widthValue = Math.round(lyrWidth/relativeWidth*100) + " %";
-            heightValue = Math.round(lyrHeight/relativeHeight*100) + " %";
+            widthValue = Math.round(lyrWidth/relativeWidth*10000) /100+ "%";
+            heightValue = Math.round(lyrHeight/relativeHeight*10000) /100+ "%";
         }
 
         createDimensionSpecs(artLayer, bounds, widthValue, heightValue);
@@ -756,47 +756,53 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
         specText.contents = widthValue;
     }
 
+    var aPos, bPos, cPos;
     switch(model.widthPos)
     {
         case widthChoice.Top:
-            specText.position = new Array(bounds[0]+width/2.0, bounds[1]-spacing-model.armWeight/2.0);
-            widthLine = createLine(bounds[0], bounds[1]-0.7*spacing, bounds[2], bounds[1]-0.7*spacing, newColor);     //Main width line.
-            setShape(bounds[0]+model.armWeight/2, 
-                                    bounds[1]-0.4*spacing, 
-                                        bounds[0]+model.armWeight/2, 
-                                            bounds[1]-spacing);                                     //Width line's left.
-            setShape(bounds[2]-model.armWeight/2, 
-                                    bounds[1]-0.4*spacing, 
-                                        bounds[2]-model.armWeight/2, 
-                                            bounds[1]-spacing);                                     // Width line's right.
+            specText.position = [bounds[0]+width/2.0, bounds[1]-spacing-model.armWeight/2.0];
+
+            bPos = bounds[1]-0.7*spacing;
+            widthLine = createLine(bounds[0], bPos, bounds[2], bPos, newColor);     //Main width line.
+
+            aPos = bounds[0]+model.armWeight/2;
+            bPos = bounds[1]-0.4*spacing;
+            cPos = bounds[1]-spacing;
+            setShape(aPos, bPos, aPos, cPos);   //Width line's left.
+
+            aPos = bounds[2]-model.armWeight/2;
+            setShape(aPos, bPos, aPos, cPos);   // Width line's right.
             break;
             
         case widthChoice.Bottom:
-            specText.position = new Array(bounds[0]+width/2.0, bounds[3]+spacing+model.armWeight/2.0+model.legendFontSize*0.8);
-            widthLine = createLine(bounds[0], bounds[3]+0.7*spacing, bounds[2], bounds[3]+0.7*spacing, newColor);     //Main width line.
-            setShape(bounds[0]+model.armWeight/2, 
-                                    bounds[3]+0.4*spacing, 
-                                        bounds[0]+model.armWeight/2, 
-                                            bounds[3]+spacing);                                     //Width line's left.
-            setShape(bounds[2]-model.armWeight/2, 
-                                    bounds[3]+0.4*spacing, 
-                                        bounds[2]-model.armWeight/2, 
-                                            bounds[3]+spacing);                                     // Width line's right.
+            specText.position = [bounds[0]+width/2.0, bounds[3]+spacing+model.armWeight/2.0+model.legendFontSize*0.8];
+            
+            bPos = bounds[3]+0.7*spacing;
+            widthLine = createLine(bounds[0], bPos, bounds[2], bPos, newColor);     //Main width line.
+            
+            aPos = bounds[0]+model.armWeight/2;
+            bPos = bounds[3]+0.4*spacing;
+            cPos = bounds[3]+spacing;
+            setShape(aPos, bPos, aPos, cPos);   //Width line's left.
+            
+            aPos = bounds[2]-model.armWeight/2;
+            setShape(aPos, bPos, aPos, cPos);    // Width line's right.
             break;
             
         case widthChoice.Center:
-            specText.position = new Array(bounds[0]+width/2.0, bounds[1]+height/2.0-spacing+model.armWeight*2.0);
-            widthLine = createLine(bounds[0], bounds[1]+height/2.0, bounds[2], bounds[1]+height/2.0, newColor);     //Main width line.
-            setShape(bounds[0]+model.armWeight/2, 
-                                    bounds[1]+height/2.0-0.4*spacing, 
-                                        bounds[0]+model.armWeight/2, 
-                                            bounds[1]+height/2.0+0.4*spacing);              //Width line's left.
-            setShape(bounds[2]-model.armWeight/2, 
-                                    bounds[1]+height/2.0-0.4*spacing, 
-                                        bounds[2]-model.armWeight/2, 
-                                            bounds[1]+height/2.0+0.4*spacing);              // Width line's right.   
-            break;
-            
+            specText.position =[bounds[0]+width/2.0, bounds[1]+height/2.0-spacing+model.armWeight*2.0];
+
+            bPos = bounds[1]+height/2.0;
+            widthLine = createLine(bounds[0], bPos, bounds[2], bPos, newColor);     //Main width line.
+
+            aPos = bounds[0]+model.armWeight/2;
+            cPos = bPos+0.4*spacing;
+            bPos = bPos-0.4*spacing;
+            setShape(aPos, bPos, aPos, cPos);   //Width line's left.
+
+            aPos = bounds[2]-model.armWeight/2;
+            setShape(aPos, bPos, aPos, cPos);   // Width line's right.   
+
             default:
     }
 
@@ -816,47 +822,51 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
     switch(model.heightPos)
     {
         case heightChoice.Left:
-            specText.position = new Array(bounds[0]-spacing-model.armWeight/2, bounds[1]+height/2.0);
-            heightLine = createLine(bounds[0]-0.7*spacing, bounds[3], bounds[0]-0.7*spacing, bounds[1], newColor);      //Main height line
-            setShape(bounds[0]-0.4*spacing, 
-                                    bounds[1]+model.armWeight/2, 
-                                        bounds[0]-spacing, 
-                                            bounds[1]+model.armWeight/2);                       //Height line's top.
-            setShape(bounds[0]-0.4*spacing, 
-                                    bounds[3]-model.armWeight/2, 
-                                        bounds[0]-spacing, 
-                                            bounds[3]-model.armWeight/2);                       //Height line's bottom.
+            specText.position = [bounds[0]-spacing-model.armWeight/2, bounds[1]+height/2.0];
+
+            aPos = bounds[0]-0.7*spacing;
+            heightLine = createLine(aPos, bounds[3], aPos, bounds[1], newColor);      //Main height line
+
+            aPos = bounds[0]-0.4*spacing;
+            bPos = bounds[1]+model.armWeight/2;
+            cPos = bounds[0]-spacing;
+            setShape(aPos, bPos, cPos, bPos);   //Height line's top.
+
+            bPos = bounds[3]-model.armWeight/2;
+            setShape(aPos, bPos, cPos, bPos);    //Height line's bottom.
             break;
 
         case heightChoice.Right:
             specText.justification = Justification.LEFT;
-            specText.position = new Array(bounds[2]+spacing+model.armWeight/2.0, bounds[1]+height/2.0);
-            heightLine = createLine(bounds[2]+0.7*spacing, bounds[3], bounds[2]+0.7*spacing, bounds[1], newColor);      //Main height line
-            setShape(bounds[2]+0.4*spacing, 
-                                    bounds[1]+model.armWeight/2, 
-                                        bounds[2]+spacing, 
-                                            bounds[1]+model.armWeight/2);                      //Height line's top.
-            setShape(bounds[2]+0.4*spacing, 
-                                    bounds[3]-model.armWeight/2, 
-                                        bounds[2]+spacing, 
-                                            bounds[3]-model.armWeight/2);                       //Height line's bottom.
+            specText.position = [bounds[2]+spacing+model.armWeight/2.0, bounds[1]+height/2.0];
+
+            aPos = bounds[2]+0.7*spacing;
+            heightLine = createLine(aPos, bounds[3], aPos, bounds[1], newColor);      //Main height line
+
+            aPos = bounds[2]+0.4*spacing;
+            bPos = bounds[1]+model.armWeight/2;
+            cPos = bounds[2]+spacing;
+            setShape(aPos, bPos, cPos, bPos);   //Height line's top.
+
+            bPos = bounds[3]-model.armWeight/2;
+            setShape(aPos, bPos, cPos, bPos);   //Height line's bottom.
             break;
-            
+
         case heightChoice.Center:
             specText.justification = Justification.LEFT;
-            specText.position = new Array(bounds[2]-width/2.0+0.4*spacing+model.armWeight/2.0, bounds[1]+height/2.0);
-            heightLine = createLine(bounds[2]-width/2.0, bounds[3], bounds[2]-width/2.0, bounds[1], newColor);      //Main height line
-            setShape(bounds[2]-width/2.0+0.4*spacing, 
-                                    bounds[1]+model.armWeight/2, 
-                                        bounds[2]-width/2.0-0.4*spacing, 
-                                            bounds[1]+model.armWeight/2);                       //Height line's top.
-            setShape(bounds[2]-width/2.0+0.4*spacing, 
-                                    bounds[3]-model.armWeight/2, 
-                                        bounds[2]-width/2.0-0.4*spacing, 
-                                            bounds[3]-model.armWeight/2);                        //Height line's bottom.
-            break;
-            
-            default:
+            specText.position = [bounds[2]-width/2.0+0.4*spacing+model.armWeight/2.0, bounds[1]+height/2.0];
+
+            aPos = bounds[2]-width/2.0;
+            heightLine = createLine(aPos, bounds[3], aPos, bounds[1], newColor);      //Main height line
+
+            bPos = bounds[1]+model.armWeight/2;
+            cPos = aPos-0.4*spacing;
+            aPos = aPos+0.4*spacing;
+            setShape(aPos, bPos, cPos, bPos);   //Height line's top.
+
+            bPos = bounds[3]-model.armWeight/2;
+            setShape(aPos, bPos, cPos, bPos);   //Height line's bottom.
+          default:
     }
 
     //Converting selected layers into single smart object.
@@ -865,7 +875,7 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
     spec.name = "DimensionSpec";
     idDimensionSpec = getIDOfLayer();
     doc.activeLayer = artLayer;
-    
+
     if(artLayer.kind != LayerKind.TEXT)
     {
         var idLayer = getIDOfLayer();
@@ -886,15 +896,15 @@ function createHrzntlSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
     try
     {
         var hrzntlDstnc = Math.abs(x2-x1);
-        var spacing = 10+model.armWeight;
+        var spacing = 3+0.3*model.armWeight;
         var newColor = legendColorSpacing();
-        
+
         if(legendLayer == null)
         {
             legendLayer = legendSpacingLayer().layerSets.add();
             legendLayer.name = "Specctr Spacing Mark";
         }
-        
+
         if(!model.specInPrcntg)
         {
             //Absolute distance.
@@ -911,7 +921,7 @@ function createHrzntlSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
             else
                 relativeWidth = orgnlCanvas[2];
 
-            hrzntlDstnc = Math.round(hrzntlDstnc/relativeWidth*100) + " %";
+            hrzntlDstnc = Math.round(hrzntlDstnc/relativeWidth*10000)/100 + "%";
         }
 
         var hrzntSpacing = legendLayer.artLayers.add();
@@ -923,11 +933,15 @@ function createHrzntlSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
         specText.font = font;
         specText.size = model.legendFontSize;
         specText.contents = hrzntlDstnc;
-        specText.position = new Array((x1+x2)/2.0, y1-spacing*0.3-model.armWeight/2);
-        
+        specText.position = [(x1+x2)/2.0, y1-spacing-model.armWeight/2];
+
         var hrzntLine = createLine(x1, y1, x2, y2, newColor);
-        setShape(x2+model.armWeight/2, y1+0.3*spacing, x2+model.armWeight/2, y2-0.3*spacing);    //horizontal left line.
-        setShape(x1-model.armWeight/2, y1+0.3*spacing, x1-model.armWeight/2, y2-0.3*spacing);    //horizontal right line.
+        var aPos = x2+model.armWeight/2;
+        var bPos = y1+spacing;
+        var cPos = y2-spacing;
+        setShape(aPos, bPos, aPos, cPos);    //horizontal left line.
+        aPos = x1-model.armWeight/2;
+        setShape(aPos, bPos, aPos, cPos);    //horizontal right line.
         
         selectLayers(hrzntSpacing.name, hrzntLine.name);
         var spec = createSmartObject();
@@ -943,7 +957,7 @@ function createVertSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
     try
     {
         var vrtclDstnc = Math.abs(y2-y1);
-        var spacing = 10+model.armWeight;
+        var spacing = 3+0.3*model.armWeight;
         var newColor = legendColorSpacing();
         if(legendLayer == null)
         {
@@ -967,7 +981,7 @@ function createVertSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
             else
                 relativeHeight = orgnlCanvas[3];
 
-            vrtclDstnc = Math.round(vrtclDstnc/relativeHeight*100) + " %";
+            vrtclDstnc = Math.round(vrtclDstnc/relativeHeight*10000)/100 + "%";
         }
     
         var spacingSpec = legendLayer.artLayers.add();
@@ -979,11 +993,13 @@ function createVertSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
         specText.font = font;
         specText.size = model.legendFontSize;
         specText.contents = vrtclDstnc;
-        specText.position = new Array(x1-spacing*0.3-model.armWeight/2, (y1+y2)/2.0);
+        specText.position = [x1-spacing-model.armWeight/2, (y1+y2)/2.0];
         
         var line = createLine(x1, y1, x2, y2, newColor);
-        setShape(x1-0.3*spacing, y2+model.armWeight/2, x1+0.3*spacing, y2+model.armWeight/2);    //vertical top line.
-        setShape(x2-0.3*spacing, y1-model.armWeight/2, x2+0.3*spacing, y1-model.armWeight/2);    //vertical bottom line.
+        var aPos =  y2+model.armWeight/2;
+        setShape(x1-spacing, aPos, x1+spacing, aPos);    //vertical top line.
+        aPos =  y1-model.armWeight/2;
+        setShape(x2-spacing, aPos, x2+spacing, aPos);    //vertical bottom line.
         
          selectLayers(spacingSpec.name, line.name);
          var spec = createSmartObject();
@@ -1280,16 +1296,16 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
 
     var font = getFont();
     var newColor = legendColorSpacing();
-    var height = bounds[3]-bounds[1];
-    var width = bounds[2]-bounds[0];
-    
-    var spacing = 10+model.armWeight;
+    var height = bounds[3] - bounds[1];
+    var width = bounds[2] - bounds[0];
+    var armWidth = model.armWeight / 2.0;
+    var spacing = 3 + 0.3 * model.armWeight;
     var cnvsRect = originalCanvasSize();       //Get the original canvas size.
     
-    var toTop = bounds[1]-cnvsRect[1];
-	var toLeft = bounds[0]-cnvsRect[0];
-    var toRight = cnvsRect[2]-bounds[2];
-    var toBottom = cnvsRect[3]-bounds[3];
+    var toTop = bounds[1] - cnvsRect[1];
+	var toLeft = bounds[0] - cnvsRect[0];
+    var toRight = cnvsRect[2] - bounds[2];
+    var toBottom = cnvsRect[3] - bounds[3];
   
     if(!model.specInPrcntg)
     {
@@ -1315,20 +1331,22 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
         else
             relativeWidth = orgnlCanvas[2];
 
-        toLeft = Math.round(toLeft/relativeWidth*100) + " %";
-        toTop = Math.round(toTop/relativeHeight*100) + " %";
-        toRight = Math.round(toRight/relativeWidth*100) + " %";
-        toBottom = Math.round(toBottom/relativeHeight*100) + " %";
+        toLeft = Math.round(toLeft / relativeWidth * 10000) / 100 + "%";
+        toTop = Math.round(toTop / relativeHeight * 10000) / 100 + "%";
+        toRight = Math.round(toRight / relativeWidth * 10000) / 100 + "%";
+        toBottom = Math.round(toBottom / relativeHeight * 10000) / 100 + "%";
     }
-    
+
     var legendLayer = legendSpacingLayer().layerSets.add();
     legendLayer.name = "Specctr Spacing Mark";
-    
+
     var lines = "", specText, topText = "", leftText = "", rightText = "", bottomText = "";
-    
-    if(model.spaceTop)
+    var aPos, bPos, cPos;
+
+    if(model.spaceTop)  //Create the spec text for top.
     {
-        //Create the spec text for top.
+        aPos = bounds[0] + width / 2 - spacing;
+
         topText = legendLayer.artLayers.add();
         topText.kind = LayerKind.TEXT;
         specText = topText.textItem;
@@ -1338,25 +1356,25 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
         specText.font = font;
         specText.size = model.legendFontSize;
         specText.contents = toTop;
-        specText.position = new Array(bounds[0]+width/2-spacing*0.3-model.armWeight/2, (bounds[1]+cnvsRect[1])/2.0);
+        specText.position = [aPos - armWidth, (bounds[1] + cnvsRect[1]) / 2.0];
 
-        lines = createLine(bounds[0]+width/2, cnvsRect[1], bounds[0]+width/2, bounds[1], newColor);      //Main top line.
-        setShape(bounds[0]+width/2-0.3*spacing, 
-                                bounds[1]-model.armWeight/2, 
-                                    bounds[0]+width/2+0.3*spacing, 
-                                        bounds[1]-model.armWeight/2);                       //Top line's top.
-        setShape(bounds[0]+width/2-0.3*spacing, 
-                                cnvsRect[1]+model.armWeight/2, 
-                                    bounds[0]+width/2+0.3*spacing, 
-                                        cnvsRect[1]+model.armWeight/2);                     //Top line's bottom.
-                                        
+        cPos = aPos + spacing;
+        lines = createLine(cPos, cnvsRect[1], cPos, bounds[1], newColor);      //Main top line.
+
+        bPos = bounds[1] - armWidth;
+        cPos = cPos + spacing;
+        setShape(aPos, bPos, cPos, bPos);   //Top line's top.
+
+        bPos = cnvsRect[1] + armWidth;
+        setShape(aPos, bPos, cPos, bPos);   //Top line's bottom.
+
         selectLayers(topText.name, lines.name);
         topText = createSmartObject();
     }
 
-    if(model.spaceLeft)
+    if(model.spaceLeft) //Create the spec text for left.
     {
-        //Create the spec text for left.
+        cPos = bounds[3] - height / 2 - spacing;
         leftText = legendLayer.artLayers.add();
         leftText.kind = LayerKind.TEXT;
         specText = leftText.textItem;
@@ -1366,25 +1384,25 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
         specText.font = font;
         specText.size = model.legendFontSize;
         specText.contents = toLeft;
-        specText.position = new Array((bounds[0]+cnvsRect[0])/2.0, bounds[3]-height/2-spacing*0.3-model.armWeight/2);
-                
-        lines = createLine(cnvsRect[0], bounds[3]-height/2, bounds[0], bounds[3]-height/2, newColor);    //Main left line.
-        setShape(bounds[0]-model.armWeight/2, 
-                                bounds[3]-height/2+0.3*spacing, 
-                                    bounds[0]-model.armWeight/2, 
-                                        bounds[3]-height/2-0.3*spacing);                        //Left line's left.
-        setShape(cnvsRect[0]+model.armWeight/2, 
-                                bounds[3]-height/2+0.3*spacing, 
-                                    cnvsRect[0]+model.armWeight/2, 
-                                        bounds[3]-height/2-0.3*spacing);                        //Left line's right.
+        specText.position = [(bounds[0] + cnvsRect[0]) / 2.0, cPos - armWidth];
+
+        bPos = cPos + spacing;
+        lines = createLine(cnvsRect[0], bPos, bounds[0], bPos, newColor);    //Main left line.
         
+        bPos = bPos + spacing;
+        aPos = bounds[0] - armWidth;
+        setShape(aPos, bPos, aPos, cPos);   //Left line's left.
+
+        aPos = cnvsRect[0] + armWidth;
+        setShape(aPos, bPos, aPos, cPos);   //Left line's right.
+
         selectLayers(leftText.name, lines.name);
         leftText = createSmartObject();
     }
 
-    if(model.spaceRight)
+    if(model.spaceRight)    //Create the spec text for right.
     {
-        //Create the spec text for right.
+        cPos = bounds[3] - height / 2 - spacing;
         rightText =  legendLayer.artLayers.add();
         rightText.kind = LayerKind.TEXT;
         specText = rightText.textItem;
@@ -1394,25 +1412,25 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
         specText.font = font;
         specText.size = model.legendFontSize;
         specText.contents = toRight;
-        specText.position = new Array((bounds[2]+cnvsRect[2])/2.0, bounds[3]-height/2-spacing*0.3-model.armWeight/2);
-        
-        lines = createLine(cnvsRect[2], bounds[3]-height/2, bounds[2], bounds[3]-height/2, newColor);    //Main Right line.
-        setShape(bounds[2]+model.armWeight/2, 
-                                bounds[3]-height/2+0.3*spacing, 
-                                    bounds[2]+model.armWeight/2, 
-                                        bounds[3]-height/2-0.3*spacing);                        //Right line's left.
-        setShape(cnvsRect[2]-model.armWeight/2, 
-                                bounds[3]-height/2+0.3*spacing, 
-                                    cnvsRect[2]-model.armWeight/2, 
-                                        bounds[3]-height/2-0.3*spacing);                        //Right line's right.
-        
+        specText.position = [(bounds[2] + cnvsRect[2]) / 2.0, cPos - armWidth];
+
+        bPos = cPos + spacing;
+        lines = createLine(cnvsRect[2], bPos, bounds[2], bPos, newColor);    //Main Right line.
+
+        bPos = bPos + spacing;
+        aPos = bounds[2] + armWidth;
+        setShape(aPos, bPos, aPos, cPos);   //Right line's left.
+        aPos = cnvsRect[2] - armWidth;
+        setShape(aPos, bPos, aPos, cPos);   //Right line's right.
+
         selectLayers(rightText.name, lines.name);
         rightText = createSmartObject();
     }
 
-    if(model.spaceBottom)
+    if(model.spaceBottom)   //Create the spec text for bottom.
     {
-        //Create the spec text for bottom.
+        aPos = bounds[0] + width / 2 - spacing;
+
         bottomText = legendLayer.artLayers.add();
         bottomText.kind = LayerKind.TEXT;
         specText = bottomText.textItem;
@@ -1422,18 +1440,16 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
         specText.font = font;
         specText.size = model.legendFontSize;
         specText.contents = toBottom;
-        specText.position = new Array(bounds[0]+width/2-spacing*0.3-model.armWeight/2, (bounds[3]+cnvsRect[3])/2.0);
+        specText.position = [aPos - armWidth, (bounds[3]+cnvsRect[3])/2.0];
+        cPos = aPos + spacing;
+        lines = createLine(cPos, cnvsRect[3], cPos, bounds[3], newColor);   //Main bottom line.
         
-        lines = createLine(bounds[0]+width/2, cnvsRect[3], bounds[0]+width/2, bounds[3], newColor);        //Main bottom line.
-        setShape(bounds[0]+width/2-0.3*spacing, 
-                                bounds[3]+model.armWeight/2, 
-                                    bounds[0]+width/2+0.3*spacing, 
-                                        bounds[3]+model.armWeight/2);                           //Bottom line's left.
-        setShape(bounds[0]+width/2-0.3*spacing, 
-                                cnvsRect[3]-model.armWeight/2, 
-                                    bounds[0]+width/2+0.3*spacing, 
-                                        cnvsRect[3]-model.armWeight/2);                         //Bottom line's right.
-        
+        bPos = bounds[3] + armWidth;
+        cPos = cPos + spacing;
+        setShape(aPos, bPos, cPos, bPos);   //Bottom line's left.
+        bPos = cnvsRect[3] - armWidth;
+        setShape(aPos, bPos, cPos, bPos);   //Bottom line's right.
+
         selectLayers(bottomText.name, lines.name);
         bottomText = createSmartObject();
     }
@@ -1488,7 +1504,7 @@ function createPropertySpecsForItem()
     {
         var sourceItem = getActiveLayer();
         var bounds = returnBounds(sourceItem);
-        app.activeDocument.suspendHistory('Get Property Info', 'createPropertySpecs(sourceItem, bounds)');
+        app.activeDocument.suspendHistory('Property Specs', 'createPropertySpecs(sourceItem, bounds)');
     }
     catch(e)
     {}
@@ -1506,7 +1522,7 @@ function createPropertySpecs(sourceItem, bounds)
     var number = -1;
     var noOfSpec;
     
-	if(artLayer.typename == 'LayerSet')
+	if(artLayer.typename === 'LayerSet')
 		return;
     
  	if(ExternalObject.AdobeXMPScript == null)
@@ -1603,7 +1619,7 @@ function createPropertySpecs(sourceItem, bounds)
                 infoText   = getSpecsInfoForTextItem(sourceItem);
                 newColor = legendColorType();
                 legendLayer = legendTextPropertiesLayer().layerSets.add();
-                if(number == -1)
+                if(number === -1)
                 {
                     noOfSpec = parseInt(noOfSpec) + 1;
                     number = noOfSpec;
@@ -1615,7 +1631,7 @@ function createPropertySpecs(sourceItem, bounds)
             case LayerKind.SOLIDFILL: 
                 infoText = getSpecsInfoForPathItem(sourceItem);
                 legendLayer = legendObjectPropertiesLayer().layerSets.add();
-                if(number == -1)
+                if(number === -1)
                 {
                     noOfSpec = parseInt(noOfSpec)+1;
                     number = noOfSpec;
@@ -1626,7 +1642,7 @@ function createPropertySpecs(sourceItem, bounds)
             default: 
                 infoText = getSpecsInfoForGeneralItem(sourceItem); 
                 legendLayer = legendObjectPropertiesLayer().layerSets.add();
-                if(number == -1)
+                if(number === -1)
                 {
                     noOfSpec = parseInt(noOfSpec) + 1;
                     number = noOfSpec;
@@ -1634,7 +1650,7 @@ function createPropertySpecs(sourceItem, bounds)
                 legendLayer.name = "Object Spec "+number;
         }
 
-        if (infoText == "") 
+        if (infoText === "") 
             return;
         
         var name = artLayer.name;
@@ -1644,16 +1660,16 @@ function createPropertySpecs(sourceItem, bounds)
         doc.resizeImage(null, null, 72, ResampleMethod.NONE);
         var spacing = 10;
         var isLeft, pos;
-        var centerX = artLayerBounds[0]/2 + artLayerBounds[2]/2;             //Get the center of item.
+        var centerX = (artLayerBounds[0] + artLayerBounds[2]) / 2;             //Get the center of item.
         var font = getFont();
-        
+
         //Create spec text for art object.
         var spec = legendLayer.artLayers.add();
         spec.kind = LayerKind.TEXT;
         var specText = spec.textItem;
         specText.kind = TextType.POINTTEXT;
         specText.contents = infoText;
-        applyBold(1, nameLength+1);
+        applyBold(1, nameLength + 1);
         specText.color.rgb = newColor;
         specText.font = font;
         specText.size = model.legendFontSize;
@@ -1662,12 +1678,12 @@ function createPropertySpecs(sourceItem, bounds)
         
         var txt = createNumber(legendLayer, number, font);
         txt.name = "___Number";
-        var dia = txt.bounds[3]-txt.bounds[1]+12;
+        var dia = txt.bounds[3] - txt.bounds[1] + 12;
         
         legendLayer.visible = false;
         var circle = createCircle (artLayerBounds[1], artLayerBounds[0]-dia, artLayerBounds[1]+dia, artLayerBounds[0], newColor);
         circle.move(txt, ElementPlacement.PLACEAFTER);
-        pos = new Array();
+        pos = [];
         pos[0] = (circle.bounds[0]+circle.bounds[2])/2.0-(txt.bounds[2]-txt.bounds[0])/2.0;
         pos[1] = (circle.bounds[1]+circle.bounds[3])/2.0-(txt.bounds[3]-txt.bounds[1])/2.0;
         txt.translate(pos[0]-txt.bounds[0], pos[1]-txt.bounds[1]);
@@ -1703,8 +1719,7 @@ function createPropertySpecs(sourceItem, bounds)
         dupBullet.visible = true;
         spec.visible = true;
 
-        
-        if(cssText == "")
+        if(cssText === "")
             cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
             
         setXmpDataOfLayer(artLayer, idLayer, idSpec, idBullet, idDupBullet, number);
@@ -1804,7 +1819,7 @@ function updateSpec(lyr, spec, idLayer, bullet, dupBullet, bounds)
         legendLayer.visible = false;
         var circle = createCircle(artLayerBounds[1], artLayerBounds[0]-dia, artLayerBounds[1]+dia, artLayerBounds[0], newColor);
         circle.move(txt, ElementPlacement.PLACEAFTER);
-        pos = new Array();
+        pos = [];
         pos[0] = (circle.bounds[0]+circle.bounds[2])/2.0-(txt.bounds[2]-txt.bounds[0])/2.0;
         pos[1] = (circle.bounds[1]+circle.bounds[3])/2.0-(txt.bounds[3]-txt.bounds[1])/2.0;
         txt.translate(pos[0]-txt.bounds[0], pos[1]-txt.bounds[1]);
@@ -1938,8 +1953,8 @@ function createCoordinates(sourceItem, bounds)
             else
                 relativeLeft = orgnlCanvas[2];
 
-            left = Math.round(bounds[0]/relativeLeft*100) + "%";
-            top = Math.round(bounds[1]/relativeTop*100) + "%";
+            left = Math.round(bounds[0]/relativeLeft*10000)/100 + "%";
+            top = Math.round(bounds[1]/relativeTop*10000)/100 + "%";
         }
         
         var styleText = "\tleft: " + left + ";\r\ttop: " + top + ";";
@@ -1964,7 +1979,7 @@ function createCoordinates(sourceItem, bounds)
         var line = "";
         if(sourceItem.kind == LayerKind.TEXT)
         {
-            specText.position = new Array(sourceItem.textItem.position[0]-spacing-model.armWeight/2, sourceItem.textItem.position[1]-spacing+model.armWeight);
+            specText.position = [sourceItem.textItem.position[0]-spacing-model.armWeight/2, sourceItem.textItem.position[1]-spacing+model.armWeight];
             spacing = spacing+5;
             line = createLine(sourceItem.textItem.position[0]-spacing-model.armWeight, 
                                                     sourceItem.textItem.position[1]+model.armWeight, 
@@ -1979,7 +1994,7 @@ function createCoordinates(sourceItem, bounds)
         }
         else
         {
-            specText.position = new Array(bounds[0]-spacing, bounds[1]-spacing);
+            specText.position =[bounds[0]-spacing, bounds[1]-spacing];
             spacing = spacing+5;
             line = createLine(bounds[0]-spacing, 
                                                     bounds[1]-model.armWeight/2, 
@@ -3162,7 +3177,7 @@ function getRoundCornerValue()
     {
         var infoText = "Border-radius: ";
         var doc = app.activeDocument;
-        var anchorPoints = new Array;
+        var anchorPoints = [];
         var shape = doc.pathItems[0];
         var pathItem = shape.subPathItems[0];
         var points = pathItem.pathPoints;
@@ -3691,7 +3706,7 @@ function originalCanvasSize()
     var border = canvasBorder();
     if(border == null)
      {
-        var bounds =  new Array(0, 0, app.activeDocument.width, app.activeDocument.height);
+        var bounds = [0, 0, app.activeDocument.width, app.activeDocument.height];
         return bounds;
     }
     else
