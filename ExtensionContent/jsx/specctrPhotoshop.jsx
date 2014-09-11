@@ -657,10 +657,10 @@ function calculateDimensions(artLayer, bounds)
 {
     //Save the current preferences
     var doc = app.activeDocument;
-    var startRulerUnits = app.preferences.rulerUnits;
-    var startTypeUnits = app.preferences.typeUnits;
-    var originalDPI = doc.resolution;
-    setPreferences(Units.PIXELS, TypeUnits.PIXELS, originalDPI);
+    var pref = app.preferences;
+    var startRulerUnits = pref.rulerUnits;
+    var startTypeUnits = pref.typeUnits;
+    setPreferences(Units.PIXELS, TypeUnits.PIXELS);
 
     try
     {
@@ -700,7 +700,7 @@ function calculateDimensions(artLayer, bounds)
     {}
     
     doc.activeLayer = artLayer;
-    setPreferences(startRulerUnits, startTypeUnits, originalDPI);      //Setting the original preferences of the document.
+    setPreferences(startRulerUnits, startTypeUnits);      //Setting the original preferences of the document.
 }
 
 //Create the dimension spec for a selected layer.
@@ -738,7 +738,7 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
     var height = bounds[3]-bounds[1];
     var width = bounds[2]-bounds[0];
     var spacing = 10+model.armWeight;
-    
+    var armWidth = model.armWeight/2.0;
     var legendLayer = legendDimensionsLayer().layerSets.add();
     legendLayer.name = "Specctr Dimension Mark"; 
     var newColor = legendColorSpacing();
@@ -760,32 +760,32 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
     switch(model.widthPos)
     {
         case widthChoice.Top:
-            specText.position = [bounds[0]+width/2.0, bounds[1]-spacing-model.armWeight/2.0];
+            specText.position = [bounds[0]+width/2.0, bounds[1]-spacing-armWidth];
 
             bPos = bounds[1]-0.7*spacing;
             widthLine = createLine(bounds[0], bPos, bounds[2], bPos, newColor);     //Main width line.
 
-            aPos = bounds[0]+model.armWeight/2;
+            aPos = bounds[0]+armWidth;
             bPos = bounds[1]-0.4*spacing;
             cPos = bounds[1]-spacing;
             setShape(aPos, bPos, aPos, cPos);   //Width line's left.
 
-            aPos = bounds[2]-model.armWeight/2;
+            aPos = bounds[2]-armWidth;
             setShape(aPos, bPos, aPos, cPos);   // Width line's right.
             break;
             
         case widthChoice.Bottom:
-            specText.position = [bounds[0]+width/2.0, bounds[3]+spacing+model.armWeight/2.0+model.legendFontSize*0.8];
+            specText.position = [bounds[0]+width/2.0, bounds[3]+spacing+armWidth+model.legendFontSize*0.8];
             
             bPos = bounds[3]+0.7*spacing;
             widthLine = createLine(bounds[0], bPos, bounds[2], bPos, newColor);     //Main width line.
             
-            aPos = bounds[0]+model.armWeight/2;
+            aPos = bounds[0]+armWidth;
             bPos = bounds[3]+0.4*spacing;
             cPos = bounds[3]+spacing;
             setShape(aPos, bPos, aPos, cPos);   //Width line's left.
             
-            aPos = bounds[2]-model.armWeight/2;
+            aPos = bounds[2]-armWidth;
             setShape(aPos, bPos, aPos, cPos);    // Width line's right.
             break;
             
@@ -795,12 +795,12 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
             bPos = bounds[1]+height/2.0;
             widthLine = createLine(bounds[0], bPos, bounds[2], bPos, newColor);     //Main width line.
 
-            aPos = bounds[0]+model.armWeight/2;
+            aPos = bounds[0]+armWidth;
             cPos = bPos+0.4*spacing;
             bPos = bPos-0.4*spacing;
             setShape(aPos, bPos, aPos, cPos);   //Width line's left.
 
-            aPos = bounds[2]-model.armWeight/2;
+            aPos = bounds[2]-armWidth;
             setShape(aPos, bPos, aPos, cPos);   // Width line's right.   
 
             default:
@@ -822,49 +822,49 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
     switch(model.heightPos)
     {
         case heightChoice.Left:
-            specText.position = [bounds[0]-spacing-model.armWeight/2, bounds[1]+height/2.0];
+            specText.position = [bounds[0]-spacing-armWidth, bounds[1]+height/2.0];
 
             aPos = bounds[0]-0.7*spacing;
             heightLine = createLine(aPos, bounds[3], aPos, bounds[1], newColor);      //Main height line
 
             aPos = bounds[0]-0.4*spacing;
-            bPos = bounds[1]+model.armWeight/2;
+            bPos = bounds[1]+armWidth;
             cPos = bounds[0]-spacing;
             setShape(aPos, bPos, cPos, bPos);   //Height line's top.
 
-            bPos = bounds[3]-model.armWeight/2;
+            bPos = bounds[3]-armWidth;
             setShape(aPos, bPos, cPos, bPos);    //Height line's bottom.
             break;
 
         case heightChoice.Right:
             specText.justification = Justification.LEFT;
-            specText.position = [bounds[2]+spacing+model.armWeight/2.0, bounds[1]+height/2.0];
+            specText.position = [bounds[2]+spacing+armWidth, bounds[1]+height/2.0];
 
             aPos = bounds[2]+0.7*spacing;
             heightLine = createLine(aPos, bounds[3], aPos, bounds[1], newColor);      //Main height line
 
             aPos = bounds[2]+0.4*spacing;
-            bPos = bounds[1]+model.armWeight/2;
+            bPos = bounds[1]+armWidth;
             cPos = bounds[2]+spacing;
             setShape(aPos, bPos, cPos, bPos);   //Height line's top.
 
-            bPos = bounds[3]-model.armWeight/2;
+            bPos = bounds[3]-armWidth;
             setShape(aPos, bPos, cPos, bPos);   //Height line's bottom.
             break;
 
         case heightChoice.Center:
             specText.justification = Justification.LEFT;
-            specText.position = [bounds[2]-width/2.0+0.4*spacing+model.armWeight/2.0, bounds[1]+height/2.0];
+            specText.position = [bounds[2]-width/2.0+0.4*spacing+armWidth, bounds[1]+height/2.0];
 
             aPos = bounds[2]-width/2.0;
             heightLine = createLine(aPos, bounds[3], aPos, bounds[1], newColor);      //Main height line
 
-            bPos = bounds[1]+model.armWeight/2;
+            bPos = bounds[1]+armWidth;
             cPos = aPos-0.4*spacing;
             aPos = aPos+0.4*spacing;
             setShape(aPos, bPos, cPos, bPos);   //Height line's top.
 
-            bPos = bounds[3]-model.armWeight/2;
+            bPos = bounds[3]-armWidth;
             setShape(aPos, bPos, cPos, bPos);   //Height line's bottom.
           default:
     }
@@ -2143,14 +2143,13 @@ function setPreferences(rulerUnit, typeUnit, resolution)
 {
     try
     {
-        app.preferences.rulerUnits = rulerUnit;
-        app.preferences.typeUnits = typeUnit;
+        var pref = app.preferences;
+        pref.rulerUnits = rulerUnit;
+        pref.typeUnits = typeUnit;
         app.activeDocument.resizeImage(null, null, resolution, ResampleMethod.NONE);
     }
     catch(e)
-    {
-        alert(e);
-    }
+    {}
 }
 
 //Store the current number of properties spec in the XMPMetadata of the document.
