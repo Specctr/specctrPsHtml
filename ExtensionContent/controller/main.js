@@ -242,6 +242,7 @@ function setModelValueFromPreferences() {
 	model.textStyle = appPrefs.textStyle ? true : false;
 	model.textLeading = appPrefs.textLeading ? true : false;
 	model.textTracking = appPrefs.textTracking ? true : false;
+	model.textAlpha = appPrefs.textAlpha ? true : false;
 	model.textEffects = appPrefs.textEffects ? true : false;
 
 	model.useHexColor = appPrefs.useHexColor ? true : false;

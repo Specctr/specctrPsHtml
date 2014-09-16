@@ -348,7 +348,7 @@ input[type="text"], input[type="password"]
     border: 2px solid red;
     background-image: none;
     width: 198px;
-    margin-top: -2px;
+    margin-top: 0px;
 }
 
 #tabpage_1 .isOpen:hover
@@ -392,8 +392,8 @@ input[type="text"], input[type="password"]
 
 .border2
 {
-    border: 1px solid #8E8E8E;
-    width: 198px !important;
+	border: 2px solid #BDBDBD;
+	width: 198px !important;
 }
 
 .line
