@@ -3,115 +3,127 @@ File-Name: preferences.js
 Description: This file includes all the functions related to reading/writing preferences of panel.
  */
 
-var preferencePath;		//path of the Specctr config file.
+/**
+ * Set permissions like read only, write only etc to file or folder.
+ * @param filePath {string} The path of the file or folder.
+ * @param permission {number} The permissions in numeric format like 0777.
+ */
+function setPermissionToFile(filePath, permission) {
+	window.cep.fs.chmod(filePath, permission);
+}
 
 /**
- * FunctionName	: readFile()
- * Description	: Read the file and return its data.
- * */
-function readFile(file)
-{
-	var result = window.cep.fs.readFile(file);
-	if(result.err != window.cep.fs.NO_ERROR)
+ * Read the file and return its data.
+ * @param filePath {string}  The path of the file to read.
+ * @return An object with the data or empty string.
+ */
+function readFile(filePath) {
+	var result = window.cep.fs.readFile(filePath);
+	if (result.err != window.cep.fs.NO_ERROR)
 		return "";
 
 	return result.data;
 }
 
 /**
- * FunctionName	: writeFile()
- * Description	: Write the data to the given file path.
- * */
-function writeFile(file, data)
-{
-	if(data.length > 1)
-		window.cep.fs.writeFile(file, data);
+ * Writes data to the file
+ * @param filePath {string}  The path of the file to read.
+ * @param data {string} The data to write to the file.
+ */
+function writeFile(filePath, data) {
+	window.cep.fs.writeFile(filePath, data);
 }
 
 /**
- * FunctionName	: getPrefernceDirectory()
- * Description	: Get the path of the directory where preferences stores.
- * */
-function getPrefernceDirectory()
-{
+ * Create the directory where preferences stores, if not exist.
+ * @return The path of the directory.
+ */
+function getPrefernceDirectory() {
 	var csInterface = new CSInterface();
+	var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA)
+			+ "/LocalStore";
 
-	try
-	{
-		var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA);
-		prefsFile += "/LocalStore";
+	var result = window.cep.fs.readdir(prefsFile);
+	if (window.cep.fs.ERR_NOT_FOUND === result.err)
+		window.cep.fs.makedir(prefsFile);
 
-		var result = window.cep.fs.readdir(prefsFile);
-		if(window.cep.fs.ERR_NOT_FOUND == result.err)
-			window.cep.fs.makedir(prefsFile);
-
-		return prefsFile;
-	}
-	catch(e)
-	{
-		console.log(e);
-		return null;
-	}
+	return prefsFile;
 }
 
 /**
- * FunctionName	: readAppPrefs()
- * Description	: Return JSON object representing Specctr configuration file.
- * */
-function readAppPrefs()
-{
-	setPreferencePath();
-	var data = readFile(preferencePath);
+ * Get the path of license or log file.
+ * @param fileExtension {string} The extension of file i.e.
+ * .log or .license.
+ * @return The path of the file according to the file extension input.
+ */
+function getFilePath(fileExtension) {
+	var csInterface = new CSInterface();
+	var extensionId = csInterface.getExtensionID();
+	var fileName = extensionId + fileExtension;
+	var filePath = getPrefernceDirectory() + "/" + fileName;
+	return filePath;
+}
 
-	if(data != "")
+/**
+ * Get the config file path.
+ * @return The path of the config file {name: specctrPhotoshopConfig.json}.
+ */
+function getConfigFilePath() {
+	var path = getPrefernceDirectory() + "/specctrPhotoshopConfig.json";
+	return path;
+}
+
+/**
+ * Read the config file {name: specctrPhotoshopConfig.json}.
+ * @return An object with the data or empty string.
+ */
+function readAppPrefs() {
+	configFilePath = getConfigFilePath();
+	var data = readFile(configFilePath);
+
+	if (data !== "")
 		data = JSON.parse(data);
 
 	return data;
 }
 
 /**
- * FunctionName	: writeAppPrefs()
- * Description	: Store preferences in specctr configuration file.
- * */
-function writeAppPrefs(data)
-{
-	if(data)
-		writeFile(preferencePath, data);
+ * Write the data to the config file.
+ */
+function writeAppPrefs() {
+	if (!configFilePath.length) {
+		configFilePath = getConfigFilePath();
+	}
+
+	setPermissionToFile(configFilePath, filePermission.WriteOnly);
+	var data = JSON.stringify(model);
+	writeFile(configFilePath, data);
+	setPermissionToFile(configFilePath, filePermission.ReadOnly);
 }
 
 /**
- * FunctionName	: setPreferencePath()
- * Description	: Set the preference path to the global variable.
- * */
-function setPreferencePath()
-{
-	preferencePath = getPrefernceDirectory() + "/specctrPhotoshopConfig.json";
-}
-
-/**
- * FunctionName	: createLogData()
- * Description	: Create the data for log, whenever user's license authenticates.  
- * */
-function createLogData(data)
-{
+ * Create the data for log file.
+ * @param message {string} Successful or failure message of activation.
+ */
+function createLogData(message) {
 	var date = new Date();
-	var logData = date.getMonth() + "/" + date.getDate() + "/" + date.getFullYear();
-	logData += " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-	logData += ' - "'  + data.message + '"\n';
+	var logData = date.getMonth() + "/" + date.getDate() + "/"
+			+ date.getFullYear();
+	logData += " " + date.getHours() + ":" + date.getMinutes() + ":"
+			+ date.getSeconds();
+	logData += ' - "' + message + '"\n';
 	return logData;
 }
 
 /**
- * FunctionName	: createLog()
- * Description	: Create the log file in the preference folder.
- * */
-function createLog(data)
-{
-	var csInterface = new CSInterface();
-	var extensionId = csInterface.getExtensionID();
-	var logFileName = extensionId + ".log";
-	var filePath = getPrefernceDirectory() + "/" + logFileName;
-
-	var log = createLogData(data);
-	writeFile(filePath, log);
+ * Create the license or log file and make them read only.
+ * @param fileExtension {string} The extension of file i.e.
+ * .log or .license.
+ * @param data {string} The data to write to the file.
+ */
+function addFileToPreferenceFolder(fileExtension, data) {
+	var filePath = getFilePath(fileExtension);
+	setPermissionToFile(filePath, filePermission.WriteOnly);
+	writeFile(filePath, data);
+	setPermissionToFile(filePath, filePermission.ReadOnly);
 }
