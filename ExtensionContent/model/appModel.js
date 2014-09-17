@@ -1,6 +1,6 @@
 /*
 Name: appModel.js
-Description: This file initialize and keep the updated value of all objects of the UI. 
+Description: This file keeps the global variables used in all other files.
  */
 
 var model = 
@@ -47,4 +47,13 @@ var model =
 		heightPos:	1,
 		widthPos:	1
 };
+
+var filePermission = {
+	ReadOnly : 0444,
+	WriteOnly : 0222,
+	ReadWrite : 0666,
+	ReadWriteExecute : 0777
+};
+
+var configFilePath = '';
 
