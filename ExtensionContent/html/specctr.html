@@ -26,7 +26,7 @@
 <title>Specctr-Pro</title>
 </head>
 
-<body onLoad="onLoaded()" oncontextmenu="return false;">
+<body onLoad="onLoaded()" oncontextmenu="return false;" onclick="loseFocusFromPanel()">
 
 	<!-- Login container start here -->
 	<div class="container" id="loginContainer" style="display: block;">
@@ -39,6 +39,7 @@
 				<label for="txtEmail">Email:</label> 
 				<input type="text" id="emailInput" 
 					name="txtEmail" style="background-color: #ffffff;"
+					onclick="item_clickHandler(event)"
 					onkeydown="text_KeyDownHandler(event)"/>
 			</div>
 			
@@ -46,6 +47,7 @@
 				<label for="txtEmail">16- Digit License Code:</label> 
 				<input type="text" id="license" name="txt16Digit"
 					placeholder="xxxx-xxxx-xxxx-xxxx" 
+					onclick="item_clickHandler(event)"
 					onkeydown="text_KeyDownHandler(event)"/>
 			</div>
 			
@@ -181,7 +183,7 @@
 					<li>
 						<div class="tblCell pxWidth">
 							<label class="lbl10Px" for="txtPx">By (px)</label> 
-							<input	id="canvasExpandSize"
+							<input	id="canvasExpandSize" onclick="item_clickHandler(event)"
 								onchange="textBox_changeHandler(this.id)" maxlength="4"
 								onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
 						</div>
@@ -302,7 +304,7 @@
 					</div>
 					<div class="tabPageContentRight">
 						<input type="text" class="inputStyle" id="relativeWidth" maxlength="6"
-							onchange="textBox_changeHandler(this.id)"
+							onchange="textBox_changeHandler(this.id)" onclick="item_clickHandler(event)"
 							onkeypress="return restrictInputToDecimal(event)" />px
 					</div>
 				</div>
@@ -311,7 +313,7 @@
 					<div class="tabPageContentLeft">100% Height:</div>
 					<div class="tabPageContentRight">
 						<input type="text" class="inputStyle" id="relativeHeight" maxlength="6"
-							onchange="textBox_changeHandler(this.id)"
+							onchange="textBox_changeHandler(this.id)" onclick="item_clickHandler(event)"
 							onkeypress="return restrictInputToDecimal(event)" />px
 					</div>
 				</div>
@@ -333,6 +335,7 @@
 					<div class="tabPageContentRight">
 						<input type="text" class="inputStyle" id="baseFontSize"
 							maxlength="6" onchange="textBox_changeHandler(this.id)"
+							onclick="item_clickHandler(event)"
 							onkeypress="return restrictInputToDecimal(event)" /> px<br />
 					</div>
 				</div>
@@ -342,6 +345,7 @@
 					<div class="tabPageContentRight">
 						<input type="text" class="inputStyle" id="baseLineHeight"
 							maxlength="6" onchange="textBox_changeHandler(this.id)"
+							onclick="item_clickHandler(event)"
 							onkeypress="return restrictInputToDecimal(event)" />px
 					</div>
 				</div>
@@ -356,13 +360,15 @@
 					<div class="tabPage4ContentLeft">
 						<label>Font</label> 
 						<select class="dropdown" id="lstFont"
-							onchange="lstFont_changeHandler()">
+							onchange="lstFont_changeHandler()"
+							onclick="item_clickHandler(event)">
 						</select>
 					</div>
 					<div class="tabPage4ContentRight">
 						<label> Size</label><br /> 
-						<select class="smalldropdown" id="lstSize" 
-							onchange="comboBox_changeHandler(this.id, 'legendFontSize')">
+						<select class="smalldropdown" id="lstSize"
+							onchange="comboBox_changeHandler(this.id, 'legendFontSize')"
+							onclick="item_clickHandler(event)">
 							<option value="8">8</option>
 							<option value="9">9</option>
 							<option value="10">10</option>
@@ -397,6 +403,7 @@
 								style="display: inline-block;"
 								onclick="setColorToLabel(this, 'Object')"></div>
 							<input type="text" id="txtShapeColor" class="colorText"  maxlength="6"
+								onclick="item_clickHandler(event)"
 								onkeydown="return colorPickerTextInput_validation(event)"
 								onkeyup="colorPickerTextInput_clickHandler(event, 'Shape')"/> <br>
 							<div class="colorBlock" title="000000"
@@ -451,6 +458,7 @@
 					</div>
 					<div class="tabPage4ContentRight">
 						<select class="smalldropdown" id="lstLineWeight"
+							onclick="item_clickHandler(event)"
 							onchange="comboBox_changeHandler(this.id, 'armWeight')">
 							<option value="0.25">0.25</option>
 							<option value="0.5">0.5</option>
@@ -475,6 +483,7 @@
 								onclick="setColorToLabel(this, 'Type')"></div>
 							<input type="text" id="txtTypeColor" class="colorText" maxlength="6"
 								onkeydown="return colorPickerTextInput_validation(event)"
+								onclick="item_clickHandler(event)"
 								onkeyup="colorPickerTextInput_clickHandler(event, 'Type')"/> <br>
 							<div class="colorBlock" title="000000"
 								style="background-color: #000000"
@@ -541,6 +550,7 @@
 								onclick="setColorToLabel(this, 'Spacing')"></div>
 							<input type="text" id="txtSpaceColor" class="colorText" maxlength="6"
 								onkeydown="return colorPickerTextInput_validation(event)"
+								onclick="item_clickHandler(event)"
 								onkeyup="colorPickerTextInput_clickHandler(event, 'Space')"/> <br>
 							<div class="colorBlock" title="000000"
 								style="background-color: #000000"
@@ -631,7 +641,8 @@
 						style="vertical-align: middle" onclick="chkScaleBy_clickHandler()" />
 					<label for="chkScaleBy">Scale By</label> <input type="text"
 						class="inputStyleSmall" id="txtScaleBy" value="x1"
-						onchange="txtScaleBy_changeHandler()" /> (e.g. x2 or /2)
+						onclick="item_clickHandler(event)"
+						maxlength="4" onchange="txtScaleBy_changeHandler()" /> (e.g. x2 or /2)
 				</div>
 
 			</div>

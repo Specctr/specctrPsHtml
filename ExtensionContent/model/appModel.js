@@ -67,3 +67,4 @@ var filePermission = {
 };
 
 var configFilePath = '';
+var extensionId = '';

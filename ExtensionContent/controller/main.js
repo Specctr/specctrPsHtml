@@ -435,3 +435,15 @@ function applyFontToList() {
 		}
 	}
 }
+
+/**
+ * Dispatch event to loose the focus from html panel.
+ */
+function loseFocusFromPanel() { 
+		if(extensionId === '')
+			extensionId = getExtensionId();
+		var csEvent = new CSEvent("com.adobe.PhotoshopLoseFocus", "APPLICATION");  
+		csEvent.extensionId = extensionId;
+		var csInterface = new CSInterface();
+		csInterface.dispatchEvent(csEvent);
+}

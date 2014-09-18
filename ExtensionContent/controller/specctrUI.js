@@ -32,8 +32,9 @@ function activateButton_clickHandler() {
 		"Specctr-Business-Site" : "63244"
 	};
 
-	var csInterface = new CSInterface();
-	var extensionId = csInterface.getExtensionID();
+	if(extensionId === '')
+		extensionId = getExtensionId();
+
 	var logData = "";
 
 	// If no installed extension is matched with productCodes values.
@@ -151,6 +152,13 @@ function changeImagesOfTabs(selectedTab) {
 }
 
 /**
+ * Stop the bubbling of click event.
+ */
+function item_clickHandler(event) {
+	event.stopPropagation();
+}
+
+/**
  * Set the value of checkBox model value when changed.
  * @param checkBoxId {string} The id of selected checkbox.
  */
@@ -191,7 +199,6 @@ function chkEmSpec_changeHandler() {
 	var textFontSize = document.getElementById("baseFontSize");
 	var textBaseLineHeight = document.getElementById("baseLineHeight");
 	model.specInEM = document.getElementById("chkEmSpec").checked;
-	writeAppPrefs();
 
 	if (model.specInEM) {
 		enableTextField(textFontSize);
@@ -210,6 +217,7 @@ function chkEmSpec_changeHandler() {
 				Math.round(Number(textFontSize.value) * 140) / 100).toString();
 		model.baseLineHeight = Number(textBaseLineHeight.value);
 	}
+	writeAppPrefs();
 }
 
 /**
@@ -355,8 +363,7 @@ function colorPicker_clickHandler(elementId, colorPickerBlock) {
 function colorPickerTextInput_validation(event) {
 	var charCode = (event.which) ? event.which : event.keyCode;
 
-	// Allows only hex value like eeffee or #eeffee.
-	/*
+	/* Allows only hex value like eeffee or #eeffee.
 	 * charCode = 8 : Enter key = 37 : Left arrow key = 39 : Right arrow key =
 	 * 46 : Delete key
 	 */
