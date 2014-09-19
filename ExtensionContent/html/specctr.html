@@ -26,7 +26,7 @@
 <title>Specctr-Pro</title>
 </head>
 
-<body onLoad="onLoaded()" oncontextmenu="return false;">
+<body onLoad="onLoaded()" oncontextmenu="return false;" onclick="loseFocusFromPanel()">
 
 	<!-- Login container start here -->
 	<div class="container" id="loginContainer" style="display: block;">
@@ -39,14 +39,16 @@
 				<label for="txtEmail">Email:</label> 
 				<input type="text" id="emailInput" 
 					name="txtEmail" style="background-color: #ffffff;"
-					onkeydown="text_KeyDownHandler(event)"/>
+					onkeydown="text_KeyDownHandler(event)"
+					onclick="item_clickHandler(event)"/>
 			</div>
 			
 			<div class="row">
 				<label for="txtEmail">16- Digit License Code:</label> 
 				<input type="text" id="license" name="txt16Digit"
 					placeholder="xxxx-xxxx-xxxx-xxxx" 
-					onkeydown="text_KeyDownHandler(event)"/>
+					onkeydown="text_KeyDownHandler(event)"
+					onclick="item_clickHandler(event)"/>
 			</div>
 			
 			<ul class="menu">
@@ -167,6 +169,7 @@
 							<label class="lbl10Px" for="txtPx">By (px)</label> 
 							<input	id="canvasExpandSize"
 								onchange="textBox_changeHandler(this.id)" maxlength="4"
+								onclick="item_clickHandler(event)"
 								onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
 						</div>
 
@@ -270,13 +273,15 @@
 					<div class="tabPage4ContentLeft">
 						<label>Font</label> 
 						<select class="dropdown" id="lstFont"
-							onchange="lstFont_changeHandler()">
+							onchange="lstFont_changeHandler()"
+							onclick="item_clickHandler(event)">
 						</select>
 					</div>
 					<div class="tabPage4ContentRight">
 						<label> Size</label><br /> 
 						<select class="smalldropdown" id="lstSize" 
-							onchange="comboBox_changeHandler(this.id, 'legendFontSize')">
+							onchange="comboBox_changeHandler(this.id, 'legendFontSize')"
+							onclick="item_clickHandler(event)">
 							<option value="8">8</option>
 							<option value="9">9</option>
 							<option value="10">10</option>
@@ -312,7 +317,8 @@
 								onclick="setColorToLabel(this, 'Object')"></div>
 							<input type="text" id="txtShapeColor" class="colorText"  maxlength="6"
 								onkeydown="return colorPickerTextInput_validation(event)"
-								onkeyup="colorPickerTextInput_clickHandler(event, 'Shape')"/> <br>
+								onkeyup="colorPickerTextInput_clickHandler(event, 'Shape')"
+								onclick="item_clickHandler(event)"/> <br>
 							<div class="colorBlock" title="000000"
 								style="background-color: #000000"
 								onmouseover="setColorValueToTextBox(this, 'Shape')"
@@ -365,7 +371,8 @@
 					</div>
 					<div class="tabPage4ContentRight">
 						<select class="smalldropdown" id="lstLineWeight"
-							onchange="comboBox_changeHandler(this.id, 'armWeight')">
+							onchange="comboBox_changeHandler(this.id, 'armWeight')"
+							onclick="item_clickHandler(event)">
 							<option value="0.25">0.25</option>
 							<option value="0.5">0.5</option>
 							<option value="1">1</option>
@@ -389,7 +396,8 @@
 								onclick="setColorToLabel(this, 'Type')"></div>
 							<input type="text" id="txtTypeColor" class="colorText" maxlength="6"
 								onkeydown="return colorPickerTextInput_validation(event)"
-								onkeyup="colorPickerTextInput_clickHandler(event, 'Type')"/> <br>
+								onkeyup="colorPickerTextInput_clickHandler(event, 'Type')"
+								onclick="item_clickHandler(event)"/> <br>
 							<div class="colorBlock" title="000000"
 								style="background-color: #000000"
 								onmouseover="setColorValueToTextBox(this, 'Type')"
@@ -455,7 +463,8 @@
 								onclick="setColorToLabel(this, 'Spacing')"></div>
 							<input type="text" id="txtSpaceColor" class="colorText" maxlength="6"
 								onkeydown="return colorPickerTextInput_validation(event)"
-								onkeyup="colorPickerTextInput_clickHandler(event, 'Space')"/> <br>
+								onkeyup="colorPickerTextInput_clickHandler(event, 'Space')"
+								onclick="item_clickHandler(event)"/> <br>
 							<div class="colorBlock" title="000000"
 								style="background-color: #000000"
 								onmouseover="setColorValueToTextBox(this, 'Space')"

@@ -10,15 +10,15 @@ Description: Includes all the methods related to UI component like change event 
 function activateButton_clickHandler() {
 	// Get Extension Id and matching productCode.
 	var productCodes = {
-        "SpecctrPs-Pro":"31265",
-        "SpecctrPs-10":"31279",
+		"SpecctrPs-Pro" : "31265",
+		"SpecctrPs-10":"31279",
         "SpecctrPs-20":"31280",
         "SpecctrPs-30":"31281",
         "SpecctrPs-Site":"31282"
-    };
+	};
 
-	var csInterface = new CSInterface();
-	var extensionId = csInterface.getExtensionID();
+	if(extensionId === '')
+		extensionId = getExtensionId();
 	var logData = "";
 
 	// If no installed extension is matched with productCodes values.
@@ -121,6 +121,13 @@ function changeImagesOfTabs(selectedTab) {
 	}
 
 	return isImageChanged;
+}
+
+/**
+ * Stop the bubbling of click event.
+ */
+function item_clickHandler(event) {
+	event.stopPropagation();
 }
 
 /**

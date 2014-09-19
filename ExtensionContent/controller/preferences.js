@@ -4,6 +4,15 @@ Description: This file includes all the functions related to reading/writing pre
  */
 
 /**
+ * Get extension id of the html panel.
+ */
+function getExtensionId() {
+	var csInterface = new CSInterface();
+	var gExtensionId = csInterface.getExtensionID();
+	return gExtensionId;
+}
+
+/**
  * Set permissions like read only, write only etc to file or folder.
  * @param filePath {string} The path of the file or folder.
  * @param permission {number} The permissions in numeric format like 0777.
@@ -57,8 +66,8 @@ function getPrefernceDirectory() {
  * @return The path of the file according to the file extension input.
  */
 function getFilePath(fileExtension) {
-	var csInterface = new CSInterface();
-	var extensionId = csInterface.getExtensionID();
+	if(extensionId === '')
+		extensionId = getExtensionId();
 	var fileName = extensionId + fileExtension;
 	var filePath = getPrefernceDirectory() + "/" + fileName;
 	return filePath;
