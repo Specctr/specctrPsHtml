@@ -39,7 +39,9 @@ function activateButton_clickHandler() {
 
 	// If no installed extension is matched with productCodes values.
 	if (!productCodes[extensionId]) {
-		logData = createLogData("Incorrect product code");
+		logData = "Incorrect product code";
+		showDialog(logData);
+		logData = createLogData(logData);
 		addFileToPreferenceFolder('.log', logData);	//Create log file.
 		return;
 	}
@@ -50,7 +52,9 @@ function activateButton_clickHandler() {
 	urlRequest += "&email=" + document.getElementById("emailInput").value;
 
 	$.get(urlRequest, completeHandler).error(function() {
-		logData = createLogData("No connection available");
+		logData = "No connection available";
+		showDialog(logData);
+		logData = createLogData(message);
 		addFileToPreferenceFolder('.log', logData);	//Create log file.
 	});
 }
@@ -437,4 +441,44 @@ function restrictInputToDecimal(event) {
 		return false;
 
 	return true;
+}
+
+/**
+ * Set the style of dialog at the time of initialization of panel. 
+ */
+function createDialog() {
+	$("#dialog").dialog({
+		autoOpen : false,
+		resizable: false,
+		width : 200,
+		height : 100,
+		modal : true,
+		buttons : [ {
+			text : "Ok",
+			style : "margin-right:40px;",
+			click : hideDialog
+		}, {
+			text : "Cancel",
+			style : "margin-right:20px;",
+			click : hideDialog
+		} ]
+	});
+}
+
+/**
+ * Open the dialog with the passed message.
+ * @param message {string} The message that appear in the dialog.
+ */
+function showDialog(message) {
+	var dialogRef = $("#dialog");
+	dialogRef.text(message);
+	dialogRef.dialog("open");
+	dialogRef.dialog({position:'center'});
+}
+
+/**
+ * Close the dialog.
+ */
+function hideDialog() {
+	$("#dialog").dialog("close");
 }

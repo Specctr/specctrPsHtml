@@ -18,6 +18,7 @@ function completeHandler(data, status) {
 
 	// If unsuccessful, return without saving the data in file.
 	if (!arr.length) {
+		showDialog(response.message);
 		return;
 	} else {
 		var activationPrefs = {
@@ -138,6 +139,7 @@ function onLoaded() {
 	// present.
 	try {
 		loadJSX(); // Load the jsx files present in \jsx folder.
+		createDialog();
 
 		var isLicensed = false;
 		var appPrefs = readAppPrefs();	//Read the config file and look for the isLicensed value.
