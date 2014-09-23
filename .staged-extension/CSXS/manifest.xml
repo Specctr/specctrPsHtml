@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="4.0" ExtensionBundleId="specctrPsHtml" ExtensionBundleVersion="2.1.2.h"
+<ExtensionManifest Version="4.0" ExtensionBundleId="specctrPsHtml" ExtensionBundleVersion="2.2.0.h"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
