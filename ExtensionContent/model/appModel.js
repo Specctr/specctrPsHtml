@@ -23,7 +23,7 @@ var model = {
 	canvasExpandSize: 250,
 
 	//legend settings
-	legendFont: 			"Arial",
+	legendFont: 			"ArialMT",
 	legendFontIndex:		0,
 	legendFontSize:			12,
 	legendColorObject:		'#FF0000',
