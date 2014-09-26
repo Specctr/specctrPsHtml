@@ -159,6 +159,7 @@ function onLoaded() {
 				activationPrefs = JSON.parse(activationPrefs);
 
 			isLicensed = activationPrefs.licensed;
+			licenseCode = activationPrefs.code;
 		} else {
 			activationPrefs.licensed = true;
 			addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs));
@@ -341,6 +342,7 @@ function expandCanvas() {
 		var extScript = "ext_PHXS_expandCanvas()";
 		evalScript(extScript);
 		writeAppPrefs();
+		analytics.trackFeature('expand_canvas');
 	} catch (e) {
 		console.log(e);
 	}
@@ -354,6 +356,7 @@ function createDimensionSpecs() {
 		setModel();
 		var extScript = "ext_PHXS_createDimensionSpecs()";
 		evalScript(extScript);
+		analytics.trackFeature('create_dimension_specs');
 	} catch (e) {
 		console.log(e);
 	}
@@ -367,6 +370,7 @@ function createSpacingSpecs() {
 		setModel();
 		var extScript = "ext_PHXS_createSpacingSpecs()";
 		evalScript(extScript);
+		analytics.trackFeature('create_spacing_specs');
 	} catch (e) {
 		console.log(e);
 	}
@@ -380,6 +384,7 @@ function createCoordinateSpecs() {
 		setModel();
 		var extScript = "ext_PHXS_createCoordinateSpecs()";
 		evalScript(extScript);
+		analytics.trackFeature('create_coordinate_specs');
 	} catch (e) {
 		console.log(e);
 	}
@@ -393,6 +398,7 @@ function createPropertySpecs() {
 		setModel();
 		var extScript = "ext_PHXS_createPropertySpecs()";
 		evalScript(extScript);
+		analytics.trackFeature('create_property_specs');
 	} catch (e) {
 		console.log(e);
 	}
@@ -406,6 +412,7 @@ function exportCss() {
 		setModel();
 		var extScript = "ext_PHXS_exportCss()";
 		evalScript(extScript);
+		analytics.trackFeature('export_css');
 	} catch (e) {
 		console.log(e);
 	}
