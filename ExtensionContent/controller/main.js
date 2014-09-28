@@ -18,12 +18,15 @@ function completeHandler(data, status) {
 
 	// If unsuccessful, return without saving the data in file.
 	if (!arr.length) {
+		analytics.trackActivation('failed');
 		return;
 	} else {
+		analytics.trackActivation('succeeded');
 		var activationPrefs = {
 			licensed : true,
 			code : $("#license").val()
 		};
+		licenseCode = activationPrefs.code;
 	}
 
 	addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs)); //Create license file.
@@ -337,12 +340,13 @@ function setModel() {
  * Call the 'createCanvasBorder' method from ./jsx/specctr.jsx.
  */
 function expandCanvas() {
+	analytics.trackFeature('expand_canvas');
+
 	try {
 		setModel();
 		var extScript = "ext_PHXS_expandCanvas()";
 		evalScript(extScript);
 		writeAppPrefs();
-		analytics.trackFeature('expand_canvas');
 	} catch (e) {
 		console.log(e);
 	}
@@ -352,11 +356,11 @@ function expandCanvas() {
  * Call the 'createDimensionSpecsForItem' method from ./jsx/specctr.jsx.
  */
 function createDimensionSpecs() {
+	analytics.trackFeature('create_dimension_specs');
 	try {
 		setModel();
 		var extScript = "ext_PHXS_createDimensionSpecs()";
 		evalScript(extScript);
-		analytics.trackFeature('create_dimension_specs');
 	} catch (e) {
 		console.log(e);
 	}
@@ -366,11 +370,12 @@ function createDimensionSpecs() {
  * Call the 'createSpacingSpecs' method from ./jsx/specctr.jsx.
  */
 function createSpacingSpecs() {
+	analytics.trackFeature('create_spacing_specs');
+
 	try {
 		setModel();
 		var extScript = "ext_PHXS_createSpacingSpecs()";
 		evalScript(extScript);
-		analytics.trackFeature('create_spacing_specs');
 	} catch (e) {
 		console.log(e);
 	}
@@ -380,11 +385,12 @@ function createSpacingSpecs() {
  * Call the 'createCoordinateSpecs' method from ./jsx/specctr.jsx.
  */
 function createCoordinateSpecs() {
+	analytics.trackFeature('create_coordinate_specs');
+
 	try {
 		setModel();
 		var extScript = "ext_PHXS_createCoordinateSpecs()";
 		evalScript(extScript);
-		analytics.trackFeature('create_coordinate_specs');
 	} catch (e) {
 		console.log(e);
 	}
@@ -394,11 +400,12 @@ function createCoordinateSpecs() {
  * Call the 'createPropertySpecsForItem' method from ./jsx/specctr.jsx.
  */
 function createPropertySpecs() {
+	analytics.trackFeature('create_property_specs');
+
 	try {
 		setModel();
 		var extScript = "ext_PHXS_createPropertySpecs()";
 		evalScript(extScript);
-		analytics.trackFeature('create_property_specs');
 	} catch (e) {
 		console.log(e);
 	}
@@ -408,11 +415,12 @@ function createPropertySpecs() {
  * Call the 'exportCss' method from ./jsx/specctr.jsx.
  */
 function exportCss() {
+	analytics.trackFeature('export_css');
+
 	try {
 		setModel();
 		var extScript = "ext_PHXS_exportCss()";
 		evalScript(extScript);
-		analytics.trackFeature('export_css');
 	} catch (e) {
 		console.log(e);
 	}
