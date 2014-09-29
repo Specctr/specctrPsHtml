@@ -1413,30 +1413,21 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
 //Create the number of spec.
 function createNumber(legendLayer, number, font)
 {
-    try
-    {
-        //Color of the number over the circle.
-        var txtColor = new RGBColor();
-        txtColor.red = 255;
-        txtColor.blue = 255;
-        txtColor.green = 255;
-        
-        //Create the circle with number over it.
-        var txt =  legendLayer.artLayers.add();
-        txt.kind = LayerKind.TEXT;
-        var specText = txt.textItem;
-        specText.kind = TextType.POINTTEXT;
-        specText.color.rgb = txtColor;
-        specText.font = font;
-        specText.size = model.legendFontSize;
-        specText.contents = number;
-        specText.fauxBold = true;
-        return txt;
-    }
-    catch(e)
-    { 
-        return null;
-    }
+    //Color of the number over the circle.
+    var color = new RGBColor();
+    color.hexValue = "ffffff";
+
+    //Create the circle with number over it.
+    var txt =  legendLayer.artLayers.add();
+    txt.kind = LayerKind.TEXT;
+    var specText = txt.textItem;
+    specText.kind = TextType.POINTTEXT;
+    specText.color.rgb = color;
+    specText.font = font;
+    specText.size = model.legendFontSize;
+    specText.contents = number;
+    specText.fauxBold = true;
+    return txt;
 }
 
 //Suspend the history of creating properties spec of layers.
@@ -1451,7 +1442,7 @@ function createPropertySpecsForItem()
     catch(e)
     {}
 }
-    
+
 //Get the property of selected layer and show it on active document.
 function createPropertySpecs(sourceItem, bounds)
 {
@@ -1463,7 +1454,7 @@ function createPropertySpecs(sourceItem, bounds)
     var idBullet, bullet, dupBullet, idDupBullet;
     var number = -1;
     var noOfSpec;
-    
+
 	if(artLayer.typename === 'LayerSet')
 		return;
     
@@ -1482,7 +1473,6 @@ function createPropertySpecs(sourceItem, bounds)
          if(spec == artLayer || bullet == artLayer || dupBullet == artLayer)
          {
             doc.activeLayer = artLayer;
-            ExternalObject.AdobeXMPScript.unload();
             return;
          }
         
@@ -1490,18 +1480,16 @@ function createPropertySpecs(sourceItem, bounds)
          {
             idLayer = getXMPData(artLayer, "idLayer");
             lyr = getLayerByID(idLayer);
-            
+
             if(lyr != null)
                 updateSpec(lyr, spec, idLayer, bullet, dupBullet, bounds);
-            
+
             try
             {
                 doc.activeLayer = artLayer;
             }
             catch(e)
             {}
-            
-            ExternalObject.AdobeXMPScript.unload();
             return;
          }
          else
@@ -1518,24 +1506,9 @@ function createPropertySpecs(sourceItem, bounds)
                   catch(e)
                   {}
               }
-           
-            //remove metadata stored in activeLayer
-            var layerXMP = new XMPMeta(artLayer.xmpMetadata.rawData );
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idLayer");
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idSpec");
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idBullet");
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idDupBullet");
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "number");
-            artLayer.xmpMetadata.rawData = layerXMP.serialize();
          }
      }
 
-	//Save the current preferences
-    var startTypeUnits = app.preferences.typeUnits; 
-	var startRulerUnits = app.preferences.rulerUnits;
-	app.preferences.rulerUnits = Units.PIXELS;
-	var originalDPI = doc.resolution;
-        
      try
     {
         doc.activeLayer = artLayer;
@@ -1550,9 +1523,10 @@ function createPropertySpecs(sourceItem, bounds)
         {
             noOfSpec = 0;
         }
-        
+
         idLayer = getIDOfLayer();				                                    //Get unique ID of selected layer.
         var artLayerBounds = bounds;
+        var name = artLayer.name;
 
         var legendLayer;
         switch(sourceItem.kind)
@@ -1594,12 +1568,15 @@ function createPropertySpecs(sourceItem, bounds)
 
         if (infoText === "") 
             return;
+
+        //Save the current preferences
+        var startTypeUnits = app.preferences.typeUnits; 
+        var startRulerUnits = app.preferences.rulerUnits;
+        var originalDPI = doc.resolution;
+        setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
         
-        var name = artLayer.name;
         var nameLength = name.length;
         infoText = "\r"+name+infoText;
-        app.preferences.typeUnits = TypeUnits.PIXELS;
-        doc.resizeImage(null, null, 72, ResampleMethod.NONE);
         var spacing = 10;
         var isLeft, pos;
         var centerX = (artLayerBounds[0] + artLayerBounds[2]) / 2;             //Get the center of item.
@@ -1655,7 +1632,7 @@ function createPropertySpecs(sourceItem, bounds)
 
         dupBullet.name = "Spec Bullet";
         spec.link(dupBullet);
-      
+
         legendLayer.visible = true;
         bullet.visible = true;
         dupBullet.visible = true;
@@ -1663,25 +1640,19 @@ function createPropertySpecs(sourceItem, bounds)
 
         if(cssText === "")
             cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
-            
+
         setXmpDataOfLayer(artLayer, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfLayer(spec, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfLayer(bullet, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfLayer(dupBullet, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfDoc(doc, noOfSpec);
         setXmpDataForSpec(spec, cssText, "css");
-        
-        ExternalObject.AdobeXMPScript.unload();
     }
     catch(e)
     {}
-    
+
     doc.activeLayer = artLayer;
-    doc.resizeImage(null, null, originalDPI, ResampleMethod.NONE);
-    
-	//Reset the application preferences
-    app.preferences.rulerUnits = startRulerUnits;
-    app.preferences.typeUnits = startTypeUnits;
+    setPreferences(startRulerUnits, startTypeUnits, originalDPI);
 }
 
 //Update the property spec of the layer whose spec is already present.
@@ -2685,11 +2656,9 @@ function getColor(colorDesc)
 //Get the default color value.
 function getDefaultColor()
 {
-    var color = new SolidColor();
-    color.rgb.red = 0;
-    color.rgb.green = 0;
-    color.rgb.blue = 0;
-    return color;
+    var newColor = new RGBColor();
+    newColor.hexValue = "000000";
+    return newColor;
 }
 
 //Get the properties of the text item.
