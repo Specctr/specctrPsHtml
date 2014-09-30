@@ -645,7 +645,19 @@ function createDimensionSpecsForItem()
         if(artLayer === null || !startUpCheckBeforeSpeccing(artLayer))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
             return;
 
-        var bounds = returnBounds(artLayer);
+        var pref = app.preferences;
+        var startRulerUnits = pref.rulerUnits; 
+        pref.rulerUnits = Units.PIXELS;
+        
+        var ref = new ActionReference();
+        ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+        var layer = executeActionGet(ref);
+        if(layer.hasKey(stringIDToTypeID('layerEffects')) && layer.getBoolean(stringIDToTypeID('layerFXVisible')))
+            var bounds = returnBounds(artLayer);
+        else
+            bounds = artLayer.bounds;
+
+        pref.rulerUnits = startRulerUnits;
         app.activeDocument.suspendHistory('Dimension Specs', 'createDimensionSpecs(artLayer, bounds)');      //Pass bounds and layer for creating dimension spec.
     }
     catch(e)
@@ -972,7 +984,16 @@ function createSpacingSpecs()
     {
         var selectedArtItems = getSelectedLayers();
         var numberOfSelectedItems = selectedArtItems.length;
-
+        var doc = app.activeDocument;
+        var pref = app.preferences;
+        var startRulerUnits = pref.rulerUnits; 
+        pref.rulerUnits = Units.PIXELS;
+        
+        var lyr = charIDToTypeID("Lyr ");
+        var ordn = charIDToTypeID("Ordn");
+        var trgt = charIDToTypeID("Trgt");
+        var layerEffects = stringIDToTypeID('layerEffects');
+        var layerFXVisible = stringIDToTypeID('layerFXVisible');
         if(numberOfSelectedItems === 2)
         {
             //get selected art items.
@@ -984,24 +1005,50 @@ function createSpacingSpecs()
                 alert("Please select shape layers or text layers only.");
                 return;
             }
-            var bounds1 = returnBounds(artLayer1);
-            var bounds2 = returnBounds(artLayer2);
+
+            doc.activeLayer = artLayer1;
+            var ref = new ActionReference();
+            ref.putEnumerated(lyr, ordn, trgt);
+            var layer = executeActionGet(ref);
+            if(layer.hasKey(layerEffects) && layer.getBoolean(layerFXVisible))
+                var bounds1 = returnBounds(artLayer1);
+            else
+                bounds1 = artLayer1.bounds;
+
+            doc.activeLayer = artLayer2;
+            ref = new ActionReference();
+            ref.putEnumerated(lyr, ordn, trgt);
+            layer = executeActionGet(ref);
+            if(layer.hasKey(layerEffects) && layer.getBoolean(layerFXVisible))
+                var bounds2 = returnBounds(artLayer2);
+            else
+                bounds2 = artLayer2.bounds;
+
             app.activeDocument.suspendHistory('Spacing spec', 'createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)');
         }
         else if(numberOfSelectedItems === 1)
         {
-            var artLayer = app.activeDocument.activeLayer;
-            
+            var artLayer = doc.activeLayer;
+
             if(!startUpCheckBeforeSpeccing(artLayer))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
                 return;
-            
-            var bounds = returnBounds(artLayer);
+
+            ref = new ActionReference();
+            ref.putEnumerated(lyr, ordn, trgt);
+            layer = executeActionGet(ref);
+            if(layer.hasKey(layerEffects) && layer.getBoolean(layerFXVisible))
+                var bounds = returnBounds(artLayer);
+            else
+                bounds = artLayer.bounds;
+
             app.activeDocument.suspendHistory('Spacing spec', 'createSpacingSpecsForSingleItem(artLayer, bounds)');
         }
         else
         {
             alert("Please select one or two shape/text layer(s)!");
         }
+
+        pref.rulerUnits = startRulerUnits;
     }
     catch(e)
     {}
@@ -1436,7 +1483,21 @@ function createPropertySpecsForItem()
     try
     {
         var sourceItem = getActiveLayer();
-        var bounds = returnBounds(sourceItem);
+        if(sourceItem === null)
+            return;
+
+        var pref = app.preferences;
+        var startRulerUnits = pref.rulerUnits; 
+        pref.rulerUnits = Units.PIXELS;
+        var ref = new ActionReference();
+        ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+        var layer = executeActionGet(ref);
+        if(layer.hasKey(stringIDToTypeID('layerEffects')) && layer.getBoolean(stringIDToTypeID('layerFXVisible')))
+            var bounds = returnBounds(sourceItem);
+        else
+            bounds = sourceItem.bounds;
+
+        pref.rulerUnits = startRulerUnits;
         app.activeDocument.suspendHistory('Property Specs', 'createPropertySpecs(sourceItem, bounds)');
     }
     catch(e)
@@ -1795,10 +1856,21 @@ function createCoordinateSpecs()
     try
     {
         var sourceItem = getActiveLayer();
-        if(sourceItem == null || !startUpCheckBeforeSpeccing(sourceItem))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
+        if(sourceItem === null || !startUpCheckBeforeSpeccing(sourceItem))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
             return;
         
-        var bounds = returnBounds(sourceItem);
+        var pref = app.preferences;
+        var startRulerUnits = pref.rulerUnits; 
+        pref.rulerUnits = Units.PIXELS;
+        var ref = new ActionReference();
+        ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+        var layer = executeActionGet(ref);
+        if(layer.hasKey(stringIDToTypeID('layerEffects')) && layer.getBoolean(stringIDToTypeID('layerFXVisible')))
+            var bounds = returnBounds(sourceItem);
+        else
+            bounds = sourceItem.bounds;
+
+        pref.rulerUnits = startRulerUnits;
         app.activeDocument.suspendHistory('Coordinate Info', 'createCoordinates(sourceItem, bounds)');
     }
     catch(e)
@@ -2446,57 +2518,43 @@ function getSpecsInfoForPathItem(pageItem)
 //To get the bounds of layer.
 function getBounds(artLayer)
 {
-    // Save the current preferences
-	var startRulerUnits = app.preferences.rulerUnits;
-	var startTypeUnits = app.preferences.typeUnits;
-	app.preferences.rulerUnits = Units.PIXELS;
-	app.preferences.typeUnits = TypeUnits.PIXELS;
-    
     var desc, ref, list;
     try
     {
         app.activeDocument.activeLayer = artLayer;
         ref = new ActionReference();
         ref.putEnumerated(charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ));
-        if(executeActionGet(ref).hasKey(stringIDToTypeID('layerEffects')) && executeActionGet(ref).getBoolean(stringIDToTypeID('layerFXVisible')))
+        var layerEffectDesc = executeActionGet(ref).getObjectValue(stringIDToTypeID('layerEffects'));
+        if(layerEffectDesc.hasKey(stringIDToTypeID('dropShadow')))
         {
-            var layerEffectDesc = executeActionGet(ref).getObjectValue(stringIDToTypeID('layerEffects'));
-            if(layerEffectDesc.hasKey(stringIDToTypeID('dropShadow')))
-            {
-                desc = new ActionDescriptor();
-                list = new ActionList();
-                ref = new ActionReference();
-                ref.putClass( charIDToTypeID( "DrSh" ) );
-                ref.putEnumerated(charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ));
-                list.putReference( ref );
-                desc.putList( charIDToTypeID( "null" ), list );
-                executeAction( charIDToTypeID( "Hd  " ), desc, DialogModes.NO );
-            }
-            if(layerEffectDesc.hasKey(stringIDToTypeID('outerGlow')))
-            {
-                desc = new ActionDescriptor();
-                list = new ActionList();
-                ref = new ActionReference();
-                ref.putClass( charIDToTypeID( "OrGl" ) );
-                ref.putEnumerated(charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ));
-                list.putReference( ref );
-                desc.putList( charIDToTypeID( "null" ), list );
-                executeAction( charIDToTypeID( "Hd  " ), desc, DialogModes.NO );
-            }
+            desc = new ActionDescriptor();
+            list = new ActionList();
+            ref = new ActionReference();
+            ref.putClass( charIDToTypeID( "DrSh" ) );
+            ref.putEnumerated(charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ));
+            list.putReference( ref );
+            desc.putList( charIDToTypeID( "null" ), list );
+            executeAction( charIDToTypeID( "Hd  " ), desc, DialogModes.NO );
         }
-        
+        if(layerEffectDesc.hasKey(stringIDToTypeID('outerGlow')))
+        {
+            desc = new ActionDescriptor();
+            list = new ActionList();
+            ref = new ActionReference();
+            ref.putClass( charIDToTypeID( "OrGl" ) );
+            ref.putEnumerated(charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ));
+            list.putReference( ref );
+            desc.putList( charIDToTypeID( "null" ), list );
+            executeAction( charIDToTypeID( "Hd  " ), desc, DialogModes.NO );
+        }
+
         artLayer = createSmartObject();
     }
     catch(e)
     {}
-    
-    lyrBound = artLayer.bounds;
-    
-    // Reset the application preferences
-	app.preferences.rulerUnits = startRulerUnits;
-	app.preferences.typeUnits = startTypeUnits;
-}
 
+    lyrBound = artLayer.bounds;
+}
 
 // Return bounds of the layer.
 function returnBounds(artLayer)
@@ -2504,7 +2562,7 @@ function returnBounds(artLayer)
     try
     {
         app.activeDocument.suspendHistory('Get Bounds','getBounds(artLayer)');     // get bounds of layer.
-        executeAction( charIDToTypeID('undo'), undefined, DialogModes.NO);
+        executeAction(charIDToTypeID('undo'), undefined, DialogModes.NO);
         return lyrBound;
     }
     catch(e)
