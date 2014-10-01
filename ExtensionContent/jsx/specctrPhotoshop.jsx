@@ -48,14 +48,7 @@ function getFontList()
 //Get the updated value of UI's component from html file.
 function setModel(currModel)
 {
-    try
-    {
-        model = JSON.parse(currModel);
-    }
-    catch(e)
-    {
-        alert(e);
-    }
+    model = JSON.parse(currModel);
 }
 
 //Get the list of selected layers.
@@ -1518,7 +1511,7 @@ function createPropertySpecs(sourceItem, bounds)
 
 	if(artLayer.typename === 'LayerSet')
 		return;
-    
+
  	if(ExternalObject.AdobeXMPScript == null)
 		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
 	
@@ -1585,7 +1578,7 @@ function createPropertySpecs(sourceItem, bounds)
             noOfSpec = 0;
         }
 
-        idLayer = getIDOfLayer();				                                    //Get unique ID of selected layer.
+        idLayer = getIDOfLayer();   //Get unique ID of selected layer.
         var artLayerBounds = bounds;
         var name = artLayer.name;
 
@@ -1602,6 +1595,9 @@ function createPropertySpecs(sourceItem, bounds)
                     number = noOfSpec;
                 }
                 legendLayer.name = "Text Spec "+number;
+                var wordsArray = name.split(" ");
+                if(wordsArray.length > 2)
+                    name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
                 break;
          
             case LayerKind.GRADIENTFILL:
@@ -2723,7 +2719,7 @@ function getDefaultColor()
 function getSpecsInfoForTextItem(pageItem)
 {
     var textItem = pageItem.textItem;
-    var infoText = "", color="";
+    var infoText = "", color="", mFactor = "";
     var alpha = "", leading = "", size = "", font = "";
     var kDefaultLeadVal = 120.0, kDefaultFontVal='MyriadPro-Regular', kDefaultFontSize= 12;
     var underline = "", strike = "", bold = "",  italic = "";
@@ -2731,104 +2727,116 @@ function getSpecsInfoForTextItem(pageItem)
 
     try
     {
+        var sizeID = stringIDToTypeID("size");
+        var transformID = stringIDToTypeID("transform");
+        var yyID = stringIDToTypeID("yy");
+        var fontPostScriptID = stringIDToTypeID("fontPostScriptName");
+        var trackingID = stringIDToTypeID("tracking");
+        var underlineID = stringIDToTypeID("underline");
+        var strikethroughID = stringIDToTypeID("strikethrough");
+        var syntheticBoldID = stringIDToTypeID("syntheticBold");
+        var syntheticItalicID = stringIDToTypeID("syntheticItalic");
+        var autoLeadingID = stringIDToTypeID("autoLeading");
+        var colorID = stringIDToTypeID("color");
+
         var ref = new ActionReference();
         ref.putEnumerated( charIDToTypeID('Lyr '), charIDToTypeID('Ordn'), charIDToTypeID('Trgt') ); 
         var desc = executeActionGet(ref).getObjectValue(stringIDToTypeID('textKey'));
-        
+
         //Character Styles
-        var txtList = desc.getList(stringIDToTypeID( "textStyleRange" ) );
-        var txtDesc = txtList.getObjectValue( 0 );
-        if(txtDesc.hasKey(stringIDToTypeID("textStyle"))) 
+        var textStyleRangeID = stringIDToTypeID("textStyleRange");
+        var textStyleID = stringIDToTypeID("textStyle");
+        var txtList = desc.getList(textStyleRangeID);
+        var txtDesc = txtList.getObjectValue(0);
+        if(txtDesc.hasKey(textStyleID)) 
         {
-            var rangeList = desc.getList(stringIDToTypeID('textStyleRange'));
-            var styleDesc = rangeList.getObjectValue(0).getObjectValue(stringIDToTypeID('textStyle'));
-            if(styleDesc.hasKey(stringIDToTypeID("size")))
+            var rangeList = desc.getList(textStyleRangeID);
+            var styleDesc = rangeList.getObjectValue(0).getObjectValue(textStyleID);
+            if(styleDesc.hasKey(sizeID))
             {
-                size =  styleDesc.getDouble(stringIDToTypeID('size'));
-                if(desc.hasKey(stringIDToTypeID('transform')))
+                size =  styleDesc.getDouble(sizeID);
+                if(desc.hasKey(transformID))
                 {
-                    var mFactor = desc.getObjectValue(stringIDToTypeID('transform')).getUnitDoubleValue (stringIDToTypeID('yy') );
+                    mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
                     size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                 }
             }
-            if(styleDesc.hasKey(stringIDToTypeID("fontPostScriptName")))
-                font =  styleDesc.getString(stringIDToTypeID('fontPostScriptName'));
-            if(styleDesc.hasKey(stringIDToTypeID("tracking")))
-                tracking =  styleDesc.getString(stringIDToTypeID('tracking'));
-            if(styleDesc.hasKey(stringIDToTypeID("underline")))
-                underline = typeIDToStringID(styleDesc.getEnumerationValue( stringIDToTypeID("underline") ));
-            if(styleDesc.hasKey(stringIDToTypeID("strikethrough")))
-                strike = typeIDToStringID(styleDesc.getEnumerationValue( stringIDToTypeID("strikethrough") ));
-            if(styleDesc.hasKey(stringIDToTypeID("syntheticBold")))
-                bold = styleDesc.getBoolean( stringIDToTypeID("syntheticBold") );
-            if(styleDesc.hasKey(stringIDToTypeID("syntheticItalic")))
-                italic = styleDesc.getBoolean( stringIDToTypeID("syntheticItalic"));
-            if(styleDesc.hasKey(stringIDToTypeID("autoLeading")))
+            if(styleDesc.hasKey(fontPostScriptID))
+                font =  styleDesc.getString(fontPostScriptID);
+            if(styleDesc.hasKey(trackingID))
+                tracking =  styleDesc.getString(trackingID);
+            if(styleDesc.hasKey(underlineID))
+                underline = typeIDToStringID(styleDesc.getEnumerationValue(underlineID));
+            if(styleDesc.hasKey(strikethroughID))
+                strike = typeIDToStringID(styleDesc.getEnumerationValue(strikethroughID));
+            if(styleDesc.hasKey(syntheticBoldID))
+                bold = styleDesc.getBoolean(syntheticBoldID);
+            if(styleDesc.hasKey(syntheticItalicID))
+                italic = styleDesc.getBoolean(syntheticItalicID);
+            if(styleDesc.hasKey(autoLeadingID))
             {
-                isAutoLeading = styleDesc.getBoolean(stringIDToTypeID("autoLeading"));
+                isAutoLeading = styleDesc.getBoolean(autoLeadingID);
                 if(isAutoLeading == false)
                 {
                      leading = styleDesc.getDouble(stringIDToTypeID("leading"));
-                     if(desc.hasKey(stringIDToTypeID('transform')))
+                     if(desc.hasKey(transformID))
                      {
-                         var mFactor = desc.getObjectValue(stringIDToTypeID('transform')).getUnitDoubleValue (stringIDToTypeID('yy') );
+                         mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
                          leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                      }
                 }
             }
-             
-             if(styleDesc.hasKey(stringIDToTypeID("color"))) 
-                color = getColor(styleDesc.getObjectValue(stringIDToTypeID("color")));
+             if(styleDesc.hasKey(colorID)) 
+                color = getColor(styleDesc.getObjectValue(colorID));
         }
-        
+
         //Paragraph styles.
+        var paragraphStyleID = stringIDToTypeID("paragraphStyle");
+        var defaultStyleID = stringIDToTypeID("defaultStyle");
         var paraList = desc.getList(stringIDToTypeID("paragraphStyleRange"));
-        var paraDesc = paraList.getObjectValue( 0 );
-        if (paraDesc.hasKey(stringIDToTypeID("paragraphStyle") ) ) 
+        var paraDesc = paraList.getObjectValue(0);
+        if (paraDesc.hasKey(paragraphStyleID)) 
         {
-            var paraStyle = paraDesc.getObjectValue( stringIDToTypeID("paragraphStyle") );
-            if(paraStyle.hasKey( stringIDToTypeID("defaultStyle") ) ) 
+            var paraStyle = paraDesc.getObjectValue(paragraphStyleID);
+            if(paraStyle.hasKey(defaultStyleID)) 
             {
-                var defStyle = paraStyle.getObjectValue(stringIDToTypeID("defaultStyle") );
-                if(font=="" && defStyle.hasKey(stringIDToTypeID("fontPostScriptName") ) ) 
-                    font= defStyle.getString(stringIDToTypeID("fontPostScriptName") );
-                if(size == "" && defStyle.hasKey(stringIDToTypeID("size") ) )
+                var defStyle = paraStyle.getObjectValue(defaultStyleID);
+                if(font === "" && defStyle.hasKey(fontPostScriptID)) 
+                    font = defStyle.getString(fontPostScriptID);
+                if(size === " " && defStyle.hasKey(sizeID))
                 {
-                    size = defStyle.getDouble( stringIDToTypeID("size") );
-                    if(desc.hasKey(stringIDToTypeID('transform')))
+                    size = defStyle.getDouble(sizeID);
+                    if(desc.hasKey(transformID))
                     {
-                        var mFactor = desc.getObjectValue(stringIDToTypeID('transform')).getUnitDoubleValue (stringIDToTypeID('yy') );
+                        var mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
                         size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                     }
                 }
-                if(tracking == "" && defStyle.hasKey( stringIDToTypeID("tracking") ) )
-                    tracking = defStyle.getInteger( stringIDToTypeID("tracking") );
-                if(underline == "" && defStyle.hasKey( stringIDToTypeID("underline") ) )
-                    underline = typeIDToStringID(defStyle.getEnumerationValue( stringIDToTypeID("underline") ));
-                if (strike == "" && defStyle.hasKey( stringIDToTypeID("strikethrough") ) )
-                    strike = typeIDToStringID(defStyle.getEnumerationValue( stringIDToTypeID("strikethrough")) );
-                if (bold == "" && defStyle.hasKey( stringIDToTypeID("syntheticBold") ) )
-                    bold = defStyle.getBoolean( stringIDToTypeID("syntheticBold"));
-                if (italic == "" && defStyle.hasKey( stringIDToTypeID("syntheticItalic") ) )
-                    italic = defStyle.getBoolean( stringIDToTypeID("syntheticItalic"));
-
-                if (leading == "" && defStyle.hasKey( stringIDToTypeID("autoLeading") ) )
+                if(tracking === "" && defStyle.hasKey(trackingID))
+                    tracking = defStyle.getInteger(trackingID);
+                if(underline === "" && defStyle.hasKey(underlineID))
+                    underline = typeIDToStringID(defStyle.getEnumerationValue(underlineID));
+                if (strike === "" && defStyle.hasKey(strikethroughID))
+                    strike = typeIDToStringID(defStyle.getEnumerationValue(strikethroughID));
+                if (bold === "" && defStyle.hasKey(syntheticBoldID))
+                    bold = defStyle.getBoolean(syntheticBoldID);
+                if (italic === "" && defStyle.hasKey(syntheticItalicID))
+                    italic = defStyle.getBoolean(syntheticItalicID);
+                if (leading === "" && defStyle.hasKey(autoLeadingID))
                 {
-                    isAutoLeading = defStyle.getBoolean( stringIDToTypeID("autoLeading"));
+                    isAutoLeading = defStyle.getBoolean(autoLeadingID);
                     if(isAutoLeading == false)
                     {
-                        leading = defStyle.getDouble( stringIDToTypeID("leading"));
-                        if(desc.hasKey(stringIDToTypeID('transform')))
+                        leading = defStyle.getDouble(stringIDToTypeID("leading"));
+                        if(desc.hasKey(transformID))
                         {
-                            var mFactor = desc.getObjectValue(stringIDToTypeID('transform')).getUnitDoubleValue (stringIDToTypeID('yy') );
+                            mFactor = desc.getObjectValue(transformID).getUnitDoubleValue(yyID);
                             leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                         }
                      }
-
                  }
-                
-                if (color == "" && defStyle.hasKey(stringIDToTypeID("color"))) 
-                    color = getColor(defStyle.getObjectValue(stringIDToTypeID("color")));
+                if (color === "" && defStyle.hasKey(colorID)) 
+                    color = getColor(defStyle.getObjectValue(colorID));
             }
         }
     }
@@ -2843,8 +2851,13 @@ function getSpecsInfoForTextItem(pageItem)
         if(model.textAlpha)
             alpha = Math.round(pageItem.opacity)/100 ;
 
-        cssText = pageItem.name.toLowerCase()+" {";
-        
+        var name = pageItem.name;
+        var wordsArray = name.split(" ");
+        if(wordsArray.length > 2)
+            name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
+
+        cssText = name.toLowerCase()+" {";
+
         //Get the text font and concat it in text info,
         if (model.textFont)
         {
