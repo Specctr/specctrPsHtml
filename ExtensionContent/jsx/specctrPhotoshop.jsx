@@ -1085,11 +1085,19 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
     doc.activeLayer = artLayer1;
     var uniqueIdOfFirstLayer = getIDOfLayer();
 
-    if(artLayer1.kind === LayerKind.TEXT)
-        bounds1[3] = artLayer1.textItem.position[1];
+    if(artLayer1.kind === LayerKind.TEXT && artLayer1.textItem.kind === TextType.POINTTEXT)
+    {
+        doc.activeLayer = artLayer1;
+        var baseLinePosition = getPointTextBaseLine(artLayer1.textItem);
+        bounds1[3] = artLayer1.textItem.position[1] + baseLinePosition;
+    }
 
-    if(artLayer2.kind === LayerKind.TEXT)
-        bounds2[3] = artLayer2.textItem.position[1];
+    if(artLayer2.kind === LayerKind.TEXT && artLayer2.textItem.kind === TextType.POINTTEXT)
+    {
+        doc.activeLayer = artLayer2;
+        var baseLinePosition = getPointTextBaseLine(artLayer2.textItem);
+        bounds2[3] = artLayer2.textItem.position[1] + baseLinePosition;
+    }
 
 	// Check overlap
 	if (bounds1[0]<bounds2[2] && bounds1[2]>bounds2[0] &&
@@ -1399,8 +1407,12 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
 
     if(model.spaceBottom)   //Create the spec text for bottom.
     {
-        if(artLayer.kind === LayerKind.TEXT)
-            bounds[3] = artLayer.textItem.position[1];
+        if(artLayer.kind === LayerKind.TEXT && artLayer.textItem.kind === TextType.POINTTEXT)
+        {
+            doc.activeLayer = artLayer;
+            var baseLinePosition = getPointTextBaseLine(artLayer.textItem);
+            bounds[3] = artLayer.textItem.position[1] + baseLinePosition;
+        }
 
         if(!model.specInPrcntg)
             distanceValue =  pointsToUnitsString(getScaledValue(cnvsRect[3] - bounds[3]), startRulerUnits);
@@ -1448,6 +1460,112 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
     setXmpDataForSpec(specItemsGroup, "true", "SpeccedObject");
 
     setPreferences(startRulerUnits, startTypeUnits, originalDPI);      //Setting the original preferences of the document.
+}
+
+//Get text base line position.
+function getPointTextBaseLine(textItem)
+{
+    var imFactor = "";
+    var leading = "", size = "";
+    var kDefaultLeadVal = 120.0, kDefaultFontSize= 12;
+    var isAutoLeading="";
+    
+    var sizeID = stringIDToTypeID("size");
+    var transformID = stringIDToTypeID("transform");
+    var yyID = stringIDToTypeID("yy");
+    var autoLeadingID = stringIDToTypeID("autoLeading");
+
+    var ref = new ActionReference();
+    ref.putEnumerated( charIDToTypeID('Lyr '), charIDToTypeID('Ordn'), charIDToTypeID('Trgt') ); 
+    var desc = executeActionGet(ref).getObjectValue(stringIDToTypeID('textKey'));
+
+    //Character Styles
+    var textStyleRangeID = stringIDToTypeID("textStyleRange");
+    var textStyleID = stringIDToTypeID("textStyle");
+    var txtList = desc.getList(textStyleRangeID);
+    var txtDesc = txtList.getObjectValue(0);
+    
+    if(txtDesc.hasKey(textStyleID)) 
+    {
+        var rangeList = desc.getList(textStyleRangeID);
+        var styleDesc = rangeList.getObjectValue(0).getObjectValue(textStyleID);
+        if(styleDesc.hasKey(sizeID))
+        {
+            size =  styleDesc.getDouble(sizeID);
+            if(desc.hasKey(transformID))
+            {
+                mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
+                size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+            }
+        }
+    
+        if(styleDesc.hasKey(autoLeadingID))
+        {
+            isAutoLeading = styleDesc.getBoolean(autoLeadingID);
+            if(isAutoLeading == false)
+            {
+                 leading = styleDesc.getDouble(stringIDToTypeID("leading"));
+                 if(desc.hasKey(transformID))
+                 {
+                     mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
+                     leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+                 }
+            }
+        }
+    }
+    
+    //Paragraph styles.
+    var paragraphStyleID = stringIDToTypeID("paragraphStyle");
+    var defaultStyleID = stringIDToTypeID("defaultStyle");
+    var paraList = desc.getList(stringIDToTypeID("paragraphStyleRange"));
+    var paraDesc = paraList.getObjectValue(0);
+    if (paraDesc.hasKey(paragraphStyleID)) 
+    {
+        var paraStyle = paraDesc.getObjectValue(paragraphStyleID);
+        if(paraStyle.hasKey(defaultStyleID)) 
+        {
+            var defStyle = paraStyle.getObjectValue(defaultStyleID);
+            if(size === " " && defStyle.hasKey(sizeID))
+            {
+                size = defStyle.getDouble(sizeID);
+                if(desc.hasKey(transformID))
+                {
+                    var mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
+                    size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+                }
+            }
+            if (leading === "" && defStyle.hasKey(autoLeadingID))
+            {
+                isAutoLeading = defStyle.getBoolean(autoLeadingID);
+                if(isAutoLeading == false)
+                {
+                    leading = defStyle.getDouble(stringIDToTypeID("leading"));
+                    if(desc.hasKey(transformID))
+                    {
+                        mFactor = desc.getObjectValue(transformID).getUnitDoubleValue(yyID);
+                        leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+                    }
+                 }
+             }
+        }
+    }
+
+    if(leading == "" || isAutoLeading == true)
+        leading =  size / 100 * Math.round(kDefaultLeadVal);
+
+    leading = Math.round(leading * 100) / 100;
+    
+    var contents = textItem.contents;
+    contents = contents.replace(/^\s+|\s+$/gm,'');                  //Trim the spaces.
+    var lastChar = contents.charAt (contents.length - 1);
+    while(lastChar === "\u0003" || lastChar === "\r")
+    {
+        contents = contents.slice (0, contents.length - 1);
+        lastChar = contents.charAt (contents.length - 1);
+    }
+
+    var lines = contents.split(/[\u0003\r]/);  //Splitting content from Enter or Shift+Enter.
+    return (lines.length - 1) * leading;
 }
 
 //Create the number of spec.
