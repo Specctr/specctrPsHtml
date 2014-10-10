@@ -748,3 +748,19 @@ label
 	font-size: 11px; 
 	-webkit-user-select: auto;
 }
+
+.ui-dialog 
+{ 
+	font-size: 10px !important; 
+}
+
+.ui-state-default .ui-icon 
+{
+	background-image: url("../Images/ui-icons_888888_256x240.png") !important;
+} 
+
+.ui-widget-overlay
+{
+  opacity: .60 !important;
+  background-color: rgb(50, 50, 50) !important;
+}

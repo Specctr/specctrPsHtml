@@ -37,7 +37,7 @@ function getFontList()
         {
             var object = {};
             object.label = currFont.family;
-            object.font = currFont.name;
+            object.font = currFont.postScriptName;
             result.push(object);
         }
 	}
@@ -48,14 +48,7 @@ function getFontList()
 //Get the updated value of UI's component from html file.
 function setModel(currModel)
 {
-    try
-    {
-        model = JSON.parse(currModel);
-    }
-    catch(e)
-    {
-        alert(e);
-    }
+    model = JSON.parse(currModel);
 }
 
 //Get the list of selected layers.
@@ -645,113 +638,96 @@ function createDimensionSpecsForItem()
         if(artLayer === null || !startUpCheckBeforeSpeccing(artLayer))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
             return;
 
-        var bounds = returnBounds(artLayer);
-        app.activeDocument.suspendHistory('Dimension Specs', 'calculateDimensions(artLayer, bounds)');      //Pass bounds and layer for creating dimension spec.
+        var pref = app.preferences;
+        var startRulerUnits = pref.rulerUnits; 
+        pref.rulerUnits = Units.PIXELS;
+        
+        var ref = new ActionReference();
+        ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+        var layer = executeActionGet(ref);
+        if(layer.hasKey(stringIDToTypeID('layerEffects')) && layer.getBoolean(stringIDToTypeID('layerFXVisible')))
+            var bounds = returnBounds(artLayer);
+        else
+            bounds = artLayer.bounds;
+
+        pref.rulerUnits = startRulerUnits;
+        app.activeDocument.suspendHistory('Dimension Specs', 'createDimensionSpecs(artLayer, bounds)');      //Pass bounds and layer for creating dimension spec.
     }
     catch(e)
     {}
-}
-
-//Calculate the width and height value of the selected art layer. These values may be fixed (in px/inches/cm) or relative to document (in %) which depends on the users choice.
-function calculateDimensions(artLayer, bounds)
-{
-    //Save the current preferences
-    var doc = app.activeDocument;
-    var pref = app.preferences;
-    var startRulerUnits = pref.rulerUnits;
-    var startTypeUnits = pref.typeUnits;
-    setPreferences(Units.PIXELS, TypeUnits.PIXELS);
-
-    try
-    {
-        var lyrHeight = bounds[3] - bounds[1];
-        var lyrWidth = bounds[2] - bounds[0];
-        var widthValue = "", heightValue = "";
-
-        if(!model.specInPrcntg)
-        {
-            //Absolute distance.
-            widthValue = pointsToUnitsString(getScaledValue(lyrWidth), startRulerUnits);
-            heightValue = pointsToUnitsString(getScaledValue(lyrHeight), startRulerUnits);
-        }
-        else 
-        {
-            //Relative distance with respect to original canvas.
-            var relativeHeight='', relativeWidth='';
-            var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
-            
-            if(model.relativeHeight != 0)
-                relativeHeight = model.relativeHeight;
-            else
-                relativeHeight = orgnlCanvas[3];
-                
-            if(model.relativeWidth != 0)
-                relativeWidth = model.relativeWidth;
-            else
-                relativeWidth = orgnlCanvas[2];
-
-            widthValue = Math.round(lyrWidth/relativeWidth*10000) /100+ "%";
-            heightValue = Math.round(lyrHeight/relativeHeight*10000) /100+ "%";
-        }
-
-        createDimensionSpecs(artLayer, bounds, widthValue, heightValue);
-    }
-    catch(e)
-    {}
-    
-    doc.activeLayer = artLayer;
-    setPreferences(startRulerUnits, startTypeUnits);      //Setting the original preferences of the document.
 }
 
 //Create the dimension spec for a selected layer.
-function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
+function createDimensionSpecs(artLayer, bounds)
 {
     if(ExternalObject.AdobeXMPScript == null)
 		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
-    
-    var dimensionSpec = "";
+
+    var dimensionSpec = "", legendLayer = "";
     var idDimensionSpec = getXMPData(artLayer, "idDimensionSpec");
     if(idDimensionSpec)
     {
         dimensionSpec = getLayerByID(idDimensionSpec);
         if(dimensionSpec)
         {
-            var parent = dimensionSpec.parent;
+            legendLayer = dimensionSpec.parent;
             dimensionSpec.remove();
-            if(parent.typename == "LayerSet")
-                parent.remove();
-            
-            //Delete the xmp data of the layer.
-            var layerXMP = new XMPMeta(artLayer.xmpMetadata.rawData);
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idDimensionSpec");
-            artLayer.xmpMetadata.rawData = layerXMP.serialize();
         }
     }
-    
+
     //Create the specs.
-    var font = getFont();
     var doc = app.activeDocument;
+    var startRulerUnits = app.preferences.rulerUnits;
+    var startTypeUnits = app.preferences.typeUnits;
     var originalDPI = doc.resolution;
-    doc.resizeImage(null, null, 72, ResampleMethod.NONE);
-    
-    var heightText = "", widthText = "", widthLine = "", heightLine = "", specText = "";
+    setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
+
+    var text = "", line = "", specText = "";
     var height = bounds[3]-bounds[1];
     var width = bounds[2]-bounds[0];
     var spacing = 10+model.armWeight;
     var armWidth = model.armWeight/2.0;
-    var legendLayer = legendDimensionsLayer().layerSets.add();
-    legendLayer.name = "Specctr Dimension Mark"; 
     var newColor = legendColorSpacing();
+
+    if(legendLayer === "")
+    {
+        legendLayer = legendDimensionsLayer().layerSets.add();
+        legendLayer.name = "Specctr Dimension Mark"; 
+    }
+
+    var spec = legendLayer.layerSets.add();
+    spec.name = "DimensionSpec"; 
     
+    var widthValue = '', heightValue = '';
+    var relativeHeight='', relativeWidth='';
+    if(model.specInPrcntg)
+    {
+        var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
+        if(model.relativeHeight != 0)
+            relativeHeight = model.relativeHeight;
+        else
+            relativeHeight = orgnlCanvas[3];
+
+        if(model.relativeWidth != 0)
+            relativeWidth = model.relativeWidth;
+        else
+            relativeWidth = orgnlCanvas[2];
+    }
+
     if(model.widthPos > 0)
     {
-        widthText = legendLayer.artLayers.add();
-        widthText.kind = LayerKind.TEXT;
-        specText = widthText.textItem;
+         if(!model.specInPrcntg)
+            widthValue = pointsToUnitsString(getScaledValue(width), startRulerUnits);
+        else
+            widthValue = Math.round(width/relativeWidth*10000) /100+ "%";
+
+        text = spec.artLayers.add();
+        text.kind = LayerKind.TEXT;
+        specText = text.textItem;
         specText.kind = TextType.POINTTEXT;
         specText.justification = Justification.CENTER;
         specText.color.rgb = newColor;
-        specText.font = font;
+        specText.font = model.legendFont;
         specText.size = model.legendFontSize;
         specText.contents = widthValue;
     }
@@ -763,7 +739,7 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
             specText.position = [bounds[0]+width/2.0, bounds[1]-spacing-armWidth];
 
             bPos = bounds[1]-0.7*spacing;
-            widthLine = createLine(bounds[0], bPos, bounds[2], bPos, newColor);     //Main width line.
+            line = createLine(bounds[0], bPos, bounds[2], bPos, newColor);     //Main width line.
 
             aPos = bounds[0]+armWidth;
             bPos = bounds[1]-0.4*spacing;
@@ -778,7 +754,7 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
             specText.position = [bounds[0]+width/2.0, bounds[3]+spacing+armWidth+model.legendFontSize*0.8];
             
             bPos = bounds[3]+0.7*spacing;
-            widthLine = createLine(bounds[0], bPos, bounds[2], bPos, newColor);     //Main width line.
+            line = createLine(bounds[0], bPos, bounds[2], bPos, newColor);     //Main width line.
             
             aPos = bounds[0]+armWidth;
             bPos = bounds[3]+0.4*spacing;
@@ -793,7 +769,7 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
             specText.position =[bounds[0]+width/2.0, bounds[1]+height/2.0-spacing+model.armWeight*2.0];
 
             bPos = bounds[1]+height/2.0;
-            widthLine = createLine(bounds[0], bPos, bounds[2], bPos, newColor);     //Main width line.
+            line = createLine(bounds[0], bPos, bounds[2], bPos, newColor);     //Main width line.
 
             aPos = bounds[0]+armWidth;
             cPos = bPos+0.4*spacing;
@@ -808,13 +784,18 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
 
     if(model.heightPos > 0)
     {
-        heightText = legendLayer.artLayers.add();
-        heightText.kind = LayerKind.TEXT;
-        specText = heightText.textItem;
+        if(!model.specInPrcntg)
+            heightValue = pointsToUnitsString(getScaledValue(height), startRulerUnits);
+        else
+            heightValue = Math.round(height/relativeHeight*10000) /100+ "%";
+
+        text = spec.artLayers.add();
+        text.kind = LayerKind.TEXT;
+        specText = text.textItem;
         specText.kind = TextType.POINTTEXT;
         specText.justification = Justification.RIGHT;
         specText.color.rgb = newColor;
-        specText.font = font;
+        specText.font = model.legendFont;
         specText.size = model.legendFontSize;
         specText.contents = heightValue;
     }
@@ -825,7 +806,7 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
             specText.position = [bounds[0]-spacing-armWidth, bounds[1]+height/2.0];
 
             aPos = bounds[0]-0.7*spacing;
-            heightLine = createLine(aPos, bounds[3], aPos, bounds[1], newColor);      //Main height line
+            line = createLine(aPos, bounds[3], aPos, bounds[1], newColor);      //Main height line
 
             aPos = bounds[0]-0.4*spacing;
             bPos = bounds[1]+armWidth;
@@ -841,7 +822,7 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
             specText.position = [bounds[2]+spacing+armWidth, bounds[1]+height/2.0];
 
             aPos = bounds[2]+0.7*spacing;
-            heightLine = createLine(aPos, bounds[3], aPos, bounds[1], newColor);      //Main height line
+            line = createLine(aPos, bounds[3], aPos, bounds[1], newColor);      //Main height line
 
             aPos = bounds[2]+0.4*spacing;
             bPos = bounds[1]+armWidth;
@@ -857,7 +838,7 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
             specText.position = [bounds[2]-width/2.0+0.4*spacing+armWidth, bounds[1]+height/2.0];
 
             aPos = bounds[2]-width/2.0;
-            heightLine = createLine(aPos, bounds[3], aPos, bounds[1], newColor);      //Main height line
+            line = createLine(aPos, bounds[3], aPos, bounds[1], newColor);      //Main height line
 
             bPos = bounds[1]+armWidth;
             cPos = aPos-0.4*spacing;
@@ -869,10 +850,8 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
           default:
     }
 
-    //Converting selected layers into single smart object.
-    selectLayers(widthText.name, heightText.name, widthLine.name, heightLine.name);
-    var spec = createSmartObject();
-    spec.name = "DimensionSpec";
+    doc.activeLayer = spec;
+    spec = createSmartObject();
     idDimensionSpec = getIDOfLayer();
     doc.activeLayer = artLayer;
 
@@ -886,29 +865,23 @@ function createDimensionSpecs(artLayer, bounds, widthValue, heightValue)
 
     setXmpDataForSpec(artLayer, idDimensionSpec, "idDimensionSpec");
     setXmpDataForSpec(spec, "true", "SpeccedObject");
-    doc.resizeImage(null, null, originalDPI, ResampleMethod.NONE);
-    ExternalObject.AdobeXMPScript.unload();
+    setPreferences(startRulerUnits, startTypeUnits, originalDPI);
 }
 
 //Create text spec for horizontal distances for spacing specs between two objects.
-function createHrzntlSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
+function createHorizontalSpec(x1, x2, y1, y2, startRulerUnits, legendLayer)
 {
     try
     {
-        var hrzntlDstnc = Math.abs(x2-x1);
+        var distance = Math.abs(x2-x1);
         var spacing = 3+0.3*model.armWeight;
+        var armWidth = model.armWeight/2;
         var newColor = legendColorSpacing();
-
-        if(legendLayer == null)
-        {
-            legendLayer = legendSpacingLayer().layerSets.add();
-            legendLayer.name = "Specctr Spacing Mark";
-        }
 
         if(!model.specInPrcntg)
         {
             //Absolute distance.
-            hrzntlDstnc = pointsToUnitsString(getScaledValue(hrzntlDstnc), startRulerUnits);
+            distance = pointsToUnitsString(getScaledValue(distance), startRulerUnits);
         }
         else 
         {
@@ -921,54 +894,46 @@ function createHrzntlSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
             else
                 relativeWidth = orgnlCanvas[2];
 
-            hrzntlDstnc = Math.round(hrzntlDstnc/relativeWidth*10000)/100 + "%";
+            distance = Math.round(distance/relativeWidth*10000)/100 + "%";
         }
 
-        var hrzntSpacing = legendLayer.artLayers.add();
-        hrzntSpacing.kind = LayerKind.TEXT;
-        var specText = hrzntSpacing.textItem;
+        var textLayer = legendLayer.artLayers.add();
+        textLayer.kind = LayerKind.TEXT;
+        var specText = textLayer.textItem;
         specText.kind = TextType.POINTTEXT;
         specText.justification = Justification.CENTER; 
         specText.color.rgb = newColor;
-        specText.font = font;
+        specText.font = model.legendFont;
         specText.size = model.legendFontSize;
-        specText.contents = hrzntlDstnc;
-        specText.position = [(x1+x2)/2.0, y1-spacing-model.armWeight/2];
+        specText.contents = distance;
+        specText.position = [(x1+x2)/2.0, y1-spacing-armWidth];
 
-        var hrzntLine = createLine(x1, y1, x2, y2, newColor);
-        var aPos = x2+model.armWeight/2;
+        var line = createLine(x1, y1, x2, y2, newColor);
+        var aPos = x2+armWidth;
         var bPos = y1+spacing;
         var cPos = y2-spacing;
         setShape(aPos, bPos, aPos, cPos);    //horizontal left line.
-        aPos = x1-model.armWeight/2;
+        aPos = x1-armWidth;
         setShape(aPos, bPos, aPos, cPos);    //horizontal right line.
-        
-        selectLayers(hrzntSpacing.name, hrzntLine.name);
-        var spec = createSmartObject();
-        return spec;
     }
     catch(e)
     {}
 }
 
 //Create text spec for vertical distances for spacing specs between two objects.
-function createVertSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
+function createVertSpec(x1, x2, y1, y2, startRulerUnits, legendLayer)
 {
     try
     {
-        var vrtclDstnc = Math.abs(y2-y1);
+        var distance = Math.abs(y2-y1);
         var spacing = 3+0.3*model.armWeight;
+        var armWidth = model.armWeight/2;
         var newColor = legendColorSpacing();
-        if(legendLayer == null)
-        {
-            legendLayer = legendSpacingLayer().layerSets.add();
-            legendLayer.name = "Specctr Spacing Mark";
-        }
         
         if(!model.specInPrcntg)
         {
             //Value after applying scaling.
-            vrtclDstnc = pointsToUnitsString(getScaledValue(vrtclDstnc), startRulerUnits);
+            distance = pointsToUnitsString(getScaledValue(distance), startRulerUnits);
         }
         else 
         {
@@ -981,29 +946,25 @@ function createVertSpec(x1, x2, y1, y2, font, startRulerUnits, legendLayer)
             else
                 relativeHeight = orgnlCanvas[3];
 
-            vrtclDstnc = Math.round(vrtclDstnc/relativeHeight*10000)/100 + "%";
+            distance = Math.round(distance/relativeHeight*10000)/100 + "%";
         }
-    
-        var spacingSpec = legendLayer.artLayers.add();
-        spacingSpec.kind = LayerKind.TEXT;
-        var specText = spacingSpec.textItem;
+
+        var textLayer = legendLayer.artLayers.add();
+        textLayer.kind = LayerKind.TEXT;
+        var specText = textLayer.textItem;
         specText.kind = TextType.POINTTEXT;
         specText.justification = Justification.RIGHT;
         specText.color.rgb = newColor;
-        specText.font = font;
+        specText.font = model.legendFont;
         specText.size = model.legendFontSize;
-        specText.contents = vrtclDstnc;
-        specText.position = [x1-spacing-model.armWeight/2, (y1+y2)/2.0];
-        
+        specText.contents = distance;
+        specText.position = [x1-spacing-armWidth, (y1+y2)/2.0];
+
         var line = createLine(x1, y1, x2, y2, newColor);
-        var aPos =  y2+model.armWeight/2;
+        var aPos =  y2+armWidth;
         setShape(x1-spacing, aPos, x1+spacing, aPos);    //vertical top line.
-        aPos =  y1-model.armWeight/2;
+        aPos =  y1-armWidth;
         setShape(x2-spacing, aPos, x2+spacing, aPos);    //vertical bottom line.
-        
-         selectLayers(spacingSpec.name, line.name);
-         var spec = createSmartObject();
-         return spec;
     }
     catch(e)
     {}
@@ -1016,37 +977,71 @@ function createSpacingSpecs()
     {
         var selectedArtItems = getSelectedLayers();
         var numberOfSelectedItems = selectedArtItems.length;
+        var doc = app.activeDocument;
+        var pref = app.preferences;
+        var startRulerUnits = pref.rulerUnits; 
+        pref.rulerUnits = Units.PIXELS;
         
-        if(numberOfSelectedItems == 2)
+        var lyr = charIDToTypeID("Lyr ");
+        var ordn = charIDToTypeID("Ordn");
+        var trgt = charIDToTypeID("Trgt");
+        var layerEffects = stringIDToTypeID('layerEffects');
+        var layerFXVisible = stringIDToTypeID('layerFXVisible');
+        if(numberOfSelectedItems === 2)
         {
             //get selected art items.
             var artLayer1 = selectLayerByIndex(selectedArtItems[0]);
             var artLayer2 = selectLayerByIndex(selectedArtItems[1]);
-            
-            if(artLayer1.typename == "LayerSet" || artLayer2.typename == "LayerSet")
+
+            if(artLayer1.typename === "LayerSet" || artLayer2.typename === "LayerSet")
             {
                 alert("Please select shape layers or text layers only.");
                 return;
             }
-        
-            var bounds1 = returnBounds(artLayer1);
-            var bounds2 = returnBounds(artLayer2);
-            app.activeDocument.suspendHistory('Get Spacing Info', 'createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)');
+
+            doc.activeLayer = artLayer1;
+            var ref = new ActionReference();
+            ref.putEnumerated(lyr, ordn, trgt);
+            var layer = executeActionGet(ref);
+            if(layer.hasKey(layerEffects) && layer.getBoolean(layerFXVisible))
+                var bounds1 = returnBounds(artLayer1);
+            else
+                bounds1 = artLayer1.bounds;
+
+            doc.activeLayer = artLayer2;
+            ref = new ActionReference();
+            ref.putEnumerated(lyr, ordn, trgt);
+            layer = executeActionGet(ref);
+            if(layer.hasKey(layerEffects) && layer.getBoolean(layerFXVisible))
+                var bounds2 = returnBounds(artLayer2);
+            else
+                bounds2 = artLayer2.bounds;
+
+            app.activeDocument.suspendHistory('Spacing spec', 'createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)');
         }
-        else if(numberOfSelectedItems == 1)
+        else if(numberOfSelectedItems === 1)
         {
-            var artLayer = app.activeDocument.activeLayer;
-            
+            var artLayer = doc.activeLayer;
+
             if(!startUpCheckBeforeSpeccing(artLayer))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
                 return;
-            
-            var bounds = returnBounds(artLayer);
-            app.activeDocument.suspendHistory('Get Spacing Info', 'createSpacingSpecsForSingleItem(artLayer, bounds)');
+
+            ref = new ActionReference();
+            ref.putEnumerated(lyr, ordn, trgt);
+            layer = executeActionGet(ref);
+            if(layer.hasKey(layerEffects) && layer.getBoolean(layerFXVisible))
+                var bounds = returnBounds(artLayer);
+            else
+                bounds = artLayer.bounds;
+
+            app.activeDocument.suspendHistory('Spacing spec', 'createSpacingSpecsForSingleItem(artLayer, bounds)');
         }
         else
         {
             alert("Please select one or two shape/text layer(s)!");
         }
+
+        pref.rulerUnits = startRulerUnits;
     }
     catch(e)
     {}
@@ -1057,13 +1052,13 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
 {
     if(ExternalObject.AdobeXMPScript == null)
 		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
-    
+
     var doc = app.activeDocument;
     doc.activeLayer = artLayer2;
     var uniqueIdOfSecondLayer = getIDOfLayer();
-    
+
     //Code for updating the specs.
-    var spacingSpec = "";
+    var spacingSpec = "", legendLayer = "";
     var indexOfSpecInFirstLayerXMPArray = "";
     var indexOfSpecInSecondLayerXMPArray = "";
     var idSpacingSpec = getXMPDataForSpacingSpec(artLayer1, uniqueIdOfSecondLayer, "idSpacingSpec");
@@ -1072,64 +1067,72 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
         spacingSpec = getLayerByID(idSpacingSpec);
         if(spacingSpec)
         {
-            var parent = spacingSpec.parent;
+            legendLayer = spacingSpec.parent;
             spacingSpec.remove();
-            if(parent.typename == "LayerSet")
-                parent.remove();
-            
-            //Delete an item in the xmp data array of the layer.
             indexOfSpecInFirstLayerXMPArray = getIndexFromXmpArray(artLayer1, idSpacingSpec, "idSpacingSpec");
             indexOfSpecInSecondLayerXMPArray = getIndexFromXmpArray(artLayer2, idSpacingSpec, "idSpacingSpec");
         }
     }
-    
+
     //Save the current preferences
     var startRulerUnits = app.preferences.rulerUnits;
     var startTypeUnits = app.preferences.typeUnits;
     var originalDPI = doc.resolution;
     setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
-    
-    var font = getFont();
+
     var isOverlapped = false;
-    var legendLayer, spec;
-    var vertSpecBottom = "", hrznSpecRight = "", vertSpecTop = "", hrznSpecLeft = "";
     var uniqueIdOfSpec = "";
     doc.activeLayer = artLayer1;
     var uniqueIdOfFirstLayer = getIDOfLayer();
-    
+
+    if(artLayer1.kind === LayerKind.TEXT && artLayer1.textItem.kind === TextType.POINTTEXT)
+    {
+        doc.activeLayer = artLayer1;
+        var baseLinePosition = getPointTextBaseLine(artLayer1.textItem);
+        bounds1[3] = artLayer1.textItem.position[1] + baseLinePosition;
+    }
+
+    if(artLayer2.kind === LayerKind.TEXT && artLayer2.textItem.kind === TextType.POINTTEXT)
+    {
+        doc.activeLayer = artLayer2;
+        var baseLinePosition = getPointTextBaseLine(artLayer2.textItem);
+        bounds2[3] = artLayer2.textItem.position[1] + baseLinePosition;
+    }
+
 	// Check overlap
 	if (bounds1[0]<bounds2[2] && bounds1[2]>bounds2[0] &&
 		bounds1[3]>bounds2[1] && bounds1[1]<bounds2[3])
 	{
 		isOverlapped = true;
 	}
-    
+
+    if(legendLayer === "")
+    {
+        legendLayer = legendSpacingLayer().layerSets.add();
+        legendLayer.name = "Specctr Spacing Mark";
+    }
+    var spec = legendLayer.layerSets.add();
+    spec.name = "SpacingSpec";
+
     // Check if there's vertical perpendicular
 	if (bounds1[0]<bounds2[2] && bounds1[2]>bounds2[0])
 	{
         var x= Math.max(bounds1[0], bounds2[0])/2+Math.min(bounds1[2], bounds2[2])/2;
-        var y1;
-        var y2;
-		
+        var y1, y2;
+
         if(!isOverlapped)
         {
             if(bounds1[1]<bounds2[1])
             {
                 y1=bounds1[3];
-                y2=bounds2[1]
+                y2=bounds2[1];
             }
             else 
             {
                 y1=bounds2[3];
                 y2=bounds1[1];
             }
-
-            var vertSpecNoOvrLapped = createVertSpec(x, x, y2, y1, font, startRulerUnits, legendLayer);
-            vertSpecNoOvrLapped.name = "Spacing Spec";
-            uniqueIdOfSpec = getIDOfLayer();
-            setXmpDataForSpec(vertSpecNoOvrLapped, "true", "SpeccedObject");
-            setXmpDataForSpec(vertSpecNoOvrLapped, uniqueIdOfFirstLayer, "firstLayer");
-            setXmpDataForSpec(vertSpecNoOvrLapped, uniqueIdOfSecondLayer, "secondLayer");
+            createVertSpec(x, x, y2, y1, startRulerUnits, spec);
         }
         else
         {
@@ -1139,34 +1142,30 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
                 if(bounds1[1]>bounds2[1])
                 {
                     y1=bounds1[1];
-                    y2=bounds2[1]
+                    y2=bounds2[1];
                 }
                 else 
                 {
                     y1=bounds2[1];
-                    y2=bounds1[1]
+                    y2=bounds1[1];
                 }
-
-                vertSpecTop = createVertSpec(x, x, y1, y2, font, startRulerUnits, legendLayer);
-                legendLayer = vertSpecTop.parent;
+                createVertSpec(x, x, y1, y2, startRulerUnits, spec);
             }
-            
+
             //for bottom to bottom
             if(model.spaceBottom)
             {
                  if(bounds1[3]>bounds2[3])
                 {
                     y1=bounds1[3];
-                    y2=bounds2[3]
+                    y2=bounds2[3];
                 }
                 else 
                 {
                     y1=bounds2[3];
-                    y2=bounds1[3]
+                    y2=bounds1[3];
                 }
-                
-                vertSpecBottom = createVertSpec(x, x, y1, y2, font, startRulerUnits, legendLayer);
-                legendLayer = vertSpecBottom.parent;
+                createVertSpec(x, x, y1, y2, startRulerUnits, spec);
             }
         }
     }
@@ -1175,10 +1174,8 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
 	if (bounds1[3]>bounds2[1] && bounds1[1]<bounds2[3])
 	{
         var y = Math.max(bounds1[1], bounds2[1])/2+Math.min(bounds1[3], bounds2[3])/2;
-				
-        var x1;
-        var x2;
-        
+        var x1, x2;
+
         if(!isOverlapped)
         {
             if(bounds1[0]>bounds2[0])
@@ -1191,13 +1188,7 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
                 x1=bounds2[0];
                 x2=bounds1[2]; 
             }
-            
-            var hrznSpecNoOvrlap = createHrzntlSpec(x1, x2, y, y, font, startRulerUnits, legendLayer);
-            hrznSpecNoOvrlap.name = "Spacing Spec";
-            uniqueIdOfSpec = getIDOfLayer();
-            setXmpDataForSpec(hrznSpecNoOvrlap, "true", "SpeccedObject");
-            setXmpDataForSpec(hrznSpecNoOvrlap, uniqueIdOfFirstLayer, "firstLayer");
-            setXmpDataForSpec(hrznSpecNoOvrlap, uniqueIdOfSecondLayer, "secondLayer");
+            createHorizontalSpec(x1, x2, y, y, startRulerUnits, spec);
         } 
         else
         {
@@ -1214,9 +1205,7 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
                     x1=bounds2[0];
                     x2=bounds1[0]; 
                 }
-            
-                hrznSpecLeft = createHrzntlSpec(x1, x2, y, y, font, startRulerUnits, legendLayer);
-                legendLayer = hrznSpecLeft.parent;
+                createHorizontalSpec(x1, x2, y, y, startRulerUnits, spec);
             }
             
             //for right to right
@@ -1232,34 +1221,21 @@ function createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)
                     x1=bounds2[2];
                     x2=bounds1[2]; 
                 }
-                
-                hrznSpecRight = createHrzntlSpec(x1, x2, y, y, font, startRulerUnits, legendLayer);
+                createHorizontalSpec(x1, x2, y, y, startRulerUnits, spec);
             }
         }
      }
 
-   try
-   {
-        if(isOverlapped)
-        {
-            selectLayers(vertSpecTop.name, vertSpecBottom.name, hrznSpecLeft.name, hrznSpecRight.name);
-            spec = createSmartObject();
-            spec.name = "SpacingSpec";
-            uniqueIdOfSpec = getIDOfLayer();
-            setXmpDataForSpec(spec, "true", "SpeccedObject");
-            setXmpDataForSpec(spec, uniqueIdOfFirstLayer, "firstLayer");
-            setXmpDataForSpec(spec, uniqueIdOfSecondLayer, "secondLayer");
-        }
-    }
-    catch(e)
-    {}
-    
+    doc.activeLayer = spec;
+    spec = createSmartObject();
+    uniqueIdOfSpec = getIDOfLayer();
+    setXmpDataForSpec(spec, "true", "SpeccedObject");
+    setXmpDataForSpec(spec, uniqueIdOfFirstLayer, "firstLayer");
+    setXmpDataForSpec(spec, uniqueIdOfSecondLayer, "secondLayer");
     selectLayers(artLayer1.name, artLayer2.name);
     setXmpDataForSpacingSpec(artLayer1, uniqueIdOfSpec, "idSpacingSpec", indexOfSpecInFirstLayerXMPArray);
     setXmpDataForSpacingSpec(artLayer2, uniqueIdOfSpec, "idSpacingSpec", indexOfSpecInSecondLayerXMPArray);
-    ExternalObject.AdobeXMPScript.unload();
-    
-   setPreferences(startRulerUnits, startTypeUnits, originalDPI);      //Setting the original preferences of the document.
+    setPreferences(startRulerUnits, startTypeUnits, originalDPI);      //Setting the original preferences of the document.
 }
 
 //Create the spacing spec for a selected layer.
@@ -1267,23 +1243,16 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
 {
      if(ExternalObject.AdobeXMPScript == null)
 		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
-    
-    var spacingSpec = "";
+
+    var spacingSpec = "", legendLayer = "";
     var idSpacingSpec = getXMPData(artLayer, "idSingleSpacingSpec");
     if(idSpacingSpec)
     {
         spacingSpec = getLayerByID(idSpacingSpec);
         if(spacingSpec)
         {
-            var parent = spacingSpec.parent;
+            legendLayer = spacingSpec.parent;
             spacingSpec.remove();
-            if(parent.typename == "LayerSet")
-                parent.remove();
-            
-            //Delete the xmp data of the layer.
-            var layerXMP = new XMPMeta(artLayer.xmpMetadata.rawData);
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idSingleSpacingSpec");
-            artLayer.xmpMetadata.rawData = layerXMP.serialize();
         }
     }
 
@@ -1294,68 +1263,58 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
     var originalDPI = doc.resolution;
     setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
 
-    var font = getFont();
+    var font = model.legendFont;
     var newColor = legendColorSpacing();
     var height = bounds[3] - bounds[1];
     var width = bounds[2] - bounds[0];
     var armWidth = model.armWeight / 2.0;
     var spacing = 3 + 0.3 * model.armWeight;
     var cnvsRect = originalCanvasSize();       //Get the original canvas size.
-    
-    var toTop = bounds[1] - cnvsRect[1];
-	var toLeft = bounds[0] - cnvsRect[0];
-    var toRight = cnvsRect[2] - bounds[2];
-    var toBottom = cnvsRect[3] - bounds[3];
-  
-    if(!model.specInPrcntg)
+
+    var relativeHeight='', relativeWidth='';
+    if(model.specInPrcntg)
     {
-        //Absolute distance.
-        toTop = pointsToUnitsString(getScaledValue(toTop), startRulerUnits);
-        toLeft = pointsToUnitsString(getScaledValue(toLeft), startRulerUnits);
-        toRight = pointsToUnitsString(getScaledValue(toRight), startRulerUnits);
-        toBottom = pointsToUnitsString(getScaledValue(toBottom), startRulerUnits);
-    }
-    else 
-    {
-        //Relative distance with respect to original canvas.
-        var relativeHeight='', relativeWidth='';
-        var orgnlCanvas = originalCanvasSize();       //Get the original canvas size.
-            
-        if(model.relativeHeight != 0)
+         if(model.relativeHeight != 0)
             relativeHeight = model.relativeHeight;
         else
-            relativeHeight = orgnlCanvas[3];
-                
+            relativeHeight = cnvsRect[3];
+
         if(model.relativeWidth != 0)
             relativeWidth = model.relativeWidth;
         else
-            relativeWidth = orgnlCanvas[2];
-
-        toLeft = Math.round(toLeft / relativeWidth * 10000) / 100 + "%";
-        toTop = Math.round(toTop / relativeHeight * 10000) / 100 + "%";
-        toRight = Math.round(toRight / relativeWidth * 10000) / 100 + "%";
-        toBottom = Math.round(toBottom / relativeHeight * 10000) / 100 + "%";
+            relativeWidth = cnvsRect[2];
     }
 
-    var legendLayer = legendSpacingLayer().layerSets.add();
-    legendLayer.name = "Specctr Spacing Mark";
+    if(legendLayer === "")
+    {
+        legendLayer = legendSpacingLayer().layerSets.add();
+        legendLayer.name = "Specctr Spacing Mark";
+    }
 
-    var lines = "", specText, topText = "", leftText = "", rightText = "", bottomText = "";
+    var specItemsGroup = legendLayer.layerSets.add();
+    specItemsGroup.name = "SpacingSpec";
+
+    var lines = "", specText = "", textLayer = "";
+    var distanceValue = "";
     var aPos, bPos, cPos;
 
     if(model.spaceTop)  //Create the spec text for top.
     {
+        if(!model.specInPrcntg)
+            distanceValue =  pointsToUnitsString(getScaledValue(bounds[1] - cnvsRect[1]), startRulerUnits);
+        else
+             distanceValue = Math.round((bounds[1] - cnvsRect[1]) / relativeHeight * 10000) / 100 + "%";
+        
         aPos = bounds[0] + width / 2 - spacing;
-
-        topText = legendLayer.artLayers.add();
-        topText.kind = LayerKind.TEXT;
-        specText = topText.textItem;
+        textLayer = specItemsGroup.artLayers.add();
+        textLayer.kind = LayerKind.TEXT;
+        specText = textLayer.textItem;
         specText.kind = TextType.POINTTEXT;
         specText.justification = Justification.RIGHT;
         specText.color.rgb = newColor;
         specText.font = font;
         specText.size = model.legendFontSize;
-        specText.contents = toTop;
+        specText.contents = distanceValue;
         specText.position = [aPos - armWidth, (bounds[1] + cnvsRect[1]) / 2.0];
 
         cPos = aPos + spacing;
@@ -1367,51 +1326,73 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
 
         bPos = cnvsRect[1] + armWidth;
         setShape(aPos, bPos, cPos, bPos);   //Top line's bottom.
-
-        selectLayers(topText.name, lines.name);
-        topText = createSmartObject();
     }
 
     if(model.spaceLeft) //Create the spec text for left.
     {
+        if(!model.specInPrcntg)
+            distanceValue =  pointsToUnitsString(getScaledValue(bounds[0] - cnvsRect[0]), startRulerUnits);
+        else
+             distanceValue = Math.round((bounds[0] - cnvsRect[0]) / relativeWidth * 10000) / 100 + "%";
+
+        if(textLayer === "")
+        {
+            textLayer = specItemsGroup.artLayers.add();
+            textLayer.kind = LayerKind.TEXT;
+            specText = textLayer.textItem;
+            specText.kind = TextType.POINTTEXT;
+            specText.color.rgb = newColor;
+            specText.font = font;
+            specText.size = model.legendFontSize;
+        }
+        else
+        {
+            textLayer = textLayer.duplicate(textLayer, ElementPlacement.PLACEBEFORE);
+            specText = textLayer.textItem;
+        }
+
         cPos = bounds[3] - height / 2 - spacing;
-        leftText = legendLayer.artLayers.add();
-        leftText.kind = LayerKind.TEXT;
-        specText = leftText.textItem;
-        specText.kind = TextType.POINTTEXT;
         specText.justification = Justification.CENTER;
-        specText.color.rgb = newColor;
-        specText.font = font;
-        specText.size = model.legendFontSize;
-        specText.contents = toLeft;
+        specText.contents = distanceValue;
         specText.position = [(bounds[0] + cnvsRect[0]) / 2.0, cPos - armWidth];
 
         bPos = cPos + spacing;
         lines = createLine(cnvsRect[0], bPos, bounds[0], bPos, newColor);    //Main left line.
-        
+
         bPos = bPos + spacing;
         aPos = bounds[0] - armWidth;
         setShape(aPos, bPos, aPos, cPos);   //Left line's left.
 
         aPos = cnvsRect[0] + armWidth;
         setShape(aPos, bPos, aPos, cPos);   //Left line's right.
-
-        selectLayers(leftText.name, lines.name);
-        leftText = createSmartObject();
     }
 
     if(model.spaceRight)    //Create the spec text for right.
     {
+        if(!model.specInPrcntg)
+            distanceValue =  pointsToUnitsString(getScaledValue(cnvsRect[2] - bounds[2]), startRulerUnits);
+        else
+             distanceValue = Math.round((cnvsRect[2] - bounds[2]) / relativeWidth * 10000) / 100 + "%";
+
+        if(textLayer === "")
+        {
+            textLayer =  specItemsGroup.artLayers.add();
+            textLayer.kind = LayerKind.TEXT;
+            specText = textLayer.textItem;
+            specText.kind = TextType.POINTTEXT;
+            specText.color.rgb = newColor;
+            specText.font = font;
+            specText.size = model.legendFontSize;
+        }
+        else
+        {
+            textLayer = textLayer.duplicate(textLayer, ElementPlacement.PLACEBEFORE);
+            specText = textLayer.textItem;
+        }
+
         cPos = bounds[3] - height / 2 - spacing;
-        rightText =  legendLayer.artLayers.add();
-        rightText.kind = LayerKind.TEXT;
-        specText = rightText.textItem;
-        specText.kind = TextType.POINTTEXT;
         specText.justification = Justification.CENTER;
-        specText.color.rgb = newColor;
-        specText.font = font;
-        specText.size = model.legendFontSize;
-        specText.contents = toRight;
+        specText.contents = distanceValue;
         specText.position = [(bounds[2] + cnvsRect[2]) / 2.0, cPos - armWidth];
 
         bPos = cPos + spacing;
@@ -1422,79 +1403,189 @@ function createSpacingSpecsForSingleItem(artLayer, bounds)
         setShape(aPos, bPos, aPos, cPos);   //Right line's left.
         aPos = cnvsRect[2] - armWidth;
         setShape(aPos, bPos, aPos, cPos);   //Right line's right.
-
-        selectLayers(rightText.name, lines.name);
-        rightText = createSmartObject();
     }
 
     if(model.spaceBottom)   //Create the spec text for bottom.
     {
-        aPos = bounds[0] + width / 2 - spacing;
+        if(artLayer.kind === LayerKind.TEXT && artLayer.textItem.kind === TextType.POINTTEXT)
+        {
+            doc.activeLayer = artLayer;
+            var baseLinePosition = getPointTextBaseLine(artLayer.textItem);
+            bounds[3] = artLayer.textItem.position[1] + baseLinePosition;
+        }
 
-        bottomText = legendLayer.artLayers.add();
-        bottomText.kind = LayerKind.TEXT;
-        specText = bottomText.textItem;
-        specText.kind = TextType.POINTTEXT;
+        if(!model.specInPrcntg)
+            distanceValue =  pointsToUnitsString(getScaledValue(cnvsRect[3] - bounds[3]), startRulerUnits);
+        else
+             distanceValue = Math.round((cnvsRect[3] - bounds[3]) / relativeHeight * 10000) / 100 + "%";
+
+        if(textLayer === "")
+        {
+            textLayer = specItemsGroup.artLayers.add();
+            textLayer.kind = LayerKind.TEXT;
+            specText = textLayer.textItem;
+            specText.kind = TextType.POINTTEXT;
+            specText.color.rgb = newColor;
+            specText.font = font;
+            specText.size = model.legendFontSize;
+        }
+        else
+        {
+            textLayer = textLayer.duplicate(textLayer, ElementPlacement.PLACEBEFORE);
+            specText = textLayer.textItem;
+        }
+
+        aPos = bounds[0] + width / 2 - spacing;
         specText.justification = Justification.RIGHT;
-        specText.color.rgb = newColor;
-        specText.font = font;
-        specText.size = model.legendFontSize;
-        specText.contents = toBottom;
+        specText.contents = distanceValue;
         specText.position = [aPos - armWidth, (bounds[3]+cnvsRect[3])/2.0];
+
         cPos = aPos + spacing;
         lines = createLine(cPos, cnvsRect[3], cPos, bounds[3], newColor);   //Main bottom line.
-        
+
         bPos = bounds[3] + armWidth;
         cPos = cPos + spacing;
         setShape(aPos, bPos, cPos, bPos);   //Bottom line's left.
         bPos = cnvsRect[3] - armWidth;
         setShape(aPos, bPos, cPos, bPos);   //Bottom line's right.
-
-        selectLayers(bottomText.name, lines.name);
-        bottomText = createSmartObject();
     }
-    
+
     //Converting selected layers into single smart object.
-    selectLayers(topText.name, leftText.name, rightText.name, bottomText.name);
-    var spec = createSmartObject();
-    spec.name = "SpacingSpec";
+    doc.activeLayer = specItemsGroup;
+    specItemsGroup = createSmartObject();
     idSpacingSpec = getIDOfLayer();
-    
+
     doc.activeLayer = artLayer;
     setXmpDataForSpec(artLayer, idSpacingSpec, "idSingleSpacingSpec");
-    setXmpDataForSpec(spec, "true", "SpeccedObject");
-    ExternalObject.AdobeXMPScript.unload();
-    
+    setXmpDataForSpec(specItemsGroup, "true", "SpeccedObject");
+
     setPreferences(startRulerUnits, startTypeUnits, originalDPI);      //Setting the original preferences of the document.
+}
+
+//Get text base line position.
+function getPointTextBaseLine(textItem)
+{
+    var imFactor = "";
+    var leading = "", size = "";
+    var kDefaultLeadVal = 120.0, kDefaultFontSize= 12;
+    var isAutoLeading="";
+    
+    var sizeID = stringIDToTypeID("size");
+    var transformID = stringIDToTypeID("transform");
+    var yyID = stringIDToTypeID("yy");
+    var autoLeadingID = stringIDToTypeID("autoLeading");
+
+    var ref = new ActionReference();
+    ref.putEnumerated( charIDToTypeID('Lyr '), charIDToTypeID('Ordn'), charIDToTypeID('Trgt') ); 
+    var desc = executeActionGet(ref).getObjectValue(stringIDToTypeID('textKey'));
+
+    //Character Styles
+    var textStyleRangeID = stringIDToTypeID("textStyleRange");
+    var textStyleID = stringIDToTypeID("textStyle");
+    var txtList = desc.getList(textStyleRangeID);
+    var txtDesc = txtList.getObjectValue(0);
+    
+    if(txtDesc.hasKey(textStyleID)) 
+    {
+        var rangeList = desc.getList(textStyleRangeID);
+        var styleDesc = rangeList.getObjectValue(0).getObjectValue(textStyleID);
+        if(styleDesc.hasKey(sizeID))
+        {
+            size =  styleDesc.getDouble(sizeID);
+            if(desc.hasKey(transformID))
+            {
+                mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
+                size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+            }
+        }
+    
+        if(styleDesc.hasKey(autoLeadingID))
+        {
+            isAutoLeading = styleDesc.getBoolean(autoLeadingID);
+            if(isAutoLeading == false)
+            {
+                 leading = styleDesc.getDouble(stringIDToTypeID("leading"));
+                 if(desc.hasKey(transformID))
+                 {
+                     mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
+                     leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+                 }
+            }
+        }
+    }
+    
+    //Paragraph styles.
+    var paragraphStyleID = stringIDToTypeID("paragraphStyle");
+    var defaultStyleID = stringIDToTypeID("defaultStyle");
+    var paraList = desc.getList(stringIDToTypeID("paragraphStyleRange"));
+    var paraDesc = paraList.getObjectValue(0);
+    if (paraDesc.hasKey(paragraphStyleID)) 
+    {
+        var paraStyle = paraDesc.getObjectValue(paragraphStyleID);
+        if(paraStyle.hasKey(defaultStyleID)) 
+        {
+            var defStyle = paraStyle.getObjectValue(defaultStyleID);
+            if(size === " " && defStyle.hasKey(sizeID))
+            {
+                size = defStyle.getDouble(sizeID);
+                if(desc.hasKey(transformID))
+                {
+                    var mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
+                    size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+                }
+            }
+            if (leading === "" && defStyle.hasKey(autoLeadingID))
+            {
+                isAutoLeading = defStyle.getBoolean(autoLeadingID);
+                if(isAutoLeading == false)
+                {
+                    leading = defStyle.getDouble(stringIDToTypeID("leading"));
+                    if(desc.hasKey(transformID))
+                    {
+                        mFactor = desc.getObjectValue(transformID).getUnitDoubleValue(yyID);
+                        leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+                    }
+                 }
+             }
+        }
+    }
+
+    if(leading == "" || isAutoLeading == true)
+        leading =  size / 100 * Math.round(kDefaultLeadVal);
+
+    leading = Math.round(leading * 100) / 100;
+    
+    var contents = textItem.contents;
+    contents = contents.replace(/^\s+|\s+$/gm,'');                  //Trim the spaces.
+    var lastChar = contents.charAt (contents.length - 1);
+    while(lastChar === "\u0003" || lastChar === "\r")
+    {
+        contents = contents.slice (0, contents.length - 1);
+        lastChar = contents.charAt (contents.length - 1);
+    }
+
+    var lines = contents.split(/[\u0003\r]/);  //Splitting content from Enter or Shift+Enter.
+    return (lines.length - 1) * leading;
 }
 
 //Create the number of spec.
 function createNumber(legendLayer, number, font)
 {
-    try
-    {
-        //Color of the number over the circle.
-        var txtColor = new RGBColor();
-        txtColor.red = 255;
-        txtColor.blue = 255;
-        txtColor.green = 255;
-        
-        //Create the circle with number over it.
-        var txt =  legendLayer.artLayers.add();
-        txt.kind = LayerKind.TEXT;
-        var specText = txt.textItem;
-        specText.kind = TextType.POINTTEXT;
-        specText.color.rgb = txtColor;
-        specText.font = font;
-        specText.size = model.legendFontSize;
-        specText.contents = number;
-        specText.fauxBold = true;
-        return txt;
-    }
-    catch(e)
-    { 
-        return null;
-    }
+    //Color of the number over the circle.
+    var color = new RGBColor();
+    color.hexValue = "ffffff";
+
+    //Create the circle with number over it.
+    var txt =  legendLayer.artLayers.add();
+    txt.kind = LayerKind.TEXT;
+    var specText = txt.textItem;
+    specText.kind = TextType.POINTTEXT;
+    specText.color.rgb = color;
+    specText.font = font;
+    specText.size = model.legendFontSize;
+    specText.contents = number;
+    specText.fauxBold = true;
+    return txt;
 }
 
 //Suspend the history of creating properties spec of layers.
@@ -1503,13 +1594,27 @@ function createPropertySpecsForItem()
     try
     {
         var sourceItem = getActiveLayer();
-        var bounds = returnBounds(sourceItem);
+        if(sourceItem === null)
+            return;
+
+        var pref = app.preferences;
+        var startRulerUnits = pref.rulerUnits; 
+        pref.rulerUnits = Units.PIXELS;
+        var ref = new ActionReference();
+        ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+        var layer = executeActionGet(ref);
+        if(layer.hasKey(stringIDToTypeID('layerEffects')) && layer.getBoolean(stringIDToTypeID('layerFXVisible')))
+            var bounds = returnBounds(sourceItem);
+        else
+            bounds = sourceItem.bounds;
+
+        pref.rulerUnits = startRulerUnits;
         app.activeDocument.suspendHistory('Property Specs', 'createPropertySpecs(sourceItem, bounds)');
     }
     catch(e)
     {}
 }
-    
+
 //Get the property of selected layer and show it on active document.
 function createPropertySpecs(sourceItem, bounds)
 {
@@ -1521,10 +1626,10 @@ function createPropertySpecs(sourceItem, bounds)
     var idBullet, bullet, dupBullet, idDupBullet;
     var number = -1;
     var noOfSpec;
-    
+
 	if(artLayer.typename === 'LayerSet')
 		return;
-    
+
  	if(ExternalObject.AdobeXMPScript == null)
 		ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
 	
@@ -1540,7 +1645,6 @@ function createPropertySpecs(sourceItem, bounds)
          if(spec == artLayer || bullet == artLayer || dupBullet == artLayer)
          {
             doc.activeLayer = artLayer;
-            ExternalObject.AdobeXMPScript.unload();
             return;
          }
         
@@ -1548,18 +1652,16 @@ function createPropertySpecs(sourceItem, bounds)
          {
             idLayer = getXMPData(artLayer, "idLayer");
             lyr = getLayerByID(idLayer);
-            
+
             if(lyr != null)
                 updateSpec(lyr, spec, idLayer, bullet, dupBullet, bounds);
-            
+
             try
             {
                 doc.activeLayer = artLayer;
             }
             catch(e)
             {}
-            
-            ExternalObject.AdobeXMPScript.unload();
             return;
          }
          else
@@ -1576,24 +1678,9 @@ function createPropertySpecs(sourceItem, bounds)
                   catch(e)
                   {}
               }
-           
-            //remove metadata stored in activeLayer
-            var layerXMP = new XMPMeta(artLayer.xmpMetadata.rawData );
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idLayer");
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idSpec");
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idBullet");
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idDupBullet");
-            layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "number");
-            artLayer.xmpMetadata.rawData = layerXMP.serialize();
          }
      }
 
-	//Save the current preferences
-    var startTypeUnits = app.preferences.typeUnits; 
-	var startRulerUnits = app.preferences.rulerUnits;
-	app.preferences.rulerUnits = Units.PIXELS;
-	var originalDPI = doc.resolution;
-        
      try
     {
         doc.activeLayer = artLayer;
@@ -1608,9 +1695,10 @@ function createPropertySpecs(sourceItem, bounds)
         {
             noOfSpec = 0;
         }
-        
-        idLayer = getIDOfLayer();				                                    //Get unique ID of selected layer.
+
+        idLayer = getIDOfLayer();   //Get unique ID of selected layer.
         var artLayerBounds = bounds;
+        var name = artLayer.name;
 
         var legendLayer;
         switch(sourceItem.kind)
@@ -1625,6 +1713,9 @@ function createPropertySpecs(sourceItem, bounds)
                     number = noOfSpec;
                 }
                 legendLayer.name = "Text Spec "+number;
+                var wordsArray = name.split(" ");
+                if(wordsArray.length > 2)
+                    name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
                 break;
          
             case LayerKind.GRADIENTFILL:
@@ -1652,16 +1743,19 @@ function createPropertySpecs(sourceItem, bounds)
 
         if (infoText === "") 
             return;
+
+        //Save the current preferences
+        var startTypeUnits = app.preferences.typeUnits; 
+        var startRulerUnits = app.preferences.rulerUnits;
+        var originalDPI = doc.resolution;
+        setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
         
-        var name = artLayer.name;
         var nameLength = name.length;
         infoText = "\r"+name+infoText;
-        app.preferences.typeUnits = TypeUnits.PIXELS;
-        doc.resizeImage(null, null, 72, ResampleMethod.NONE);
         var spacing = 10;
         var isLeft, pos;
         var centerX = (artLayerBounds[0] + artLayerBounds[2]) / 2;             //Get the center of item.
-        var font = getFont();
+        var font = model.legendFont;
 
         //Create spec text for art object.
         var spec = legendLayer.artLayers.add();
@@ -1713,7 +1807,7 @@ function createPropertySpecs(sourceItem, bounds)
 
         dupBullet.name = "Spec Bullet";
         spec.link(dupBullet);
-      
+
         legendLayer.visible = true;
         bullet.visible = true;
         dupBullet.visible = true;
@@ -1721,25 +1815,19 @@ function createPropertySpecs(sourceItem, bounds)
 
         if(cssText === "")
             cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
-            
+
         setXmpDataOfLayer(artLayer, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfLayer(spec, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfLayer(bullet, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfLayer(dupBullet, idLayer, idSpec, idBullet, idDupBullet, number);
         setXmpDataOfDoc(doc, noOfSpec);
         setXmpDataForSpec(spec, cssText, "css");
-        
-        ExternalObject.AdobeXMPScript.unload();
     }
     catch(e)
     {}
-    
+
     doc.activeLayer = artLayer;
-    doc.resizeImage(null, null, originalDPI, ResampleMethod.NONE);
-    
-	//Reset the application preferences
-    app.preferences.rulerUnits = startRulerUnits;
-    app.preferences.typeUnits = startTypeUnits;
+    setPreferences(startRulerUnits, startTypeUnits, originalDPI);
 }
 
 //Update the property spec of the layer whose spec is already present.
@@ -1756,7 +1844,7 @@ function updateSpec(lyr, spec, idLayer, bullet, dupBullet, bounds)
     var spacing = 10;
     var newColor = legendColorObject();
     var infoText, isBulletCreated;
-    var font = getFont();
+    var font = model.legendFont;
     var artLayerBounds = bounds;
     var number, pos, idDupBullet, idBullet;
 
@@ -1882,10 +1970,21 @@ function createCoordinateSpecs()
     try
     {
         var sourceItem = getActiveLayer();
-        if(sourceItem == null || !startUpCheckBeforeSpeccing(sourceItem))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
+        if(sourceItem === null || !startUpCheckBeforeSpeccing(sourceItem))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
             return;
         
-        var bounds = returnBounds(sourceItem);
+        var pref = app.preferences;
+        var startRulerUnits = pref.rulerUnits; 
+        pref.rulerUnits = Units.PIXELS;
+        var ref = new ActionReference();
+        ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+        var layer = executeActionGet(ref);
+        if(layer.hasKey(stringIDToTypeID('layerEffects')) && layer.getBoolean(stringIDToTypeID('layerFXVisible')))
+            var bounds = returnBounds(sourceItem);
+        else
+            bounds = sourceItem.bounds;
+
+        pref.rulerUnits = startRulerUnits;
         app.activeDocument.suspendHistory('Coordinate Info', 'createCoordinates(sourceItem, bounds)');
     }
     catch(e)
@@ -1926,7 +2025,7 @@ function createCoordinates(sourceItem, bounds)
         var originalDPI = doc.resolution;
         setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
     
-        var font = getFont();
+        var font = model.legendFont;
         var newColor = legendColorSpacing();
         var left = "", top = "";
         
@@ -2533,57 +2632,43 @@ function getSpecsInfoForPathItem(pageItem)
 //To get the bounds of layer.
 function getBounds(artLayer)
 {
-    // Save the current preferences
-	var startRulerUnits = app.preferences.rulerUnits;
-	var startTypeUnits = app.preferences.typeUnits;
-	app.preferences.rulerUnits = Units.PIXELS;
-	app.preferences.typeUnits = TypeUnits.PIXELS;
-    
     var desc, ref, list;
     try
     {
         app.activeDocument.activeLayer = artLayer;
         ref = new ActionReference();
         ref.putEnumerated(charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ));
-        if(executeActionGet(ref).hasKey(stringIDToTypeID('layerEffects')) && executeActionGet(ref).getBoolean(stringIDToTypeID('layerFXVisible')))
+        var layerEffectDesc = executeActionGet(ref).getObjectValue(stringIDToTypeID('layerEffects'));
+        if(layerEffectDesc.hasKey(stringIDToTypeID('dropShadow')))
         {
-            var layerEffectDesc = executeActionGet(ref).getObjectValue(stringIDToTypeID('layerEffects'));
-            if(layerEffectDesc.hasKey(stringIDToTypeID('dropShadow')))
-            {
-                desc = new ActionDescriptor();
-                list = new ActionList();
-                ref = new ActionReference();
-                ref.putClass( charIDToTypeID( "DrSh" ) );
-                ref.putEnumerated(charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ));
-                list.putReference( ref );
-                desc.putList( charIDToTypeID( "null" ), list );
-                executeAction( charIDToTypeID( "Hd  " ), desc, DialogModes.NO );
-            }
-            if(layerEffectDesc.hasKey(stringIDToTypeID('outerGlow')))
-            {
-                desc = new ActionDescriptor();
-                list = new ActionList();
-                ref = new ActionReference();
-                ref.putClass( charIDToTypeID( "OrGl" ) );
-                ref.putEnumerated(charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ));
-                list.putReference( ref );
-                desc.putList( charIDToTypeID( "null" ), list );
-                executeAction( charIDToTypeID( "Hd  " ), desc, DialogModes.NO );
-            }
+            desc = new ActionDescriptor();
+            list = new ActionList();
+            ref = new ActionReference();
+            ref.putClass( charIDToTypeID( "DrSh" ) );
+            ref.putEnumerated(charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ));
+            list.putReference( ref );
+            desc.putList( charIDToTypeID( "null" ), list );
+            executeAction( charIDToTypeID( "Hd  " ), desc, DialogModes.NO );
         }
-        
+        if(layerEffectDesc.hasKey(stringIDToTypeID('outerGlow')))
+        {
+            desc = new ActionDescriptor();
+            list = new ActionList();
+            ref = new ActionReference();
+            ref.putClass( charIDToTypeID( "OrGl" ) );
+            ref.putEnumerated(charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ));
+            list.putReference( ref );
+            desc.putList( charIDToTypeID( "null" ), list );
+            executeAction( charIDToTypeID( "Hd  " ), desc, DialogModes.NO );
+        }
+
         artLayer = createSmartObject();
     }
     catch(e)
     {}
-    
-    lyrBound = artLayer.bounds;
-    
-    // Reset the application preferences
-	app.preferences.rulerUnits = startRulerUnits;
-	app.preferences.typeUnits = startTypeUnits;
-}
 
+    lyrBound = artLayer.bounds;
+}
 
 // Return bounds of the layer.
 function returnBounds(artLayer)
@@ -2591,7 +2676,7 @@ function returnBounds(artLayer)
     try
     {
         app.activeDocument.suspendHistory('Get Bounds','getBounds(artLayer)');     // get bounds of layer.
-        executeAction( charIDToTypeID('undo'), undefined, DialogModes.NO);
+        executeAction(charIDToTypeID('undo'), undefined, DialogModes.NO);
         return lyrBound;
     }
     catch(e)
@@ -2743,18 +2828,16 @@ function getColor(colorDesc)
 //Get the default color value.
 function getDefaultColor()
 {
-    var color = new SolidColor();
-    color.rgb.red = 0;
-    color.rgb.green = 0;
-    color.rgb.blue = 0;
-    return color;
+    var newColor = new RGBColor();
+    newColor.hexValue = "000000";
+    return newColor;
 }
 
 //Get the properties of the text item.
 function getSpecsInfoForTextItem(pageItem)
 {
     var textItem = pageItem.textItem;
-    var infoText = "", color="";
+    var infoText = "", color="", mFactor = "";
     var alpha = "", leading = "", size = "", font = "";
     var kDefaultLeadVal = 120.0, kDefaultFontVal='MyriadPro-Regular', kDefaultFontSize= 12;
     var underline = "", strike = "", bold = "",  italic = "";
@@ -2762,104 +2845,116 @@ function getSpecsInfoForTextItem(pageItem)
 
     try
     {
+        var sizeID = stringIDToTypeID("size");
+        var transformID = stringIDToTypeID("transform");
+        var yyID = stringIDToTypeID("yy");
+        var fontPostScriptID = stringIDToTypeID("fontPostScriptName");
+        var trackingID = stringIDToTypeID("tracking");
+        var underlineID = stringIDToTypeID("underline");
+        var strikethroughID = stringIDToTypeID("strikethrough");
+        var syntheticBoldID = stringIDToTypeID("syntheticBold");
+        var syntheticItalicID = stringIDToTypeID("syntheticItalic");
+        var autoLeadingID = stringIDToTypeID("autoLeading");
+        var colorID = stringIDToTypeID("color");
+
         var ref = new ActionReference();
         ref.putEnumerated( charIDToTypeID('Lyr '), charIDToTypeID('Ordn'), charIDToTypeID('Trgt') ); 
         var desc = executeActionGet(ref).getObjectValue(stringIDToTypeID('textKey'));
-        
+
         //Character Styles
-        var txtList = desc.getList(stringIDToTypeID( "textStyleRange" ) );
-        var txtDesc = txtList.getObjectValue( 0 );
-        if(txtDesc.hasKey(stringIDToTypeID("textStyle"))) 
+        var textStyleRangeID = stringIDToTypeID("textStyleRange");
+        var textStyleID = stringIDToTypeID("textStyle");
+        var txtList = desc.getList(textStyleRangeID);
+        var txtDesc = txtList.getObjectValue(0);
+        if(txtDesc.hasKey(textStyleID)) 
         {
-            var rangeList = desc.getList(stringIDToTypeID('textStyleRange'));
-            var styleDesc = rangeList.getObjectValue(0).getObjectValue(stringIDToTypeID('textStyle'));
-            if(styleDesc.hasKey(stringIDToTypeID("size")))
+            var rangeList = desc.getList(textStyleRangeID);
+            var styleDesc = rangeList.getObjectValue(0).getObjectValue(textStyleID);
+            if(styleDesc.hasKey(sizeID))
             {
-                size =  styleDesc.getDouble(stringIDToTypeID('size'));
-                if(desc.hasKey(stringIDToTypeID('transform')))
+                size =  styleDesc.getDouble(sizeID);
+                if(desc.hasKey(transformID))
                 {
-                    var mFactor = desc.getObjectValue(stringIDToTypeID('transform')).getUnitDoubleValue (stringIDToTypeID('yy') );
+                    mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
                     size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                 }
             }
-            if(styleDesc.hasKey(stringIDToTypeID("fontPostScriptName")))
-                font =  styleDesc.getString(stringIDToTypeID('fontPostScriptName'));
-            if(styleDesc.hasKey(stringIDToTypeID("tracking")))
-                tracking =  styleDesc.getString(stringIDToTypeID('tracking'));
-            if(styleDesc.hasKey(stringIDToTypeID("underline")))
-                underline = typeIDToStringID(styleDesc.getEnumerationValue( stringIDToTypeID("underline") ));
-            if(styleDesc.hasKey(stringIDToTypeID("strikethrough")))
-                strike = typeIDToStringID(styleDesc.getEnumerationValue( stringIDToTypeID("strikethrough") ));
-            if(styleDesc.hasKey(stringIDToTypeID("syntheticBold")))
-                bold = styleDesc.getBoolean( stringIDToTypeID("syntheticBold") );
-            if(styleDesc.hasKey(stringIDToTypeID("syntheticItalic")))
-                italic = styleDesc.getBoolean( stringIDToTypeID("syntheticItalic"));
-            if(styleDesc.hasKey(stringIDToTypeID("autoLeading")))
+            if(styleDesc.hasKey(fontPostScriptID))
+                font =  styleDesc.getString(fontPostScriptID);
+            if(styleDesc.hasKey(trackingID))
+                tracking =  styleDesc.getString(trackingID);
+            if(styleDesc.hasKey(underlineID))
+                underline = typeIDToStringID(styleDesc.getEnumerationValue(underlineID));
+            if(styleDesc.hasKey(strikethroughID))
+                strike = typeIDToStringID(styleDesc.getEnumerationValue(strikethroughID));
+            if(styleDesc.hasKey(syntheticBoldID))
+                bold = styleDesc.getBoolean(syntheticBoldID);
+            if(styleDesc.hasKey(syntheticItalicID))
+                italic = styleDesc.getBoolean(syntheticItalicID);
+            if(styleDesc.hasKey(autoLeadingID))
             {
-                isAutoLeading = styleDesc.getBoolean(stringIDToTypeID("autoLeading"));
+                isAutoLeading = styleDesc.getBoolean(autoLeadingID);
                 if(isAutoLeading == false)
                 {
                      leading = styleDesc.getDouble(stringIDToTypeID("leading"));
-                     if(desc.hasKey(stringIDToTypeID('transform')))
+                     if(desc.hasKey(transformID))
                      {
-                         var mFactor = desc.getObjectValue(stringIDToTypeID('transform')).getUnitDoubleValue (stringIDToTypeID('yy') );
+                         mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
                          leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                      }
                 }
             }
-             
-             if(styleDesc.hasKey(stringIDToTypeID("color"))) 
-                color = getColor(styleDesc.getObjectValue(stringIDToTypeID("color")));
+             if(styleDesc.hasKey(colorID)) 
+                color = getColor(styleDesc.getObjectValue(colorID));
         }
-        
+
         //Paragraph styles.
+        var paragraphStyleID = stringIDToTypeID("paragraphStyle");
+        var defaultStyleID = stringIDToTypeID("defaultStyle");
         var paraList = desc.getList(stringIDToTypeID("paragraphStyleRange"));
-        var paraDesc = paraList.getObjectValue( 0 );
-        if (paraDesc.hasKey(stringIDToTypeID("paragraphStyle") ) ) 
+        var paraDesc = paraList.getObjectValue(0);
+        if (paraDesc.hasKey(paragraphStyleID)) 
         {
-            var paraStyle = paraDesc.getObjectValue( stringIDToTypeID("paragraphStyle") );
-            if(paraStyle.hasKey( stringIDToTypeID("defaultStyle") ) ) 
+            var paraStyle = paraDesc.getObjectValue(paragraphStyleID);
+            if(paraStyle.hasKey(defaultStyleID)) 
             {
-                var defStyle = paraStyle.getObjectValue(stringIDToTypeID("defaultStyle") );
-                if(font=="" && defStyle.hasKey(stringIDToTypeID("fontPostScriptName") ) ) 
-                    font= defStyle.getString(stringIDToTypeID("fontPostScriptName") );
-                if(size == "" && defStyle.hasKey(stringIDToTypeID("size") ) )
+                var defStyle = paraStyle.getObjectValue(defaultStyleID);
+                if(font === "" && defStyle.hasKey(fontPostScriptID)) 
+                    font = defStyle.getString(fontPostScriptID);
+                if(size === " " && defStyle.hasKey(sizeID))
                 {
-                    size = defStyle.getDouble( stringIDToTypeID("size") );
-                    if(desc.hasKey(stringIDToTypeID('transform')))
+                    size = defStyle.getDouble(sizeID);
+                    if(desc.hasKey(transformID))
                     {
-                        var mFactor = desc.getObjectValue(stringIDToTypeID('transform')).getUnitDoubleValue (stringIDToTypeID('yy') );
+                        var mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
                         size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                     }
                 }
-                if(tracking == "" && defStyle.hasKey( stringIDToTypeID("tracking") ) )
-                    tracking = defStyle.getInteger( stringIDToTypeID("tracking") );
-                if(underline == "" && defStyle.hasKey( stringIDToTypeID("underline") ) )
-                    underline = typeIDToStringID(defStyle.getEnumerationValue( stringIDToTypeID("underline") ));
-                if (strike == "" && defStyle.hasKey( stringIDToTypeID("strikethrough") ) )
-                    strike = typeIDToStringID(defStyle.getEnumerationValue( stringIDToTypeID("strikethrough")) );
-                if (bold == "" && defStyle.hasKey( stringIDToTypeID("syntheticBold") ) )
-                    bold = defStyle.getBoolean( stringIDToTypeID("syntheticBold"));
-                if (italic == "" && defStyle.hasKey( stringIDToTypeID("syntheticItalic") ) )
-                    italic = defStyle.getBoolean( stringIDToTypeID("syntheticItalic"));
-
-                if (leading == "" && defStyle.hasKey( stringIDToTypeID("autoLeading") ) )
+                if(tracking === "" && defStyle.hasKey(trackingID))
+                    tracking = defStyle.getInteger(trackingID);
+                if(underline === "" && defStyle.hasKey(underlineID))
+                    underline = typeIDToStringID(defStyle.getEnumerationValue(underlineID));
+                if (strike === "" && defStyle.hasKey(strikethroughID))
+                    strike = typeIDToStringID(defStyle.getEnumerationValue(strikethroughID));
+                if (bold === "" && defStyle.hasKey(syntheticBoldID))
+                    bold = defStyle.getBoolean(syntheticBoldID);
+                if (italic === "" && defStyle.hasKey(syntheticItalicID))
+                    italic = defStyle.getBoolean(syntheticItalicID);
+                if (leading === "" && defStyle.hasKey(autoLeadingID))
                 {
-                    isAutoLeading = defStyle.getBoolean( stringIDToTypeID("autoLeading"));
+                    isAutoLeading = defStyle.getBoolean(autoLeadingID);
                     if(isAutoLeading == false)
                     {
-                        leading = defStyle.getDouble( stringIDToTypeID("leading"));
-                        if(desc.hasKey(stringIDToTypeID('transform')))
+                        leading = defStyle.getDouble(stringIDToTypeID("leading"));
+                        if(desc.hasKey(transformID))
                         {
-                            var mFactor = desc.getObjectValue(stringIDToTypeID('transform')).getUnitDoubleValue (stringIDToTypeID('yy') );
+                            mFactor = desc.getObjectValue(transformID).getUnitDoubleValue(yyID);
                             leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                         }
                      }
-
                  }
-                
-                if (color == "" && defStyle.hasKey(stringIDToTypeID("color"))) 
-                    color = getColor(defStyle.getObjectValue(stringIDToTypeID("color")));
+                if (color === "" && defStyle.hasKey(colorID)) 
+                    color = getColor(defStyle.getObjectValue(colorID));
             }
         }
     }
@@ -2874,8 +2969,13 @@ function getSpecsInfoForTextItem(pageItem)
         if(model.textAlpha)
             alpha = Math.round(pageItem.opacity)/100 ;
 
-        cssText = pageItem.name.toLowerCase()+" {";
-        
+        var name = pageItem.name;
+        var wordsArray = name.split(" ");
+        if(wordsArray.length > 2)
+            name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
+
+        cssText = name.toLowerCase()+" {";
+
         //Get the text font and concat it in text info,
         if (model.textFont)
         {
@@ -3491,25 +3591,6 @@ function createSmartObject()
     }
 }
 
-//Get the post script name of the font.
-function getFont()
-{
-	var postScriptName = "Myriad Pro-Regular";
-	var font = app.fonts;
-	var appFontLength = font.length;
-	//Set the spec text properties.
-	for (var i = 0; i < appFontLength; i++)
-	{
-		if(font[i].name == model.legendFont)
-		{
-			postScriptName = font[i].postScriptName;
-			break;
-		}
-	}
-
-	return postScriptName;
-}
-
 //This function create the artlayer set named 'Specctr', if not created.
 function legendLayer()
 {
@@ -3636,31 +3717,25 @@ function legendCoordinateLayer()
 //Get the color to apply on the properties specs of text layer.
 function legendColorType()
 {
-	var newColor = new RGBColor();
-	newColor.red = rChannel(model.legendColorType);
-	newColor.blue = bChannel(model.legendColorType);
-	newColor.green = gChannel(model.legendColorType);
-	return newColor;
+    var newColor = new RGBColor();
+    newColor.hexValue = model.legendColorType.substring(1, 7);
+    return newColor;
 }
  
 //Get the color to apply on the spacing specs.
 function legendColorSpacing()
 {
-	var newColor = new RGBColor();
-	newColor.red = rChannel(model.legendColorSpacing);
-	newColor.blue = bChannel(model.legendColorSpacing);
-	newColor.green = gChannel(model.legendColorSpacing);
-	return newColor;
+    var newColor = new RGBColor();
+    newColor.hexValue = model.legendColorSpacing.substring(1, 7);
+    return newColor;
 }
 
 //Get the color to apply on the properties specs of shape layer.
 function legendColorObject()
 {
-	var newColor = new RGBColor();
-	newColor.red = rChannel(model.legendColorObject);
-	newColor.blue = bChannel(model.legendColorObject);
-	newColor.green = gChannel(model.legendColorObject);
-	return newColor;
+    var newColor = new RGBColor();
+    newColor.hexValue = model.legendColorObject.substring(1, 7);
+    return newColor;
 }
 
 //Set position of border before the particular layer in Layer panel.
@@ -3674,24 +3749,6 @@ function placeBorderBefore(lyr)
     catch(e)
     {}
 }
-
-//Get the red color value from the color hex value.
-function rChannel(value)
-{
-	return parseInt(value.substring(1, 3), 16);
-}
-
-//Get the green color value from the color hex value.
-function gChannel(value) 
-{
-	return parseInt(value.substring(3, 5), 16);
-}
-
-//Get the blue color value from the color hex value.
-function bChannel(value)
-{
-	return parseInt(value.substring(5, 7), 16);
-} 
 
 //Calculate the diameter of circle.
 function circleDiameter(strokeWidth)
