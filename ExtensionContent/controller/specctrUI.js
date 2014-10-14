@@ -451,17 +451,9 @@ function createDialog() {
 		autoOpen : false,
 		resizable: false,
 		width : 200,
-		height : 100,
+		height : 60,
 		modal : true,
-		buttons : [ {
-			text : "Ok",
-			style : "margin-right:40px;",
-			click : hideDialog
-		}, {
-			text : "Cancel",
-			style : "margin-right:20px;",
-			click : hideDialog
-		} ]
+		buttons : []
 	});
 }
 
