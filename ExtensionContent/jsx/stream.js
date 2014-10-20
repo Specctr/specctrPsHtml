@@ -47,7 +47,7 @@ Stream.prototype.eof = function() {
 };
 
 /**
- * Read the bytes of the .aco file.
+ * Read the byte of the .aco file.
  */
 Stream.prototype.readByte = function() {
   var self = this;
@@ -58,6 +58,9 @@ Stream.prototype.readByte = function() {
   return c;
 };
 
+/**
+ * Convert bytes into char of the .aco file.
+ */
 Stream.prototype.readInt16 = function() {
   var self = this;
   var hi = self.readByte();
@@ -65,6 +68,9 @@ Stream.prototype.readInt16 = function() {
   return (hi << 8) + lo;
 };
 
+/**
+ * Read words from .aco file.
+ */
 Stream.prototype.readWord = function() {
   var self = this;
   var hi = self.readInt16();
@@ -72,6 +78,9 @@ Stream.prototype.readWord = function() {
   return (hi << 16) + lo;
 };
 
+/**
+ * Retrieve color swatches name from .aco file.
+ */
 Stream.prototype.readUnicode = function(readPad) {
   var self = this;
 
@@ -87,7 +96,7 @@ Stream.prototype.readUnicode = function(readPad) {
     }
   }
   if (readPad != false) {
-    self.readInt16(); // null pad
+    self.readInt16();
   }
   return s;
 };
