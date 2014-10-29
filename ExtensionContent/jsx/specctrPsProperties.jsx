@@ -334,7 +334,7 @@ $.specctrPsProperties = {
             this.setXmpDataOfLayer(dupBullet, idLayer, idSpec, idBullet, idDupBullet, number);
             this.setXmpDataOfLayer(bullet, idLayer, idSpec, idBullet, idDupBullet, number);
             this.setXmpDataOfLayer (spec, idLayer, idSpec, idBullet, idDupBullet, number);
-            this.setXmpDataForSpec(spec, cssText, "css");
+            $.specctrPsCommon.setXmpDataForSpec(spec, cssText, "css");
         } catch(e) {}
         
         doc.resizeImage(null, null, originalDPI, ResampleMethod.NONE);
