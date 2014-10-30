@@ -84,7 +84,7 @@ $.specctrPsCoordinates = {
                 left = Math.round(bounds[0]/relativeLeft*10000)/100 + "%";
                 top = Math.round(bounds[1]/relativeTop*10000)/100 + "%";
             }
-            
+
             var styleText = "\tleft: " + left + ";\r\ttop: " + top + ";";
             var doc = app.activeDocument;
             var spacing = 3+model.armWeight;
@@ -106,17 +106,17 @@ $.specctrPsCoordinates = {
             
             var line = "";
             if(sourceItem.kind == LayerKind.TEXT) {
-                specText.position = [sourceItem.textItem.position[0]-spacing-model.armWeight/2, sourceItem.textItem.position[1]-spacing+model.armWeight];
+                specText.position = [bounds[0]-spacing-model.armWeight/2, sourceItem.textItem.position[1]-spacing+model.armWeight];
                 spacing = spacing+5;
-                line = $.specctrPsCommon.createLine(sourceItem.textItem.position[0]-spacing-model.armWeight, 
+                line = $.specctrPsCommon.createLine(bounds[0]-spacing-model.armWeight, 
                                                         sourceItem.textItem.position[1]+model.armWeight, 
-                                                            sourceItem.textItem.position[0]+spacing,
+                                                            bounds[0]+spacing,
                                                                 sourceItem.textItem.position[1]+model.armWeight,
                                                                     newColor);     //Horizontal line.
                                                                 
-                $.specctrPsCommon.setShape(sourceItem.textItem.position[0]-model.armWeight, 
+                $.specctrPsCommon.setShape(bounds[0]-model.armWeight, 
                                         sourceItem.textItem.position[1]-spacing, 
-                                            sourceItem.textItem.position[0]-model.armWeight, 
+                                            bounds[0]-model.armWeight, 
                                                 sourceItem.textItem.position[1]+spacing+model.armWeight);        //Vertical line
             } else {
                 specText.position =[bounds[0]-spacing, bounds[1]-spacing];
@@ -126,7 +126,7 @@ $.specctrPsCoordinates = {
                                                             bounds[0]+spacing, 
                                                                 bounds[1]-model.armWeight/2, 
                                                                     newColor);     //Horizontal line.
-                                                                
+                                                                    
                 $.specctrPsCommon.setShape(bounds[0]-model.armWeight/2, 
                                         bounds[1]-spacing, 
                                             bounds[0]-model.armWeight/2, 
