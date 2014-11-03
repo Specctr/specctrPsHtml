@@ -10,7 +10,7 @@ $.specctrPsCoordinates = {
             var sourceItem = $.specctrPsCommon.getActiveLayer();
             if(sourceItem === null || !$.specctrPsCommon.startUpCheckBeforeSpeccing(sourceItem))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
                 return;
-            
+
             var pref = app.preferences;
             var startRulerUnits = pref.rulerUnits; 
             pref.rulerUnits = Units.PIXELS;
@@ -81,20 +81,22 @@ $.specctrPsCoordinates = {
                 else
                     relativeLeft = orgnlCanvas[2];
 
-                left = Math.round(bounds[0]/relativeLeft*10000)/100 + "%";
-                top = Math.round(bounds[1]/relativeTop*10000)/100 + "%";
+                left = Math.round(bounds[0] / relativeLeft * 10000) / 100 + "%";
+                top = Math.round(bounds[1] / relativeTop * 10000) / 100 + "%";
             }
 
             var styleText = "\tleft: " + left + ";\r\ttop: " + top + ";";
             var doc = app.activeDocument;
-            var spacing = 3+model.armWeight;
+            var spacing = 3 + model.armWeight;
             var legendLayer = $.specctrPsCommon.legendSpecLayer("Coordinates").layerSets.add();            //To create the layer group for coordinate layer.
             legendLayer.name = "Specctr Coordinates Mark";
         
             var lines = "", coordinateText = "";
-        
+            var spec = legendLayer.layerSets.add();
+            spec.name = "CoordinatesSpec";
+            
             //Create the spec text for top.
-            coordinateText = legendLayer.artLayers.add();
+            coordinateText = spec.artLayers.add();
             coordinateText.kind = LayerKind.TEXT;
             var specText = coordinateText.textItem;
             specText.kind = TextType.POINTTEXT;
@@ -102,40 +104,43 @@ $.specctrPsCoordinates = {
             specText.color.rgb = newColor;
             specText.font = font;
             specText.size = model.legendFontSize;
-            specText.contents = "x: "+left+" y: "+top;
+            specText.contents = "x: " + left + " y: " + top;
             
             var line = "";
-            if(sourceItem.kind == LayerKind.TEXT) {
-                specText.position = [bounds[0]-spacing-model.armWeight/2, sourceItem.textItem.position[1]-spacing+model.armWeight];
-                spacing = spacing+5;
-                line = $.specctrPsCommon.createLine(bounds[0]-spacing-model.armWeight, 
-                                                        sourceItem.textItem.position[1]+model.armWeight, 
-                                                            bounds[0]+spacing,
-                                                                sourceItem.textItem.position[1]+model.armWeight,
-                                                                    newColor);     //Horizontal line.
-                                                                
-                $.specctrPsCommon.setShape(bounds[0]-model.armWeight, 
-                                        sourceItem.textItem.position[1]-spacing, 
-                                            bounds[0]-model.armWeight, 
-                                                sourceItem.textItem.position[1]+spacing+model.armWeight);        //Vertical line
+            var aPos, bPos, cPos;
+            if(sourceItem.kind === LayerKind.TEXT) {
+
+                if(sourceItem.textItem.kind === TextType.PARAGRAPHTEXT) {
+                    aPos = sourceItem.textItem.position[1] - model.armWeight;
+                    cPos = sourceItem.textItem.position[1] - model.armWeight / 2;
+                } else {
+                    aPos = sourceItem.textItem.position[1] + model.armWeight;
+                    cPos = sourceItem.textItem.position[1];
+                }
+
+                bPos = bounds[0] - spacing;
+                specText.position = [bPos - model.armWeight / 2, aPos - spacing];
+                spacing = spacing + 5;
+                bPos = bPos - 5;
+                line = $.specctrPsCommon.createLine(bPos - model.armWeight,  aPos, 
+                                                            bounds[0] + spacing, aPos, newColor);     //Horizontal line.
+
+                aPos = bounds[0] - model.armWeight;
+                $.specctrPsCommon.setShape(aPos, cPos - spacing, aPos, 
+                                                cPos + spacing);        //Vertical line
             } else {
-                specText.position =[bounds[0]-spacing, bounds[1]-spacing];
-                spacing = spacing+5;
-                line = $.specctrPsCommon.createLine(bounds[0]-spacing, 
-                                                        bounds[1]-model.armWeight/2, 
-                                                            bounds[0]+spacing, 
-                                                                bounds[1]-model.armWeight/2, 
-                                                                    newColor);     //Horizontal line.
-                                                                    
-                $.specctrPsCommon.setShape(bounds[0]-model.armWeight/2, 
-                                        bounds[1]-spacing, 
-                                            bounds[0]-model.armWeight/2, 
-                                                bounds[1]+spacing);        //Vertical line
+                specText.position =[bounds[0] - spacing, bounds[1] - spacing];
+                spacing = spacing + 5;
+                aPos = bounds[1] - model.armWeight / 2;
+                line = $.specctrPsCommon.createLine(bounds[0] - spacing, aPos, 
+                            bounds[0] + spacing, aPos, newColor);     //Horizontal line.
+                aPos = bounds[0] - model.armWeight / 2;
+                $.specctrPsCommon.setShape(aPos, bounds[1] - spacing, aPos, 
+                            bounds[1] + spacing);        //Vertical line
             }
         
-            $.specctrPsCommon.selectLayers(line.name, coordinateText.name);
-            var spec = $.specctrPsCommon.createSmartObject();
-            spec.name = "CoordinatesSpec";
+            doc.activeLayer = spec;
+            spec = $.specctrPsCommon.createSmartObject();
             idCoordinateSpec = $.specctrPsCommon.getIDOfLayer();
             
             $.specctrPsCommon.setXmpDataForSpec(sourceItem, idCoordinateSpec, "idCoordinateSpec");

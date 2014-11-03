@@ -30,8 +30,10 @@ function spacingButton_clickHandler() {
 /**
  * Adding/Removing style classes on opening/closing of spacing drop-down.
  * */
-function spacingDropDown_clickHandler() {
+function spacingDropDown_clickHandler(event) {
 	try {
+		event.stopPropagation();	//Stop the click event from bubbling to parent div.
+		
 		if ($("#spacingDropDown").is(":visible")) {
 			$("#liSpacing").removeClass("isOpen");
 			$("#btnSpacing").removeClass("buttonSelected");
