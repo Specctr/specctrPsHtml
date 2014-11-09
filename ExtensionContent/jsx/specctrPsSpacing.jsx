@@ -4,6 +4,7 @@ if(typeof($)=== 'undefined')
 	$={};
 
 var model;
+var textBaseLine;
 $.specctrPsSpacing = {
     //Suspend the history of creating spacing spec of layers.
     createSpacingSpecs : function() {
@@ -13,15 +14,17 @@ $.specctrPsSpacing = {
             var doc = app.activeDocument;
             var pref = app.preferences;
             var startRulerUnits = pref.rulerUnits; 
+            var startTypeUnits = pref.typeUnits;
             pref.rulerUnits = Units.PIXELS;
+            pref.typeUnits = TypeUnits.PIXELS;
             model = $.specctrPsCommon.getModel();
             var lyr = charIDToTypeID("Lyr ");
             var ordn = charIDToTypeID("Ordn");
             var trgt = charIDToTypeID("Trgt");
             var layerEffects = stringIDToTypeID('layerEffects');
             var layerFXVisible = stringIDToTypeID('layerFXVisible');
+
             if(numberOfSelectedItems === 2) {
-                //get selected art items.
                 var artLayer1 = $.specctrPsCommon.selectLayerByIndex(selectedArtItems[0]);
                 var artLayer2 = $.specctrPsCommon.selectLayerByIndex(selectedArtItems[1]);
 
@@ -38,6 +41,13 @@ $.specctrPsSpacing = {
                     var bounds1 = $.specctrPsCommon.returnBounds(artLayer1);
                 else
                     bounds1 = artLayer1.bounds;
+                
+                if(artLayer1.kind === LayerKind.TEXT) {
+                    doc.activeLayer = artLayer1;
+                    app.activeDocument.suspendHistory('TextBaseLine', 'this.getTextBaseLine(artLayer1, artLayer1.textItem)');
+                    executeAction(charIDToTypeID('undo'), undefined, DialogModes.NO);
+                    bounds1[3] =  textBaseLine;
+                }
 
                 doc.activeLayer = artLayer2;
                 ref = new ActionReference();
@@ -48,7 +58,15 @@ $.specctrPsSpacing = {
                 else
                     bounds2 = artLayer2.bounds;
 
+                if(artLayer2.kind === LayerKind.TEXT) {
+                    doc.activeLayer = artLayer2;
+                    app.activeDocument.suspendHistory('TextBaseLine', 'this.getTextBaseLine(artLayer2, artLayer2.textItem)');
+                    executeAction(charIDToTypeID('undo'), undefined, DialogModes.NO);
+                    bounds2[3] =  textBaseLine;
+                }
+
                 pref.rulerUnits = startRulerUnits;
+                pref.typeUnits = startTypeUnits;
                 app.activeDocument.suspendHistory('Spacing spec', 'this.createSpacingSpecsForTwoItems(artLayer1, artLayer2, bounds1, bounds2)');
             } else if(numberOfSelectedItems === 1) {
                 var artLayer = doc.activeLayer;
@@ -62,8 +80,16 @@ $.specctrPsSpacing = {
                     var bounds = $.specctrPsCommon.returnBounds(artLayer);
                 else
                     bounds = artLayer.bounds;
+                
+                if(artLayer.kind === LayerKind.TEXT) {
+                    doc.activeLayer = artLayer;
+                    app.activeDocument.suspendHistory('TextBaseLine', 'this.getTextBaseLine(artLayer, artLayer.textItem)');
+                    executeAction(charIDToTypeID('undo'), undefined, DialogModes.NO);
+                    bounds[3] =  textBaseLine;
+                }
 
                 pref.rulerUnits = startRulerUnits;
+                pref.typeUnits = startTypeUnits;
                 app.activeDocument.suspendHistory('Spacing spec', 'this.createSpacingSpecsForSingleItem(artLayer, bounds)');
             } else {
                 alert("Please select one or two shape/text layer(s)!");
@@ -104,16 +130,6 @@ $.specctrPsSpacing = {
         var uniqueIdOfSpec = "";
         doc.activeLayer = artLayer1;
         var uniqueIdOfFirstLayer = $.specctrPsCommon.getIDOfLayer();
-        if(artLayer1.kind === LayerKind.TEXT && artLayer1.textItem.kind === TextType.POINTTEXT) {
-            doc.activeLayer = artLayer1;
-            var baseLinePosition = this.getPointTextBaseLine(artLayer1.textItem);
-            bounds1[3] = artLayer1.textItem.position[1] + baseLinePosition;
-        }
-        if(artLayer2.kind === LayerKind.TEXT && artLayer2.textItem.kind === TextType.POINTTEXT) {
-            doc.activeLayer = artLayer2;
-            var baseLinePosition = this.getPointTextBaseLine(artLayer2.textItem);
-            bounds2[3] = artLayer2.textItem.position[1] + baseLinePosition;
-        }
 
         // Check overlap
         if (bounds1[0]<bounds2[2] && bounds1[2]>bounds2[0] &&
@@ -364,12 +380,6 @@ $.specctrPsSpacing = {
         }
 
         if(model.spaceBottom) {
-            if(artLayer.kind === LayerKind.TEXT && artLayer.textItem.kind === TextType.POINTTEXT) {
-                doc.activeLayer = artLayer;
-                var baseLinePosition = this.getPointTextBaseLine(artLayer.textItem);
-                bounds[3] = artLayer.textItem.position[1] + baseLinePosition;
-            }
-
             if(!model.specInPrcntg)
                 distanceValue =  $.specctrPsCommon.pointsToUnitsString($.specctrPsCommon.getScaledValue(cnvsRect[3] - bounds[3]), startRulerUnits);
             else
@@ -451,90 +461,57 @@ $.specctrPsSpacing = {
     },
 
     //Get text base line position.
-    getPointTextBaseLine : function(textItem) {
-        var imFactor = "";
-        var leading = "", size = "";
-        var kDefaultLeadVal = 120.0, kDefaultFontSize= 12;
-        var isAutoLeading="";
-        
-        var sizeID = stringIDToTypeID("size");
-        var transformID = stringIDToTypeID("transform");
-        var yyID = stringIDToTypeID("yy");
-        var autoLeadingID = stringIDToTypeID("autoLeading");
-        var ref = new ActionReference();
-        ref.putEnumerated( charIDToTypeID('Lyr '), charIDToTypeID('Ordn'), charIDToTypeID('Trgt') ); 
-        var desc = executeActionGet(ref).getObjectValue(stringIDToTypeID('textKey'));
+    getTextBaseLine : function(artLayer, textItem) {
+        try {
+            var contents = textItem.contents;
+            var size = 12;
+            var sizeID = stringIDToTypeID("size");
+            var transformID = stringIDToTypeID("transform");
+            var ref = new ActionReference();
+            ref.putEnumerated( charIDToTypeID('Lyr '), charIDToTypeID('Ordn'), charIDToTypeID('Trgt') ); 
+            var desc = executeActionGet(ref).getObjectValue(stringIDToTypeID('textKey'));
 
-        //Character Styles
-        var textStyleRangeID = stringIDToTypeID("textStyleRange");
-        var textStyleID = stringIDToTypeID("textStyle");
-        var txtList = desc.getList(textStyleRangeID);
-        var txtDesc = txtList.getObjectValue(0);
-        
-        if(txtDesc.hasKey(textStyleID)) {
-            var rangeList = desc.getList(textStyleRangeID);
-            var styleDesc = rangeList.getObjectValue(0).getObjectValue(textStyleID);
-            if(styleDesc.hasKey(sizeID)) {
-                size =  styleDesc.getDouble(sizeID);
-                if(desc.hasKey(transformID)) {
-                    mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
-                    size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
-                }
-            }
-            if(styleDesc.hasKey(autoLeadingID)) {
-                isAutoLeading = styleDesc.getBoolean(autoLeadingID);
-                if(isAutoLeading == false) {
-                     leading = styleDesc.getDouble(stringIDToTypeID("leading"));
-                     if(desc.hasKey(transformID)) {
-                         mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
-                         leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
-                     }
-                }
-            }
-        }
-        
-        //Paragraph styles.
-        var paragraphStyleID = stringIDToTypeID("paragraphStyle");
-        var defaultStyleID = stringIDToTypeID("defaultStyle");
-        var paraList = desc.getList(stringIDToTypeID("paragraphStyleRange"));
-        var paraDesc = paraList.getObjectValue(0);
-        if (paraDesc.hasKey(paragraphStyleID)) {
-            var paraStyle = paraDesc.getObjectValue(paragraphStyleID);
-            if(paraStyle.hasKey(defaultStyleID)) {
-                var defStyle = paraStyle.getObjectValue(defaultStyleID);
-                if(size === " " && defStyle.hasKey(sizeID)) {
-                    size = defStyle.getDouble(sizeID);
+            var textStyleRangeID = stringIDToTypeID("textStyleRange");
+            var textStyleID = stringIDToTypeID("textStyle");
+            var txtList = desc.getList(textStyleRangeID);
+            var txtDesc = txtList.getObjectValue(0);
+
+            if(txtDesc.hasKey(textStyleID)) {
+                var styleDesc = txtList.getObjectValue(0).getObjectValue(textStyleID);
+                if(styleDesc.hasKey(sizeID)) {
+                    size =  styleDesc.getDouble(sizeID);
                     if(desc.hasKey(transformID)) {
-                        var mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
-                        size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+                        var mFactor = desc.getObjectValue(transformID).getUnitDoubleValue(stringIDToTypeID("yy"));
+                        size = (size * mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                     }
                 }
-                if (leading === "" && defStyle.hasKey(autoLeadingID)) {
-                    isAutoLeading = defStyle.getBoolean(autoLeadingID);
-                    if(isAutoLeading == false) {
-                        leading = defStyle.getDouble(stringIDToTypeID("leading"));
-                        if(desc.hasKey(transformID)) {
-                            mFactor = desc.getObjectValue(transformID).getUnitDoubleValue(yyID);
-                            leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
-                        }
-                     }
-                 }
             }
-        }
 
-        if(leading == "" || isAutoLeading == true)
-            leading =  size / 100 * Math.round(kDefaultLeadVal);
+            contents = contents.replace(/(j)/g, 'l');
+            contents = contents.replace(/(g|p|q|y|Q)/g, 'c');
+            textItem.contents = contents;
+            this.setFontSizePixels(parseFloat(size));
+        } catch(e) {}
 
-        leading = Math.round(leading * 100) / 100;
-        var contents = textItem.contents;
-        contents = contents.replace(/^\s+|\s+$/gm,'');                  //Trim the spaces.
-        var lastChar = contents.charAt (contents.length - 1);
-        while(lastChar === "\u0003" || lastChar === "\r") {
-            contents = contents.slice (0, contents.length - 1);
-            lastChar = contents.charAt (contents.length - 1);
-        }
-        var lines = contents.split(/[\u0003\r]/);  //Splitting content from Enter or Shift+Enter.
-        return (lines.length - 1) * leading;
+        var bounds = artLayer.bounds;
+        textBaseLine = bounds[3];
+    },
+
+    //Set the font size to text item in pixel.
+    setFontSizePixels : function(size) {
+        var magicNumber = app.charIDToTypeID("0042");
+        var layerDesc = new ActionDescriptor();  
+        var ref = new ActionReference();  
+        ref.putProperty(app.charIDToTypeID('Prpr'), app.charIDToTypeID('TxtS'));  
+        ref.putEnumerated(app.charIDToTypeID('TxLr'), app.charIDToTypeID('Ordn'), app.charIDToTypeID('Trgt'));
+        layerDesc.putReference(app.charIDToTypeID('null'), ref);
+
+        var propertyDesc = new ActionDescriptor();  
+        propertyDesc.putInteger(app.stringIDToTypeID('textOverrideFeatureName'), magicNumber);  
+        propertyDesc.putInteger(app.stringIDToTypeID('typeStyleOperationType'), 3);
+        propertyDesc.putUnitDouble(app.charIDToTypeID('Sz  '), app.charIDToTypeID('#Pxl'), size);
+        layerDesc.putObject(app.charIDToTypeID('T   '), app.charIDToTypeID('TxtS'), propertyDesc);
+        executeAction(app.charIDToTypeID('setd'), layerDesc, DialogModes.NO);
     },
 
     //Create text spec for horizontal distances for spacing specs between two objects.

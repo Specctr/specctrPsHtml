@@ -38,7 +38,9 @@ function dimensionButton_clickHandler() {
 /**
  * Adding/Removing style classes on opening/closing of width/height drop-down.
  * */
-function dimensionDropDown_clickHandler() {
+function dimensionDropDown_clickHandler(event) {
+	event.stopPropagation();	//Stop the click event from bubbling to parent div.
+
 	//Close the spacing drop down, if open.
 	if ($("#spacingDropDown").is(":visible")) {
 		$("#liSpacing .options").slideUp(100);

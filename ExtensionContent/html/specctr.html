@@ -116,14 +116,13 @@
 					<!-- Width/Height button. -->
 					<li class="border" id="liWh">
 					
-						<div class="button imgButton" id="btnWh">
+						<div class="button imgButton" id="btnWh" onclick="dimensionButton_clickHandler()">
 							<img id="dimensionIcon"
-								src="../Images/DimensionButtonIcons/WH_11.png"
-								onclick="dimensionButton_clickHandler()"/> 
-							<label class="buttonTextStyle" onclick="dimensionButton_clickHandler()">
+								src="../Images/DimensionButtonIcons/WH_11.png"/> 
+							<label class="buttonTextStyle">
 								Width / Height</label>
 							<div class="dropdownArrow" id="imgWhDdlArrow"
-								onclick="dimensionDropDown_clickHandler()"></div>
+								onclick="dimensionDropDown_clickHandler(event)"></div>
 						</div>
 						
 						<div class="options" id="dimensionDropDown">
@@ -149,14 +148,13 @@
 
 					<!-- Spacing button. -->
 					<li class="border" id="liSpacing">
-						<div class="button imgButton" id="btnSpacing">
+						<div class="button imgButton" id="btnSpacing" onclick="spacingButton_clickHandler()">
 							<img id="spacingIcon"
-								src="../Images/SpacingButtonIcons/Spacing_TL.png"
-								onclick="spacingButton_clickHandler()" />
-							<label class="buttonTextStyle" style="margin-left: -15px;" 
-								onclick="spacingButton_clickHandler()">Spacing</label>
+								src="../Images/SpacingButtonIcons/Spacing_TL.png"/>
+							<label class="buttonTextStyle" style="margin-left: -15px;">
+								Spacing</label>
 							<div id="imgSpacingDdlArrow" class="dropdownArrow"
-								onclick="spacingDropDown_clickHandler()"></div>
+								onclick="spacingDropDown_clickHandler(event)"></div>
 						</div>
 						<div class="options" id="spacingDropDown">
 							<div class="option topSelected" id="imgSpaceTop"
