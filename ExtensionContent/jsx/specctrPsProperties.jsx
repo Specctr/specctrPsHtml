@@ -1,4 +1,9 @@
-﻿
+﻿/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * File Name: specctrPsProperties.jsx
+ * Description: Include the methods for creation, updation and deletion of properties specs
+  for the selected art object.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
 #include "specctrPsCommon.jsx"
 #include "specctrPsSwatches.jsx"
 if(typeof($)=== 'undefined')
@@ -8,7 +13,6 @@ var model;
 var cssText = "";
 var cssBodyText = "";
 $.specctrPsProperties = {
-    
     //Suspend the history of creating properties spec of layers.
     createPropertySpecsForItem : function() {
         try {

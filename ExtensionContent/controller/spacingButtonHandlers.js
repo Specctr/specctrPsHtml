@@ -33,7 +33,7 @@ function spacingButton_clickHandler() {
 function spacingDropDown_clickHandler(event) {
 	try {
 		event.stopPropagation();	//Stop the click event from bubbling to parent div.
-		
+
 		if ($("#spacingDropDown").is(":visible")) {
 			$("#liSpacing").removeClass("isOpen");
 			$("#btnSpacing").removeClass("buttonSelected");
