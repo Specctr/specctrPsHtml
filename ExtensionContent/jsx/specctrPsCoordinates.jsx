@@ -31,6 +31,18 @@ $.specctrPsCoordinates = {
             app.activeDocument.suspendHistory('Coordinate Info', 'this.createCoordinates(sourceItem, bounds)');
         } catch(e) {}
     },
+    
+    //Set coordinate specs to the selected corner.
+    setSpecsToGivenPoints : function(mark, markX, markY, coordinateText, 
+                                                        justification, text, textX, textY) {
+        mark = mark.duplicate(mark, ElementPlacement.PLACEBEFORE);
+        mark.translate(markX, markY);
+        coordinateText = coordinateText.duplicate(coordinateText, ElementPlacement.PLACEBEFORE);
+        var specText = coordinateText.textItem;
+        specText.justification = justification;
+        specText.contents = text;
+        specText.position = [textX, textY];
+    },
 
     //Create coordinate specs for the layer.
     createCoordinates : function(sourceItem, bounds) {
@@ -54,8 +66,8 @@ $.specctrPsCoordinates = {
             var halfWeight = model.armWeight / 2.0;
             var spacing = 10 + halfWeight;
             var margin = spacing - 5;
-            var layerWidth = bounds[2] - bounds[0];
-            var layerHeight = bounds[3] - bounds[1];
+            var widthMargin = bounds[2] - bounds[0] + model.armWeight;
+            var heightMargin = bounds[3] - bounds[1] + model.armWeight;
             var startRulerUnits = app.preferences.rulerUnits;
             var startTypeUnits = app.preferences.typeUnits;
             var originalDPI = doc.resolution;
@@ -92,8 +104,14 @@ $.specctrPsCoordinates = {
                 bottom = Math.round(bounds[3] / relativeHeight * 10000) / 100 + "%";
             }
 
+            var textLeftMargin = bounds[0] - margin;
+            var textTopMargin = bounds[1] - margin;
+            var textRightMargin = bounds[2] + margin;
+            var textBottomMargin = bounds[3] - margin;
+            var leftJustification = Justification.LEFT;
+            var rightJustification = Justification.RIGHT;
             var styleText = "\tleft: " + left + ";\r\ttop: " + top + ";";
-            
+
             if(legendLayer === "") {
                 legendLayer = $.specctrPsCommon.legendSpecLayer("Coordinates").layerSets.add();            //To create the layer group for coordinate layer.
                 legendLayer.name = "Specctr Coordinates Mark";
@@ -102,134 +120,59 @@ $.specctrPsCoordinates = {
             var xLine = "", yLine = "", mark="", coordinateText = "";
             var spec = legendLayer.layerSets.add();
             spec.name = "CoordinatesSpec";
-            var aPos, bPos, cPos;
 
             //Coordinate specs for left top.
-            if(1) {
-                aPos = bounds[0] - spacing - model.armWeight;
-                bPos = bounds[0] + spacing;
-                cPos = bounds[1] - halfWeight;
-                mark = spec.layerSets.add();
-                xLine = $.specctrPsCommon.createLine(aPos, cPos, bPos, cPos, newColor);     //Horizontal line.
-                yLine = xLine.duplicate(xLine, ElementPlacement.PLACEBEFORE);
-                yLine = yLine.rotate(90.0);
-                doc.activeLayer = mark;
-                mark = $.specctrPsCommon.createSmartObject();
-                coordinateText = spec.artLayers.add();
-                coordinateText.kind = LayerKind.TEXT;
-                var specText = coordinateText.textItem;
-                specText.kind = TextType.POINTTEXT;
-                specText.justification = Justification.RIGHT;
-                specText.color.rgb = newColor;
-                specText.font = font;
-                specText.size = model.legendFontSize;
-                specText.contents = "x: " + left + " y: " + top;
-                specText.position = [bounds[0] - margin, bounds[1] - margin];
-            }
-            
+            var content =  "x: " + left + " y: " + top;
+            var yPoint = bounds[1] - halfWeight;
+            mark = spec.layerSets.add();
+            xLine = $.specctrPsCommon.createLine(bounds[0] - spacing - model.armWeight, 
+                                                                        yPoint, bounds[0] + spacing, yPoint, newColor);     //Horizontal line.
+            yLine = xLine.duplicate(xLine, ElementPlacement.PLACEBEFORE);
+            yLine = yLine.rotate(90.0);
+            doc.activeLayer = mark;
+            mark = $.specctrPsCommon.createSmartObject();
+            coordinateText = spec.artLayers.add();
+            coordinateText.kind = LayerKind.TEXT;
+            var specText = coordinateText.textItem;
+            specText.kind = TextType.POINTTEXT;
+            specText.justification = rightJustification;
+            specText.color.rgb = newColor;
+            specText.font = font;
+            specText.size = model.legendFontSize;
+            specText.contents = content;
+            specText.position = [textLeftMargin, textTopMargin];
+
             //Coordinate specs for right top.
             if(1) {
-                //if(mark === "") {
-                    aPos = bounds[2] - spacing;
-                    bPos = bounds[2] + spacing + model.armWeight;
-                    cPos = bounds[1] - halfWeight;
-                    mark = spec.layerSets.add();
-                    xLine = $.specctrPsCommon.createLine(aPos, cPos, bPos, cPos, newColor);     //Horizontal line.
-                    yLine = xLine.duplicate(xLine, ElementPlacement.PLACEBEFORE);
-                    yLine = yLine.rotate(90.0);
-                    doc.activeLayer = mark;
-                    mark = $.specctrPsCommon.createSmartObject();
-               // } else {
-                //    mark = mark.duplicate(mark, ElementPlacement.PLACEBEFORE);
-                //    mark.translate(layerWidth + model.armWeight, 0);
-              //  }
-                if(coordinateText === "") {
-                    coordinateText = spec.artLayers.add();
-                    coordinateText.kind = LayerKind.TEXT;
-                    specText = coordinateText.textItem;
-                    specText.kind = TextType.POINTTEXT;
-                    specText.color.rgb = newColor;
-                    specText.font = font;
-                    specText.size = model.legendFontSize;
-                } else {
-                    coordinateText = coordinateText.duplicate(coordinateText, ElementPlacement.PLACEBEFORE);
-                    specText = coordinateText.textItem;
-                }
-                specText.justification = Justification.LEFT;
-                specText.contents = "x: " + right + " y: " + top;
-                specText.position = [bounds[2] + margin, bounds[1] - margin];
+                var content =  "x: " + right + " y: " + top;
+                this.setSpecsToGivenPoints(mark, widthMargin, 0, coordinateText, 
+                                                            leftJustification,  content, textRightMargin, textTopMargin);
             }
-        
+
             //Coordinate specs for left bottom.
             if(1) {
-                //if(mark === "") {
-                    aPos = bounds[0] - spacing - model.armWeight;
-                    bPos = bounds[0] + spacing;
-                    cPos = bounds[3] + halfWeight;
-                    mark = spec.layerSets.add();
-                    xLine = $.specctrPsCommon.createLine(aPos, cPos, bPos, cPos, newColor);     //Horizontal line.
-                    yLine = xLine.duplicate(xLine, ElementPlacement.PLACEBEFORE);
-                    yLine = yLine.rotate(90.0);
-                    doc.activeLayer = mark;
-                    mark = $.specctrPsCommon.createSmartObject();
-               // } else {
-                //    mark = mark.duplicate(mark, ElementPlacement.PLACEBEFORE);
-                //    mark.translate(layerWidth + model.armWeight, 0);
-              //  }
-                if(coordinateText === "") {
-                    coordinateText = spec.artLayers.add();
-                    coordinateText.kind = LayerKind.TEXT;
-                    specText = coordinateText.textItem;
-                    specText.kind = TextType.POINTTEXT;
-                    specText.color.rgb = newColor;
-                    specText.font = font;
-                    specText.size = model.legendFontSize;
-                } else {
-                    coordinateText = coordinateText.duplicate(coordinateText, ElementPlacement.PLACEBEFORE);
-                    specText = coordinateText.textItem;
-                }
-                specText.justification = Justification.RIGHT;
-                specText.contents = "x: " + left + " y: " + bottom;
-                specText.position = [bounds[0] - margin, bounds[3] - margin];
+                content =  "x: " + left + " y: " + bottom;
+                this.setSpecsToGivenPoints(mark, 0,  heightMargin, coordinateText, 
+                                                            rightJustification,  content, textLeftMargin, textBottomMargin);
             }
-        
+
             //Coordinate specs for right bottom.
             if(1) {
-                //if(mark === "") {
-                    aPos = bounds[2] - spacing;
-                    bPos = bounds[2] + spacing + model.armWeight;
-                    cPos = bounds[3] + halfWeight;
-                    mark = spec.layerSets.add();
-                    xLine = $.specctrPsCommon.createLine(aPos, cPos, bPos, cPos, newColor);     //Horizontal line.
-                    yLine = xLine.duplicate(xLine, ElementPlacement.PLACEBEFORE);
-                    yLine = yLine.rotate(90.0);
-                    doc.activeLayer = mark;
-                    mark = $.specctrPsCommon.createSmartObject();
-               // } else {
-                //    mark = mark.duplicate(mark, ElementPlacement.PLACEBEFORE);
-                //    mark.translate(layerWidth + model.armWeight, 0);
-              //  }
-                if(coordinateText === "") {
-                    coordinateText = spec.artLayers.add();
-                    coordinateText.kind = LayerKind.TEXT;
-                    specText = coordinateText.textItem;
-                    specText.kind = TextType.POINTTEXT;
-                    specText.color.rgb = newColor;
-                    specText.font = font;
-                    specText.size = model.legendFontSize;
-                } else {
-                    coordinateText = coordinateText.duplicate(coordinateText, ElementPlacement.PLACEBEFORE);
-                    specText = coordinateText.textItem;
-                }
-                specText.justification = Justification.LEFT;
-                specText.contents = "x: " + right + " y: " + bottom;
-                specText.position = [bounds[2] + margin, bounds[3] - margin];
+                content =  "x: " + right + " y: " + bottom;
+                this.setSpecsToGivenPoints(mark, widthMargin, heightMargin, coordinateText, 
+                                                                leftJustification,  content, textRightMargin, textBottomMargin);
             }
-        
+
+            //If left top is selected then don't delete the specs.
+            if(0) {
+                mark.remove();
+                coordinateText.remove();
+            }
+
             doc.activeLayer = spec;
             spec = $.specctrPsCommon.createSmartObject();
             idCoordinateSpec = $.specctrPsCommon.getIDOfLayer();
-            
+
             $.specctrPsCommon.setXmpDataForSpec(sourceItem, idCoordinateSpec, "idCoordinateSpec");
             $.specctrPsCommon.setXmpDataForSpec(spec, "true", "SpeccedObject");
             $.specctrPsCommon.setXmpDataForSpec(spec, styleText, "css");
