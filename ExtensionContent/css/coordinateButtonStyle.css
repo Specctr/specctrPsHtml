@@ -1,0 +1,72 @@
+@CHARSET "ISO-8859-1";
+
+/*
+File-Name: coordinateButtonStyle.css
+Description: Includes styling code related to coordinate button. 
+*/
+
+#liCoordinate .option {
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#liCoordinate .options {
+    height: 50px;
+}
+
+#liCoordinate:hover .options {
+    margin-left: -1px !important;
+}
+
+#imgLeftTop {
+    background-image: url('../Images/SpacingDropDownIcons/SpaceTop.png');
+}
+
+    #imgLeftTop:hover {
+        background-image: url('../Images/SpacingDropDownIcons/SpaceTopOver.png');
+    }
+
+.topSelected {
+	background-image: url('../Images/SpacingDropDownIcons/SpaceTopSelected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgRightTop {
+    background-image: url('../Images/SpacingDropDownIcons/SpaceRight.png');
+}
+
+    #imgRightTop:hover {
+        background-image: url('../Images/SpacingDropDownIcons/SpaceRightOver.png');
+    }
+
+.rightSelected {
+	background-image: url('../Images/SpacingDropDownIcons/SpaceRightSelected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgRightBottom {
+    background-image: url('../Images/SpacingDropDownIcons/SpaceBottom.png');
+}
+
+    #imgRightBottom:hover {
+        background-image: url('../Images/SpacingDropDownIcons/SpaceBottomOver.png');
+    }
+
+.bottomSelected {
+	background-image: url('../Images/SpacingDropDownIcons/SpaceBottomSelected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgBottomLeft {
+    background-image: url('../Images/SpacingDropDownIcons/SpaceLeft.png');
+}
+
+    #imgBottomLeft:hover {
+        background-image: url('../Images/SpacingDropDownIcons/SpaceLeftOver.png');
+    }
+
+.leftSelected
+{
+	background-image: url('../Images/SpacingDropDownIcons/SpaceLeftSelected.png') !important;
+	background-color: #D2D2D2;
+}

@@ -36,6 +36,13 @@ var model = {
 	typeUnits: 		"pt",
 	distanceUnits:	"px",
 
+	
+	//Coordinate spec options
+	leftTop:		true,
+	rightTop:		true,
+	rightBottom:	false,
+	bottomLeft:		false,
+	
 	//Spacing spec options
 	spaceLeft:		true,
 	spaceTop:		true,

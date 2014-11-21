@@ -110,7 +110,8 @@ $.specctrPsCoordinates = {
             var textBottomMargin = bounds[3] - margin;
             var leftJustification = Justification.LEFT;
             var rightJustification = Justification.RIGHT;
-            var styleText = "\tleft: " + left + ";\r\ttop: " + top + ";";
+            var styleText = "\tleft: " + left + ";\r\ttop: " + top + 
+                                        ";\r\tright: " + right + ";\r\tbottom: " + bottom + ";";
 
             if(legendLayer === "") {
                 legendLayer = $.specctrPsCommon.legendSpecLayer("Coordinates").layerSets.add();            //To create the layer group for coordinate layer.

@@ -19,12 +19,14 @@
 <script src="../controller/utility.js"></script>
 <script src="../controller/specctrUI.js"></script>
 <script src="../controller/main.js"></script>
+<script src="../controller/coordinateButtonHandlers.js"></script>
 <script src="../controller/spacingButtonHandlers.js"></script>
 <script src="../controller/dimensionButtonHandlers.js"></script>
 
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/style.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/dimensionButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/spacingButtonStyle.css">
+<link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/coordinateButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css" href="../css/jquery-ui-1.10.2.custom.css">
 
 <title>Specctr-Pro</title>
@@ -169,10 +171,23 @@
 					</li>
 
 					<!-- Coordinate button. -->
-					<li class="border mb20Px" onclick="createCoordinateSpecs()">
-						<div class="button imgButton">
+					<li class="border" id="liCoordinate">
+						<div class="button imgButton" id="btnCoordinate" onclick="coordinateButton_clickHandler()">
 							<img src="../Images/Icon_coordinates.png" alt="Coordinates" /> 
-							<label class="buttonTextStyle" style="margin-left: -1px;">Coordinates</label>
+							<label class="buttonTextStyle" style="margin-left: -1px;">
+								Coordinates</label>
+							<div id="imgCoordinateDdlArrow" class="dropdownArrow"
+								onclick="coordinateDropDown_clickHandler(event)"></div>
+						</div>
+						<div class="options" id="coordinateDropDown">
+							<div class="option topSelected" id="imgLeftTop"
+								onclick="coordinateCell_clickHandler(this.id, 'topSelected', 'leftTop')"></div>
+							<div class="option" id="imgRightTop"
+								onclick="coordinateCell_clickHandler(this.id, 'rightSelected', 'rightTop')"></div>
+							<div class="option" id="imgRightBottom"
+								onclick="coordinateCell_clickHandler(this.id, 'bottomSelected', 'rightBottom')"></div>
+							<div class="option leftSelected" id="imgBottomLeft"
+								onclick="coordinateCell_clickHandler(this.id, 'leftSelected', 'bottomLeft')"></div>
 						</div>
 					</li>
 
