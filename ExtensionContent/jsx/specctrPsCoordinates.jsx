@@ -33,15 +33,21 @@ $.specctrPsCoordinates = {
     },
     
     //Set coordinate specs to the selected corner.
-    setSpecsToGivenPoints : function(mark, markX, markY, coordinateText, 
-                                                        justification, text, textX, textY) {
-        mark = mark.duplicate(mark, ElementPlacement.PLACEBEFORE);
-        mark.translate(markX, markY);
-        coordinateText = coordinateText.duplicate(coordinateText, ElementPlacement.PLACEBEFORE);
-        var specText = coordinateText.textItem;
-        specText.justification = justification;
-        specText.contents = text;
-        specText.position = [textX, textY];
+    setSpecsToGivenPoints : function(spec, x1, y, x2, newColor, font, size,
+                                                        justification, content, textX, textY) {
+            var xLine = $.specctrPsCommon.createLine(x1, y, x2, y, newColor);     //Horizontal line.
+            var yLine = xLine.duplicate(xLine, ElementPlacement.PLACEBEFORE);
+            yLine = yLine.rotate(90.0);
+            var coordinateText = spec.artLayers.add();
+            coordinateText.kind = LayerKind.TEXT;
+            var specText = coordinateText.textItem;
+            specText.kind = TextType.POINTTEXT;
+            specText.justification = justification;
+            specText.color.rgb = newColor;
+            specText.font = font;
+            specText.size = size;
+            specText.contents = content;
+            specText.position = [textX, textY];
     },
 
     //Create coordinate specs for the layer.
@@ -64,6 +70,7 @@ $.specctrPsCoordinates = {
             var model = $.specctrPsCommon.getModel();
             var doc = app.activeDocument;
             var halfWeight = model.armWeight / 2.0;
+            var size = model.legendFontSize;
             var spacing = 10 + halfWeight;
             var margin = spacing - 5;
             var widthMargin = bounds[2] - bounds[0] + model.armWeight;
@@ -123,51 +130,43 @@ $.specctrPsCoordinates = {
             spec.name = "CoordinatesSpec";
 
             //Coordinate specs for left top.
-            var content =  "x: " + left + " y: " + top;
-            var yPoint = bounds[1] - halfWeight;
-            mark = spec.layerSets.add();
-            xLine = $.specctrPsCommon.createLine(bounds[0] - spacing - model.armWeight, 
-                                                                        yPoint, bounds[0] + spacing, yPoint, newColor);     //Horizontal line.
-            yLine = xLine.duplicate(xLine, ElementPlacement.PLACEBEFORE);
-            yLine = yLine.rotate(90.0);
-            doc.activeLayer = mark;
-            mark = $.specctrPsCommon.createSmartObject();
-            coordinateText = spec.artLayers.add();
-            coordinateText.kind = LayerKind.TEXT;
-            var specText = coordinateText.textItem;
-            specText.kind = TextType.POINTTEXT;
-            specText.justification = rightJustification;
-            specText.color.rgb = newColor;
-            specText.font = font;
-            specText.size = model.legendFontSize;
-            specText.contents = content;
-            specText.position = [textLeftMargin, textTopMargin];
-
-            //Coordinate specs for right top.
-            if(1) {
-                var content =  "x: " + right + " y: " + top;
-                this.setSpecsToGivenPoints(mark, widthMargin, 0, coordinateText, 
+            var content;
+            var x1, y1, x2;
+             
+            switch(model.coordinateCellNumber) {
+                case 0: content = "x: " + left + " y: " + top;
+                    x1 = bounds[0] - spacing - model.armWeight;
+                    y1 = bounds[1] - halfWeight;
+                    x2 = bounds[0] + spacing;
+                    this.setSpecsToGivenPoints(spec, x1, y1, x2, newColor, font, size,
+                                                            rightJustification,  content, textLeftMargin, textTopMargin);
+                    break;
+                
+                case 1: content =  "x: " + right + " y: " + top;
+                    x1 = bounds[2] + spacing + model.armWeight;
+                    y1 = bounds[1] - halfWeight;
+                    x2 = bounds[2] - spacing;
+                    this.setSpecsToGivenPoints(spec, x1, y1, x2, newColor, font, size,
                                                             leftJustification,  content, textRightMargin, textTopMargin);
-            }
-
-            //Coordinate specs for left bottom.
-            if(1) {
-                content =  "x: " + left + " y: " + bottom;
-                this.setSpecsToGivenPoints(mark, 0,  heightMargin, coordinateText, 
-                                                            rightJustification,  content, textLeftMargin, textBottomMargin);
-            }
-
-            //Coordinate specs for right bottom.
-            if(1) {
-                content =  "x: " + right + " y: " + bottom;
-                this.setSpecsToGivenPoints(mark, widthMargin, heightMargin, coordinateText, 
+                break;
+                
+                case 2: content =  "x: " + right + " y: " + bottom;
+                    x1 = bounds[2] + spacing + model.armWeight;
+                    y1 = bounds[3] + halfWeight;
+                    x2 = bounds[2] - spacing;
+                    this.setSpecsToGivenPoints(spec, x1, y1, x2, newColor, font, size,
                                                                 leftJustification,  content, textRightMargin, textBottomMargin);
-            }
+                break;
+                
+                case 3: content =  "x: " + left + " y: " + bottom;
+                    x1 = bounds[0] - spacing - model.armWeight;
+                    y1 = bounds[3] + halfWeight;
+                    x2 = bounds[0] + spacing;
+                    this.setSpecsToGivenPoints(spec, x1, y1, x2, newColor, font, size,
+                                                            rightJustification,  content, textLeftMargin, textBottomMargin);
+                break;
 
-            //If left top is selected then don't delete the specs.
-            if(0) {
-                mark.remove();
-                coordinateText.remove();
+                default:
             }
 
             doc.activeLayer = spec;

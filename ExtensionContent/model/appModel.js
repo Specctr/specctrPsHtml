@@ -35,13 +35,9 @@ var model = {
 	armWeight:		1,
 	typeUnits: 		"pt",
 	distanceUnits:	"px",
-
 	
 	//Coordinate spec options
-	leftTop:		true,
-	rightTop:		true,
-	rightBottom:	false,
-	bottomLeft:		false,
+	coordinateCellNumber:	0,
 	
 	//Spacing spec options
 	spaceLeft:		true,

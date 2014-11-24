@@ -18,55 +18,38 @@ Description: Includes styling code related to coordinate button.
     margin-left: -1px !important;
 }
 
-#imgLeftTop {
-    background-image: url('../Images/SpacingDropDownIcons/SpaceTop.png');
+#imgTopLeft {
+    background-image: url('../Images/CoordinateDropDownIcons/coordinates_topleft.png');
 }
 
-    #imgLeftTop:hover {
-        background-image: url('../Images/SpacingDropDownIcons/SpaceTopOver.png');
-    }
-
-.topSelected {
-	background-image: url('../Images/SpacingDropDownIcons/SpaceTopSelected.png') !important;
+.topLeftSelected {
+	background-image: url('../Images/CoordinateDropDownIcons/coordinates_topleft_selected.png') !important;
 	background-color: #D2D2D2;
 }
 
-#imgRightTop {
-    background-image: url('../Images/SpacingDropDownIcons/SpaceRight.png');
+#imgTopRight {
+    background-image: url('../Images/CoordinateDropDownIcons/coordinates_topright.png');
 }
 
-    #imgRightTop:hover {
-        background-image: url('../Images/SpacingDropDownIcons/SpaceRightOver.png');
-    }
-
-.rightSelected {
-	background-image: url('../Images/SpacingDropDownIcons/SpaceRightSelected.png') !important;
+.topRightSelected {
+	background-image: url('../Images/CoordinateDropDownIcons/coordinates_topright_selected.png') !important;
 	background-color: #D2D2D2;
 }
 
-#imgRightBottom {
-    background-image: url('../Images/SpacingDropDownIcons/SpaceBottom.png');
+#imgBottomRight {
+    background-image: url('../Images/CoordinateDropDownIcons/coordinates_bottomright.png');
 }
 
-    #imgRightBottom:hover {
-        background-image: url('../Images/SpacingDropDownIcons/SpaceBottomOver.png');
-    }
-
-.bottomSelected {
-	background-image: url('../Images/SpacingDropDownIcons/SpaceBottomSelected.png') !important;
+.bottomRightSelected {
+	background-image: url('../Images/CoordinateDropDownIcons/coordinates_bottomright_selected.png') !important;
 	background-color: #D2D2D2;
 }
 
 #imgBottomLeft {
-    background-image: url('../Images/SpacingDropDownIcons/SpaceLeft.png');
+    background-image: url('../Images/CoordinateDropDownIcons/coordinates_bottomleft.png');
 }
 
-    #imgBottomLeft:hover {
-        background-image: url('../Images/SpacingDropDownIcons/SpaceLeftOver.png');
-    }
-
-.leftSelected
-{
-	background-image: url('../Images/SpacingDropDownIcons/SpaceLeftSelected.png') !important;
+.bottomLeftSelected {
+	background-image: url('../Images/CoordinateDropDownIcons/coordinates_bottomleft_selected.png') !important;
 	background-color: #D2D2D2;
 }
