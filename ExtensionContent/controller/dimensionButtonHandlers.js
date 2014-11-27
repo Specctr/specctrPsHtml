@@ -18,11 +18,11 @@ function dimensionButton_clickHandler() {
 		} else {
 			//Close the spacing drop down, if open.
 			if ($("#spacingDropDown").is(":visible")) {
-				$("#liSpacing .options").slideUp(100);
-				$("#liSpacing").removeClass("isOpen");
-				$("#btnSpacing").removeClass("buttonSelected");
-				$("#imgSpacingDdlArrow").removeClass()
-						.addClass("dropdownArrow");
+				closeDropDown("#liSpacing", "#btnSpacing", "#imgSpacingDdlArrow");
+			}
+
+			if ($("#coordinateDropDown").is(":visible")) {
+				closeDropDown("#liCoordinate", "#btnCoordinate", "#imgCoordinateDdlArrow");
 			}
 
 			$("#liWh .options").slideDown(100);
@@ -43,10 +43,10 @@ function dimensionDropDown_clickHandler(event) {
 
 	//Close the spacing drop down, if open.
 	if ($("#spacingDropDown").is(":visible")) {
-		$("#liSpacing .options").slideUp(100);
-		$("#liSpacing").removeClass("isOpen");
-		$("#btnSpacing").removeClass("buttonSelected");
-		$("#imgSpacingDdlArrow").removeClass().addClass("dropdownArrow");
+		closeDropDown("#liSpacing", "#btnSpacing", "#imgSpacingDdlArrow");
+	}
+	if ($("#coordinateDropDown").is(":visible")) {
+		closeDropDown("#liCoordinate", "#btnCoordinate", "#imgCoordinateDdlArrow");
 	}
 
 	if ($("#dimensionDropDown").is(":visible")) {

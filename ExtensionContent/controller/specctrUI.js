@@ -482,3 +482,17 @@ function showDialog(message) {
 function hideDialog() {
 	$("#dialog").dialog("close");
 }
+
+/**
+ * Open the dialog with the passed message.
+ * @param id {string} li tag id of button.
+ * @param button {string} button id.
+ * @param dropDownId {string} button's dropdown id.
+ */
+function closeDropDown(id, button, dropDownId) {
+	var liButton = id + " .options";
+	$(liButton).slideUp(100);
+	$(id).removeClass("isOpen");
+	$(button).removeClass("buttonSelected");
+	$(dropDownId).removeClass().addClass("dropdownArrow");
+}

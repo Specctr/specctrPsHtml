@@ -1,5 +1,6 @@
-/**
- * 
+/*
+File-Name: coordinateButtonHandlers.js
+Description: This file includes all the handlers and methods related to coordinate popup button.
  */
 
 /**

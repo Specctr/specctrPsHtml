@@ -16,6 +16,11 @@ function spacingButton_clickHandler() {
 			$("#imgSpacingDdlArrow").addClass("dropdownArrowUp");
 			$("#liSpacing").addClass("isOpen");
 		} else {
+			
+			if ($("#coordinateDropDown").is(":visible")) {
+				closeDropDown("#liCoordinate", "#btnCoordinate", "#imgCoordinateDdlArrow");
+			}
+			
 			$("#liSpacing .options").slideUp(100);
 			$("#imgSpacingDdlArrow").removeClass("dropdownArrowUp");
 			$("#btnSpacing").removeClass("buttonSelected");
@@ -33,6 +38,10 @@ function spacingButton_clickHandler() {
 function spacingDropDown_clickHandler(event) {
 	try {
 		event.stopPropagation();	//Stop the click event from bubbling to parent div.
+		
+		if ($("#coordinateDropDown").is(":visible")) {
+			closeDropDown("#liCoordinate", "#btnCoordinate", "#imgCoordinateDdlArrow");
+		}
 
 		if ($("#spacingDropDown").is(":visible")) {
 			$("#liSpacing").removeClass("isOpen");
