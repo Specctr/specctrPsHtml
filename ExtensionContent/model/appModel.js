@@ -59,7 +59,9 @@ var model = {
 
 	//Scaling specs
 	useScaleBy: false,
-	scaleValue: "x1"
+	scaleValue: "x1",
+	
+	rgbTransformIntoPercentage: false
 };
 
 var filePermission = {

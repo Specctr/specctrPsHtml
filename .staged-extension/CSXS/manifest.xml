@@ -176,15 +176,15 @@ each party and (ii) in a written contract signed by both parties.]]>
 					<Menu>Specctr-Pro</Menu>
 					<Geometry>
 						<Size>
-							<Height>492</Height>
+							<Height>512</Height>
 							<Width>224</Width>
 						</Size>
 						<MaxSize>
-							<Height>492</Height>
+							<Height>512</Height>
 							<Width>224</Width>
 						</MaxSize>
 						<MinSize>
-							<Height>492</Height>
+							<Height>512</Height>
 							<Width>224</Width>
 						</MinSize>
 					</Geometry>

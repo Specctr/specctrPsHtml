@@ -129,6 +129,8 @@ function prefs_creationCompleteHandler() {
 	else
 		disableTextField(document.getElementById("txtScaleBy"));
 
+	document.getElementById("rgbTransformIntoPercentage").checked = model.rgbTransformIntoPercentage;
+	
 	var extScript = "$.specctrPsCommon.getFontList()";
 	evalScript(extScript, loadFontsToList);
 }
@@ -255,7 +257,8 @@ function setModelValueFromPreferences() {
 	model.specInPrcntg = appPrefs.specInPrcntg ? true : false;
 	model.specInEM = appPrefs.specInEM ? true : false;
 	model.useScaleBy = appPrefs.useScaleBy ? true : false;
-
+	model.rgbTransformIntoPercentage = appPrefs.rgbTransformIntoPercentage ? true : false;
+	
 	model.canvasExpandSize = Number(appPrefs.canvasExpandSize);
 
 	model.legendFont = appPrefs.legendFont ? appPrefs.legendFont

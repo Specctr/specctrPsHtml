@@ -802,8 +802,19 @@ $.specctrPsProperties = {
 
                             result = "#" + red + green + blue;
                         } else {
-                            result = "rgb(" + Math.round(colorType.red) + ", " + Math.round(colorType.green) + ", " + Math.round(colorType.blue) + ")";
+                            
+                            if(model.rgbTransformIntoPercentage === true) {
+                                var rVal = Math.round(colorType.red / 255 * 100);
+                                var gVal =  Math.round(colorType.green / 255 * 100);
+                                var bVal =  Math.round(colorType.blue / 255 * 100);
+                            } else {
+                                rVal = Math.round(colorType.red);
+                                gVal =  Math.round(colorType.green);
+                                bVal =  Math.round(colorType.blue);
                             }
+                            
+                            result = "rgb(" + rVal + ", " + gVal + ", " + bVal + ")";
+                        }
                 }
                 break;
 
