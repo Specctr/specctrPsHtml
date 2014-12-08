@@ -628,7 +628,7 @@
 
 					<div class="tabPage4ContentLeft" id="radioForPHXS">
 						<label>Color Mode</label>
-						<div id="radio" onclick="radioButton_clickHandler(event)">
+						<div id="radio" onclick="radioButton_clickHandler(event, 'legendColorMode')">
 							<input type="radio" id="rgbRadioButton" name="radio" value="RGB"
 								checked="checked"><span>RGB</span> <input type="radio"
 								id="hsbRadioButton" name="radio" value="HSB"><span>HSB</span>
@@ -677,7 +677,14 @@
 						onclick="checkBox_changeHandler(this.id)" /> <label
 						for="useHexColor"> Transform RGB Into Percentage</label>
 				</div>
-
+				
+				<form class="tabPageContentRow" style="margin-top: 5px; margin-left: -5px;" 
+					onclick="radioButton_clickHandler(event, 'decimalFractionValue')">
+					<input type="radio" name="decimalFractionOptions" id="decimalRadioButton" 
+						value="decimal" ><label for="decimal"> Decimal </label>
+					<input type="radio" name="decimalFractionOptions" id="fractionRadioButton"
+						value="fraction"><label	for="fraction"> Fraction</label>
+				</form>
 			</div>
 			<!-- Ending of options tab. -->
 

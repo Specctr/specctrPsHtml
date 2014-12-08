@@ -61,7 +61,8 @@ var model = {
 	useScaleBy: false,
 	scaleValue: "x1",
 	
-	rgbTransformIntoPercentage: false
+	rgbTransformIntoPercentage: false,
+	decimalFractionValue: "decimal"
 };
 
 var filePermission = {

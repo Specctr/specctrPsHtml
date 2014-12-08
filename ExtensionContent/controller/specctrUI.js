@@ -257,12 +257,12 @@ function txtScaleBy_changeHandler() {
  * Set the value of legendColorMode when selection of radio button changed.
  * @param event {event type} The event comes after clicking radio button.
  */
-function radioButton_clickHandler(event) {
-	var colorMode = event.target.value;
-	if (colorMode === undefined)
+function radioButton_clickHandler(event, value) {
+	var selectedValue = event.target.value;
+	if (selectedValue === undefined)
 		return;
 
-	model.legendColorMode = colorMode;
+	model[value] = selectedValue;
 	writeAppPrefs();
 }
 

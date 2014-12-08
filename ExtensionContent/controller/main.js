@@ -131,6 +131,9 @@ function prefs_creationCompleteHandler() {
 
 	document.getElementById("rgbTransformIntoPercentage").checked = model.rgbTransformIntoPercentage;
 	
+	radioButton = model.decimalFractionValue + "RadioButton";
+	document.getElementById(radioButton).checked = true;
+
 	var extScript = "$.specctrPsCommon.getFontList()";
 	evalScript(extScript, loadFontsToList);
 }
@@ -179,6 +182,8 @@ function onLoaded() {
 	} catch (e) {
 		console.log(e);
 	}
+	
+	//cosole.log(window.devicePixelRatio);
 }
 
 /**
@@ -277,6 +282,9 @@ function setModelValueFromPreferences() {
 
 	if (appPrefs.hasOwnProperty("legendColorMode"))
 		model.legendColorMode = appPrefs.legendColorMode;
+	
+	if (appPrefs.hasOwnProperty("decimalFractionValue"))
+		model.decimalFractionValue = appPrefs.decimalFractionValue;
 }
 
 /**

@@ -53,3 +53,12 @@ Description: Includes styling code related to coordinate button.
 	background-image: url('../Images/CoordinateDropDownIcons/coordinates_bottomleft_selected.png') !important;
 	background-color: #D2D2D2;
 }
+
+@media 
+(-webkit-min-device-pixel-ratio: 2) { 
+    .topRightSelected {
+		background-image: url('../Images/CoordinateDropDownIcons/coordinates_topright_selected_2x.png') !important;
+		background-color: #D2D2D2;
+		background-size: 49px 49px;
+    }
+}
