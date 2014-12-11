@@ -491,12 +491,47 @@ $.specctrPsCommon = {
     },
 
     setCssBodyText : function (cssBody) {
-            cssBodyText = cssBody;
-        },
+        cssBodyText = cssBody;
+    },
 
     getCssBodyText : function (cssBody) {
-            return cssBodyText;
+        return cssBodyText;
+    },
+    
+    //Convert decimal value into fraction string.
+    decimalToFraction : function (decimalValue) {
+        //Split decimalValue and get the digit value.
+        var digitValue = decimalValue.split (" ");
+        if(decimalValue.search("%") !== -1) {
+            digitValue = decimalValue.split("%");
+            digitValue[1] = "%";
         }
+            
+        var digitPart = digitValue[0];
+        var postUnit = "";
+        if(digitValue.length === 2)
+            postUnit = " " + digitValue[1];
+
+        function highestCommonFactor(a,b) {
+            if (b == 0) return a;
+            return highestCommonFactor(b, a % b);
+        }
+
+        var decimalArray = digitPart.split(".");
+        if(decimalArray.length == 1) {
+            return decimalValue;
+        }
+
+        var leftDecimalPart = decimalArray[0];
+        var rightDecimalPart = decimalArray[1];
+
+        var numerator = leftDecimalPart + rightDecimalPart;
+        var denominator = Math.pow(10, rightDecimalPart.length);
+        var factor = highestCommonFactor(numerator, denominator);
+        denominator /= factor;
+        numerator /= factor;
+        return numerator + "/" + denominator + postUnit;
+    }
 
 };
 

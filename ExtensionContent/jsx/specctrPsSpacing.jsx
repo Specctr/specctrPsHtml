@@ -296,11 +296,15 @@ $.specctrPsSpacing = {
         var aPos, bPos, cPos;
 
         if(model.spaceTop) {
-            if(!model.specInPrcntg)
+            if(!model.specInPrcntg) {
                 distanceValue = $.specctrPsCommon.pointsToUnitsString($.specctrPsCommon.getScaledValue(bounds[1] - cnvsRect[1]), startRulerUnits);
-            else
+            } else {
                  distanceValue = Math.round((bounds[1] - cnvsRect[1]) / relativeHeight * 10000) / 100 + "%";
-            
+            }
+
+            if(model.decimalFractionValue === "fraction")
+                distanceValue = $.specctrPsCommon.decimalToFraction(distanceValue);
+
             aPos = bounds[0] + width / 2 - spacing;
             textLayer = specItemsGroup.artLayers.add();
             textLayer.kind = LayerKind.TEXT;
@@ -322,10 +326,14 @@ $.specctrPsSpacing = {
         }
 
         if(model.spaceLeft) {
-            if(!model.specInPrcntg)
+            if(!model.specInPrcntg) {
                 distanceValue = $.specctrPsCommon.pointsToUnitsString($.specctrPsCommon.getScaledValue(bounds[0] - cnvsRect[0]), startRulerUnits);
-            else
+            } else {
                  distanceValue = Math.round((bounds[0] - cnvsRect[0]) / relativeWidth * 10000) / 100 + "%";
+             }
+
+            if(model.decimalFractionValue === "fraction")
+                distanceValue = $.specctrPsCommon.decimalToFraction(distanceValue);
 
             if(textLayer === "") {
                 textLayer = specItemsGroup.artLayers.add();
@@ -354,10 +362,14 @@ $.specctrPsSpacing = {
         }
 
         if(model.spaceRight) {
-            if(!model.specInPrcntg)
+            if(!model.specInPrcntg) {
                 distanceValue =  $.specctrPsCommon.pointsToUnitsString($.specctrPsCommon.getScaledValue(cnvsRect[2] - bounds[2]), startRulerUnits);
-            else
+            } else {
                  distanceValue = Math.round((cnvsRect[2] - bounds[2]) / relativeWidth * 10000) / 100 + "%";
+             }
+
+            if(model.decimalFractionValue === "fraction")
+                distanceValue = $.specctrPsCommon.decimalToFraction(distanceValue);
 
             if(textLayer === "") {
                 textLayer =  specItemsGroup.artLayers.add();
@@ -385,10 +397,14 @@ $.specctrPsSpacing = {
         }
 
         if(model.spaceBottom) {
-            if(!model.specInPrcntg)
+            if(!model.specInPrcntg) {
                 distanceValue =  $.specctrPsCommon.pointsToUnitsString($.specctrPsCommon.getScaledValue(cnvsRect[3] - bounds[3]), startRulerUnits);
-            else
+            } else {
                  distanceValue = Math.round((cnvsRect[3] - bounds[3]) / relativeHeight * 10000) / 100 + "%";
+             }
+
+             if(model.decimalFractionValue === "fraction")
+                distanceValue = $.specctrPsCommon.decimalToFraction(distanceValue);
 
             if(textLayer === "") {
                 textLayer = specItemsGroup.artLayers.add();
@@ -539,6 +555,10 @@ $.specctrPsSpacing = {
                     relativeWidth = orgnlCanvas[2];
                 distance = Math.round(distance/relativeWidth*10000)/100 + "%";
             }
+
+            if(model.decimalFractionValue === "fraction")
+                distance = $.specctrPsCommon.decimalToFraction(distance);
+
             var textLayer = legendLayer.artLayers.add();
             textLayer.kind = LayerKind.TEXT;
             var specText = textLayer.textItem;
@@ -579,6 +599,10 @@ $.specctrPsSpacing = {
                     relativeHeight = orgnlCanvas[3];
                 distance = Math.round(distance/relativeHeight*10000)/100 + "%";
             }
+
+            if(model.decimalFractionValue === "fraction")
+                distance = $.specctrPsCommon.decimalToFraction(distance);
+
             var textLayer = legendLayer.artLayers.add();
             textLayer.kind = LayerKind.TEXT;
             var specText = textLayer.textItem;
