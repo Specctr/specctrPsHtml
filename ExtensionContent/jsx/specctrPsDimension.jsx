@@ -94,6 +94,9 @@ $.specctrPsDimension = {
             else
                 widthValue = Math.round(width/relativeWidth*10000) /100+ "%";
 
+            if(model.decimalFractionValue === "fraction")
+                widthValue = $.specctrPsCommon.decimalToFraction(widthValue);
+
             text = spec.artLayers.add();
             text.kind = LayerKind.TEXT;
             specText = text.textItem;
@@ -150,6 +153,9 @@ $.specctrPsDimension = {
                 heightValue = $.specctrPsCommon.pointsToUnitsString($.specctrPsCommon.getScaledValue(height), startRulerUnits);
             else
                 heightValue = Math.round(height/relativeHeight*10000) /100+ "%";
+
+            if(model.decimalFractionValue === "fraction")
+                heightValue = $.specctrPsCommon.decimalToFraction(heightValue);
 
             text = spec.artLayers.add();
             text.kind = LayerKind.TEXT;
