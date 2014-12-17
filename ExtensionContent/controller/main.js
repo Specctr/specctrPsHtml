@@ -38,6 +38,20 @@ function completeHandler(data, status) {
  * Set the canvas expand text value.
  */
 function mainTab_creationCompleteHandler() {
+
+	//For retina display: 2 pixel ratio; 
+	if(window.devicePixelRatio > 1) {
+		$("#imgProperty").attr("src", "../Images/Icon_object_x2.png");
+		$("#imgCoordinate").attr("src", "../Images/Icon_coordinates_x2.png");
+		$("#dimensionIcon").attr("src", "../Images/DimensionButtonIcons/WH_11_x2.png");
+		$("#spacingIcon").attr("src", "../Images/SpacingButtonIcons/Spacing_TL_x2.png");
+	} else {
+		$("#imgProperty").attr("src", "../Images/Icon_object.png");
+		$("#imgCoordinate").attr("src", "../Images/Icon_coordinates.png");
+		$("#dimensionIcon").attr("src", "../Images/DimensionButtonIcons/WH_11.png");
+		$("#spacingIcon").attr("src", "../Images/SpacingButtonIcons/Spacing_TL.png");
+	}
+
 	document.getElementById("canvasExpandSize").value = model.canvasExpandSize;
 }
 

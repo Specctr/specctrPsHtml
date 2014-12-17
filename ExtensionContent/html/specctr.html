@@ -110,7 +110,7 @@
 					<!-- Shape/Text button. -->
 					<li class="border" onclick="createPropertySpecs()">
 						<div class="button imgButton">
-							<img src="../Images/Icon_object.png" alt="Shape/Text" /> 
+							<img id="imgProperty" alt="Shape/Text" /> 
 							<label class="buttonTextStyle" style="margin-left: -1px;">Shape / Text</label>
 						</div>
 					</li>
@@ -119,8 +119,7 @@
 					<li class="border" id="liWh">
 					
 						<div class="button imgButton" id="btnWh" onclick="dimensionButton_clickHandler()">
-							<img id="dimensionIcon"
-								src="../Images/DimensionButtonIcons/WH_11.png"/> 
+							<img id="dimensionIcon"/> 
 							<label class="buttonTextStyle">
 								Width / Height</label>
 							<div class="dropdownArrow" id="imgWhDdlArrow"
@@ -151,9 +150,8 @@
 					<!-- Spacing button. -->
 					<li class="border" id="liSpacing">
 						<div class="button imgButton" id="btnSpacing" onclick="spacingButton_clickHandler()">
-							<img id="spacingIcon"
-								src="../Images/SpacingButtonIcons/Spacing_TL.png"/>
-							<label class="buttonTextStyle" style="margin-left: -15px;">
+							<img id="spacingIcon" class="adjustSpacingImage"/>
+							<label class="buttonTextStyle adjustSpacingLabel">
 								Spacing</label>
 							<div id="imgSpacingDdlArrow" class="dropdownArrow"
 								onclick="spacingDropDown_clickHandler(event)"></div>
@@ -173,7 +171,7 @@
 					<!-- Coordinate button. -->
 					<li class="border" id="liCoordinate">
 						<div class="button imgButton" id="btnCoordinate" onclick="coordinateButton_clickHandler()">
-							<img src="../Images/Icon_coordinates.png" alt="Coordinates" /> 
+							<img id="imgCoordinate" alt="Coordinates" /> 
 							<label class="buttonTextStyle" style="margin-left: -1px;">
 								Coordinates</label>
 							<div id="imgCoordinateDdlArrow" class="dropdownArrow"

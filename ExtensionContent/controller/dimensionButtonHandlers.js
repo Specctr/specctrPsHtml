@@ -119,6 +119,11 @@ function changeDimensionButtonIcon() {
 	try {
 		var dimensionIconHandler = document.getElementById("dimensionIcon");
 		var imagePath = "../Images/DimensionButtonIcons/WH_";
+		var imageExtension = ".png";
+		
+		//For retina display: 2 pixel ratio; 
+		if(window.devicePixelRatio > 1)
+			imageExtension = "_x2.png";
 
 		var dimensionIcons = [];
 		var min = 0, max = 3;
@@ -128,7 +133,7 @@ function changeDimensionButtonIcon() {
 			dimensionIcons.push([]);
 			dimensionIcons[i].push(new Array(max));
 			for (var j = min; j <= max; j++)
-				dimensionIcons[i][j] = imagePath + i + "" + j + ".png";
+				dimensionIcons[i][j] = imagePath + i + "" + j + imageExtension;
 		}
 
 		dimensionIconHandler.src = dimensionIcons[model.widthPos][model.heightPos];

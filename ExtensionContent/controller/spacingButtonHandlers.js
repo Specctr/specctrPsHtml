@@ -82,15 +82,21 @@ function changeSpacingBtnIcon() {
 	try {
 		var spacingIconHandler = document.getElementById("spacingIcon");
 		var iconPath = "../Images/SpacingButtonIcons/Spacing_";
+		var imageExtension = ".png";
+		
+		//For retina display: 2 pixel ratio; 
+		if(window.devicePixelRatio > 1)
+			imageExtension = "_x2.png";
 
 		//Array of spacing button icons.
-		var spacingIcons = [ iconPath + "None.png", iconPath + "B.png",
-				iconPath + "L.png", iconPath + "BL.png", iconPath + "R.png",
-				iconPath + "BR.png", iconPath + "LR.png", iconPath + "BLR.png",
-				iconPath + "T.png", iconPath + "BT.png", iconPath + "TL.png",
-				iconPath + "LTB.png", iconPath + "TR.png",
-				iconPath + "BTR.png", iconPath + "LTR.png",
-				iconPath + "All.png" ];
+		var spacingIcons = [ iconPath + "None" + imageExtension, iconPath + "B" + imageExtension,
+				iconPath + "L" + imageExtension, iconPath + "BL" + imageExtension, 
+				iconPath + "R" + imageExtension, iconPath + "BR" + imageExtension, 
+				iconPath + "LR" + imageExtension, iconPath + "BLR" + imageExtension,
+				iconPath + "T" + imageExtension, iconPath + "BT" + imageExtension, 
+				iconPath + "TL" + imageExtension, iconPath + "LTB" + imageExtension, 
+				iconPath + "TR" + imageExtension, iconPath + "BTR" + imageExtension, 
+				iconPath + "LTR" + imageExtension, iconPath + "All" + imageExtension];
 
 		//Calculate the index of button icon.
 		var indexSpacingIcon = (model.spaceTop | 0) * 8
