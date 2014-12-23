@@ -2793,6 +2793,10 @@ function getSpecsInfoForTextItem(pageItem)
     if(!name)
         name = textItem.contents;
     
+    var wordsArray = name.split(" ");
+    if(wordsArray.length > 2)
+        name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
+                
     cssText = name.toLowerCase() + " {";
     infoText = name;
     

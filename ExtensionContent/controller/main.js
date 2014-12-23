@@ -10,21 +10,16 @@ and reading and writing preferences methods.
  * @param status {string} The status of the activation request.
  */
 function completeHandler(data, status) {
-	var appPrefs = new Object();
-	var response = data;
-
-	var arr = response.registered;
+	var arr = data.registered;
 
 	//If unsuccessful, return without saving the data in config.
 	if (arr.length != 0) {
-		appPrefs.isLicensed = true;
 		model.isLicensed = true;
 	} else {
 		return;
 	}
 
-	setPreferencePath();
-	writeAppPrefs(JSON.stringify(appPrefs));
+	writeAppPrefs();
 	init();
 }
 
