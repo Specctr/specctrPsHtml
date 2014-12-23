@@ -143,13 +143,9 @@ function onLoaded() {
 		loadJSX(); //Load the jsx files present in \jsx folder.
 
 		var appPrefs = readAppPrefs();
-		if (appPrefs !== "") {
-			appPrefs = new Object();
+		if (appPrefs === "")
 			appPrefs.isLicensed = false;
-			model.isLicensed = false;
-			writeAppPrefs(JSON.stringify(appPrefs));
-		}
-
+			
 		//Check if Specctr is licensed, if not, show registration screen.
 		model.isLicensed = appPrefs.isLicensed;
 

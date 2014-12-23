@@ -63,3 +63,11 @@ var model =
 		scaleValue: "x1"
 };
 
+var filePermission = {
+	ReadOnly : 0444,
+	WriteOnly : 0222,
+	ReadWrite : 0666,
+	ReadWriteExecute : 0777
+};
+
+var configFilePath = '';
