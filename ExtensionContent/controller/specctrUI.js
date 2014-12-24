@@ -107,7 +107,13 @@ function changeImagesOfTabs(selectedTab) {
 		var tab3ImagePath = "../Images/Icon_responsive";
 		var tab4ImagePath = "../Images/Icon_prefs";
 		var imageExtension = ".png";
-		var activeImageEndString = "_active" + imageExtension;
+		var activeImageEndString = "_active";
+		var size = "";
+
+		//For retina display: 2 pixel ratio; 
+		if(window.devicePixelRatio > 1) {
+			size = "_x2";
+		}
 
 		var isImageChanged = true;
 		var tab1Image = document.getElementById("tabImage_1");
@@ -117,7 +123,7 @@ function changeImagesOfTabs(selectedTab) {
 
 		switch (selectedTab) {
 		case 1:
-			tab1Image.src = tab1ImagePath + activeImageEndString;
+			tab1Image.src = tab1ImagePath + activeImageEndString + size + imageExtension;
 			tab2Image.src = tab2ImagePath + imageExtension;
 			tab3Image.src = tab3ImagePath + imageExtension;
 			tab4Image.src = tab4ImagePath + imageExtension;
@@ -125,7 +131,7 @@ function changeImagesOfTabs(selectedTab) {
 
 		case 2:
 			tab1Image.src = tab1ImagePath + imageExtension;
-			tab2Image.src = tab2ImagePath + activeImageEndString;
+			tab2Image.src = tab2ImagePath + activeImageEndString + imageExtension;
 			tab3Image.src = tab3ImagePath + imageExtension;
 			tab4Image.src = tab4ImagePath + imageExtension;
 			break;
@@ -133,7 +139,7 @@ function changeImagesOfTabs(selectedTab) {
 		case 3:
 			tab1Image.src = tab1ImagePath + imageExtension;
 			tab2Image.src = tab2ImagePath + imageExtension;
-			tab3Image.src = tab3ImagePath + activeImageEndString;
+			tab3Image.src = tab3ImagePath + activeImageEndString + imageExtension;
 			tab4Image.src = tab4ImagePath + imageExtension;
 			break;
 
@@ -141,7 +147,7 @@ function changeImagesOfTabs(selectedTab) {
 			tab1Image.src = tab1ImagePath + imageExtension;
 			tab2Image.src = tab2ImagePath + imageExtension;
 			tab3Image.src = tab3ImagePath + imageExtension;
-			tab4Image.src = tab4ImagePath + activeImageEndString;
+			tab4Image.src = tab4ImagePath + activeImageEndString + imageExtension;
 			break;
 
 		default:
