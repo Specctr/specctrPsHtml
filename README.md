@@ -1,11 +1,11 @@
 specctrPsHtml
 ================
 
-Specctr for Photoshop
+Specctr for Illustrator
 
-Project Name: specctrPsHtml
+Project Name: specctrPsHtml/specctrAiHtml-2.0.. (Contains all development for Ai)
 
-Description: The objective of the project is to create a panel name "Specctr-Pro" in Photoshop. The panel consists some buttons, tabs, check boxes etc. and these are used to measure the width and height of the art object created in the canvas, to measure the spacing between two art objects and between the canvas edges and single art object. It also shows the properties of the art objects like shape, color, effects, border, inner shadow etc. And for text art object it shows text font family, font size, leading, styles etc.
+Description: The objective of the project is to create a panel name "Specctr-Pro" in Illustrator. The panel consists some buttons, tabs, check boxes etc. and these are used to measure the width and height of the art object created in the canvas, to measure the spacing between two art objects and between the canvas edges and single art object. It also shows the properties of the art objects like shape, color, effects, border, inner shadow etc. And for text art object it shows text font family, font size, leading, styles etc.
 
 Features of the Panel:
 1. GLOBAL FEATURES
