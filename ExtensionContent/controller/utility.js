@@ -42,3 +42,24 @@ function rgbToHex(colorVal) {
 
 	return colorVal;
 }
+
+/**
+ * Get the current host application name.
+ * @returns host application id.
+ * */
+function getHostApp() {
+	var csInterface = new CSInterface();
+	var appName = csInterface.hostEnvironment.appName;
+	var appNames = ["PHXS", "ILST"];
+	var currentApplication = "";
+
+	for (var i = 0; i < appNames.length; i++) {
+		var name = appNames[i];
+		if(appName.indexOf(name) >= 0) {
+			currentApplication = name;
+			break;
+		}
+	}
+
+	return currentApplication;
+}

@@ -23,6 +23,7 @@ function completeHandler(data, status) {
 		return;
 	} else {
 		analytics.trackActivation('succeeded');
+		
 		var activationPrefs = {
 			licensed : true,
 			code : $("#license").val()
@@ -59,9 +60,20 @@ function mainTab_creationCompleteHandler() {
  * Set the values of the objects(check boxes in setting tab) from model.
  */
 function settings_creationCompleteHandler() {
-	document.getElementById("shapeFill").checked = model.shapeFill;
-	document.getElementById("shapeStroke").checked = model.shapeStroke;
-	document.getElementById("shapeEffects").checked = model.shapeEffects;
+	//Load settings from model according to the host application.
+	if (hostApplication === illustrator) {
+		document.getElementById("shapeFillColor").checked			= model.shapeFillColor;
+		document.getElementById("shapeFillStyle").checked			= model.shapeFillStyle;
+		document.getElementById("shapeStrokeColor").checked			= model.shapeStrokeColor;
+		document.getElementById("shapeStrokeStyle").checked			= model.shapeStrokeStyle;
+		document.getElementById("shapeStrokeSize").checked			= model.shapeStrokeSize;
+	} else {
+		document.getElementById("shapeFill").checked			= model.shapeFill;
+		document.getElementById("shapeStroke").checked			= model.shapeStroke;
+		document.getElementById("shapeEffects").checked			= model.shapeEffects;
+		document.getElementById("textEffects").checked			= model.textEffects;
+	}
+
 	document.getElementById("shapeAlpha").checked = model.shapeAlpha;
 	document.getElementById("shapeBorderRadius").checked = model.shapeBorderRadius;
 
@@ -73,7 +85,6 @@ function settings_creationCompleteHandler() {
 	document.getElementById("textLeading").checked = model.textLeading;
 	document.getElementById("textTracking").checked = model.textTracking;
 	document.getElementById("textAlpha").checked = model.textAlpha;
-	document.getElementById("textEffects").checked = model.textEffects;
 }
 
 /**
@@ -128,8 +139,20 @@ function prefs_creationCompleteHandler() {
 	if (!model.legendColorMode)
 		model.legendColorMode = "RGB";
 
-	var radioButton = model.legendColorMode.toLowerCase() + "RadioButton";
-	document.getElementById(radioButton).checked = true;
+	//Initialize the components on the basis of host application.
+	if (hostApplication === illustrator)	{
+		document.getElementById("specToEdge").checked = model.specToEdge;
+		var colorModeHandler = document.getElementById("lstColorMode");
+		for(var i = 0; i < 4; i++) {
+			if(colorModeHandler.options[i].text == model.legendColorMode) {
+				colorModeHandler.options[i].selected = true;
+				break;
+			}
+		}
+	} else {
+		var radioButton = model.legendColorMode.toLowerCase() + "RadioButton";
+		document.getElementById(radioButton).checked = true;
+	}
 
 	document.getElementById("colObject").style.backgroundColor = model.legendColorObject;
 	document.getElementById("colType").style.backgroundColor = model.legendColorType;
@@ -160,24 +183,46 @@ function onLoaded() {
 	// Handle the exceptions such as if any value or any component is not
 	// present.
 	try {
-		loadJSX(); // Load the jsx files present in \jsx folder.
 		createDialog();
-
 		var isLicensed = false;
-		var appPrefs = readAppPrefs();	//Read the config file and look for the isLicensed value.
+		var appPrefs;
+
+		//Get the host application name.
+		hostApplication = getHostApp();
+
+		if (hostApplication === '') {
+			showDialog('Cannot load the extension.\nRequired host application not found!');
+			return;
+		} else if (hostApplication === illustrator) {
+			document.getElementById("fillForPHXS").style.display = "none";
+			document.getElementById("strokeForPHXS").style.display = "none";
+			document.getElementById("shapeEffectsForPHXS").style.display = "none";
+			document.getElementById("textEffectsForPHXS").style.display = "none";
+			document.getElementById("radioForPHXS").style.display = "none";
+
+			document.getElementById("fillColorForILST").style.display = "block";
+			document.getElementById("fillStyleForILST").style.display = "block";
+			document.getElementById("strokeColorForILST").style.display = "block";
+			document.getElementById("strokeStyleForILST").style.display = "block";
+			document.getElementById("strokeSizeForILST").style.display = "block";
+			document.getElementById("specToEdgeCheckbox").style.display = "block";
+			document.getElementById("colorListForILST").style.display = "block";
+		}
+
+		appPrefs = readAppPrefs();	//Read the config file and look for the isLicensed value.
 		if (appPrefs !== "") {
-			if(appPrefs.hasOwnProperty("isLicensed"))
+			if (appPrefs.hasOwnProperty("isLicensed"))
 				isLicensed = appPrefs.isLicensed;
 			setModelValueFromPreferences();
 		}
 
-		//Migrating license from config file to license file, if present.
+		//Migrating isLicensed from config file to license file, if present.
 		var activationPrefs = {};
-		if(!isLicensed) {
+		if (!isLicensed) {
 			var licenseFilePath = getFilePath('.license');
 			activationPrefs = readFile(licenseFilePath);	//Read the licensed file.
 
-			if(activationPrefs === "")
+			if (activationPrefs === "")
 				return;
 			else
 				activationPrefs = JSON.parse(activationPrefs);
@@ -190,14 +235,14 @@ function onLoaded() {
 			writeAppPrefs();
 		}
 
+		loadJSX(); // Load the jsx files present in \jsx folder.
+		
 		if (isLicensed)
 			init();
 
 	} catch (e) {
 		console.log(e);
 	}
-	
-	//cosole.log(window.devicePixelRatio);
 }
 
 /**
@@ -256,9 +301,20 @@ function setModelValueFromPreferences() {
 	if (!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha"))
 		return;
 
-	model.shapeFill = appPrefs.shapeFill ? true : false;
-	model.shapeStroke = appPrefs.shapeStroke ? true : false;
-	model.shapeEffects = appPrefs.shapeEffects ? true : false;
+	if (hostApplication === illustrator) {
+		model.shapeFillColor = appPrefs.shapeFillColor ? true : false;
+		model.shapeFillStyle = appPrefs.shapeFillStyle ? true : false;
+		model.shapeStrokeColor = appPrefs.shapeStrokeColor ? true : false;
+		model.shapeStrokeStyle = appPrefs.shapeStrokeStyle ? true : false;
+		model.shapeStrokeSize = appPrefs.shapeStrokeSize ? true : false;
+		model.specToEdge = appPrefs.specToEdge ? true : false;
+	} else {
+		model.shapeFill = appPrefs.shapeFill ? true : false;
+		model.shapeStroke = appPrefs.shapeStroke ? true : false;
+		model.shapeEffects = appPrefs.shapeEffects ? true : false;
+		model.textEffects = appPrefs.textEffects ? true : false;
+	}
+	
 	model.shapeAlpha = appPrefs.shapeAlpha ? true : false;
 	model.shapeBorderRadius = appPrefs.shapeBorderRadius ? true : false;
 
@@ -270,7 +326,6 @@ function setModelValueFromPreferences() {
 	model.textLeading = appPrefs.textLeading ? true : false;
 	model.textTracking = appPrefs.textTracking ? true : false;
 	model.textAlpha = appPrefs.textAlpha ? true : false;
-	model.textEffects = appPrefs.textEffects ? true : false;
 
 	model.useHexColor = appPrefs.useHexColor ? true : false;
 	model.specInPrcntg = appPrefs.specInPrcntg ? true : false;

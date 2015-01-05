@@ -7,6 +7,13 @@ var model = {
 	shapeFill:			true,
 	shapeStroke:		true,
 	shapeEffects:		true,
+	
+	shapeFillColor:		true,
+	shapeFillStyle:		true,
+	shapeStrokeColor:	true,
+	shapeStrokeStyle:	true,
+	shapeStrokeSize:	true,
+	
 	shapeAlpha:			false,
 	shapeBorderRadius: 	false,
 
@@ -23,18 +30,19 @@ var model = {
 	canvasExpandSize: 250,
 
 	//legend settings
-	legendFont: 			"ArialMT",
+	legendFont: 			'ArialMT',
 	legendFontIndex:		0,
 	legendFontSize:			12,
 	legendColorObject:		'#FF0000',
 	legendColorType:		'#FF0000',
 	legendColorSpacing:		'#FF0000',
 	useHexColor:			true,
-	legendColorMode:		"RGB",
+	legendColorMode:		'RGB',
+	specToEdge:				true,
 
 	armWeight:		1,
-	typeUnits: 		"pt",
-	distanceUnits:	"px",
+	typeUnits: 		'pt',
+	distanceUnits:	'px',
 	
 	//Coordinate spec options
 	coordinateCellNumber:	0,
@@ -59,10 +67,10 @@ var model = {
 
 	//Scaling specs
 	useScaleBy: false,
-	scaleValue: "x1",
+	scaleValue: 'x1',
 	
 	rgbTransformIntoPercentage: false,
-	decimalFractionValue: "decimal"
+	decimalFractionValue: 'decimal'
 };
 
 var filePermission = {
@@ -74,3 +82,6 @@ var filePermission = {
 
 var configFilePath = '';
 var extensionId = '';
+var hostApplication = '';
+var illustrator = 'ILST';
+var photoshop = 'PHXS';

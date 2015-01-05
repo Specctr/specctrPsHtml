@@ -77,7 +77,13 @@ function getFilePath(fileExtension) {
  * @return The path of the config file {name: specctrPhotoshopConfig.json}.
  */
 function getConfigFilePath() {
-	var path = getPrefernceDirectory() + "/specctrPhotoshopConfig.json";
+	var configFileName = "";
+	if (hostApplication === photoshop)
+		configFileName = "/specctrPhotoshopConfig.json";
+	else if (hostApplication === illustrator)
+		configFileName = "/specctrIllustratorConfig.json";
+	
+	var path = getPrefernceDirectory() + configFileName;
 	return path;
 }
 
