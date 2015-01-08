@@ -125,9 +125,8 @@ function responsiveTab_creationCompleteHandler() {
  */
 function prefs_creationCompleteHandler() {
 	
-	if(hostApplication === illustrator && model.legendFont == "Arial")
-		model.legendFont += "MT";
-	
+	var hostPrefix = "$.specctrPsCommon.";
+
 	// Set the values for font size combobox.
 	var fontSizeHandler = document.getElementById("lstSize");
 	fontSizeHandler.selectedIndex = -1;
@@ -145,6 +144,7 @@ function prefs_creationCompleteHandler() {
 
 	//Initialize the components on the basis of host application.
 	if (hostApplication === illustrator)	{
+		hostPrefix = "ext_ILST_";
 		document.getElementById("specToEdge").checked = model.specToEdge;
 		var colorModeHandler = document.getElementById("lstColorMode");
 		for(var i = 0; i < 4; i++) {
@@ -175,7 +175,7 @@ function prefs_creationCompleteHandler() {
 	radioButton = model.decimalFractionValue + "RadioButton";
 	document.getElementById(radioButton).checked = true;
 
-	var extScript = "$.specctrPsCommon.getFontList()";
+	var extScript = hostPrefix + "getFontList()";
 	evalScript(extScript, loadFontsToList);
 }
 
