@@ -124,6 +124,10 @@ function responsiveTab_creationCompleteHandler() {
  * Load the data provider values to the combo box in spec options tab.
  */
 function prefs_creationCompleteHandler() {
+	
+	if(hostApplication === illustrator && model.legendFont == "Arial")
+		model.legendFont += "MT";
+	
 	// Set the values for font size combobox.
 	var fontSizeHandler = document.getElementById("lstSize");
 	fontSizeHandler.selectedIndex = -1;
