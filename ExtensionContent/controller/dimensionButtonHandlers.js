@@ -18,11 +18,11 @@ function dimensionButton_clickHandler() {
 		} else {
 			//Close the spacing drop down, if open.
 			if ($("#spacingDropDown").is(":visible")) {
-				$("#liSpacing .options").slideUp(100);
-				$("#liSpacing").removeClass("isOpen");
-				$("#btnSpacing").removeClass("buttonSelected");
-				$("#imgSpacingDdlArrow").removeClass()
-						.addClass("dropdownArrow");
+				closeDropDown("#liSpacing", "#btnSpacing", "#imgSpacingDdlArrow");
+			}
+
+			if ($("#coordinateDropDown").is(":visible")) {
+				closeDropDown("#liCoordinate", "#btnCoordinate", "#imgCoordinateDdlArrow");
 			}
 
 			$("#liWh .options").slideDown(100);
@@ -43,10 +43,10 @@ function dimensionDropDown_clickHandler(event) {
 
 	//Close the spacing drop down, if open.
 	if ($("#spacingDropDown").is(":visible")) {
-		$("#liSpacing .options").slideUp(100);
-		$("#liSpacing").removeClass("isOpen");
-		$("#btnSpacing").removeClass("buttonSelected");
-		$("#imgSpacingDdlArrow").removeClass().addClass("dropdownArrow");
+		closeDropDown("#liSpacing", "#btnSpacing", "#imgSpacingDdlArrow");
+	}
+	if ($("#coordinateDropDown").is(":visible")) {
+		closeDropDown("#liCoordinate", "#btnCoordinate", "#imgCoordinateDdlArrow");
 	}
 
 	if ($("#dimensionDropDown").is(":visible")) {
@@ -119,6 +119,11 @@ function changeDimensionButtonIcon() {
 	try {
 		var dimensionIconHandler = document.getElementById("dimensionIcon");
 		var imagePath = "../Images/DimensionButtonIcons/WH_";
+		var imageExtension = ".png";
+		
+		//For retina display: 2 pixel ratio; 
+		if(window.devicePixelRatio > 1)
+			imageExtension = "_x2.png";
 
 		var dimensionIcons = [];
 		var min = 0, max = 3;
@@ -128,7 +133,7 @@ function changeDimensionButtonIcon() {
 			dimensionIcons.push([]);
 			dimensionIcons[i].push(new Array(max));
 			for (var j = min; j <= max; j++)
-				dimensionIcons[i][j] = imagePath + i + "" + j + ".png";
+				dimensionIcons[i][j] = imagePath + i + "" + j + imageExtension;
 		}
 
 		dimensionIconHandler.src = dimensionIcons[model.widthPos][model.heightPos];

@@ -1,0 +1,64 @@
+@CHARSET "ISO-8859-1";
+
+/*
+File-Name: coordinateButtonStyle.css
+Description: Includes styling code related to coordinate button. 
+*/
+
+#liCoordinate .option {
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+#liCoordinate .options {
+    height: 50px;
+}
+
+#liCoordinate:hover .options {
+    margin-left: -1px !important;
+}
+
+#imgTopLeft {
+    background-image: url('../Images/CoordinateDropDownIcons/coordinates_topleft.png');
+}
+
+.topLeftSelected {
+	background-image: url('../Images/CoordinateDropDownIcons/coordinates_topleft_selected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgTopRight {
+    background-image: url('../Images/CoordinateDropDownIcons/coordinates_topright.png');
+}
+
+.topRightSelected {
+	background-image: url('../Images/CoordinateDropDownIcons/coordinates_topright_selected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgBottomRight {
+    background-image: url('../Images/CoordinateDropDownIcons/coordinates_bottomright.png');
+}
+
+.bottomRightSelected {
+	background-image: url('../Images/CoordinateDropDownIcons/coordinates_bottomright_selected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgBottomLeft {
+    background-image: url('../Images/CoordinateDropDownIcons/coordinates_bottomleft.png');
+}
+
+.bottomLeftSelected {
+	background-image: url('../Images/CoordinateDropDownIcons/coordinates_bottomleft_selected.png') !important;
+	background-color: #D2D2D2;
+}
+
+@media 
+(-webkit-min-device-pixel-ratio: 2) { 
+    .topRightSelected {
+		background-image: url('../Images/CoordinateDropDownIcons/coordinates_topright_selected_2x.png') !important;
+		background-color: #D2D2D2;
+		background-size: 49px 49px;
+    }
+}

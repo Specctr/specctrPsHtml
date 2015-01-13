@@ -3,6 +3,10 @@ Name: stream.js
 Description: This file is used to read the bytes from the color swatch file. 
  */
 
+/**
+ * Stream constructor.
+ * @param str {String} Content of files.
+ */
 Stream = function(str) {
   var self = this;
   self.str = (str ? str : []); // the actual bytes

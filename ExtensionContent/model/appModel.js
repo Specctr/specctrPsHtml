@@ -35,7 +35,10 @@ var model = {
 	armWeight:		1,
 	typeUnits: 		"pt",
 	distanceUnits:	"px",
-
+	
+	//Coordinate spec options
+	coordinateCellNumber:	0,
+	
 	//Spacing spec options
 	spaceLeft:		true,
 	spaceTop:		true,
@@ -56,7 +59,10 @@ var model = {
 
 	//Scaling specs
 	useScaleBy: false,
-	scaleValue: "x1"
+	scaleValue: "x1",
+	
+	rgbTransformIntoPercentage: false,
+	decimalFractionValue: "decimal"
 };
 
 var filePermission = {

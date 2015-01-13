@@ -1,4 +1,9 @@
-﻿
+﻿/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * File Name: specctrPsCoordinates.jsx
+ * Description: Includes the methods for creation, updation and deletion of coordinate specs
+  for the selected art object.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
 #include"specctrPsCommon.jsx";
 if(typeof($)=== 'undefined')
 	$={};
@@ -26,6 +31,24 @@ $.specctrPsCoordinates = {
             app.activeDocument.suspendHistory('Coordinate Info', 'this.createCoordinates(sourceItem, bounds)');
         } catch(e) {}
     },
+    
+    //Set coordinate specs to the selected corner.
+    setSpecsToGivenPoints : function(spec, x1, y, x2, newColor, font, size,
+                                                        justification, content, textX, textY) {
+            var xLine = $.specctrPsCommon.createLine(x1, y, x2, y, newColor);     //Horizontal line.
+            var yLine = xLine.duplicate(xLine, ElementPlacement.PLACEBEFORE);
+            yLine = yLine.rotate(90.0);
+            var coordinateText = spec.artLayers.add();
+            coordinateText.kind = LayerKind.TEXT;
+            var specText = coordinateText.textItem;
+            specText.kind = TextType.POINTTEXT;
+            specText.justification = justification;
+            specText.color.rgb = newColor;
+            specText.font = font;
+            specText.size = size;
+            specText.contents = content;
+            specText.position = [textX, textY];
+    },
 
     //Create coordinate specs for the layer.
     createCoordinates : function(sourceItem, bounds) {
@@ -33,116 +56,123 @@ $.specctrPsCoordinates = {
             if(ExternalObject.AdobeXMPScript == null)
                 ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
         
-            var coordinateSpec = "";
+            var coordinateSpec = "", legendLayer = "";
             var idCoordinateSpec = $.specctrPsCommon.getXMPData(sourceItem, "idCoordinateSpec");
             if(idCoordinateSpec) {
                 coordinateSpec = $.specctrPsCommon.getLayerByID(idCoordinateSpec);
                 if(coordinateSpec) {
-                    var parent = coordinateSpec.parent;
+                    legendLayer = coordinateSpec.parent;
                     coordinateSpec.remove();
-                    if(parent.typename === "LayerSet")
-                        parent.remove();
-                
-                    //Delete the xmp data of the layer.
-                    var layerXMP = new XMPMeta(sourceItem.xmpMetadata.rawData);
-                    layerXMP.deleteProperty(XMPConst.NS_PHOTOSHOP, "idCoordinateSpec");
-                    sourceItem.xmpMetadata.rawData = layerXMP.serialize();
                 }
             }
-        
+
             //Save the current preferences
             var model = $.specctrPsCommon.getModel();
             var doc = app.activeDocument;
+            var halfWeight = model.armWeight / 2.0;
+            var size = model.legendFontSize;
+            var spacing = 10 + halfWeight;
+            var margin = spacing - 5;
+            var widthMargin = bounds[2] - bounds[0] + model.armWeight;
+            var heightMargin = bounds[3] - bounds[1] + model.armWeight;
             var startRulerUnits = app.preferences.rulerUnits;
             var startTypeUnits = app.preferences.typeUnits;
             var originalDPI = doc.resolution;
             $.specctrPsCommon.setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
-        
+
             var font = model.legendFont;
             var newColor = $.specctrPsCommon.legendColor(model.legendColorSpacing);
-            var left = "", top = "";
+            var left = "", top = "", right = "", bottom = "";
             
             //Responsive option selected or not.
             if(!model.specInPrcntg) {
                 //Absolute distance.
                 top = $.specctrPsCommon.pointsToUnitsString(bounds[1], startRulerUnits).split(" ", 1);
                 left = $.specctrPsCommon.pointsToUnitsString(bounds[0], startRulerUnits).split(" ", 1);
+                right = $.specctrPsCommon.pointsToUnitsString(bounds[2], startRulerUnits).split(" ", 1);
+                bottom = $.specctrPsCommon.pointsToUnitsString(bounds[3], startRulerUnits).split(" ", 1);
             } else {
                 //Relative distance with respect to original canvas.
-                var relativeTop='', relativeLeft='';
+                var relativeHeight='', relativeWidth='';
                 var orgnlCanvas = $.specctrPsCommon.originalCanvasSize();       //Get the original canvas size.
                 if(model.relativeHeight != 0)
-                    relativeTop = model.relativeHeight;
+                    relativeHeight = model.relativeHeight;
                 else
-                    relativeTop = orgnlCanvas[3];
-                    
-                if(model.relativeWidth != 0)
-                    relativeLeft = model.relativeWidth;
-                else
-                    relativeLeft = orgnlCanvas[2];
+                    relativeHeight = orgnlCanvas[3];
 
-                left = Math.round(bounds[0] / relativeLeft * 10000) / 100 + "%";
-                top = Math.round(bounds[1] / relativeTop * 10000) / 100 + "%";
+                if(model.relativeWidth != 0)
+                    relativeWidth = model.relativeWidth;
+                else
+                    relativeWidth = orgnlCanvas[2];
+
+                left = Math.round(bounds[0] / relativeWidth * 10000) / 100 + "%";
+                top = Math.round(bounds[1] / relativeHeight * 10000) / 100 + "%";
+                right = Math.round(bounds[2] / relativeWidth * 10000) / 100 + "%";
+                bottom = Math.round(bounds[3] / relativeHeight * 10000) / 100 + "%";
             }
 
-            var styleText = "\tleft: " + left + ";\r\ttop: " + top + ";";
-            var doc = app.activeDocument;
-            var spacing = 3 + model.armWeight;
-            var legendLayer = $.specctrPsCommon.legendSpecLayer("Coordinates").layerSets.add();            //To create the layer group for coordinate layer.
-            legendLayer.name = "Specctr Coordinates Mark";
-        
-            var lines = "", coordinateText = "";
+            var textLeftMargin = bounds[0] - margin;
+            var textTopMargin = bounds[1] - margin;
+            var textRightMargin = bounds[2] + margin;
+            var textBottomMargin = bounds[3] - margin;
+            var leftJustification = Justification.LEFT;
+            var rightJustification = Justification.RIGHT;
+            var styleText = "\tleft: " + left + ";\r\ttop: " + top + 
+                                        ";\r\tright: " + right + ";\r\tbottom: " + bottom + ";";
+
+            if(legendLayer === "") {
+                legendLayer = $.specctrPsCommon.legendSpecLayer("Coordinates").layerSets.add();            //To create the layer group for coordinate layer.
+                legendLayer.name = "Specctr Coordinates Mark";
+            }
+
+            var xLine = "", yLine = "", mark="", coordinateText = "";
             var spec = legendLayer.layerSets.add();
             spec.name = "CoordinatesSpec";
-            
-            //Create the spec text for top.
-            coordinateText = spec.artLayers.add();
-            coordinateText.kind = LayerKind.TEXT;
-            var specText = coordinateText.textItem;
-            specText.kind = TextType.POINTTEXT;
-            specText.justification = Justification.RIGHT;
-            specText.color.rgb = newColor;
-            specText.font = font;
-            specText.size = model.legendFontSize;
-            specText.contents = "x: " + left + " y: " + top;
-            
-            var line = "";
-            var aPos, bPos, cPos;
-            if(sourceItem.kind === LayerKind.TEXT) {
 
-                if(sourceItem.textItem.kind === TextType.PARAGRAPHTEXT) {
-                    aPos = sourceItem.textItem.position[1] - model.armWeight;
-                    cPos = sourceItem.textItem.position[1] - model.armWeight / 2;
-                } else {
-                    aPos = sourceItem.textItem.position[1] + model.armWeight;
-                    cPos = sourceItem.textItem.position[1];
-                }
+            //Coordinate specs for left top.
+            var content;
+            var x1, y1, x2;
+             
+            switch(model.coordinateCellNumber) {
+                case 0: content = "x: " + left + " y: " + top;
+                    x1 = bounds[0] - spacing - model.armWeight;
+                    y1 = bounds[1] - halfWeight;
+                    x2 = bounds[0] + spacing;
+                    this.setSpecsToGivenPoints(spec, x1, y1, x2, newColor, font, size,
+                                                            rightJustification,  content, textLeftMargin, textTopMargin);
+                    break;
+                
+                case 1: content =  "x: " + right + " y: " + top;
+                    x1 = bounds[2] + spacing + model.armWeight;
+                    y1 = bounds[1] - halfWeight;
+                    x2 = bounds[2] - spacing;
+                    this.setSpecsToGivenPoints(spec, x1, y1, x2, newColor, font, size,
+                                                            leftJustification,  content, textRightMargin, textTopMargin);
+                break;
+                
+                case 2: content =  "x: " + right + " y: " + bottom;
+                    x1 = bounds[2] + spacing + model.armWeight;
+                    y1 = bounds[3] + halfWeight;
+                    x2 = bounds[2] - spacing;
+                    this.setSpecsToGivenPoints(spec, x1, y1, x2, newColor, font, size,
+                                                                leftJustification,  content, textRightMargin, textBottomMargin);
+                break;
+                
+                case 3: content =  "x: " + left + " y: " + bottom;
+                    x1 = bounds[0] - spacing - model.armWeight;
+                    y1 = bounds[3] + halfWeight;
+                    x2 = bounds[0] + spacing;
+                    this.setSpecsToGivenPoints(spec, x1, y1, x2, newColor, font, size,
+                                                            rightJustification,  content, textLeftMargin, textBottomMargin);
+                break;
 
-                bPos = bounds[0] - spacing;
-                specText.position = [bPos - model.armWeight / 2, aPos - spacing];
-                spacing = spacing + 5;
-                bPos = bPos - 5;
-                line = $.specctrPsCommon.createLine(bPos - model.armWeight,  aPos, 
-                                                            bounds[0] + spacing, aPos, newColor);     //Horizontal line.
-
-                aPos = bounds[0] - model.armWeight;
-                $.specctrPsCommon.setShape(aPos, cPos - spacing, aPos, 
-                                                cPos + spacing);        //Vertical line
-            } else {
-                specText.position =[bounds[0] - spacing, bounds[1] - spacing];
-                spacing = spacing + 5;
-                aPos = bounds[1] - model.armWeight / 2;
-                line = $.specctrPsCommon.createLine(bounds[0] - spacing, aPos, 
-                            bounds[0] + spacing, aPos, newColor);     //Horizontal line.
-                aPos = bounds[0] - model.armWeight / 2;
-                $.specctrPsCommon.setShape(aPos, bounds[1] - spacing, aPos, 
-                            bounds[1] + spacing);        //Vertical line
+                default:
             }
-        
+
             doc.activeLayer = spec;
             spec = $.specctrPsCommon.createSmartObject();
             idCoordinateSpec = $.specctrPsCommon.getIDOfLayer();
-            
+
             $.specctrPsCommon.setXmpDataForSpec(sourceItem, idCoordinateSpec, "idCoordinateSpec");
             $.specctrPsCommon.setXmpDataForSpec(spec, "true", "SpeccedObject");
             $.specctrPsCommon.setXmpDataForSpec(spec, styleText, "css");

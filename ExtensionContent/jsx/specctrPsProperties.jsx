@@ -1,4 +1,9 @@
-﻿
+﻿/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * File Name: specctrPsProperties.jsx
+ * Description: Include the methods for creation, updation and deletion of properties specs
+  for the selected art object.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
 #include "specctrPsCommon.jsx"
 #include "specctrPsSwatches.jsx"
 if(typeof($)=== 'undefined')
@@ -8,7 +13,6 @@ var model;
 var cssText = "";
 var cssBodyText = "";
 $.specctrPsProperties = {
-    
     //Suspend the history of creating properties spec of layers.
     createPropertySpecsForItem : function() {
         try {
@@ -798,8 +802,19 @@ $.specctrPsProperties = {
 
                             result = "#" + red + green + blue;
                         } else {
-                            result = "rgb(" + Math.round(colorType.red) + ", " + Math.round(colorType.green) + ", " + Math.round(colorType.blue) + ")";
+                            
+                            if(model.rgbTransformIntoPercentage === true) {
+                                var rVal = Math.round(colorType.red / 255 * 100);
+                                var gVal =  Math.round(colorType.green / 255 * 100);
+                                var bVal =  Math.round(colorType.blue / 255 * 100);
+                            } else {
+                                rVal = Math.round(colorType.red);
+                                gVal =  Math.round(colorType.green);
+                                bVal =  Math.round(colorType.blue);
                             }
+                            
+                            result = "rgb(" + rVal + ", " + gVal + ", " + bVal + ")";
+                        }
                 }
                 break;
 

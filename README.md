@@ -22,6 +22,7 @@ Features of the Panel:
 
 3. SMART OBJECT
 - Fill Color
+- Swatch name.
 - Effect Stroke color, size, style
 - Opacity, filter 
 
@@ -29,6 +30,7 @@ Features of the Panel:
 - Font family
 - Size
 - Color 
+- Swatch name.
 - Opacity, Filter
 - Alignment, Leading, kerning
 
@@ -40,10 +42,12 @@ Features of the Panel:
 - Different color for spec Types 
 - Different modes of calculating measurements
 - Scaling specs (x2, x3, /2, /3 etc.)
+- iOS option: RGB in %.
+- Fraction/Decimal values.
 
 6. Others
 - Number system is used for Shape/Text property specs.
-- Spacing and Dimension specs can be created on user's selected position. (see dropdown feature of buttons)
+- Spacing, Dimension and Coordinate specs can be created on user's selected position. (see dropdown feature of buttons)
  
 Importing steps:
 - To build the project, We need Eclipse 3.6 or later version with Extension Builder 3.
@@ -86,3 +90,7 @@ Supported platforms:
 For more understanding of UI:
 - http://www.specctr.com/products.php
 - http://www.specctr.com
+
+Note:
+- Latest html version of specctrPs.
+- This source code is used to make zxp for users.

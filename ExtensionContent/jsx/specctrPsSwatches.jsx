@@ -1,9 +1,14 @@
-﻿
+﻿/*//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ * File Name: specctrPsSwatches.jsx
+ * Description: Includes the methods for getting the swatch names from the color value.
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
+
 #include "stream.js"
 if(typeof($)=== 'undefined')
 	$={};
 
 $.specctrPsSwatches = {
+    //Write the current swatch panel's swatches to the aco file.
     readFromRuntime : function(color) {
         try {
             var path = doc.path;
@@ -25,6 +30,7 @@ $.specctrPsSwatches = {
         return swatchName;
     },
 
+    //Save the current swatches of the panel.
     saveSwatches : function(fptr) {
       var desc = new ActionDescriptor();
       desc.putPath( charIDToTypeID('null'), fptr);
@@ -35,13 +41,18 @@ $.specctrPsSwatches = {
       executeAction(charIDToTypeID('setd'), desc, DialogModes.NO);
     },
 
+    // Read the file's stream and get the name of swatches from the color value.
     readFromACOFile : function(fptr, color) {
         var str = Stream.readStream(fptr);
-        try{
-        var swatchName = this.read(str, color);}catch(e){alert(e);}
+        try {
+            var swatchName = this.read(str, color);
+        } catch(e) {
+            alert(e);
+        }
         return swatchName;
     },
 
+    // Read the bytes of the aco file.
     read : function(str, color) {
       var version = str.readInt16();
       var swatchName = '';
@@ -63,6 +74,7 @@ $.specctrPsSwatches = {
       return swatchName;
     },
 
+    //Get the colors of the swatches from the current aco file.
     readColors : function(str, count, names, color) {
         var model = color.model;
         for (var i = 0; i < count; i++) {
@@ -121,6 +133,7 @@ $.specctrPsSwatches = {
       }
     },
 
+    //Set the color bytes into existing color type of swatches.
     setColor : function(cwords, ctype) {
       var color = new SolidColor();
       switch (ctype) {
@@ -171,13 +184,15 @@ $.specctrPsSwatches = {
       return color;
     },
 
-  mapInto256 : function(value) {
+    //Map the values to 256.
+    mapInto256 : function(value) {
     var rc = value/256.0;
     return (rc > 255.0) ? 255 : rc;
-  },
+    },
 
-  mapInto100 : function(value) {
+    //Map the values to 100.
+    mapInto100 : function(value) {
     return 100.0 * value / 0xFFFF;
-  }
+    }
 
 };

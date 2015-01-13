@@ -38,6 +38,20 @@ function completeHandler(data, status) {
  * Set the canvas expand text value.
  */
 function mainTab_creationCompleteHandler() {
+
+	//For retina display: 2 pixel ratio; 
+	if(window.devicePixelRatio > 1) {
+		$("#imgProperty").attr("src", "../Images/Icon_object_x2.png");
+		$("#imgCoordinate").attr("src", "../Images/Icon_coordinates_x2.png");
+		$("#dimensionIcon").attr("src", "../Images/DimensionButtonIcons/WH_11_x2.png");
+		$("#spacingIcon").attr("src", "../Images/SpacingButtonIcons/Spacing_TL_x2.png");
+	} else {
+		$("#imgProperty").attr("src", "../Images/Icon_object.png");
+		$("#imgCoordinate").attr("src", "../Images/Icon_coordinates.png");
+		$("#dimensionIcon").attr("src", "../Images/DimensionButtonIcons/WH_11.png");
+		$("#spacingIcon").attr("src", "../Images/SpacingButtonIcons/Spacing_TL.png");
+	}
+
 	document.getElementById("canvasExpandSize").value = model.canvasExpandSize;
 }
 
@@ -129,6 +143,11 @@ function prefs_creationCompleteHandler() {
 	else
 		disableTextField(document.getElementById("txtScaleBy"));
 
+	document.getElementById("rgbTransformIntoPercentage").checked = model.rgbTransformIntoPercentage;
+	
+	radioButton = model.decimalFractionValue + "RadioButton";
+	document.getElementById(radioButton).checked = true;
+
 	var extScript = "$.specctrPsCommon.getFontList()";
 	evalScript(extScript, loadFontsToList);
 }
@@ -177,6 +196,8 @@ function onLoaded() {
 	} catch (e) {
 		console.log(e);
 	}
+	
+	//cosole.log(window.devicePixelRatio);
 }
 
 /**
@@ -255,7 +276,8 @@ function setModelValueFromPreferences() {
 	model.specInPrcntg = appPrefs.specInPrcntg ? true : false;
 	model.specInEM = appPrefs.specInEM ? true : false;
 	model.useScaleBy = appPrefs.useScaleBy ? true : false;
-
+	model.rgbTransformIntoPercentage = appPrefs.rgbTransformIntoPercentage ? true : false;
+	
 	model.canvasExpandSize = Number(appPrefs.canvasExpandSize);
 
 	model.legendFont = appPrefs.legendFont ? appPrefs.legendFont
@@ -274,6 +296,9 @@ function setModelValueFromPreferences() {
 
 	if (appPrefs.hasOwnProperty("legendColorMode"))
 		model.legendColorMode = appPrefs.legendColorMode;
+	
+	if (appPrefs.hasOwnProperty("decimalFractionValue"))
+		model.decimalFractionValue = appPrefs.decimalFractionValue;
 }
 
 /**

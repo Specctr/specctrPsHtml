@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="4.0" ExtensionBundleId="specctrPsHtml" ExtensionBundleVersion="2.2.3.h"
+<ExtensionManifest Version="4.0" ExtensionBundleId="specctrPsHtml" ExtensionBundleVersion="2.2.8.h"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
@@ -176,15 +176,15 @@ each party and (ii) in a written contract signed by both parties.]]>
 					<Menu>Specctr-Pro</Menu>
 					<Geometry>
 						<Size>
-							<Height>492</Height>
+							<Height>542</Height>
 							<Width>224</Width>
 						</Size>
 						<MaxSize>
-							<Height>492</Height>
+							<Height>542</Height>
 							<Width>224</Width>
 						</MaxSize>
 						<MinSize>
-							<Height>492</Height>
+							<Height>542</Height>
 							<Width>224</Width>
 						</MinSize>
 					</Geometry>

@@ -35,7 +35,7 @@ body
 
 .container
 {
-    Height: 490px;
+    Height: 540px;
     Width: 222px;
     background-color: #E8E8E8;
 	margin: 0 auto;
@@ -324,6 +324,7 @@ input[type="text"], input[type="password"]
     float: left;
     width: 49px;
     margin-left: 15px;
+    background-size: 49px 49px;
 }
 
 .imgButton label
@@ -763,4 +764,27 @@ label
 {
   opacity: .60 !important;
   background-color: rgb(50, 50, 50) !important;
+}
+
+.adjustSpacingImage {
+	height: 49px; 
+	margin-left: 15px;
+}
+
+.adjustSpacingLabel {
+	margin-left: -15px !important;
+}
+
+@media 
+(-webkit-min-device-pixel-ratio: 2) { 
+	.adjustSpacingImage {
+		margin-top: 2px !important;
+		height: 45px !important; 
+		margin-left: 10px !important;
+	}
+
+	.adjustSpacingLabel {
+		margin-left: -10px !important;
+	}
+	
 }
