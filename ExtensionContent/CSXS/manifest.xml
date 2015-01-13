@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="4.0" ExtensionBundleId="Specctr-10-PS" ExtensionBundleVersion="1.2.3"
+<ExtensionManifest Version="4.0" ExtensionBundleId="Specctr-Pro-PS" ExtensionBundleVersion="2.4.0"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
@@ -8,7 +8,7 @@
     <Contact mailto="info@on-pixel.com"/>
     <Legal>
         <![CDATA[
-End User License Agreement for Specctr-10-PS.
+End User License Agreement for Specctr-Pro-PS.
 This End User Software License Agreement (this “Agreement”) is by and between You (“Recipient”), and 
 On Pixel, Inc., a Massachusetts corporation, with a primary place of business at 374 Beacon St. #2
 Somerville, Massachusetts 02464 (“Provider”). This agreement governs your use of the Specctr software 
@@ -18,7 +18,7 @@ Terms and Conditions
 1. License.
 (a) Grant of Rights. Provider hereby grants Recipient a non-exclusive license to use the Software 
 provided: (i) Recipient may give no more than one (1) concurrent user access to the Software; (ii) 
-Recipient may install the Software on no more than one (1) computers; (iii) Recipient complies 
+Recipient may install the Software on no more than two (2) computers; (iii) Recipient complies 
 with the restrictions set forth in Subsection 1(b) below. 
 (b) Restrictions. Copies of the Software created or transferred pursuant to this Agreement are 
 licensed, not sold, and Recipient receives no title to or ownership of any copy or of the Software 
@@ -151,14 +151,14 @@ each party and (ii) in a written contract signed by both parties.
         <![CDATA[Specctr supercharges Adobe Photoshop by automating spec generation. With the capability to spec dimensions, color, font, spacing, and more, Specctr enables design and development teams to collaborate more accurately, efficiently, and effortlessly.]]>
     </Abstract>
     <ExtensionList>
-        <Extension Id="SpecctrPs-10" Version="1.0"/>
+        <Extension Id="SpecctrPs-Pro" Version="1.0"/>
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
            
-            <Host Name="PHSP" Version="[14.0,15.9]" />
+            <Host Name="PHSP" Version="[14.0,16.9]" />
            
-            <Host Name="PHXS" Version="[14.0,15.9]" />
+            <Host Name="PHXS" Version="[14.0,16.9]" />
         
 		</HostList>
 		<LocaleList>
@@ -169,7 +169,7 @@ each party and (ii) in a written contract signed by both parties.
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
-        <Extension Id="SpecctrPs-10">
+        <Extension Id="SpecctrPs-Pro">
 			<DispatchInfo >
 				<Resources>
 				<MainPath>./html/specctr.html</MainPath>
@@ -180,19 +180,19 @@ each party and (ii) in a written contract signed by both parties.
 				</Lifecycle>
 				<UI>
 					<Type>Panel</Type>
-                    <Menu>Specctr-10-PS</Menu>
+                    <Menu>Specctr-Pro-PS</Menu>
 					<Geometry>
 						<Size>
-							<Height>370</Height>
-							<Width>222</Width>
+                            <Height>490</Height>
+                            <Width>222</Width>
 						</Size>
 						<MaxSize>
-							<Height>370</Height>
-							<Width>222</Width>
+                            <Height>490</Height>
+                            <Width>222</Width>
 						</MaxSize>
 						<MinSize>
-							<Height>370</Height>
-							<Width>222</Width>
+                            <Height>490</Height>
+                            <Width>222</Width>
 						</MinSize>
 					</Geometry>
 					<Icons>
