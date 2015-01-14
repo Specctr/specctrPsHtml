@@ -16,15 +16,6 @@ var cssText = "";
 var cssBodyText = "";
 var propSpecUndo=({});
 
-ext_ILST_setModel = setModel;
-ext_ILST_expandCanvas = expandCanvas;
-ext_ILST_createDimensionSpecs = createDimensionSpecs;
-ext_ILST_createSpacingSpecs = createSpacingSpecs;
-ext_ILST_createCoordinateSpecs = createCoordinateSpecs;
-ext_ILST_createPropertySpecs = createPropertySpecs;
-ext_ILST_exportCss = exportCss;
-ext_ILST_getFontList = getFontList;
-
 $.specctrAi = {
     //Get the application font's name and font's family.
     getFontList : function() {
@@ -50,7 +41,7 @@ $.specctrAi = {
     },
 
     //Create the canvas border and expand the artboard.
-    expandCanvas : function() {
+    createCanvasBorder : function() {
         var doc = app.activeDocument;
         var currentArtboard = doc.artboards[doc.artboards.getActiveArtboardIndex()];
         var artRect = currentArtboard.artboardRect;
@@ -431,7 +422,8 @@ $.specctrAi = {
             if (model.widthPos == 0 && model.heightPos == 0) 
                 return true;
             
-            var legendLayer = this.legendDimensionsLayer();
+            var name = "Dimensions";
+            var legendLayer = this.legendSpecLayer(name);
             var pageItemBounds = this.itemBounds(pageItem);
 
             var height = pageItemBounds[1] - pageItemBounds[3];
@@ -465,11 +457,11 @@ $.specctrAi = {
         
             //Delete the width/height spec group if it is already created for the acitve source item on the basis of the visibility variable.
             var idVar = pageItem.visibilityVariable;
-            this.removeSpecGroup(idVar, "Dimensions");
+            this.removeSpecGroup(idVar, name);
        
             var styleText = "\twidth: " + widthForSpec + ";\r\theight: " + heightForSpec +";";
             var spacing = 10 + model.armWeight;
-            var newColor = this.legendColorSpacing();
+            var newColor = this.legendColor(model.legendColorSpacing);
             var itemsGroup = app.activeDocument.groupItems.add();
         
             //Create the width specs.
@@ -635,19 +627,25 @@ $.specctrAi = {
     //Create coordinate specs for the selected page item.
     createCoordinateSpecsForItem : function(pageItem) {
         try {
-            var legendLayer = this.legendCoordinatesLayer();                        //Create the 'Coordinates' layer group.
+            var name = "Coordinates";
+            var legendLayer = this.legendSpecLayer(name);    //Create the 'Coordinates' layer group.
             var pageItemBounds = this.itemBounds(pageItem);
             var top = -pageItemBounds[1];
             var left = pageItemBounds[0];
+            var right = pageItemBounds[2];
+            var bottom = -pageItemBounds[3];
             var spacing = 10 + model.armWeight;
+            var armWeight = model.armWeight / 2;
             var idVar = pageItem.visibilityVariable;
-            this.removeSpecGroup(idVar, "Coordinates");
+            this.removeSpecGroup(idVar, name);
         
             //Responsive option is selected or not.
             if (!model.specInPrcntg) {
                 //Absolute distance.
                 top = this.pointsToUnitsString(top, null);
                 left = this.pointsToUnitsString(left, null);
+                right = this.pointsToUnitsString(right, null);
+                bottom = this.pointsToUnitsString(bottom, null);
             } else {
                 //Relative distance with respect to original canvas Or the given values in the text boxes of Responsive tab.
                 var relativeTop = '', relativeLeft = '';
@@ -665,57 +663,96 @@ $.specctrAi = {
 
                 top = Math.round(top / relativeTop * 100) + "%";
                 left = Math.round(left / relativeLeft * 100) + "%";
+                right = Math.round(right / relativeLeft * 100) + "%";
+                bottom = Math.round(bottom / relativeTop * 100) + "%";
             }
         
-            var styleText = "\tleft: " + left + ";\r\ttop: " + top + ";";
-            var newColor = this.legendColorSpacing();
+            var styleText = "\tleft: " + left + ";\r\ttop: " + top + ";" +
+                            ";\r\tright: " + right + ";\r\tbottom: " + bottom + ";";
+
+            var newColor = this.legendColor(model.legendColorSpacing);
             var itemsGroup = app.activeDocument.groupItems.add();
         
-            var pointX = pageItemBounds[0];
-            var pointY = pageItemBounds[1];
-            var horizontalLineY = pointY + model.armWeight / 2;
-            var verticalLineY = pointY + spacing + model.armWeight / 2;
+            var horizontalLineY, verticalLineY;
         
-            if (pageItem.typename == "TextFrame") {   //Change the position of lines if page item is a text item.
-                if (pageItem.kind == TextType.POINTTEXT) {
-                    pointX = pageItem.anchor[0];
-                    pointY = pageItem.anchor[1];
-                } else if (pageItem.kind == TextType.PATHTEXT) {
-                    pointX = pageItemBounds[0];
-                    pointY = pageItem.position[1];
-                }
+//~             if (pageItem.typename == "TextFrame") {   //Change the position of lines if page item is a text item.
+//~                 if (pageItem.kind == TextType.POINTTEXT) {
+//~                     pointX = pageItem.anchor[0];
+//~                     pointY = pageItem.anchor[1];
+//~                 } else if (pageItem.kind == TextType.PATHTEXT) {
+//~                     pointX = pageItemBounds[0];
+//~                     pointY = pageItem.position[1];
+//~                 }
 
-                horizontalLineY = pointY - model.armWeight / 2;
-                verticalLineY = pointY + spacing;
-            }
+//~                 horizontalLineY = pointY - model.armWeight / 2;
+//~                 verticalLineY = pointY + spacing;
+//~             }
         
-            //Creating coordinate spec text.
-            var coordinateText = app.activeDocument.textFrames.pointText([pointX - 0.5 * spacing, pointY + 0.5 * spacing], 
-                                                                                                            TextOrientation.HORIZONTAL);
-            coordinateText.contents = "x: " + left + " y: " + top;
-            coordinateText.textRange.paragraphAttributes.justification = Justification.RIGHT;
+            var coordinateText, horizontalLine, horizontalLineMain;
+            var lineX, verticalLine, verticalLineMain;
+            
+            switch(model.coordinateCellNumber) {
+                case 0 :    //Creating coordinate spec text at left top.
+                horizontalLineY = pageItemBounds[1] + armWeight;
+                verticalLineY = pageItemBounds[1] + spacing + armWeight;
+                
+                coordinateText = app.activeDocument.textFrames.pointText([pageItemBounds[0] - 0.5 * spacing, 
+                                            pageItemBounds[1] + 0.5 * spacing], TextOrientation.HORIZONTAL);
+                coordinateText.contents = "x: " + left + " y: " + top;
+                coordinateText.textRange.paragraphAttributes.justification = Justification.RIGHT;
+            
+                horizontalLine = app.activeDocument.compoundPathItems.add();
+                horizontalLineMain = horizontalLine.pathItems.add();
+                horizontalLineMain.setEntirePath([[pageItemBounds[0] - spacing - armWeight, horizontalLineY], 
+                                                                [pageItemBounds[0] + spacing, horizontalLineY]]);
+            
+                lineX = pageItemBounds[0] - armWeight;
+                verticalLine = app.activeDocument.compoundPathItems.add();
+                verticalLineMain = verticalLine.pathItems.add();
+                verticalLineMain.setEntirePath([[lineX, verticalLineY], [lineX, pageItemBounds[1] - spacing]]);
+                break;
+                
+                case 1 :    //Creating coordinate spec text at right top.
+                horizontalLineY = pageItemBounds[1] + armWeight;
+                verticalLineY = pageItemBounds[1] + spacing + armWeight;
+                
+                coordinateText = app.activeDocument.textFrames.pointText([pageItemBounds[2] + 0.5 * spacing, 
+                                            pageItemBounds[1] + 0.5 * spacing], TextOrientation.HORIZONTAL);
+                coordinateText.contents = "x: " + right + " y: " + top;
+                coordinateText.textRange.paragraphAttributes.justification = Justification.LEFT;
+            
+                horizontalLine = app.activeDocument.compoundPathItems.add();
+                horizontalLineMain = horizontalLine.pathItems.add();
+                horizontalLineMain.setEntirePath([[pageItemBounds[2] - spacing, horizontalLineY], 
+                                                                [pageItemBounds[2] + spacing + armWeight, horizontalLineY]]);
+            
+                lineX = pageItemBounds[2] + armWeight;
+                verticalLine = app.activeDocument.compoundPathItems.add();
+                verticalLineMain = verticalLine.pathItems.add();
+                verticalLineMain.setEntirePath([[lineX, verticalLineY], [lineX, pageItemBounds[1] - spacing]]);
+                break;
+                
+                case 2 :
+                break;
+            
+            }
+            
             coordinateText.textRange.characterAttributes.fillColor = newColor;
             coordinateText.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
             coordinateText.textRange.characterAttributes.size = model.legendFontSize;
             coordinateText.move(itemsGroup, ElementPlacement.INSIDE);
         
             //Adding horizontal line.
-            var horizontalLine = app.activeDocument.compoundPathItems.add();
-            var horizontalLineMain = horizontalLine.pathItems.add();
-            horizontalLineMain.setEntirePath([[pointX - spacing - model.armWeight / 2, horizontalLineY], 
-                                                                [pointX + spacing, horizontalLineY]]);
             horizontalLineMain.stroked = true;
             horizontalLineMain.strokeDashes = [];
             horizontalLineMain.strokeWidth = model.armWeight;
             horizontalLineMain.strokeColor = newColor;
             horizontalLine.move(itemsGroup, ElementPlacement.INSIDE);
             
-            var lineX = pointX - model.armWeight / 2;
+            
         
             //Adding vertical line.
-            var verticalLine = app.activeDocument.compoundPathItems.add();
-            var verticalLineMain = verticalLine.pathItems.add();
-            verticalLineMain.setEntirePath([[lineX, verticalLineY], [lineX, pointY - spacing]]);
+            
             verticalLineMain.stroked = true;
             verticalLineMain.strokeDashes = [];
             verticalLineMain.strokeWidth = model.armWeight;
@@ -748,9 +785,9 @@ $.specctrAi = {
     //Create text for vertical distances for spacing specs between two objects.
     createSpacingVerticalSpec : function(x, y1, y2, itemsGroup) {
         try {
-            var legendLayer = this.legendSpacingLayer();
+            var legendLayer = this.legendSpecLayer("Spacing");
             var spacing = 10 + model.armWeight;
-            var newColor = this.legendColorSpacing();
+            var newColor = this.legendColor(model.legendColorSpacing);
         
             var ySpacing = Math.abs(y2 - y1);
         
@@ -807,9 +844,9 @@ $.specctrAi = {
     //Create text for horizontal distances for spacing specs between two objects.
     createSpacingHorizontalSpec : function(y, x1, x2, itemsGroup) {
         try {
-            var legendLayer = this.legendSpacingLayer();
+            var legendLayer = this.legendSpecLayer("Spacing");
             var spacing = 10 + model.armWeight;
-            var newColor = this.legendColorSpacing();                    
+            var newColor = this.legendColor(model.legendColorSpacing);
         
             var xSpacing = Math.abs(x2 - x1);
        
@@ -865,13 +902,14 @@ $.specctrAi = {
     //Create the spacing spec between the selected page items.
     createSpacingSpecsForItems : function(aItem, bItem) {			
         try {
-            var legendLayer = this.legendSpacingLayer();
+            var name = "Spacing";
+            var legendLayer = this.legendSpecLayer(name);
             var spacing = 10 + model.armWeight;
-            var newColor = this.legendColorSpacing(); 
+            var newColor = this.legendColor(model.legendColorSpacing); 
             
             var idVarForFirstItem = aItem.visibilityVariable;
             var idVarForSecondItem = bItem.visibilityVariable;
-            this.removeSpacingItemsGroup(idVarForFirstItem, idVarForSecondItem, "Spacing");
+            this.removeSpacingItemsGroup(idVarForFirstItem, idVarForSecondItem, name);
             
             var itemsGroup = app.activeDocument.groupItems.add();
         
@@ -991,7 +1029,8 @@ $.specctrAi = {
             if (!(model.spaceTop || model.spaceBottom || model.spaceLeft || model.spaceRight)) 
                 return true;
         
-            var legendLayer = this.legendSpacingLayer();
+            var name = "Spacing";
+            var legendLayer = this.legendSpecLayer(name);
             var spacing = 10 + model.armWeight;
             var artRect = this.originalArtboardRect();
             
@@ -1002,7 +1041,7 @@ $.specctrAi = {
             var toRight = -pageItemBounds[2] + artRect[2];
             
             var idVar = pageItem.visibilityVariable;
-            this.removeSpecGroup(idVar, "Spacing");
+            this.removeSpecGroup(idVar, name);
 
             if (!model.specInPrcntg) {
                 //Value after applying scaling.
@@ -1034,7 +1073,7 @@ $.specctrAi = {
             var height = pageItemBounds[1] - pageItemBounds[3];
             var width = pageItemBounds[2] - pageItemBounds[0];
                 
-            var newColor = this.legendColorSpacing();
+            var newColor = this.legendColor(model.legendColorSpacing);
             var itemsGroup = app.activeDocument.groupItems.add();
                 
             if (model.spaceTop) {
@@ -1272,7 +1311,7 @@ $.specctrAi = {
                         return;*/
                 }
             
-                var newColor = this.legendColorObject();
+                var newColor = this.legendColor(model.legendColorObject);
                 var ids = [];       //collect ids of selected objects
                 var selectedItems = app.selection;
                 var allVariables = app.activeDocument.variables;
@@ -1474,10 +1513,10 @@ $.specctrAi = {
                             var legendLayer;
                             if (source.typename == "TextFrame") {
                                 itemCircle.filled = true;
-                                legendLayer = this.legendTextPropertiesLayer();
+                                legendLayer = this.legendSpecLayer("Text Properties");
                             } else {
                                 itemCircle.filled = false;
-                                legendLayer = this.legendObjectPropertiesLayer();
+                                legendLayer = this.legendSpecLayer("Object Properties");
                             }
             
                             itemCircle.strokeWidth = model.armWeight;
@@ -1558,7 +1597,7 @@ $.specctrAi = {
             var spacing = 10;
             var legendLayer;
 
-            var newColor = this.legendColorObject();
+            var newColor = this.legendColor(model.legendColorObject);
                 
             var arm, spec, group, itemCircle, infoText;
             var pageItem = sourceItem;
@@ -1568,18 +1607,18 @@ $.specctrAi = {
             switch (sourceItem.typename) {
                 case "TextFrame": 
                     infoText = this.getSpecsInfoForTextItem(sourceItem); 
-                    newColor = this.legendColorType(); 
-                    legendLayer = this.legendTextPropertiesLayer(); 
+                    newColor = this.legendColor(model.legendColorType); 
+                    legendLayer = this.legendSpecLayer("Text Properties"); 
                     break;
             
                 case "PathItem": 
                     infoText = this.getSpecsInfoForPathItem(sourceItem); 
-                    legendLayer = this.legendObjectPropertiesLayer();	
+                    legendLayer = this.legendSpecLayer("Object Properties");	
                     break;
             
                 default: 
                     infoText = this.getSpecsInfoForGeneralItem(sourceItem);
-                    legendLayer = this.legendObjectPropertiesLayer();
+                    legendLayer = this.legendSpecLayer("Object Properties");
             }
 
             if (infoText == "") 
@@ -1853,28 +1892,12 @@ $.specctrAi = {
         } catch(e) {}
         return false;
     },
-        
-    legendColorObject : function() {
-        var newColor = new RGBColor();
-        newColor.red = this.rChannel(model.legendColorObject);
-        newColor.blue = this.bChannel(model.legendColorObject);
-        newColor.green = this.gChannel(model.legendColorObject);
-        return newColor;
-    },
-            
-    legendColorType : function() {
-        var newColor= new RGBColor();
-        newColor.red = this.rChannel(model.legendColorType);
-        newColor.blue = this.bChannel(model.legendColorType);
-        newColor.green = this.gChannel(model.legendColorType);
-        return newColor;
-    },
 
-    legendColorSpacing : function() {
+    legendColor : function(colorValue) {
         var newColor= new RGBColor();
-        newColor.red = this.rChannel(model.legendColorSpacing);
-        newColor.blue = this.bChannel(model.legendColorSpacing);
-        newColor.green = this.gChannel(model.legendColorSpacing);
+        newColor.red = this.rChannel(colorValue);
+        newColor.blue = this.bChannel(colorValue);
+        newColor.green = this.gChannel(colorValue);
         return newColor;
     },
 
@@ -1892,75 +1915,14 @@ $.specctrAi = {
         return newLayer;
     },
 
-    //Create the 'Text Properties' group layer first time.
-    legendTextPropertiesLayer : function() {
+     //Create the spec group layer first time.
+     legendSpecLayer : function(layerName) {
         var newLayer;
         try {
-            newLayer = this.legendLayer().layers.getByName("Text Properties");
-        }
-        catch(e) {
-            newLayer = this.legendLayer().layers.add();
-            newLayer.name = "Text Properties";
-            newLayer.zOrder(ZOrderMethod.BRINGTOFRONT);
-        }
-
-        newLayer.locked = false;
-        return newLayer;	
-    },
-
-    //Create the 'Object Properties' group layer first time.
-    legendObjectPropertiesLayer : function() {
-        var newLayer;
-        try {
-            newLayer = this.legendLayer().layers.getByName("Object Properties");
+            newLayer = this.legendLayer().layers.getByName(layerName);    //Already present in the 'Specctr' group layer.
         } catch(e) {
             newLayer = this.legendLayer().layers.add();
-            newLayer.name = "Object Properties";
-            newLayer.zOrder(ZOrderMethod.BRINGTOFRONT);
-        }
-
-        newLayer.locked = false;
-        return newLayer;
-    },
-
-    //Create the 'Spacing' group layer first time.
-    legendSpacingLayer : function() {
-        var newLayer;
-        try {
-            newLayer = this.legendLayer().layers.getByName("Spacing");
-        } catch(e) {
-            newLayer = this.legendLayer().layers.add();
-            newLayer.name = "Spacing";
-            newLayer.zOrder(ZOrderMethod.BRINGTOFRONT);
-        }
-
-        newLayer.locked = false;
-        return newLayer;
-    },
-
-    //Create the 'Dimension' group layer first time.
-    legendDimensionsLayer : function() {
-        var newLayer;
-        try {
-            newLayer = this.legendLayer().layers.getByName("Dimensions");
-        } catch(e) {
-            newLayer = this.legendLayer().layers.add();
-            newLayer.name = "Dimensions";
-            newLayer.zOrder(ZOrderMethod.BRINGTOFRONT);
-        }
-
-        newLayer.locked = false;
-        return newLayer;
-    },
-
-    //Create the 'Coordinates' group layer first time.
-     legendCoordinatesLayer : function() {
-        var newLayer;
-        try {
-            newLayer = this.legendLayer().layers.getByName("Coordinates");    //Already present in the 'Specctr' group layer.
-        } catch(e) {
-            newLayer = this.legendLayer().layers.add();
-            newLayer.name = "Coordinates";
+            newLayer.name = layerName;
             newLayer.zOrder(ZOrderMethod.BRINGTOFRONT);
         }
 

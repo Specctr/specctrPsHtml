@@ -144,7 +144,7 @@ function prefs_creationCompleteHandler() {
 
 	//Initialize the components on the basis of host application.
 	if (hostApplication === illustrator)	{
-		hostPrefix = "ext_ILST_";
+		hostPrefix = "$.specctrAi.";
 		document.getElementById("specToEdge").checked = model.specToEdge;
 		var colorModeHandler = document.getElementById("lstColorMode");
 		for(var i = 0; i < 4; i++) {
@@ -415,8 +415,11 @@ function evalScript(script, callback) {
  */
 function setModel() {
 	try {
-		var extScript = "$.specctrPsCommon.setModel('" + JSON.stringify(model) + "')";
-		evalScript(extScript);
+		var methodName = "setModel('" + JSON.stringify(model) + "')";
+		if (hostApplication === illustrator)
+			evalScript("$.specctrAi." + methodName);
+		else
+			evalScript("$.specctrPsCommon." + methodName);		
 	} catch (e) {
 		console.log(e);
 	}
@@ -430,8 +433,13 @@ function expandCanvas() {
 
 	try {
 		setModel();
-		var extScript = "$.specctrPsExpandCanvas.createCanvasBorder()";
-		evalScript(extScript);
+		var methodName = "createCanvasBorder()";
+
+		if (hostApplication === illustrator)
+			evalScript("$.specctrAi." + methodName);
+		else
+			evalScript("$.specctrPsExpandCanvas." + methodName);
+	
 		writeAppPrefs();
 	} catch (e) {
 		console.log(e);
@@ -445,8 +453,11 @@ function createDimensionSpecs() {
 	analytics.trackFeature('create_dimension_specs');
 	try {
 		setModel();
-		var extScript = "$.specctrPsDimension.createDimensionSpecsForItem()";
-		evalScript(extScript);
+		if (hostApplication === illustrator)
+			evalScript("$.specctrAi.createDimensionSpecs()");
+		else
+			evalScript("$.specctrPsDimension.createDimensionSpecsForItem()");
+		
 	} catch (e) {
 		console.log(e);
 	}
@@ -460,8 +471,11 @@ function createSpacingSpecs() {
 
 	try {
 		setModel();
-		var extScript = "$.specctrPsSpacing.createSpacingSpecs()";
-		evalScript(extScript);
+		if (hostApplication === illustrator)
+			evalScript("$.specctrAi.createSpacingSpecs()");
+		else
+			evalScript("$.specctrPsSpacing.createSpacingSpecs()");
+
 	} catch (e) {
 		console.log(e);
 	}
@@ -475,8 +489,11 @@ function createCoordinateSpecs() {
 
 	try {
 		setModel();
-		var extScript = "$.specctrPsCoordinates.createCoordinateSpecs()";
-		evalScript(extScript);
+		if (hostApplication === illustrator)
+			evalScript("$.specctrAi.createCoordinateSpecs()");
+		else
+			evalScript("$.specctrPsCoordinates.createCoordinateSpecs()");
+
 	} catch (e) {
 		console.log(e);
 	}
@@ -490,8 +507,11 @@ function createPropertySpecs() {
 
 	try {
 		setModel();
-		var extScript = "$.specctrPsProperties.createPropertySpecsForItem()";
-		evalScript(extScript);
+		if (hostApplication === illustrator)
+			evalScript("$.specctrAi.createPropertySpecs()");
+		else
+			evalScript("$.specctrPsProperties.createPropertySpecsForItem()");
+
 	} catch (e) {
 		console.log(e);
 	}
@@ -505,8 +525,11 @@ function exportCss() {
 
 	try {
 		setModel();
-		var extScript = "$.specctrPsExportCss.exportCss()";
-		evalScript(extScript);
+		if (hostApplication === illustrator)
+			evalScript("$.specctrAi.exportCss()");
+		else
+			evalScript("$.specctrPsExportCss.exportCss()");
+
 	} catch (e) {
 		console.log(e);
 	}

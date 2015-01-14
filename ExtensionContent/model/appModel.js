@@ -83,5 +83,5 @@ var filePermission = {
 var configFilePath = '';
 var extensionId = '';
 var hostApplication = '';
-var illustrator = 'ILST';
-var photoshop = 'PHXS';
+var illustrator = 'Ai';
+var photoshop = 'Ps';
