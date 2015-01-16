@@ -675,19 +675,6 @@ $.specctrAi = {
         
             var horizontalLineY, verticalLineY;
         
-//~             if (pageItem.typename == "TextFrame") {   //Change the position of lines if page item is a text item.
-//~                 if (pageItem.kind == TextType.POINTTEXT) {
-//~                     pointX = pageItem.anchor[0];
-//~                     pointY = pageItem.anchor[1];
-//~                 } else if (pageItem.kind == TextType.PATHTEXT) {
-//~                     pointX = pageItemBounds[0];
-//~                     pointY = pageItem.position[1];
-//~                 }
-
-//~                 horizontalLineY = pointY - model.armWeight / 2;
-//~                 verticalLineY = pointY + spacing;
-//~             }
-        
             var coordinateText, horizontalLine, horizontalLineMain;
             var lineX, verticalLine, verticalLineMain;
             
@@ -700,12 +687,12 @@ $.specctrAi = {
                                             pageItemBounds[1] + 0.5 * spacing], TextOrientation.HORIZONTAL);
                 coordinateText.contents = "x: " + left + " y: " + top;
                 coordinateText.textRange.paragraphAttributes.justification = Justification.RIGHT;
-            
+
                 horizontalLine = app.activeDocument.compoundPathItems.add();
                 horizontalLineMain = horizontalLine.pathItems.add();
                 horizontalLineMain.setEntirePath([[pageItemBounds[0] - spacing - armWeight, horizontalLineY], 
                                                                 [pageItemBounds[0] + spacing, horizontalLineY]]);
-            
+
                 lineX = pageItemBounds[0] - armWeight;
                 verticalLine = app.activeDocument.compoundPathItems.add();
                 verticalLineMain = verticalLine.pathItems.add();
@@ -720,7 +707,7 @@ $.specctrAi = {
                                             pageItemBounds[1] + 0.5 * spacing], TextOrientation.HORIZONTAL);
                 coordinateText.contents = "x: " + right + " y: " + top;
                 coordinateText.textRange.paragraphAttributes.justification = Justification.LEFT;
-            
+                
                 horizontalLine = app.activeDocument.compoundPathItems.add();
                 horizontalLineMain = horizontalLine.pathItems.add();
                 horizontalLineMain.setEntirePath([[pageItemBounds[2] - spacing, horizontalLineY], 
@@ -732,11 +719,46 @@ $.specctrAi = {
                 verticalLineMain.setEntirePath([[lineX, verticalLineY], [lineX, pageItemBounds[1] - spacing]]);
                 break;
                 
-                case 2 :
+                case 2 :    //Creating coordinate spec text at right bottom.
+                horizontalLineY = pageItemBounds[3] - armWeight;
+                verticalLineY = pageItemBounds[3] - spacing - armWeight;
+                
+                coordinateText = app.activeDocument.textFrames.pointText([pageItemBounds[2] + 0.5 * spacing, 
+                                            pageItemBounds[3] - spacing  - armWeight], TextOrientation.HORIZONTAL);
+                coordinateText.contents = "x: " + right + " y: " + bottom;
+                coordinateText.textRange.paragraphAttributes.justification = Justification.LEFT;
+            
+                horizontalLine = app.activeDocument.compoundPathItems.add();
+                horizontalLineMain = horizontalLine.pathItems.add();
+                horizontalLineMain.setEntirePath([[pageItemBounds[2] - spacing, horizontalLineY], 
+                                                                [pageItemBounds[2] + spacing + armWeight, horizontalLineY]]);
+            
+                lineX = pageItemBounds[2] + armWeight;
+                verticalLine = app.activeDocument.compoundPathItems.add();
+                verticalLineMain = verticalLine.pathItems.add();
+                verticalLineMain.setEntirePath([[lineX, verticalLineY], [lineX, pageItemBounds[3] + spacing]]);
                 break;
+                
+                case 3 :    //Creating coordinate spec text at left bottom.
+                horizontalLineY = pageItemBounds[3] - armWeight;
+                verticalLineY = pageItemBounds[3] - spacing - armWeight;
+                
+                coordinateText = app.activeDocument.textFrames.pointText([pageItemBounds[0] - 0.5 * spacing, 
+                                            pageItemBounds[3] - spacing - armWeight], TextOrientation.HORIZONTAL);
+                coordinateText.contents = "x: " + right + " y: " + bottom;
+                coordinateText.textRange.paragraphAttributes.justification = Justification.RIGHT;
             
+                horizontalLine = app.activeDocument.compoundPathItems.add();
+                horizontalLineMain = horizontalLine.pathItems.add();
+                horizontalLineMain.setEntirePath([[pageItemBounds[0] - spacing  - armWeight, horizontalLineY], 
+                                                                [pageItemBounds[0] + spacing, horizontalLineY]]);
+            
+                lineX = pageItemBounds[0] - armWeight;
+                verticalLine = app.activeDocument.compoundPathItems.add();
+                verticalLineMain = verticalLine.pathItems.add();
+                verticalLineMain.setEntirePath([[lineX, verticalLineY], [lineX, pageItemBounds[3] + spacing]]);
             }
-            
+
             coordinateText.textRange.characterAttributes.fillColor = newColor;
             coordinateText.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
             coordinateText.textRange.characterAttributes.size = model.legendFontSize;
@@ -748,11 +770,8 @@ $.specctrAi = {
             horizontalLineMain.strokeWidth = model.armWeight;
             horizontalLineMain.strokeColor = newColor;
             horizontalLine.move(itemsGroup, ElementPlacement.INSIDE);
-            
-            
-        
+
             //Adding vertical line.
-            
             verticalLineMain.stroked = true;
             verticalLineMain.strokeDashes = [];
             verticalLineMain.strokeWidth = model.armWeight;
