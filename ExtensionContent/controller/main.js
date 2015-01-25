@@ -11,13 +11,12 @@ and reading and writing preferences methods.
  */
 function completeHandler(data, status) {
 	var response = data;
-	var arr = response.registered;
 
-	var logData = createLogData(response.message);
+	var logData = createLogData('Activation Success.');
 	addFileToPreferenceFolder('.log', logData);	//Create log file.
 
 	// If unsuccessful, return without saving the data in file.
-	if (!arr.length) {
+	if (!response.success) {
 		analytics.trackActivation('failed');
 		showDialog(response.message);
 		return;
@@ -26,7 +25,8 @@ function completeHandler(data, status) {
 		
 		var activationPrefs = {
 			licensed : true,
-			code : $("#license").val()
+			machine_id: response.machine_id,
+			api_key: response.api_key
 		};
 		licenseCode = activationPrefs.code;
 	}

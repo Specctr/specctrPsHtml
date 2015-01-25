@@ -150,9 +150,9 @@ each party and (ii) in a written contract signed by both parties.]]>
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
-			<Host Name="PHSP" Version="[14.0,15.9]" />
-			<Host Name="PHXS" Version="[14.0,15.9]" />
-			<Host Name="ILST" Version="[17.0,18.9]" />
+			<Host Name="PHSP" Version="[14.0,14.9]" />
+			<Host Name="PHXS" Version="[14.0,14.9]" />
+			<Host Name="ILST" Version="[17.0,17.9]" />
 		</HostList>
 		<LocaleList>
 			<Locale Code="All" />
@@ -177,7 +177,7 @@ each party and (ii) in a written contract signed by both parties.]]>
 					<Menu>Specctr-Pro</Menu>
 					<Geometry>
 						<Size>
-							<Height>560</Height>
+							<Height>490</Height>
 							<Width>224</Width>
 						</Size>
 						<MaxSize>
@@ -185,7 +185,7 @@ each party and (ii) in a written contract signed by both parties.]]>
 							<Width>224</Width>
 						</MaxSize>
 						<MinSize>
-							<Height>560</Height>
+							<Height>490</Height>
 							<Width>224</Width>
 						</MinSize>
 					</Geometry>
@@ -195,6 +195,8 @@ each party and (ii) in a written contract signed by both parties.]]>
 					</Icons>
 				</UI>
 			</DispatchInfo>
+
+
 		</Extension>
 	</DispatchInfoList>
 </ExtensionManifest>

@@ -46,16 +46,26 @@ function activateButton_clickHandler() {
 		return;
 	}
 
-	var urlRequest = "http://specctr-license.herokuapp.com";
-	urlRequest += "?product=" + productCodes[extensionId];
-	urlRequest += "&license=" + document.getElementById("license").value;
-	urlRequest += "&email=" + document.getElementById("emailInput").value;
+	//var urlRequest = "http://specctr-license.herokuapp.com";
+	var urlRequest = "http://127.0.0.1:5000/api/v1/register_machine?";
 
-	$.get(urlRequest, completeHandler).error(function() {
-		logData = "No connection available";
-		showDialog(logData);
-		logData = createLogData(message);
-		addFileToPreferenceFolder('.log', logData);	//Create log file.
+	urlRequest += "&email=" + document.getElementById("emailInput").value;
+	urlRequest += "&password=" + document.getElementById("passwordInput").value;
+
+
+	$.ajax({
+		url:urlRequest,
+		type: 'POST',
+		contentType: "application/json",
+		dataType: "json",
+		success: completeHandler,
+		error: function(xhr) {
+			var response = JSON.parse(xhr.responseText);
+		
+			showDialog(response.message);
+			logData = createLogData(response.error);
+			addFileToPreferenceFolder('.log', logData);	//Create log file.
+		}
 	});
 }
 
