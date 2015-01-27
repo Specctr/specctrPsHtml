@@ -8,30 +8,40 @@ if(typeof($)=== 'undefined')
 	$={};
 
 $.specctrPsExportCss = {
+	//Upload the spec layer into css text file.
+	getCss : function() {
+	    if(!app.documents.length)           //Checking document is open or not.
+	        return;
+	    
+	    var doc = app.activeDocument;
+	    try {
+	        var propertySpecLayerGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties");
+	    } catch(e) {
+	         alert("No spec present to export.");
+	         return;
+	    }
+	    
+	    if(ExternalObject.AdobeXMPScript == null)
+	        ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
+	
+	    var coordinateSpecsInfo = this.getStyleFromOtherSpecs("Coordinates");           //Get the array of coordinate specs info.
+	    var styleText = $.specctrPsCommon.getCssBodyText();            //Add the body text at the top of css file.
+	    styleText += this.getCssForText(coordinateSpecsInfo);
+	    styleText += this.getCssForShape(coordinateSpecsInfo);
+	    if(styleText == "") {
+	        alert("No spec present to export!");
+	        return;
+	    }
+	    var cssInfo = {
+	    	document_name: app.activeDocument.name,
+	    	text: styleText,
+	    };
+	    return JSON.stringify(cssInfo);
+	},
+
     //Export the spec layer into css text file.
     exportCss : function() {
-        if(!app.documents.length)           //Checking document is open or not.
-            return;
-        
-        var doc = app.activeDocument;
-        try {
-            var propertySpecLayerGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties");
-        } catch(e) {
-             alert("No spec present to export.");
-             return;
-        }
-        
-        if(ExternalObject.AdobeXMPScript == null)
-            ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
-
-        var coordinateSpecsInfo = this.getStyleFromOtherSpecs("Coordinates");           //Get the array of coordinate specs info.
-        var styleText = $.specctrPsCommon.getCssBodyText();            //Add the body text at the top of css file.
-        styleText += this.getCssForText(coordinateSpecsInfo);
-        styleText += this.getCssForShape(coordinateSpecsInfo);
-        if(styleText == "") {
-            alert("No spec present to export!");
-            return;
-        }
+        var styleText = $.specctrPsExportCss.getCss();
         
         //Create the file and export it.
         var cssFile = "";
@@ -49,7 +59,7 @@ $.specctrPsExportCss = {
 
         cssFile = File(cssFilePath);
         if(cssFile.exists) {
-            var replaceFileFlag = confirm("Styles.css already exists in this location.\rDo you want to replace it?", true, "Specctr");
+            var replaceFileFlag = confirm("Styles.css already exists at " + cssFilePath + ".\rDo you want to replace it?", true, "Specctr");
             if(!replaceFileFlag)
                 return;
         }
@@ -59,10 +69,7 @@ $.specctrPsExportCss = {
             cssFile.write(styleText);
             cssFile.close;
             
-            if(replaceFileFlag)
-                alert("Styles.css is exported.");
-            else 
-                alert("Styles.css is exported to " + cssFilePath);
+            alert("Styles.css is exported to " + cssFilePath);
         } else {
             alert("Unable to export!");
             return;

@@ -232,7 +232,8 @@ function onLoaded() {
 				activationPrefs = JSON.parse(activationPrefs);
 
 			isLicensed = activationPrefs.licensed;
-			licenseCode = activationPrefs.code;
+			api_key = activationPrefs.api_key;
+			machine_id = activationPrefs.machine_id;
 		} else {
 			activationPrefs.licensed = true;
 			addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs));
@@ -522,13 +523,36 @@ function createPropertySpecs() {
  */
 function exportCss() {
 	analytics.trackFeature('export_css');
-
 	try {
 		setModel();
 		if (hostApplication === illustrator)
 			evalScript("$.specctrAi.exportCss()");
-		else
-			evalScript("$.specctrPsExportCss.exportCss()");
+		else{
+			// Upload specs to Specctr.
+			cssText = evalScript("$.specctrPsExportCss.getCss()", function(cssInfo){
+				var css = JSON.parse(cssInfo);
+				var cssJson = CSSJSON.toJSON(css.text);
+				var data = JSON.stringify({
+					api_key: api_key,
+					machine_id: machine_id,
+					document_name: css.document_name,
+					css_items: cssJson.children
+				});
+				$.ajax({
+					url: SPECCTR_API + "/css_items",
+					type: "POST",
+					contentType: "application/json;charset=utf-8",
+					dataType: "json",
+					data: data,
+					success: function(response) {
+						alert('success');
+					},
+					error: function(xhr) {
+						alert('error');
+					}
+				});
+			});
+		}
 
 	} catch (e) {
 		console.log(e);

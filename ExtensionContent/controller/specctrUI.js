@@ -7,6 +7,8 @@ Description: Includes all the methods related to UI component like change event 
  * Validate the license of the user and move to the tab container
  *  if user's credentials valid.
  */
+SPECCTR_API = "http://127.0.0.1:5000/api/v1";
+	
 function activateButton_clickHandler() {
 	// Get Extension Id and matching productCode.
 	var productCodes = {
@@ -47,7 +49,7 @@ function activateButton_clickHandler() {
 	}
 
 	//var urlRequest = "http://specctr-license.herokuapp.com";
-	var urlRequest = "http://127.0.0.1:5000/api/v1/register_machine?";
+	var urlRequest = SPECCTR_API + "/register_machine?";
 
 	urlRequest += "&email=" + document.getElementById("emailInput").value;
 	urlRequest += "&password=" + document.getElementById("passwordInput").value;
