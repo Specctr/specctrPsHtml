@@ -8,6 +8,8 @@ Description: Includes all the methods related to UI component like change event 
  *  if user's credentials valid.
  */
 SPECCTR_API = "http://127.0.0.1:5000/api/v1";
+SPECCTR_API = "http://specctr-subscription.herokuapp.com/api/v1";
+
 	
 function activateButton_clickHandler() {
 	// Get Extension Id and matching productCode.
@@ -38,15 +40,7 @@ function activateButton_clickHandler() {
 		extensionId = getExtensionId();
 
 	var logData = "";
-
-	// If no installed extension is matched with productCodes values.
-	if (!productCodes[extensionId]) {
-		logData = "Incorrect product code";
-		showDialog(logData);
-		logData = createLogData(logData);
-		addFileToPreferenceFolder('.log', logData);	//Create log file.
-		return;
-	}
+	
 
 	//var urlRequest = "http://specctr-license.herokuapp.com";
 	var urlRequest = SPECCTR_API + "/register_machine?";

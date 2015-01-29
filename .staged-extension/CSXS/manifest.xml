@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <ExtensionManifest Version="4.0" ExtensionBundleId="specctrHtml" ExtensionBundleVersion="3.0.0.h"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		ExtensionBundleName="specctrHtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
 	</Author>	<Contact mailto="info@on-pixel.com"/>	<Legal>
@@ -195,8 +195,6 @@ each party and (ii) in a written contract signed by both parties.]]>
 					</Icons>
 				</UI>
 			</DispatchInfo>
-
-
 		</Extension>
 	</DispatchInfoList>
 </ExtensionManifest>
