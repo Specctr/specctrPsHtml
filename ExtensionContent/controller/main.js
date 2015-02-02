@@ -137,6 +137,8 @@ function prefs_creationCompleteHandler() {
 	armWeightHandler.selectedIndex = -1;
 	armWeightHandler.value = model.armWeight.toString();
 
+	
+	
 	document.getElementById("useHexColor").checked = model.useHexColor;
 
 	if (!model.legendColorMode)
@@ -156,6 +158,10 @@ function prefs_creationCompleteHandler() {
 	} else {
 		var radioButton = model.legendColorMode.toLowerCase() + "RadioButton";
 		document.getElementById(radioButton).checked = true;
+		// Set the values for spec option combobox.
+		var specOptionHandler = document.getElementById("lstSpecOption");
+		specOptionHandler.selectedIndex = -1;
+		specOptionHandler.value = model.specOption;
 	}
 
 	document.getElementById("colObject").style.backgroundColor = model.legendColorObject;
@@ -203,6 +209,7 @@ function onLoaded() {
 			document.getElementById("shapeEffectsForPHXS").style.display = "none";
 			document.getElementById("textEffectsForPHXS").style.display = "none";
 			document.getElementById("radioForPHXS").style.display = "none";
+			document.getElementById("specOption").style.display = "none";
 
 			document.getElementById("fillColorForILST").style.display = "block";
 			document.getElementById("fillStyleForILST").style.display = "block";
@@ -343,6 +350,7 @@ function setModelValueFromPreferences() {
 			: model.legendFont;
 	model.legendFontSize = Number(appPrefs.legendFontSize);
 	model.armWeight = Number(appPrefs.armWeight);
+	model.specOption = appPrefs.specOption;
 
 	if (appPrefs.hasOwnProperty("legendColorObject"))
 		model.legendColorObject = appPrefs.legendColorObject;

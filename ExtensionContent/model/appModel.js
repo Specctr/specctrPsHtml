@@ -70,7 +70,8 @@ var model = {
 	scaleValue: 'x1',
 	
 	rgbTransformIntoPercentage: false,
-	decimalFractionValue: 'decimal'
+	decimalFractionValue: 'decimal',
+	specOption: 'Line'
 };
 
 var filePermission = {
