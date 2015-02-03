@@ -434,7 +434,7 @@ function setModel() {
 }
 
 /**
- * Call the 'createCanvasBorder' method from ./jsx/specctrPsExpandCanvas.jsx.
+ * Call the 'createCanvasBorder' method from .jsx based on host application.
  */
 function expandCanvas() {
 	analytics.trackFeature('expand_canvas');
@@ -455,7 +455,7 @@ function expandCanvas() {
 }
 
 /**
- * Call the 'createDimensionSpecsForItem' method from ./jsx/specctrPsDimension.jsx.
+ * Call the 'createDimensionSpecsForItem' method from .jsx based on host application.
  */
 function createDimensionSpecs() {
 	analytics.trackFeature('create_dimension_specs');
@@ -472,7 +472,7 @@ function createDimensionSpecs() {
 }
 
 /**
- * Call the 'createSpacingSpecs' method from ./jsx/specctrPsSpacing.jsx.
+ * Call the 'createSpacingSpecs' method from .jsx based on host application.
  */
 function createSpacingSpecs() {
 	analytics.trackFeature('create_spacing_specs');
@@ -490,7 +490,7 @@ function createSpacingSpecs() {
 }
 
 /**
- * Call the 'createCoordinateSpecs' method from ./jsx/specctrPsCoordinates.jsx.
+ * Call the 'createCoordinateSpecs' method from .jsx based on host application.
  */
 function createCoordinateSpecs() {
 	analytics.trackFeature('create_coordinate_specs');
@@ -508,7 +508,24 @@ function createCoordinateSpecs() {
 }
 
 /**
- * Call the 'createPropertySpecsForItem' method from ./jsx/specctrPsProperties.jsx.
+ * Call the 'addNoteSpecs' method from .jsx based on host application.
+ */
+function addNoteSpecs() {
+	analytics.trackFeature('create_note_specs');
+
+	try {
+		setModel();
+		if (hostApplication === illustrator)
+			evalScript("$.specctrAi.addNoteSpecs()");
+		else
+			evalScript("$.specctrPsAddNote.addNoteSpecs()");
+
+	} catch (e) {
+		console.log(e);
+	}
+}
+/**
+ * Call the 'createPropertySpecsForItem' method from .jsx based on host application.
  */
 function createPropertySpecs() {
 	analytics.trackFeature('create_property_specs');
@@ -526,7 +543,7 @@ function createPropertySpecs() {
 }
 
 /**
- * Call the 'exportCss' method from ./jsx/specctrPsExportCss.jsx.
+ * Call the 'exportCss' method from .jsx based on host application.
  */
 function exportCss() {
 	analytics.trackFeature('export_css');
@@ -569,7 +586,7 @@ function applyFontToList() {
 }
 
 /**
- * Dispatch event to loose the focus from html panel.
+ * Dispatch event to loose the focus from photoshop html panel.
  */
 function loseFocusFromPanel() { 
 		if(extensionId === '')

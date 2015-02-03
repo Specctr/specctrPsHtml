@@ -35,7 +35,7 @@ body
 
 .container
 {
-    Height: 558px;
+    Height: 608px;
     Width: 222px;
     background-color: #E8E8E8;
 	margin: 0 auto;
@@ -376,6 +376,14 @@ input[type="text"], input[type="password"]
 {
 	font-family: Arial-BoldMT !important;
 	font-size: 14px !important;
+	color: #58585B !important;
+}
+
+.addNoteTextStyle
+{
+	margin-left: 50px !important;
+	font-family: Arial-BoldMT !important;
+	font-size: 20px !important;
 	color: #58585B !important;
 }
 
