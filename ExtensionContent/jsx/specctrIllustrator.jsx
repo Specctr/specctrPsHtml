@@ -1841,6 +1841,22 @@ $.specctrAi = {
 
         return true;
     },
+    
+    //Call the add note specs function for each selected art on the active artboard.
+    addNoteSpecs : function() {
+        try {
+            alert("Work is under progress!");
+            return;
+            var selectionLength = app.selection.length;
+            for (var i = 0; i < selectionLength; i++) {
+                var obj = app.selection[i];
+                if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
+                    this.addNoteSpecsForItem(obj);
+            }
+
+            app.redraw();
+        } catch(e) {}
+    },
 
     deserialize : function(dataString) {
         var object = ({});

@@ -64,17 +64,21 @@ $.specctrPsExpandCanvas = {
 
     //Convert background layer into regular layer.
     backgroundLayerIntoNormalLayer : function () {
-        var idLyr = charIDToTypeID("Lyr ");
-        var desc = new ActionDescriptor();
-        var ref = new ActionReference();
-        ref.putProperty(idLyr, charIDToTypeID("Bckg"));
-        desc.putReference(charIDToTypeID("null"), ref);
-        var propertyDesc = new ActionDescriptor();
-        propertyDesc.putUnitDouble(charIDToTypeID("Opct"), charIDToTypeID("#Prc"), 100.0);
-        propertyDesc.putEnumerated(charIDToTypeID("Md  "), charIDToTypeID("BlnM"), charIDToTypeID("Nrml"));
-        desc.putObject(charIDToTypeID("T   "), idLyr, propertyDesc);
-        executeAction(charIDToTypeID( "setd" ), desc, DialogModes.NO );
-        return true;
+        try {
+            var idLyr = charIDToTypeID("Lyr ");
+            var desc = new ActionDescriptor();
+            var ref = new ActionReference();
+            ref.putProperty(idLyr, charIDToTypeID("Bckg"));
+            desc.putReference(charIDToTypeID("null"), ref);
+            var propertyDesc = new ActionDescriptor();
+            propertyDesc.putUnitDouble(charIDToTypeID("Opct"), charIDToTypeID("#Prc"), 100.0);
+            propertyDesc.putEnumerated(charIDToTypeID("Md  "), charIDToTypeID("BlnM"), charIDToTypeID("Nrml"));
+            desc.putObject(charIDToTypeID("T   "), idLyr, propertyDesc);
+            executeAction(charIDToTypeID( "setd" ), desc, DialogModes.NO );
+            return true;
+        } catch (e) {
+            return false;
+        }
     },
 
     //Select all layers in the layer panel.
