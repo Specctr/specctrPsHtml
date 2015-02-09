@@ -46,7 +46,6 @@ $.specctrPsProperties = {
         var spec, idLayer, idSpec, lyr;
         var idBullet, bullet, dupBullet, idDupBullet;
         var legendLayer;
-        var noOfSpec;
 
         try {
             //WARNiNG: Do Check it is specctr's specctr or any other specctr.
@@ -69,18 +68,6 @@ $.specctrPsProperties = {
          }
 
          try {
-            doc.activeLayer = artLayer;
-            noOfSpec = $.specctrPsCommon.getXMPData(doc, "noOfSpec");
-            try {
-                doc.layerSets.getByName("Specctr").layerSets.getByName("Properties");
-                if(noOfSpec == null)
-                    noOfSpec = 0;
-            } catch(e) {
-                noOfSpec = 0;
-            }
-            noOfSpec = parseInt(noOfSpec);
-            var number = noOfSpec + 1;
-
             idLayer = $.specctrPsCommon.getIDOfLayer();   //Get unique ID of selected layer.
             var artLayerBounds = bounds;
             var name = artLayer.name;
@@ -90,7 +77,7 @@ $.specctrPsProperties = {
                     infoText  = this.getSpecsInfoForTextItem(sourceItem);
                     newColor = $.specctrPsCommon.legendColor(model.legendColorType);
                     legendLayer = this.legendPropertiesLayer("Text Specs").layerSets.add();
-                    legendLayer.name = "Text Spec "+number;
+                    legendLayer.name = "Text Spec ";
                     var wordsArray = name.split(" ");
                     if(wordsArray.length > 2)
                         name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
@@ -100,13 +87,13 @@ $.specctrPsProperties = {
                 case LayerKind.SOLIDFILL: 
                     infoText = this.getSpecsInfoForPathItem(sourceItem);
                     legendLayer = this.legendPropertiesLayer("Object Specs").layerSets.add();
-                    legendLayer.name = "Object Spec "+number;
+                    legendLayer.name = "Object Spec ";
                     break;
 
                 default: 
                     infoText = this.getSpecsInfoForGeneralItem(sourceItem); 
                     legendLayer = this.legendPropertiesLayer("Object Specs").layerSets.add();
-                    legendLayer.name = "Object Spec "+number;
+                    legendLayer.name = "Object Spec ";
             }
 
             if (infoText === "") 
@@ -143,7 +130,10 @@ $.specctrPsProperties = {
             
             //Number system..
             if(model.specOption == "Bullet") {
-                bullet = this.createBullet(legendLayer, number, font, artLayerBounds, newColor);
+                //Check if any number is linked with selected art layer or not, if not then assign a number.
+                var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, true);
+                legendLayer.name += number;
+                bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
                 dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
                 var dia = bullet.bounds[2] - bullet.bounds[0];
                 
@@ -155,8 +145,6 @@ $.specctrPsProperties = {
                 spec.link(dupBullet);
                 legendLayer.visible = true;
                 bullet.visible = true;
-                this.setXmpDataOfLayer(artLayer, idLayer, idSpec, number);
-                this.setXmpDataOfDoc(doc, number);
             } else {
                 //Calcutate the position of spec text item.
                 if(centerX <=  doc.width/2.0) {
@@ -169,13 +157,13 @@ $.specctrPsProperties = {
 
                 //Get the end points for arm.
                 legendLayer.visible = true;
-                arm = this.createArm(specText, spec, artLayerBounds, newColor);
+                arm = $.specctrPsCommon.createArm(specText, spec, artLayerBounds, newColor);
                 arm.name = "__sArm";
                 spec.link(arm);
-                this.setXmpDataOfLayer(artLayer, idLayer, idSpec);
+                $.specctrPsCommon.setXmpDataOfLayer(artLayer, idLayer, idSpec);
             }
 
-            this.setXmpDataOfLayer(legendLayer, idLayer, idSpec);
+            $.specctrPsCommon.setXmpDataOfLayer(legendLayer, idLayer, idSpec);
             if(cssText === "")
                 cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
             $.specctrPsCommon.setXmpDataForSpec(spec, cssText, "css");
@@ -200,7 +188,7 @@ $.specctrPsProperties = {
         var infoText, isBulletCreated;
         var font = model.legendFont;
         var artLayerBounds = bounds;
-        var number, pos, idDupBullet, idBullet;
+        var pos, idDupBullet, idBullet;
         var isNewSpecCreated = false;
         doc.activeLayer = artLayer;
 
@@ -256,16 +244,7 @@ $.specctrPsProperties = {
             var centerY = (artLayerBounds[1] + artLayerBounds[3]) / 2;
             if(model.specOption == "Bullet") {
                 //Check if any number is linked with selected art layer or not, if not then assign a number.
-                number =  $.specctrPsCommon.getXMPData(artLayer, "number"); //Number linked with art layer.
-                if(number == null) {
-                    //Number linked with document, this no. tells the total no. of property specs created on document.
-                    number = $.specctrPsCommon.getXMPData(doc, "noOfSpec"); 
-                    if(number == null)
-                        number = 0;
-                    number = parseInt(number) + 1;
-                    this.setXmpDataOfLayer(artLayer, null, null, number);   //Store only number and keep idLayer and idSpec same to art layer.
-                    this.setXmpDataOfDoc(doc, number);
-                }
+               var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, false);
                 
                 //Look for the arm and delete it.
                 this.deleteSpecArmBullet(legendLayer, "__sArm");
@@ -273,7 +252,7 @@ $.specctrPsProperties = {
                 try {
                     var bullet = legendLayer.artLayers.getByName("__sFirstBullet");
                 } catch (e) {
-                    bullet = this.createBullet(legendLayer, number, font, artLayerBounds, newColor);
+                    bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
                 }
 
                 try {
@@ -308,7 +287,7 @@ $.specctrPsProperties = {
                 }
 
                 //Create the arm at  the end points of spec and selected art layer.
-                arm = this.createArm(specText, spec, artLayerBounds, newColor);
+                arm = $.specctrPsCommon.createArm(specText, spec, artLayerBounds, newColor);
                 arm.name = "__sArm";
                 spec.link(arm);
             }
@@ -1180,167 +1159,7 @@ $.specctrPsProperties = {
         } catch(e) {}
     },
 
-    //Create arm for property spec.
-    createArm : function (specText, spec, artLayerBounds, newColor) {
-        var arm = null;
-        var startX = spec.bounds[2];
-        var centerX = (artLayerBounds[0] + artLayerBounds[2]) / 2;
-        var centerY = (artLayerBounds[1] + artLayerBounds[3]) / 2;
-
-        //Get the end points for arm.
-        if(specText.justification == Justification.LEFT) {
-            if(startX < artLayerBounds[0]) {
-                arm = this.createLine(startX, spec.bounds[1], artLayerBounds[0], centerY, newColor);
-                this.setShape(startX, spec.bounds[1], artLayerBounds[0], centerY, "circle");
-            } else if(startX > artLayerBounds[2]) {
-                arm = this.createLine(startX, spec.bounds[1], artLayerBounds[2], centerY, newColor);
-                this.setShape(startX, spec.bounds[1], artLayerBounds[2], centerY, "circle");
-            }
-        } else {
-            startX = spec.bounds[0];
-
-            if(startX > artLayerBounds[2]) {
-                arm = this.createLine(startX, spec.bounds[1], artLayerBounds[2], centerY, newColor);
-                this.setShape(startX, spec.bounds[1], artLayerBounds[2], centerY, "circle");
-            } else if(startX < artLayerBounds[0]) {
-                arm = this.createLine(startX, spec.bounds[1], artLayerBounds[0], centerY, newColor);
-                this.setShape(startX, spec.bounds[1], artLayerBounds[0], centerY, "circle");
-            }
-        }
-
-        if(arm == null) {
-            arm = this.createLine(startX, spec.bounds[1], centerX, artLayerBounds[1], newColor);
-            this.setShape(startX, spec.bounds[1], centerX, artLayerBounds[1], "circle");
-        }
-    
-        return arm;
-    },
-
-    //Create the number of spec.
-    createNumber : function(legendLayer, number, font) {
-        //Color of the number over the circle.
-        var color = new RGBColor();
-        color.hexValue = "ffffff";
-
-        //Create the circle with number over it.
-        var txt =  legendLayer.artLayers.add();
-        txt.kind = LayerKind.TEXT;
-        var specText = txt.textItem;
-        specText.kind = TextType.POINTTEXT;
-        specText.color.rgb = color;
-        specText.font = font;
-        specText.size = model.legendFontSize;
-        specText.contents = number;
-        specText.fauxBold = true;
-        return txt;
-    },
-
-    //Create circle and apply color to that circle.
-    createCircle : function(top,left, bottom, right, newColor) {
-        try {
-            var idcontentLayer = stringIDToTypeID( "contentLayer" );
-            var idsolidLayer = stringIDToTypeID( "solidColorLayer" );
-            var idPxl = charIDToTypeID( "#Pxl" );
-            var idNull = charIDToTypeID( "null" );
-
-            //Creating circle for the numbering on object/spec.
-            var desc = new ActionDescriptor();
-            var ref = new ActionReference();
-            ref.putClass(idcontentLayer);
-            desc.putReference(idNull, ref);
-            var layerDesc = new ActionDescriptor();
-            layerDesc.putClass(charIDToTypeID("Type"), idsolidLayer);
-            var propDesc = new ActionDescriptor();
-            propDesc.putUnitDouble(charIDToTypeID( "Top " ), idPxl, top);
-            propDesc.putUnitDouble(charIDToTypeID( "Left" ), idPxl, left);
-            propDesc.putUnitDouble(charIDToTypeID( "Btom" ), idPxl, bottom);
-            propDesc.putUnitDouble(charIDToTypeID( "Rght" ), idPxl, right);
-            layerDesc.putObject(charIDToTypeID( "Shp " ), charIDToTypeID( "Elps" ), propDesc );
-            desc.putObject(charIDToTypeID( "Usng" ), idcontentLayer, layerDesc );
-            executeAction(charIDToTypeID( "Mk  " ), desc, DialogModes.NO );
-         
-            //Adding color to the selected art layer.
-            ref = new ActionReference();
-            ref.putEnumerated( idcontentLayer, charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ));
-            layerDesc = new ActionDescriptor();
-            layerDesc.putReference(idNull, ref );
-            propDesc = new ActionDescriptor();
-            propDesc.putDouble( charIDToTypeID( "Rd  " ), newColor.red);
-            propDesc.putDouble( charIDToTypeID( "Grn " ), newColor.green );
-            propDesc.putDouble( charIDToTypeID( "Bl  " ), newColor.blue );
-            var setColorDesc = new ActionDescriptor();
-            setColorDesc.putObject( charIDToTypeID( "Clr " ), charIDToTypeID( "RGBC" ), propDesc );
-            layerDesc.putObject( charIDToTypeID( "T   " ), idsolidLayer, setColorDesc );
-            executeAction( charIDToTypeID( "setd" ), layerDesc, DialogModes.NO );
-        
-            return app.activeDocument.activeLayer;
-        } catch(e) {
-            return null;
-        }
-    },
-    
-    //Create bullet for specs.
-    createBullet : function (legendLayer, number, font, artLayerBounds, newColor) {
-        var txt = this.createNumber(legendLayer, number, font);
-        txt.name = "___Number";
-        var dia = txt.bounds[3]-txt.bounds[1]+12;
-        var circle = this.createCircle(artLayerBounds[1], artLayerBounds[0]-dia, artLayerBounds[1]+dia, artLayerBounds[0], newColor);
-        circle.move(txt, ElementPlacement.PLACEAFTER);
-        var pos = [(circle.bounds[0]+circle.bounds[2])/2.0-(txt.bounds[2]-txt.bounds[0])/2.0,
-                            (circle.bounds[1]+circle.bounds[3])/2.0-(txt.bounds[3]-txt.bounds[1])/2.0];
-        txt.translate(pos[0]-txt.bounds[0], pos[1]-txt.bounds[1]);
-        $.specctrPsCommon.selectLayers(circle.name, txt.name);
-        var bullet = $.specctrPsCommon.createSmartObject();
-        bullet.name = "__sFirstBullet";
-        return bullet;
-    },
-
-    //Store the current number of properties spec in the XMPMetadata of the document.
-    setXmpDataOfDoc : function(doc, noOfSpec) {
-        var layerXMP;
-        try {
-            layerXMP = new XMPMeta(doc.xmpMetadata.rawData);			// get the object
-        } catch(errMsg) {
-            layerXMP = new XMPMeta();			// layer did not have metadata so create new
-        }
-
-        try {
-            layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, "noOfSpec", null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-            layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, "noOfSpec", 1, noOfSpec.toString());
-            doc.xmpMetadata.rawData = layerXMP.serialize();
-        } catch(errMsg) {}
-    },
-
-    //Set the XMPMetadata to the active layer.
-    setXmpDataOfLayer : function(activeLayer, idLayer, idSpec,  number) {
-        var layerXMP;
-        try {
-            layerXMP = new XMPMeta(activeLayer.xmpMetadata.rawData);			// get the object
-        } catch(errMsg) {
-            layerXMP = new XMPMeta();			// layer did not have metadata so create new
-        }
-
-        try {
-            
-            if (idLayer) {
-                layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, "idLayer", null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-                layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, "idLayer", 1, idLayer.toString());
-            }
-
-            if(idSpec) {
-                layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, "idSpec", null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-                layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, "idSpec", 1, idSpec.toString());
-            }
-
-            if (number) {
-                layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, "number", null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-                layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, "number", 1, number.toString());
-            }
-            
-            activeLayer.xmpMetadata.rawData = layerXMP.serialize();
-        } catch(e) {}
-    },
-
+   
     //This function create the artlayer set named 'Text Properties', if not created.
     legendPropertiesLayer : function(specName) {
         var newLayer;
@@ -1352,104 +1171,5 @@ $.specctrPsProperties = {
         }
         return newLayer;
     },
-
-    //Create line and apply color to that line.
-    createLine : function(startX, startY, endX, endY, newColor) {
-        var idcontentLayer = stringIDToTypeID( "contentLayer" );
-        var idSolidLayer = stringIDToTypeID( "solidColorLayer" );
-        var idStrt = charIDToTypeID( "Strt" );
-        var idHrzn = charIDToTypeID( "Hrzn" );
-        var idPxl = charIDToTypeID( "#Pxl" );
-        var idVrtc = charIDToTypeID( "Vrtc" );
-        var idPnt = charIDToTypeID( "Pnt " );
-        var idNull = charIDToTypeID( "null" );
-        var idType = charIDToTypeID( "T   " );
-        var idOrdn = charIDToTypeID( "Ordn" );
-        var idTrgt = charIDToTypeID( "Trgt" );
-
-        //Creating arm.
-        var actRef = new ActionReference();
-        actRef.putClass( idcontentLayer );
-        var layerDesc = new ActionDescriptor();
-        layerDesc.putReference(idNull, actRef );
-        var lineDesc = new ActionDescriptor();
-        lineDesc.putClass( charIDToTypeID( "Type" ), idSolidLayer);
-        var propertyDesc = new ActionDescriptor();
-        var strtPointDesc = new ActionDescriptor();
-        strtPointDesc.putUnitDouble( idHrzn, idPxl,  startX);
-        strtPointDesc.putUnitDouble( idVrtc, idPxl, startY);
-        var endPointDesc = new ActionDescriptor();
-        endPointDesc.putUnitDouble( idHrzn, idPxl, endX );
-        endPointDesc.putUnitDouble( idVrtc, idPxl, endY );
-        propertyDesc.putObject(  charIDToTypeID( "Strt" ), idPnt, strtPointDesc );
-        propertyDesc.putObject( charIDToTypeID( "End " ), idPnt, endPointDesc);
-        propertyDesc.putUnitDouble( charIDToTypeID( "Wdth" ), idPxl, model.armWeight );
-        lineDesc.putObject( charIDToTypeID( "Shp " ), charIDToTypeID( "Ln  " ), propertyDesc );
-        layerDesc.putObject( charIDToTypeID( "Usng" ), idcontentLayer, lineDesc );
-        executeAction( charIDToTypeID( "Mk  " ), layerDesc, DialogModes.NO );
-
-        //Adding color to the selected art layer.
-        actRef = new ActionReference();
-        actRef.putEnumerated( idcontentLayer, idOrdn, idTrgt);
-        layerDesc = new ActionDescriptor();
-        layerDesc.putReference(idNull, actRef );
-        var colorDesc = new ActionDescriptor();
-        colorDesc.putDouble( charIDToTypeID( "Rd  " ), newColor.red);
-        colorDesc.putDouble( charIDToTypeID( "Grn " ), newColor.green );
-        colorDesc.putDouble( charIDToTypeID( "Bl  " ), newColor.blue );
-        var setColorDesc = new ActionDescriptor();
-        setColorDesc.putObject( charIDToTypeID( "Clr " ), charIDToTypeID( "RGBC" ), colorDesc );
-        layerDesc.putObject( idType, idSolidLayer, setColorDesc );
-        executeAction( charIDToTypeID( "setd" ), layerDesc, DialogModes.NO );
-            
-         return app.activeDocument.activeLayer;
-    },
-
-    //Create the shape art layer in the selected layer.
-    setShape : function(startX, startY, endX, endY, shape) {
-        var idPxl = charIDToTypeID("#Pxl");
-        
-        if(shape == "circle") {
-            //Calculate radius of circle.
-            var circleR = model.armWeight + 3;
-
-            var circleDesc = new ActionDescriptor();
-            actRef = new ActionReference();
-            actRef.putEnumerated( charIDToTypeID( "Path" ),  charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
-            circleDesc.putReference(charIDToTypeID("null"), actRef);
-            propertyDesc = new ActionDescriptor();
-            propertyDesc.putInteger(stringIDToTypeID("unitValueQuadVersion"), 1 );
-            propertyDesc.putUnitDouble( charIDToTypeID( "Top " ), idPxl, endY - circleR);
-            propertyDesc.putUnitDouble( charIDToTypeID( "Left" ), idPxl, endX - circleR);
-            propertyDesc.putUnitDouble( charIDToTypeID( "Btom" ), idPxl, endY + circleR);
-            propertyDesc.putUnitDouble( charIDToTypeID( "Rght" ), idPxl, endX+ circleR);
-            circleDesc.putObject( charIDToTypeID( "T   " ), charIDToTypeID( "Elps" ), propertyDesc);
-            executeAction( charIDToTypeID( "AddT") , circleDesc, DialogModes.NO);
-        } else {
-
-            var idHrzn = charIDToTypeID("Hrzn");
-            var idVrtc = charIDToTypeID("Vrtc");
-            
-            var shapeDesc = new ActionDescriptor();
-            var ref = new ActionReference();
-            ref.putEnumerated(charIDToTypeID("Path"), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
-            shapeDesc.putReference(charIDToTypeID("null"), ref);
-            
-            var propDesc = new ActionDescriptor();
-            
-            var desc = new ActionDescriptor();
-            desc.putUnitDouble(idHrzn, idPxl, startX);
-            desc.putUnitDouble(idVrtc, idPxl, startY);
-            propDesc.putObject(charIDToTypeID( "Strt" ), idPxl, desc);
-            desc = new ActionDescriptor();
-            desc.putUnitDouble( idHrzn, idPxl, endX);
-            desc.putUnitDouble( idVrtc, idPxl, endY);
-            propDesc.putObject( charIDToTypeID("End "), idPxl, desc);
-            
-            propDesc.putUnitDouble( charIDToTypeID("Wdth"), idPxl, model.armWeight);
-            shapeDesc.putObject( charIDToTypeID( "T   " ),  charIDToTypeID( "Ln  " ), propDesc);
-            executeAction( charIDToTypeID( "AddT" ), shapeDesc, DialogModes.NO );
-        }
-    }
 
 };
