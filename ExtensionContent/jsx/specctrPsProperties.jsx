@@ -138,7 +138,7 @@ $.specctrPsProperties = {
                 var dia = bullet.bounds[2] - bullet.bounds[0];
                 
                 //Adjust position of spec items.
-               this.adjustPositionOfSpecItems(spec, specText, dupBullet, artLayerBounds, spacing, 
+               $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, artLayerBounds[1], spacing, 
                                                                   doc.width/2.0, centerX, dia, true);
                                                                   
                 dupBullet.name = "__sSecondBullet";
@@ -160,9 +160,9 @@ $.specctrPsProperties = {
                 arm = $.specctrPsCommon.createArm(specText, spec, artLayerBounds, newColor);
                 arm.name = "__sArm";
                 spec.link(arm);
-                $.specctrPsCommon.setXmpDataOfLayer(artLayer, idLayer, idSpec);
             }
 
+            $.specctrPsCommon.setXmpDataOfLayer(artLayer, idLayer, idSpec);
             $.specctrPsCommon.setXmpDataOfLayer(legendLayer, idLayer, idSpec);
             if(cssText === "")
                 cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
@@ -264,7 +264,7 @@ $.specctrPsProperties = {
 
                 var dia = bullet.bounds[2] - bullet.bounds[0];
                 //Adjust position of spec items.
-               this.adjustPositionOfSpecItems(spec, specText, dupBullet, artLayerBounds, spacing, centerX, 
+               $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, artLayerBounds[1], spacing, centerX, 
                                                                     (spec.bounds[0] + spec.bounds[2]) / 2.0, dia, isNewSpecCreated);
 
                 bullet.translate(artLayerBounds[0]-bullet.bounds[0]-dia-1, artLayerBounds[1]-bullet.bounds[1]-1);
@@ -297,32 +297,13 @@ $.specctrPsProperties = {
 
             // Set Xmp metadata for spec and bullet.
             $.specctrPsCommon.setXmpDataForSpec(spec, cssText, "css");
-        } catch(e) {}
+        } catch(e) {alert(e);}
 
         doc.activeLayer = artLayer;
         doc.resizeImage(null, null, originalDPI, ResampleMethod.NONE);
         // Reset the application preferences
         app.preferences.typeUnits = startTypeUnits;
         app.preferences.rulerUnits = startRulerUnits;
-    },
-    
-    //Adjust the positions of property specs item on the active document.
-    adjustPositionOfSpecItems : function (spec, specText, dupBullet, artLayerBounds, 
-            spacing, condition1, condition2, dia, isNewSpecCreated) {
-        var doc = app.activeDocument;
-         if(condition1 >= condition2) {
-            if(isNewSpecCreated) {
-                specText.justification = Justification.LEFT;
-                spec.translate(-(spec.bounds[0]-spacing-dia), artLayerBounds[1]-spec.bounds[1]);
-            }
-            dupBullet.translate(spec.bounds[0]-dupBullet.bounds[0]-dia-1, spec.bounds[1]-dupBullet.bounds[1]-1);
-        } else {
-            if(isNewSpecCreated) {
-                specText.justification = Justification.RIGHT;
-                spec.translate(doc.width-spacing-spec.bounds[2]-dia, artLayerBounds[1]-spec.bounds[1]);
-            }
-            dupBullet.translate(spec.bounds[2]-dupBullet.bounds[0]+1, spec.bounds[1]-dupBullet.bounds[1]-1);
-        }
     },
     
     //Delete property spec arm or bullet, if any.

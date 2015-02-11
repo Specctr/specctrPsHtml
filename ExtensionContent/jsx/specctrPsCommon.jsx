@@ -266,10 +266,10 @@ $.specctrPsCommon = {
     },
 
     //Set position of border before the particular layer in Layer panel.
-    placeBorderBefore : function(lyr) {
+    placeBorderBefore : function(layer) {
         try {
             var border = app.activeDocument.artLayers.getByName("Specctr Canvas Border"); 
-            border.move(lyr, ElementPlacement.PLACEBEFORE);
+            border.move(layer, ElementPlacement.PLACEBEFORE);
         } catch(e) {}
     },
 
@@ -741,7 +741,26 @@ $.specctrPsCommon = {
             shapeDesc.putObject( charIDToTypeID( "T   " ),  charIDToTypeID( "Ln  " ), propDesc);
             executeAction( charIDToTypeID( "AddT" ), shapeDesc, DialogModes.NO );
         }
-    }
+    },
+
+    //Adjust the positions of property specs item on the active document.
+    adjustPositionOfSpecItems : function (spec, specText, dupBullet, specYPos, 
+            spacing, condition1, condition2, dia, isNewSpecCreated) {
+        var doc = app.activeDocument;
+         if(condition1 >= condition2) {
+            if(isNewSpecCreated) {
+                specText.justification = Justification.LEFT;
+                spec.translate(-(spec.bounds[0]-spacing-dia), specYPos-spec.bounds[1]);
+            }
+            dupBullet.translate(spec.bounds[0]-dupBullet.bounds[0]-dia-1, spec.bounds[1]-dupBullet.bounds[1]-1);
+        } else {
+            if(isNewSpecCreated) {
+                specText.justification = Justification.RIGHT;
+                spec.translate(doc.width-spacing-spec.bounds[2]-dia, specYPos-spec.bounds[1]);
+            }
+            dupBullet.translate(spec.bounds[2]-dupBullet.bounds[0]+1, spec.bounds[1]-dupBullet.bounds[1]-1);
+        }
+    },
 
 };
 
