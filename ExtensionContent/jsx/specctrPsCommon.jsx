@@ -505,13 +505,18 @@ $.specctrPsCommon = {
 
     // Get number for bullet.
     getBulletNumber : function (artLayer, doc, isNewBullet) {
+        var specctrLayerSet = doc.layerSets.getByName("Specctr").layerSets;
          //Check if any number is linked with selected art layer or not, if not then assign a number.
         var number =  this.getXMPData(artLayer, "number"); //Number linked with art layer.
         try {
-            doc.layerSets.getByName("Specctr").layerSets.getByName("Properties");
+            specctrLayerSet.getByName("Properties");
         } catch(e) {
-            number = 0;
-            isNewBullet = true;
+            try {
+                specctrLayerSet.getByName("Add Note");
+            } catch (e) {
+                number = 0;
+                isNewBullet = true;
+            }
         }
         if(number == null) {
             //Number linked with document, this no. tells the total no. of property specs created on document.
@@ -762,5 +767,11 @@ $.specctrPsCommon = {
         }
     },
 
+    //Delete layer using its name .
+    deleteArtLayerByName : function (layer, name) {
+        try {
+            layer.artLayers.getByName(name).remove();
+        } catch (e) {}
+    },
 };
 

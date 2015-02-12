@@ -247,7 +247,7 @@ $.specctrPsProperties = {
                var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, false);
                 
                 //Look for the arm and delete it.
-                this.deleteSpecArmBullet(legendLayer, "__sArm");
+                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
                 
                 try {
                     var bullet = legendLayer.artLayers.getByName("__sFirstBullet");
@@ -271,9 +271,9 @@ $.specctrPsProperties = {
                 spec.link(dupBullet);
             } else {
                 
-                this.deleteSpecArmBullet(legendLayer, "__sFirstBullet");
-                this.deleteSpecArmBullet(legendLayer, "__sSecondBullet");
-                this.deleteSpecArmBullet(legendLayer, "__sArm");
+                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sFirstBullet");
+                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sSecondBullet");
+                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
                 
                 //Calcutate the position of spec text item.
                 if (isNewSpecCreated == true) {
@@ -304,14 +304,6 @@ $.specctrPsProperties = {
         // Reset the application preferences
         app.preferences.typeUnits = startTypeUnits;
         app.preferences.rulerUnits = startRulerUnits;
-    },
-    
-    //Delete property spec arm or bullet, if any.
-    deleteSpecArmBullet : function (legendLayer, name) {
-        try {
-            var specStyle = legendLayer.artLayers.getByName(name);
-            specStyle.remove();
-        } catch (e) {}
     },
 
     //Get the properties of the text item.

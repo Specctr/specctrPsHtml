@@ -104,7 +104,7 @@ $.specctrPsAddNote = {
          
             //Check if any number is linked with selected art layer or not, if not then assign a number.
             if (!bullet) {
-                var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, false);
+                var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, true);
                 bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
             }
             
@@ -133,9 +133,11 @@ $.specctrPsAddNote = {
             arm.name = "__sArm";
             spec.link(arm);
         }
-    
-        this.setXmpDataOfLayer(artLayer, idLayer, noteId);
-        this.setXmpDataOfLayer(legendLayer, idLayer, noteId);
+        var xmpData = {layers : [{reference : legendLayer}, {reference : artLayer}],
+                                  properties : [{name : "idLayer", value : idLayer}, {name : "idNote", value : noteId}]};
+        
+        this.setXmpDataOfLayer(xmpData);
+        //this.setXmpDataOfLayer(legendLayer, idLayer, noteId);
     } catch (e) {
         alert(e);
     }
@@ -197,10 +199,11 @@ $.specctrPsAddNote = {
                 if (!bullet) {
                     var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, false);
                     bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
+                    bullet.name = "__sFirstBullet";
                 }
                 
                 //Look for the arm and delete it.
-                this.deleteSpecArmBullet(legendLayer, "__sArm");
+                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
 
                 try {
                     var dupBullet = legendLayer.artLayers.getByName("__sSecondBullet");
@@ -218,8 +221,9 @@ $.specctrPsAddNote = {
                 bullet.translate(artLayerBounds[0]-bullet.bounds[0]-dia-1, artLayerBounds[1]-bullet.bounds[1]-1);
                 spec.link(dupBullet);
             } else {
-                this.deleteSpecArmBullet(legendLayer, "__sSecondBullet");
-                this.deleteSpecArmBullet(legendLayer, "__sArm");
+                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sFirstBullet");
+                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sSecondBullet");
+                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
                 
                 //Calcutate the position of spec text item.
                 if (isNewSpecCreated == true) {
@@ -248,30 +252,30 @@ $.specctrPsAddNote = {
     },
 
     //Set the XMPMetadata to the active layer.
-    setXmpDataOfLayer : function(activeLayer, idLayer, idNote) {
-        var layerXMP;
-        try {
-            layerXMP = new XMPMeta(activeLayer.xmpMetadata.rawData);			// get the object
-        } catch(errMsg) {
-            layerXMP = new XMPMeta();			// layer did not have metadata so create new
+    setXmpDataOfLayer : function(data) {
+        var layer, layerXMP;
+        var noOfLayers = data.layers.length;
+        var noOfProperties = data.properties.length;
+        var propertyName, value;
+        
+        for (var i = 0; i < noOfLayers; i++) {
+            layer = data.layers[i].reference;
+            try {
+                layerXMP = new XMPMeta(layer.xmpMetadata.rawData);
+            } catch(e) {
+                layerXMP = new XMPMeta();	// layer did not have metadata so create new.
+            }
+
+            for (var k = 0; k < noOfProperties; k++) {
+                try {
+                    propertyName = data.properties[k].name;
+                    value = data.properties[k].value;
+                    layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, propertyName, null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
+                    layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, propertyName, 1, value.toString());
+                } catch(e) {}
+            }
+            layer.xmpMetadata.rawData = layerXMP.serialize();
         }
-
-        try {
-            layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, "idLayer", null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-            layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, "idLayer", 1, idLayer.toString());
-
-            layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, "idNote", null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-            layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, "idNote", 1, idNote.toString());
-            
-            activeLayer.xmpMetadata.rawData = layerXMP.serialize();
-        } catch(e) {}
-    },
-
-    //Delete property spec arm or bullet, if any.
-    deleteSpecArmBullet : function (legendLayer, name) {
-        try {
-            var specStyle = legendLayer.artLayers.getByName(name);
-            specStyle.remove();
-        } catch (e) {}
-    },
+    }
+    
 };
