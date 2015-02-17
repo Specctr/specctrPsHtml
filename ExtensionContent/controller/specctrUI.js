@@ -102,58 +102,25 @@ function tab_clickHandler() {
  */
 function changeImagesOfTabs(selectedTab) {
 	try {
-		var tab1ImagePath = "../Images/Icon_main";
-		var tab2ImagePath = "../Images/Icon_settings";
-		var tab3ImagePath = "../Images/Icon_responsive";
-		var tab4ImagePath = "../Images/Icon_prefs";
-		var imageExtension = ".png";
+		var isImageChanged = true, size = "";
+		var iconExtension = ".png";
 		var activeImageEndString = "_active";
-		var size = "";
-
+		var tabIconPath = ["../Images/Icon_main", "../Images/Icon_settings", 
+		                   "../Images/Icon_responsive", "../Images/Icon_prefs"];
+		
 		//For retina display: 2 pixel ratio; 
-		if(window.devicePixelRatio > 1) {
+		//We have only first tab icon in x2 for that 'selectedTab === 1' check is used.
+		if (window.devicePixelRatio > 1 && selectedTab === 1)
 			size = "_x2";
+
+		tabIconPath[selectedTab-1] += activeImageEndString;	//Set active icon path.
+		
+		//Set icons to their respective tabs.
+		for (var i = 0; i < 4; i++) {
+			$("#tabImage_" + (i + 1)).attr("src", 
+					tabIconPath[i] + size + iconExtension);
 		}
-
-		var isImageChanged = true;
-		var tab1Image = document.getElementById("tabImage_1");
-		var tab2Image = document.getElementById("tabImage_2");
-		var tab3Image = document.getElementById("tabImage_3");
-		var tab4Image = document.getElementById("tabImage_4");
-
-		switch (selectedTab) {
-		case 1:
-			tab1Image.src = tab1ImagePath + activeImageEndString + size + imageExtension;
-			tab2Image.src = tab2ImagePath + imageExtension;
-			tab3Image.src = tab3ImagePath + imageExtension;
-			tab4Image.src = tab4ImagePath + imageExtension;
-			break;
-
-		case 2:
-			tab1Image.src = tab1ImagePath + imageExtension;
-			tab2Image.src = tab2ImagePath + activeImageEndString + imageExtension;
-			tab3Image.src = tab3ImagePath + imageExtension;
-			tab4Image.src = tab4ImagePath + imageExtension;
-			break;
-
-		case 3:
-			tab1Image.src = tab1ImagePath + imageExtension;
-			tab2Image.src = tab2ImagePath + imageExtension;
-			tab3Image.src = tab3ImagePath + activeImageEndString + imageExtension;
-			tab4Image.src = tab4ImagePath + imageExtension;
-			break;
-
-		case 4:
-			tab1Image.src = tab1ImagePath + imageExtension;
-			tab2Image.src = tab2ImagePath + imageExtension;
-			tab3Image.src = tab3ImagePath + imageExtension;
-			tab4Image.src = tab4ImagePath + activeImageEndString + imageExtension;
-			break;
-
-		default:
-			isImageChanged = false;
-		}
-
+		
 	} catch (e) {
 		isImageChanged = false;
 	}
@@ -189,8 +156,8 @@ function textBox_changeHandler(textBoxId) {
  * Enable/Disable the width and height text boxes and 
  * set the value of model's specInPrcntg when changed.
  */
-function chkDistanceSpec_changeHandler() {
-	model.specInPrcntg = document.getElementById("chkDistanceSpec").checked;
+function specInPrcntg_changeHandler() {
+	model.specInPrcntg = document.getElementById("specInPrcntg").checked;
 	if (model.specInPrcntg) {
 		enableTextField(document.getElementById("relativeWidth"));
 		enableTextField(document.getElementById("relativeHeight"));
@@ -205,10 +172,10 @@ function chkDistanceSpec_changeHandler() {
  * Enable/Disable the baseFontSize and baseLineHeight text boxes and
  * set the value of model's specInEM when changed.
  */
-function chkEmSpec_changeHandler() {
+function specInEM_changeHandler() {
 	var textFontSize = document.getElementById("baseFontSize");
 	var textBaseLineHeight = document.getElementById("baseLineHeight");
-	model.specInEM = document.getElementById("chkEmSpec").checked;
+	model.specInEM = document.getElementById("specInEM").checked;
 
 	if (model.specInEM) {
 		enableTextField(textFontSize);
@@ -468,7 +435,7 @@ function createDialog() {
 		autoOpen : false,
 		resizable: false,
 		width : 200,
-		height : 60,
+		height : 80,
 		modal : true,
 		buttons : []
 	});

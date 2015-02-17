@@ -796,3 +796,11 @@ label
 	}
 	
 }
+
+.psElement {
+	display: none;
+}
+
+.nonPsElement {
+	display: block;
+}

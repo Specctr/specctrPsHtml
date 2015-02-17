@@ -86,3 +86,4 @@ var extensionId = '';
 var hostApplication = '';
 var illustrator = 'Ai';
 var photoshop = 'Ps';
+var indesign = 'Id';

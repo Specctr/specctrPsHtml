@@ -51,11 +51,13 @@ function getHostApp() {
 	var csInterface = new CSInterface();
 	var appName = csInterface.hostEnvironment.appName;
 	var currentApplication = "";
-	
+
 	if(appName.indexOf("PHXS") >= 0) {
 		currentApplication = "Ps";
 	} else if (appName.indexOf("ILST") >= 0) {
 		currentApplication = "Ai";
+	} else if (appName.indexOf("IDSN") >= 0) {
+		currentApplication = "Id";
 	}
 	
 	return currentApplication;

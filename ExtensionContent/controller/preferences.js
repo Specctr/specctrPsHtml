@@ -82,6 +82,8 @@ function getConfigFilePath() {
 		configFileName = "/specctrPhotoshopConfig.json";
 	else if (hostApplication === illustrator)
 		configFileName = "/specctrIllustratorConfig.json";
+	else if (hostApplication === indesign)
+		configFileName = "/specctrIndesignConfig.json";
 	
 	var path = getPrefernceDirectory() + configFileName;
 	return path;

@@ -39,21 +39,21 @@ function completeHandler(data, status) {
  * Set the canvas expand text value.
  */
 function mainTab_creationCompleteHandler() {
-
+	var iconPostString = ".png";
+	var buttonIconPaths = ["../Images/Icon_object", "../Images/Icon_coordinates",
+	                       "../Images/DimensionButtonIcons/WH_11", 
+	                       "../Images/SpacingButtonIcons/Spacing_TL"];
+	var buttonIds = ["#imgProperty", "#imgCoordinate", "#dimensionIcon", "#spacingIcon"];
+	
 	//For retina display: 2 pixel ratio; 
-	if(window.devicePixelRatio > 1) {
-		$("#imgProperty").attr("src", "../Images/Icon_object_x2.png");
-		$("#imgCoordinate").attr("src", "../Images/Icon_coordinates_x2.png");
-		$("#dimensionIcon").attr("src", "../Images/DimensionButtonIcons/WH_11_x2.png");
-		$("#spacingIcon").attr("src", "../Images/SpacingButtonIcons/Spacing_TL_x2.png");
-	} else {
-		$("#imgProperty").attr("src", "../Images/Icon_object.png");
-		$("#imgCoordinate").attr("src", "../Images/Icon_coordinates.png");
-		$("#dimensionIcon").attr("src", "../Images/DimensionButtonIcons/WH_11.png");
-		$("#spacingIcon").attr("src", "../Images/SpacingButtonIcons/Spacing_TL.png");
+	if(window.devicePixelRatio > 1)
+		iconPostString = "_x2" + iconPostString;
+
+	for (var i = 0; i < 4; i++) {
+		$(buttonIds[i]).attr("src", buttonIconPaths[i] + iconPostString);
 	}
 
-	document.getElementById("canvasExpandSize").value = model.canvasExpandSize;
+	$("#canvasExpandSize").val(model.canvasExpandSize);
 }
 
 /**
@@ -61,30 +61,26 @@ function mainTab_creationCompleteHandler() {
  */
 function settings_creationCompleteHandler() {
 	//Load settings from model according to the host application.
-	if (hostApplication === illustrator) {
-		document.getElementById("shapeFillColor").checked			= model.shapeFillColor;
-		document.getElementById("shapeFillStyle").checked			= model.shapeFillStyle;
-		document.getElementById("shapeStrokeColor").checked			= model.shapeStrokeColor;
-		document.getElementById("shapeStrokeStyle").checked			= model.shapeStrokeStyle;
-		document.getElementById("shapeStrokeSize").checked			= model.shapeStrokeSize;
+	var appSpecificCheckBoxesId;
+	var checkBoxesId = ["shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
+	                    "textColor", "textStyle", "textAlignment", "textLeading",
+	                    "textTracking", "textAlpha"];
+	
+	if (hostApplication === photoshop) {
+		appSpecificCheckBoxesId = ["shapeFill", "shapeStroke", 
+		                           "shapeEffects", "textEffects"];
 	} else {
-		document.getElementById("shapeFill").checked			= model.shapeFill;
-		document.getElementById("shapeStroke").checked			= model.shapeStroke;
-		document.getElementById("shapeEffects").checked			= model.shapeEffects;
-		document.getElementById("textEffects").checked			= model.textEffects;
+		appSpecificCheckBoxesId = ["shapeFillColor", "shapeFillStyle", 
+		                           "shapeStrokeColor", "shapeStrokeStyle", 
+		                           "shapeStrokeSize"];
 	}
 
-	document.getElementById("shapeAlpha").checked = model.shapeAlpha;
-	document.getElementById("shapeBorderRadius").checked = model.shapeBorderRadius;
-
-	document.getElementById("textFont").checked = model.textFont;
-	document.getElementById("textSize").checked = model.textSize;
-	document.getElementById("textColor").checked = model.textColor;
-	document.getElementById("textStyle").checked = model.textStyle;
-	document.getElementById("textAlignment").checked = model.textAlignment;
-	document.getElementById("textLeading").checked = model.textLeading;
-	document.getElementById("textTracking").checked = model.textTracking;
-	document.getElementById("textAlpha").checked = model.textAlpha;
+	Array.prototype.push.apply(checkBoxesId, appSpecificCheckBoxesId);
+	var totalCheckBoxes = checkBoxesId.length;
+	
+	for (var i = 0; i < totalCheckBoxes; i++) {
+		$("#"+checkBoxesId[i]).prop("checked", model[checkBoxesId[i]]);
+	}
 }
 
 /**
@@ -92,31 +88,20 @@ function settings_creationCompleteHandler() {
  * enable/disable the text boxes.
  */
 function responsiveTab_creationCompleteHandler() {
-	var relativeWidth = "relativeWidth";
-	var relativeHeight = "relativeHeight";
-	var baseFontSize = "baseFontSize";
-	var baseLineHeight = "baseLineHeight";
-
-	// Select the checkboxes depending on the model value.
-	document.getElementById("chkDistanceSpec").checked = model.specInPrcntg;
-	document.getElementById("chkEmSpec").checked = model.specInEM;
-
-	// If true, enable the text boxes for width and height.
-	if (model.specInPrcntg) {
-		enableTextField(document.getElementById(relativeWidth));
-		enableTextField(document.getElementById(relativeHeight));
-	} else {
-		disableTextField(document.getElementById(relativeWidth));
-		disableTextField(document.getElementById(relativeHeight));
-	}
-
-	// If true, enable the text boxes for base font size and line height.
-	if (model.specInEM) {
-		enableTextField(document.getElementById(baseFontSize));
-		enableTextField(document.getElementById(baseLineHeight));
-	} else {
-		disableTextField(document.getElementById(baseFontSize));
-		disableTextField(document.getElementById(baseLineHeight));
+	var textFieldIds = ["relativeWidth", "relativeHeight",
+	                    "baseFontSize", "baseLineHeight"];
+	
+	var checkBoxIds = ["specInPrcntg", "specInEM"];
+	
+	for (var i = 0; i < 4; i+=2) {
+		document.getElementById(checkBoxIds[i/2]).checked = model[checkBoxIds[i/2]];
+		if (model[checkBoxIds[i/2]]) {
+			enableTextField(document.getElementById(textFieldIds[i]));
+			enableTextField(document.getElementById(textFieldIds[i+1]));
+		} else {
+			disableTextField(document.getElementById(textFieldIds[i]));
+			disableTextField(document.getElementById(textFieldIds[i+1]));
+		}
 	}
 }
 
@@ -190,12 +175,13 @@ function prefs_creationCompleteHandler() {
  * according to the license value in preferences.
  */
 function onLoaded() {
-	// Handle the exceptions such as if any value or any component is not
-	// present.
+	// Handle exceptions of any missing components.
 	try {
 		createDialog();
 		var isLicensed = false;
 		var appPrefs;
+		
+		loadJSX(); // Load the jsx files present in \jsx folder.
 
 		//Get the host application name.
 		hostApplication = getHostApp();
@@ -203,21 +189,12 @@ function onLoaded() {
 		if (hostApplication === '') {
 			showDialog('Cannot load the extension.\nRequired host application not found!');
 			return;
-		} else if (hostApplication === illustrator) {
-			document.getElementById("fillForPHXS").style.display = "none";
-			document.getElementById("strokeForPHXS").style.display = "none";
-			document.getElementById("shapeEffectsForPHXS").style.display = "none";
-			document.getElementById("textEffectsForPHXS").style.display = "none";
-			document.getElementById("radioForPHXS").style.display = "none";
-			document.getElementById("specOption").style.display = "none";
-
-			document.getElementById("fillColorForILST").style.display = "block";
-			document.getElementById("fillStyleForILST").style.display = "block";
-			document.getElementById("strokeColorForILST").style.display = "block";
-			document.getElementById("strokeStyleForILST").style.display = "block";
-			document.getElementById("strokeSizeForILST").style.display = "block";
-			document.getElementById("specToEdgeCheckbox").style.display = "block";
-			document.getElementById("colorListForILST").style.display = "block";
+		} else if (hostApplication === photoshop) {
+			$(".psElement").show();
+			$(".nonPsElement").hide();
+		} else if (hostApplication === indesign) {
+			$(".nonIdElement").hide();
+			$("#imgCoordinateDdlArrow").remove();
 		}
 
 		appPrefs = readAppPrefs();	//Read the config file and look for the isLicensed value.
@@ -246,8 +223,6 @@ function onLoaded() {
 			writeAppPrefs();
 		}
 
-		loadJSX(); // Load the jsx files present in \jsx folder.
-		
 		if (isLicensed)
 			init();
 
@@ -260,31 +235,27 @@ function onLoaded() {
  * Initialize the values of the tab conatainer's components.
  */
 function init() {
-	// Handle the exceptions such as if any value or any component is not
-	// present.
+	// Handle exceptions of missing components
 	try {
 		// Load tab container..
-		document.getElementById("loginContainer").style.display = "none";
-		document.getElementById("tabContainer").style.display = "block";
+		$("#loginContainer").hide();
+		$("#tabContainer").show();
 
 		setModelValueFromPreferences();
 
-		var container = document.getElementById("tabContainer"); // Get tab
-		// container
-		var navitem = container.querySelector(".tabs ul li"); // Set current
-		// tab
+		var container = document.getElementById("tabContainer"); // Get tab container.
+		var navitem = container.querySelector(".tabs ul li"); // Set current tab.
 
-		// Store which tab we are on
+		// Store which tab we are on.
 		var ident = navitem.id.split("_")[1];
 		navitem.parentNode.setAttribute("data-current", ident);
 
-		changeImagesOfTabs(parseInt(ident)); // Set Current Tab with proper
-		// Image
-		navitem.setAttribute("class", "tabActiveHeader"); // Set current tab
-		// with class of
-		// active tab header
+		changeImagesOfTabs(parseInt(ident)); // Set Current Tab with proper Image.
+		
+		 // Set current tab with class of active tab header.
+		navitem.setAttribute("class", "tabActiveHeader");
 
-		// Hide two tab contents we don't need
+		// Hide two tab contents we don't need.
 		var pages = container.querySelectorAll(".tabpage");
 		for (var i = 1; i < pages.length; i++)
 			pages[i].style.display = "none";
@@ -311,61 +282,38 @@ function setModelValueFromPreferences() {
 
 	if (!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha"))
 		return;
-
-	if (hostApplication === illustrator) {
-		model.shapeFillColor = appPrefs.shapeFillColor ? true : false;
-		model.shapeFillStyle = appPrefs.shapeFillStyle ? true : false;
-		model.shapeStrokeColor = appPrefs.shapeStrokeColor ? true : false;
-		model.shapeStrokeStyle = appPrefs.shapeStrokeStyle ? true : false;
-		model.shapeStrokeSize = appPrefs.shapeStrokeSize ? true : false;
-		model.specToEdge = appPrefs.specToEdge ? true : false;
+	
+	var i, propertyApplicationSpecific;
+	var propertyName = ["shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
+	                    "textAlignment", "textColor", "textStyle", "textLeading", 
+	                    "textTracking", "textAlpha", "useHexColor", "specInPrcntg", 
+	                    "specInEM", "rgbTransformIntoPercentage"];
+	
+	if (hostApplication === photoshop) {
+		propertyApplicationSpecific = ["shapeFill", "shapeStroke", "shapeEffects", "textEffects"];
 	} else {
-		model.shapeFill = appPrefs.shapeFill ? true : false;
-		model.shapeStroke = appPrefs.shapeStroke ? true : false;
-		model.shapeEffects = appPrefs.shapeEffects ? true : false;
-		model.textEffects = appPrefs.textEffects ? true : false;
+		propertyApplicationSpecific = ["shapeFillColor", "shapeFillStyle", "shapeStrokeColor", 
+		                               "shapeStrokeStyle", "shapeStrokeSize", "specToEdge"];
 	}
 	
-	model.shapeAlpha = appPrefs.shapeAlpha ? true : false;
-	model.shapeBorderRadius = appPrefs.shapeBorderRadius ? true : false;
-
-	model.textFont = appPrefs.textFont ? true : false;
-	model.textSize = appPrefs.textSize ? true : false;
-	model.textAlignment = appPrefs.textAlignment ? true : false;
-	model.textColor = appPrefs.textColor ? true : false;
-	model.textStyle = appPrefs.textStyle ? true : false;
-	model.textLeading = appPrefs.textLeading ? true : false;
-	model.textTracking = appPrefs.textTracking ? true : false;
-	model.textAlpha = appPrefs.textAlpha ? true : false;
-
-	model.useHexColor = appPrefs.useHexColor ? true : false;
-	model.specInPrcntg = appPrefs.specInPrcntg ? true : false;
-	model.specInEM = appPrefs.specInEM ? true : false;
-	model.useScaleBy = appPrefs.useScaleBy ? true : false;
-	model.rgbTransformIntoPercentage = appPrefs.rgbTransformIntoPercentage ? true : false;
+	Array.prototype.push.apply(propertyName, propertyApplicationSpecific);
+	var noOfPropertyItem = propertyName.length;
+	for (i = 0; i < noOfPropertyItem; i++){
+		model[propertyName[i]] = appPrefs[propertyName[i]] ? true : false;
+	}
 	
-	model.canvasExpandSize = Number(appPrefs.canvasExpandSize);
-
-	model.legendFont = appPrefs.legendFont ? appPrefs.legendFont
-			: model.legendFont;
-	model.legendFontSize = Number(appPrefs.legendFontSize);
-	model.armWeight = Number(appPrefs.armWeight);
-	model.specOption = appPrefs.specOption;
-
-	if (appPrefs.hasOwnProperty("legendColorObject"))
-		model.legendColorObject = appPrefs.legendColorObject;
-
-	if (appPrefs.hasOwnProperty("legendColorType"))
-		model.legendColorType = appPrefs.legendColorType;
-
-	if (appPrefs.hasOwnProperty("legendColorSpacing"))
-		model.legendColorSpacing = appPrefs.legendColorSpacing;
-
-	if (appPrefs.hasOwnProperty("legendColorMode"))
-		model.legendColorMode = appPrefs.legendColorMode;
+	var textBoxIds = ["canvasExpandSize", "legendFontSize", "armWeight"];
+	for (i = 0; i < 3; i++) {
+		model[textBoxIds[i]] = Number(appPrefs[textBoxIds[i]]);
+	}
 	
-	if (appPrefs.hasOwnProperty("decimalFractionValue"))
-		model.decimalFractionValue = appPrefs.decimalFractionValue;
+	var dropDownIds = ["specOption", "legendColorObject", "legendColorType",
+	                   "legendColorSpacing", "legendColorMode", "decimalFractionValue",
+	                   "legendFont"];
+	for (i = 0; i < 7; i++) {
+		if (appPrefs.hasOwnProperty(dropDownIds[i]))
+			model[dropDownIds[i]] = appPrefs[dropDownIds[i]];
+	}
 }
 
 /**
