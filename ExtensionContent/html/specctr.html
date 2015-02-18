@@ -658,7 +658,7 @@
 						<label style="margin-left: -4px;"> Spec Option</label>
 						<select class="smalldropdown" id="lstSpecOption"
 								onclick="item_clickHandler(event)"
-								onchange="specOption_changeHandler(this.id)">
+								onchange="comboBox_changeHandler(this.id, 'specOption')">
 								<option value="Line">Line</option>
 								<option value="Bullet">Bullet</option>
 						</select>
@@ -714,9 +714,9 @@
 				</div>
 
 				<div class="tabPageCheckBoxRow" style="margin-top: -15px;">
-					<input type="checkbox" value="ScaleBy" id="chkScaleBy"
-						style="vertical-align: middle" onclick="chkScaleBy_clickHandler()" />
-					<label for="chkScaleBy">Scale By</label> <input type="text"
+					<input type="checkbox" value="ScaleBy" id="useScaleBy"
+						style="vertical-align: middle" onclick="useScaleBy_clickHandler()" />
+					<label for="useScaleBy">Scale By</label> <input type="text"
 						class="inputStyleSmall" id="txtScaleBy" value="x1"
 						onclick="item_clickHandler(event)"
 						maxlength="4" onchange="txtScaleBy_changeHandler()" /> (e.g. x2 or /2)

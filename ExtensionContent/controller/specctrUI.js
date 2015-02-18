@@ -200,8 +200,8 @@ function specInEM_changeHandler() {
 /**
  * Set the value of useScaleBy when changed.
  */
-function chkScaleBy_clickHandler() {
-	model.useScaleBy = document.getElementById("chkScaleBy").checked;
+function useScaleBy_clickHandler() {
+	model.useScaleBy = document.getElementById("useScaleBy").checked;
 
 	if (model.useScaleBy)
 		enableTextField(document.getElementById("txtScaleBy"));
@@ -246,18 +246,7 @@ function radioButton_clickHandler(event, value) {
  */
 function comboBox_changeHandler(elementId, modelValue) {
 	var comboHandler = document.getElementById(elementId);
-	model[modelValue] = Number(comboHandler.options[comboHandler.selectedIndex].value);
-	writeAppPrefs();
-}
-
-/**
- * Set the value of font size when changed.
- * @param elementId {string} The id of selected combobox.
- * @param modelValue {string} The combobox name.
- */
-function specOption_changeHandler(elementId) {
-	var comboHandler = document.getElementById(elementId);
-	model['specOption'] = comboHandler.options[comboHandler.selectedIndex].value;
+	model[modelValue] = comboHandler.options[comboHandler.selectedIndex].value;
 	writeAppPrefs();
 }
 

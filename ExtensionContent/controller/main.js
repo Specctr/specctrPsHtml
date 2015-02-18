@@ -36,35 +36,39 @@ function completeHandler(data, status) {
 }
 
 /**
- * Set the canvas expand text value.
+ * Set model values to UI components.
  */
-function mainTab_creationCompleteHandler() {
+function setModelToUIComponents() {
+	
+	var hostPrefix = "$.specctrPsCommon.";
+	
+	//Set icons to the buttons.
 	var iconPostString = ".png";
 	var buttonIconPaths = ["../Images/Icon_object", "../Images/Icon_coordinates",
 	                       "../Images/DimensionButtonIcons/WH_11", 
 	                       "../Images/SpacingButtonIcons/Spacing_TL"];
 	var buttonIds = ["#imgProperty", "#imgCoordinate", "#dimensionIcon", "#spacingIcon"];
 	
-	//For retina display: 2 pixel ratio; 
-	if(window.devicePixelRatio > 1)
+	if(window.devicePixelRatio > 1)	//For retina display: 2 pixel ratio; 
 		iconPostString = "_x2" + iconPostString;
 
 	for (var i = 0; i < 4; i++) {
 		$(buttonIds[i]).attr("src", buttonIconPaths[i] + iconPostString);
 	}
 
+	//Set text and combo box values.
 	$("#canvasExpandSize").val(model.canvasExpandSize);
-}
-
-/**
- * Set the values of the objects(check boxes in setting tab) from model.
- */
-function settings_creationCompleteHandler() {
-	//Load settings from model according to the host application.
+	$("#lstSize").val(model.legendFontSize);
+	$("#lstLineWeight").val(model.armWeight);
+	$("#lstSpecOption").val(model.specOption);
+	$("#lstColorMode").val(model.legendColorMode);
+	
+	//Set check boxes values.
 	var appSpecificCheckBoxesId;
 	var checkBoxesId = ["shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
 	                    "textColor", "textStyle", "textAlignment", "textLeading",
-	                    "textTracking", "textAlpha"];
+	                    "textTracking", "textAlpha", "useHexColor", "useScaleBy",
+	                    "rgbTransformIntoPercentage"];
 	
 	if (hostApplication === photoshop) {
 		appSpecificCheckBoxesId = ["shapeFill", "shapeStroke", 
@@ -72,7 +76,8 @@ function settings_creationCompleteHandler() {
 	} else {
 		appSpecificCheckBoxesId = ["shapeFillColor", "shapeFillStyle", 
 		                           "shapeStrokeColor", "shapeStrokeStyle", 
-		                           "shapeStrokeSize"];
+		                           "shapeStrokeSize", "specToEdge"];
+		hostPrefix = "$.specctr"+ hostApplication +".";
 	}
 
 	Array.prototype.push.apply(checkBoxesId, appSpecificCheckBoxesId);
@@ -81,13 +86,35 @@ function settings_creationCompleteHandler() {
 	for (var i = 0; i < totalCheckBoxes; i++) {
 		$("#"+checkBoxesId[i]).prop("checked", model[checkBoxesId[i]]);
 	}
+	
+	//Set color for dropdown.
+	$("#colObject").css("background-color", model.legendColorObject);
+	$("#colType").css("background-color", model.legendColorType);
+	$("#colSpacing").css("background-color", model.legendColorSpacing);
+	
+	//Set radio buttons values.
+	var radioButtonIds = [model.legendColorMode.toLowerCase(), 
+	                       model.decimalFractionValue];
+	for (var i = 0; i < 2; i++) {
+		$("#"+radioButtonIds[i]+"RadioButton").prop("checked", true);
+	}
+	
+	// Enable or disable scale text according to selection of check box.
+	if (model.useScaleBy)
+		enableTextField(document.getElementById("txtScaleBy"));
+	else
+		disableTextField(document.getElementById("txtScaleBy"));
+	
+	//Get font list according to host application.
+	var extScript = hostPrefix + "getFontList()";
+	evalScript(extScript, loadFontsToList);
 }
 
 /**
  * Set the values of the objects(check boxes in responsive tab) from model and
  * enable/disable the text boxes.
  */
-function responsiveTab_creationCompleteHandler() {
+function setModelToResponsive() {
 	var textFieldIds = ["relativeWidth", "relativeHeight",
 	                    "baseFontSize", "baseLineHeight"];
 	
@@ -106,71 +133,6 @@ function responsiveTab_creationCompleteHandler() {
 }
 
 /**
- * Load the data provider values to the combo box in spec options tab.
- */
-function prefs_creationCompleteHandler() {
-	
-	var hostPrefix = "$.specctrPsCommon.";
-
-	// Set the values for font size combobox.
-	var fontSizeHandler = document.getElementById("lstSize");
-	fontSizeHandler.selectedIndex = -1;
-	fontSizeHandler.value = model.legendFontSize.toString();
-
-	// Set the values for arm weight combobox.
-	var armWeightHandler = document.getElementById("lstLineWeight");
-	armWeightHandler.selectedIndex = -1;
-	armWeightHandler.value = model.armWeight.toString();
-
-	
-	
-	document.getElementById("useHexColor").checked = model.useHexColor;
-
-	if (!model.legendColorMode)
-		model.legendColorMode = "RGB";
-
-	//Initialize the components on the basis of host application.
-	if (hostApplication === illustrator)	{
-		hostPrefix = "$.specctrAi.";
-		document.getElementById("specToEdge").checked = model.specToEdge;
-		var colorModeHandler = document.getElementById("lstColorMode");
-		for(var i = 0; i < 4; i++) {
-			if(colorModeHandler.options[i].text == model.legendColorMode) {
-				colorModeHandler.options[i].selected = true;
-				break;
-			}
-		}
-	} else {
-		var radioButton = model.legendColorMode.toLowerCase() + "RadioButton";
-		document.getElementById(radioButton).checked = true;
-		// Set the values for spec option combobox.
-		var specOptionHandler = document.getElementById("lstSpecOption");
-		specOptionHandler.selectedIndex = -1;
-		specOptionHandler.value = model.specOption;
-	}
-
-	document.getElementById("colObject").style.backgroundColor = model.legendColorObject;
-	document.getElementById("colType").style.backgroundColor = model.legendColorType;
-	document.getElementById("colSpacing").style.backgroundColor = model.legendColorSpacing;
-
-	document.getElementById("chkScaleBy").checked = model.useScaleBy;
-
-	// Enable or disable scale text according to selection of check box.
-	if (model.useScaleBy)
-		enableTextField(document.getElementById("txtScaleBy"));
-	else
-		disableTextField(document.getElementById("txtScaleBy"));
-
-	document.getElementById("rgbTransformIntoPercentage").checked = model.rgbTransformIntoPercentage;
-	
-	radioButton = model.decimalFractionValue + "RadioButton";
-	document.getElementById(radioButton).checked = true;
-
-	var extScript = hostPrefix + "getFontList()";
-	evalScript(extScript, loadFontsToList);
-}
-
-/**
  * Load the jsx and show/hide the login container 
  * according to the license value in preferences.
  */
@@ -180,7 +142,6 @@ function onLoaded() {
 		createDialog();
 		var isLicensed = false;
 		var appPrefs;
-		
 		loadJSX(); // Load the jsx files present in \jsx folder.
 
 		//Get the host application name.
@@ -265,10 +226,8 @@ function init() {
 		for (var i = 0; i < tabs.length; i++)
 			tabs[i].onclick = tab_clickHandler;
 
-		mainTab_creationCompleteHandler();
-		settings_creationCompleteHandler();
-		responsiveTab_creationCompleteHandler();
-		prefs_creationCompleteHandler();
+		setModelToUIComponents();
+		setModelToResponsive();
 	} catch (e) {
 		console.log(e);
 	}
@@ -287,7 +246,7 @@ function setModelValueFromPreferences() {
 	var propertyName = ["shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
 	                    "textAlignment", "textColor", "textStyle", "textLeading", 
 	                    "textTracking", "textAlpha", "useHexColor", "specInPrcntg", 
-	                    "specInEM", "rgbTransformIntoPercentage"];
+	                    "useScaleBy","specInEM", "rgbTransformIntoPercentage"];
 	
 	if (hostApplication === photoshop) {
 		propertyApplicationSpecific = ["shapeFill", "shapeStroke", "shapeEffects", "textEffects"];
@@ -372,10 +331,10 @@ function evalScript(script, callback) {
 function setModel() {
 	try {
 		var methodName = "setModel('" + JSON.stringify(model) + "')";
-		if (hostApplication === illustrator)
-			evalScript("$.specctrAi." + methodName);
+		if (hostApplication === photoshop)
+			evalScript("$.specctrPsCommon." + methodName);
 		else
-			evalScript("$.specctrPsCommon." + methodName);		
+			evalScript("$.specctr" + hostApplication + "." + methodName);
 	} catch (e) {
 		console.log(e);
 	}
@@ -391,11 +350,11 @@ function expandCanvas() {
 		setModel();
 		var methodName = "createCanvasBorder()";
 
-		if (hostApplication === illustrator)
-			evalScript("$.specctrAi." + methodName);
-		else
+		if (hostApplication === photoshop)
 			evalScript("$.specctrPsExpandCanvas." + methodName);
-	
+		else
+			evalScript("$.specctr" + hostApplication + "." + methodName);
+
 		writeAppPrefs();
 	} catch (e) {
 		console.log(e);
