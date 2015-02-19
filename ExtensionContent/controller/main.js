@@ -404,10 +404,10 @@ function createCoordinateSpecs() {
 
 	try {
 		setModel();
-		if (hostApplication === illustrator)
-			evalScript("$.specctrAi.createCoordinateSpecs()");
-		else
+		if (hostApplication === photoshop)
 			evalScript("$.specctrPsCoordinates.createCoordinateSpecs()");
+		else
+			evalScript("$.specctr" + hostApplication + "." + "createCoordinateSpecs()");
 
 	} catch (e) {
 		console.log(e);

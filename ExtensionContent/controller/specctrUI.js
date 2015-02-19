@@ -246,7 +246,10 @@ function radioButton_clickHandler(event, value) {
  */
 function comboBox_changeHandler(elementId, modelValue) {
 	var comboHandler = document.getElementById(elementId);
-	model[modelValue] = comboHandler.options[comboHandler.selectedIndex].value;
+	var value = comboHandler.options[comboHandler.selectedIndex].value;
+	if(!isNaN(Number(value)))
+		value = Number(value);
+	model[modelValue] = value;
 	writeAppPrefs();
 }
 
