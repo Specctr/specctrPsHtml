@@ -9,30 +9,38 @@ if(typeof($)=='undefined')
 $._ext = {
     
     //Evaluate a file and catch the exception.
-    evalFile : function(path) 
-    {
-        try 
-        {
+    evalFile : function(path) {
+        try {
             $.evalFile(path);
-        } 
-        catch (e) 
-        {
+        } catch (e) {
             alert("Exception:" + e);
         }
     },
 
     // Evaluate all the files in the given folder 
-    evalFiles : function(jsxFolderPath) 
-    {
+    evalFiles : function(jsxFolderPath, hostApp) {
         var folder = new Folder(jsxFolderPath);
-        if (folder.exists) 
-        {
+        if (folder.exists) {
             var jsxFiles = folder.getFiles("*.jsx");
-            for (var i = 0; i < jsxFiles.length; i++) 
-            {
+            for (var i = 0; i < jsxFiles.length; i++) {
                 var jsxFile = jsxFiles[i];
-                $._ext.evalFile(jsxFile);
+                if(hostApp == "Id" ) { 
+                    if(jsxFile.name.indexOf("Indesign") > 0) {
+                        $._ext.evalFile(jsxFile);
+                        break;
+                    }
+                } else if (hostApp == "Ai") {
+                    if(jsxFile.name.indexOf("Illustrator") > 0) {
+                        $._ext.evalFile(jsxFile);
+                        break;
+                    }
+                } else {
+                    if(jsxFile.name.indexOf("Ps") > 0) {
+                        $._ext.evalFile(jsxFile);
+                    }
+                }
             }
         }
+        return true;
     }
 };

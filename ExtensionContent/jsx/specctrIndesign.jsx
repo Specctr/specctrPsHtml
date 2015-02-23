@@ -1,4 +1,6 @@
 ﻿#target indesign
+
+#include "json2.js"
 var debug = false;
 var prevTime;
 var _specctr;
@@ -313,8 +315,7 @@ Array.prototype.pushOnce = function(obj)
 	
     //illustrator measurements are always in pt
     //in indesign this needs to be set or use UnitValue(x,"pt") / "px"
-//~     try{app.eventListeners.itemByName("_specctrAttrChanged").remove(); }catch(e){}
-//~     app.eventListeners.add("afterSelectionAttributeChanged", myEventHandlerWrapper,undefined,{name:"_specctrAttrChanged"});
+
 
    
 $.specctrId = {
@@ -322,7 +323,8 @@ $.specctrId = {
     getFontList : function() {
         var font = app.fonts.everyItem().getElements().slice(0);
         var appFontLength = font.length;
-        var result = [];        
+        var result = [];
+
         //Set the spec text properties.
         for (var i = 0; i < appFontLength; i++) {
             var currFont = font[i];
@@ -333,11 +335,17 @@ $.specctrId = {
                 result.push(object);
             }
         }
+
         return JSON.stringify(result); 
     },
 
     //Get the updated value of UI's component from html file.
     setModel : function(currModel) {
+     try{app.eventListeners.itemByName("_specctrAttrChanged").remove(); }catch(e){}
+    app.eventListeners.add("afterSelectionAttributeChanged", $.specctrId.myEventHandlerWrapper,undefined,{name:"_specctrAttrChanged"});
+        with(app.scriptPreferences) {
+            measurementUnit = MeasurementUnits.POINTS;
+        }
         model = JSON.parse(currModel);
     },
     
@@ -345,25 +353,21 @@ $.specctrId = {
         app.doUndoableScript (this.createCanvas(), "Create Canvas Border");
     },
 
-//Export the specs into styles.
-exportCss : function()
-{
+    //Export the specs into styles.
+    exportCss : function() {
 
-    //css specs easily get unsynced, it would be better to create them on exporting
-    
-    var isExportedSuccessfully = false;
-    
-    var rltvFontSize = 16;
-            
-    if(model.baseFontSize != 0)
-                rltvFontSize = model.baseFontSize;
-    
-    if(model.specInEM)
-        cssBodyText = "body {\r\tfont-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;\r}\r\r";
-        /*
+        //css specs easily get unsynced, it would be better to create them on exporting
+        var isExportedSuccessfully = false;
+        var rltvFontSize = 16;
+        if(model.baseFontSize != 0)
+            rltvFontSize = model.baseFontSize;
+        
+        if(model.specInEM)
+            cssBodyText = "body {\r\tfont-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;\r}\r\r";
+            /*
             The reason that some aren’t exported with a “.” is that we figured that most of the text elements should be global <html> tags not classes. For example <h1> <h2> or <body> tags. (http://www.w3schools.com/tags/tag_hn.asp)
-Maybe you can help us write the logic for a system that works like this: if the title of the layer is : h1, h2, h3, h4, h5, h6 , or body then don’t add the  “.” to make it into a global tag. All other layer titles should be exported as classes with a “.”
-*/
+            Maybe you can help us write the logic for a system that works like this: if the title of the layer is : h1, h2, h3, h4, h5, h6 , or body then don’t add the  “.” to make it into a global tag. All other layer titles should be exported as classes with a “.”
+        */
     try
     {
         
@@ -560,8 +564,7 @@ Maybe you can help us write the logic for a system that works like this: if the 
         var activeLayer = app.activeDocument.activeLayer;
         var currPage = this.getCurrentPage();
         var currSpread = currPage.parent;
-        model.legendFontSize = parseInt(model.legendFontSize);
-        model.armWeight = parseInt(model.armWeight);
+        
         //remove old specs
         if(!existingSpecs)
             currSpread.removeBySourceIdAndTypes(pageItem.id,coordSpecsObj);
@@ -583,7 +586,6 @@ Maybe you can help us write the logic for a system that works like this: if the 
         var legendLayer = this.legendCoordinatesLayer();                    //Create the 'Coordinates' layer group.
         var itemCoordsObj = this.itemCoords(pageItem);
         var spacing = 10 + model.armWeight;
-
         var relHeight = parseFloat(model.rltvHeight);
         var relWidth = parseFloat(model.rltvWidth);
 
@@ -655,95 +657,79 @@ Maybe you can help us write the logic for a system that works like this: if the 
         return true;
     },
 
-createDimensionSpecs : function()
-{
+    
+    createDimensionSpecs : function() {
         if(!app.selection.length) return;
-        
+
         app.doUndoableScript (function(){
             var myItems = app.selection;
-            for(var i=0;i<myItems.length;i++)
-                createDimensionSpecsForItem(myItems[i]);
+            for(var i = 0; i < myItems.length; i++)
+                $.specctrId.createDimensionSpecsForItem(myItems[i]);
             }, "Create Dimension Specs");
-        
-},
+    },
 
-createDimensionSpecsForItem : function(pageItem,codeInvoked,existingSpecs)
-		{
-            var currPage = this.getCurrentPage ();
-            var currSpread = currPage.parent;
-            
-
+    createDimensionSpecsForItem : function(pageItem,codeInvoked,existingSpecs) {
+        try {
+        var currPage = this.getCurrentPage ();
+        var currSpread = currPage.parent;
+         
          //remove old specs
          if(!existingSpecs)
-        currSpread.removeBySourceIdAndTypes(pageItem.id,dimSpecsObj);
+            currSpread.removeBySourceIdAndTypes(pageItem.id,dimSpecsObj);
         else   
             for(var prop in dimSpecsObj)
                 try{
                     existingSpecs[prop].remove();
                 }catch(e){}
-                      
-            //if it's button invoked - we recreate spec according to current prefs
-            //if it's code invoked - recreate spec as it was
-            //for this keep model copy on each source
-            //save model.widthPos and model.heightPos
-            var settings = ({
-                widthPos:model.widthPos,
-                heightPos:model.heightPos,
-                specInPrcntg:model.specInPrcntg
-                });
-            if(codeInvoked)
-             try{
-                 settings = eval(pageItem.extractLabel("specctrDimensionsSpecSettings"));
-                 }catch(e){}
+
+        //if it's button invoked - we recreate spec according to current prefs
+        //if it's code invoked - recreate spec as it was
+        //for this keep model copy on each source
+        //save model.widthPos and model.heightPos
+        var settings = ({widthPos:model.widthPos, heightPos:model.heightPos,
+                                    specInPrcntg:model.specInPrcntg});
+
+        if(codeInvoked)
+         try {
+             settings = eval(pageItem.extractLabel("specctrDimensionsSpecSettings"));
+         }catch(e){}
                 
         
 		if(settings.widthPos == 0 && settings.heightPos == 0) return true;
+        
         //delete specs in this case
-
-		 var activeLayer = app.activeDocument.activeLayer;
-		
-			var legendLayer = legendDimensionsLayer();
-			
-			var itemCoordsObj= this.itemCoords(pageItem);
-			
-			
-            
-                    var relHeight = parseFloat(model.rltvHeight);
+        var activeLayer = app.activeDocument.activeLayer;
+        var legendLayer = this.legendDimensionsLayer();
+        var itemCoordsObj= this.itemCoords(pageItem);
+        var relHeight = parseFloat(model.rltvHeight);
         var relWidth = parseFloat(model.rltvWidth);
         
-        if(settings.specInPrcntg)
-        {
-            if(!relHeight || isNaN(relHeight) || !relWidth || isNaN(relWidth))
-                {     
+        if(settings.specInPrcntg) {
+            if(!relHeight || isNaN(relHeight) || !relWidth || isNaN(relWidth)) {     
                 var pageCoords = currPage.getCoords ();
                 relHeight = pageCoords.height;
                 relWidth = pageCoords.width;
-                }
-            
+            }
         }
-    
-        var widthForSpec = this.pointsToUnitsString(getScaledValue(itemCoordsObj.width),null, settings.specInPrcntg, relWidth);
-        var heightForSpec = this.pointsToUnitsString(getScaledValue(itemCoordsObj.height),null, settings.specInPrcntg, relHeight);
+
+        var widthForSpec = this.pointsToUnitsString(this.getScaledValue(itemCoordsObj.width),null, settings.specInPrcntg, relWidth);
+        var heightForSpec = this.pointsToUnitsString(this.getScaledValue(itemCoordsObj.height),null, settings.specInPrcntg, relHeight);
         var styleText = "\twidth: " + widthForSpec + ";\r\theight: " + heightForSpec +";";
         pageItem.insertLabel("css_dimensions",styleText);
         
-        
-			var spacing = 10 + model.armWeight;
-			
-			var newColor = this.legendColorSpacing();
-			
-			var itemsGroup;
-			var items = [];
+        var spacing = 10 + model.armWeight;
+        var newColor = this.legendColorSpacing();
 
-             do
-             {
-             
-			if(settings.widthPos > 0)
-			{
-               if(codeInvoked && !(existingSpecs["specctrDimensionsWidthText"] || existingSpecs["specctrDimensionsWidthLine"])) break;
-             var lineY,textY;
-                switch (settings.widthPos)
-                {
+        var itemsGroup;
+        var items = [];
+
+        do {
+            if(settings.widthPos > 0) {
+                if(codeInvoked && !(existingSpecs["specctrDimensionsWidthText"] || existingSpecs["specctrDimensionsWidthLine"])) 
+                    break;
+                
+                var lineY,textY;
+                switch (settings.widthPos) {
                        case widthChoice.Bottom:
                         lineY = itemCoordsObj.y2+0.7*spacing;
                        textY = itemCoordsObj.y2+spacing+model.armWeight/2; //-textHeight
@@ -757,26 +743,19 @@ createDimensionSpecsForItem : function(pageItem,codeInvoked,existingSpecs)
                        lineY = itemCoordsObj.y1-0.7*spacing;
                        textY = itemCoordsObj.y1-spacing-model.armWeight/2;
                 }
-            
-          
             	var gb = [textY,itemCoordsObj.center.x,textY+model.legendFontSize*2,itemCoordsObj.center.x+100];
-                
-
-
-			var widthText = currPage.textFrames.add(undefined,undefined,undefined,
-		{geometricBounds:gb,itemLayer:legendLayer});
-            widthText.contents = widthForSpec;
-            widthText.parentStory.fillColor = newColor;
+                var widthText = currPage.textFrames.add(undefined,undefined,undefined, {geometricBounds:gb,itemLayer:legendLayer});
+                widthText.contents = widthForSpec;
+                widthText.parentStory.fillColor = newColor;
             			
-             widthText.parentStory.appliedFont = model.legendFont;
-             widthText.parentStory.pointSize = model.legendFontSize;
-             widthText.parentStory.alignToBaseline = false;
-            widthText.fit(FitOptions.FRAME_TO_CONTENT);
-            widthText.recompose();
-            widthText.fit(FitOptions.FRAME_TO_CONTENT);
-            //move
-                  switch (settings.widthPos)
-                {
+                widthText.parentStory.appliedFont = model.legendFont;
+                widthText.parentStory.pointSize = model.legendFontSize;
+                widthText.parentStory.alignToBaseline = false;
+                widthText.fit(FitOptions.FRAME_TO_CONTENT);
+                widthText.recompose();
+                widthText.fit(FitOptions.FRAME_TO_CONTENT);
+
+                switch (settings.widthPos) {
                        case widthChoice.Bottom:
                        widthText.move(undefined,[-(widthText.geometricBounds[3]-widthText.geometricBounds[1])/2,textY-widthText.geometricBounds[0]])
                        break;
@@ -789,42 +768,27 @@ createDimensionSpecsForItem : function(pageItem,codeInvoked,existingSpecs)
                        default:
                        widthText.move(undefined,[-(widthText.geometricBounds[3]-widthText.geometricBounds[1])/2,textY-widthText.geometricBounds[2]])
                 }
-            
+                widthText.name="Specctr Dimension Width Mark";
+                var widthLineMain = currPage.graphicLines.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"None", strokeColor:newColor , geometricBounds:[lineY,itemCoordsObj.x1,lineY,itemCoordsObj.x2]});
+                var widthLineLeft = widthLineMain.paths.add({entirePath:[[itemCoordsObj.x1+model.armWeight/2,lineY-0.3*spacing],[itemCoordsObj.x1+model.armWeight/2,lineY+0.3*spacing]]});
+                var widthLineRight = widthLineMain.paths.add({entirePath:[[itemCoordsObj.x2-model.armWeight/2,lineY-0.3*spacing],[itemCoordsObj.x2-model.armWeight/2,lineY+0.3*spacing]]});
+                items.push(widthLineMain,widthText);
+			
+                widthText.insertLabel("specctrSourceId",pageItem.id.toString());
+                widthText.insertLabel("specctrType","specctrDimensionWidthText");
+           
+                widthLineMain.insertLabel("specctrSourceId",pageItem.id.toString());
+                widthLineMain.insertLabel("specctrType","specctrDimensionsWidthLine");
+            }
+        }while(false);
+           
+        do{
+            if(settings.heightPos > 0) {
+                if(codeInvoked && !(existingSpecs["specctrDimensionsHeightText"] || existingSpecs["specctrDimensionsHeightLine"])) 
+                    break;
 
-			widthText.name="Specctr Dimension Width Mark";
-			
-         
-   var widthLineMain = currPage.graphicLines.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"None", strokeColor:newColor , geometricBounds:[lineY,itemCoordsObj.x1,lineY,itemCoordsObj.x2]});
-   
-	
-		
-			var widthLineLeft = widthLineMain.paths.add({entirePath:[[itemCoordsObj.x1+model.armWeight/2,lineY-0.3*spacing],[itemCoordsObj.x1+model.armWeight/2,lineY+0.3*spacing]]});
-			var widthLineRight = widthLineMain.paths.add({entirePath:[[itemCoordsObj.x2-model.armWeight/2,lineY-0.3*spacing],[itemCoordsObj.x2-model.armWeight/2,lineY+0.3*spacing]]});
-		
-        items.push(widthLineMain,widthText);
-			
-            widthText.insertLabel("specctrSourceId",pageItem.id.toString());
-		   widthText.insertLabel("specctrType","specctrDimensionWidthText");
-           
-           widthLineMain.insertLabel("specctrSourceId",pageItem.id.toString());
-		  widthLineMain.insertLabel("specctrType","specctrDimensionsWidthLine");
-          
-           
-                
-			}
-			
-            
-			
-               }while(false);
-           
-           do{
-            if(settings.heightPos > 0)
-			{
-              if(codeInvoked && !(existingSpecs["specctrDimensionsHeightText"] || existingSpecs["specctrDimensionsHeightLine"])) break;
-             var lineX,textX;
-                       
-                switch (settings.heightPos)
-                {
+                var lineX,textX;
+                switch (settings.heightPos) {
                        case heightChoice.Right:
                         lineX =  itemCoordsObj.x2+0.7*spacing;
                        textX= itemCoordsObj.x2+spacing+model.armWeight/2; 
@@ -838,23 +802,18 @@ createDimensionSpecsForItem : function(pageItem,codeInvoked,existingSpecs)
                        lineX = itemCoordsObj.x1-0.7*spacing;
                        textX = itemCoordsObj.x1-spacing-model.armWeight/2;
                 }
-                
-                
-            var gb = [itemCoordsObj.center.y,textX,itemCoordsObj.center.y+model.legendFontSize*2,textX+100];
-
-			var heightText = currPage.textFrames.add(undefined,undefined,undefined,
-		{geometricBounds:gb,itemLayer:legendLayer});
-           heightText.contents = heightForSpec;
-            heightText.parentStory.fillColor = newColor;
-            heightText.parentStory.appliedFont = model.legendFont;
-            heightText.parentStory.pointSize = model.legendFontSize;
-            heightText.parentStory.alignToBaseline = false;
-           heightText.fit(FitOptions.FRAME_TO_CONTENT);
-          heightText.fit(FitOptions.FRAME_TO_CONTENT);
+                var gb = [itemCoordsObj.center.y,textX,itemCoordsObj.center.y+model.legendFontSize*2,textX+100];
+                var heightText = currPage.textFrames.add(undefined,undefined,undefined, {geometricBounds:gb,itemLayer:legendLayer});
+                heightText.contents = heightForSpec;
+                heightText.parentStory.fillColor = newColor;
+                heightText.parentStory.appliedFont = model.legendFont;
+                heightText.parentStory.pointSize = model.legendFontSize;
+                heightText.parentStory.alignToBaseline = false;
+                heightText.fit(FitOptions.FRAME_TO_CONTENT);
+                heightText.fit(FitOptions.FRAME_TO_CONTENT);
           
-          //shift
-             switch (settings.heightPos)
-                {
+                //shift
+                switch (settings.heightPos) {
                        case heightChoice.Right:
                        heightText.move(undefined,[textX-heightText.geometricBounds[1],-(heightText.geometricBounds[2]-heightText.geometricBounds[0])/2])
                        break;
@@ -868,370 +827,260 @@ createDimensionSpecsForItem : function(pageItem,codeInvoked,existingSpecs)
                        default:
                         heightText.move(undefined,[textX-heightText.geometricBounds[3],-(heightText.geometricBounds[2]-heightText.geometricBounds[0])/2]);
                 }
-            
+                
+                heightText.name="Specctr Dimension Height Mark";
+                var heightLineMain = currPage.graphicLines.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"None", strokeColor:newColor , geometricBounds:[itemCoordsObj.y1,lineX,itemCoordsObj.y2,lineX]});
+                var heightLineLeft = heightLineMain.paths.add({entirePath:[[lineX-0.3*spacing,itemCoordsObj.y1+model.armWeight/2],[lineX+0.3*spacing,itemCoordsObj.y1+model.armWeight/2]]});
+                var heightLineRight = heightLineMain.paths.add({entirePath:[[lineX-0.3*spacing,itemCoordsObj.y2-model.armWeight/2],[lineX+0.3*spacing,itemCoordsObj.y2-model.armWeight/2]]});
+                items.push(heightLineMain,heightText);
+                
+                heightText.insertLabel("specctrSourceId",pageItem.id.toString());
+                heightText.insertLabel("specctrType","specctrDimensionHeightText");
            
-            
-			heightText.name="Specctr Dimension Height Mark";
-            
-            
-   var heightLineMain = currPage.graphicLines.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"None", strokeColor:newColor , geometricBounds:[itemCoordsObj.y1,lineX,itemCoordsObj.y2,lineX]});
-   
-	
-		
-			var heightLineLeft = heightLineMain.paths.add({entirePath:[[lineX-0.3*spacing,itemCoordsObj.y1+model.armWeight/2],[lineX+0.3*spacing,itemCoordsObj.y1+model.armWeight/2]]});
-            
-			var heightLineRight = heightLineMain.paths.add({entirePath:[[lineX-0.3*spacing,itemCoordsObj.y2-model.armWeight/2],[lineX+0.3*spacing,itemCoordsObj.y2-model.armWeight/2]]});
-		
-        items.push(heightLineMain,heightText);
-        
-            heightText.insertLabel("specctrSourceId",pageItem.id.toString());
-		   heightText.insertLabel("specctrType","specctrDimensionHeightText");
-           
-           heightLineMain.insertLabel("specctrSourceId",pageItem.id.toString());
-		  heightLineMain.insertLabel("specctrType","specctrDimensionsHeightLine");
-        
+                heightLineMain.insertLabel("specctrSourceId",pageItem.id.toString());
+                heightLineMain.insertLabel("specctrType","specctrDimensionsHeightLine");
             }
-             
-            
-			
-		
-            }while(false);
-        if(items.length)
-        {
-        itemsGroup = currPage.groups.add(items,legendLayer);
-			itemsGroup.name="Specctr Dimension Mark";
-			
-          
-           itemsGroup.insertLabel("specctrSourceId",pageItem.id.toString());
-		  itemsGroup.insertLabel("specctrType","specctrDimensionsGroup");
+        }while(false);
+    
+        if(items.length) {
+            itemsGroup = currPage.groups.add(items,legendLayer);
+            itemsGroup.name="Specctr Dimension Mark";
+            itemsGroup.insertLabel("specctrSourceId",pageItem.id.toString());
+            itemsGroup.insertLabel("specctrType","specctrDimensionsGroup");
            
            pageItem.insertLabel("specctrType","specctrSpecSource");
            pageItem.insertLabel("specctrCoords",pageItem.geometricBounds.join("|"));
            pageItem.insertLabel("specctrDimensionsSpecSettings",settings.toSource())
-           }
-     app.activeDocument.activeLayer = activeLayer;
+        }
+        app.activeDocument.activeLayer = activeLayer;
+        return true; } catch (e) {
+            alert(e);
+        }
+    },
 
-            return true;
-},
-
-createSpacingVerticalSpec : function(x,y1,y2,settings)
-{
-    //check max/min y
-                      var legendLayer = legendSpacingLayer();
-              var spacing = 10 + model.armWeight;
-			var currPage = this.getCurrentPage ();
-                var newColor = this.legendColorSpacing();
-                
-                if(!settings) settings = ({specInPrcntg:model.specInPrcntg});
-                
-                        var relHeight = parseFloat(model.rltvHeight);
+    createSpacingVerticalSpec : function(x,y1,y2,settings) {
+        //check max/min y
+        var legendLayer = this.legendSpacingLayer();
+        var spacing = 10 + model.armWeight;
+        var currPage = this.getCurrentPage ();
+        var newColor = this.legendColorSpacing();
         
-        if(settings.specInPrcntg)
-        {
-            if(!relHeight || isNaN(relHeight))
-                {     
+        if(!settings) settings = ({specInPrcntg:model.specInPrcntg});
+
+        var relHeight = parseFloat(model.rltvHeight);
+        if(settings.specInPrcntg) {
+            if(!relHeight || isNaN(relHeight)) {     
                 var pageCoords = currPage.getCoords ();
                 relHeight = pageCoords.height;
                 }
-            
         }
-    
-                   var yLine = currPage.graphicLines.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"None", strokeColor:newColor , geometricBounds:[y1,x,y2,x]});
-                   var topLine = yLine.paths.add({entirePath:[[x-0.3*spacing,y1+model.armWeight/2],[x+0.3*spacing,y1+model.armWeight/2]]});
-                
-           var bottomLine = yLine.paths.add({entirePath:[[x-0.3*spacing,y2-model.armWeight/2],[x+0.3*spacing,y2-model.armWeight/2]]});
-				
 
-                var gb = [y1/2+y2/2,x,y1/2+y2/2+model.legendFontSize+100,x+100];
+       var yLine = currPage.graphicLines.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"None", strokeColor:newColor , geometricBounds:[y1,x,y2,x]});
+       var topLine = yLine.paths.add({entirePath:[[x-0.3*spacing,y1+model.armWeight/2],[x+0.3*spacing,y1+model.armWeight/2]]});
+       var bottomLine = yLine.paths.add({entirePath:[[x-0.3*spacing,y2-model.armWeight/2],[x+0.3*spacing,y2-model.armWeight/2]]});
+       var gb = [y1/2+y2/2,x,y1/2+y2/2+model.legendFontSize+100,x+100];
 
-			var yText = currPage.textFrames.add(undefined,undefined,undefined,
-		{geometricBounds:gb});
-           yText.contents = this.pointsToUnitsString(getScaledValue(Math.abs(y2-y1)),null, settings.specInPrcntg, relHeight);
-            yText.parentStory.fillColor = newColor;
-              yText.parentStory.appliedFont = model.legendFont;
-             yText.parentStory.pointSize = model.legendFontSize;
-             yText.parentStory.alignToBaseline = false;
-           yText.fit(FitOptions.FRAME_TO_CONTENT);
-          yText.fit(FitOptions.FRAME_TO_CONTENT);
+        var yText = currPage.textFrames.add(undefined,undefined,undefined,{geometricBounds:gb});
+        yText.contents = this.pointsToUnitsString(this.getScaledValue(Math.abs(y2-y1)),null, settings.specInPrcntg, relHeight);
+        yText.parentStory.fillColor = newColor;
+        yText.parentStory.appliedFont = model.legendFont;
+        yText.parentStory.pointSize = model.legendFontSize;
+        yText.parentStory.alignToBaseline = false;
+        yText.fit(FitOptions.FRAME_TO_CONTENT);
+        yText.fit(FitOptions.FRAME_TO_CONTENT);
           
-          //we shift it by width and by whole height
-            yText.move(undefined,[-(yText.geometricBounds[3]-yText.geometricBounds[1]+0.3*spacing),-(yText.geometricBounds[2]-yText.geometricBounds[0])/2])
-            
-            yText.name="Specctr Spacing Vertical Text Mark";
+        //we shift it by width and by whole height
+        yText.move(undefined,[-(yText.geometricBounds[3]-yText.geometricBounds[1]+0.3*spacing),-(yText.geometricBounds[2]-yText.geometricBounds[0])/2])
+        yText.name="Specctr Spacing Vertical Text Mark";
 
         return [yText,yLine];
-},
+    },
 
+    createSpacingHorizontalSpec : function(y,x1,x2,settings) {
+        //check max/min x
+        var legendLayer = this.legendSpacingLayer();
+        var spacing = 10 + model.armWeight;
+        var currPage = this.getCurrentPage ();
+        var newColor = this.legendColorSpacing();
 
-createSpacingHorizontalSpec : function(y,x1,x2,settings)
-{
-     //check max/min x
-                     var legendLayer =legendSpacingLayer();
-                var spacing = 10 + model.armWeight;
-			var currPage = this.getCurrentPage ();
-                var newColor =this.legendColorSpacing();
-                
-                if(!settings) settings = ({specInPrcntg:model.specInPrcntg});
-
+        if(!settings) settings = ({specInPrcntg:model.specInPrcntg});
         var relWidth = parseFloat(model.rltvWidth);
-        
-        if(settings.specInPrcntg)
-        {
-            if(!relWidth || isNaN(relWidth))
-                {     
+
+        if(settings.specInPrcntg) {
+            if(!relWidth || isNaN(relWidth)) {     
                 var pageCoords = currPage.getCoords ();
                 relWidth = pageCoords.width;
-                }
-            
+            }
         }
-                
-                   var xLine =currPage.graphicLines.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"None", strokeColor:newColor , geometricBounds:[y,x1,y,x2]});
-                   var leftLine = xLine.paths.add({entirePath:[[x1+model.armWeight/2,y+0.3*spacing],[x1+model.armWeight/2,y-0.3*spacing]]});
-                
-           var rightLine = xLine.paths.add({entirePath:[[x2-model.armWeight/2,y+0.3*spacing],[x2-model.armWeight/2,y-0.3*spacing]]});
-				
 
-                var gb = [y,x1/2+x2/2,y+model.legendFontSize*2,x1/2+x2/2+100];
+        var xLine = currPage.graphicLines.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"None", strokeColor:newColor , geometricBounds:[y,x1,y,x2]});
+        var leftLine = xLine.paths.add({entirePath:[[x1+model.armWeight/2,y+0.3*spacing],[x1+model.armWeight/2,y-0.3*spacing]]});
+        var rightLine = xLine.paths.add({entirePath:[[x2-model.armWeight/2,y+0.3*spacing],[x2-model.armWeight/2,y-0.3*spacing]]});
+        
+        var gb = [y,x1/2+x2/2,y+model.legendFontSize*2,x1/2+x2/2+100];
+        var xText = currPage.textFrames.add(undefined,undefined,undefined,{geometricBounds:gb});
+        xText.contents = this.pointsToUnitsString(this.getScaledValue(Math.abs(x2-x1)),null, settings.specInPrcntg, relWidth);
+        xText.parentStory.fillColor = newColor;
+        xText.parentStory.appliedFont = model.legendFont;
+        xText.parentStory.pointSize = model.legendFontSize;
+        xText.parentStory.alignToBaseline = false;
+        xText.fit(FitOptions.FRAME_TO_CONTENT);
+        xText.fit(FitOptions.FRAME_TO_CONTENT);
+        
+        //we shift it by half of width and by whole height
+        xText.move(undefined,[-(xText.geometricBounds[3]-xText.geometricBounds[1])/2,-(xText.geometricBounds[2]-xText.geometricBounds[0]+0.3*spacing)])
+        xText.name="Specctr Spacing Horizontal Text Mark";
 
-			var xText = currPage.textFrames.add(undefined,undefined,undefined,
-		{geometricBounds:gb});
-           xText.contents = this.pointsToUnitsString(getScaledValue(Math.abs(x2-x1)),null, settings.specInPrcntg, relWidth);
-            xText.parentStory.fillColor = newColor;
-              xText.parentStory.appliedFont = model.legendFont;
-             xText.parentStory.pointSize = model.legendFontSize;
-             xText.parentStory.alignToBaseline = false;
-           xText.fit(FitOptions.FRAME_TO_CONTENT);
-         xText.fit(FitOptions.FRAME_TO_CONTENT);
-                //we shift it by half of width and by whole height
-            xText.move(undefined,[-(xText.geometricBounds[3]-xText.geometricBounds[1])/2,-(xText.geometricBounds[2]-xText.geometricBounds[0]+0.3*spacing)])
-            
-            xText.name="Specctr Spacing Horizontal Text Mark";
-            
-            return [xText,xLine];
-          
-},
+        return [xText,xLine];
+    },
 
-createSpacingSpecs : function() {
+    createSpacingSpecs : function() {
         if(!app.selection.length || app.selection.length>2) return;
-        if(app.selection.length == 1)
-        {
-            
-             app.doUndoableScript (function(){
-                createSpacingSpecsForItem(app.selection[0]);
-            }, "Create Spacing Specs"); 
-            
-        return;
+        if(app.selection.length == 1) {
+            app.doUndoableScript (function(){ 
+                $.specctrId.createSpacingSpecsForItem(app.selection[0]);
+                }, "Create Spacing Specs"); 
+            return;
         }
-    
-         if(app.selection.length == 2)
-         {
-             
-        app.doUndoableScript (function(){
-                createSpacingSpecsForItems(app.selection[0],app.selection[1]);
-            }, "Create Spacing Specs"); 
-            
-         }
+        if(app.selection.length == 2) {
+            app.doUndoableScript (function(){
+                $.specctrId.createSpacingSpecsForItems(app.selection[0],app.selection[1]);
+                }, "Create Spacing Specs"); 
+        }
+    },
 
-},
+    createSpacingSpecsForItems : function(aItem,bItem,codeInvoked,existingSpecs) {		
+        try {
+        var currPage = this.getCurrentPage ();
+        var currSpread = currPage.parent;
 
-createSpacingSpecsForItems : function(aItem,bItem,codeInvoked,existingSpecs)
-		{			
+        //this spec is between 2 items
+        //i.e. 2 sources
+        //here - save if we found spec or not
+        //if not found and it's code invoked - we can return
+        //source ids saved only to spec itself. delete spec and this link is lost
+        //tmp - rework it
+        currSpread.removeDoubleSpacingSpecBySourceIdsAndTypes(aItem.id,bItem.id,spacingDoubleSpecsObj);
+        var activeLayer =  app.activeDocument.activeLayer;               
+        var legendLayer = this.legendSpacingLayer();
+        var spacing = 10 + model.armWeight;
+        var newColor = this.legendColorSpacing(); 
 
-            var currPage = this.getCurrentPage ();
-            var currSpread = currPage.parent;
-            
-            //this spec is between 2 items
-            //i.e. 2 sources
-            
-            //here - save if we found spec or not
-            //if not found and it's code invoked - we can return
-            //source ids saved only to spec itself. delete spec and this link is lost
-            
-            //tmp - rework it
-            currSpread.removeDoubleSpacingSpecBySourceIdsAndTypes(aItem.id,bItem.id,spacingDoubleSpecsObj);
-            
-                 
-			    var activeLayer =  app.activeDocument.activeLayer;               
-                  var legendLayer = legendSpacingLayer();
-			
-                    var spacing = 10 + model.armWeight;
-			
-                var newColor =this.legendColorSpacing(); 
- 
+        var itemsGroup;
+        var items = [];
 
-			
-			var itemsGroup;
-			var items = [];
-			
-			var aItemBounds = this.itemCoords(aItem);
-			var bItemBounds = this.itemCoords(bItem);
-			
-			var isOverlapped = false;
-			
-			//check overlap
-            //(RectA.X1 < RectB.X2 && RectA.X2 > RectB.X1 &&
-           //    RectA.Y1 < RectB.Y2 && RectA.Y2 > RectB.Y1)
+        var aItemBounds = this.itemCoords(aItem);
+        var bItemBounds = this.itemCoords(bItem);
 
-			if (aItemBounds.x1<bItemBounds.x2 && aItemBounds.x2>bItemBounds.x1 &&
-				aItemBounds.y1<bItemBounds.y2 && aItemBounds.y2>bItemBounds.y1)
-			{
-				isOverlapped = true;
-			}
-			
-            
-             
-            
-			//check if there's vertical perpendicular
-			if (aItemBounds.x1<bItemBounds.x2 && aItemBounds.x2>bItemBounds.x1)
-			{
-				var y1;
-				var y2;
-				var x= Math.max(aItemBounds.x1,bItemBounds.x1)/2+Math.min(aItemBounds.x2,bItemBounds.x2)/2;
+        var isOverlapped = false;
+        //check overlap
+        //(RectA.X1 < RectB.X2 && RectA.X2 > RectB.X1 &&
+        //    RectA.Y1 < RectB.Y2 && RectA.Y2 > RectB.Y1)
+
+        if (aItemBounds.x1<bItemBounds.x2 && aItemBounds.x2>bItemBounds.x1 &&
+        aItemBounds.y1<bItemBounds.y2 && aItemBounds.y2>bItemBounds.y1) {
+            isOverlapped = true;
+        }
+        
+        //check if there's vertical perpendicular
+        if (aItemBounds.x1<bItemBounds.x2 && aItemBounds.x2>bItemBounds.x1) {
+            var y1;
+            var y2;
+            var x= Math.max(aItemBounds.x1,bItemBounds.x1)/2+Math.min(aItemBounds.x2,bItemBounds.x2)/2;
+
+            if(!isOverlapped) {
+                if(aItemBounds.y1<bItemBounds.y1) { //? <
+                    y1=aItemBounds.y2;
+                    y2=bItemBounds.y1;
+                } else {
+                    y1=bItemBounds.y2;
+                    y2=aItemBounds.y1;
+                }
+                items = items.concat(this.createSpacingVerticalSpec(x,y1,y2) );
+            } else { //overlap, vertical specs
+                if(model.spaceTop) {
+                    if(aItemBounds.y1<bItemBounds.y1) //? <
+                        {y1=aItemBounds.y1;y2=bItemBounds.y1}
+                    else 
+                        {y1=bItemBounds.y1;y2=aItemBounds.y1}
+                    items = items.concat(this.createSpacingVerticalSpec(x,y1,y2) );
+                }
                 
-				if(!isOverlapped)
-					{
-					if(aItemBounds.y1<bItemBounds.y1) //? <
-					{y1=aItemBounds.y2;y2=bItemBounds.y1}
-					else {y1=bItemBounds.y2;y2=aItemBounds.y1}
+                if(model.spaceBottom) {
+                     if(aItemBounds.y2<bItemBounds.y2) //? <
+                        {y1=aItemBounds.y2;y2=bItemBounds.y2}
+                    else 
+                        {y1=bItemBounds.y2;y2=aItemBounds.y2}
+                    items = items.concat(this.createSpacingVerticalSpec(x,y1,y2) );
+                }
+            }
+        }
 
-                      items = items.concat(createSpacingVerticalSpec(x,y1,y2) );
-                
-                
-					}
-				else //overlap, vertical specs
-					{
-                        
-                               if(model.spaceTop) 
-                               {
-                                   
-                                   if(aItemBounds.y1<bItemBounds.y1) //? <
-                                {y1=aItemBounds.y1;y2=bItemBounds.y1}
-                                else {y1=bItemBounds.y1;y2=aItemBounds.y1}
-                                
-                               items = items.concat(createSpacingVerticalSpec(x,y1,y2) );
-                                   
-                               }
-                           
-                                if(model.spaceBottom)
-                                {
-                                    
-                                 if(aItemBounds.y2<bItemBounds.y2) //? <
-                                {y1=aItemBounds.y2;y2=bItemBounds.y2}
-                                else {y1=bItemBounds.y2;y2=aItemBounds.y2}
-                                
-                                items = items.concat(createSpacingVerticalSpec(x,y1,y2) );
-                                    
-                                    
-                                }
-                        
-					
-                    
-                        
-                    
-                    
-					}
+        //check if there's horizontal perpendicular
+        if (aItemBounds.y2>bItemBounds.y1 && aItemBounds.y1<bItemBounds.y2) {
+            var y= Math.max(aItemBounds.y1,bItemBounds.y1)/2+Math.min(aItemBounds.y2,bItemBounds.y2)/2;
+            var x1;
+            var x2;
 
-				
-				
-				
-			}
-			
-			//check if there's horizontal perpendicular
-			if (aItemBounds.y2>bItemBounds.y1 && aItemBounds.y1<bItemBounds.y2)
-			{
-				var y= Math.max(aItemBounds.y1,bItemBounds.y1)/2+Math.min(aItemBounds.y2,bItemBounds.y2)/2;
-				
-				var x1;
-				var x2;
-				
-				if(!isOverlapped)
-				{
-				if(aItemBounds.x1>bItemBounds.x1)
-					{
-					x2=aItemBounds.x1;x1=bItemBounds.x2; 
-					}
-				else
-					{
-					x2=bItemBounds.x1;x1=aItemBounds.x2; 
-					}
+            if(!isOverlapped) {
+                if(aItemBounds.x1>bItemBounds.x1) {
+                    x2=aItemBounds.x1;x1=bItemBounds.x2; 
+                } else {
+                    x2=bItemBounds.x1;x1=aItemBounds.x2; 
+                }
+                items = items.concat(this.createSpacingHorizontalSpec(y,x1,x2) );
+            } else { //overlap, horizontal specs
                 
-                    items = items.concat(createSpacingHorizontalSpec(y,x1,x2) );
-                    
-               
-				} 
-				else //overlap, horizontal specs
-				{
-                    
-                       if(model.spaceLeft)
-                       {
-                            if(aItemBounds.x1>bItemBounds.x1)
-                            {
-                            x1=aItemBounds.x1;x2=bItemBounds.x1; 
-                            }
-                            else
-                            {
-                            x1=bItemBounds.x1;x2=aItemBounds.x1; 
-                            }
-                        
-                           items = items.concat(createSpacingHorizontalSpec(y,x1,x2) );
-                       }
-                   
-                     if(model.spaceRight)
-                     {
-                            if(aItemBounds.x2>bItemBounds.x2)
-                            {
-                            x1=aItemBounds.x2;x2=bItemBounds.x2; 
-                            }
-                            else
-                            {
-                            x1=bItemBounds.x2;x2=aItemBounds.x2; 
-                            }
-                        
-                             items = items.concat(createSpacingHorizontalSpec(y,x1,x2) );
-                      }
-
-				}
-				
-				
-			
-				
-			}
-			
-
-            //items have one spec always
-            //it's [text,line]
-            if(items.length)
-            {
-                
-                var sourceIds = [aItem.id.toString(),bItem.id.toString()].toSource();
+                if(model.spaceLeft) {
+                    if(aItemBounds.x1>bItemBounds.x1) {
+                    x1=aItemBounds.x1;x2=bItemBounds.x1; 
+                    } else {
+                    x1=bItemBounds.x1;x2=aItemBounds.x1; 
+                    }
+                    items = items.concat(this.createSpacingHorizontalSpec(y,x1,x2) );
+                }
+           
+                if(model.spaceRight) {
+                    if(aItemBounds.x2>bItemBounds.x2) {
+                        x1=aItemBounds.x2;x2=bItemBounds.x2; 
+                    } else {
+                        x1=bItemBounds.x2;x2=aItemBounds.x2; 
+                    }
+                    items = items.concat(this.createSpacingHorizontalSpec(y,x1,x2) );
+                }
+            }
+        }
+        
+        //items have one spec always
+        //it's [text,line]
+        if(items.length) {
+            var sourceIds = [aItem.id.toString(),bItem.id.toString()].toSource();
             items[0].insertLabel("specctrSourceIds",sourceIds);
             items[0].insertLabel("specctrType","specctrSpacingDoubleText");
             items[1].insertLabel("specctrSourceIds",sourceIds);
             items[1].insertLabel("specctrType","specctrSpacingDoubleLine");
-            
-                itemsGroup = currPage.groups.add(items,legendLayer);
-			itemsGroup.name="Specctr Spacing Mark";
-            
-                itemsGroup.insertLabel("specctrSourceIds",sourceIds);
 
-		  itemsGroup.insertLabel("specctrType","specctrSpacingDoubleGroup");
-           
-           aItem.insertLabel("specctrType","specctrSpecSource");
-           aItem.insertLabel("specctrCoords",aItem.geometricBounds.join("|"));  
-           
-           bItem.insertLabel("specctrType","specctrSpecSource");
-           bItem.insertLabel("specctrCoords",bItem.geometricBounds.join("|")); 
-            }
-        
-             app.activeDocument.activeLayer = activeLayer;
+            itemsGroup = currPage.groups.add(items,legendLayer);
+            itemsGroup.name="Specctr Spacing Mark";
 
-             
-            return true;
-		},
+            itemsGroup.insertLabel("specctrSourceIds",sourceIds);
+
+            itemsGroup.insertLabel("specctrType","specctrSpacingDoubleGroup");
+
+            aItem.insertLabel("specctrType","specctrSpecSource");
+            aItem.insertLabel("specctrCoords",aItem.geometricBounds.join("|"));  
+
+            bItem.insertLabel("specctrType","specctrSpecSource");
+            bItem.insertLabel("specctrCoords",bItem.geometricBounds.join("|")); 
+        }
+        app.activeDocument.activeLayer = activeLayer;
+        return true; } catch (e) {
+            alert(e);
+        }
+    },
 		
-createSpacingSpecsForItem : function(pageItem,codeInvoked,existingSpecs)
-		{		
-            
+    createSpacingSpecsForItem : function(pageItem,codeInvoked,existingSpecs) {		
+            try {
             var currPage = this.getCurrentPage ();
             var currSpread = currPage.parent;
             
@@ -1270,7 +1119,7 @@ createSpacingSpecsForItem : function(pageItem,codeInvoked,existingSpecs)
                 
                 var pageItemBounds = this.itemCoords(pageItem);
                 
-                var artRect = canvasBounds();
+                var artRect = this.canvasBounds();
 			
 			var spacing = 10 + model.armWeight;
 			
@@ -1280,7 +1129,7 @@ createSpacingSpecsForItem : function(pageItem,codeInvoked,existingSpecs)
 			var items = [];
 
     
-			var legendLayer=legendSpacingLayer();
+			var legendLayer=this.legendSpacingLayer();
 			
    
 			
@@ -1288,7 +1137,7 @@ createSpacingSpecsForItem : function(pageItem,codeInvoked,existingSpecs)
 		if(settings.spaceTop)
     		do{
                 if(codeInvoked && !(existingSpecs["specctrSpacingSingleTopText"] || existingSpecs["specctrSpacingSingleTopLine"] )) break;
-                var currSpecs = createSpacingVerticalSpec(pageItemBounds.center.x,artRect.y1,pageItemBounds.y1,settings);
+                var currSpecs = this.createSpacingVerticalSpec(pageItemBounds.center.x,artRect.y1,pageItemBounds.y1,settings);
                 
                 
                 currSpecs[0].insertLabel("specctrSourceId",pageItem.id.toString());
@@ -1304,7 +1153,7 @@ createSpacingSpecsForItem : function(pageItem,codeInvoked,existingSpecs)
     		do{
                  if(codeInvoked && !(existingSpecs["specctrSpacingSingleBottomText"] || existingSpecs["specctrSpacingSingleBottomLine"] )) break;
                  
-                var currSpecs = createSpacingVerticalSpec(pageItemBounds.center.x,pageItemBounds.y2,artRect.y2,settings);
+                var currSpecs = this.createSpacingVerticalSpec(pageItemBounds.center.x,pageItemBounds.y2,artRect.y2,settings);
                 
                 currSpecs[0].insertLabel("specctrSourceId",pageItem.id.toString());
 		   currSpecs[0].insertLabel("specctrType","specctrSpacingSingleBottomText");
@@ -1318,7 +1167,7 @@ createSpacingSpecsForItem : function(pageItem,codeInvoked,existingSpecs)
 		if(settings.spaceLeft)
 			do{
                  if(codeInvoked && !(existingSpecs["specctrSpacingSingleLeftText"] || existingSpecs["specctrSpacingSingleLeftLine"] )) break;
-                   var currSpecs = createSpacingHorizontalSpec(pageItemBounds.center.y,artRect.x1,pageItemBounds.x1,settings) ;
+                   var currSpecs = this.createSpacingHorizontalSpec(pageItemBounds.center.y,artRect.x1,pageItemBounds.x1,settings) ;
                 
                 currSpecs[0].insertLabel("specctrSourceId",pageItem.id.toString());
 		   currSpecs[0].insertLabel("specctrType","specctrSpacingSingleLeftText");
@@ -1332,7 +1181,7 @@ createSpacingSpecsForItem : function(pageItem,codeInvoked,existingSpecs)
 		if(settings.spaceRight)
 			do{
                  if(codeInvoked && !(existingSpecs["specctrSpacingSingleRightText"] || existingSpecs["specctrSpacingSingleRightLine"] )) break;
-                var currSpecs = createSpacingHorizontalSpec(pageItemBounds.center.y,pageItemBounds.x2,artRect.x2,settings) ;
+                var currSpecs = this.createSpacingHorizontalSpec(pageItemBounds.center.y,pageItemBounds.x2,artRect.x2,settings) ;
                 
                 currSpecs[0].insertLabel("specctrSourceId",pageItem.id.toString());
 		   currSpecs[0].insertLabel("specctrType","specctrSpacingSingleRightText");
@@ -1360,97 +1209,68 @@ itemsGroup.insertLabel("specctrSourceId",pageItem.id.toString());
         }catch(e){}
             app.activeDocument.activeLayer = activeLayer ;
 
-            return true;
+            return true; } catch(e) {alert(e);}
 },
 
-createPropertySpecs : function()
-{
+    createPropertySpecs : function() {
         if(!app.selection.length) return;
-        
         app.doUndoableScript (function(){
             var myItems = app.selection;
             for(var i=0;i<myItems.length;i++)
-                createPropertySpecsForItem(myItems[i]);
+                $.specctrId.createPropertySpecsForItem(myItems[i]);
             }, "Create Property Specs");
-        
-},
+    },
 
-createPropertySpecsForItem : function(pageItem)	
-		{
-	
-    
+    createPropertySpecsForItem : function(pageItem) {
+        try {
              
             //avoid speccing the spec
             var type = pageItem.extractLabel("specctrType");
-                            
             if(type=="specctrInfoCircle" || type=="specctrInfoArm" || type=="specctrInfoSpec" || type=="specctrInfoGroup") return false;
             
-             
-             
             var activeLayer  = app.activeDocument.activeLayer;
+            var spacing = 10;
+            var itemType = this.pageItemType(pageItem);
+            var legendLayer;
+            var newColor;
             
-			var spacing = 10;
-            
-            var itemType = pageItemType(pageItem);
-			var legendLayer;
-			var newColor;
-            
-                if(itemType=="text") 
-                {
-                    newColor = legendColorType();
-                    legendLayer = legendTextPropertiesLayer();
-                 }
-                else 
-                {
-                    newColor = legendColorObject();
-                     legendLayer = legendObjectPropertiesLayer();
-                }
-                var infoText = "";
-			
-			 var pageItemBounds = this.itemCoords(pageItem);
-              var currPage = this.getCurrentPage ();
-              var currSpread = this.getCurrentSpread();
-            	
-              infoText=getSpecsInfoForItem(pageItem,itemType);   
-              
+            if(itemType=="text") {
+                newColor = this.legendColorType();
+                legendLayer = this.legendTextPropertiesLayer();
+             } else {
+                newColor = this.legendColorObject();
+                legendLayer = this.legendObjectPropertiesLayer();
+            }
              
-
-			if(infoText=="") return;
-
-             
+            var infoText = "";
+            var pageItemBounds = this.itemCoords(pageItem);
+            var currPage = this.getCurrentPage ();
+            var currSpread = this.getCurrentSpread();
+            infoText=this.getSpecsInfoForItem(pageItem,itemType);   
+            
+            if(infoText=="") return;
             var specGroup = currSpread.findByTypeAndSourceId("specctrInfoGroup",pageItem.id);                    
             if(specGroup) specGroup.ungroup();
-           
-             var spec = currSpread.findByTypeAndSourceId("specctrInfoSpec",pageItem.id);
-             var arm = currSpread.findByTypeAndSourceId("specctrInfoArm",pageItem.id);
-			var itemCircle = currSpread.findByTypeAndSourceId("specctrInfoCircle",pageItem.id);
-
             
-                
-                
-			var gb = pageItem.visibleBounds;
+            var spec = currSpread.findByTypeAndSourceId("specctrInfoSpec",pageItem.id);
+            var arm = currSpread.findByTypeAndSourceId("specctrInfoArm",pageItem.id);
+            var itemCircle = currSpread.findByTypeAndSourceId("specctrInfoCircle",pageItem.id);
+
+            var gb = pageItem.visibleBounds;
             gb[1] = gb[3]+spacing;
             gb[3] = gb[1]+100;
 
             var specExisted = true;
+            if(!spec) {
+                spec = currPage.textFrames.add(legendLayer,undefined,undefined,{geometricBounds:gb});
+                specExisted = false;
+            }
             
-			if(!spec)
-			{
-			spec = currPage.textFrames.add(legendLayer,undefined,undefined,
-		{geometricBounds:gb});
-        specExisted = false;
-			}
-
-	
-
-         
-			spec.parentStory.contents = infoText;
+            spec.parentStory.contents = infoText;
             spec.parentStory.alignToBaseline = false;
-            
-
-			spec.parentStory.fillColor = newColor;
-             spec.parentStory.appliedFont = model.legendFont;
-             spec.parentStory.pointSize = model.legendFontSize;
+            spec.parentStory.fillColor = newColor;
+            spec.parentStory.appliedFont = model.legendFont;
+            spec.parentStory.pointSize = model.legendFontSize;
              /*
              try{
                  app.findGrepPreferences = NothingEnum.nothing;
@@ -1463,247 +1283,191 @@ createPropertySpecsForItem : function(pageItem)
                 app.changeGrepPreferences = NothingEnum.nothing;
                  }catch(e){}
              */
-             spec.fit(FitOptions.FRAME_TO_CONTENT);
-             spec.recompose();
-             spec.fit(FitOptions.FRAME_TO_CONTENT);
-             
+            spec.fit(FitOptions.FRAME_TO_CONTENT);
+            spec.recompose();
+            spec.fit(FitOptions.FRAME_TO_CONTENT);
             var allParas = spec.paragraphs;
 
-        //make all paras 1 line
-            for(var i=0;i<allParas.length;i++)
-    {
-        var currPara = allParas[i];
-        if (currPara.lines.length>1)
-        {
-            var gb = spec.geometricBounds;
-                gb[3]+= gb[3]-gb[1];
-                spec.geometricBounds=gb;
-                spec.recompose();
-                i=-1;
-        }
-    }
+            //make all paras 1 line
+            for(var i=0;i<allParas.length;i++) {
+                var currPara = allParas[i];
+                if (currPara.lines.length>1) {
+                    var gb = spec.geometricBounds;
+                    gb[3]+= gb[3]-gb[1];
+                    spec.geometricBounds=gb;
+                    spec.recompose();
+                    i=-1;
+                }
+            }
 
- spec.fit(FitOptions.FRAME_TO_CONTENT);
-                spec.recompose();
-             spec.fit(FitOptions.FRAME_TO_CONTENT);
-             
-var maxWidth = allParas[0].lineWidth();
-for(var i=1;i<allParas.length;i++)
-{
-    maxWidth = Math.max(maxWidth,allParas[i].lineWidth());
-}
+            spec.fit(FitOptions.FRAME_TO_CONTENT);
+            spec.recompose();
+            spec.fit(FitOptions.FRAME_TO_CONTENT);
+
+            var maxWidth = allParas[0].lineWidth();
+            for(var i=1;i<allParas.length;i++) {
+            maxWidth = Math.max(maxWidth,allParas[i].lineWidth());
+            }
 
             var gb = spec.geometricBounds;
-                gb[3]= gb[1]+maxWidth;
-                spec.geometricBounds=gb;
-                spec.fit(FitOptions.FRAME_TO_CONTENT);
-                spec.recompose();
-             spec.fit(FitOptions.FRAME_TO_CONTENT);
-             
+            gb[3]= gb[1]+maxWidth;
+            spec.geometricBounds=gb;
+            spec.fit(FitOptions.FRAME_TO_CONTENT);
+            spec.recompose();
+            spec.fit(FitOptions.FRAME_TO_CONTENT);
+
             spec.name="Specctr Properties Mark";
-            
             spec.insertLabel("specctrSourceId",pageItem.id.toString());
-		   spec.insertLabel("specctrType","specctrInfoSpec");
-           
-           
-           pageItem.insertLabel("specctrType","specctrSpecSource");
-           
-			//pageItem.insertLabel("specctrInfoSpec",spec.id.toString());
-			//positioning
-
-			
-              var specBounds = this.itemCoords(spec);
-              
-              var heightItem= pageItemBounds.height;
-			var heightInfo = specBounds.height;
+            spec.insertLabel("specctrType","specctrInfoSpec");
+            pageItem.insertLabel("specctrType","specctrSpecSource");
+            //pageItem.insertLabel("specctrInfoSpec",spec.id.toString());
+            //positioning
+            var specBounds = this.itemCoords(spec);
+            var heightItem= pageItemBounds.height;
+            var heightInfo = specBounds.height;
             var widthInfo = specBounds.width;
-            
-			var centerY = pageItemBounds.center.y;
-			var centerX = pageItemBounds.center.x;
-            
-			var artRect = currPage.bounds;
-			var artboardCenterX = artRect[1]/2+artRect[3]/2;
-              
-              if(!specExisted)
-              {
-			//center
 
-			
-			var specX;
-			var specEdge;
+            var centerY = pageItemBounds.center.y;
+            var centerX = pageItemBounds.center.x;
 
-		
-			if(centerX<=artboardCenterX)
-			{
-				spec.parentStory.justification = Justification.LEFT_ALIGN;
+            var artRect = currPage.bounds;
+            var artboardCenterX = artRect[1]/2+artRect[3]/2;
+
+            if(!specExisted) {
+                //center
+                var specX;
+                var specEdge;
+                if(centerX<=artboardCenterX) {
+                    spec.parentStory.justification = Justification.LEFT_ALIGN;
+                    if(model.specToEdge)
+                        specX=artRect[1]+spacing;
+                    else
+                      specX=pageItemBounds.x1-widthInfo-spacing;
+                } else {
+                    spec.parentStory.justification = Justification.RIGHT_ALIGN;
+                    if(model.specToEdge) {
+                        //spec.translate(pageItemBounds[2]-pageItemBounds[0],0);
+                        specX=artRect[3]-widthInfo-spacing;
+                    } else
+                    specX=pageItemBounds.x2+spacing;
+                }
                 
-                 if(model.specToEdge)
-				specX=artRect[1]+spacing;
-				else
-                  specX=pageItemBounds.x1-widthInfo-spacing;
-			}
-			else
-			{
-				spec.parentStory.justification = Justification.RIGHT_ALIGN;
-                if(model.specToEdge)
-                {
-			//	spec.translate(pageItemBounds[2]-pageItemBounds[0],0);
-				specX=artRect[3]-widthInfo-spacing;
-				}
-                else
-                specX=pageItemBounds.x2+spacing;
-			}
-			
-			spec.move([specX,(pageItemBounds.y1+(heightItem-heightInfo)/2)]);	
-            specBounds = this.itemCoords(spec);
+                spec.move([specX,(pageItemBounds.y1+(heightItem-heightInfo)/2)]);	
+                specBounds = this.itemCoords(spec);
             }//end if spec existed
-//
-            if(!arm)
-             {
-                  
-                 var armX1;
-                 var armX2;
-                 
-                 if(centerX<=artboardCenterX)
-                  {
-                      
-                      armX1 = pageItemBounds.x1;
-                      armX2 = specBounds.x2;
-                  }  
-                 else
-                 {
+
+            if(!arm) {
+                var armX1;
+                var armX2;
+                if(centerX <= artboardCenterX) {
+                    armX1 = pageItemBounds.x1;
+                    armX2 = specBounds.x2;
+                } else {
                       armX1 = pageItemBounds.x2;
                       armX2 = specBounds.x1;
-                 }
+                }
              
                 var armDX = Math.abs(armX1-armX2);
                 var dx = armPartLength;
                 if(armX1<armX2) dx=-dx;
-                
-               
-                
-                if (armDX<armPartLength*1.3)
-                {
+
+                if (armDX<armPartLength*1.3) {
                      arm = currPage.graphicLines.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"None", strokeColor:newColor , geometricBounds:[specBounds.y1,armX2,centerY,armX1]});
                      arm.paths[0].entirePath = [[armX2,specBounds.y1],[armX1,centerY]];
-                 }
-                else
-                {
+                 } else {
                     arm = currPage.graphicLines.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"None", strokeColor:newColor , geometricBounds:[specBounds.y1,armX2,centerY,armX1]});
-                    
                     arm.paths[0].entirePath =[[armX2,specBounds.y1],[armX2+dx,specBounds.y1],[armX1,centerY]];
-                    }
-                
+                }
                 
                arm.insertLabel("specctrSourceId",pageItem.id.toString());
                arm.insertLabel("specctrType","specctrInfoArm");
-               
-               //arm.locked = true;
-              //  pageItem.insertLabel("specctrInfoArm",arm.id.toString());
+
+                //arm.locked = true;
+                //  pageItem.insertLabel("specctrInfoArm",arm.id.toString());
             }
-        
-			var circleD = circleDiameter(model.armWeight);
-			
-			if (!itemCircle) 
-            {
+
+                var circleD = this.circleDiameter(model.armWeight);
+            if (!itemCircle) {
                 
-                if(centerX<=artboardCenterX)
-                {
+                if(centerX<=artboardCenterX) {
                     itemCircle = currPage.ovals.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"Paper", strokeColor:newColor , geometricBounds:[centerY-circleD/2,pageItemBounds.x1-circleD/2,centerY+circleD/2,pageItemBounds.x1+circleD/2]});
-                }
-            else 
-                {
+                } else {
                     itemCircle = currPage.ovals.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"Paper", strokeColor:newColor , geometricBounds:[centerY-circleD/2,pageItemBounds.x2-circleD/2,centerY+circleD/2,pageItemBounds.x2+circleD/2]});
                 }
-            
-            itemCircle.insertLabel("specctrSourceId",pageItem.id.toString());
-		   itemCircle.insertLabel("specctrType","specctrInfoCircle");
+               itemCircle.insertLabel("specctrSourceId",pageItem.id.toString());
+               itemCircle.insertLabel("specctrType","specctrInfoCircle");
            
-          // itemCircle.locked = true;
-          // pageItem.insertLabel("specctrInfoCircle",itemCircle.id.toString());
-         
-         /*
-			if(sourceItem.typename=="TextFrame")
-			itemCircle.filled = true;
-			else itemCircle.filled = false;
-			*/
-			
-			}
-        
-       if(itemType=="text")  itemCircle.fillColor = newColor;
-        else itemCircle.fillColor = "Paper"; //change to none?
-        
-        arm.insertLabel("specctrCoords",arm.geometricBounds.join("|"));
-        itemCircle.insertLabel("specctrCoords",itemCircle.geometricBounds.join("|"));
-        spec.insertLabel("specctrCoords",spec.geometricBounds.join("|"));
-        pageItem.insertLabel("specctrCoords",pageItem.geometricBounds.join("|"));
+              // itemCircle.locked = true;
+              // pageItem.insertLabel("specctrInfoCircle",itemCircle.id.toString());
+             
+             /*
+                if(sourceItem.typename=="TextFrame")
+                itemCircle.filled = true;
+                else itemCircle.filled = false;
+                */
+                }
 
-       
-                        specGroup = currPage.groups.add([spec,itemCircle,arm],legendLayer,undefined,undefined,{name:"Specctr Properties Mark"});
-                        specGroup.insertLabel("specctrSourceId",pageItem.id.toString());
-                        specGroup.insertLabel("specctrType","specctrInfoGroup");
-                   
-             specGroup.insertLabel("specctrCoords",specGroup.geometricBounds.join("|"));
-        
+            if(itemType=="text")  itemCircle.fillColor = newColor;
+            else itemCircle.fillColor = "Paper"; //change to none?
 
+            arm.insertLabel("specctrCoords",arm.geometricBounds.join("|"));
+            itemCircle.insertLabel("specctrCoords",itemCircle.geometricBounds.join("|"));
+            spec.insertLabel("specctrCoords",spec.geometricBounds.join("|"));
+            pageItem.insertLabel("specctrCoords",pageItem.geometricBounds.join("|"));
+            specGroup = currPage.groups.add([spec,itemCircle,arm],legendLayer,undefined,undefined,{name:"Specctr Properties Mark"});
+            specGroup.insertLabel("specctrSourceId",pageItem.id.toString());
+            specGroup.insertLabel("specctrType","specctrInfoGroup");
+
+            specGroup.insertLabel("specctrCoords",specGroup.geometricBounds.join("|"));
             app.activeDocument.activeLayer = activeLayer;
             return true;
-		
-},
+        } catch (e) {
+            alert(e);
+        }
+    },
 
+    itemBounds : function(textFrame) {
+        return textFrame.visibleBounds;
+        //illustrator code
+        var bounds=textFrame.visibleBounds;
+        if(textFrame.typename=="TextFrame") {
+            try{
+                var dup=textFrame.duplicate();
+                var target=dup.createOutline();
+                bounds=target.visibleBounds;
+                target.remove();
+            }catch(e){}
+        }
 
- itemBounds : function(textFrame)
-		{
-            return textFrame.visibleBounds;
-            //illustrator code
-			var bounds=textFrame.visibleBounds;
-			
-			if(textFrame.typename=="TextFrame")
-			{
-			try{
-				var dup=textFrame.duplicate();
-				var target=dup.createOutline();
-				bounds=target.visibleBounds;
-				target.remove();
-			}catch(e){}
-			}
-			
-			return bounds;
-},
+        return bounds;
+    },
 
- itemGeometricBounds : function(textFrame)
-		{
-              //for now
-            return textFrame.geometricBounds;
-            //illustrator code
-            
-            //TODO later convert to outlines and measure... or somehow else
-			var bounds=textFrame.geometricBounds;
-			
+    itemGeometricBounds : function(textFrame) {            //for now
+        return textFrame.geometricBounds;
+        //illustrator code
+        //TODO later convert to outlines and measure... or somehow else
+        var bounds=textFrame.geometricBounds;
+        if(textFrame.typename=="TextFrame") {
+            try{
+                var dup=textFrame.duplicate();
+                var target=dup.createOutline();
+                bounds=target.geometricBounds;
+                target.remove();
+            }catch(e){}
+        }
 
-			if(textFrame.typename=="TextFrame")
-			{
-				try{
-					var dup=textFrame.duplicate();
-					var target=dup.createOutline();
-					bounds=target.geometricBounds;
-					target.remove();
-				}catch(e){}
-			}
-			
-			try{
-				if (textFrame.stroked)
-				{
-					var strokeWidth=textFrame.strokeWidth/2;
-					bounds[0]-=strokeWidth;
-					bounds[1]+=strokeWidth;
-					bounds[2]+=strokeWidth;
-					bounds[3]-=strokeWidth;
-				}
-			}catch(e){}
-			
-			return bounds;
-},
+        try{
+            if (textFrame.stroked) {
+                var strokeWidth=textFrame.strokeWidth/2;
+                bounds[0]-=strokeWidth;
+                bounds[1]+=strokeWidth;
+                bounds[2]+=strokeWidth;
+                bounds[3]-=strokeWidth;
+            }
+        }catch(e){}
+
+        return bounds;
+    },
 
     legendLayer : function() {		
         var newLayer;
@@ -1719,41 +1483,33 @@ for(var i=1;i<allParas.length;i++)
         return newLayer;
     },
 
- legendTextPropertiesLayer : function()
-		{
-			var newLayer;
-			
-			try{
-				newLayer=app.activeDocument.layers.itemByName("Specctr Text Properties");
-                newLayer.id;
-			}
-			catch(e)
-			{
-				newLayer=app.activeDocument.layers.add({name:"Specctr Text Properties"});
-				newLayer.move(LocationOptions.AT_BEGINNING);
-			}
-			//newLayer.locked=false;
-			return newLayer;		
-			
-		},
+    legendTextPropertiesLayer : function() {
+        var newLayer;
+
+        try {
+            newLayer = app.activeDocument.layers.itemByName("Specctr Text Properties");
+            newLayer.id;
+        } catch(e) {
+            newLayer = app.activeDocument.layers.add({name:"Specctr Text Properties"});
+            newLayer.move(LocationOptions.AT_BEGINNING);
+        }
+        //newLayer.locked=false;
+        return newLayer;		
+    },
     
- legendObjectPropertiesLayer : function()
-		{
-			var newLayer;
-			
-			try{
-				newLayer=app.activeDocument.layers.itemByName("Specctr Object Properties");
-                newLayer.id;
-			}
-			catch(e)
-			{
-				newLayer=app.activeDocument.layers.add({name:"Specctr Object Properties"});
-				newLayer.move(LocationOptions.AT_BEGINNING);
-			}
-			//newLayer.locked=false;
-			return newLayer;		
-			
-		},
+    legendObjectPropertiesLayer : function() {
+        var newLayer;
+
+        try {
+            newLayer = app.activeDocument.layers.itemByName("Specctr Object Properties");
+            newLayer.id;
+        } catch(e) {
+            newLayer=app.activeDocument.layers.add({name:"Specctr Object Properties"});
+            newLayer.move(LocationOptions.AT_BEGINNING);
+        }
+        //newLayer.locked=false;
+        return newLayer;
+    },
 
     legendCoordinatesLayer : function() {
         var newLayer;
@@ -1769,41 +1525,33 @@ for(var i=1;i<allParas.length;i++)
         return newLayer;
     },
 
- legendSpacingLayer : function()
-{
-			var newLayer;
-			
-			try{
-				newLayer=app.activeDocument.layers.itemByName("Specctr Spacing");
-                newLayer.id;
-			}
-			catch(e)
-			{
-				newLayer=app.activeDocument.layers.add({name:"Specctr Spacing"});
-				newLayer.move(LocationOptions.AT_BEGINNING);
-			}
-		//	newLayer.locked=false;
-			return newLayer;		
+    legendSpacingLayer : function() {
+        var newLayer;
 
-},
+        try{
+            newLayer = app.activeDocument.layers.itemByName("Specctr Spacing");
+            newLayer.id;
+        } catch(e) {
+            newLayer = app.activeDocument.layers.add({name:"Specctr Spacing"});
+            newLayer.move(LocationOptions.AT_BEGINNING);
+        }
+        //newLayer.locked=false;
+        return newLayer;
+    },
 		
- legendDimensionsLayer : function()
-{
-			var newLayer;
-			
-			try{
-				newLayer=app.activeDocument.layers.itemByName("Specctr Dimensions");
-                newLayer.id;
-			}
-			catch(e)
-			{
-				newLayer=app.activeDocument.layers.add({name:"Specctr Dimensions"});
-				newLayer.move(LocationOptions.AT_BEGINNING);
-			}
-		//	newLayer.locked=false;
-			return newLayer;		
+    legendDimensionsLayer : function() {
+        var newLayer;
 
-},
+        try {
+            newLayer = app.activeDocument.layers.itemByName("Specctr Dimensions");
+            newLayer.id;
+        } catch(e) {
+            newLayer = app.activeDocument.layers.add({name:"Specctr Dimensions"});
+            newLayer.move(LocationOptions.AT_BEGINNING);
+        }
+        //newLayer.locked=false;
+        return newLayer;		
+    },
 
     pointsToUnitsString : function(value,units,responsive,relativeTo) {
 
@@ -1844,18 +1592,17 @@ for(var i=1;i<allParas.length;i++)
             
             return result;
     },
-		
- typeUnits : function()
-		{
-			if (app.activeDocument.viewPreferences.horizontalMeasurementUnits==MeasurementUnits.PIXELS) return "px"; 
-			else 
-			return "pt";
-		},
 
- colorAsString : function(c,tint)
-		{
+    typeUnits : function() {
+        if (app.activeDocument.viewPreferences.horizontalMeasurementUnits == MeasurementUnits.PIXELS) 
+            return "px"; 
+        else 
+            return "pt";
+    },
 
-    if(tint==-1 || tint==undefined) tint = 100;
+    colorAsString : function(c,tint) {
+
+        if(tint==-1 || tint==undefined) tint = 100;
     
     
 			var result="";
@@ -1868,7 +1615,7 @@ for(var i=1;i<allParas.length;i++)
                 else result+="radial";
                 for(var i=0;i<c.gradientStops.length;i++)
                 try{
-                 result+="\r"+colorAsString(c.gradientStops[i].stopColor,tint);   
+                 result+="\r"+this.colorAsString(c.gradientStops[i].stopColor,tint);   
                  }catch(e){}
                  return result;
             }
@@ -1909,7 +1656,7 @@ for(var i=1;i<allParas.length;i++)
 				break;
 				
 				case ColorSpace.LAB:
-				result="L"+lightnessTint(color.colorValue[0],tint)+" a"+Math.round(color.colorValue[1])+" b"+Math.round(color.colorValue[2]);
+				result="L"+this.lightnessTint(color.colorValue[0],tint)+" a"+Math.round(color.colorValue[1])+" b"+Math.round(color.colorValue[2]);
 				break;
                 
                 case ColorSpace.RGB:
@@ -1917,29 +1664,29 @@ for(var i=1;i<allParas.length;i++)
 					switch(model.legendColorMode)
 					{
 					case "HSB":
-						result = rgbToHsv(color.colorValue,tint);
+						result = this.rgbToHsv(color.colorValue,tint);
 					break;
 				
 					case "HSL":
-						result = rgbToHsl(color.colorValue,tint);
+						result = this.rgbToHsl(color.colorValue,tint);
 					break;
 				
 					case "RGB":
 					default:
 					if(model.useHexColor)
 					{
-						var red=rgbTint(color.colorValue[0],tint).toString(16);
+						var red=this.rgbTint(color.colorValue[0],tint).toString(16);
 						if (red.length==1) red="0"+red;
-						var green=rgbTint(color.colorValue[1],tint).toString(16);
+						var green=this.rgbTint(color.colorValue[1],tint).toString(16);
 						if (green.length==1) green="0"+green;
-						var blue=rgbTint(color.colorValue[2],tint).toString(16);
+						var blue=this.rgbTint(color.colorValue[2],tint).toString(16);
 						if (blue.length==1) blue="0"+blue;
 					
 						result = "#"+red+green+blue;
 					}
 					
 					else	
-						result="R"+rgbTint(color.colorValue[0],tint)+" G"+rgbTint(color.colorValue[1],tint)+" B"+rgbTint(color.colorValue[2],tint);
+						result="R"+this.rgbTint(color.colorValue[0],tint)+" G"+this.rgbTint(color.colorValue[1],tint)+" B"+this.rgbTint(color.colorValue[2],tint);
 					}
 				break;
 				
@@ -2066,7 +1813,7 @@ getSpecsInfoForItem : function(pageItem,itemType)
 
 							if(model.shapeFillColor && pageItem.fillColor.name!="None")
                             {
-                                 var color = colorAsString(pageItem.fillColor,pageItem.fillTint);
+                                 var color = this.colorAsString(pageItem.fillColor,pageItem.fillTint);
 								infoText+=color;
                                     cssText += "\r\tcolor: "+color.toLowerCase()+";";
                                 }
@@ -2090,7 +1837,7 @@ getSpecsInfoForItem : function(pageItem,itemType)
                           
                             if(model.shapeStrokeColor && pageItem.strokeWeight!=0)
                             {
-                                 var strokeColor = colorAsString(pageItem.strokeColor,pageItem.strokeTint);
+                                 var strokeColor = this.colorAsString(pageItem.strokeColor,pageItem.strokeTint);
                                 infoText+=", "+strokeColor; 
                                 cssText += "\r\tstroke-color: " + strokeColor.toLowerCase() + ";";
                 
@@ -2182,7 +1929,7 @@ getSpecsInfoForItem : function(pageItem,itemType)
                              if(model.specInEM)
                              fontSize = Math.round(textItem.pointSize / rltvFontSize *100)/100+" em";
                              else
-                             fontSize = Math.round(textItem.pointSize*10)/10+" "+typeUnits();
+                             fontSize = Math.round(textItem.pointSize*10)/10+" "+this.typeUnits();
                              
                              currStyleRangeSpec+="Font-Size: "+ fontSize;
                                 currStyleRangeSpec+="\r";
@@ -2192,7 +1939,7 @@ getSpecsInfoForItem : function(pageItem,itemType)
                             
                             if(model.textColor)
                              try{
-                                 var textColor = colorAsString(textItem.fillColor,textItem.fillTint);
+                                 var textColor = this.colorAsString(textItem.fillColor,textItem.fillTint);
 							currStyleRangeSpec+="Color: "+textColor;
                             currStyleRangeSpec+="\r";
                             currCssRange += "\r\tcolor: " + textColor.toLowerCase() + ";";
@@ -2224,7 +1971,7 @@ getSpecsInfoForItem : function(pageItem,itemType)
                               if(model.specInEM)
                            leading=Math.round(leading / rltvLineHeight*100)/100+" em";
                            else
-						leading = Math.round(leading*10)/10+" "+typeUnits();
+						leading = Math.round(leading*10)/10+" "+this.typeUnits();
                         
                           
 						currStyleRangeSpec+="Line-Height: "+leading;
@@ -2291,7 +2038,7 @@ getSpecsInfoForItem : function(pageItem,itemType)
     addIfNotExists : function(colorArray) {                
         var result;
         for (var i=0;i<app.activeDocument.colors.length;i++) {
-            var currentValue = app.activeDocument.colors[i].colorValue;      
+            var currentValue = app.activeDocument.colors[i].colorValue;
             if (currentValue.toString() == colorArray.toString()) {                 
                 result=app.activeDocument.colors[i];
                 break;
@@ -2443,19 +2190,19 @@ myEventHandler : function()
 
                 
                 //property spec update
-                var itemType = pageItemType(pageItem);
+                var itemType = this.pageItemType(pageItem);
 			var legendLayer;
 			var newColor;
             
                 if(itemType=="text") 
                 {
-                    newColor = legendColorType();
-                    legendLayer = legendTextPropertiesLayer();
+                    newColor = this.legendColorType();
+                    legendLayer = this.legendTextPropertiesLayer();
                  }
                 else 
                 {
-                    newColor = legendColorObject();
-                     legendLayer = legendObjectPropertiesLayer();
+                    newColor = this.legendColorObject();
+                     legendLayer = this.legendObjectPropertiesLayer();
                 }
             
             
@@ -2475,7 +2222,7 @@ myEventHandler : function()
        {
         if(allRelatedItems[prop])
         {
-        createCoordinateSpecsForItem(pageItem,true,allRelatedItems);
+        this.createCoordinateSpecsForItem(pageItem,true,allRelatedItems);
         break;
         }
        }
@@ -2488,7 +2235,7 @@ myEventHandler : function()
        {
         if(allRelatedItems[prop])
         {
-        createDimensionSpecsForItem (pageItem, true, allRelatedItems);
+        this.createDimensionSpecsForItem (pageItem, true, allRelatedItems);
         break;
         }
        }
@@ -2501,7 +2248,7 @@ myEventHandler : function()
        {
         if(allRelatedItems[prop])
         {
-        createSpacingSpecsForItem (pageItem, true, allRelatedItems);
+        this.createSpacingSpecsForItem (pageItem, true, allRelatedItems);
         break;
         }
        }
@@ -2513,7 +2260,7 @@ myEventHandler : function()
                var sources = currSpread.existDoubleSpacingSpecBySourceIdAndTypes(pageItem.id, spacingDoubleSpecsObj);
 
                for(var s=0;s<sources.length;s++)
-               createSpacingSpecsForItems (pageItem,sources[s], true);
+               this.createSpacingSpecsForItems (pageItem,sources[s], true);
                }
                
            
@@ -2636,7 +2383,7 @@ myEventHandler : function()
         //    arm.locked = true;
             
             
-			var circleD = circleDiameter(model.armWeight);
+			var circleD = this.circleDiameter(model.armWeight);
 			
 			if (!itemCircle) 
             {
@@ -2726,15 +2473,15 @@ myEventHandler : function()
     },
 
     rChannel : function(value) {
-        return value >> 16 & 0xFF;
+        return parseInt(value.substring(1, 3), 16);
     },
 
     gChannel : function(value) {
-        return value >> 8 & 0xFF;
+        return parseInt(value.substring(3, 5), 16);
     },
             
     bChannel : function(value) {
-        return value >> 0 & 0xFF;
+        return parseInt(value.substring(5, 7), 16);
     },
 
     isText : function(obj) {

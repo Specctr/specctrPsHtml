@@ -142,10 +142,10 @@ function onLoaded() {
 		createDialog();
 		var isLicensed = false;
 		var appPrefs;
-		loadJSX(); // Load the jsx files present in \jsx folder.
 
 		//Get the host application name.
 		hostApplication = getHostApp();
+		loadJSX(); // Load the jsx files present in \jsx folder.
 
 		if (hostApplication === '') {
 			showDialog('Cannot load the extension.\nRequired host application not found!');
@@ -282,6 +282,7 @@ function setModelValueFromPreferences() {
  */
 function loadFontsToList(result) {
 	try {
+		
 		var font = JSON.parse(result);
 		var fontLength = font.length;
 		var fontList = document.getElementById("lstFont");
@@ -296,6 +297,7 @@ function loadFontsToList(result) {
 
 		applyFontToList();
 	} catch (e) {
+		alert(e);
 		console.log(e);
 	}
 }
@@ -309,7 +311,7 @@ function loadJSX() {
 		var csInterface = new CSInterface();
 		var extensionRoot = csInterface.getSystemPath(SystemPath.EXTENSION)
 				+ "/jsx/";
-		csInterface.evalScript('$._ext.evalFiles("' + extensionRoot + '")');
+		csInterface.evalScript('$._ext.evalFiles("' + extensionRoot + '","' + hostApplication + '")');
 	} catch (e) {
 		console.log(e);
 	}
@@ -368,10 +370,10 @@ function createDimensionSpecs() {
 	analytics.trackFeature('create_dimension_specs');
 	try {
 		setModel();
-		if (hostApplication === illustrator)
-			evalScript("$.specctrAi.createDimensionSpecs()");
-		else
+		if (hostApplication === photoshop)
 			evalScript("$.specctrPsDimension.createDimensionSpecsForItem()");
+		else
+			evalScript("$.specctr" + hostApplication + "." + "createDimensionSpecs()");
 		
 	} catch (e) {
 		console.log(e);
@@ -386,10 +388,10 @@ function createSpacingSpecs() {
 
 	try {
 		setModel();
-		if (hostApplication === illustrator)
-			evalScript("$.specctrAi.createSpacingSpecs()");
-		else
+		if (hostApplication === photoshop)
 			evalScript("$.specctrPsSpacing.createSpacingSpecs()");
+		else
+			evalScript("$.specctr" + hostApplication + "." + "createSpacingSpecs()");
 
 	} catch (e) {
 		console.log(e);
@@ -439,10 +441,10 @@ function createPropertySpecs() {
 
 	try {
 		setModel();
-		if (hostApplication === illustrator)
-			evalScript("$.specctrAi.createPropertySpecs()");
-		else
+		if (hostApplication === photoshop)
 			evalScript("$.specctrPsProperties.createPropertySpecsForItem()");
+		else
+			evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()");
 
 	} catch (e) {
 		console.log(e);
@@ -457,10 +459,11 @@ function exportCss() {
 
 	try {
 		setModel();
-		if (hostApplication === illustrator)
-			evalScript("$.specctrAi.exportCss()");
-		else
+		if (hostApplication === photoshop)
 			evalScript("$.specctrPsExportCss.exportCss()");
+		else
+			evalScript("$.specctr" + hostApplication + "." + "exportCss()");
+			
 
 	} catch (e) {
 		console.log(e);
