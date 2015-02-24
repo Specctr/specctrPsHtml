@@ -35,7 +35,7 @@ $._ext = {
                         break;
                     }
                 } else {
-                    if(jsxFile.name.indexOf("Ps") > 0) {
+                    if(jsxFile.name.indexOf("Ps") > 0 || jsxFile.name.indexOf("Photoshop") > 0) {
                         $._ext.evalFile(jsxFile);
                     }
                 }

@@ -249,23 +249,6 @@ Array.prototype.pushOnce = function(obj)
         this.push(obj);    
 }
 
-//~ function specctrObj()
-//~ {
-//~  //Temporary   
-//~ with(app.scriptPreferences)
-//~ {
-//~ measurementUnit = MeasurementUnits.POINTS;
-//~ //enableRedraw = false;
-//~ //userInteractionLevel = UserInteractionLevels.NEVER_INTERACT;
-//~ }
-
-//~ if(!_specctr)
-//~         _specctr = new specctr();
-
-
-//~ return _specctr;
-//~ }
-
 	var model;
     var armPartLength=40;
     var cssText = "";
@@ -316,7 +299,8 @@ Array.prototype.pushOnce = function(obj)
     //illustrator measurements are always in pt
     //in indesign this needs to be set or use UnitValue(x,"pt") / "px"
 
-
+//~ try{app.eventListeners.itemByName("_specctrAttrChanged").remove(); }catch(e){}
+//~     app.eventListeners.add("afterSelectionAttributeChanged", $.specctrId.myEventHandlerWrapper,undefined,{name:"_specctrAttrChanged"});
    
 $.specctrId = {
     //Get the application font's name and font's family.
@@ -341,8 +325,6 @@ $.specctrId = {
 
     //Get the updated value of UI's component from html file.
     setModel : function(currModel) {
-     try{app.eventListeners.itemByName("_specctrAttrChanged").remove(); }catch(e){}
-    app.eventListeners.add("afterSelectionAttributeChanged", $.specctrId.myEventHandlerWrapper,undefined,{name:"_specctrAttrChanged"});
         with(app.scriptPreferences) {
             measurementUnit = MeasurementUnits.POINTS;
         }

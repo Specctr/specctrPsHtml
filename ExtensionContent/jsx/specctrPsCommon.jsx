@@ -11,24 +11,7 @@ var model = "";
 var lyrBound = "";
 var cssBodyText = "";
 $.specctrPsCommon = {
-    //Get the application font's name and font's family.
-    getFontList : function() {
-        var font = app.fonts;
-        var appFontLength = font.length;
-        var result = [];
-        //Set the spec text properties.
-        for(var i = 0; i < appFontLength; i++) {
-            var currFont = font[i];
-            if(currFont.style == "Regular") {
-                var object = {};
-                object.label = currFont.family;
-                object.font = currFont.postScriptName;
-                result.push(object);
-            }
-        }
-        return JSON.stringify(result);
-    },
-
+    
     //Get the updated value of UI's component from html file.
     setModel : function(currModel) {
         model = JSON.parse(currModel);

@@ -40,8 +40,6 @@ function completeHandler(data, status) {
  */
 function setModelToUIComponents() {
 	
-	var hostPrefix = "$.specctrPsCommon.";
-	
 	//Set icons to the buttons.
 	var iconPostString = ".png";
 	var buttonIconPaths = ["../Images/Icon_object", "../Images/Icon_coordinates",
@@ -77,7 +75,6 @@ function setModelToUIComponents() {
 		appSpecificCheckBoxesId = ["shapeFillColor", "shapeFillStyle", 
 		                           "shapeStrokeColor", "shapeStrokeStyle", 
 		                           "shapeStrokeSize", "specToEdge"];
-		hostPrefix = "$.specctr"+ hostApplication +".";
 	}
 
 	Array.prototype.push.apply(checkBoxesId, appSpecificCheckBoxesId);
@@ -106,7 +103,7 @@ function setModelToUIComponents() {
 		disableTextField(document.getElementById("txtScaleBy"));
 	
 	//Get font list according to host application.
-	var extScript = hostPrefix + "getFontList()";
+	var extScript = "$.specctr"+ hostApplication +"." + "getFontList()";
 	evalScript(extScript, loadFontsToList);
 }
 
@@ -276,33 +273,6 @@ function setModelValueFromPreferences() {
 }
 
 /**
- * Callback function which takes the font list from jsx and 
- * load the list to the font combo-box of fourth tab.
- * @param result {string} List of font families.
- */
-function loadFontsToList(result) {
-	try {
-		
-		var font = JSON.parse(result);
-		var fontLength = font.length;
-		var fontList = document.getElementById("lstFont");
-
-		// Set the font list to combo-box.
-		for (var i = 0; i < fontLength; i++) {
-			var option = document.createElement("option");
-			option.text = font[i].font;
-			option.value = i;
-			fontList.add(option, i);
-		}
-
-		applyFontToList();
-	} catch (e) {
-		alert(e);
-		console.log(e);
-	}
-}
-
-/**
  * Load JSX file into the scripting context of the product. 
  * All the jsx files in folder [ExtensionRoot]/jsx will be loaded.
  */
@@ -333,10 +303,7 @@ function evalScript(script, callback) {
 function setModel() {
 	try {
 		var methodName = "setModel('" + JSON.stringify(model) + "')";
-		if (hostApplication === photoshop)
-			evalScript("$.specctrPsCommon." + methodName);
-		else
-			evalScript("$.specctr" + hostApplication + "." + methodName);
+		evalScript("$.specctr" + hostApplication + "." + methodName);
 	} catch (e) {
 		console.log(e);
 	}
@@ -350,13 +317,7 @@ function expandCanvas() {
 
 	try {
 		setModel();
-		var methodName = "createCanvasBorder()";
-
-		if (hostApplication === photoshop)
-			evalScript("$.specctrPsExpandCanvas." + methodName);
-		else
-			evalScript("$.specctr" + hostApplication + "." + methodName);
-
+		evalScript("$.specctr" + hostApplication + "." + "createCanvasBorder()");
 		writeAppPrefs();
 	} catch (e) {
 		console.log(e);
@@ -370,11 +331,7 @@ function createDimensionSpecs() {
 	analytics.trackFeature('create_dimension_specs');
 	try {
 		setModel();
-		if (hostApplication === photoshop)
-			evalScript("$.specctrPsDimension.createDimensionSpecsForItem()");
-		else
-			evalScript("$.specctr" + hostApplication + "." + "createDimensionSpecs()");
-		
+		evalScript("$.specctr" + hostApplication + "." + "createDimensionSpecs()");
 	} catch (e) {
 		console.log(e);
 	}
@@ -388,11 +345,7 @@ function createSpacingSpecs() {
 
 	try {
 		setModel();
-		if (hostApplication === photoshop)
-			evalScript("$.specctrPsSpacing.createSpacingSpecs()");
-		else
-			evalScript("$.specctr" + hostApplication + "." + "createSpacingSpecs()");
-
+		evalScript("$.specctr" + hostApplication + "." + "createSpacingSpecs()");
 	} catch (e) {
 		console.log(e);
 	}
@@ -406,11 +359,7 @@ function createCoordinateSpecs() {
 
 	try {
 		setModel();
-		if (hostApplication === photoshop)
-			evalScript("$.specctrPsCoordinates.createCoordinateSpecs()");
-		else
-			evalScript("$.specctr" + hostApplication + "." + "createCoordinateSpecs()");
-
+		evalScript("$.specctr" + hostApplication + "." + "createCoordinateSpecs()");
 	} catch (e) {
 		console.log(e);
 	}
@@ -441,11 +390,7 @@ function createPropertySpecs() {
 
 	try {
 		setModel();
-		if (hostApplication === photoshop)
-			evalScript("$.specctrPsProperties.createPropertySpecsForItem()");
-		else
-			evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()");
-
+		evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()");
 	} catch (e) {
 		console.log(e);
 	}
@@ -459,39 +404,48 @@ function exportCss() {
 
 	try {
 		setModel();
-		if (hostApplication === photoshop)
-			evalScript("$.specctrPsExportCss.exportCss()");
-		else
-			evalScript("$.specctr" + hostApplication + "." + "exportCss()");
-			
-
+		evalScript("$.specctr" + hostApplication + "." + "exportCss()");
 	} catch (e) {
 		console.log(e);
 	}
 }
 
 /**
- * Apply the model's font value to the font list of fourth tab.
+ * Callback function which takes the font list from jsx and 
+ * load the list to the font combo-box of fourth tab.
+ * @param result {string} List of font families.
  */
-function applyFontToList() {
-	// Get font combo-box handler.
-	var fontListHandler = document.getElementById("lstFont"); 
+function loadFontsToList(result) {
+	try {
+		
+		var font = JSON.parse(result);
+		var fontLength = font.length;
+		var fontPos = -1; 
+		var fontListHandler = document.getElementById("lstFont");
 
-	// Select the font if the index text value matches with the legendFont.
-	if (fontListHandler.options[model.legendFontIndex].text == model.legendFont) {
-		fontListHandler.options[model.legendFontIndex].selected = true;
-		return;
-	}
-
-	var listLength = fontListHandler.options.length;
-
-	// Select the font from the legendFont value and apply it.
-	for (var i = 0; i < listLength; i++) {
-		if (fontListHandler.options[i].text == model.legendFont) {
-			model.legendFontIndex = i;
-			fontListHandler.options[i].selected = true;
-			break;
+		// Set the font list to combo-box.
+		for (var i = 0; i < fontLength; i++) {
+			var option = document.createElement("option");
+			option.text = font[i].font;
+			option.value = i;
+			fontListHandler.add(option, i);
+			if(option.text == model.legendFont)
+				fontPos = i;
 		}
+
+		if(fontPos == -1) {
+			// Select the font from the legendFont value and apply it.
+			for (i = 0; i < fontLength; i++) {
+				if (fontListHandler.options[i].text.indexOf("Arial") >= 0) {
+					fontPos = i;
+					break;
+				}
+			}
+		}
+
+		fontListHandler.options[fontPos].selected = true;
+	} catch (e) {
+		console.log(e);
 	}
 }
 

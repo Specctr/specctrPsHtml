@@ -31,7 +31,6 @@ var model = {
 
 	//legend settings
 	legendFont: 			'ArialMT',
-	legendFontIndex:		0,
 	legendFontSize:			12,
 	legendColorObject:		'#FF0000',
 	legendColorType:		'#FF0000',
