@@ -303,8 +303,25 @@ Array.prototype.pushOnce = function(obj)
 //~     app.eventListeners.add("afterSelectionAttributeChanged", $.specctrId.myEventHandlerWrapper,undefined,{name:"_specctrAttrChanged"});
    
 $.specctrId = {
-    //Get the application font's name and font's family.
+    //Get the application font's name and font's family and add event listener for indesign.
     getFontList : function() {
+        
+        //Add event listener for indesign.
+        var xLib = null;
+        var plugExternalLib = File(File($.fileName).parent.parent).fullName+"/lib/PlugPlugExternalObject.dll";
+        try {
+            var xLib = new ExternalObject("lib:"+ plugExternalLib);
+        } catch (e) {
+            alert(e);
+        }
+        app.addEventListener("afterSelectionAttributeChanged", $.specctrId.myEventHandlerWrapper, false);
+        
+        // Set Indesign default units.
+        with(app.scriptPreferences) {
+            measurementUnit = MeasurementUnits.POINTS;
+        }
+    
+        //Get application font info.
         var font = app.fonts.everyItem().getElements().slice(0);
         var appFontLength = font.length;
         var result = [];
@@ -325,12 +342,9 @@ $.specctrId = {
 
     //Get the updated value of UI's component from html file.
     setModel : function(currModel) {
-        with(app.scriptPreferences) {
-            measurementUnit = MeasurementUnits.POINTS;
-        }
         model = JSON.parse(currModel);
     },
-    
+
     createCanvasBorder : function(){
         app.doUndoableScript (this.createCanvas(), "Create Canvas Border");
     },
@@ -2089,348 +2103,254 @@ getSpecsInfoForItem : function(pageItem,itemType)
         return result;
     },
 
-myEventHandlerWrapper : function(myEvent)
-{
-    
-        if(!app.selection.length) return;
-        //check if it's undo effect, then undo once again
-
-        
+    myEventHandlerWrapper : function(myEvent) {
+        if(!app.selection.length) 
+            return;
+                
         //check if there's no need to update and return
-         var selectedItems = app.selection;
+        var selectedItems = app.selection;
         var needsUpdate = false;
-            for (var s=0; s<selectedItems.length; s++)
-                        try{
-                            var type = selectedItems[s].extractLabel("specctrType");
-                            if(type=="specctrSpecSource" || type=="specctrInfoCircle" || type=="specctrInfoArm" || type=="specctrInfoSpec" || type == "specctrInfoGroup")
-                            {
-                                var prevCoords =  selectedItems[s].extractLabel("specctrCoords");
-                                var currCoords = selectedItems[s].geometricBounds;
-                                if(prevCoords != currCoords.join("|")) {needsUpdate = true; break;}
-                            }
-                        }catch(e){}
-          
-        
-        if(needsUpdate) 
-        {
-        
-        app.doUndoableScript (myEventHandler, "Update Specs");
-        
+        for (var s=0; s < selectedItems.length; s++)
+            try{
+                var type = selectedItems[s].extractLabel("specctrType");
+                if(type=="specctrSpecSource" || type=="specctrInfoCircle" || type=="specctrInfoArm" 
+                    || type=="specctrInfoSpec" || type == "specctrInfoGroup") {
+                        var prevCoords =  selectedItems[s].extractLabel("specctrCoords");
+                        var currCoords = selectedItems[s].geometricBounds;
+                if(prevCoords != currCoords.join("|")) {
+                    needsUpdate = true; 
+                    break;
+                }
+            }
+        } catch(e) {}
+
+        if(needsUpdate) {
+            app.doUndoableScript ($.specctrId.myEventHandler, "Update Specs");
         }
         
-},
+    },
 
- addListener : function()
-{
-//alert("added");
- //  try{app.eventListeners.add("afterSelectionAttributeChanged", myEventHandlerWrapper,undefined,{name:"_specctrAttrChanged"});}catch(e){}
-},
+    addListener : function() {
+        //alert("added");
+        //  try{app.eventListeners.add("afterSelectionAttributeChanged", myEventHandlerWrapper,undefined,{name:"_specctrAttrChanged"});}catch(e){}
+    },
 
-removeListener : function()
-{
-//alert("removed");
-   //  try{app.eventListeners.itemByName("_specctrAttrChanged").remove(); }catch(e){}
+    removeListener : function() {
+        //alert("removed");
+        //  try{app.eventListeners.itemByName("_specctrAttrChanged").remove(); }catch(e){}
+    },
 
-},
+    myEventHandler : function() {
+        //NB for live update: 
+        //1 - recreate specs according to saved model settings
+        //2 - recreate spec only if it exists, i.e. if height spec is missing don't redraw it
+        //3 optimize search for items - do it in one run and think about cache
+        //if update is from button - recreate specs according to current model settings, no need to check which ones exist or not
 
-myEventHandler : function()
-{
-
-    //NB for live update: 
-    //1 - recreate specs according to saved model settings
-    //2 - recreate spec only if it exists, i.e. if height spec is missing don't redraw it
-    //3 optimize search for items - do it in one run and think about cache
-    
-    //if update is from button - recreate specs according to current model settings, no need to check which ones exist or not
-
-        try{
-						
-            var currSpread = this.getCurrentSpread();
-            var currPage = this.getCurrentPage();
+        try {
+            var currSpread = $.specctrId.getCurrentSpread();
+            var currPage = $.specctrId.getCurrentPage();
             
-			//collect ids of selected objects
-			var ids = [];
+            //collect ids of selected objects
+            var ids = [];
             var selectedItems = app.selection;
 
             for (var s=0; s<selectedItems.length; s++)
-                        try{
-                            var type = selectedItems[s].extractLabel("specctrType");
-                            if(type=="specctrSpecSource") {ids.pushOnce(selectedItems[s].id); continue;}
-                            if(type=="specctrInfoCircle" || type=="specctrInfoArm" || type=="specctrInfoSpec" || type=="specctrInfoGroup")
-                            {var id =  selectedItems[s].extractLabel("specctrSourceId");
-                                ids.pushOnce(id);
-                            }
-                        }catch(e){}
+                try{
+                    var type = selectedItems[s].extractLabel("specctrType");
+                    if(type=="specctrSpecSource") {ids.pushOnce(selectedItems[s].id); continue;}
+                    if(type=="specctrInfoCircle" || type=="specctrInfoArm" || type=="specctrInfoSpec" || type=="specctrInfoGroup")
+                    {var id =  selectedItems[s].extractLabel("specctrSourceId");
+                        ids.pushOnce(id);
+                    }
+                }catch(e){}
 
 
-			for(var j=0;j<ids.length;j++)
-			{
-				var currId = ids[j];
-				var source = currSpread.findItemByID(currId);
+            for(var j=0;j<ids.length;j++) {
+                var currId = ids[j];
+                var source = currSpread.findItemByID(currId);
                 var pageItem = source; //refactor
-                
-
-                
                 //property spec update
-                var itemType = this.pageItemType(pageItem);
-			var legendLayer;
-			var newColor;
+                var itemType = $.specctrId.pageItemType(pageItem);
+                var legendLayer;
+                var newColor;
             
-                if(itemType=="text") 
-                {
-                    newColor = this.legendColorType();
-                    legendLayer = this.legendTextPropertiesLayer();
-                 }
-                else 
-                {
-                    newColor = this.legendColorObject();
-                     legendLayer = this.legendObjectPropertiesLayer();
+                if(itemType=="text") {
+                    newColor = $.specctrId.legendColorType();
+                    legendLayer = $.specctrId.legendTextPropertiesLayer();
+                 } else {
+                    newColor = $.specctrId.legendColorObject();
+                    legendLayer = $.specctrId.legendObjectPropertiesLayer();
                 }
-            
-            
-        var allRelatedItems =  currSpread.findRelatedBySourceId(pageItem.id);        
+                
+                var allRelatedItems =  currSpread.findRelatedBySourceId(pageItem.id);        
+                if(allRelatedItems["specctrInfoGroup"]) 
+                    allRelatedItems["specctrInfoGroup"].ungroup();
+                
+                var spec = allRelatedItems["specctrInfoSpec"];
+                var arm = allRelatedItems["specctrInfoArm"];
+                var itemCircle = allRelatedItems["specctrInfoCircle"];
 
-                if(allRelatedItems["specctrInfoGroup"]) allRelatedItems["specctrInfoGroup"].ungroup();
-                
-                             var spec = allRelatedItems["specctrInfoSpec"];
-             var arm = allRelatedItems["specctrInfoArm"];
-			var itemCircle = allRelatedItems["specctrInfoCircle"];
-                
-                
                 //coords specs       
-                
-       if(source)    
-       for(var prop in coordSpecsObj)
-       {
-        if(allRelatedItems[prop])
-        {
-        this.createCoordinateSpecsForItem(pageItem,true,allRelatedItems);
-        break;
-        }
-       }
+                if (source)    
+                    for(var prop in coordSpecsObj) {
+                        if(allRelatedItems[prop]) {
+                            $.specctrId.createCoordinateSpecsForItem(pageItem,true,allRelatedItems);
+                            break;
+                        }
+                    }
 
+                //dimension specs
+                if(source)    
+                    for(var prop in dimSpecsObj) {
+                        if(allRelatedItems[prop]) {
+                            $.specctrId.createDimensionSpecsForItem (pageItem, true, allRelatedItems);
+                            break;
+                        }
+                    }
 
-//dimension specs
-            
-      if(source)    
-       for(var prop in dimSpecsObj)
-       {
-        if(allRelatedItems[prop])
-        {
-        this.createDimensionSpecsForItem (pageItem, true, allRelatedItems);
-        break;
-        }
-       }
-   
-
-            //single spacing specs
+                //single spacing specs
+                if(source)    
+                    for(var prop in spacingSingleSpecsObj) {
+                        if(allRelatedItems[prop]) {
+                            $.specctrId.createSpacingSpecsForItem (pageItem, true, allRelatedItems);
+                            break;
+                        }
+                   }
                
-        if(source)    
-       for(var prop in spacingSingleSpecsObj)
-       {
-        if(allRelatedItems[prop])
-        {
-        this.createSpacingSpecsForItem (pageItem, true, allRelatedItems);
-        break;
-        }
-       }
-               
-               //double spacing specs
+                //double spacing specs
                 //rework this, include search into allRelatedItems
-               if(source)
-               {
-               var sources = currSpread.existDoubleSpacingSpecBySourceIdAndTypes(pageItem.id, spacingDoubleSpecsObj);
-
-               for(var s=0;s<sources.length;s++)
-               this.createSpacingSpecsForItems (pageItem,sources[s], true);
-               }
+                if(source) {
+                    var sources = currSpread.existDoubleSpacingSpecBySourceIdAndTypes(pageItem.id, spacingDoubleSpecsObj);
+                    for(var s=0;s<sources.length;s++)
+                        $.specctrId.createSpacingSpecsForItems (pageItem,sources[s], true);
+                }
                
-           
-				if(source && spec) 
-				{
-				   
-					var aItem = source;
-					var bItem = spec;
+                if(source && spec) {
+                    var aItem = source;
+                    var bItem = spec;
+                    var aBounds = $.specctrId.itemCoords(aItem);
+                    var bBounds = $.specctrId.itemCoords(bItem);
+                    var bX = bBounds.x2;
+                    var bY = bBounds.y1 - model.armWeight/2;
+                    var centerX = bBounds.center.x;
+                    var sourceCenterX = aBounds.center.x;
 					
-					var aBounds = this.itemCoords(aItem);
-					var bBounds = this.itemCoords(bItem);
-					
-					
-					var bX = bBounds.x2;
-					var bY = bBounds.y1 - model.armWeight/2;
-					
-					var centerX = bBounds.center.x;
-                      var sourceCenterX = aBounds.center.x;
-					
-					var artRect = currPage.bounds;
-                       var artboardCenterX = artRect[1]/2+artRect[3]/2;
-					
+                    var artRect = currPage.bounds;
+                    var artboardCenterX = artRect[1]/2+artRect[3]/2;
 				
-					if(bBounds.x2<=sourceCenterX && spec.parentStory.justification != Justification.LEFT_ALIGN)
-					{						
-						spec.parentStory.justification = Justification.LEFT_ALIGN;
-                         spec.parentStory.recompose();
-					}
-					else
-                      if (bBounds.x1>=sourceCenterX  && spec.parentStory.justification != Justification.RIGHT_ALIGN)
-					{					
-						spec.parentStory.justification = Justification.RIGHT_ALIGN;
+                    if(bBounds.x2<=sourceCenterX && spec.parentStory.justification != Justification.LEFT_ALIGN) {						
+                        spec.parentStory.justification = Justification.LEFT_ALIGN;
                         spec.parentStory.recompose();
-					}
+                    } else if (bBounds.x1>=sourceCenterX  && spec.parentStory.justification != Justification.RIGHT_ALIGN) {					
+                        spec.parentStory.justification = Justification.RIGHT_ALIGN;
+                        spec.parentStory.recompose();
+                    }
 					
-                     if( spec.parentStory.justification == Justification.RIGHT_ALIGN) 
+                    if( spec.parentStory.justification == Justification.RIGHT_ALIGN) 
                         bX=bBounds.x1; //?
                         
-					//centers
-					var aX = aBounds.x1;
-					var aY = aBounds.center.y;
-					var aXC= aBounds.center.x;
-							
-					if(bX>=aBounds.x1 && bX<=aBounds.x2) 
-					{
-						aX=aXC;
-						if (bY>aBounds.y2) {aY=aBounds.y2;} else {aY=aBounds.y1;}
-					}
-					else if(bX>aBounds.x2)
-					{
-						aX=aBounds.x2;
-					}
-					
-					var dX=aX-bX;
-					var dY=aY-bY;
-					
-					
-					
-					var originalBX = undefined;
-					
-					if(dX>armPartLength) 
-					{
-						originalBX=bX;
-						//bX+=armPartLength;
-						dX+=armPartLength;
-					}else
-					if(dX<-armPartLength)
-					{
-						originalBX=bX;
-						//bX-=armPartLength;
-						dX-=armPartLength;
-						
-					}
-					
-					if(dX==0) dX=1;
-					if(dY==0) dY=1;
-					
-					var aTg = dY/dX;
-					var aCtg = dX/dY;
-                    var gipotenuzaLen  = Math.sqrt(dX*dX+dY*dY);
-					var aCos = dX/gipotenuzaLen;
-					var aSin = dY/gipotenuzaLen;
-                    
-                    //refactor it
-                   var pageItemBounds = aBounds;
-                   var  specBounds = bBounds;
-                     
-                     //arm update
-                      var armX1 = aX;
-                 var armX2 = bX;
+                    //centers
+                    var aX = aBounds.x1;
+                    var aY = aBounds.center.y;
+                    var aXC= aBounds.center.x;
 
-                var armDX = Math.abs(armX1-armX2);
-                var dx = armPartLength;
-                if(armX1<armX2) dx=-dx;
+                    if(bX>=aBounds.x1 && bX<=aBounds.x2) {
+                        aX=aXC;
+                        if (bY>aBounds.y2) {aY=aBounds.y2;} else {aY=aBounds.y1;}
+                    } else if(bX>aBounds.x2) {
+                        aX=aBounds.x2;
+                    }
+
+                    var dX=aX-bX;
+                    var dY=aY-bY;
+                    var originalBX = undefined;
+                    if(dX>armPartLength) {
+                        originalBX=bX;
+                        //bX+=armPartLength;
+                        dX+=armPartLength;
+                    } else if (dX<-armPartLength) {
+                        originalBX=bX;
+                        //bX-=armPartLength;
+                        dX-=armPartLength;
+                    }
 					
-                   
-	   if(!arm)
-             {
-                  
-               arm = currPage.graphicLines.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"None", strokeColor:newColor , geometricBounds:[specBounds.y1,armX2,aY,armX1]});
-                
-                
-                
-               arm.insertLabel("specctrSourceId",pageItem.id.toString());
-               arm.insertLabel("specctrType","specctrInfoArm");
-               
-          //      pageItem.insertLabel("specctrInfoArm",arm.id.toString());
-            }
-        
-   //     arm.locked = false;
-             if (armDX<armPartLength*1.3)
-                {
-                     arm.paths[0].entirePath = [[armX2,specBounds.y1],[armX1,aY]];
-                 }
-                else
-                {        
-                    arm.paths[0].entirePath =[[armX2,specBounds.y1],[armX2+dx,specBounds.y1],[armX1,aY]];
+                    if(dX==0) dX=1;
+                    if(dY==0) dY=1;
+                    var aTg = dY/dX;
+                    var aCtg = dX/dY;
+                    var gipotenuzaLen  = Math.sqrt(dX*dX+dY*dY);
+                    var aCos = dX/gipotenuzaLen;
+                    var aSin = dY/gipotenuzaLen;
+
+                    //refactor it
+                    var pageItemBounds = aBounds;
+                    var  specBounds = bBounds;
+
+                    //arm update
+                    var armX1 = aX;
+                    var armX2 = bX;
+                    var armDX = Math.abs(armX1-armX2);
+                    var dx = armPartLength;
+                    if(armX1<armX2) dx=-dx;
+
+                    if(!arm) {
+                        arm = currPage.graphicLines.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"None", strokeColor:newColor , geometricBounds:[specBounds.y1,armX2,aY,armX1]});
+                        arm.insertLabel("specctrSourceId",pageItem.id.toString());
+                        arm.insertLabel("specctrType","specctrInfoArm");
+                        //      pageItem.insertLabel("specctrInfoArm",arm.id.toString());
+                    }
+                    //     arm.locked = false;
+                    if (armDX<armPartLength*1.3) {
+                        arm.paths[0].entirePath = [[armX2,specBounds.y1],[armX1,aY]];
+                    } else {        
+                        arm.paths[0].entirePath =[[armX2,specBounds.y1],[armX2+dx,specBounds.y1],[armX1,aY]];
                     }
                 
-        //    arm.locked = true;
-            
-            
-			var circleD = this.circleDiameter(model.armWeight);
+                    //    arm.locked = true;
+                    var circleD = $.specctrId.circleDiameter(model.armWeight);
 			
-			if (!itemCircle) 
-            {
-                
-             
-                    itemCircle = currPage.ovals.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"Paper", strokeColor:newColor , geometricBounds:[aY-circleD/2,aX-circleD/2,aY+circleD/2,aX+circleD/2]});
-             
-            
-            itemCircle.insertLabel("specctrSourceId",pageItem.id.toString());
-		   itemCircle.insertLabel("specctrType","specctrInfoCircle");
-         //  itemCircle.locked = true;
-        //   pageItem.insertLabel("specctrInfoCircle",itemCircle.id.toString());
+                    if (!itemCircle) {
+                        itemCircle = currPage.ovals.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"Paper", strokeColor:newColor , geometricBounds:[aY-circleD/2,aX-circleD/2,aY+circleD/2,aX+circleD/2]});
+                        itemCircle.insertLabel("specctrSourceId",pageItem.id.toString());
+                        itemCircle.insertLabel("specctrType","specctrInfoCircle");
+                         //  itemCircle.locked = true;
+                        //   pageItem.insertLabel("specctrInfoCircle",itemCircle.id.toString());
          
-         /*
-			if(sourceItem.typename=="TextFrame")
-			itemCircle.filled = true;
-			else itemCircle.filled = false;
-			*/
-			
-			}
-        else
-        {
-   //          itemCircle.locked = false;
-             
-              itemCircle.geometricBounds=[aY-circleD/2,aX-circleD/2,aY+circleD/2,aX+circleD/2];
+                         /*if(sourceItem.typename=="TextFrame")
+                                        itemCircle.filled = true;
+                                        else itemCircle.filled = false;
+                                */
+                    } else {
+                        //          itemCircle.locked = false;
+                        itemCircle.geometricBounds=[aY-circleD/2,aX-circleD/2,aY+circleD/2,aX+circleD/2];
+                        //    itemCircle.locked = true;
+                    }
+                }
+                if(itemType=="text") {
+                    itemCircle.fillColor = newColor;            
+                } else {
+                    itemCircle.fillColor = "Paper"; //change to none?
+                }
 
-         //    itemCircle.locked = true;
-         }
+                arm.strokeColor = newColor;
+                itemCircle.strokeColor = newColor;
+                spec.parentStory.fillColor = newColor;
+                arm.insertLabel("specctrCoords",arm.geometricBounds.join("|"));
+                itemCircle.insertLabel("specctrCoords",itemCircle.geometricBounds.join("|"));
+                spec.insertLabel("specctrCoords",spec.geometricBounds.join("|"));
+                pageItem.insertLabel("specctrCoords",pageItem.geometricBounds.join("|"));
         
+                var  specGroup = currPage.groups.add([spec,itemCircle,arm],legendLayer,undefined,undefined,{name:"Specctr Properties Mark"});
+                specGroup.insertLabel("specctrSourceId",pageItem.id.toString());
+                specGroup.insertLabel("specctrType","specctrInfoGroup");
+                specGroup.insertLabel("specctrCoords",specGroup.geometricBounds.join("|"));
+            }//for id end
+        } catch(e) {}    
         
-
-				}
-				
-                
-        if(itemType=="text")  
-        {
-            itemCircle.fillColor = newColor;            
-        }
-        else         
-        {
-            itemCircle.fillColor = "Paper"; //change to none?
-        }
-    
-        arm.strokeColor = newColor;
-        itemCircle.strokeColor = newColor;
-        spec.parentStory.fillColor = newColor;
-    
-            arm.insertLabel("specctrCoords",arm.geometricBounds.join("|"));
-        itemCircle.insertLabel("specctrCoords",itemCircle.geometricBounds.join("|"));
-        spec.insertLabel("specctrCoords",spec.geometricBounds.join("|"));
-        pageItem.insertLabel("specctrCoords",pageItem.geometricBounds.join("|"));
-        
-                              var  specGroup = currPage.groups.add([spec,itemCircle,arm],legendLayer,undefined,undefined,{name:"Specctr Properties Mark"});
-                        specGroup.insertLabel("specctrSourceId",pageItem.id.toString());
-                        specGroup.insertLabel("specctrType","specctrInfoGroup");
-                   specGroup.insertLabel("specctrCoords",specGroup.geometricBounds.join("|"));
-            
-			}//for id end
-
-
-
-			}catch(e){}    
-          //  logTime("end");
+        //  logTime("end");
         return true;
-},
+    },
 
     circleDiameter : function(strokeWidth) {
         return Math.max(3, strokeWidth * 2 + 3);
