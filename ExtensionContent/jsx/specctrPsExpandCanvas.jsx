@@ -41,7 +41,7 @@ $.specctrPsExpandCanvas = {
                 if(backgroundLayer)
                     this.lyrIntoBckgrndLyr();                                     //Add layer and convert it into background layer.
                 
-                this.drawDashBorder();                                       //Create the dashed border.
+                var borderLayer = this.drawDashBorder();                                       //Create the dashed border.
                 doc = app.activeDocument;
                 
                 try {
@@ -52,6 +52,21 @@ $.specctrPsExpandCanvas = {
             
             doc.resizeCanvas(width + 2*model.canvasExpandSize, 
                                         height + 2*model.canvasExpandSize, AnchorPosition.MIDDLECENTER);     // Expanding the canvas.
+            
+            //Store border width in metadata.
+            var layerXMP;
+            try {
+                layerXMP = new XMPMeta(borderLayer.xmpMetadata.rawData);			// get the object
+            } catch(errMsg) {
+                layerXMP = new XMPMeta();			// layer did not have metadata so create new
+            }
+
+            try {
+                layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, "borderWidth", null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
+                layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, "borderWidth", 1, Math.ceil(model.armWeight).toString ());
+                borderLayer.xmpMetadata.rawData = layerXMP.serialize();
+            } catch(e) {}
+            
         } catch(e) {
             alert(e);
         }
@@ -194,6 +209,7 @@ $.specctrPsExpandCanvas = {
         desc.putEnumerated(idstrokeStyleLineCapType, idstrokeStyleLineCapType, stringIDToTypeID("strokeStyleButtCap"));
         desc.putEnumerated(idstrokeStyleLineJoinType, idstrokeStyleLineJoinType, stringIDToTypeID("strokeStyleMiterJoin"));
         desc.putEnumerated(idstrokeStyleLineAlignment, idstrokeStyleLineAlignment, stringIDToTypeID("strokeStyleAlignCenter"));
+        desc.putEnumerated( idstrokeStyleLineAlignment, idstrokeStyleLineAlignment, stringIDToTypeID( "strokeStyleAlignOutside" ) );
         desc.putBoolean(stringIDToTypeID("strokeStyleScaleLock"), false);
         desc.putBoolean(stringIDToTypeID("strokeStyleStrokeAdjust"), false);
             
@@ -222,5 +238,7 @@ $.specctrPsExpandCanvas = {
         doc.activeLayer.move(doc.layers[0] , ElementPlacement.PLACEBEFORE);
         doc.activeLayer.name =  "Specctr Canvas Border";
         doc.activeLayer.allLocked = true;
+        
+        return doc.activeLayer;
     }
 };
