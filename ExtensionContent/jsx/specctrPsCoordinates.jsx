@@ -82,19 +82,22 @@ $.specctrPsCoordinates = {
 
             var font = model.legendFont;
             var newColor = $.specctrPsCommon.legendColor(model.legendColorSpacing);
-            var left = "", top = "", right = "", bottom = "";
+            var orgnlCanvas = $.specctrPsCommon.originalCanvasSize();       //Get the original canvas size.
+            var left = bounds[0] - orgnlCanvas[0];
+            var top = bounds[1] - orgnlCanvas[1];
+            var right = bounds[2] - orgnlCanvas[0];
+            var bottom = bounds[3] - orgnlCanvas[1];
             
             //Responsive option selected or not.
             if(!model.specInPrcntg) {
                 //Absolute distance.
-                top = $.specctrPsCommon.pointsToUnitsString(bounds[1], startRulerUnits).split(" ", 1);
-                left = $.specctrPsCommon.pointsToUnitsString(bounds[0], startRulerUnits).split(" ", 1);
-                right = $.specctrPsCommon.pointsToUnitsString(bounds[2], startRulerUnits).split(" ", 1);
-                bottom = $.specctrPsCommon.pointsToUnitsString(bounds[3], startRulerUnits).split(" ", 1);
+                top = $.specctrPsCommon.pointsToUnitsString(top, startRulerUnits).split(" ", 1);
+                left = $.specctrPsCommon.pointsToUnitsString(left, startRulerUnits).split(" ", 1);
+                right = $.specctrPsCommon.pointsToUnitsString(right, startRulerUnits).split(" ", 1);
+                bottom = $.specctrPsCommon.pointsToUnitsString(bottom, startRulerUnits).split(" ", 1);
             } else {
                 //Relative distance with respect to original canvas.
                 var relativeHeight='', relativeWidth='';
-                var orgnlCanvas = $.specctrPsCommon.originalCanvasSize();       //Get the original canvas size.
                 if(model.relativeHeight != 0)
                     relativeHeight = model.relativeHeight;
                 else

@@ -258,13 +258,20 @@ $.specctrPsCommon = {
 
     //Get the original size of canvas.
     originalCanvasSize : function() {
+        var bounds; 
         var border = this.canvasBorder();
         if(border === undefined) {
-            var bounds = [0, 0, app.activeDocument.width, app.activeDocument.height];
-            return bounds;
+            bounds = [0, 0, app.activeDocument.width, app.activeDocument.height];
         } else {
-            return border.bounds;
+            //Get stored border width from metadata. 
+            var armWeight = Number(this.getXMPData(border, "borderWidth"));
+            bounds = border.bounds; 
+            bounds[0] += armWeight; 
+            bounds[1] += armWeight; 
+            bounds[2] -= armWeight; 
+            bounds[3] -= armWeight; 
         }
+        return bounds;
     },
 
     //Get the reference of the border, if it is already present.
