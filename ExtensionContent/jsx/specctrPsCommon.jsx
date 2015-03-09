@@ -339,67 +339,32 @@ $.specctrPsCommon = {
         ref.putEnumerated( charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
         return(executeActionGet(ref).getInteger(charIDToTypeID( "LyrI" )));
     },
-    
-     //Store the current number of properties spec in the XMPMetadata of the document.
-    setXmpDataOfDoc : function(doc, noOfSpec) {
-        var layerXMP;
-        try {
-            layerXMP = new XMPMeta(doc.xmpMetadata.rawData);			// get the object
-        } catch(errMsg) {
-            layerXMP = new XMPMeta();			// layer did not have metadata so create new
-        }
-
-        try {
-            layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, "noOfSpec", null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-            layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, "noOfSpec", 1, noOfSpec.toString());
-            doc.xmpMetadata.rawData = layerXMP.serialize();
-        } catch(errMsg) {}
-    },
 
     //Set the XMPMetadata to the active layer.
-    setXmpDataOfLayer : function(activeLayer, idLayer, idSpec,  number) {
-        var layerXMP;
-        try {
-            layerXMP = new XMPMeta(activeLayer.xmpMetadata.rawData);			// get the object
-        } catch(errMsg) {
-            layerXMP = new XMPMeta();			// layer did not have metadata so create new
+    setXmpDataOfLayer : function(data) {
+        var layer, layerXMP;
+        var noOfLayers = data.length;
+        var propertyName, value, noOfProperties;
+        
+        for (var i = 0; i < noOfLayers; i++) {
+            layer = data[i].layerHandler;
+            noOfProperties = data[i].properties.length;
+            try {
+                layerXMP = new XMPMeta(layer.xmpMetadata.rawData);
+            } catch(e) {
+                layerXMP = new XMPMeta();	// layer did not have metadata so create new.
+            }
+
+            for (var k = 0; k < noOfProperties; k++) {
+                try {
+                    propertyName = data[i].properties[k].name;
+                    value = data[i].properties[k].value;
+                    layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, propertyName, null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
+                    layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, propertyName, 1, value.toString());
+                } catch(e) {}
+            }
+            layer.xmpMetadata.rawData = layerXMP.serialize();
         }
-
-        try {
-            
-            if (idLayer) {
-                layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, "idLayer", null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-                layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, "idLayer", 1, idLayer.toString());
-            }
-
-            if(idSpec) {
-                layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, "idSpec", null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-                layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, "idSpec", 1, idSpec.toString());
-            }
-
-            if (number) {
-                layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, "number", null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-                layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, "number", 1, number.toString());
-            }
-            
-            activeLayer.xmpMetadata.rawData = layerXMP.serialize();
-        } catch(e) {}
-    },
-
-    //Set XMPMetadata for specced Object.
-    setXmpDataForSpec : function(activeLayer, value, specString) {
-        var layerXMP;
-        try {
-            layerXMP = new XMPMeta(activeLayer.xmpMetadata.rawData);
-        } catch(e) {
-            layerXMP = new XMPMeta();			// layer did not have metadata so create new
-        }
-
-        try {
-            layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, specString, null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-            layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, specString, 1, value.toString());
-            activeLayer.xmpMetadata.rawData = layerXMP.serialize();
-        } catch(e){}
     },
 
     //Select the layers on name basis.
@@ -518,8 +483,14 @@ $.specctrPsCommon = {
 
         if(isNewBullet) {
             number = parseInt(number) + 1;
-            this.setXmpDataOfLayer(artLayer, null, null, number);   //Store only number and keep idLayer and idSpec same to art layer.
-            this.setXmpDataOfDoc(doc, number);
+            var xmpData = [{layerHandler : artLayer, 
+                                    properties : [{name : "number", value : number}]
+                                    }, 
+                                    {layerHandler : doc,
+                                        properties : [{name : "noOfSpec", value : number}]
+                                    }];
+            
+            this.setXmpDataOfLayer(xmpData);
         }
         return parseInt(number);
     },

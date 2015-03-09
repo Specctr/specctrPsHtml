@@ -161,12 +161,24 @@ $.specctrPsProperties = {
                 arm.name = "__sArm";
                 spec.link(arm);
             }
-
-            $.specctrPsCommon.setXmpDataOfLayer(artLayer, idLayer, idSpec);
-            $.specctrPsCommon.setXmpDataOfLayer(legendLayer, idLayer, idSpec);
+        
             if(cssText === "")
                 cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
-            $.specctrPsCommon.setXmpDataForSpec(spec, cssText, "css");
+            
+             var xmpData = [{layerHandler : legendLayer, 
+                                    properties : [{name : "idLayer", value : idLayer}, 
+                                                        {name : "idSpec", value : idSpec}]
+                                    }, 
+                                    {layerHandler : artLayer,
+                                        properties : [{name : "idLayer", value : idLayer}, 
+                                                            {name : "idSpec", value : idSpec}]
+                                    },
+                                    {layerHandler : spec,
+                                        properties : [{name : "css", value : cssText}]
+                                    }
+                                ];
+
+            $.specctrPsCommon.setXmpDataOfLayer(xmpData);
 
         } catch(e) {alert(e);}
 
@@ -295,8 +307,12 @@ $.specctrPsProperties = {
             if(cssText == "")
                 cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
 
+            var xmpData = [{layerHandler : spec,
+                                        properties : [{name : "css", value : cssText}]
+                                    }
+                                ];
             // Set Xmp metadata for spec and bullet.
-            $.specctrPsCommon.setXmpDataForSpec(spec, cssText, "css");
+            $.specctrPsCommon.setXmpDataOfLayer(xmpData);
         } catch(e) {alert(e);}
 
         doc.activeLayer = artLayer;

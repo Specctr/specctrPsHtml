@@ -113,13 +113,13 @@ $.specctrPsExportCss = {
             try {
                 var objectSpec = objectSpecGroup.layerSets[noOfObjectSpecLayerGroups - 1].artLayers.getByName("Specs");
                 var text = $.specctrPsCommon.getXMPData(objectSpec, "css");
-                
+
                 if(noOfDimensionSpecs)
                     text = this.addSpecsStyleTextToCss(objectSpec, text, dimensionSpecsInfo);
-                
+
                 if(noOfCoordinateSpecs)
                     text = this.addSpecsStyleTextToCss(objectSpec, text, coordinateSpecsInfo);
-                    
+
                 styleText += text + "\r\r";
             } catch(e) {}
 
@@ -160,17 +160,17 @@ $.specctrPsExportCss = {
 
     //Add coordinate or width/height style text into css file.
     addSpecsStyleTextToCss : function(spec, text, specsInfo) {
-        var idLayer = $.specctrPsCommon.getXMPData(spec, "idLayer");
+        var idLayer = $.specctrPsCommon.getXMPData(spec.parent, "idLayer");
         var specCssText = "";
         var noOfSpecs = specsInfo.length;
-        
+
         for(var i = 0; i < noOfSpecs; i++) {
             if(specsInfo[i].idLayer == idLayer) {
                 specCssText = specsInfo[i].styleText;
                 break;
             }
         }
-                    
+
         if(specCssText)
             text = text.replace("}", specCssText + "\r}");
         

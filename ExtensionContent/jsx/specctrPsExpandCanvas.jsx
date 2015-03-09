@@ -57,21 +57,15 @@ $.specctrPsExpandCanvas = {
                                         height + 2*model.canvasExpandSize, AnchorPosition.MIDDLECENTER);     // Expanding the canvas.
             
             //Store border width in metadata. 
-            var layerXMP; 
-            try { 
-                layerXMP = new XMPMeta(borderLayer.xmpMetadata.rawData);			// get the object 
-            } catch(errMsg) { 
-                layerXMP = new XMPMeta();			// layer did not have metadata so create new 
-            } 
+            var xmpData = [{layerHandler : borderLayer, 
+                                        properties : [{name : "borderWidth", value : Math.ceil(model.armWeight).toString ()}]
+                                    }
+                                ];
 
-            try { 
-                layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, "borderWidth", null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED); 
-                layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, "borderWidth", 1, Math.ceil(model.armWeight).toString ()); 
-                borderLayer.xmpMetadata.rawData = layerXMP.serialize(); 
-            } catch(e) {} 
-
+            $.specctrPsCommon.setXmpDataOfLayer(xmpData);
+            
         } catch(e) {
-            alert("what "+e);
+            alert(e);
         }
         
         if(activeLayer)

@@ -214,15 +214,25 @@ $.specctrPsDimension = {
         idDimensionSpec = $.specctrPsCommon.getIDOfLayer();
         doc.activeLayer = artLayer;
 
+        var xmpData = [{layerHandler : artLayer, 
+                                        properties : [{name : "idDimensionSpec", value : idDimensionSpec}]
+                                    }, 
+                                    {layerHandler : spec,
+                                        properties : [{name : "SpeccedObject", value : "true"}]
+                                    }
+                                ];
+
         if(artLayer.kind != LayerKind.TEXT) {
             var idLayer = $.specctrPsCommon.getIDOfLayer();
-            $.specctrPsCommon.setXmpDataForSpec(spec, idLayer, "idLayer");
             var styleText = "\twidth: " + widthValue + ";\r\theight: " + heightValue + ";";
-            $.specctrPsCommon.setXmpDataForSpec(spec, styleText, "css");
+            var specData = {layerHandler : spec,
+                                        properties : [{name : "css", value : styleText},
+                                                            {name : "idLayer", value : idLayer}]
+                                    };
+            xmpData.push(specData);
         }
 
-        $.specctrPsCommon.setXmpDataForSpec(artLayer, idDimensionSpec, "idDimensionSpec");
-        $.specctrPsCommon.setXmpDataForSpec(spec, "true", "SpeccedObject");
+        $.specctrPsCommon.setXmpDataOfLayer(xmpData);
         $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);
     }
 

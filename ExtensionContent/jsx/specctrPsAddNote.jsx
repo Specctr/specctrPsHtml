@@ -133,10 +133,16 @@ $.specctrPsAddNote = {
             arm.name = "__sArm";
             spec.link(arm);
         }
-        var xmpData = {layers : [{reference : legendLayer}, {reference : artLayer}],
-                                  properties : [{name : "idLayer", value : idLayer}, {name : "idNote", value : noteId}]};
+        var xmpData = [{layerHandler : legendLayer, 
+                                    properties : [{name : "idLayer", value : idLayer}, 
+                                                        {name : "idNote", value : noteId}]
+                                    }, 
+                                    {layerHandler : artLayer,
+                                        properties : [{name : "idLayer", value : idLayer}, 
+                                                            {name : "idNote", value : noteId}]
+                                    }];
         
-        this.setXmpDataOfLayer(xmpData);
+        $.specctrPsCommon.setXmpDataOfLayer(xmpData);
         //this.setXmpDataOfLayer(legendLayer, idLayer, noteId);
     } catch (e) {
         alert(e);
@@ -251,31 +257,6 @@ $.specctrPsAddNote = {
         app.preferences.rulerUnits = startRulerUnits;
     },
 
-    //Set the XMPMetadata to the active layer.
-    setXmpDataOfLayer : function(data) {
-        var layer, layerXMP;
-        var noOfLayers = data.layers.length;
-        var noOfProperties = data.properties.length;
-        var propertyName, value;
-        
-        for (var i = 0; i < noOfLayers; i++) {
-            layer = data.layers[i].reference;
-            try {
-                layerXMP = new XMPMeta(layer.xmpMetadata.rawData);
-            } catch(e) {
-                layerXMP = new XMPMeta();	// layer did not have metadata so create new.
-            }
-
-            for (var k = 0; k < noOfProperties; k++) {
-                try {
-                    propertyName = data.properties[k].name;
-                    value = data.properties[k].value;
-                    layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, propertyName, null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
-                    layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, propertyName, 1, value.toString());
-                } catch(e) {}
-            }
-            layer.xmpMetadata.rawData = layerXMP.serialize();
-        }
-    }
+    
     
 };

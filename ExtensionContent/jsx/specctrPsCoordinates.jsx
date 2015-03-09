@@ -175,13 +175,20 @@ $.specctrPsCoordinates = {
             doc.activeLayer = spec;
             spec = $.specctrPsCommon.createSmartObject();
             idCoordinateSpec = $.specctrPsCommon.getIDOfLayer();
-
-            $.specctrPsCommon.setXmpDataForSpec(sourceItem, idCoordinateSpec, "idCoordinateSpec");
-            $.specctrPsCommon.setXmpDataForSpec(spec, "true", "SpeccedObject");
-            $.specctrPsCommon.setXmpDataForSpec(spec, styleText, "css");
             doc.activeLayer = sourceItem;
             var idLayer = $.specctrPsCommon.getIDOfLayer();
-            $.specctrPsCommon.setXmpDataForSpec(spec, idLayer, "idLayer");
+            
+            var xmpData = [{layerHandler : sourceItem, 
+                                        properties : [{name : "idCoordinateSpec", value : idCoordinateSpec}]
+                                    }, 
+                                    {layerHandler : spec,
+                                        properties : [{name : "SpeccedObject", value : "true"}, 
+                                                            {name : "css", value : styleText},
+                                                            {name : "idLayer", value : idLayer}]
+                                    }
+                                ];
+            $.specctrPsCommon.setXmpDataOfLayer(xmpData);
+        
         } catch(e) {
             doc.activeLayer = sourceItem;
         }

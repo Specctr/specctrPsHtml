@@ -233,9 +233,15 @@ $.specctrPsSpacing = {
         doc.activeLayer = spec;
         spec = $.specctrPsCommon.createSmartObject();
         uniqueIdOfSpec = $.specctrPsCommon.getIDOfLayer();
-        $.specctrPsCommon.setXmpDataForSpec(spec, "true", "SpeccedObject");
-        $.specctrPsCommon.setXmpDataForSpec(spec, uniqueIdOfFirstLayer, "firstLayer");
-        $.specctrPsCommon.setXmpDataForSpec(spec, uniqueIdOfSecondLayer, "secondLayer");
+        var xmpData = [{layerHandler : spec,
+                                        properties : [{name : "SpeccedObject", value : "true"}, 
+                                                            {name : "firstLayer", value : uniqueIdOfFirstLayer},
+                                                            {name : "secondLayer", value : uniqueIdOfSecondLayer}]
+                                    }
+                                ];
+
+        $.specctrPsCommon.setXmpDataOfLayer(xmpData);
+
         $.specctrPsCommon.selectLayers(artLayer1.name, artLayer2.name);
         this.setXmpDataForSpacingSpec(artLayer1, uniqueIdOfSpec, "idSpacingSpec", indexOfSpecInFirstLayerXMPArray);
         this.setXmpDataForSpacingSpec(artLayer2, uniqueIdOfSpec, "idSpacingSpec", indexOfSpecInSecondLayerXMPArray);
@@ -438,8 +444,15 @@ $.specctrPsSpacing = {
         idSpacingSpec = $.specctrPsCommon.getIDOfLayer();
 
         doc.activeLayer = artLayer;
-        $.specctrPsCommon.setXmpDataForSpec(artLayer, idSpacingSpec, "idSingleSpacingSpec");
-        $.specctrPsCommon.setXmpDataForSpec(specItemsGroup, "true", "SpeccedObject");
+        var xmpData = [{layerHandler : artLayer,
+                                        properties : [{name : "idSingleSpacingSpec", value :idSpacingSpec}]
+                                    },
+                                {layerHandler : specItemsGroup,
+                                        properties : [{name : "SpeccedObject", value :"true"}]
+                                    }
+                                ];
+
+        $.specctrPsCommon.setXmpDataOfLayer(xmpData);
         $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);      //Setting the original preferences of the document.
     },
 
