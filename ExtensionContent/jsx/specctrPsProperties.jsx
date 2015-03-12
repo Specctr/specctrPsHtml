@@ -39,13 +39,14 @@ $.specctrPsProperties = {
     //Get the property of selected layer and show it on active document.
     createPropertySpecs : function(sourceItem, bounds) {
         var doc = app.activeDocument;
+        var spacing = 10;
         var infoText;
         model = $.specctrPsCommon.getModel();
         var newColor = $.specctrPsCommon.legendColor(model.legendColorObject);
         var artLayer = sourceItem;
         var spec, idLayer, idSpec, lyr;
         var idBullet, bullet, dupBullet, idDupBullet;
-        var legendLayer;
+        var legendLayer, noteSpecBottom = bounds[1];
 
         try {
             //WARNiNG: Do Check it is specctr's specctr or any other specctr.
@@ -58,11 +59,22 @@ $.specctrPsProperties = {
         if(ExternalObject.AdobeXMPScript == null)
             ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
         
+         var noteId = $.specctrPsCommon.getXMPData(artLayer, "idNote");			//Check if metadata of the layer is already present or not.
+         if(noteId != null) {
+             var noteLegendLayer = $.specctrPsCommon.getLayerByID(noteId);
+             if(noteLegendLayer) {
+                try {
+                    var noteSpec = noteLegendLayer.artLayers.getByName("Specs");
+                    noteSpecBottom = noteSpec.bounds[3] + spacing;
+                } catch (e) {}
+            }
+         }
+     
          idSpec = $.specctrPsCommon.getXMPData(artLayer, "idSpec");			//Check if metadata of the layer is already present or not.
          if(idSpec != null) {
              legendLayer = $.specctrPsCommon.getLayerByID(idSpec);
              if(legendLayer) {
-                this.updateSpec(sourceItem, legendLayer, bounds);
+                this.updateSpec(sourceItem, legendLayer, bounds, noteSpecBottom, noteLegendLayer);
                 return;
             }
          }
@@ -109,7 +121,7 @@ $.specctrPsProperties = {
             
             var nameLength = name.length;
             infoText = "\r"+name+infoText;
-            var spacing = 10;
+            
             var isLeft, pos;
             var centerX = (artLayerBounds[0] + artLayerBounds[2]) / 2;             //Get the center of item.
             var centerY = (artLayerBounds[1] + artLayerBounds[3]) / 2;
@@ -138,7 +150,7 @@ $.specctrPsProperties = {
                 var dia = bullet.bounds[2] - bullet.bounds[0];
                 
                 //Adjust position of spec items.
-               $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, artLayerBounds[1], spacing, 
+               $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, noteSpecBottom, spacing, 
                                                                   doc.width/2.0, centerX, dia, true);
                                                                   
                 dupBullet.name = "__sSecondBullet";
@@ -149,10 +161,10 @@ $.specctrPsProperties = {
                 //Calcutate the position of spec text item.
                 if(centerX <=  doc.width/2.0) {
                     specText.justification = Justification.LEFT;
-                    spec.translate(-(spec.bounds[0]-spacing), artLayerBounds[1]-spec.bounds[1]);
+                    spec.translate(-(spec.bounds[0]-spacing), noteSpecBottom-spec.bounds[1]);
                 } else {
                     specText.justification = Justification.RIGHT;
-                    spec.translate(doc.width-spacing-spec.bounds[2], artLayerBounds[1]-spec.bounds[1]);
+                    spec.translate(doc.width-spacing-spec.bounds[2], noteSpecBottom-spec.bounds[1]);
                 }
 
                 //Get the end points for arm.
@@ -187,7 +199,7 @@ $.specctrPsProperties = {
     },
 
     //Update the property spec of the layer whose spec is already present.
-    updateSpec : function(artLayer, legendLayer, bounds) {
+    updateSpec : function(artLayer, legendLayer, bounds, specYPos, noteLegendLayer) {
         // Save the current preferences
         var startTypeUnits = app.preferences.typeUnits;
         var startRulerUnits = app.preferences.rulerUnits;
@@ -254,47 +266,41 @@ $.specctrPsProperties = {
 
             var centerX = (artLayerBounds[0] + artLayerBounds[2])/2;
             var centerY = (artLayerBounds[1] + artLayerBounds[3]) / 2;
+            
+            $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sFirstBullet");
+            $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sSecondBullet");
+            $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
+
             if(model.specOption == "Bullet") {
+                $.specctrPsCommon.deleteArtLayerByName(noteLegendLayer, "__sFirstBullet");
+                
                 //Check if any number is linked with selected art layer or not, if not then assign a number.
                var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, false);
                 
-                //Look for the arm and delete it.
-                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
+                var bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
+                bullet.name = "__sFirstBullet";
                 
-                try {
-                    var bullet = legendLayer.artLayers.getByName("__sFirstBullet");
-                } catch (e) {
-                    bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
-                }
-
-                try {
-                    var dupBullet = legendLayer.artLayers.getByName("__sSecondBullet");
-                } catch (e) {
-                    dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
-                    dupBullet.name = "__sSecondBullet";
-                }
-
+                var dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
+                dupBullet.name = "__sSecondBullet";
+                dupBullet.move(legendLayer, ElementPlacement.INSIDE);
+                
                 var dia = bullet.bounds[2] - bullet.bounds[0];
                 //Adjust position of spec items.
-               $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, artLayerBounds[1], spacing, centerX, 
+               $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, specYPos, spacing, centerX, 
                                                                     (spec.bounds[0] + spec.bounds[2]) / 2.0, dia, isNewSpecCreated);
 
                 bullet.translate(artLayerBounds[0]-bullet.bounds[0]-dia-1, artLayerBounds[1]-bullet.bounds[1]-1);
                 spec.link(dupBullet);
             } else {
-                
-                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sFirstBullet");
-                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sSecondBullet");
-                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
-                
+
                 //Calcutate the position of spec text item.
                 if (isNewSpecCreated == true) {
                     if(centerX <=  doc.width/2.0) {
                         specText.justification = Justification.LEFT;
-                        spec.translate(-(spec.bounds[0]-spacing), artLayerBounds[1]-spec.bounds[1]);
+                        spec.translate(-(spec.bounds[0]-spacing), specYPos-spec.bounds[1]);
                     } else {
                         specText.justification = Justification.RIGHT;
-                        spec.translate(doc.width-spacing-spec.bounds[2], artLayerBounds[1]-spec.bounds[1]);
+                        spec.translate(doc.width-spacing-spec.bounds[2], specYPos-spec.bounds[1]);
                     }
                 }
 

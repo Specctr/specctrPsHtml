@@ -100,7 +100,7 @@ $.specctrPsAddNote = {
                  try {
                     bullet = propertyLegendLayer.artLayers.getByName("__sFirstBullet");
                 } catch (e) {}
-            }
+             }
          
             //Check if any number is linked with selected art layer or not, if not then assign a number.
             if (!bullet) {
@@ -143,7 +143,7 @@ $.specctrPsAddNote = {
                                     }];
         
         $.specctrPsCommon.setXmpDataOfLayer(xmpData);
-        //this.setXmpDataOfLayer(legendLayer, idLayer, noteId);
+
     } catch (e) {
         alert(e);
     }
@@ -194,30 +194,21 @@ $.specctrPsAddNote = {
 
             var centerX = (artLayerBounds[0] + artLayerBounds[2])/2;
             var centerY = (artLayerBounds[1] + artLayerBounds[3]) / 2;
-            if(model.specOption == "Bullet") {
-                if(propertyLegendLayer) {
-                     try {
-                       var bullet = propertyLegendLayer.artLayers.getByName("__sFirstBullet");
-                    } catch (e) {}
-                }
-             
-                //Check if any number is linked with selected art layer or not, if not then assign a number.
-                if (!bullet) {
-                    var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, false);
-                    bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
-                    bullet.name = "__sFirstBullet";
-                }
+            
+            $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sFirstBullet");
+            $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sSecondBullet");
+            $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
                 
-                //Look for the arm and delete it.
-                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
+            if(model.specOption == "Bullet") {
+                $.specctrPsCommon.deleteArtLayerByName(propertyLegendLayer, "__sFirstBullet");
+                //Check if any number is linked with selected art layer or not, if not then assign a number.
+                var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, false);
+                var bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
+                bullet.name = "__sFirstBullet";
 
-                try {
-                    var dupBullet = legendLayer.artLayers.getByName("__sSecondBullet");
-                } catch (e) {
-                    dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
-                    dupBullet.name = "__sSecondBullet";
-                    dupBullet.move(legendLayer, ElementPlacement.INSIDE);
-                }
+                var dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
+                dupBullet.name = "__sSecondBullet";
+                dupBullet.move(legendLayer, ElementPlacement.INSIDE);
 
                 var dia = bullet.bounds[2] - bullet.bounds[0];
                 //Adjust position of spec items.
@@ -227,10 +218,6 @@ $.specctrPsAddNote = {
                 bullet.translate(artLayerBounds[0]-bullet.bounds[0]-dia-1, artLayerBounds[1]-bullet.bounds[1]-1);
                 spec.link(dupBullet);
             } else {
-                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sFirstBullet");
-                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sSecondBullet");
-                $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
-                
                 //Calcutate the position of spec text item.
                 if (isNewSpecCreated == true) {
                     if(centerX <=  doc.width/2.0) {
@@ -255,8 +242,5 @@ $.specctrPsAddNote = {
         // Reset the application preferences
         app.preferences.typeUnits = startTypeUnits;
         app.preferences.rulerUnits = startRulerUnits;
-    },
-
-    
-    
+    }
 };
