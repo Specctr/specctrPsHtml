@@ -58,7 +58,6 @@ function setModelToUIComponents() {
 	$("#canvasExpandSize").val(model.canvasExpandSize);
 	$("#lstSize").val(model.legendFontSize);
 	$("#lstLineWeight").val(model.armWeight);
-	$("#lstSpecOption").val(model.specOption);
 	$("#lstColorMode").val(model.legendColorMode);
 	
 	//Set check boxes values.
@@ -263,10 +262,9 @@ function setModelValueFromPreferences() {
 		model[textBoxIds[i]] = Number(appPrefs[textBoxIds[i]]);
 	}
 	
-	var dropDownIds = ["specOption", "legendColorObject", "legendColorType",
-	                   "legendColorSpacing", "legendColorMode", "decimalFractionValue",
-	                   "legendFont"];
-	for (i = 0; i < 7; i++) {
+	var dropDownIds = ["legendColorObject", "legendColorType", "legendColorSpacing",
+	                   "legendColorMode", "decimalFractionValue", "legendFont"];
+	for (i = 0; i < 6; i++) {
 		if (appPrefs.hasOwnProperty(dropDownIds[i]))
 			model[dropDownIds[i]] = appPrefs[dropDownIds[i]];
 	}

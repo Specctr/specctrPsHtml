@@ -380,13 +380,11 @@ function colorPickerTextInput_clickHandler(event, colorPickerBlock) {
 	for (var i = color.length; i < inputSize; i++)
 		color += "0";
 
-	var colorBlock = colorPickerBlock.toLowerCase() + "ColorBlock";
-	var mainColorBlock = document.getElementById(colorBlock);
-	mainColorBlock.style.backgroundColor = color;
+	var colorBlock = "#" + colorPickerBlock.toLowerCase() + "ColorBlock";
+	$(colorBlock).css("background-color", color);
 
-	if (event.keyCode == 13) // Dispatch the click event if pressed key is
-		// 'Enter'.
-		mainColorBlock.click();
+	if (event.keyCode == 13) // Dispatch the click event if pressed key is 'Enter'.
+		$(colorBlock).trigger("click");
 }
 
 /**
@@ -396,7 +394,7 @@ function colorPickerTextInput_clickHandler(event, colorPickerBlock) {
  */
 function text_KeyDownHandler(event) {
 	if (event.keyCode == 13)
-		document.getElementById("activateButton").click();
+		$("#activateButton").trigger("click");
 }
 
 /**

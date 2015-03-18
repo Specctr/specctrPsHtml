@@ -22,8 +22,10 @@
 <script src="../controller/coordinateButtonHandlers.js"></script>
 <script src="../controller/spacingButtonHandlers.js"></script>
 <script src="../controller/dimensionButtonHandlers.js"></script>
+<script src="../controller/propertiesButtonHandlers.js"></script>
 
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/style.css">
+<link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/propertiesButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/dimensionButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/spacingButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/coordinateButtonStyle.css">
@@ -108,11 +110,23 @@
 				<ul class="menu">
 
 					<!-- Shape/Text button. -->
-					<li class="border" onclick="createPropertySpecs()">
-						<div class="button imgButton">
+					<li class="border" id="liProperties">
+						<div class="button imgButton" id="btnProperties" onclick="propertiesButton_clickHandler()">
 							<img id="imgProperty" alt="Shape/Text" /> 
-							<label class="buttonTextStyle" style="margin-left: -1px;">Shape / Text</label>
+							<label class="buttonTextStyle" style="margin-left: -1px;">Properties</label>
+							<div class="dropdownArrow psElement" id="imgPropertiesDdlArrow"
+								onclick="propertiesDropDown_clickHandler(event)"></div>
 						</div>
+						
+						<div class="options psElement" id="propertiesDropDown">
+							<div class="propertyCellOption lineOptionSelected" id="imgPropertiesLine"
+								onclick="propertiesCell_clickHandler(this.id, 'lineOptionSelected', 'Line')">
+										Line</div>
+							<div class="propertyCellOption" id="imgPropertiesBullet"
+								onclick="propertiesCell_clickHandler(this.id, 'bulletOptionSelected', 'Bullet')">
+										Bullet</div>
+						</div>
+						
 					</li>
 
 					<!-- Width/Height button. -->
@@ -652,16 +666,6 @@
 								onmouseover="setColorValueToTextBox(this, 'Space')"
 								onclick="setColorToLabel(this, 'Spacing')"></div>
 						</div>
-					</div>
-					<div id="specOption" class="tabPage4ContentRight psElement"
-					style="float: right;">
-						<label style="margin-left: -4px;"> Spec Option</label>
-						<select class="smalldropdown" id="lstSpecOption"
-								onclick="item_clickHandler(event)"
-								onchange="comboBox_changeHandler(this.id, 'specOption')">
-								<option value="Line">Line</option>
-								<option value="Bullet">Bullet</option>
-						</select>
 					</div>
 				</div>
 				<div class="tabPageContentRow" style="padding-top: 15px;">
