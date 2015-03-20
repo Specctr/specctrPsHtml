@@ -214,6 +214,7 @@ $.specctrPsProperties = {
         var artLayerBounds = bounds;
         var pos, idDupBullet, idBullet;
         var isNewSpecCreated = false;
+        var name = artLayer.name;
         doc.activeLayer = artLayer;
 
         try {
@@ -221,6 +222,9 @@ $.specctrPsProperties = {
                 case LayerKind.TEXT:
                     infoText   = this.getSpecsInfoForTextItem(artLayer);
                     newColor = $.specctrPsCommon.legendColor(model.legendColorType);
+                    var wordsArray = name.split(" ");
+                    if(wordsArray.length > 2)
+                        name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
                     break;
 
                 case LayerKind.GRADIENTFILL:
@@ -236,7 +240,7 @@ $.specctrPsProperties = {
                 return;
 
             var justification = Justification.LEFT;
-            var name = artLayer.name;
+            
             var nameLength = name.length;
             infoText = "\r"+name+infoText;
             app.preferences.typeUnits = TypeUnits.PIXELS;
@@ -319,7 +323,7 @@ $.specctrPsProperties = {
                                 ];
             // Set Xmp metadata for spec and bullet.
             $.specctrPsCommon.setXmpDataOfLayer(xmpData);
-        } catch(e) {alert(e);}
+        } catch(e) {}
 
         doc.activeLayer = artLayer;
         doc.resizeImage(null, null, originalDPI, ResampleMethod.NONE);

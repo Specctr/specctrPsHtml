@@ -111,20 +111,20 @@
 
 					<!-- Shape/Text button. -->
 					<li class="border" id="liProperties">
-						<div class="button imgButton" id="btnProperties" onclick="propertiesButton_clickHandler()">
+						<div class="button imgButton" id="btnProperties" onclick="propertiesButton_clickHandler(this)">
 							<img id="imgProperty" alt="Shape/Text" /> 
 							<label class="buttonTextStyle" style="margin-left: -1px;">Properties</label>
-							<div class="dropdownArrow psElement" id="imgPropertiesDdlArrow"
+							<div class="dropdownArrow" id="imgPropertiesDdlArrow"
 								onclick="propertiesDropDown_clickHandler(event)"></div>
 						</div>
 						
-						<div class="options psElement" id="propertiesDropDown">
+						<div class="options" id="propertiesDropDown">
 							<div class="propertyCellOption lineOptionSelected" id="imgPropertiesLine"
 								onclick="propertiesCell_clickHandler(this.id, 'lineOptionSelected', 'Line')">
-										Line</div>
+								Line</div>
 							<div class="propertyCellOption" id="imgPropertiesBullet"
 								onclick="propertiesCell_clickHandler(this.id, 'bulletOptionSelected', 'Bullet')">
-										Bullet</div>
+								Bullet</div>
 						</div>
 						
 					</li>

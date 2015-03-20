@@ -415,7 +415,6 @@ function exportCss() {
  */
 function loadFontsToList(result) {
 	try {
-		
 		var font = JSON.parse(result);
 		var fontLength = font.length;
 		var fontPos = -1; 
@@ -435,6 +434,7 @@ function loadFontsToList(result) {
 			// Select the font from the legendFont value and apply it.
 			for (i = 0; i < fontLength; i++) {
 				if (fontListHandler.options[i].text.indexOf("Arial") >= 0) {
+					model.legendFont = fontListHandler.options[i].text;
 					fontPos = i;
 					break;
 				}

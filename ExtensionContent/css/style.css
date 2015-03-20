@@ -490,6 +490,8 @@ label {
 	height: 50px;
 	cursor: pointer;
 	background-position: center;
+	text-align: center;
+	vertical-align: middle; 
 }
 
 .active {

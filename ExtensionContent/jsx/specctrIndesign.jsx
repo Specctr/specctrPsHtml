@@ -311,9 +311,7 @@ $.specctrId = {
         var plugExternalLib = File(File($.fileName).parent.parent).fullName+"/lib/PlugPlugExternalObject.dll";
         try {
             var xLib = new ExternalObject("lib:"+ plugExternalLib);
-        } catch (e) {
-            alert(e);
-        }
+        } catch (e) {}
         app.addEventListener("afterSelectionAttributeChanged", $.specctrId.myEventHandlerWrapper, false);
         
         // Set Indesign default units.
