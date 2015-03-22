@@ -8,7 +8,7 @@ Description: Includes all the methods related to UI component like change event 
  *  if user's credentials valid.
  */
 SPECCTR_API = "http://127.0.0.1:5000/api/v1";
-SPECCTR_API = "http://specctr-subscription.herokuapp.com/api/v1";
+//SPECCTR_API = "http://specctr-subscription.herokuapp.com/api/v1";
 
 	
 function activateButton_clickHandler() {
