@@ -1329,20 +1329,19 @@ $.specctrAi = {
                         else if(!spec){ source.visibilityVariable = undefined; if(arm) arm.remove(); if(itemCircle) itemCircle.remove(); currentIdVar.remove(); app.redraw();}	
                         return;*/
                 }
-            
+
                 var newColor = this.legendColor(model.legendColorObject);
                 var ids = [];       //collect ids of selected objects
                 var selectedItems = app.selection;
                 var allVariables = app.activeDocument.variables;
-                   
+                
                 for (var s = 0; s < selectedItems.length; s++)
                 try {
                     var dataString = selectedItems[s].note;
-                
                     if (dataString.search("-css:") > 0) {
-                        if(!buttonInvoked)
+                        if(!buttonInvoked) {
                             cssText = this.separateNoteAndStyleText(selectedItems[s].note, "style");
-                    
+                        }
                         dataString = this.separateNoteAndStyleText(selectedItems[s].note);
                         selectedItems[s].note = dataString;
                     }
@@ -1422,9 +1421,7 @@ $.specctrAi = {
                                 propSpecUndo[idVar.name].updated = data.updated;
                                 return;
                             }
-                        } catch(e) {
-                            log(e)
-                        }
+                        } catch(e) {}
 
     /*var lastUpdateIndex = propSpecUndo[idVar.name].updated.length-1;
     alert(data.updated+" "+propSpecUndo[idVar.name].undoCounter+" "+propSpecUndo[idVar.name].updated[lastUpdateIndex+propSpecUndo[idVar.name].undoCounter]);
@@ -1585,9 +1582,7 @@ $.specctrAi = {
                         app.redraw();
                     }
                 }
-            } catch(e) {
-                log(e)
-            }
+            } catch(e) {}
         } catch(e) {
             alert(e);
             return false;

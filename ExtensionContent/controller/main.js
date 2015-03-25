@@ -154,6 +154,7 @@ function onLoaded() {
 			$("#imgCoordinateDdlArrow").remove();
 		}
 
+		addApplicationEventListener(hostApplication);
 		appPrefs = readAppPrefs();	//Read the config file and look for the isLicensed value.
 		if (appPrefs !== "") {
 			if (appPrefs.hasOwnProperty("isLicensed"))
@@ -451,10 +452,43 @@ function loadFontsToList(result) {
  * Dispatch event to loose the focus from photoshop html panel.
  */
 function loseFocusFromPanel() { 
-		if(extensionId === '')
-			extensionId = getExtensionId();
-		var csEvent = new CSEvent("com.adobe.PhotoshopLoseFocus", "APPLICATION");  
-		csEvent.extensionId = extensionId;
-		var csInterface = new CSInterface();
-		csInterface.dispatchEvent(csEvent);
+	if(extensionId === '')
+		extensionId = getExtensionId();
+	var csEvent = new CSEvent("com.adobe.PhotoshopLoseFocus", "APPLICATION");  
+	csEvent.extensionId = extensionId;
+	var csInterface = new CSInterface();
+	csInterface.dispatchEvent(csEvent);
+}
+
+/**
+ * Add Ai event listener for art selection change.
+ */
+function addApplicationEventListener(app) { 
+	if(app === illustrator) {
+		try {
+			AIEventAdapter.getInstance().addEventListener(AIEvent.ART_SELECTION_CHANGED, 
+					selectionChangeListener);
+		} catch(e) {
+			alert(e);
+		}
+	}
+}
+
+/**
+ * Calling updateConnection method on art selection change notifier for Ai.
+ */
+function selectionChangeListener(event) {
+	try {
+		AIEventAdapter.getInstance().removeEventListener(AIEvent.ART_SELECTION_CHANGED, selectionChangeListener);
+	} catch(e) {}
+	
+	try {
+		setModel();
+		evalScript("$.specctr" + hostApplication + "." + "updateConnection()");
+	} catch (e) {}
+	
+	try {
+		AIEventAdapter.getInstance().addEventListener(AIEvent.ART_SELECTION_CHANGED, 
+				selectionChangeListener);
+	} catch(e) {}
 }
