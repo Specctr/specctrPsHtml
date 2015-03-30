@@ -183,7 +183,7 @@ function onLoaded() {
 
 		if (isLicensed)
 			init();
-
+		
 	} catch (e) {
 		console.log(e);
 	}
@@ -425,17 +425,21 @@ function loadFontsToList(result) {
 		for (var i = 0; i < fontLength; i++) {
 			var option = document.createElement("option");
 			option.text = font[i].font;
-			option.value = i;
+			option.value = font[i].label;
 			fontListHandler.add(option, i);
-			if(option.text == model.legendFont)
+			if(option.text == model.legendFont) {
 				fontPos = i;
+				model.legendFontFamily = font[i].label;
+			}
 		}
 
 		if(fontPos == -1) {
 			// Select the font from the legendFont value and apply it.
 			for (i = 0; i < fontLength; i++) {
-				if (fontListHandler.options[i].text.indexOf("Arial") >= 0) {
-					model.legendFont = fontListHandler.options[i].text;
+				var fontListOption = fontListHandler.options[i];
+				if (fontListOption.text.indexOf("Arial") >= 0) {
+					model.legendFont = fontListOption.text;
+					model.legendFontFamily = fontListOption.value;
 					fontPos = i;
 					break;
 				}

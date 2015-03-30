@@ -42,6 +42,7 @@ $.specctrAi = {
 
     //Create the canvas border and expand the artboard.
     createCanvasBorder : function() {
+        app.redraw();   //Creates an 'undo' point.
         var doc = app.activeDocument;
         var currentArtboard = doc.artboards[doc.artboards.getActiveArtboardIndex()];
         var artRect = currentArtboard.artboardRect;
@@ -411,8 +412,7 @@ $.specctrAi = {
                 if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
                     this.createDimensionSpecsForItem(obj);
             }
-
-            app.redraw();
+            app.redraw();   //Creates an 'undo' point.        
         } catch(e) {}
     },
 
@@ -620,7 +620,7 @@ $.specctrAi = {
                 if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
                     this.createCoordinateSpecsForItem(obj);
             }
-            app.redraw();
+            app.redraw();   //Creates an 'undo' point.        
         } catch(e) {}
     },
 
@@ -1288,7 +1288,7 @@ $.specctrAi = {
     //Call the spacing specs functions according to the number of selected art on the active artboard.
     createSpacingSpecs : function() {
         var result = false;
-        
+
         try {
             if (app.selection.length==2) {	
                 var obj1 = app.selection[0];
@@ -1304,8 +1304,7 @@ $.specctrAi = {
             } else {
                 alert("Please select one or two art items!");
             }
-
-            app.redraw();
+            app.redraw();   //Creates an 'undo' point.        
         } catch(e) {}
         
         return result;
@@ -1578,8 +1577,6 @@ $.specctrAi = {
                     
                         source.note = "({type:'source',updated:'" + updated + "',varName:'" + idVar.name +
                                                 "',position:'" + source.visibleBounds.join("|") + "'})";
-                     
-                        app.redraw();
                     }
                 }
             } catch(e) {}
@@ -1600,8 +1597,7 @@ $.specctrAi = {
                 if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
                     this.createPropertySpecsForItem(obj);
             }
-
-            app.redraw();
+            app.redraw();   //Creates an 'undo' point.
         } catch(e) {}
     },
 
@@ -1679,17 +1675,13 @@ $.specctrAi = {
                     var currTextRange = spec.story.lines[i];
                     var content = currTextRange.contents;
                     if(content == "Text:" || content == "Stroke:" || content == "Fill:"  || 
-                            content == "Alpha:" || content == "Border-radius:" || i == 0)
-                    {
-                        try
-                        {
+                            content == "Alpha:" || content == "Border-radius:" || i == 0)  {
+                        try {
                             var newFontName = this.getBoldStyleOfFont();
                             currTextRange.characterAttributes.textFont = app.textFonts.getByName(newFontName);
-                        }
-                        catch(e){}
+                        } catch(e){}
                     }
-                }
-                catch(e){}
+                } catch(e){}
             }
                 
             if (idVar && spec && arm && itemCircle) {
@@ -1848,8 +1840,7 @@ $.specctrAi = {
                 if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
                     this.addNoteSpecsForItem(obj);
             }
-
-            app.redraw();
+            app.redraw();   //Creates an 'undo' point.
         } catch(e) {}
     },
 
@@ -1874,7 +1865,7 @@ $.specctrAi = {
         var fonts = app.textFonts;
         var boldFontName;
         var fontsLength = fonts.length;
-
+   
         for (var j = 0; j < fontsLength; j++) {
             var currFont = fonts[j];
             if (currFont.family == model.legendFontFamily && currFont.style == "Bold") {
@@ -1882,7 +1873,6 @@ $.specctrAi = {
                 break;
             }
         }
-
         return boldFontName;
     },
 

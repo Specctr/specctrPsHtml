@@ -258,7 +258,7 @@ function comboBox_changeHandler(elementId, modelValue) {
  */
 function lstFont_changeHandler() {
 	var fontListHandler = document.getElementById("lstFont");
-	model.legenFontIndex = Number(fontListHandler.options[fontListHandler.selectedIndex].value);
+	model.legendFontFamily = fontListHandler.options[fontListHandler.selectedIndex].value;
 	model.legendFont = fontListHandler.options[fontListHandler.selectedIndex].text;
 	writeAppPrefs();
 }
