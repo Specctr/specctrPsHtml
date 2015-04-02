@@ -139,8 +139,8 @@ function item_clickHandler(event) {
  * Set the value of checkBox model value when changed.
  * @param checkBoxId {string} The id of selected checkbox.
  */
-function checkBox_changeHandler(checkBoxId) {
-	model[checkBoxId] = document.getElementById(checkBoxId).checked;
+function checkBox_changeHandler(checkBox) {
+	model[checkBoxId.id] = checkBox.checked;
 	writeAppPrefs();
 }
 
@@ -258,8 +258,9 @@ function comboBox_changeHandler(elementId, modelValue) {
  */
 function lstFont_changeHandler() {
 	var fontListHandler = document.getElementById("lstFont");
-	model.legendFontFamily = fontListHandler.options[fontListHandler.selectedIndex].value;
-	model.legendFont = fontListHandler.options[fontListHandler.selectedIndex].text;
+	var selectedFont = fontListHandler.options[fontListHandler.selectedIndex];
+	model.legendFontFamily = selectedFont.value;
+	model.legendFont = selectedFont.text;
 	writeAppPrefs();
 }
 

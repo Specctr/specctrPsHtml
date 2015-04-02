@@ -372,11 +372,7 @@ function addNoteSpecs() {
 
 	try {
 		setModel();
-		if (hostApplication === illustrator)
-			evalScript("$.specctrAi.addNoteSpecs()");
-		else
-			evalScript("$.specctrPsAddNote.addNoteSpecs()");
-
+		evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs()");
 	} catch (e) {
 		console.log(e);
 	}
@@ -455,7 +451,7 @@ function loadFontsToList(result) {
 /**
  * Dispatch event to loose the focus from photoshop html panel.
  */
-function loseFocusFromPanel() { 
+function loseFocusFromPanel() {
 	if(extensionId === '')
 		extensionId = getExtensionId();
 	var csEvent = new CSEvent("com.adobe.PhotoshopLoseFocus", "APPLICATION");  

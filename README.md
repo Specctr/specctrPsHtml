@@ -1,11 +1,11 @@
-specctrPsHtml
+specctrHtml (Master)
 ================
 
-Specctr for Photoshop
+Specctr for Photoshop, Illustrator and Indesign.
 
 Project Name: specctrPsHtml
 
-Description: The objective of the project is to create a panel name "Specctr-Pro" in Photoshop. The panel consists some buttons, tabs, check boxes etc. and these are used to measure the width and height of the art object created in the canvas, to measure the spacing between two art objects and between the canvas edges and single art object. It also shows the properties of the art objects like shape, color, effects, border, inner shadow etc. And for text art object it shows text font family, font size, leading, styles etc.
+Description: The objective of the project is to create a panel name "Specctr-Pro" in Ps, Ai and Id. The panel consists some buttons, tabs, check boxes etc. and these are used to measure the width and height of the art object created in the canvas, to measure the spacing between two art objects and between the canvas edges and single art object. It also shows the properties of the art objects like shape, color, effects, border, inner shadow etc. And for text art object it shows text font family, font size, leading, styles etc.
 
 Features of the Panel:
 1. GLOBAL FEATURES
@@ -84,7 +84,7 @@ Tools and IDE used:
 - Extension Builder 3 (EB3)
 
 Supported platforms:
-- Photoshop version: Photoshop CC
+- Photoshop version: Ps (CC / CC_2014), Ai (CC / CC_2014) and Id (CC / CC_2014). 
 - OS support: Mac and Win.
 
 For more understanding of UI:

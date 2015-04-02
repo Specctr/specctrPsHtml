@@ -620,7 +620,7 @@ $.specctrAi = {
                 if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
                     this.createCoordinateSpecsForItem(obj);
             }
-            app.redraw();   //Creates an 'undo' point.        
+            app.redraw();   //Creates an 'undo' point.
         } catch(e) {}
     },
 
@@ -1310,33 +1310,25 @@ $.specctrAi = {
         return result;
     },
 
-    //Update the property spec of the layer whose spec is already present.
+    //Update the property and note spec of the layer whose spec is already present.
     updateConnection : function(buttonInvoked) {
         try {
-            if (!app.selection.length)             //  logTime("start");
+
+            if (!app.selection.length)
                 return;
 
             try {
-                var source, arm, spec, group, itemCircle;
-
-                if (!app.selection.length && currentIdVar) {              //check for orphan elements and delete them if necessary - DISABLED for now
-                    return;
-                    /*var currPageItems = currentIdVar.pageItems;for(var i = 0;i<currPageItems.length;i++){try{ if(currPageItems[i]){
-                        var dataString=currPageItems[i].note;  var data = this.deserialize(dataString);switch(data.type){case "spec": spec=currPageItems[i]; break;
-                        case "source": source=currPageItems[i]; break;case "arm": arm=currPageItems[i]; break;case "itemCircle": itemCircle=currPageItems[i]; break;
-                        }}}catch(e){}}if(!source){ if(spec) spec.remove(); if(arm) arm.remove(); if(itemCircle) itemCircle.remove(); currentIdVar.remove(); app.redraw();}
-                        else if(!spec){ source.visibilityVariable = undefined; if(arm) arm.remove(); if(itemCircle) itemCircle.remove(); currentIdVar.remove(); app.redraw();}	
-                        return;*/
-                }
-
+                var source, arm, spec, group, itemCircle, bulletGroup;
                 var newColor = this.legendColor(model.legendColorObject);
                 var ids = [];       //collect ids of selected objects
                 var selectedItems = app.selection;
                 var allVariables = app.activeDocument.variables;
-                
-                for (var s = 0; s < selectedItems.length; s++)
+                var updateSpecName = buttonInvoked;
+                var selectedItemsLength = selectedItems.length;
+                for (var s = 0; s < selectedItemsLength; s++)
                 try {
                     var dataString = selectedItems[s].note;
+
                     if (dataString.search("-css:") > 0) {
                         if(!buttonInvoked) {
                             cssText = this.separateNoteAndStyleText(selectedItems[s].note, "style");
@@ -1352,21 +1344,26 @@ $.specctrAi = {
                         data = this.deserialize(dataString);
                     }
             
-                    if ((data.type != "source" || buttonInvoked) && data.varName) {          // && !ids.contains(data.varName)
+                    if ((data.type != "source" || buttonInvoked) && data.varName) {
                         ids.push(data.varName);
+                        if(dataString.search("'noteGroup'") > 0 || dataString.search("'noteSpec'") > 0) {
+                            updateSpecName = "noteSpec";
+                        } else if (dataString.search("'group'") > 0 || dataString.search("'spec'") > 0){
+                            updateSpecName = "propertySpec";
+                        }
                         break;
                     }
                 } catch(e) {}
-
+                
                 for (var j = 0; j < ids.length; j++) {
                     var idVar = allVariables.getByName(ids[j]);
                     var currPageItems = idVar.pageItems;
                 
                     var noteData = ({});
+
                     for (var i = 0; i < currPageItems.length; i++) {
                         try {
                             var dataString = currPageItems[i].note;
-                        
                             if (dataString.search("-css:") > 0) {
                                 if (!buttonInvoked)
                                     cssText = this.separateNoteAndStyleText(currPageItems[i].note, "style");
@@ -1381,59 +1378,50 @@ $.specctrAi = {
                             } catch(e) {
                                 data = this.deserialize(dataString);
                             }
-                                
-                            switch (data.type) {
-                                case "group": 
-                                    group = currPageItems[i]; 
-                                    break;
-                            
-                                case "spec": 
-                                    spec = currPageItems[i]; 
-                                    break;
-                            
-                                case "source": 
-                                    source = currPageItems[i]; 
-                                    break;
-                            
-                                case "arm": 
-                                    arm = currPageItems[i]; 
-                                    break;
-                        
-                                case "itemCircle": 
-                                    itemCircle = currPageItems[i]; 
-                                    break;
-                        
-                                default:
+
+                            if(updateSpecName == "propertySpec") {
+                                switch (data.type) {
+                                    case "group": group = currPageItems[i]; break;
+                                    case "spec": spec = currPageItems[i]; break;
+                                    case "source": source = currPageItems[i]; break;
+                                    case "arm": arm = currPageItems[i]; break;
+                                    case "itemCircle": itemCircle = currPageItems[i]; break;
+                                    default:
+                                }
+                            } else if (updateSpecName == "noteSpec") {
+                                switch (data.type) {
+                                    case "noteGroup": group = currPageItems[i]; break;
+                                    case "noteSpec": spec = currPageItems[i]; break;
+                                    case "source": source = currPageItems[i]; break;
+                                    case "noteArm": arm = currPageItems[i]; break;
+                                    case "noteItemCircle": itemCircle = currPageItems[i]; break;
+                                    default:
+                                }
                             }
-                            
                             noteData[data.type] = data;
                         } catch(e) {}
                     }
-                
+
                     if (source && spec) {
-                        try {
-                            //check if it's generated by undo                                                                                                                           
-                            var data = noteData["spec"];
-                            if (!buttonInvoked && propSpecUndo[idVar.name] && propSpecUndo[idVar.name].updated 
-                                && data.updated && data.updated != propSpecUndo[idVar.name].updated) {
+                        if (updateSpecName == "propertySpec") {
+                            try {
+                                //check if it's generated by undo                                                                                                                           
+                                var data = noteData["spec"];
+                                if (!buttonInvoked && propSpecUndo[idVar.name] && propSpecUndo[idVar.name].updated 
+                                    && data.updated && data.updated != propSpecUndo[idVar.name].updated) {
+                                    spec.note = spec.note + "-css:" + cssText;
+                                    propSpecUndo[idVar.name].updated = data.updated;
+                                    return;
+                                }
+                            } catch(e) {}
+
+                            if (arm && !this.positionChanged(source, noteData["source"].position) && 
+                                    !this.positionChanged(spec, noteData["spec"].position)) {
                                 spec.note = spec.note + "-css:" + cssText;
-                                propSpecUndo[idVar.name].updated = data.updated;
-                                return;
+                                break;
                             }
-                        } catch(e) {}
-
-    /*var lastUpdateIndex = propSpecUndo[idVar.name].updated.length-1;
-    alert(data.updated+" "+propSpecUndo[idVar.name].undoCounter+" "+propSpecUndo[idVar.name].updated[lastUpdateIndex+propSpecUndo[idVar.name].undoCounter]);
-    if(data.updated<propSpecUndo[idVar.name].updated[lastUpdateIndex+propSpecUndo[idVar.name].undoCounter]){propSpecUndo[idVar.name].undoCounter--; 
-    return;}else if(data.updated>propSpecUndo[idVar.name].updated[lastUpdateIndex+propSpecUndo[idVar.name].undoCounter]){
-    propSpecUndo[idVar.name].undoCounter++; //this is Redo return;}*/
-                        
-                        if (arm && !this.positionChanged(source, noteData["source"].position) && 
-                                !this.positionChanged(spec, noteData["spec"].position)) { //&& (!currentIdVar || currentIdVar.name==idVar.name)  //&& !this.positionChanged(arm,currentArm)
-                            spec.note = spec.note + "-css:" + cssText;
-                            break;
                         }
-
+                    
                         var aItem = source;
                         var bItem = spec;
                         
@@ -1503,85 +1491,109 @@ $.specctrAi = {
                         
                         var yLine;
         
-                        if (arm) {
-                            yLine = arm;						
-                        } else {               
-                            yLine = app.activeDocument.pathItems.add();
-                            yLine.note = "({type:'arm',varName:'" + idVar.name + "'})";
-                            yLine.visibilityVariable = idVar;
-                            
-                            yLine.stroked = true;
-                            yLine.strokeDashes = [];
-                            yLine.strokeWidth = model.armWeight;
-                            yLine.strokeColor = newColor;
-                        }
-
-                        var circleD = this.circleDiameter(model.armWeight);
-                        if (itemCircle) {
-                            itemCircle.position = [aX - circleD / 2, aY + circleD / 2];
-                        } else {
-                            itemCircle = app.activeDocument.pathItems.ellipse(aY + circleD / 2, aX - circleD / 2, circleD, circleD);
-                        
-                            itemCircle.strokeColor = newColor;
-                            itemCircle.fillColor = newColor;
-
-                            var legendLayer;
-                            if (source.typename == "TextFrame") {
-                                itemCircle.filled = true;
-                                legendLayer = this.legendSpecLayer("Text Properties");
+                            if (arm) {
+                                yLine = arm;
                             } else {
-                                itemCircle.filled = false;
-                                legendLayer = this.legendSpecLayer("Object Properties");
+                                yLine = app.activeDocument.pathItems.add();
+                                if (updateSpecName == "propertySpec") {
+                                    yLine.note = "({type:'arm',varName:'" + idVar.name + "'})";
+                                } else if (updateSpecName == "noteSpec") {
+                                    yLine.note = "({type:'noteArm',varName:'" + idVar.name + "'})";
+                                }
+                            
+                                yLine.visibilityVariable = idVar;
+                                
+                                yLine.stroked = true;
+                                yLine.strokeDashes = [];
+                                yLine.strokeWidth = model.armWeight;
+                                yLine.strokeColor = newColor;
                             }
+
+                            var circleD = this.circleDiameter(model.armWeight);
+                            if (itemCircle) {
+                                itemCircle.position = [aX - circleD / 2, aY + circleD / 2];
+                            } else {
+                                itemCircle = app.activeDocument.pathItems.ellipse(aY + circleD / 2, aX - circleD / 2, circleD, circleD);
+                            
+                                itemCircle.strokeColor = newColor;
+                                itemCircle.fillColor = newColor;
+
+                                var legendLayer;
+                                if (updateSpecName == "propertySpec") {
+                                    if (source.typename == "TextFrame") {
+                                        itemCircle.filled = true;
+                                        legendLayer = this.legendSpecLayer("Text Properties");
+                                    } else {
+                                        itemCircle.filled = false;
+                                        legendLayer = this.legendSpecLayer("Object Properties");
+                                    }
+                    
+                                    itemCircle.strokeWidth = model.armWeight;
+                                    itemCircle.stroked = true;	
+                                    itemCircle.note = "({type:'itemCircle',varName:'" + idVar.name + "'})";
+                                    
+                                }  else if (updateSpecName == "noteSpec") {
+                                    
+                                    if (source.typename == "TextFrame") {
+                                        itemCircle.filled = true;
+                                    } else {
+                                        itemCircle.filled = false;
+                                    }
+                                
+                                    legendLayer = this.legendSpecLayer("Add Notes");
+                                    itemCircle.strokeWidth = model.armWeight;
+                                    itemCircle.stroked = true;	
+                                    itemCircle.note = "({type:'noteItemCircle',varName:'" + idVar.name + "'})";
+                                }
+                            
+                                itemCircle.visibilityVariable = idVar;
+                            
+                                if (group) 
+                                    itemCircle.move(group, ElementPlacement.INSIDE);
+                            }
+                            
+                            var aX1 = circleD / 2 * aCos;
+                            var aY1 = circleD / 2 * aSin;
             
-                            itemCircle.strokeWidth = model.armWeight;
-                            itemCircle.stroked = true;	
-                            itemCircle.note = "({type:'itemCircle',varName:'" + idVar.name + "'})";
-                            itemCircle.visibilityVariable = idVar;
-                        
-                            if (group) 
-                                itemCircle.move(group, ElementPlacement.INSIDE);
-                        }
-                        
-                        var aX1 = circleD / 2 * aCos;
-                        var aY1 = circleD / 2 * aSin;
-        
-                        if (originalBX != undefined) {
-                            yLine.setEntirePath([[aX - aX1, aY - aY1], [bX, bY], [originalBX, bY]]);
-                            yLine.filled = false;
-                        } else {
-                            yLine.setEntirePath([[aX - aX1, aY - aY1], [bX, bY]]);
-                        }
-            
-                        if (!arm) {
-                            yLine.move(legendLayer, ElementPlacement.INSIDE);
-                            arm = yLine;
-                            if (group) 
-                                yLine.move(group, ElementPlacement.INSIDE);
-                        }
+                            if (originalBX != undefined) {
+                                yLine.setEntirePath([[aX - aX1, aY - aY1], [bX, bY], [originalBX, bY]]);
+                                yLine.filled = false;
+                            } else {
+                                yLine.setEntirePath([[aX - aX1, aY - aY1], [bX, bY]]);
+                            }
+                
+                            if (!arm) {
+                                yLine.move(legendLayer, ElementPlacement.INSIDE);
+                                arm = yLine;
+                                if (group) 
+                                    yLine.move(group, ElementPlacement.INSIDE);
+                            }
                     }
                 
                     if (idVar && source && spec && arm) {
-                        //currentIdVar = idVar; currentSource=source.visibleBounds.join("|"); currentSpec=spec.visibleBounds.join("|"); currentArm=arm.visibleBounds.join("|");
-                        var date = new Date();
-                        var updated = date.getTime();
-                    
-                        if (!propSpecUndo[idVar.name]) 
-                            propSpecUndo[idVar.name] = ({});
+                        if (updateSpecName == "propertySpec") {
+                            var date = new Date();
+                            var updated = date.getTime();
                         
-                        /* propSpecUndo[idVar.name].undoCounter = 0; if(!propSpecUndo[idVar.name].updated) propSpecUndo[idVar.name].updated=[];*/ 
-                        propSpecUndo[idVar.name].updated = updated;
-                    
-                        spec.note = "({type:'spec',updated:'" + updated + "',varName:'" + idVar.name + 
-                                                "',position:'" + spec.visibleBounds.join("|") + "'})" + "-css:" + cssText;
-                    
-                        source.note = "({type:'source',updated:'" + updated + "',varName:'" + idVar.name +
-                                                "',position:'" + source.visibleBounds.join("|") + "'})";
+                            if (!propSpecUndo[idVar.name]) 
+                                propSpecUndo[idVar.name] = ({});
+                            
+                            propSpecUndo[idVar.name].updated = updated;
+                        
+                            spec.note = "({type:'spec',updated:'" + updated + "',varName:'" + idVar.name + 
+                                                    "',position:'" + spec.visibleBounds.join("|") + "'})" + "-css:" + cssText;
+                        
+                            source.note = "({type:'source',updated:'" + updated + "',varName:'" + idVar.name +
+                                                    "',position:'" + source.visibleBounds.join("|") + "'})";
+                                                    
+                        } else if (updateSpecName == "noteSpec") {
+                            spec.note = "({type:'noteSpec',varName:'" + idVar.name + 
+                                                    "',position:'" + spec.visibleBounds.join("|") + "'})";
+                        }
                     }
                 }
             } catch(e) {}
         } catch(e) {
-            alert(e);
             return false;
         }
 
@@ -1591,6 +1603,7 @@ $.specctrAi = {
     //Call the property specs function for each selected art on the active artboard.
     createPropertySpecs : function() {
         try {
+            // Create property specs for all the selected pageItems.
             var selectionLength = app.selection.length;
             for (var i = 0; i < selectionLength; i++) {
                 var obj = app.selection[i];
@@ -1604,12 +1617,12 @@ $.specctrAi = {
     //Get the property of selected layer and show it on active document.
     createPropertySpecsForItem : function(sourceItem) {
         try {
-            var spacing = 10;
+            var spacing = 25;
             var legendLayer;
 
             var newColor = this.legendColor(model.legendColorObject);
                 
-            var arm, spec, group, itemCircle, infoText;
+            var arm, spec, group, itemCircle, infoText, noteSpec, firstBullet, secondBullet;
             var pageItem = sourceItem;
             var pageItemBounds = this.itemBounds(pageItem);
             var idVar = pageItem.visibilityVariable;
@@ -1642,17 +1655,20 @@ $.specctrAi = {
                         var dataString = this.separateNoteAndStyleText(allPageItems[i].note);
                         allPageItems[i].note = dataString;
                         var data;
-                        try {    
+                        try {
                             data = eval(dataString);
                         } catch(e) {
                             data = this.deserialize(dataString);
                         }
                    
                         switch (data.type) {
+                            case "noteSpec": noteSpec = allPageItems[i]; break;
                             case "spec": spec = allPageItems[i]; break;
                             case "arm": arm = allPageItems[i]; break;
                             case "group": group = allPageItems[i]; break;
                             case "itemCircle": itemCircle = allPageItems[i]; break;
+                            case "firstBullet": firstBullet = allPageItems[i]; break;
+                            case "secondBullet": secondBullet = allPageItems[i]; break;
                             default:
                         }
                     } catch(e) {}
@@ -1684,8 +1700,8 @@ $.specctrAi = {
                 } catch(e){}
             }
                 
-            if (idVar && spec && arm && itemCircle) {
-                this.updateConnection(true);
+            if (idVar && spec && arm && itemCircle && model.specOption == "Line") {
+                this.updateConnection("propertySpec");
                 return;
             }
 
@@ -1705,12 +1721,19 @@ $.specctrAi = {
             var artboardCenterX = artRect[0] / 2 + artRect[2] / 2;
             var specX;
             var specEdge;
+            
+            var yReference = 0;
+             if(noteSpec) {
+                yReference = noteSpec.visibleBounds[3] - spacing;
+            } else {
+                yReference = pageItemBounds[1] - (heightItem - heightInfo) / 2;
+            }
 
             if (centerX <= artboardCenterX) {
                 spec.textRange.paragraphAttributes.justification = Justification.LEFT;
                     
                 if (model.specToEdge)
-                    specX = artRect[0] - spec.visibleBounds[0] + spacing;
+                    specX = artRect[0] - spec.visibleBounds[0] + spacing ;
                 else
                     specX = pageItemBounds[0] - widthInfo - spacing;
             } else {
@@ -1723,7 +1746,309 @@ $.specctrAi = {
                 }
             }
 
-           spec.translate(specX, (pageItemBounds[1] - spec.visibleBounds[1] - (heightItem - heightInfo) / 2));			
+           spec.translate(specX, (yReference - spec.visibleBounds[1]));			
+           spec.move(group, ElementPlacement.INSIDE);
+
+            if (!arm && model.specOption == "Line") {
+                if(firstBullet)
+                    firstBullet.remove();
+                if(secondBullet)
+                    secondBullet.remove();
+                arm = app.activeDocument.pathItems.add();
+
+                var armX1;
+                var armX2;
+                     
+                if (centerX <= artboardCenterX) {
+                    armX1 = pageItemBounds[0];
+                    armX2 = spec.visibleBounds[2];
+                } else {
+                    armX1 = pageItemBounds[2];
+                    armX2 = spec.visibleBounds[0];
+                }
+                 
+                var armDX = Math.abs(armX1 - armX2);
+                var dx = armPartLength;
+                if (armX1 < armX2) 
+                    dx = -dx;
+                    
+                if (armDX < armPartLength * 1.3)
+                    arm.setEntirePath([[armX2, spec.visibleBounds[1]], [armX1, centerY]]);
+                else
+                    arm.setEntirePath([[armX2, spec.visibleBounds[1]], [armX2 + dx, spec.visibleBounds[1]], [armX1, centerY]]);
+
+                arm.stroked = true;
+                arm.strokeDashes = [];
+                arm.strokeWidth = model.armWeight;
+                arm.strokeColor = newColor;
+                arm.filled = false;
+                arm.move(group, ElementPlacement.INSIDE);
+            }
+            
+            var circleD = this.circleDiameter(model.armWeight);
+
+            if (!itemCircle && model.specOption == "Line") {
+                if (centerX <= artboardCenterX)
+                    itemCircle = app.activeDocument.pathItems.ellipse(centerY + circleD / 2, 
+                                                                                                pageItemBounds[0] - circleD / 2, circleD, circleD);
+                else 
+                    itemCircle = app.activeDocument.pathItems.ellipse(centerY + circleD / 2,
+                                                                                                pageItemBounds[2] - circleD / 2, circleD, circleD);
+            
+                itemCircle.strokeColor = newColor;
+                itemCircle.fillColor = newColor;
+                
+                if (sourceItem.typename=="TextFrame")
+                    itemCircle.filled = true;
+                else 
+                    itemCircle.filled = false;
+                
+                itemCircle.strokeWidth = model.armWeight;
+                itemCircle.stroked = true;
+                itemCircle.move(group, ElementPlacement.INSIDE);
+            }
+
+             if(model.specOption == "Bullet") {
+                 
+                 if(arm)
+                    arm.remove();
+                
+                if(itemCircle)
+                    itemCircle.remove();
+                
+                 var dia;
+                 if(firstBullet) {
+                     dia = firstBullet.visibleBounds[2] - firstBullet.visibleBounds[0];
+                     firstBullet.translate(spec.visibleBounds[0] - firstBullet.visibleBounds[0] - dia - 1, 
+                                spec.visibleBounds[1]-firstBullet.visibleBounds[1]);
+                 } else {
+                     //Create text at given font size, font value, font color.
+                    var textColor = new RGBColor();
+                    textColor.red = 255;
+                    textColor.green = 255;
+                    textColor.blue = 255;
+                    
+                    var number = app.activeDocument.textFrames.add();
+                    number.contents = "1";
+                    number.textRange.characterAttributes.fillColor = textColor;
+                    number.textRange.characterAttributes.textFont = app.textFonts.getByName(newFontName);
+                    number.textRange.characterAttributes.size = model.legendFontSize;
+                    
+                     dia = Math.abs(number.visibleBounds[3] - number.visibleBounds[1]) + 8;
+                     firstBullet = this.createBullet(newColor, number, dia,
+                                               spec.visibleBounds[1], spec.visibleBounds[0]);
+                 }
+                
+                 if(secondBullet) {
+                     secondBullet.translate(pageItemBounds[0] - secondBullet.visibleBounds[0] - dia - 1, 
+                            pageItemBounds[1] - secondBullet.visibleBounds[1]);
+                 } else {
+                     secondBullet = firstBullet.duplicate();
+                     secondBullet.translate(pageItemBounds[0] - secondBullet.visibleBounds[0] - dia - 1, 
+                            pageItemBounds[1] - secondBullet.visibleBounds[1]);
+                 }
+
+                 firstBullet.move(group, ElementPlacement.INSIDE);
+                 secondBullet.move(group, ElementPlacement.INSIDE);
+             }
+         
+            var date = new Date();
+            var id = date.getTime();
+                
+            if (!idVar) {
+                idVar = app.activeDocument.variables.add();
+                idVar.kind = VariableKind.VISIBILITY;
+                idVar.name = "Var_" + id;
+                pageItem.visibilityVariable = idVar;
+            }
+         
+            try {
+                arm.visibilityVariable = idVar;
+                arm.note = "({type:'arm',varName:'" + idVar.name + "'})";
+            } catch(e) {}
+            try {
+                group.visibilityVariable = idVar;
+            } catch(e) {}
+            try {
+                spec.visibilityVariable = idVar;
+            } catch(e) {}
+            try {
+                itemCircle.visibilityVariable = idVar;
+                itemCircle.note = "({type:'itemCircle',varName:'" + idVar.name + "'})";
+            } catch(e) {}
+            try {
+                firstBullet.visibilityVariable = idVar;
+                firstBullet.note = "({type:'firstBullet',varName:'" + idVar.name + "'})";
+            } catch(e) {}
+            try {
+                secondBullet.visibilityVariable = idVar;
+                secondBullet.note = "({type:'secondBullet',varName:'" + idVar.name + "'})";
+            } catch(e) {}
+
+            pageItem.note = "({type:'source',updated:'" + id + "',varName:'" + idVar.name + "',position:'" + 
+                                            pageItem.visibleBounds.join("|") + "'})";
+            group.note = "({type:'group',varName:'" + idVar.name + "'})";
+            
+            if (!propSpecUndo[idVar.name]) 
+                propSpecUndo[idVar.name] = ({});
+
+            propSpecUndo[idVar.name].updated = id;
+
+            spec.note = "({type:'spec',updated:'" + id + "',varName:'" + idVar.name + "',position:'" + 
+                                    spec.visibleBounds.join("|") + "'})" + "-css:" + cssText ;
+        
+            group.name = "Specctr Properties Mark";
+            group.move(legendLayer, ElementPlacement.INSIDE);
+        } catch(e) {
+            alert(e);
+            return false;
+        }
+
+        return true;
+    },
+
+    //Create bullet annotation for specs.
+    createBullet : function (bulletColor, number, dia, specTop, specLeft) {
+        try {
+            var group = app.activeDocument.groupItems.add();
+            var numberHeight = number.visibleBounds[3] - number.visibleBounds[1];
+            var numberWidth = number.visibleBounds[2] - number.visibleBounds[0];
+
+            //top, left should be the spec's coordinates.
+            var itemCircle = app.activeDocument.pathItems.ellipse(specTop, specLeft - dia - 1, dia, dia);
+            itemCircle.fillColor = bulletColor;
+            itemCircle.filled = true;
+            itemCircle.stroked = false;
+            itemCircle.move(group, ElementPlacement.INSIDE);
+
+            number.translate(itemCircle.visibleBounds[0] - number.visibleBounds[0] + dia / 2.0 - numberWidth/2.0, 
+                                        itemCircle.visibleBounds[1] - number.visibleBounds[1] - dia / 2.0 - numberHeight/2.0);
+            number.move(group, ElementPlacement.INSIDE);
+            
+            return group;
+            
+        } catch (e) {
+            alert(e);
+        }
+    },
+
+    //Call the add note specs function for each selected art on the active artboard.
+    addNoteSpecs : function() {
+        try {
+            var selectionLength = app.selection.length;
+            for (var i = 0; i < selectionLength; i++) {
+                var obj = app.selection[i];
+                if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
+                    this.addNoteSpecsForItem(obj);
+            }
+            app.redraw();   //Creates an 'undo' point.
+        } catch(e) {}
+    },
+
+    // Add note specs for the selected page item.
+    addNoteSpecsForItem : function (sourceItem) {
+         try {
+            var spacing = 10;
+            var legendLayer;
+
+            var newColor = this.legendColor(model.legendColorObject);
+                
+            var arm, spec, group, itemCircle, infoText = "#Add_Notes";
+            var pageItem = sourceItem;
+            var pageItemBounds = this.itemBounds(pageItem);
+            var idVar = pageItem.visibilityVariable;
+            var propertySpec;
+            
+            legendLayer = this.legendSpecLayer("Add Notes");
+             //To get property specs in case any present for selected pageItem.
+            if (idVar) {      //find spec components
+                var allPageItems = idVar.pageItems;
+            
+                for (var i = 0; i < allPageItems.length; i++) {
+                    try {
+                        var dataString = this.separateNoteAndStyleText(allPageItems[i].note);
+                        allPageItems[i].note = dataString;
+                        var data;
+                        try {    
+                            data = eval(dataString);
+                        } catch(e) {
+                            data = this.deserialize(dataString);
+                        }
+                   
+                        switch (data.type) {
+                            case "spec": propertySpec = allPageItems[i]; break;
+                            case "noteSpec": spec = allPageItems[i]; 
+                                                       infoText = spec.contents; break;
+                            case "noteArm": arm = allPageItems[i]; break;
+                            case "noteGroup": group = allPageItems[i]; break;
+                            case "noteItemCircle": itemCircle = allPageItems[i]; break;
+                            default:
+                        }
+                    } catch(e) {}
+                }
+            }
+        
+        var yReference = 0;
+        
+
+            if (!spec) {
+                spec = app.activeDocument.textFrames.add();     
+                spec.resize(100.1, 100.1);       //this allows to change justification from right to left later
+                /*spec.note = "type:spec";if(idVar) {spec.visibilityVariable = idVar;spec.note = "type:spec,varName:"+idVar.name;}*/
+            }
+
+            spec.contents = infoText;
+            spec.textRange.characterAttributes.fillColor = newColor;
+            spec.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
+            spec.textRange.characterAttributes.size = model.legendFontSize;
+
+            if (idVar && spec && arm && itemCircle) {
+                this.updateConnection("noteSpec");
+                return;
+            }
+
+            if (!group)  //positioning
+                group = app.activeDocument.groupItems.add();
+             
+            var currentArtboard = app.activeDocument.artboards[app.activeDocument.artboards.getActiveArtboardIndex()];
+            var artRect = currentArtboard.artboardRect;
+
+            //center
+            var heightItem= pageItemBounds[1] - pageItemBounds[3];
+            var heightInfo = spec.visibleBounds[1] - spec.visibleBounds[3];
+            var widthInfo = spec.visibleBounds[2] - spec.visibleBounds[0];
+                
+            var centerY = pageItemBounds[1] / 2 + pageItemBounds[3] / 2;
+            var centerX = pageItemBounds[0] / 2 + pageItemBounds[2] / 2;
+            var artboardCenterX = artRect[0] / 2 + artRect[2] / 2;
+            var specX;
+            var specEdge;
+            if(propertySpec) {
+                yReference = propertySpec.visibleBounds[3] - spacing;
+            } else {
+                yReference = pageItemBounds[1];
+            }
+            if (centerX <= artboardCenterX) {
+                spec.textRange.paragraphAttributes.justification = Justification.LEFT;
+                    
+                if (model.specToEdge)
+                    specX = artRect[0] - spec.visibleBounds[0] + spacing;
+                else
+                    specX = pageItemBounds[0] - widthInfo - spacing;
+
+            } else {
+                spec.textRange.paragraphAttributes.justification = Justification.RIGHT;
+                
+                if (model.specToEdge) {
+                    spec.translate(pageItemBounds[2] - pageItemBounds[0],0);
+                    specX = artRect[2] - spec.visibleBounds[2] - spacing;
+                } else {
+                    specX = pageItemBounds[2] + spacing;
+                }
+            
+            }
+
+           spec.translate(specX, (yReference - spec.visibleBounds[1] ));			
            spec.move(group, ElementPlacement.INSIDE);
 
             if (!arm) {
@@ -1780,10 +2105,10 @@ $.specctrAi = {
                 itemCircle.stroked = true;
                 itemCircle.move(group, ElementPlacement.INSIDE);
             }
-             
+
             var date = new Date();
             var id = date.getTime();
-                
+
             if (!idVar) {
                 idVar = app.activeDocument.variables.add();
                 idVar.kind = VariableKind.VISIBILITY;
@@ -1804,22 +2129,15 @@ $.specctrAi = {
                 itemCircle.visibilityVariable = idVar;
             } catch(e) {}
         
-            arm.note = "({type:'arm',varName:'" + idVar.name + "'})";
-            pageItem.note = "({type:'source',updated:'" + id + "',varName:'" + idVar.name + "',position:'" + 
+            arm.note = "({type:'noteArm',varName:'" + idVar.name + "'})";
+            pageItem.note = "({type:'source',varName:'" + idVar.name + "',position:'" + 
                                             pageItem.visibleBounds.join("|") + "'})";
+            group.note = "({type:'noteGroup',varName:'" + idVar.name + "'})";
+            itemCircle.note = "({type:'noteItemCircle',varName:'" + idVar.name + "'})";
+            spec.note = "({type:'noteSpec',varName:'" + idVar.name + "',position:'" + 
+                                    spec.visibleBounds.join("|") + "'})";
         
-            group.note = "({type:'group',varName:'" + idVar.name + "'})";
-            itemCircle.note = "({type:'itemCircle',varName:'" + idVar.name + "'})";
-                
-            if (!propSpecUndo[idVar.name]) 
-                propSpecUndo[idVar.name] = ({});
-
-            propSpecUndo[idVar.name].updated = id;
-
-            spec.note = "({type:'spec',updated:'" + id + "',varName:'" + idVar.name + "',position:'" + 
-                                    spec.visibleBounds.join("|") + "'})" + "-css:" + cssText ;
-        
-            group.name = "Specctr Properties Mark";
+            group.name = "Specctr Add Notes";
             group.move(legendLayer, ElementPlacement.INSIDE);
         } catch(e) {
             alert(e);
@@ -1827,21 +2145,6 @@ $.specctrAi = {
         }
 
         return true;
-    },
-    
-    //Call the add note specs function for each selected art on the active artboard.
-    addNoteSpecs : function() {
-        try {
-            alert("Work is under progress!");
-            return;
-            var selectionLength = app.selection.length;
-            for (var i = 0; i < selectionLength; i++) {
-                var obj = app.selection[i];
-                if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
-                    this.addNoteSpecsForItem(obj);
-            }
-            app.redraw();   //Creates an 'undo' point.
-        } catch(e) {}
     },
 
     deserialize : function(dataString) {

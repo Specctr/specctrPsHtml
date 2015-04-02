@@ -12,6 +12,7 @@
 #include "specctrPsExportCss.jsx"
 #include "specctrPsProperties.jsx"
 #include "specctrPsSpacing.jsx"
+#include "specctrPsAddNote.jsx"
 
 $.specctrPs = {
     //Get the application font's name and font's family.
@@ -60,6 +61,11 @@ $.specctrPs = {
     //Call create property spec method from specctrPsProperties jsx file.
     createPropertySpecs : function() {
         $.specctrPsProperties.createPropertySpecsForItem();
+    },
+
+    //Call create add note spec method from specctrPsAddNotes jsx file.
+    addNoteSpecs : function() {
+        $.specctrPsAddNote.addNoteSpecs();
     },
 
     //Call create exportCss method from specctrPsExportCss jsx file.
