@@ -3,8 +3,9 @@ File-Name: specctrUI.js
 Description: Includes all the methods related to UI component like change event handlers, click event handlers etc. 
  */
 
-
-SPECCTR_API = "http://127.0.0.1:5000/api/v1";
+//SPECCTR_HOST = "http://localhost:5000";
+SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
+SPECCTR_API = SPECCTR_HOST += "/api/v1";
 
 /**
  * Validate the license of the user and move to the tab container
@@ -49,9 +50,11 @@ function activateButton_clickHandler() {
 		return;
 	}
 
-	var urlRequest = "http://127.0.0.1:5000/api/v1/register_machine?";
+	var urlRequest = SPECCTR_API += "/register_machine?";
 	urlRequest += "&email=" + document.getElementById("emailInput").value;
 	urlRequest += "&password=" + document.getElementById("passwordInput").value;
+	
+	alert(urlRequest);
 
 	$.ajax({
 		url:urlRequest,
