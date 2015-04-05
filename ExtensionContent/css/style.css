@@ -68,12 +68,13 @@ body {
 	color: #4B4B4B;
 }
 
-input[type="text"],input[type="password"] {
+input[type="text"],input[type="email"],input[type="password"] {
 	border: 1px solid #C9CBCC !important;
 	padding: 1px;
 	border-top: 1px solid #6D6F70 !important;
 	width: 187px;
 	-webkit-user-select: auto;
+	cursor: text;
 }
 
 .menu {

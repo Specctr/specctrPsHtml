@@ -3,6 +3,9 @@ File-Name: specctrUI.js
 Description: Includes all the methods related to UI component like change event handlers, click event handlers etc. 
  */
 
+
+SPECCTR_API = "http://127.0.0.1:5000/api/v1";
+
 /**
  * Validate the license of the user and move to the tab container
  *  if user's credentials valid.
@@ -46,16 +49,23 @@ function activateButton_clickHandler() {
 		return;
 	}
 
-	var urlRequest = "http://specctr-license.herokuapp.com";
-	urlRequest += "?product=" + productCodes[extensionId];
-	urlRequest += "&license=" + document.getElementById("license").value;
+	var urlRequest = "http://127.0.0.1:5000/api/v1/register_machine?";
 	urlRequest += "&email=" + document.getElementById("emailInput").value;
+	urlRequest += "&password=" + document.getElementById("passwordInput").value;
 
-	$.get(urlRequest, completeHandler).error(function() {
-		logData = "No connection available";
-		showDialog(logData);
-		logData = createLogData(message);
-		addFileToPreferenceFolder('.log', logData);	//Create log file.
+	$.ajax({
+		url:urlRequest,
+		type: 'POST',
+		contentType: "application/json",
+		dataType: "json",
+		success: completeHandler,
+		error: function(xhr) {
+			var response = JSON.parse(xhr.responseText);
+		
+			showDialog(response.message);
+			logData = createLogData(response.error);
+			addFileToPreferenceFolder('.log', logData);	//Create log file.
+		}
 	});
 }
 

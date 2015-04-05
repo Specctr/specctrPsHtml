@@ -9,30 +9,25 @@ and reading and writing preferences methods.
  * @param data {object} The object of the response came from the activation request.
  * @param status {string} The status of the activation request.
  */
-function completeHandler(data, status) {
-	var response = data;
-	var arr = response.registered;
-
+function completeHandler(response, status) {
 	var logData = createLogData(response.message);
 	addFileToPreferenceFolder('.log', logData);	//Create log file.
 
 	// If unsuccessful, return without saving the data in file.
-	if (!arr.length) {
+	if (response.success) {
+		analytics.trackActivation('succeeded');	
+		var activationPrefs = {
+			licensed : true,
+			machine_id: response.machine_id,
+			api_key: response.api_key
+		};
+		addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs)); //Create license file.
+		init();
+	} else {
 		analytics.trackActivation('failed');
 		showDialog(response.message);
 		return;
-	} else {
-		analytics.trackActivation('succeeded');
-		
-		var activationPrefs = {
-			licensed : true,
-			code : $("#license").val()
-		};
-		licenseCode = activationPrefs.code;
 	}
-
-	addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs)); //Create license file.
-	init();
 }
 
 /**
@@ -164,22 +159,18 @@ function onLoaded() {
 
 		//Migrating isLicensed from config file to license file, if present.
 		var activationPrefs = {};
-		if (!isLicensed) {
-			var licenseFilePath = getFilePath('.license');
-			activationPrefs = readFile(licenseFilePath);	//Read the licensed file.
+		
+		var licenseFilePath = getFilePath('.license');
+		activationPrefs = readFile(licenseFilePath);	//Read the licensed file.
 
-			if (activationPrefs === "")
-				return;
-			else
-				activationPrefs = JSON.parse(activationPrefs);
+		if (activationPrefs === "")
+			return;
+		else
+			activationPrefs = JSON.parse(activationPrefs);
 
-			isLicensed = activationPrefs.licensed;
-			licenseCode = activationPrefs.code;
-		} else {
-			activationPrefs.licensed = true;
-			addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs));
-			writeAppPrefs();
-		}
+		isLicensed = activationPrefs.licensed;
+		licenseCode = activationPrefs.code;
+		
 
 		if (isLicensed)
 			init();
@@ -403,6 +394,38 @@ function exportCss() {
 	} catch (e) {
 		console.log(e);
 	}
+}
+
+function syncCss() {
+	try{
+		setModel();
+		// Upload specs to Specctr.
+		cssText = evalScript("$.specctrPsExportCss.getCss()", function(cssInfo){
+			var css = JSON.parse(cssInfo);
+			var cssJson = CSSJSON.toJSON(css.text);
+			var data = JSON.stringify({
+				api_key: api_key,
+				machine_id: machine_id,
+				document_name: css.document_name,
+				css_items: cssJson.children
+			});
+			$.ajax({
+				url: SPECCTR_API + "/css_items",
+				type: "POST",
+				contentType: "application/json;charset=utf-8",
+				dataType: "json",
+				data: data,
+				success: function(response) {
+					alert('success');
+				},
+				error: function(xhr) {
+					alert('error');
+				}
+			});
+		});
+	} catch(e) {
+		console.log(e);
+	}	
 }
 
 /**
