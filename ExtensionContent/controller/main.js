@@ -417,10 +417,10 @@ function syncCss() {
 				dataType: "json",
 				data: data,
 				success: function(response) {
-					alert('success');
+					showDialog('success');
 				},
 				error: function(xhr) {
-					alert('error');
+					showDialog('error');
 				}
 			});
 		});

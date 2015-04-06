@@ -20,10 +20,8 @@
 <script src="../controller/utility.js"></script>
 <script src="../controller/specctrUI.js"></script>
 <script src="../controller/main.js"></script>
-<script src="../controller/coordinateButtonHandlers.js"></script>
-<script src="../controller/spacingButtonHandlers.js"></script>
-<script src="../controller/dimensionButtonHandlers.js"></script>
-<script src="../controller/propertiesButtonHandlers.js"></script>
+<script src="../controller/buttonHandlers.js"></script>
+
 <script src="../lib/cs_host_adapter.js"></script>
 <script src="../lib/ai_host_adapter.js"></script>
 
@@ -112,22 +110,20 @@
 			<div id="tabpage_1" class="tabpage">
 				<ul class="menu">
 
-					<!-- Shape/Text button. -->
+					<!-- Property button. -->
 					<li class="border" id="liProperties">
-						<div class="button imgButton" id="btnProperties" onclick="propertiesButton_clickHandler(this)">
+						<div class="button imgButton" id="btnProperties" onclick="specButtonsClickHandler(this)">
 							<img id="imgProperty" alt="Shape/Text" /> 
 							<label class="buttonTextStyle" style="margin-left: -1px;">Properties</label>
 							<div class="dropdownArrow" id="imgPropertiesDdlArrow"
-								onclick="propertiesDropDown_clickHandler(event)"></div>
+								onclick="buttonDropDownClickHandler(event, this)"></div>
 						</div>
 						
 						<div class="options" id="propertiesDropDown">
-							<div class="propertyCellOption lineOptionSelected" id="imgPropertiesLine"
-								onclick="propertiesCell_clickHandler(this.id, 'lineOptionSelected', 'Line')">
-								Line</div>
-							<div class="propertyCellOption" id="imgPropertiesBullet"
-								onclick="propertiesCell_clickHandler(this.id, 'bulletOptionSelected', 'Bullet')">
-								Bullet</div>
+							<div class="option specLineSelected" id="imgPropertiesLine"
+								onclick="dropDownCellClickHandler(this.id, 'specLineSelected', 'Line')"></div>
+							<div class="option" id="imgPropertiesBullet"
+								onclick="dropDownCellClickHandler(this.id, 'specBulletSelected', 'Bullet')"></div>
 						</div>
 						
 					</li>
@@ -135,74 +131,74 @@
 					<!-- Width/Height button. -->
 					<li class="border" id="liWh">
 					
-						<div class="button imgButton" id="btnWh" onclick="dimensionButton_clickHandler()">
+						<div class="button imgButton" id="btnWh" onclick="specButtonsClickHandler(this)">
 							<img id="dimensionIcon"/> 
 							<label class="buttonTextStyle">
 								Width / Height</label>
 							<div class="dropdownArrow" id="imgWhDdlArrow"
-								onclick="dimensionDropDown_clickHandler(event)"></div>
+								onclick="buttonDropDownClickHandler(event, this)"></div>
 						</div>
 						
 						<div class="options" id="dimensionDropDown">
 							<div class="option" id="imgNoSelectionWidth" title="width"
-								onclick="dimensionCell_clickHandler(this.id, 'noSelectionSelected')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'noSelectionSelected')"></div>
 							<div class="option widthTopSelected" id="imgWidthTop" title="width"
-								onclick="dimensionCell_clickHandler(this.id, 'widthTopSelected')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'widthTopSelected')"></div>
 							<div class="option" id="imgWidthBottom" title="width"
-								onclick="dimensionCell_clickHandler(this.id, 'widthBottomSelected')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'widthBottomSelected')"></div>
 							<div class="option" id="imgWidthCenter" title="width"
-								onclick="dimensionCell_clickHandler(this.id, 'widthCenterSelected')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'widthCenterSelected')"></div>
 							<div class="option" id="imgNoSelectionHeight" title="height"
-								onclick="dimensionCell_clickHandler(this.id, 'noSelectionSelected')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'noSelectionSelected')"></div>
 							<div class="option heightLeftSelected" id="imgHeightLeft" title="height"
-								onclick="dimensionCell_clickHandler(this.id, 'heightLeftSelected')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'heightLeftSelected')"></div>
 							<div class="option" id="imgHeightRight" title="height"
-								onclick="dimensionCell_clickHandler(this.id, 'heightRightSelected')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'heightRightSelected')"></div>
 							<div class="option" id="imgHeightCenter" title="height"
-								onclick="dimensionCell_clickHandler(this.id, 'heightCenterSelected')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'heightCenterSelected')"></div>
 						</div>
 						
 					</li>
 
 					<!-- Spacing button. -->
 					<li class="border" id="liSpacing">
-						<div class="button imgButton" id="btnSpacing" onclick="spacingButton_clickHandler()">
+						<div class="button imgButton" id="btnSpacing" onclick="specButtonsClickHandler(this)">
 							<img id="spacingIcon" class="adjustSpacingImage"/>
 							<label class="buttonTextStyle adjustSpacingLabel">
 								Spacing</label>
 							<div id="imgSpacingDdlArrow" class="dropdownArrow"
-								onclick="spacingDropDown_clickHandler(event)"></div>
+								onclick="buttonDropDownClickHandler(event, this)"></div>
 						</div>
 						<div class="options" id="spacingDropDown">
 							<div class="option topSelected" id="imgSpaceTop"
-								onclick="spacingCell_clickHandler(this.id, 'topSelected', 'spaceTop')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'topSelected', 'spaceTop')"></div>
 							<div class="option" id="imgSpaceRight"
-								onclick="spacingCell_clickHandler(this.id, 'rightSelected', 'spaceRight')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'rightSelected', 'spaceRight')"></div>
 							<div class="option" id="imgSpaceBottom"
-								onclick="spacingCell_clickHandler(this.id, 'bottomSelected', 'spaceBottom')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'bottomSelected', 'spaceBottom')"></div>
 							<div class="option leftSelected" id="imgSpaceLeft"
-								onclick="spacingCell_clickHandler(this.id, 'leftSelected', 'spaceLeft')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'leftSelected', 'spaceLeft')"></div>
 						</div>
 					</li>
 
 					<!-- Coordinate button. -->
 					<li class="border" id="liCoordinate">
-						<div class="button imgButton" id="btnCoordinate" onclick="coordinateButton_clickHandler()">
+						<div class="button imgButton" id="btnCoordinate" onclick="specButtonsClickHandler(this)">
 							<img id="imgCoordinate" alt="Coordinates" /> 
 							<label class="buttonTextStyle" style="margin-left: -1px;">
 								Coordinates</label>
 							<div id="imgCoordinateDdlArrow" class="dropdownArrow"
-								onclick="coordinateDropDown_clickHandler(event)"></div>
+								onclick="buttonDropDownClickHandler(event, this)"></div>
 						</div>
 						<div class="options nonIdElement" id="coordinateDropDown">
 							<div class="option topLeftSelected" id="imgTopLeft"
-								onclick="coordinateCell_clickHandler(this.id, 'topLeftSelected')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'topLeftSelected')"></div>
 							<div class="option" id="imgTopRight"
-								onclick="coordinateCell_clickHandler(this.id, 'topRightSelected')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'topRightSelected')"></div>
 							<div class="option" id="imgBottomRight"
-								onclick="coordinateCell_clickHandler(this.id, 'bottomRightSelected')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'bottomRightSelected')"></div>
 							<div class="option" id="imgBottomLeft"
-								onclick="coordinateCell_clickHandler(this.id, 'bottomLeftSelected')"></div>
+								onclick="dropDownCellClickHandler(this.id, 'bottomLeftSelected')"></div>
 						</div>
 					</li>
 

@@ -488,11 +488,12 @@ label {
 .propertyCellOption {
 	float: left;
 	width: 99px;
-	height: 50px;
+	height: 49px;
 	cursor: pointer;
 	background-position: center;
 	text-align: center;
 	vertical-align: middle; 
+	background-repeat: no-repeat;
 }
 
 .active {
