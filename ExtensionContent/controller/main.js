@@ -130,7 +130,6 @@ function setModelToResponsive() {
 function onLoaded() {
 	// Handle exceptions of any missing components.
 	try {
-		alert("YO");
 		createDialog();
 		var isLicensed = false;
 		var appPrefs;
