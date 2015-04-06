@@ -169,7 +169,8 @@ function onLoaded() {
 			activationPrefs = JSON.parse(activationPrefs);
 
 		isLicensed = activationPrefs.licensed;
-		licenseCode = activationPrefs.code;
+		api_key = activationPrefs.api_key;
+		machine_id = activationPrefs.machine_id;
 		
 
 		if (isLicensed)
@@ -400,7 +401,7 @@ function syncCss() {
 	try{
 		setModel();
 		// Upload specs to Specctr.
-		cssText = evalScript("$.specctrPsExportCss.getCss()", function(cssInfo){
+		cssText = evalScript("$.specctrPsExportCss.uploadCss()", function(cssInfo){
 			var css = JSON.parse(cssInfo);
 			var cssJson = CSSJSON.toJSON(css.text);
 			var data = JSON.stringify({
