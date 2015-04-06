@@ -1,0 +1,62 @@
+@CHARSET "ISO-8859-1";
+
+/*
+File-Name: coordinateButtonStyle.css
+Description: Includes styling code related to coordinate button. 
+*/
+
+#liProperties .option {
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 99px;
+}
+
+#liProperties .options {
+    height: 50px;
+}
+
+#liProperties:hover .options {
+    margin-left: -1px !important;
+}
+
+#imgPropertiesLine {
+    background-image: url('../Images/PropertiesDropDownIcons/specLine.png');
+}
+
+.specLineSelected {
+	background-image: url('../Images/PropertiesDropDownIcons/specLine_selected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgPropertiesBullet {
+    background-image: url('../Images/PropertiesDropDownIcons/specNumber.png');
+}
+
+.specBulletSelected {
+	background-image: url('../Images/PropertiesDropDownIcons/specNumber_selected.png') !important;
+	background-color: #D2D2D2;
+}
+
+@media 
+(-webkit-min-device-pixel-ratio: 2) { 
+	#imgPropertiesLine {
+    	background-image: url('../Images/PropertiesDropDownIcons/specLine_x2.png');
+    	background-size: 49px 49px;
+	}
+
+    .specLineSelected {
+		background-image: url('../Images/PropertiesDropDownIcons/specLine_selected_x2.png') !important;
+		background-color: #D2D2D2;
+		background-size: 49px 49px;
+    }
+    
+    #imgPropertiesBullet {
+    	background-image: url('../Images/PropertiesDropDownIcons/specNumber_x2.png');
+    	background-size: 49px 49px;
+	}
+    .specBulletSelected {
+		background-image: url('../Images/PropertiesDropDownIcons/specNumber_selected_x2.png') !important;
+		background-color: #D2D2D2;
+		background-size: 49px 49px;
+    }
+}
