@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="4.0" ExtensionBundleId="Specctr-10-PS" ExtensionBundleVersion="1.2.3"
+<ExtensionManifest Version="5.0" ExtensionBundleId="SpecctrMaster" ExtensionBundleVersion="3.0.7.h"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
-    </Author>
-    <Contact mailto="info@on-pixel.com"/>
-    <Legal>
-        <![CDATA[
-End User License Agreement for Specctr-10-PS.
+	</Author>	<Contact mailto="info@on-pixel.com"/>	<Legal>
+		<![CDATA[End User License Agreement for Specctr - Pro.
 This End User Software License Agreement (this “Agreement”) is by and between You (“Recipient”), and 
 On Pixel, Inc., a Massachusetts corporation, with a primary place of business at 374 Beacon St. #2
 Somerville, Massachusetts 02464 (“Provider”). This agreement governs your use of the Specctr software 
@@ -18,8 +15,9 @@ Terms and Conditions
 1. License.
 (a) Grant of Rights. Provider hereby grants Recipient a non-exclusive license to use the Software 
 provided: (i) Recipient may give no more than one (1) concurrent user access to the Software; (ii) 
-Recipient may install the Software on no more than one (1) computers; (iii) Recipient complies 
-with the restrictions set forth in Subsection 1(b) below. 
+Freelance/Single License Recipient may install the Software on no more than two (2) computers;
+(iii) Enterprise/Business License Recipient may install the Software on no more than one (1) computer;  
+(iv) Recipient complies with the restrictions set forth in Subsection 1(b) below. 
 (b) Restrictions. Copies of the Software created or transferred pursuant to this Agreement are 
 licensed, not sold, and Recipient receives no title to or ownership of any copy or of the Software 
 itself. Use of the software in violation of, or outside the terms of, this agreement constitutes 
@@ -70,7 +68,7 @@ ON A CONFIDENTIAL BASIS PURSUANT TO THE COMMERCIAL ARBITRATION RULES OF THE
 AMERICAN ARBITRATION ASSOCIATION. ANY DECISION OR AWARD AS A RESULT OF ANY SUCH 
 ARBITRATION PROCEEDING SHALL BE IN WRITING AND SHALL PROVIDE AN EXPLANATION FOR 
 ALL CONCLUSIONS OF LAW AND FACT AND SHALL INCLUDE THE ASSESSMENT OF COSTS, 
-EXPENSES, AND REASONABLE ATTORNEYS\&#x27; FEES. ANY SUCH ARBITRATION SHALL BE 
+EXPENSES, AND REASONABLE ATTORNEYS' FEES. ANY SUCH ARBITRATION SHALL BE 
 CONDUCTED BY AN ARBITRATOR EXPERIENCED IN COMPUTER SOFTWARE LICENSING AND 
 SHALL INCLUDE A WRITTEN RECORD OF THE ARBITRATION HEARING. THE PARTIES RESERVE 
 THE RIGHT TO OBJECT TO ANY INDIVIDUAL WHO SHALL BE EMPLOYED BY OR AFFILIATED 
@@ -88,7 +86,7 @@ PROVIDER IS ADVISED IN ADVANCE OF THE POSSIBILITY OF THE DAMAGES IN QUESTION AND
 EVEN IF SUCH DAMAGES WERE FORESEEABLE; AND (D) EVEN IF RECIPIENT’S REMEDIES FAIL 3
 OF THEIR ESSENTIAL PURPOSE. If applicable law limits the application of the provisions of this Section 
 6, Provider’s liability will be limited to the maximum extent permissible.
-7. Term &amp; Termination.
+7. Term & Termination.
 (a) Term. This Agreement will continue until terminated as set forth in this section. Recipient may 
 terminate this Agreement at any time. Provider may terminate this Agreement immediately if 
 Recipient violates any provision of this agreement or if Provider determines that the Software or 
@@ -113,12 +111,12 @@ Representative and (ii) in an explicit written waiver. No waiver of a breach of 
 constitute a waiver of any prior or subsequent breach of this Agreement.
 (c) Force Majeure. To the extent caused by force majeure, no delay, failure, or default will constitute 
 a breach of this Agreement. 
-(d) Assignment &amp; Successors. Neither party may assign this Agreement or any of its rights or 
+(d) Assignment & Successors. Neither party may assign this Agreement or any of its rights or 
 obligations hereunder without the other’s express written consent, except that Provider may 
 assign this Agreement to the surviving party in a merger into another entity. Except to the extent 
 forbidden in the previous sentence, this Agreement will be binding upon and inure to the benefit of 
 the respective successors and assigns of the parties.
-(e) Choice of Law &amp; Jurisdiction. This Agreement will be governed solely by the internal laws of the 
+(e) Choice of Law & Jurisdiction. This Agreement will be governed solely by the internal laws of the 
 State of Massachusetts, without reference to such State’s principles of conflicts of law. The 
 parties consent to the personal and exclusive jurisdiction of the federal and state courts of 
 Boston, Massachusetts.
@@ -144,32 +142,29 @@ this Agreement and those of any attachment, the terms of this main body will gov
 all prior or contemporaneous writings, negotiations, and discussions with respect to the subject 
 matter hereof. Neither party has relied upon any such prior or contemporaneous communications.
 (j) Amendment. This Agreement may not be modified except (i) by Authorized Representatives of 
-each party and (ii) in a written contract signed by both parties.
-]]>
-    </Legal>
-    <Abstract>
-        <![CDATA[Specctr supercharges Adobe Photoshop by automating spec generation. With the capability to spec dimensions, color, font, spacing, and more, Specctr enables design and development teams to collaborate more accurately, efficiently, and effortlessly.]]>
-    </Abstract>
-    <ExtensionList>
-        <Extension Id="SpecctrPs-10" Version="1.0"/>
+each party and (ii) in a written contract signed by both parties.]]>
+	</Legal>	<Abstract>
+		<![CDATA[Specctr supercharges Adobe Photoshop by automating spec generation. With the capability to spec dimensions, color, font, spacing, and more, Specctr enables design and development teams to collaborate more accurately, efficiently, and effortlessly.]]>
+	</Abstract>	<ExtensionList>
+		<Extension Id="SpecctrPs-Pro" Version="1.0" />
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
-           
-            <Host Name="PHSP" Version="[14.0,15.9]" />
-           
-            <Host Name="PHXS" Version="[14.0,15.9]" />
-        
+			<Host Name="PHSP" Version="[14.0,15.9]" />
+			<Host Name="IDSN" Version="[9.1,10.9]" />
+			<Host Name="PHXS" Version="[14.0,15.9]" />
+			<Host Name="ILST" Version="[17.0,18.9]" />
 		</HostList>
 		<LocaleList>
 			<Locale Code="All" />
 		</LocaleList>
 		<RequiredRuntimeList>
-			<RequiredRuntime Name="CSXS" Version="4.0" />
+			<RequiredRuntime Name="CSXS" Version="5.0" />
+
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
-        <Extension Id="SpecctrPs-10">
+		<Extension Id="SpecctrPs-Pro">
 			<DispatchInfo >
 				<Resources>
 				<MainPath>./html/specctr.html</MainPath>
@@ -180,19 +175,19 @@ each party and (ii) in a written contract signed by both parties.
 				</Lifecycle>
 				<UI>
 					<Type>Panel</Type>
-                    <Menu>Specctr-10-PS</Menu>
+					<Menu>Specctr-Pro</Menu>
 					<Geometry>
 						<Size>
-							<Height>370</Height>
-							<Width>222</Width>
+							<Height>610</Height>
+							<Width>224</Width>
 						</Size>
 						<MaxSize>
-							<Height>370</Height>
-							<Width>222</Width>
+							<Height>610</Height>
+							<Width>224</Width>
 						</MaxSize>
 						<MinSize>
-							<Height>370</Height>
-							<Width>222</Width>
+							<Height>610</Height>
+							<Width>224</Width>
 						</MinSize>
 					</Geometry>
 					<Icons>

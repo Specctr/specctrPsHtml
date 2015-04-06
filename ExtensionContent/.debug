@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<ExtensionList>
+    <Extension Id="SpecctrPs-Pro">
+        <HostList>
+            <Host Name="PHXS" Port="5050"/> 
+            <Host Name="ILST" Port="5050"/> 
+            <Host Name="IDSN" Port="5050"/> 
+        </HostList>
+    </Extension>
+</ExtensionList>
