@@ -19,35 +19,25 @@ function specButtonsClickHandler(specButton) {
 			createPropertySpecs();
 		} else if(specButton.id == "btnWh") {
 			
-			if (model.widthPos == 0 && model.heightPos == 0) {
-				//Open the dropdown.
-				$("#liWh .options").slideDown(100);
-				$("#imgWhDdlArrow").addClass("dropdownArrowUp");
-				$("#btnWh").addClass("buttonSelected");
-				$("#liWh").addClass("isOpen");
-			} else {
+			if (model.widthPos == 0 && model.heightPos == 0) 
+				openDropDown(specButton.id);	//Open width/height button dropdown.
+			else 
 				createDimensionSpecs();
-			}
-			
+
 		} else if (specButton.id == "btnSpacing"){
 			
 			if (!model.spaceTop && !model.spaceRight && !model.spaceLeft
-					&& !model.spaceBottom) {
-				//Open the dropdown.
-				$("#liSpacing .options").slideDown(100);
-				$("#btnSpacing").addClass("buttonSelected");
-				$("#imgSpacingDdlArrow").addClass("dropdownArrowUp");
-				$("#liSpacing").addClass("isOpen");
-			} else {
+					&& !model.spaceBottom) 
+				openDropDown(specButton.id); //Open the spacing button dropdown.
+			else 
 				createSpacingSpecs();
-			}
-			
+
 		} else if (specButton.id == "btnCoordinate") {
 			createCoordinateSpecs();
 		}
 			
 	} catch (e) {
-		alert(e);
+		alert("come "+e);
 	}
 }
 
@@ -58,24 +48,18 @@ function buttonDropDownClickHandler(event, specButton) {
 	try {
 		event.stopPropagation();	//Stop the click event from bubbling to parent div.
 		
-		//Close remaining drop downs.
-		closeAllDropDown(specButton.parentNode.id);
+		var buttonId = specButton.parentNode.id;
+		//Close the remaining drop downs except the element in the parameters.
+		closeAllDropDown(buttonId);
 
+		//Get the ids of selected dropdown elements.
+		buttonId = "#" + buttonId;
+		var liId = "#" + specButton.parentNode.parentNode.id;
+		var dropDownId = "#" + $(liId+" div:nth-child(2)").attr("id");
+		var imageDropDownArrowId = "#" + specButton.id;
+		
 		//Call the spec methods respective to the clicked button's Id.
-		//Make it generic..
-		if(specButton.parentNode.id == "btnProperties") {
-			toggleDropDown("#liProperties", "#btnProperties",
-					"#propertiesDropDown", "#imgPropertiesDdlArrow");
-		} else if(specButton.parentNode.id == "btnWh") {
-			toggleDropDown("#liWh", "#btnWh",
-					"#dimensionDropDown", "#imgWhDdlArrow");
-		} else if (specButton.parentNode.id == "btnSpacing"){
-			toggleDropDown("#liSpacing", "#btnSpacing",
-					"#spacingDropDown", "#imgSpacingDdlArrow");
-		} else if (specButton.parentNode.id == "btnCoordinate") {
-			toggleDropDown("#liCoordinate", "#btnCoordinate",
-					"#coordinateDropDown", "#imgCoordinateDdlArrow");
-		}
+		toggleDropDown(liId, buttonId, dropDownId, imageDropDownArrowId);
 		
 	} catch (e) {
 		alert(e);
@@ -86,39 +70,56 @@ function buttonDropDownClickHandler(event, specButton) {
  * Change the appearance of selected cell in the property dropdown.
  * @param cellId {string} The id of selected cell.
  * @param selectionClass {string} The css class that has to be toggled.
+ * @param modelValue {string} The value to be changed in model object.
  * */
 function dropDownCellClickHandler(cellId, selectionClass, modelValue) {
 	try {
-		var selectedCellIndex;
+		var selectedCellIndex, classForSelection;
 		var cellHandler = $("#" + cellId);
 		
 		if(cellHandler.parent().attr("id") == "dimensionDropDown") {
 			var selectedRow = cellHandler.attr("title");
 			selectedCellIndex = cellHandler.index() % 4;
-			removeSelectedCell(selectedRow, cellHandler.parent());
 
 			//Set values according to cell selection in dimension button.
-			if (selectedRow == "width")
+			if (selectedRow == "width") {
+				//Selection classes for each cell in width row.
+				classForSelection = ["noSelectionSelected", "widthTopSelected",
+						"widthBottomSelected", "widthCenterSelected"];
+				removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 				model.widthPos = selectedCellIndex;
-			else
+			} else {
+				//Selection classes for each cell in height row.
+				classForSelection = ["noSelectionSelected", "heightLeftSelected",
+						"heightRightSelected", "heightCenterSelected"];
+				removeClassesOfCell(cellHandler.parent(), classForSelection, 4);
 				model.heightPos = selectedCellIndex;
+			}
+			
+			cellHandler.addClass(selectionClass);
+			changeDimensionButtonIcon();
 
-			cellHandler.addClass(selectionClass); //Select the cell.
-			changeDimensionButtonIcon(); //Change button icon.
 		} else if (cellHandler.parent().attr("id") == "spacingDropDown") {
+			
 			cellHandler.toggleClass(selectionClass);
 			model[modelValue] = !model[modelValue];
 			changeSpacingButtonIcon();
+		
 		} else if (cellHandler.parent().attr("id") == "coordinateDropDown") {
+			
 			selectedCellIndex = cellHandler.index();
-			removeSelectedCoordinateCell(cellHandler.parent());
+			classForSelection = ["topLeftSelected", "topRightSelected",
+			          				"bottomRightSelected", "bottomLeftSelected"];
+			removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 			model[modelValue] = selectedCellIndex;
-			cellHandler.addClass(selectionClass); //Select the cell.
+			cellHandler.addClass(selectionClass);
+		
 		} else {
-			removeSelectedPropertiesCell(cellHandler.parent());
-			//Set values according to cell selection.
+			
+			classForSelection = ["specLineSelected", "specBulletSelected"];
+			removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 			model[modelValue] = modelValue;
-			cellHandler.addClass(selectionClass); //Select the cell.
+			cellHandler.addClass(selectionClass);
 		}
 	} catch (e) {
 		alert(e);
@@ -140,25 +141,36 @@ function closeDropDown(id, button, dropDownId) {
 }
 
 /**
- * Close all button's drop-down.
+ * Close all button's drop-down except the button id passed in parameter.
+ * @param parentId {string} parent (button) id of dropdown. 
  * */
-function closeAllDropDown(parentNode) {
-	//Close all drop downs.
-	if ($("#spacingDropDown").is(":visible") && parentNode != "btnSpacing") {
-		closeDropDown("#liSpacing", "#btnSpacing", "#imgSpacingDdlArrow");
-	}
+function closeAllDropDown(parentId) {
+	var dropDownIds = ["#spacingDropDown", "#coordinateDropDown",
+	                   "#dimensionDropDown", "#propertiesDropDown"];
 	
-	if ($("#coordinateDropDown").is(":visible") && parentNode != "btnCoordinate") {
-		closeDropDown("#liCoordinate", "#btnCoordinate", "#imgCoordinateDdlArrow");
+	for (var i = 0; i < 4; i++) {
+		var liId = "#" + $(dropDownIds[i]).parent().attr("id");
+		var buttonId = $(liId + " div:nth-child(1)").attr("id");
+		var imageDropDownId = "#" + $("#" + buttonId + " div:nth-child(3)").attr("id");
+		if($(dropDownIds[i]).is(":visible") && parentId != buttonId)
+			closeDropDown(liId, "#" + buttonId, imageDropDownId);
 	}
-	
-	if ($("#dimensionDropDown").is(":visible") && parentNode != "btnWh") {
-		closeDropDown("#liWh", "#btnWh", "#imgWhDdlArrow");
-	}
+}
 
-	if ($("#propertiesDropDown").is(":visible") && parentNode != "btnProperties") {
-		closeDropDown("#liProperties", "#btnProperties", "#imgPropertiesDdlArrow");
-	}
+/**
+ * Open button's drop-down.
+ * @param buttonId {string} Id of spec dropdown button. 
+ * */
+function openDropDown(buttonId) {
+	//Open the button dropdown.
+	buttonId = "#" + buttonId;
+	var liId = "#" + $(buttonId).parent().attr("id");
+	var imageDropDownId = "#" + $(buttonId + " div:nth-child(3)").attr("id");
+
+	$(liId + " .options").slideDown(100);
+	$(imageDropDownId).addClass("dropdownArrowUp");
+	$(buttonId).addClass("buttonSelected");
+	$(liId).addClass("isOpen");
 }
 
 /**
@@ -176,57 +188,20 @@ function toggleDropDown(id, button, dropDownId, imgDropDown) {
 	$(id + " .options").slideToggle(100);
 	$(imgDropDown).toggleClass("dropdownArrowUp");
 }
-/**
- * Remove selected cells in a given row of dimension dropdown.
- * @param selectedRow {string} The row of the selected cell.
- * @param parent {object} The parent object of the selected cell.
- * */
-function removeSelectedCell(selectedRow, parent) {
-	var classForSelection;
-
-	//Remove the selected cell in the selected row.
-	if (selectedRow == "width") {
-		//Selection classes for each cell in width row.
-		classForSelection = [ "noSelectionSelected", "widthTopSelected",
-				"widthBottomSelected", "widthCenterSelected" ];
-
-		//Remove selection classes from each cell.
-		for (var i = 0; i <= 3; i++)
-			parent.children().eq(i).removeClass(classForSelection[i]);
-	} else {
-		//Selection classes for each cell in height row.
-		classForSelection = [ "noSelectionSelected", "heightLeftSelected",
-				"heightRightSelected", "heightCenterSelected" ];
-
-		//Remove selection classes from each cell.
-		for (var i = 4; i <= 7; i++)
-			parent.children().eq(i).removeClass(classForSelection[i - 4]);
-	}
-}
 
 /**
- * Remove selected cells in a given row of coordinate dropdown.
+ * Remove selected cells in a given row of dropdown.
  * @param parent {object} The parent object of the selected cell.
+ * @param classArray {array} Array of classes applied on cells.
+ * @param startIndex {int} Index of selected cell. 
  * */
-function removeSelectedCoordinateCell(parent) {
-	var classForSelection = [ "topLeftSelected", "topRightSelected",
-				"bottomRightSelected", "bottomLeftSelected" ];
-
+function removeClassesOfCell(parent, classArray, startIndex) {
+	var classLength = classArray.length;
+	var endIndex = startIndex + classLength;
+	
 	//Remove selection classes from each cell.
-	for (var i = 0; i <= 3; i++)
-		parent.children().eq(i).removeClass(classForSelection[i]);
-}
-
-/**
- * Remove selected cells in a given row of property dropdown.
- * @param parent {object} The parent object of the selected cell.
- * */
-function removeSelectedPropertiesCell(parent) {
-	var classForSelection = [ "specLineSelected", "specBulletSelected"];
-
-	//Remove selection classes from each cell.
-	for (var i = 0; i <= 1; i++)
-		parent.children().eq(i).removeClass(classForSelection[i]);
+	for (var i = startIndex; i < endIndex; i++)
+		parent.children().eq(i).removeClass(classArray[i % classLength]);
 }
 
 /**

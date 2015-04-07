@@ -32,7 +32,7 @@ $.specctrPsDimension = {
                 bounds = artLayer.bounds;
             pref.rulerUnits = startRulerUnits;
             app.activeDocument.suspendHistory('Dimension Specs', 'this.createDimensionSpecs(artLayer, bounds)');      //Pass bounds and layer for creating dimension spec.
-        } catch(e) {alert(e);}
+        } catch(e) {}
     },
 
     //Create the dimension spec for a selected layer.
