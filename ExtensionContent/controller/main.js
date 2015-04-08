@@ -149,7 +149,7 @@ function onLoaded() {
 			$("#imgCoordinateDdlArrow").remove();
 		}
 
-		addApplicationEventListener(hostApplication);
+		addApplicationEventListener();
 		appPrefs = readAppPrefs();	//Read the config file and look for the isLicensed value.
 		if (appPrefs !== "") {
 			if (appPrefs.hasOwnProperty("isLicensed"))
@@ -397,6 +397,9 @@ function exportCss() {
 	}
 }
 
+/**
+ * Call the 'uploadCss' method from .jsx in Ps only.
+ */
 function syncCss() {
 	try{
 		setModel();
@@ -487,14 +490,12 @@ function loseFocusFromPanel() {
 /**
  * Add Ai event listener for art selection change.
  */
-function addApplicationEventListener(app) { 
-	if(app === illustrator) {
-		try {
-			AIEventAdapter.getInstance().addEventListener(AIEvent.ART_SELECTION_CHANGED, 
-					selectionChangeListener);
-		} catch(e) {
-			alert(e);
-		}
+function addApplicationEventListener(response) { 
+	try {
+		AIEventAdapter.getInstance().addEventListener(AIEvent.ART_SELECTION_CHANGED, 
+				selectionChangeListener);
+	} catch(e) {
+		alert(e);
 	}
 }
 
@@ -503,16 +504,12 @@ function addApplicationEventListener(app) {
  */
 function selectionChangeListener(event) {
 	try {
-		AIEventAdapter.getInstance().removeEventListener(AIEvent.ART_SELECTION_CHANGED, selectionChangeListener);
-	} catch(e) {}
-	
-	try {
-		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "updateConnection()");
-	} catch (e) {}
-	
-	try {
-		AIEventAdapter.getInstance().addEventListener(AIEvent.ART_SELECTION_CHANGED, 
+		//Remove eventListener.
+		AIEventAdapter.getInstance().removeEventListener(AIEvent.ART_SELECTION_CHANGED, 
 				selectionChangeListener);
-	} catch(e) {}
+		
+		setModel();
+		evalScript("$.specctr" + hostApplication + "." + "updateConnection()", addApplicationEventListener);
+	} catch (e) {}
+
 }

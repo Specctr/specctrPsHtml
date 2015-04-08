@@ -19,7 +19,7 @@ function specButtonsClickHandler(specButton) {
 			createPropertySpecs();
 		} else if(specButton.id == "btnWh") {
 			
-			if (model.widthPos == 0 && model.heightPos == 0) 
+			if (!model.widthPos && !model.heightPos) 
 				openDropDown(specButton.id);	//Open width/height button dropdown.
 			else 
 				createDimensionSpecs();
@@ -37,7 +37,7 @@ function specButtonsClickHandler(specButton) {
 		}
 			
 	} catch (e) {
-		alert("come "+e);
+		alert(e);
 	}
 }
 
@@ -118,7 +118,7 @@ function dropDownCellClickHandler(cellId, selectionClass, modelValue) {
 			
 			classForSelection = ["specLineSelected", "specBulletSelected"];
 			removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
-			model[modelValue] = modelValue;
+			model.specOption = modelValue;
 			cellHandler.addClass(selectionClass);
 		}
 	} catch (e) {
