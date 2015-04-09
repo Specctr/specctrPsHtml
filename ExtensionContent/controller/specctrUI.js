@@ -1,6 +1,7 @@
 /*
 File-Name: specctrUI.js
-Description: Includes all the methods related to UI component like change event handlers, click event handlers etc. 
+Description: Includes all the methods related to UI component like change event handlers, 
+click event handlers etc. 
  */
 
 //SPECCTR_HOST = "http://localhost:5000";
@@ -11,7 +12,7 @@ SPECCTR_API = SPECCTR_HOST += "/api/v1";
  * Validate the license of the user and move to the tab container
  *  if user's credentials valid.
  */
-function activateButton_clickHandler() {
+function activateButtonClickHandler() {
 	// Get Extension Id and matching productCode.
 	var productCodes = {
 		// Photoshop 2.0.
@@ -51,10 +52,8 @@ function activateButton_clickHandler() {
 	}
 
 	var urlRequest = SPECCTR_API += "/register_machine?";
-	urlRequest += "&email=" + document.getElementById("emailInput").value;
-	urlRequest += "&password=" + document.getElementById("passwordInput").value;
-	
-	alert(urlRequest);
+	urlRequest += "&email=" + $("#emailInput").val();
+	urlRequest += "&password=" + $("#passwordInput").val();
 
 	$.ajax({
 		url:urlRequest,
@@ -64,9 +63,8 @@ function activateButton_clickHandler() {
 		success: completeHandler,
 		error: function(xhr) {
 			var response = JSON.parse(xhr.responseText);
-		
 			showDialog(response.message);
-			logData = createLogData(response.error);
+			logData = createLogData(response.message);
 			addFileToPreferenceFolder('.log', logData);	//Create log file.
 		}
 	});
@@ -76,19 +74,19 @@ function activateButton_clickHandler() {
  * Click event handler of tabs. Modify styles to tabs and 
  * call the function to change images on tab.
  */
-function tab_clickHandler() {
+function tabClickHandler() {
 	try {
 		var ident = this.id.split("_")[1];
 		var current = this.parentNode.getAttribute("data-current");
 
 		// Remove class of active tab header and hide old contents
-		var currentTabHeader = document.getElementById("tabHeader_" + current);
-		var currentTabPage = document.getElementById("tabpage_" + current);
+		var currentTabHeader = $("#tabHeader_" + current);
+		var currentTabPage = $("#tabpage_" + current);
 
 		if (currentTabHeader && currentTabPage
 				&& (ident >= "1" && ident <= "4")) {
-			currentTabHeader.removeAttribute("class");
-			currentTabPage.style.display = "none";
+			currentTabHeader.removeAttr("class");
+			currentTabPage.css("display", "none");
 		} else {
 			return false;
 		}
@@ -99,7 +97,7 @@ function tab_clickHandler() {
 		// Set class of active tab
 		this.setAttribute("class", "tabActiveHeader");
 
-		document.getElementById("tabpage_" + ident).style.display = "block";
+		$("#tabpage_" + ident).css("display", "block");
 		this.parentNode.setAttribute("data-current", ident);
 	} catch (e) {
 		console.log(e);
@@ -144,7 +142,7 @@ function changeImagesOfTabs(selectedTab) {
 /**
  * Stop the bubbling of click event.
  */
-function item_clickHandler(event) {
+function itemClickHandler(event) {
 	event.stopPropagation();
 }
 
@@ -152,8 +150,8 @@ function item_clickHandler(event) {
  * Set the value of checkBox model value when changed.
  * @param checkBoxId {string} The id of selected checkbox.
  */
-function checkBox_changeHandler(checkBox) {
-	model[checkBoxId.id] = checkBox.checked;
+function checkBoxChangeHandler(checkBox) {
+	model[checkBox.id] = checkBox.checked;
 	writeAppPrefs();
 }
 
@@ -161,22 +159,23 @@ function checkBox_changeHandler(checkBox) {
  * Set the model value of text box when changed.
  * @param textBoxId {string} The id of selected text box.
  */
-function textBox_changeHandler(textBoxId) {
-	model[textBoxId] = Number(document.getElementById(textBoxId).value);
+function textBoxChangeHandler(textBoxId) {
+	model[textBoxId] = Number($("#" + textBoxId).val());
+	writeAppPrefs();
 }
 
 /**
  * Enable/Disable the width and height text boxes and 
  * set the value of model's specInPrcntg when changed.
  */
-function specInPrcntg_changeHandler() {
-	model.specInPrcntg = document.getElementById("specInPrcntg").checked;
+function specInPercentageChangeHandler() {
+	model.specInPrcntg = $("#specInPrcntg").is(":checked");
 	if (model.specInPrcntg) {
-		enableTextField(document.getElementById("relativeWidth"));
-		enableTextField(document.getElementById("relativeHeight"));
+		enableTextField("relativeWidth");
+		enableTextField("relativeHeight");
 	} else {
-		disableTextField(document.getElementById("relativeWidth"));
-		disableTextField(document.getElementById("relativeHeight"));
+		disableTextField("relativeWidth");
+		disableTextField("relativeHeight");
 	}
 	writeAppPrefs();
 }
@@ -185,27 +184,27 @@ function specInPrcntg_changeHandler() {
  * Enable/Disable the baseFontSize and baseLineHeight text boxes and
  * set the value of model's specInEM when changed.
  */
-function specInEM_changeHandler() {
-	var textFontSize = document.getElementById("baseFontSize");
-	var textBaseLineHeight = document.getElementById("baseLineHeight");
-	model.specInEM = document.getElementById("specInEM").checked;
+function specInEMChangeHandler(element) {
+	var textFontSize = $("#baseFontSize");
+	var textBaseLineHeight = $("#baseLineHeight");
+	model.specInEM = element.checked;
 
 	if (model.specInEM) {
-		enableTextField(textFontSize);
-		enableTextField(textBaseLineHeight);
+		enableTextField("baseFontSize");
+		enableTextField("baseLineHeight");
 	} else {
-		disableTextField(textFontSize);
-		disableTextField(textBaseLineHeight);
-		return;
+		disableTextField("baseFontSize");
+		disableTextField("baseLineHeight");
 	}
 
-	if (textFontSize.value.length == 0)
-		textFontSize.value = "16";
+	//Fill default values if nothing is present in specInEM's textboxes.
+	if (textFontSize.val().length == 0)
+		textFontSize.val("16");
 
-	if (textBaseLineHeight.value.length == 0) {
-		textBaseLineHeight.value = Number(
-				Math.round(Number(textFontSize.value) * 140) / 100).toString();
-		model.baseLineHeight = Number(textBaseLineHeight.value);
+	if (textBaseLineHeight.val().length == 0) {
+		var value = Number(Math.round(Number(textFontSize.val()) * 140) / 100);
+		textBaseLineHeight.val(value.toString());
+		model.baseLineHeight = value;
 	}
 	writeAppPrefs();
 }
@@ -213,13 +212,13 @@ function specInEM_changeHandler() {
 /**
  * Set the value of useScaleBy when changed.
  */
-function useScaleBy_clickHandler() {
-	model.useScaleBy = document.getElementById("useScaleBy").checked;
+function useScaleByClickHandler() {
+	model.useScaleBy = $("#useScaleBy").is(":checked");
 
 	if (model.useScaleBy)
-		enableTextField(document.getElementById("txtScaleBy"));
+		enableTextField("txtScaleBy");
 	else
-		disableTextField(document.getElementById("txtScaleBy"));
+		disableTextField("txtScaleBy");
 
 	writeAppPrefs();
 }
@@ -227,23 +226,23 @@ function useScaleBy_clickHandler() {
 /**
  *Allow the input greater than 1 only and set the value of scaleValue when changed.
  */
-function txtScaleBy_changeHandler() {
-	var scaleByHandler = document.getElementById("txtScaleBy");
-	var firstChar = scaleByHandler.value.charAt(0);
+function txtScaleByChangeHandler() {
+	var scaleByHandler = $("#txtScaleBy");
+	var firstChar = scaleByHandler.val().charAt(0);
 
 	// if first character is other than 'x', 'X' or '/' then empty the text box.
 	if (!(firstChar == "x" || firstChar == "/" || firstChar == "X"))
-		scaleByHandler.value = "";
+		scaleByHandler.val("");
 
 	// Restrict the text inputs to satisfy the values like x1, x2, /1, /2 etc.
-	model.scaleValue = scaleByHandler.value;
+	model.scaleValue = scaleByHandler.val();
 }
 
 /**
  * Set the value of legendColorMode when selection of radio button changed.
  * @param event {event type} The event comes after clicking radio button.
  */
-function radioButton_clickHandler(event, value) {
+function radioButtonClickHandler(event, value) {
 	var selectedValue = event.target.value;
 	if (selectedValue === undefined)
 		return;
@@ -254,12 +253,11 @@ function radioButton_clickHandler(event, value) {
 
 /**
  * Set the value of font size when changed.
- * @param elementId {string} The id of selected combobox.
- * @param modelValue {string} The combobox name.
+ * @param element {object} Reference of selected combo-box.
+ * @param modelValue {string} Combo-box name.
  */
-function comboBox_changeHandler(elementId, modelValue) {
-	var comboHandler = document.getElementById(elementId);
-	var value = comboHandler.options[comboHandler.selectedIndex].value;
+function comboBoxChangeHandler(element, modelValue) {
+	var value = element.options[element.selectedIndex].value;
 	if(!isNaN(Number(value)))
 		value = Number(value);
 	model[modelValue] = value;
@@ -269,9 +267,8 @@ function comboBox_changeHandler(elementId, modelValue) {
 /**
  * Set the value of font when changed.
  */
-function lstFont_changeHandler() {
-	var fontListHandler = document.getElementById("lstFont");
-	var selectedFont = fontListHandler.options[fontListHandler.selectedIndex];
+function listFontChangeHandler(element) {
+	var selectedFont = element.options[element.selectedIndex];
 	model.legendFontFamily = selectedFont.value;
 	model.legendFont = selectedFont.text;
 	writeAppPrefs();
@@ -283,12 +280,10 @@ function lstFont_changeHandler() {
  * @param colorPickerBlock {string} The name of color picker block.
  */
 function setColorValueToTextBox(element, colorPickerBlock) {
-	var inputTextName = "txt" + colorPickerBlock + "Color";
-	var blockName = colorPickerBlock.toLowerCase() + "ColorBlock";
-
-	document.getElementById(inputTextName).value = element.title;
-	document.getElementById(blockName).style.backgroundColor = "#"
-			+ element.title;
+	var inputTextName = "#txt" + colorPickerBlock + "Color";
+	var blockName = "#" + colorPickerBlock.toLowerCase() + "ColorBlock";
+	$(inputTextName).val(element.title);
+	$(blockName).css("background-color", "#" + element.title);
 }
 
 /**
@@ -298,17 +293,16 @@ function setColorValueToTextBox(element, colorPickerBlock) {
  * @param colorPickerBlock {string} The name of color picker block.
  */
 function setColorToLabel(element, colorPickerBlock) {
-	var labelName = "col" + colorPickerBlock;
 	var value = "legendColor" + colorPickerBlock;
 
 	if (element.title) {
 		var color = "#" + element.title;
 	} else {
-		color = document.getElementById(element.id).style.backgroundColor;
+		color = element.style.backgroundColor;
 		color = rgbToHex(color);
 	}
 
-	document.getElementById(labelName).style.backgroundColor = color;
+	$("#col" + colorPickerBlock).css("background-color", color);
 	$("#" + element.parentNode.id).slideUp(100);
 	model[value] = color;
 	writeAppPrefs();
@@ -320,16 +314,16 @@ function setColorToLabel(element, colorPickerBlock) {
  * @param elementId {string} The id of color picker.
  * @param colorPickerBlock {string} The name of color picker block.
  */
-function colorPicker_clickHandler(elementId, colorPickerBlock) {
+function colorPickerClickHandler(element, colorPickerBlock) {
 	var colorBlockTextbox = "#txt" + colorPickerBlock + "Color";
 	var dropDownBlock = "#color" + colorPickerBlock + "DropDown";
-	var colorBlock = colorPickerBlock.toLowerCase() + "ColorBlock";
+	var colorBlock = "#" + colorPickerBlock.toLowerCase() + "ColorBlock";
 	var valueForTextBox = "";
 
-	var color = document.getElementById(elementId).style.backgroundColor;
+	var color = element.style.backgroundColor;
 	color = rgbToHex(color);
 	$(dropDownBlock).slideToggle(100);
-	document.getElementById(colorBlock).style.backgroundColor = color;
+	$(colorBlock).css("background-color", color);
 
 	if (color[0] == "#")
 		valueForTextBox = color.substring(1);
@@ -354,7 +348,7 @@ function colorPicker_clickHandler(elementId, colorPickerBlock) {
  * Validate the input value in text input of color picker block.
  * @param event {event type} The event dispatched after clicking text input.
  */
-function colorPickerTextInput_validation(event) {
+function colorPickerTextInputValidation(event) {
 	var charCode = (event.which) ? event.which : event.keyCode;
 
 	/* Allows only hex value like eeffee or #eeffee.
@@ -378,16 +372,16 @@ function colorPickerTextInput_validation(event) {
  * in textbox.
  * @param colorPickerBlock {string} The name of color picker block. 
  */
-function colorPickerTextInput_clickHandler(event, colorPickerBlock) {
-	var elementId = "txt" + colorPickerBlock + "Color";
-	var textBox = document.getElementById(elementId);
-	var color = textBox.value;
+function colorPickerTextInputClickHandler(event, colorPickerBlock) {
+	var elementId = "#txt" + colorPickerBlock + "Color";
+	var textBox = $(elementId);
+	var color = textBox.val();
 	var inputSize = 7; // Length of the input hex value.
 
 	if (color.charAt(0) == "#") {
-		textBox.maxLength = inputSize;
+		textBox.attr("maxlength", inputSize);
 	} else {
-		textBox.maxLength = inputSize - 1;
+		textBox.attr("maxlength", inputSize - 1);
 		color = "#" + color;
 	}
 
@@ -406,7 +400,7 @@ function colorPickerTextInput_clickHandler(event, colorPickerBlock) {
  * @param event {event type} The keyDown event dispatched after pressing key
  * in textbox. 
  */
-function text_KeyDownHandler(event) {
+function textKeyDownHandler(event) {
 	if (event.keyCode == 13)
 		$("#activateButton").trigger("click");
 }
@@ -461,18 +455,4 @@ function showDialog(message) {
  */
 function hideDialog() {
 	$("#dialog").dialog("close");
-}
-
-/**
- * Open the dialog with the passed message.
- * @param id {string} li tag id of button.
- * @param button {string} button id.
- * @param dropDownId {string} button's dropdown id.
- */
-function closeDropDown(id, button, dropDownId) {
-	var liButton = id + " .options";
-	$(liButton).slideUp(100);
-	$(id).removeClass("isOpen");
-	$(button).removeClass("buttonSelected");
-	$(dropDownId).removeClass().addClass("dropdownArrow");
 }

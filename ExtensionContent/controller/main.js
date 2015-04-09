@@ -1,12 +1,12 @@
 /*
 File-Name: main.js
-Description: This file is used to communicate between extend script file and html file. It also include function to execute when panel loads
-and reading and writing preferences methods.  
+Description: Include methods to initialize the panel's component according to the stored preferences.  
+Include all spec button click handlers and methods to communicate between js and jsx.  
  */
 
 /**
  * Callback function which is called when validation of user's license take place.
- * @param data {object} The object of the response came from the activation request.
+ * @param response {object} The object of the response came from the activation request.
  * @param status {string} The status of the activation request.
  */
 function completeHandler(response, status) {
@@ -75,7 +75,7 @@ function setModelToUIComponents() {
 	var totalCheckBoxes = checkBoxesId.length;
 	
 	for (var i = 0; i < totalCheckBoxes; i++) {
-		$("#"+checkBoxesId[i]).prop("checked", model[checkBoxesId[i]]);
+		$("#" + checkBoxesId[i]).prop("checked", model[checkBoxesId[i]]);
 	}
 	
 	//Set color for dropdown.
@@ -87,14 +87,14 @@ function setModelToUIComponents() {
 	var radioButtonIds = [model.legendColorMode.toLowerCase(), 
 	                       model.decimalFractionValue];
 	for (var i = 0; i < 2; i++) {
-		$("#"+radioButtonIds[i]+"RadioButton").prop("checked", true);
+		$("#" + radioButtonIds[i] + "RadioButton").prop("checked", true);
 	}
 	
 	// Enable or disable scale text according to selection of check box.
 	if (model.useScaleBy)
-		enableTextField(document.getElementById("txtScaleBy"));
+		enableTextField("txtScaleBy");
 	else
-		disableTextField(document.getElementById("txtScaleBy"));
+		disableTextField("txtScaleBy");
 	
 	//Get font list according to host application.
 	var extScript = "$.specctr"+ hostApplication +"." + "getFontList()";
@@ -111,14 +111,14 @@ function setModelToResponsive() {
 	
 	var checkBoxIds = ["specInPrcntg", "specInEM"];
 	
-	for (var i = 0; i < 4; i+=2) {
-		document.getElementById(checkBoxIds[i/2]).checked = model[checkBoxIds[i/2]];
+	for (var i = 0; i < 4; i += 2) {
+		$("#" + checkBoxIds[i/2]).prop("checked", model[checkBoxIds[i/2]]);
 		if (model[checkBoxIds[i/2]]) {
-			enableTextField(document.getElementById(textFieldIds[i]));
-			enableTextField(document.getElementById(textFieldIds[i+1]));
+			enableTextField(textFieldIds[i]);
+			enableTextField(textFieldIds[i+1]);
 		} else {
-			disableTextField(document.getElementById(textFieldIds[i]));
-			disableTextField(document.getElementById(textFieldIds[i+1]));
+			disableTextField(textFieldIds[i]);
+			disableTextField(textFieldIds[i+1]);
 		}
 	}
 }
@@ -192,33 +192,31 @@ function init() {
 		$("#tabContainer").show();
 
 		setModelValueFromPreferences();
-
-		var container = document.getElementById("tabContainer"); // Get tab container.
-		var navitem = container.querySelector(".tabs ul li"); // Set current tab.
+		var navitem = $("#tabContainer .tabs ul li:eq(0)"); // Set current tab.
 
 		// Store which tab we are on.
-		var ident = navitem.id.split("_")[1];
-		navitem.parentNode.setAttribute("data-current", ident);
+		var ident = navitem.attr("id").split("_")[1];
+		navitem.parent().attr("data-current", ident);
 
 		changeImagesOfTabs(parseInt(ident)); // Set Current Tab with proper Image.
 		
 		 // Set current tab with class of active tab header.
-		navitem.setAttribute("class", "tabActiveHeader");
+		navitem.attr("class", "tabActiveHeader");
 
-		// Hide two tab contents we don't need.
-		var pages = container.querySelectorAll(".tabpage");
-		for (var i = 1; i < pages.length; i++)
-			pages[i].style.display = "none";
+		// Hide the tab contents we don't need.
+		var noOfPages = $(".tabpage").length;
+		for (var i = 1; i < noOfPages; i++)
+			$("#tabpage_" + (i + 1)).css("display", "none");
 
-		// Register click events to tabs.
-		var tabs = container.querySelectorAll(".tabs ul li");
-		for (var i = 0; i < tabs.length; i++)
-			tabs[i].onclick = tab_clickHandler;
+		// Register click events to all tabs.
+		$("#tabContainer .tabs ul li").each(function(){
+			$(this).click(tabClickHandler);
+		});
 
 		setModelToUIComponents();
 		setModelToResponsive();
 	} catch (e) {
-		console.log(e);
+		alert(e);
 	}
 }
 
@@ -272,11 +270,13 @@ function loadJSX() {
 		var csInterface = new CSInterface();
 		var extensionRoot = csInterface.getSystemPath(SystemPath.EXTENSION)
 				+ "/jsx/";
-		csInterface.evalScript('$._ext.evalFiles("' + extensionRoot + '","' + hostApplication + '")');
+		
+		//Evaluating .jsx file according to host application.
+		csInterface.evalScript('$._ext.evalFiles("' + extensionRoot + 
+				'","' + hostApplication + '")');
 	} catch (e) {
 		console.log(e);
 	}
-
 }
 
 /**
@@ -442,34 +442,33 @@ function loadFontsToList(result) {
 		var font = JSON.parse(result);
 		var fontLength = font.length;
 		var fontPos = -1; 
-		var fontListHandler = document.getElementById("lstFont");
+		var defaultPos = 0, defaultValue = {};
 
 		// Set the font list to combo-box.
 		for (var i = 0; i < fontLength; i++) {
-			var option = document.createElement("option");
-			option.text = font[i].font;
-			option.value = font[i].label;
-			fontListHandler.add(option, i);
-			if(option.text == model.legendFont) {
+			$("#lstFont").append($("<option>", 
+					{value:font[i].label, text:font[i].font}));
+
+			if(font[i].font == model.legendFont) {
 				fontPos = i;
 				model.legendFontFamily = font[i].label;
+			}
+			
+			if(font[i].font.indexOf("Arial") >= 0) {
+				defaultPos = i;
+				defaultValue.text = font[i].font;
+				defaultValue.value = font[i].label;
 			}
 		}
 
 		if(fontPos == -1) {
 			// Select the font from the legendFont value and apply it.
-			for (i = 0; i < fontLength; i++) {
-				var fontListOption = fontListHandler.options[i];
-				if (fontListOption.text.indexOf("Arial") >= 0) {
-					model.legendFont = fontListOption.text;
-					model.legendFontFamily = fontListOption.value;
-					fontPos = i;
-					break;
-				}
-			}
+			fontPos = defaultPos;
+			model.legendFont = defaultValue.text;
+			model.legendFontFamily = defaultValue.value;
 		}
 
-		fontListHandler.options[fontPos].selected = true;
+		$('#lstFont option').eq(fontPos).prop('selected', true);
 	} catch (e) {
 		console.log(e);
 	}

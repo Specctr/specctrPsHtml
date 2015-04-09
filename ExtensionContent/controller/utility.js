@@ -8,16 +8,17 @@ Description: This file includes common utility functions used by more than one f
  * @param textField {textInput object} Reference of the text input.
  */
 function disableTextField(textField) {
-	textField.disabled = true;
+	$("#" + textField).attr("disabled", true);
 }
 
 /**
  * Enable the text input and change the background color to white.
- * @param textField {textInput object} Reference of the text input.
+ * @param textField {string} Id of the text input.
  */
 function enableTextField(textField) {
-	textField.disabled = false;
-	textField.style.backgroundColor = "#ffffff";
+	textField = "#" + textField;
+	$(textField).attr("disabled", false);
+	$(textField).css("background-color", "#ffffff");
 }
 
 /**

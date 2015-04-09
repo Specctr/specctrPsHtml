@@ -1366,9 +1366,8 @@ $.specctrAi = {
                         allPageItems[i].note = dataString;
                     }
                     
-                    var data;
                     try {
-                        data = eval(dataString);
+                        var data = eval(dataString);
                     } catch(e) {
                         data = this.deserialize(dataString);
                     }
@@ -1395,8 +1394,11 @@ $.specctrAi = {
                             }
                         }
                     noteData[data.type] = data;
-                    if(!noOfSpecs && data.noOfSpecs)
-                        noOfSpecs = data.noOfSpecs;
+                    if(!noOfSpecs && data.noOfSpecs) {
+                        noOfSpecs = parseInt(data.noOfSpecs);
+                        if(isNaN(noOfSpecs))
+                            noOfSpecs = 1;
+                    }
                 } catch(e) {}
             }                
 
@@ -1422,15 +1424,12 @@ $.specctrAi = {
                 
                 var aItem = source;
                 var bItem = spec;
-                
                 var aBounds = this.itemBounds(aItem);
                 var bBounds = bItem.visibleBounds;
-                
                 var bX = bBounds[2];
                 var bY = bBounds[1] - model.armWeight / 2;
                 var centerX = bBounds[0] / 2 + bBounds[2] / 2;
                 var sourceCenterX = aBounds[0] / 2 + aBounds[2] / 2;
-                
                 var currentArtboard = app.activeDocument.artboards[app.activeDocument.artboards.getActiveArtboardIndex()];
                 var artRect = currentArtboard.artboardRect;
                 var artboardCenterX = artRect[0] / 2 + artRect[2] / 2;
@@ -1485,10 +1484,10 @@ $.specctrAi = {
                 var gipotenuzaLen  = Math.sqrt(dX * dX + dY * dY);
                 var aCos = dX / gipotenuzaLen;
                 var aSin = dY / gipotenuzaLen;
-                
                 var yLine;
+                
                 if(model.specOption == "Line" || updateSpecName == "noteSpec") {
-                    //Delete the bullet, if any.
+                    //Delete the bullets, if any.
                     if(firstBullet) firstBullet.remove();
                     if(secondBullet) secondBullet.remove();
     
@@ -1575,15 +1574,13 @@ $.specctrAi = {
                     if(!noOfSpecs) {
                         try {
                             var specctrLayer = this.legendLayer();
-                            noOfSpecs = specctrLayer.note;
-                            specctrLayer.note = noOfSpecs + 1;
-                        } catch (e) {
-                            alert(e);
-                        }
-                        if(!noOfSpecs)
-                            noOfSpecs = 1;
+                            noOfSpecs = parseInt(specctrLayer.note);
+                            if(isNaN (noOfSpecs))
+                                noOfSpecs  = 1;
+                            specctrLayer.note = "" + (noOfSpecs + 1);
+                        } catch (e) {}
                     }
-                        
+
                     if(firstBullet) {
                          dia = firstBullet.visibleBounds[2] - firstBullet.visibleBounds[0];
                          firstBullet.translate(spec.visibleBounds[0] - firstBullet.visibleBounds[0] - dia - 1, 
@@ -1618,8 +1615,10 @@ $.specctrAi = {
                         secondBullet = firstBullet.duplicate();
                         secondBullet.translate(pageItemBounds[0] - secondBullet.visibleBounds[0] - dia - 1, 
                                pageItemBounds[1] - secondBullet.visibleBounds[1]);
+                       
                         if (group)
                             secondBullet.move(group, ElementPlacement.INSIDE); 
+                        
                         secondBullet.visibilityVariable = idVar;
                         secondBullet.note = "({type:'secondBullet',varName:'" + idVar.name + "'})";
                      }
@@ -1637,8 +1636,8 @@ $.specctrAi = {
                         propSpecUndo[idVar.name].updated = updated;
                         spec.note = "({type:'spec',updated:'" + updated + "',varName:'" + idVar.name + 
                                                 "',position:'" + spec.visibleBounds.join("|") + "'})" + "-css:" + cssText;
-                        source.note = "({type:'source',updated:'" + updated + "',varName:'" + idVar.name  + "',noOfSpecs:" + noOfSpecs +
-                                                ",position:'" + source.visibleBounds.join("|") + "'})";
+                        source.note = "({type:'source',updated:'" + updated + "',varName:'" + idVar.name  + "',noOfSpecs:'" + noOfSpecs +
+                                                "',position:'" + source.visibleBounds.join("|") + "'})";
                     
                     } else if (updateSpecName == "noteSpec") {
                         spec.note = "({type:'noteSpec',varName:'" + idVar.name + "'})";
@@ -1939,7 +1938,7 @@ $.specctrAi = {
                 secondBullet.note = "({type:'secondBullet',varName:'" + idVar.name + "'})";
             } catch(e) {}
 
-            pageItem.note = "({type:'source',updated:'" + id + "',varName:'" + idVar.name + "',noOfSpecs:" + noOfSpecs + ",position:'" + 
+            pageItem.note = "({type:'source',updated:'" + id + "',varName:'" + idVar.name + "',noOfSpecs:'" + noOfSpecs + "',position:'" + 
                                             pageItem.visibleBounds.join("|") + "'})";
             group.note = "({type:'group',varName:'" + idVar.name + "'})";
             

@@ -48,22 +48,22 @@
 				<label for="txtEmail">Email:</label> 
 				<input type="email" id="emailInput"
 					placeholder="Email" name="txtEmail" style="background-color: #ffffff;"
-					onclick="item_clickHandler(event)"
-					onkeydown="text_KeyDownHandler(event)"/>
+					onclick="itemClickHandler(event)"
+					onkeydown="textKeyDownHandler(event)"/>
 			</div>
 			
 			<div class="row">
 				<label for="txtPassword">Password:</label> 
 				<input type="password" id="passwordInput" name="txtPassword"
 					placeholder="Password" 
-					onclick="item_clickHandler(event)"
-					onkeydown="text_KeyDownHandler(event)"/>
+					onclick="itemClickHandler(event)"
+					onkeydown="textKeyDownHandler(event)"/>
 			</div>
 			
 			<ul class="menu">
 				<li class="border">
 					<div id="activateButton" class="button" 
-						onclick="activateButton_clickHandler()">
+						onclick="activateButtonClickHandler()">
 						<label>Activate Specctr</label>
 					</div>
 				</li>
@@ -222,8 +222,8 @@
 					<li>
 						<div class="tblCell pxWidth">
 							<label class="lbl10Px" for="txtPx">By (px)</label> 
-							<input	id="canvasExpandSize" onclick="item_clickHandler(event)"
-								onchange="textBox_changeHandler(this.id)" maxlength="4"
+							<input	id="canvasExpandSize" onclick="itemClickHandler(event)"
+								onchange="textBoxChangeHandler(this.id)" maxlength="4"
 								onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
 						</div>
 
@@ -247,52 +247,52 @@
 						Shape Object</div>
 					<div class="tabPage2Content nonPsElement" id="fillColor">
 						<input type="checkbox" value="1" id="shapeFillColor"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="shapeFillColor">Fill Color</label>
 					</div>
 					<div class="tabPage2Content nonPsElement" id="fillStyle">
 						<input type="checkbox" value="2" id="shapeFillStyle"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="shapeFillColor">Fill Style</label>
 					</div>
 					<div class="tabPage2Content nonPsElement" id="strokeColor">
 						<input type="checkbox" value="3" id="shapeStrokeColor"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="shapeStrokeColor">Stroke Color</label>
 					</div>
 					<div class="tabPage2Content nonPsElement" id="strokeStyle">
 						<input type="checkbox" value="4" id="shapeStrokeStyle"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="shapeStrokeStyle">Stroke Style</label>
 					</div>
 					<div class="tabPage2Content nonPsElement" id="strokeSize">
 						<input type="checkbox" value="5" id="shapeStrokeSize"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="shapeStrokeSize">Stroke Size</label>
 					</div>
 					<div class="tabPage2Content psElement" id="fill">
 						<input type="checkbox" value="1" id="shapeFill"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="shapeFill">Fill</label>
 					</div>
 					<div class="tabPage2Content psElement" id="stroke">
 						<input type="checkbox" value="2" id="shapeStroke"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="shapeStroke">Stroke</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="3" id="shapeAlpha"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="shapeAlpha">Alpha</label>
 					</div>
 					<div class="tabPage2Content psElement">
 						<input type="checkbox" value="4" id="shapeEffects"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="shapeEffects">Effects</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="5" id="shapeBorderRadius"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="shapeBorderRadius">Border Radius</label>
 					</div>
 				</div>
@@ -302,47 +302,47 @@
 						Object</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="6" id="textFont"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="textFont">Font Family</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="7" id="textSize"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="textSize">Font Size</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="8" id="textColor"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="textColor">Color</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="9" id="textStyle"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="textStyle">Font Style</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="10" id="textAlignment"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="textAlignment">Text-Align</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="11" id="textLeading"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="textLeading">Line Height</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="12" id="textTracking"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for=textTracking>Letter Spacing</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="13" id="textAlpha"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="textAlpha">Alpha</label>
 					</div>
 					<div class="tabPage2Content psElement">
 						<input type="checkbox" value="14" id="textEffects"
-							onclick="checkBox_changeHandler(this)" /> 
+							onclick="checkBoxChangeHandler(this)" /> 
 						<label for="textEffects">Effects</label>
 					</div>
 				</div>
@@ -358,7 +358,7 @@
 
 				<div class="tabPageContentSubHeaderRow">
 					<input type="checkbox" value="1" id="specInPrcntg"
-						onchange="specInPrcntg_changeHandler()" /> 
+						onchange="specInPercentageChangeHandler()" /> 
 					<label for="specInPrcntg"> Spec Distance by %</label>
 				</div>
 
@@ -368,7 +368,7 @@
 					</div>
 					<div class="tabPageContentRight">
 						<input type="text" class="inputStyle" id="relativeWidth" maxlength="6"
-							onchange="textBox_changeHandler(this.id)" onclick="item_clickHandler(event)"
+							onchange="textBoxChangeHandler(this.id)" onclick="itemClickHandler(event)"
 							onkeypress="return restrictInputToDecimal(event)" />px
 					</div>
 				</div>
@@ -377,7 +377,7 @@
 					<div class="tabPageContentLeft">100% Height:</div>
 					<div class="tabPageContentRight">
 						<input type="text" class="inputStyle" id="relativeHeight" maxlength="6"
-							onchange="textBox_changeHandler(this.id)" onclick="item_clickHandler(event)"
+							onchange="textBoxChangeHandler(this.id)" onclick="itemClickHandler(event)"
 							onkeypress="return restrictInputToDecimal(event)" />px
 					</div>
 				</div>
@@ -388,7 +388,7 @@
 
 				<div class="tabPageContentSubHeaderRow">
 					<input type="checkbox" value="1" id="specInEM"
-						onchange="specInEM_changeHandler()" /> 
+						onchange="specInEMChangeHandler(this)" /> 
 					<label for="specInEM">Spec in em</label>
 				</div>
 
@@ -398,8 +398,8 @@
 					</div>
 					<div class="tabPageContentRight">
 						<input type="text" class="inputStyle" id="baseFontSize"
-							maxlength="6" onchange="textBox_changeHandler(this.id)"
-							onclick="item_clickHandler(event)"
+							maxlength="6" onchange="textBoxChangeHandler(this.id)"
+							value="16" onclick="itemClickHandler(event)"
 							onkeypress="return restrictInputToDecimal(event)" /> px<br />
 					</div>
 				</div>
@@ -408,8 +408,8 @@
 					<div class="tabPageContentLeft">Base line height:</div>
 					<div class="tabPageContentRight">
 						<input type="text" class="inputStyle" id="baseLineHeight"
-							maxlength="6" onchange="textBox_changeHandler(this.id)"
-							onclick="item_clickHandler(event)"
+							maxlength="6" onchange="textBoxChangeHandler(this.id)"
+							value="22.4" onclick="itemClickHandler(event)"
 							onkeypress="return restrictInputToDecimal(event)" />px
 					</div>
 				</div>
@@ -424,15 +424,15 @@
 					<div class="tabPage4ContentLeft">
 						<label>Font</label> 
 						<select class="dropdown" id="lstFont"
-							onchange="lstFont_changeHandler()"
-							onclick="item_clickHandler(event)">
+							onchange="listFontChangeHandler(this)"
+							onclick="itemClickHandler(event)">
 						</select>
 					</div>
 					<div class="tabPage4ContentRight">
 						<label> Size</label><br /> 
 						<select class="smalldropdown" id="lstSize"
-							onchange="comboBox_changeHandler(this.id, 'legendFontSize')"
-							onclick="item_clickHandler(event)">
+							onchange="comboBoxChangeHandler(this, 'legendFontSize')"
+							onclick="itemClickHandler(event)">
 							<option value="8">8</option>
 							<option value="9">9</option>
 							<option value="10">10</option>
@@ -460,16 +460,16 @@
 					<div class="tabPage4ContentLeft">
 						<label style="font-weight: normal"> Shape: </label> 
 						<input id="colObject" class="colorPickerAppearance"
-							onclick="colorPicker_clickHandler(this.id, 'Shape')"
+							onclick="colorPickerClickHandler(this, 'Shape')"
 							style="margin-left: 11px; " />
 						<div id='colorShapeDropDown' class="colorPicker">
 							<div id="shapeColorBlock" class="mainColorBlock"
 								style="display: inline-block;"
 								onclick="setColorToLabel(this, 'Object')"></div>
 							<input type="text" id="txtShapeColor" class="colorText"  maxlength="6"
-								onclick="item_clickHandler(event)"
-								onkeydown="return colorPickerTextInput_validation(event)"
-								onkeyup="colorPickerTextInput_clickHandler(event, 'Shape')"/> <br>
+								onclick="itemClickHandler(event)"
+								onkeydown="return colorPickerTextInputValidation(event)"
+								onkeyup="colorPickerTextInputClickHandler(event, 'Shape')"/> <br>
 							<div class="colorBlock" title="000000"
 								style="background-color: #000000"
 								onmouseover="setColorValueToTextBox(this, 'Shape')"
@@ -522,8 +522,8 @@
 					</div>
 					<div class="tabPage4ContentRight">
 						<select class="smalldropdown" id="lstLineWeight"
-							onclick="item_clickHandler(event)"
-							onchange="comboBox_changeHandler(this.id, 'armWeight')">
+							onclick="itemClickHandler(event)"
+							onchange="comboBoxChangeHandler(this, 'armWeight')">
 							<option value="0.25">0.25</option>
 							<option value="0.5">0.5</option>
 							<option value="1">1</option>
@@ -539,16 +539,16 @@
 					<div class="tabPage4ContentLeft">
 						<label style="font-weight: normal"> Type: </label> 
 						<input id="colType" class="colorPickerAppearance"
-							onclick="colorPicker_clickHandler(this.id, 'Type')"
+							onclick="colorPickerClickHandler(this, 'Type')"
 							style="margin-left: 17px;" />
 						<div id='colorTypeDropDown' class="colorPicker">
 							<div id="typeColorBlock" class="mainColorBlock"
 								style="display: inline-block;"
 								onclick="setColorToLabel(this, 'Type')"></div>
 							<input type="text" id="txtTypeColor" class="colorText" maxlength="6"
-								onkeydown="return colorPickerTextInput_validation(event)"
-								onclick="item_clickHandler(event)"
-								onkeyup="colorPickerTextInput_clickHandler(event, 'Type')"/> <br>
+								onkeydown="return colorPickerTextInputValidation(event)"
+								onclick="itemClickHandler(event)"
+								onkeyup="colorPickerTextInputClickHandler(event, 'Type')"/> <br>
 							<div class="colorBlock" title="000000"
 								style="background-color: #000000"
 								onmouseover="setColorValueToTextBox(this, 'Type')"
@@ -606,16 +606,16 @@
 					<div class="tabPage4ContentLeft">
 						<label style="font-weight: normal"> Spacing: </label> 
 						<input id="colSpacing" class="colorPickerAppearance"
-							onclick="colorPicker_clickHandler(this.id, 'Space')"
+							onclick="colorPickerClickHandler(this, 'Space')"
 							style="margin-left: 3px; " />
 						<div id='colorSpaceDropDown' class="colorPicker">
 							<div id="spaceColorBlock" class="mainColorBlock"
 								style="display: inline-block;"
 								onclick="setColorToLabel(this, 'Spacing')"></div>
 							<input type="text" id="txtSpaceColor" class="colorText" maxlength="6"
-								onkeydown="return colorPickerTextInput_validation(event)"
-								onclick="item_clickHandler(event)"
-								onkeyup="colorPickerTextInput_clickHandler(event, 'Space')"/> <br>
+								onkeydown="return colorPickerTextInputValidation(event)"
+								onclick="itemClickHandler(event)"
+								onkeyup="colorPickerTextInputClickHandler(event, 'Space')"/> <br>
 							<div class="colorBlock" title="000000"
 								style="background-color: #000000"
 								onmouseover="setColorValueToTextBox(this, 'Space')"
@@ -671,7 +671,7 @@
 
 					<div class="tabPage4ContentLeft psElement" id="colorRadio">
 						<label>Color Mode</label>
-						<div id="radio" onclick="radioButton_clickHandler(event, 'legendColorMode')">
+						<div id="radio" onclick="radioButtonClickHandler(event, 'legendColorMode')">
 							<input type="radio" id="rgbRadioButton" name="radio" value="RGB"
 								checked="checked"><span>RGB</span> <input type="radio"
 								id="hsbRadioButton" name="radio" value="HSB"><span>HSB</span>
@@ -684,7 +684,7 @@
 					<div class="tabPage4ContentLeft nonPsElement" id="colorList">
 						<label>Color Mode</label> 
 						<select class="dropdown" id="lstColorMode" 
-							onchange="comboBox_changeHandler(this.id, 'legendColorMode')">
+							onchange="comboBoxChangeHandler(this, 'legendColorMode')">
 							<option value="CMYK">CMYK</option>
 							<option value="HSB">HSB</option>
 							<option value="HSL">HSL</option>
@@ -700,13 +700,13 @@
 				<div class="tabPageCheckBoxRow">
 					<input type="checkbox" value="DisplayRGBAsHex"
 						id="useHexColor"
-						onclick="checkBox_changeHandler(this)" /> <label
+						onclick="checkBoxChangeHandler(this)" /> <label
 						for="useHexColor"> Display RGB As Hex</label>
 				</div>
 				
 				<div class="tabPageCheckBoxRow nonPsElement" id="specToEdgeCheckbox">
 					<input type="checkbox" value="CanvasEdge" id="specToEdge"
-						onclick="checkBox_changeHandler(this)" /> 
+						onclick="checkBoxChangeHandler(this)" /> 
 					<label for="specToEdge"> Print Spec to Canvas edge</label>
 				</div>
 
@@ -718,11 +718,11 @@
 
 				<div class="tabPageCheckBoxRow" style="margin-top: -15px;">
 					<input type="checkbox" value="ScaleBy" id="useScaleBy"
-						style="vertical-align: middle" onclick="useScaleBy_clickHandler()" />
+						style="vertical-align: middle" onclick="useScaleByClickHandler()" />
 					<label for="useScaleBy">Scale By</label> <input type="text"
 						class="inputStyleSmall" id="txtScaleBy" value="x1"
-						onclick="item_clickHandler(event)"
-						maxlength="4" onchange="txtScaleBy_changeHandler()" /> (e.g. x2 or /2)
+						onclick="itemClickHandler(event)"
+						maxlength="4" onchange="txtScaleByChangeHandler()" /> (e.g. x2 or /2)
 				</div>
 				
 				<div class="tabPageContentRow nonIdElement" style="padding-top: 10px;">
@@ -734,12 +734,12 @@
 				<div class="tabPageCheckBoxRow nonIdElement" style="margin-top: -15px;">
 					<input type="checkbox" value="rgbTransformation" 
 						id="rgbTransformIntoPercentage"
-						onclick="checkBox_changeHandler(this)" /> <label
+						onclick="checkBoxChangeHandler(this)" /> <label
 						for="useHexColor"> Transform RGB Into Percentage</label>
 				</div>
 				
 				<form class="tabPageContentRow nonIdElement" style="margin-top: 5px; margin-left: -5px;" 
-					onclick="radioButton_clickHandler(event, 'decimalFractionValue')">
+					onclick="radioButtonClickHandler(event, 'decimalFractionValue')">
 					<input type="radio" name="decimalFractionOptions" id="decimalRadioButton" 
 						value="decimal" ><label for="decimal"> Decimal </label>
 					<input type="radio" name="decimalFractionOptions" id="fractionRadioButton"

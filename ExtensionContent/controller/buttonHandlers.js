@@ -210,7 +210,6 @@ function removeClassesOfCell(parent, classArray, startIndex) {
 function changeDimensionButtonIcon() {
 	//Handle the exceptions like no image is found..
 	try {
-		var dimensionIconHandler = document.getElementById("dimensionIcon");
 		var imagePath = "../Images/DimensionButtonIcons/WH_";
 		var imageExtension = ".png";
 		
@@ -229,7 +228,7 @@ function changeDimensionButtonIcon() {
 				dimensionIcons[i][j] = imagePath + i + "" + j + imageExtension;
 		}
 
-		dimensionIconHandler.src = dimensionIcons[model.widthPos][model.heightPos];
+		$("#dimensionIcon").attr("src", dimensionIcons[model.widthPos][model.heightPos]);
 	} catch (e) {
 		console.log(e);
 	}
@@ -240,7 +239,6 @@ function changeDimensionButtonIcon() {
  * */
 function changeSpacingButtonIcon() {
 	try {
-		var spacingIconHandler = document.getElementById("spacingIcon");
 		var iconPath = "../Images/SpacingButtonIcons/Spacing_";
 		var imageExtension = ".png";
 		
@@ -263,7 +261,7 @@ function changeSpacingButtonIcon() {
 				+ (model.spaceRight | 0) * 4 + (model.spaceLeft | 0) * 2
 				+ (model.spaceBottom | 0);
 
-		spacingIconHandler.src = spacingIcons[indexSpacingIcon];
+		$("#spacingIcon").attr("src", spacingIcons[indexSpacingIcon]);
 	} catch (e) {
 		console.log(e);
 	}
