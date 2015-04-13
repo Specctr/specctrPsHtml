@@ -4,71 +4,7 @@ Description: Includes all the methods related to UI component like change event 
 click event handlers etc. 
  */
 
-//SPECCTR_HOST = "http://localhost:5000";
-SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
-SPECCTR_API = SPECCTR_HOST += "/api/v1";
-
-/**
- * Validate the license of the user and move to the tab container
- *  if user's credentials valid.
- */
-function activateButtonClickHandler() {
-	// Get Extension Id and matching productCode.
-	var productCodes = {
-		// Photoshop 2.0.
-		"SpecctrPs-Pro" : "63221",
-		"SpecctrPs-10" : "63222",
-		"SpecctrPs-20" : "63223",
-		"SpecctrPs-30" : "63224",
-		"SpecctrPs-Site" : "63225",
-
-		// Illustrator 2.0.
-		"SpecctrPro" : "63233",
-		"SpecctrBusiness10" : "63235",
-		"SpecctrBusiness20" : "63236",
-		"SpecctrBusiness30" : "63237",
-		"SpecctrBusinessSite" : "63238",
-
-		// Indesign 2.0.
-		"Specctr-Pro-ID" : "63240",
-		"Specctr-Business-10" : "63241",
-		"Specctr-Business-20" : "63242",
-		"Specctr-Business-30" : "63243",
-		"Specctr-Business-Site" : "63244"
-	};
-
-	if(extensionId === '')
-		extensionId = getExtensionId();
-
-	var logData = "";
-
-	// If no installed extension is matched with productCodes values.
-	if (!productCodes[extensionId]) {
-		logData = "Incorrect product code";
-		showDialog(logData);
-		logData = createLogData(logData);
-		addFileToPreferenceFolder('.log', logData);	//Create log file.
-		return;
-	}
-
-	var urlRequest = SPECCTR_API += "/register_machine?";
-	urlRequest += "&email=" + $("#emailInput").val();
-	urlRequest += "&password=" + $("#passwordInput").val();
-
-	$.ajax({
-		url:urlRequest,
-		type: 'POST',
-		contentType: "application/json",
-		dataType: "json",
-		success: completeHandler,
-		error: function(xhr) {
-			var response = JSON.parse(xhr.responseText);
-			showDialog(response.message);
-			logData = createLogData(response.message);
-			addFileToPreferenceFolder('.log', logData);	//Create log file.
-		}
-	});
-}
+var specctrUI = {};
 
 /**
  * Click event handler of tabs. Modify styles to tabs and 
@@ -92,10 +28,7 @@ function tabClickHandler() {
 		}
 
 		// Set Image of Active Tab
-		changeImagesOfTabs(parseInt(ident));
-
-		// Set class of active tab
-		this.setAttribute("class", "tabActiveHeader");
+		specctrUtility.changeImagesOfTabs(parseInt(ident));
 
 		$("#tabpage_" + ident).css("display", "block");
 		this.parentNode.setAttribute("data-current", ident);
@@ -105,38 +38,6 @@ function tabClickHandler() {
 	}
 
 	return true;
-}
-
-/**
- * Change the images of tabs on their selection.
- * @param selectedTab {number} The position of selected tab.
- */
-function changeImagesOfTabs(selectedTab) {
-	try {
-		var isImageChanged = true, size = "";
-		var iconExtension = ".png";
-		var activeImageEndString = "_active";
-		var tabIconPath = ["../Images/Icon_main", "../Images/Icon_settings", 
-		                   "../Images/Icon_responsive", "../Images/Icon_prefs"];
-		
-		//For retina display: 2 pixel ratio; 
-		//We have only first tab icon in x2 for that 'selectedTab === 1' check is used.
-		if (window.devicePixelRatio > 1 && selectedTab === 1)
-			size = "_x2";
-
-		tabIconPath[selectedTab-1] += activeImageEndString;	//Set active icon path.
-		
-		//Set icons to their respective tabs.
-		for (var i = 0; i < 4; i++) {
-			$("#tabImage_" + (i + 1)).attr("src", 
-					tabIconPath[i] + size + iconExtension);
-		}
-		
-	} catch (e) {
-		isImageChanged = false;
-	}
-
-	return isImageChanged;
 }
 
 /**
@@ -152,7 +53,14 @@ function itemClickHandler(event) {
  */
 function checkBoxChangeHandler(checkBox) {
 	model[checkBox.id] = checkBox.checked;
-	writeAppPrefs();
+	
+	//Change the checkbox label color to blue.
+	var parent = $(checkBox).parent();
+	if ($(parent).hasClass('tabPage2Content')) {
+		specctrUtility.changeTextColor($(parent).children().last());
+	}
+
+	pref.writeAppPrefs();
 }
 
 /**
@@ -161,7 +69,7 @@ function checkBoxChangeHandler(checkBox) {
  */
 function textBoxChangeHandler(textBoxId) {
 	model[textBoxId] = Number($("#" + textBoxId).val());
-	writeAppPrefs();
+	pref.writeAppPrefs();
 }
 
 /**
@@ -171,13 +79,13 @@ function textBoxChangeHandler(textBoxId) {
 function specInPercentageChangeHandler() {
 	model.specInPrcntg = $("#specInPrcntg").is(":checked");
 	if (model.specInPrcntg) {
-		enableTextField("relativeWidth");
-		enableTextField("relativeHeight");
+		specctrUtility.enableTextField("relativeWidth");
+		specctrUtility.enableTextField("relativeHeight");
 	} else {
-		disableTextField("relativeWidth");
-		disableTextField("relativeHeight");
+		specctrUtility.disableTextField("relativeWidth");
+		specctrUtility.disableTextField("relativeHeight");
 	}
-	writeAppPrefs();
+	pref.writeAppPrefs();
 }
 
 /**
@@ -190,11 +98,11 @@ function specInEMChangeHandler(element) {
 	model.specInEM = element.checked;
 
 	if (model.specInEM) {
-		enableTextField("baseFontSize");
-		enableTextField("baseLineHeight");
+		specctrUtility.enableTextField("baseFontSize");
+		specctrUtility.enableTextField("baseLineHeight");
 	} else {
-		disableTextField("baseFontSize");
-		disableTextField("baseLineHeight");
+		specctrUtility.disableTextField("baseFontSize");
+		specctrUtility.disableTextField("baseLineHeight");
 	}
 
 	//Fill default values if nothing is present in specInEM's textboxes.
@@ -206,7 +114,7 @@ function specInEMChangeHandler(element) {
 		textBaseLineHeight.val(value.toString());
 		model.baseLineHeight = value;
 	}
-	writeAppPrefs();
+	pref.writeAppPrefs();
 }
 
 /**
@@ -216,11 +124,11 @@ function useScaleByClickHandler() {
 	model.useScaleBy = $("#useScaleBy").is(":checked");
 
 	if (model.useScaleBy)
-		enableTextField("txtScaleBy");
+		specctrUtility.enableTextField("txtScaleBy");
 	else
-		disableTextField("txtScaleBy");
+		specctrUtility.disableTextField("txtScaleBy");
 
-	writeAppPrefs();
+	pref.writeAppPrefs();
 }
 
 /**
@@ -248,7 +156,7 @@ function radioButtonClickHandler(event, value) {
 		return;
 
 	model[value] = selectedValue;
-	writeAppPrefs();
+	pref.writeAppPrefs();
 }
 
 /**
@@ -261,7 +169,7 @@ function comboBoxChangeHandler(element, modelValue) {
 	if(!isNaN(Number(value)))
 		value = Number(value);
 	model[modelValue] = value;
-	writeAppPrefs();
+	pref.writeAppPrefs();
 }
 
 /**
@@ -271,7 +179,7 @@ function listFontChangeHandler(element) {
 	var selectedFont = element.options[element.selectedIndex];
 	model.legendFontFamily = selectedFont.value;
 	model.legendFont = selectedFont.text;
-	writeAppPrefs();
+	pref.writeAppPrefs();
 }
 
 /**
@@ -299,13 +207,13 @@ function setColorToLabel(element, colorPickerBlock) {
 		var color = "#" + element.title;
 	} else {
 		color = element.style.backgroundColor;
-		color = rgbToHex(color);
+		color = specctrUtility.rgbToHex(color);
 	}
 
 	$("#col" + colorPickerBlock).css("background-color", color);
 	$("#" + element.parentNode.id).slideUp(100);
 	model[value] = color;
-	writeAppPrefs();
+	pref.writeAppPrefs();
 }
 
 /**
@@ -321,7 +229,7 @@ function colorPickerClickHandler(element, colorPickerBlock) {
 	var valueForTextBox = "";
 
 	var color = element.style.backgroundColor;
-	color = rgbToHex(color);
+	color = specctrUtility.rgbToHex(color);
 	$(dropDownBlock).slideToggle(100);
 	$(colorBlock).css("background-color", color);
 
@@ -428,7 +336,7 @@ function restrictInputToDecimal(event) {
 /**
  * Set the style of dialog at the time of initialization of panel. 
  */
-function createDialog() {
+specctrUI.createDialog = function() {
 	$("#dialog").dialog({
 		autoOpen : false,
 		resizable: false,
@@ -437,22 +345,15 @@ function createDialog() {
 		modal : true,
 		buttons : []
 	});
-}
+};
 
 /**
  * Open the dialog with the passed message.
  * @param message {string} The message that appear in the dialog.
  */
-function showDialog(message) {
+specctrUI.showDialog = function(message) {
 	var dialogRef = $("#dialog");
 	dialogRef.text(message);
 	dialogRef.dialog("open");
 	dialogRef.dialog({position:'center'});
-}
-
-/**
- * Close the dialog.
- */
-function hideDialog() {
-	$("#dialog").dialog("close");
-}
+};

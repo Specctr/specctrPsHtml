@@ -31,7 +31,7 @@ body {
 }
 
 .container {
-	Height: 608px;
+	Height: 598px;
 	Width: 222px;
 	background-color: #E8E8E8;
 	margin: 0 auto;
@@ -75,6 +75,19 @@ input[type="text"],input[type="email"],input[type="password"] {
 	width: 187px;
 	-webkit-user-select: auto;
 	cursor: text;
+}
+
+.tabTitle {
+	text-align: center;
+	font-family: Aauxpro-bold;
+	font-size: 11px;
+	font-style: normal;
+	color: #808080;
+	background-color: #E1E1E1;
+	width: 222px;
+	height: 23px;
+	padding-top: 8px;
+	margin-left: -9px !important; 
 }
 
 .menu {
@@ -136,7 +149,7 @@ input[type="text"],input[type="email"],input[type="password"] {
 .link {
 	color: #3199F6;
 	font-family: sans-serif;
-	font-size: 13px;
+	font-size: 11px;
 	cursor: pointer;
 }
 
@@ -146,40 +159,30 @@ input[type="text"],input[type="email"],input[type="password"] {
 }
 
 .tabs {
-	height: 40px;
+	height: 50px;
 }
 
 .tabs>ul {
 	font-size: 1em;
 	list-style: none;
+	cursor: pointer;
+	padding-top: 5px;
 }
 
 .tabs>ul>li {
-	background-image: linear-gradient(to top, #B5B2B2 0%, #e1e1e1 100%);
 	text-align: center;
+	border: none;
+	background: #FFFFFF;
 	float: left;
-	width: 54px;
-	height: 40px;
-	border-left: 1px solid #B9B9B9;
-	border-right: 1px solid #B9B9B9;
-	border-top: 1px solid #B9B9B9;
-	border-bottom: 2px solid #ABA9A9;
+	width: 55.5px;
+	height: 50px;
+	cursor: pointer;
+	padding-top: 5px;
 }
 
-.tabs>ul>li:hover {
-	background-image: linear-gradient(to top, #B5B2B2 0%, #e1e1e1 80%);
-	cursor: pointer;
-	border: none;
-	border-right: 1px solid #3199F6;
-	border-bottom: 2px solid #ABA9A9;
-	border-top: 1px solid #3199F6;
-	border-left: 1px solid #3199F6;
-}
-
-.tabs>ul>li.tabActiveHeader {
-	border: none;
-	background: #E8E8E8;
-	cursor: pointer;
+#tabpage_2>div>label {
+	padding-top: 5px;
+	padding-left: 8px;
 }
 
 #tabContainer {
@@ -197,25 +200,27 @@ input[type="text"],input[type="email"],input[type="password"] {
 	border-bottom-right-radius: 4px;
 	border-bottom-left-radius: 4px;
 	padding: 10px 10px 25px;
-	background: #E8E8E8;
+	background: #FFFFFF;
 	color: #333;
-	height: 414px;
+	height: 580px;
 }
 
-.floatLeft {
-	float: left;
-}
-
-.floatRight {
-	float: right;
+.tabPage2PropertiesHeader {
+	font-size: medium;
+	font-family: "Arial";
+	font-size: 16px;
+	width: 198px;
+	margin-top: 20px;
+	margin-left: 20px;
+	margin-bottom: 15px;
 }
 
 .tabPage2Content {
 	font-family: "Arial";
-	font-size: 11px;
-	width: 100px;
-	height: 18px;
-	padding-bottom: 2px;
+	font-size: 13px;
+	width: 198px;
+	margin-bottom: 10px;
+	margin-left: 22px;
 }
 
 .tabPage3Content {
@@ -341,6 +346,12 @@ input[type="text"],input[type="email"],input[type="password"] {
 	color: #58585B !important;
 }
 
+.subscriptionNote {
+	font-family: Arial !important;
+	font-size: 12px !important;
+	color: #808080 !important;
+}
+
 #tabpage_1 ul {
 	width: 200px !important;
 }
@@ -436,6 +447,10 @@ input[type="text"]:disabled {
 
 label {
 	color: #0C0D0D;
+}
+
+.setBlueLabel {
+	color: #0000FF !important;
 }
 
 .button:hover {

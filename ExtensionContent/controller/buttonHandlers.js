@@ -4,6 +4,8 @@ Description: Handles the functionalities of drop-down buttons in panel such as d
 changing icons of buttons on cell selection etc.
  */
 
+var buttonFeature = {};
+
 /**
  * Closing/Opening Spacing popup button according to dropdown cell selection and call 
  * creating spec function accordingly.
@@ -12,7 +14,7 @@ function specButtonsClickHandler(specButton) {
 	try {
 		
 		//Close all dropdowns.
-		closeAllDropDown();
+		buttonFeature.closeAllDropDown();
 
 		//Call the spec methods respective to the clicked button's Id.
 		if(specButton.id == "btnProperties") {
@@ -20,7 +22,7 @@ function specButtonsClickHandler(specButton) {
 		} else if(specButton.id == "btnWh") {
 			
 			if (!model.widthPos && !model.heightPos) 
-				openDropDown(specButton.id);	//Open width/height button dropdown.
+				buttonFeature.openDropDown(specButton.id);	//Open width/height button dropdown.
 			else 
 				createDimensionSpecs();
 
@@ -28,7 +30,7 @@ function specButtonsClickHandler(specButton) {
 			
 			if (!model.spaceTop && !model.spaceRight && !model.spaceLeft
 					&& !model.spaceBottom) 
-				openDropDown(specButton.id); //Open the spacing button dropdown.
+				buttonFeature.openDropDown(specButton.id); //Open the spacing button dropdown.
 			else 
 				createSpacingSpecs();
 
@@ -50,7 +52,7 @@ function buttonDropDownClickHandler(event, specButton) {
 		
 		var buttonId = specButton.parentNode.id;
 		//Close the remaining drop downs except the element in the parameters.
-		closeAllDropDown(buttonId);
+		buttonFeature.closeAllDropDown(buttonId);
 
 		//Get the ids of selected dropdown elements.
 		buttonId = "#" + buttonId;
@@ -59,7 +61,7 @@ function buttonDropDownClickHandler(event, specButton) {
 		var imageDropDownArrowId = "#" + specButton.id;
 		
 		//Call the spec methods respective to the clicked button's Id.
-		toggleDropDown(liId, buttonId, dropDownId, imageDropDownArrowId);
+		buttonFeature.toggleDropDown(liId, buttonId, dropDownId, imageDropDownArrowId);
 		
 	} catch (e) {
 		alert(e);
@@ -86,38 +88,38 @@ function dropDownCellClickHandler(cellId, selectionClass, modelValue) {
 				//Selection classes for each cell in width row.
 				classForSelection = ["noSelectionSelected", "widthTopSelected",
 						"widthBottomSelected", "widthCenterSelected"];
-				removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
+				buttonFeature.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 				model.widthPos = selectedCellIndex;
 			} else {
 				//Selection classes for each cell in height row.
 				classForSelection = ["noSelectionSelected", "heightLeftSelected",
 						"heightRightSelected", "heightCenterSelected"];
-				removeClassesOfCell(cellHandler.parent(), classForSelection, 4);
+				buttonFeature.removeClassesOfCell(cellHandler.parent(), classForSelection, 4);
 				model.heightPos = selectedCellIndex;
 			}
 			
 			cellHandler.addClass(selectionClass);
-			changeDimensionButtonIcon();
+			buttonFeature.changeDimensionButtonIcon();
 
 		} else if (cellHandler.parent().attr("id") == "spacingDropDown") {
 			
 			cellHandler.toggleClass(selectionClass);
 			model[modelValue] = !model[modelValue];
-			changeSpacingButtonIcon();
+			buttonFeature.changeSpacingButtonIcon();
 		
 		} else if (cellHandler.parent().attr("id") == "coordinateDropDown") {
 			
 			selectedCellIndex = cellHandler.index();
 			classForSelection = ["topLeftSelected", "topRightSelected",
 			          				"bottomRightSelected", "bottomLeftSelected"];
-			removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
+			buttonFeature.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 			model[modelValue] = selectedCellIndex;
 			cellHandler.addClass(selectionClass);
 		
 		} else {
 			
 			classForSelection = ["specLineSelected", "specBulletSelected"];
-			removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
+			buttonFeature.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 			model.specOption = modelValue;
 			cellHandler.addClass(selectionClass);
 		}
@@ -132,19 +134,19 @@ function dropDownCellClickHandler(cellId, selectionClass, modelValue) {
  * @param button {string} button id.
  * @param dropDownId {string} button's dropdown id.
  */
-function closeDropDown(id, button, dropDownId) {
+buttonFeature.closeDropDown = function(id, button, dropDownId) {
 	var liButton = id + " .options";
 	$(liButton).slideUp(100);
 	$(id).removeClass("isOpen");
 	$(button).removeClass("buttonSelected");
 	$(dropDownId).removeClass().addClass("dropdownArrow");
-}
+};
 
 /**
  * Close all button's drop-down except the button id passed in parameter.
  * @param parentId {string} parent (button) id of dropdown. 
  * */
-function closeAllDropDown(parentId) {
+buttonFeature.closeAllDropDown = function(parentId) {
 	var dropDownIds = ["#spacingDropDown", "#coordinateDropDown",
 	                   "#dimensionDropDown", "#propertiesDropDown"];
 	
@@ -153,15 +155,15 @@ function closeAllDropDown(parentId) {
 		var buttonId = $(liId + " div:nth-child(1)").attr("id");
 		var imageDropDownId = "#" + $("#" + buttonId + " div:nth-child(3)").attr("id");
 		if($(dropDownIds[i]).is(":visible") && parentId != buttonId)
-			closeDropDown(liId, "#" + buttonId, imageDropDownId);
+			this.closeDropDown(liId, "#" + buttonId, imageDropDownId);
 	}
-}
+};
 
 /**
  * Open button's drop-down.
  * @param buttonId {string} Id of spec dropdown button. 
  * */
-function openDropDown(buttonId) {
+buttonFeature.openDropDown = function(buttonId) {
 	//Open the button dropdown.
 	buttonId = "#" + buttonId;
 	var liId = "#" + $(buttonId).parent().attr("id");
@@ -171,12 +173,12 @@ function openDropDown(buttonId) {
 	$(imageDropDownId).addClass("dropdownArrowUp");
 	$(buttonId).addClass("buttonSelected");
 	$(liId).addClass("isOpen");
-}
+};
 
 /**
  * Toggle classes of selected button's drop-down.
  * */
-function toggleDropDown(id, button, dropDownId, imgDropDown) {
+buttonFeature.toggleDropDown = function(id, button, dropDownId, imgDropDown) {
 	if ($(dropDownId).is(":visible")) {
 		$(id).removeClass("isOpen");
 		$(button).removeClass("buttonSelected");
@@ -187,7 +189,7 @@ function toggleDropDown(id, button, dropDownId, imgDropDown) {
 
 	$(id + " .options").slideToggle(100);
 	$(imgDropDown).toggleClass("dropdownArrowUp");
-}
+};
 
 /**
  * Remove selected cells in a given row of dropdown.
@@ -195,19 +197,19 @@ function toggleDropDown(id, button, dropDownId, imgDropDown) {
  * @param classArray {array} Array of classes applied on cells.
  * @param startIndex {int} Index of selected cell. 
  * */
-function removeClassesOfCell(parent, classArray, startIndex) {
+buttonFeature.removeClassesOfCell = function(parent, classArray, startIndex) {
 	var classLength = classArray.length;
 	var endIndex = startIndex + classLength;
 	
 	//Remove selection classes from each cell.
 	for (var i = startIndex; i < endIndex; i++)
 		parent.children().eq(i).removeClass(classArray[i % classLength]);
-}
+};
 
 /**
  * Change the dimension button icon according to the selection of cells in the grid.
  * */
-function changeDimensionButtonIcon() {
+buttonFeature.changeDimensionButtonIcon = function() {
 	//Handle the exceptions like no image is found..
 	try {
 		var imagePath = "../Images/DimensionButtonIcons/WH_";
@@ -232,12 +234,12 @@ function changeDimensionButtonIcon() {
 	} catch (e) {
 		console.log(e);
 	}
-}
+};
 
 /**
  * Change the spacing button icon according to the selection of cells in the grid.
  * */
-function changeSpacingButtonIcon() {
+buttonFeature.changeSpacingButtonIcon = function() {
 	try {
 		var iconPath = "../Images/SpacingButtonIcons/Spacing_";
 		var imageExtension = ".png";
@@ -265,4 +267,4 @@ function changeSpacingButtonIcon() {
 	} catch (e) {
 		console.log(e);
 	}
-}
+};

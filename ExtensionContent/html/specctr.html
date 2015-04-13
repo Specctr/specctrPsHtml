@@ -87,19 +87,19 @@
 			<ul>
 				<li id="tabHeader_1">
 					<img id="tabImage_1" src="../Images/Icon_main.png" width="48" height="34" 
-					style="margin-top: 3px;"/>
+					style="margin-top: 6px;"/>
 				</li>
 				<li id="tabHeader_2">
 					<img id="tabImage_2" src="../Images/Icon_settings.png" width="48" height="34"
-					style="margin-top: 3px;"/>
+					style="margin-top: 6px;"/>
 				</li>
 				<li id="tabHeader_3">
 					<img id="tabImage_3" src="../Images/Icon_responsive.png" width="48" height="34"
-					style="margin-top: 3px;"/>
+					style="margin-top: 6px;"/>
 				</li>
 				<li id="tabHeader_4">
-					<img id="tabImage_4" src="../Images/Icon_prefs.png" width="48" height="34"
-					style="margin-top: 3px;"/>
+					<img id="tabImage_4" src="../Images/Icon_cloud.png" width="48" height="34"
+					style="margin-top: 6px;"/>
 				</li>
 			</ul>
 		</div>
@@ -108,6 +108,7 @@
 
 			<!-- Starting of main tab. -->
 			<div id="tabpage_1" class="tabpage">
+				<div class="tabTitle boldText">Spec Away!</div>
 				<ul class="menu">
 
 					<!-- Property button. -->
@@ -241,117 +242,113 @@
 
 			<!-- Starting of setting tab. -->
 			<div id="tabpage_2" class="tabpage">
-				<div class="tabPage2Header">SELECT DETAILS</div>
-				<div class="floatLeft" id="shapePropertyForPHXS">
-					<div class="tabPage2Content tabPage2SubHeader boldText">
-						Shape Object</div>
-					<div class="tabPage2Content nonPsElement" id="fillColor">
-						<input type="checkbox" value="1" id="shapeFillColor"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="shapeFillColor">Fill Color</label>
-					</div>
-					<div class="tabPage2Content nonPsElement" id="fillStyle">
-						<input type="checkbox" value="2" id="shapeFillStyle"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="shapeFillColor">Fill Style</label>
-					</div>
-					<div class="tabPage2Content nonPsElement" id="strokeColor">
-						<input type="checkbox" value="3" id="shapeStrokeColor"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="shapeStrokeColor">Stroke Color</label>
-					</div>
-					<div class="tabPage2Content nonPsElement" id="strokeStyle">
-						<input type="checkbox" value="4" id="shapeStrokeStyle"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="shapeStrokeStyle">Stroke Style</label>
-					</div>
-					<div class="tabPage2Content nonPsElement" id="strokeSize">
-						<input type="checkbox" value="5" id="shapeStrokeSize"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="shapeStrokeSize">Stroke Size</label>
-					</div>
-					<div class="tabPage2Content psElement" id="fill">
-						<input type="checkbox" value="1" id="shapeFill"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="shapeFill">Fill</label>
-					</div>
-					<div class="tabPage2Content psElement" id="stroke">
-						<input type="checkbox" value="2" id="shapeStroke"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="shapeStroke">Stroke</label>
-					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="3" id="shapeAlpha"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="shapeAlpha">Alpha</label>
-					</div>
-					<div class="tabPage2Content psElement">
-						<input type="checkbox" value="4" id="shapeEffects"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="shapeEffects">Effects</label>
-					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="5" id="shapeBorderRadius"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="shapeBorderRadius">Border Radius</label>
-					</div>
+				<div class="tabTitle boldText">Pick the properties you want to display</div>
+				<div class="tabPage2PropertiesHeader boldText">
+					Shape Properties</div>
+				<div class="tabPage2Content nonPsElement" id="fillColor">
+					<input type="checkbox" value="1" id="shapeFillColor"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="shapeFillColor">Fill Color</label>
+				</div>
+				<div class="tabPage2Content nonPsElement" id="fillStyle">
+					<input type="checkbox" value="2" id="shapeFillStyle"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="shapeFillStyle">Fill Style</label>
+				</div>
+				<div class="tabPage2Content nonPsElement" id="strokeColor">
+					<input type="checkbox" value="3" id="shapeStrokeColor"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="shapeStrokeColor">Stroke Color</label>
+				</div>
+				<div class="tabPage2Content nonPsElement" id="strokeStyle">
+					<input type="checkbox" value="4" id="shapeStrokeStyle"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="shapeStrokeStyle">Stroke Style</label>
+				</div>
+				<div class="tabPage2Content nonPsElement" id="strokeSize">
+					<input type="checkbox" value="5" id="shapeStrokeSize"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="shapeStrokeSize">Stroke Size</label>
+				</div>
+				<div class="tabPage2Content psElement" id="fill">
+					<input type="checkbox" value="1" id="shapeFill"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="shapeFill">Fill</label>
+				</div>
+				<div class="tabPage2Content psElement" id="stroke">
+					<input type="checkbox" value="2" id="shapeStroke"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="shapeStroke">Stroke</label>
+				</div>
+				<div class="tabPage2Content">
+					<input type="checkbox" value="3" id="shapeAlpha"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="shapeAlpha">Alpha</label>
+				</div>
+				<div class="tabPage2Content psElement">
+					<input type="checkbox" value="4" id="shapeEffects"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="shapeEffects">Effects</label>
+				</div>
+				<div class="tabPage2Content">
+					<input type="checkbox" value="5" id="shapeBorderRadius"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="shapeBorderRadius">Border Radius</label>
 				</div>
 
-				<div class="floatRight">
-					<div class="tabPage2Content tabPage2SubHeader boldText">Text
-						Object</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="6" id="textFont"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="textFont">Font Family</label>
-					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="7" id="textSize"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="textSize">Font Size</label>
-					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="8" id="textColor"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="textColor">Color</label>
-					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="9" id="textStyle"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="textStyle">Font Style</label>
-					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="10" id="textAlignment"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="textAlignment">Text-Align</label>
-					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="11" id="textLeading"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="textLeading">Line Height</label>
-					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="12" id="textTracking"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for=textTracking>Letter Spacing</label>
-					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="13" id="textAlpha"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="textAlpha">Alpha</label>
-					</div>
-					<div class="tabPage2Content psElement">
-						<input type="checkbox" value="14" id="textEffects"
-							onclick="checkBoxChangeHandler(this)" /> 
-						<label for="textEffects">Effects</label>
-					</div>
+				<div class="tabPage2PropertiesHeader boldText">Text
+					Properties</div>
+				<div class="tabPage2Content">
+					<input type="checkbox" value="6" id="textFont"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="textFont">Font Family</label>
+				</div>
+				<div class="tabPage2Content">
+					<input type="checkbox" value="7" id="textSize"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="textSize">Font Size</label>
+				</div>
+				<div class="tabPage2Content">
+					<input type="checkbox" value="8" id="textColor"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="textColor">Color</label>
+				</div>
+				<div class="tabPage2Content">
+					<input type="checkbox" value="9" id="textStyle"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="textStyle">Font Style</label>
+				</div>
+				<div class="tabPage2Content">
+					<input type="checkbox" value="10" id="textAlignment"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="textAlignment">Text-Align</label>
+				</div>
+				<div class="tabPage2Content">
+					<input type="checkbox" value="11" id="textLeading"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="textLeading">Line Height</label>
+				</div>
+				<div class="tabPage2Content">
+					<input type="checkbox" value="12" id="textTracking"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for=textTracking>Letter Spacing</label>
+				</div>
+				<div class="tabPage2Content">
+					<input type="checkbox" value="13" id="textAlpha"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="textAlpha">Alpha</label>
+				</div>
+				<div class="tabPage2Content psElement">
+					<input type="checkbox" value="14" id="textEffects"
+						onclick="checkBoxChangeHandler(this)" /> 
+					<label for="textEffects">Effects</label>
 				</div>
 			</div>
 			<!-- Ending of setting tab. -->
 
 			<!-- Starting of responsive tab. -->
 			<div id="tabpage_3" class="tabpage">
-
+				<div class="tabTitle boldText">Responsive Options</div>
 				<div class="tabPage2Header">RESPONSIVE OPTIONS</div>
 
 				<span class="boldText tabPage2SubHeader">Distance/Spacing</span>
@@ -417,339 +414,351 @@
 			</div>
 			<!-- Ending of responsive tab. -->
 
-			<!-- Starting of options tab. -->
+			<!-- Starting of cloud tab. -->
 			<div id="tabpage_4" class="tabpage">
-				<div class="tabPage2Header">SPEC OPTIONS</div>
-				<div class="tabPageContentRow">
-					<div class="tabPage4ContentLeft">
-						<label>Font</label> 
-						<select class="dropdown" id="lstFont"
-							onchange="listFontChangeHandler(this)"
-							onclick="itemClickHandler(event)">
-						</select>
-					</div>
-					<div class="tabPage4ContentRight">
-						<label> Size</label><br /> 
-						<select class="smalldropdown" id="lstSize"
-							onchange="comboBoxChangeHandler(this, 'legendFontSize')"
-							onclick="itemClickHandler(event)">
-							<option value="8">8</option>
-							<option value="9">9</option>
-							<option value="10">10</option>
-							<option value="11">11</option>
-							<option value="12">12</option>
-							<option value="14">14</option>
-							<option value="16">16</option>
-							<option value="18">18</option>
-							<option value="24">24</option>
-							<option value="36">36</option>
-							<option value="48">48</option>
-						</select>
-					</div>
+				<div class="tabTitle boldText">Specctr Clouds</div>
+				<div style="margin-top: 30px;">
+					<label class="subscriptionNote boldText">SUBSCRIPTION PLAN:</label>
 				</div>
-				<div class="tabPageEmptyRow"></div>
-				<div class="tabPageCheckBoxRow">
-					<div class="tabPage4ContentLeft">
-						<label> Spec Color</label>
-					</div>
-					<div class="tabPage4ContentRight">
-						<label> Line Weight</label>
-					</div>
+				<div style="margin-top: 20px;">
+					<label class="subscriptionNote" style="float: right;">15 DAYS REMAINING</label>
+					<label class="subscriptionNote" style="float: left;">TRIAL</label>
 				</div>
-				<div class="tabPageCheckBoxRow">
-					<div class="tabPage4ContentLeft">
-						<label style="font-weight: normal"> Shape: </label> 
-						<input id="colObject" class="colorPickerAppearance"
-							onclick="colorPickerClickHandler(this, 'Shape')"
-							style="margin-left: 11px; " />
-						<div id='colorShapeDropDown' class="colorPicker">
-							<div id="shapeColorBlock" class="mainColorBlock"
-								style="display: inline-block;"
-								onclick="setColorToLabel(this, 'Object')"></div>
-							<input type="text" id="txtShapeColor" class="colorText"  maxlength="6"
-								onclick="itemClickHandler(event)"
-								onkeydown="return colorPickerTextInputValidation(event)"
-								onkeyup="colorPickerTextInputClickHandler(event, 'Shape')"/> <br>
-							<div class="colorBlock" title="000000"
-								style="background-color: #000000"
-								onmouseover="setColorValueToTextBox(this, 'Shape')"
-								onclick="setColorToLabel(this, 'Object')"></div>
-							<div class="colorBlock" title="FF0000"
-								style="background-color: #FF0000"
-								onmouseover="setColorValueToTextBox(this, 'Shape')"
-								onclick="setColorToLabel(this, 'Object')"></div>
-							<div class="colorBlock" title="FF8800"
-								style="background-color: #FF8800"
-								onmouseover="setColorValueToTextBox(this, 'Shape')"
-								onclick="setColorToLabel(this, 'Object')"></div>
-							<div class="colorBlock" title="FFFF00"
-								style="background-color: #FFFF00"
-								onmouseover="setColorValueToTextBox(this, 'Shape')"
-								onclick="setColorToLabel(this, 'Object')"></div>
-							<div class="colorBlock" title="88FF00"
-								style="background-color: #88FF00"
-								onmouseover="setColorValueToTextBox(this, 'Shape')"
-								onclick="setColorToLabel(this, 'Object')"></div>
-							<div class="colorBlock" title="00FF00"
-								style="background-color: #00FF00"
-								onmouseover="setColorValueToTextBox(this, 'Shape')"
-								onclick="setColorToLabel(this, 'Object')"></div>
-							<div class="colorBlock" title="00FF88"
-								style="background-color: #00FF88"
-								onmouseover="setColorValueToTextBox(this, 'Shape')"
-								onclick="setColorToLabel(this, 'Object')"></div>
-							<div class="colorBlock" title="00FFFF"
-								style="background-color: #00FFFF"
-								onmouseover="setColorValueToTextBox(this, 'Shape')"
-								onclick="setColorToLabel(this, 'Object')"></div>
-							<div class="colorBlock" title="0000FF"
-								style="background-color: #0000FF"
-								onmouseover="setColorValueToTextBox(this, 'Shape')"
-								onclick="setColorToLabel(this, 'Object')"></div>
-							<div class="colorBlock" title="8800FF"
-								style="background-color: #8800FF"
-								onmouseover="setColorValueToTextBox(this, 'Shape')"
-								onclick="setColorToLabel(this, 'Object')"></div>
-							<div class="colorBlock" title="FF00FF"
-								style="background-color: #FF00FF"
-								onmouseover="setColorValueToTextBox(this, 'Shape')"
-								onclick="setColorToLabel(this, 'Object')"></div>
-							<div class="colorBlock" title="FFFFFF"
-								style="background-color: #FFFFFF"
-								onmouseover="setColorValueToTextBox(this, 'Shape')"
-								onclick="setColorToLabel(this, 'Object')"></div>
-						</div>
-					</div>
-					<div class="tabPage4ContentRight">
-						<select class="smalldropdown" id="lstLineWeight"
-							onclick="itemClickHandler(event)"
-							onchange="comboBoxChangeHandler(this, 'armWeight')">
-							<option value="0.25">0.25</option>
-							<option value="0.5">0.5</option>
-							<option value="1">1</option>
-							<option value="1.5">1.5</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-						</select>
-					</div>
+				<div style="margin-top: 50px !important; text-align: center;">
+					<a class="link" href="#">Activate Specctr Pro Today!</a>
 				</div>
-				<div class="tabPageContentRow">
-					<div class="tabPage4ContentLeft">
-						<label style="font-weight: normal"> Type: </label> 
-						<input id="colType" class="colorPickerAppearance"
-							onclick="colorPickerClickHandler(this, 'Type')"
-							style="margin-left: 17px;" />
-						<div id='colorTypeDropDown' class="colorPicker">
-							<div id="typeColorBlock" class="mainColorBlock"
-								style="display: inline-block;"
-								onclick="setColorToLabel(this, 'Type')"></div>
-							<input type="text" id="txtTypeColor" class="colorText" maxlength="6"
-								onkeydown="return colorPickerTextInputValidation(event)"
-								onclick="itemClickHandler(event)"
-								onkeyup="colorPickerTextInputClickHandler(event, 'Type')"/> <br>
-							<div class="colorBlock" title="000000"
-								style="background-color: #000000"
-								onmouseover="setColorValueToTextBox(this, 'Type')"
-								onclick="setColorToLabel(this, 'Type')"></div>
-							<div class="colorBlock" title="FF0000"
-								style="background-color: #FF0000"
-								onmouseover="setColorValueToTextBox(this, 'Type')"
-								onclick="setColorToLabel(this, 'Type')"></div>
-							<div class="colorBlock" title="FF8800"
-								style="background-color: #FF8800"
-								onmouseover="setColorValueToTextBox(this, 'Type')"
-								onclick="setColorToLabel(this, 'Type')"></div>
-							<div class="colorBlock" title="FFFF00"
-								style="background-color: #FFFF00"
-								onmouseover="setColorValueToTextBox(this, 'Type')"
-								onclick="setColorToLabel(this, 'Type')"></div>
-							<div class="colorBlock" title="88FF00"
-								style="background-color: #88FF00"
-								onmouseover="setColorValueToTextBox(this, 'Type')"
-								onclick="setColorToLabel(this, 'Type')"></div>
-							<div class="colorBlock" title="00FF00"
-								style="background-color: #00FF00"
-								onmouseover="setColorValueToTextBox(this, 'Type')"
-								onclick="setColorToLabel(this, 'Type')"></div>
-							<div class="colorBlock" title="00FF88"
-								style="background-color: #00FF88"
-								onmouseover="setColorValueToTextBox(this, 'Type')"
-								onclick="setColorToLabel(this, 'Type')"></div>
-							<div class="colorBlock" title="00FFFF"
-								style="background-color: #00FFFF"
-								onmouseover="setColorValueToTextBox(this, 'Type')"
-								onclick="setColorToLabel(this, 'Type')"></div>
-							<div class="colorBlock" title="0000FF"
-								style="background-color: #0000FF"
-								onmouseover="setColorValueToTextBox(this, 'Type')"
-								onclick="setColorToLabel(this, 'Type')"></div>
-							<div class="colorBlock" title="8800FF"
-								style="background-color: #8800FF"
-								onmouseover="setColorValueToTextBox(this, 'Type')"
-								onclick="setColorToLabel(this, 'Type')"></div>
-							<div class="colorBlock" title="FF00FF"
-								style="background-color: #FF00FF"
-								onmouseover="setColorValueToTextBox(this, 'Type')"
-								onclick="setColorToLabel(this, 'Type')"></div>
-							<div class="colorBlock" title="FFFFFF"
-								style="background-color: #FFFFFF"
-								onmouseover="setColorValueToTextBox(this, 'Type')"
-								onclick="setColorToLabel(this, 'Type')"></div>
-						</div>
-
-					</div>
-					<div class="tabPage4ContentRight"></div>
-				</div>
-				<div class="tabPageContentRow" style="margin-top: -4px;">
-					<div class="tabPage4ContentLeft">
-						<label style="font-weight: normal"> Spacing: </label> 
-						<input id="colSpacing" class="colorPickerAppearance"
-							onclick="colorPickerClickHandler(this, 'Space')"
-							style="margin-left: 3px; " />
-						<div id='colorSpaceDropDown' class="colorPicker">
-							<div id="spaceColorBlock" class="mainColorBlock"
-								style="display: inline-block;"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-							<input type="text" id="txtSpaceColor" class="colorText" maxlength="6"
-								onkeydown="return colorPickerTextInputValidation(event)"
-								onclick="itemClickHandler(event)"
-								onkeyup="colorPickerTextInputClickHandler(event, 'Space')"/> <br>
-							<div class="colorBlock" title="000000"
-								style="background-color: #000000"
-								onmouseover="setColorValueToTextBox(this, 'Space')"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-							<div class="colorBlock" title="FF0000"
-								style="background-color: #FF0000"
-								onmouseover="setColorValueToTextBox(this, 'Space')"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-							<div class="colorBlock" title="FF8800"
-								style="background-color: #FF8800"
-								onmouseover="setColorValueToTextBox(this, 'Space')"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-							<div class="colorBlock" title="FFFF00"
-								style="background-color: #FFFF00"
-								onmouseover="setColorValueToTextBox(this, 'Space')"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-							<div class="colorBlock" title="88FF00"
-								style="background-color: #88FF00"
-								onmouseover="setColorValueToTextBox(this, 'Space')"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-							<div class="colorBlock" title="00FF00"
-								style="background-color: #00FF00"
-								onmouseover="setColorValueToTextBox(this, 'Space')"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-							<div class="colorBlock" title="00FF88"
-								style="background-color: #00FF88"
-								onmouseover="setColorValueToTextBox(this, 'Space')"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-							<div class="colorBlock" title="00FFFF"
-								style="background-color: #00FFFF"
-								onmouseover="setColorValueToTextBox(this, 'Space')"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-							<div class="colorBlock" title="0000FF"
-								style="background-color: #0000FF"
-								onmouseover="setColorValueToTextBox(this, 'Space')"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-							<div class="colorBlock" title="8800FF"
-								style="background-color: #8800FF"
-								onmouseover="setColorValueToTextBox(this, 'Space')"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-							<div class="colorBlock" title="FF00FF"
-								style="background-color: #FF00FF"
-								onmouseover="setColorValueToTextBox(this, 'Space')"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-							<div class="colorBlock" title="FFFFFF"
-								style="background-color: #FFFFFF"
-								onmouseover="setColorValueToTextBox(this, 'Space')"
-								onclick="setColorToLabel(this, 'Spacing')"></div>
-						</div>
-					</div>
-				</div>
-				<div class="tabPageContentRow" style="padding-top: 15px;">
-
-					<div class="tabPage4ContentLeft psElement" id="colorRadio">
-						<label>Color Mode</label>
-						<div id="radio" onclick="radioButtonClickHandler(event, 'legendColorMode')">
-							<input type="radio" id="rgbRadioButton" name="radio" value="RGB"
-								checked="checked"><span>RGB</span> <input type="radio"
-								id="hsbRadioButton" name="radio" value="HSB"><span>HSB</span>
-							<input type="radio" id="cmykRadioButton" name="radio"
-								value="CMYK"><span style='margin-right: 38px;'>CMYK</span>
-							<input type="radio" id="hslRadioButton" name="radio" value="HSL"><span>HSL</span>
-						</div>
-					</div>
-					
-					<div class="tabPage4ContentLeft nonPsElement" id="colorList">
-						<label>Color Mode</label> 
-						<select class="dropdown" id="lstColorMode" 
-							onchange="comboBoxChangeHandler(this, 'legendColorMode')">
-							<option value="CMYK">CMYK</option>
-							<option value="HSB">HSB</option>
-							<option value="HSL">HSL</option>
-							<option value="RGB">RGB</option>
-						</select>
-					</div>
-
-					<div class="tabPage4ContentRight"></div>
-				</div>
-
-				<div class="tabPageEmptyRow"></div>
-
-				<div class="tabPageCheckBoxRow">
-					<input type="checkbox" value="DisplayRGBAsHex"
-						id="useHexColor"
-						onclick="checkBoxChangeHandler(this)" /> <label
-						for="useHexColor"> Display RGB As Hex</label>
-				</div>
-				
-				<div class="tabPageCheckBoxRow nonPsElement" id="specToEdgeCheckbox">
-					<input type="checkbox" value="CanvasEdge" id="specToEdge"
-						onclick="checkBoxChangeHandler(this)" /> 
-					<label for="specToEdge"> Print Spec to Canvas edge</label>
-				</div>
-
-				<div class="tabPageContentRow" style="padding-top: 10px;">
-					<div class="tabPage4ContentLeft">
-						<label>Scale Specs</label>
-					</div>
-				</div>
-
-				<div class="tabPageCheckBoxRow" style="margin-top: -15px;">
-					<input type="checkbox" value="ScaleBy" id="useScaleBy"
-						style="vertical-align: middle" onclick="useScaleByClickHandler()" />
-					<label for="useScaleBy">Scale By</label> <input type="text"
-						class="inputStyleSmall" id="txtScaleBy" value="x1"
-						onclick="itemClickHandler(event)"
-						maxlength="4" onchange="txtScaleByChangeHandler()" /> (e.g. x2 or /2)
-				</div>
-				
-				<div class="tabPageContentRow nonIdElement" style="padding-top: 10px;">
-					<div class="tabPage4ContentLeft">
-						<label>iOS option</label>
-					</div>
-				</div>
-
-				<div class="tabPageCheckBoxRow nonIdElement" style="margin-top: -15px;">
-					<input type="checkbox" value="rgbTransformation" 
-						id="rgbTransformIntoPercentage"
-						onclick="checkBoxChangeHandler(this)" /> <label
-						for="useHexColor"> Transform RGB Into Percentage</label>
-				</div>
-				
-				<form class="tabPageContentRow nonIdElement" style="margin-top: 5px; margin-left: -5px;" 
-					onclick="radioButtonClickHandler(event, 'decimalFractionValue')">
-					<input type="radio" name="decimalFractionOptions" id="decimalRadioButton" 
-						value="decimal" ><label for="decimal"> Decimal </label>
-					<input type="radio" name="decimalFractionOptions" id="fractionRadioButton"
-						value="fraction"><label	for="fraction"> Fraction</label>
-				</form>
 			</div>
-			<!-- Ending of options tab. -->
+			<!-- Ending of cloud tab. -->
+<!-- 				<div class="tabPage2Header">SPEC OPTIONS</div> -->
+<!-- 				<div class="tabPageContentRow"> -->
+<!-- 					<div class="tabPage4ContentLeft"> -->
+<!-- 						<label>Font</label>  -->
+<!-- 						<select class="dropdown" id="lstFont" -->
+<!-- 							onchange="listFontChangeHandler(this)" -->
+<!-- 							onclick="itemClickHandler(event)"> -->
+<!-- 						</select> -->
+<!-- 					</div> -->
+<!-- 					<div class="tabPage4ContentRight"> -->
+<!-- 						<label> Size</label><br />  -->
+<!-- 						<select class="smalldropdown" id="lstSize" -->
+<!-- 							onchange="comboBoxChangeHandler(this, 'legendFontSize')" -->
+<!-- 							onclick="itemClickHandler(event)"> -->
+<!-- 							<option value="8">8</option> -->
+<!-- 							<option value="9">9</option> -->
+<!-- 							<option value="10">10</option> -->
+<!-- 							<option value="11">11</option> -->
+<!-- 							<option value="12">12</option> -->
+<!-- 							<option value="14">14</option> -->
+<!-- 							<option value="16">16</option> -->
+<!-- 							<option value="18">18</option> -->
+<!-- 							<option value="24">24</option> -->
+<!-- 							<option value="36">36</option> -->
+<!-- 							<option value="48">48</option> -->
+<!-- 						</select> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="tabPageEmptyRow"></div> -->
+<!-- 				<div class="tabPageCheckBoxRow"> -->
+<!-- 					<div class="tabPage4ContentLeft"> -->
+<!-- 						<label> Spec Color</label> -->
+<!-- 					</div> -->
+<!-- 					<div class="tabPage4ContentRight"> -->
+<!-- 						<label> Line Weight</label> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="tabPageCheckBoxRow"> -->
+<!-- 					<div class="tabPage4ContentLeft"> -->
+<!-- 						<label style="font-weight: normal"> Shape: </label>  -->
+<!-- 						<input id="colObject" class="colorPickerAppearance" -->
+<!-- 							onclick="colorPickerClickHandler(this, 'Shape')" -->
+<!-- 							style="margin-left: 11px; " /> -->
+<!-- 						<div id='colorShapeDropDown' class="colorPicker"> -->
+<!-- 							<div id="shapeColorBlock" class="mainColorBlock" -->
+<!-- 								style="display: inline-block;" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 							<input type="text" id="txtShapeColor" class="colorText"  maxlength="6" -->
+<!-- 								onclick="itemClickHandler(event)" -->
+<!-- 								onkeydown="return colorPickerTextInputValidation(event)" -->
+<!-- 								onkeyup="colorPickerTextInputClickHandler(event, 'Shape')"/> <br> -->
+<!-- 							<div class="colorBlock" title="000000" -->
+<!-- 								style="background-color: #000000" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Shape')" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 							<div class="colorBlock" title="FF0000" -->
+<!-- 								style="background-color: #FF0000" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Shape')" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 							<div class="colorBlock" title="FF8800" -->
+<!-- 								style="background-color: #FF8800" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Shape')" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 							<div class="colorBlock" title="FFFF00" -->
+<!-- 								style="background-color: #FFFF00" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Shape')" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 							<div class="colorBlock" title="88FF00" -->
+<!-- 								style="background-color: #88FF00" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Shape')" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 							<div class="colorBlock" title="00FF00" -->
+<!-- 								style="background-color: #00FF00" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Shape')" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 							<div class="colorBlock" title="00FF88" -->
+<!-- 								style="background-color: #00FF88" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Shape')" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 							<div class="colorBlock" title="00FFFF" -->
+<!-- 								style="background-color: #00FFFF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Shape')" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 							<div class="colorBlock" title="0000FF" -->
+<!-- 								style="background-color: #0000FF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Shape')" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 							<div class="colorBlock" title="8800FF" -->
+<!-- 								style="background-color: #8800FF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Shape')" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 							<div class="colorBlock" title="FF00FF" -->
+<!-- 								style="background-color: #FF00FF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Shape')" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 							<div class="colorBlock" title="FFFFFF" -->
+<!-- 								style="background-color: #FFFFFF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Shape')" -->
+<!-- 								onclick="setColorToLabel(this, 'Object')"></div> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					<div class="tabPage4ContentRight"> -->
+<!-- 						<select class="smalldropdown" id="lstLineWeight" -->
+<!-- 							onclick="itemClickHandler(event)" -->
+<!-- 							onchange="comboBoxChangeHandler(this, 'armWeight')"> -->
+<!-- 							<option value="0.25">0.25</option> -->
+<!-- 							<option value="0.5">0.5</option> -->
+<!-- 							<option value="1">1</option> -->
+<!-- 							<option value="1.5">1.5</option> -->
+<!-- 							<option value="2">2</option> -->
+<!-- 							<option value="3">3</option> -->
+<!-- 							<option value="4">4</option> -->
+<!-- 							<option value="5">5</option> -->
+<!-- 						</select> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="tabPageContentRow"> -->
+<!-- 					<div class="tabPage4ContentLeft"> -->
+<!-- 						<label style="font-weight: normal"> Type: </label>  -->
+<!-- 						<input id="colType" class="colorPickerAppearance" -->
+<!-- 							onclick="colorPickerClickHandler(this, 'Type')" -->
+<!-- 							style="margin-left: 17px;" /> -->
+<!-- 						<div id='colorTypeDropDown' class="colorPicker"> -->
+<!-- 							<div id="typeColorBlock" class="mainColorBlock" -->
+<!-- 								style="display: inline-block;" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 							<input type="text" id="txtTypeColor" class="colorText" maxlength="6" -->
+<!-- 								onkeydown="return colorPickerTextInputValidation(event)" -->
+<!-- 								onclick="itemClickHandler(event)" -->
+<!-- 								onkeyup="colorPickerTextInputClickHandler(event, 'Type')"/> <br> -->
+<!-- 							<div class="colorBlock" title="000000" -->
+<!-- 								style="background-color: #000000" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Type')" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 							<div class="colorBlock" title="FF0000" -->
+<!-- 								style="background-color: #FF0000" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Type')" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 							<div class="colorBlock" title="FF8800" -->
+<!-- 								style="background-color: #FF8800" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Type')" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 							<div class="colorBlock" title="FFFF00" -->
+<!-- 								style="background-color: #FFFF00" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Type')" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 							<div class="colorBlock" title="88FF00" -->
+<!-- 								style="background-color: #88FF00" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Type')" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 							<div class="colorBlock" title="00FF00" -->
+<!-- 								style="background-color: #00FF00" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Type')" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 							<div class="colorBlock" title="00FF88" -->
+<!-- 								style="background-color: #00FF88" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Type')" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 							<div class="colorBlock" title="00FFFF" -->
+<!-- 								style="background-color: #00FFFF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Type')" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 							<div class="colorBlock" title="0000FF" -->
+<!-- 								style="background-color: #0000FF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Type')" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 							<div class="colorBlock" title="8800FF" -->
+<!-- 								style="background-color: #8800FF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Type')" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 							<div class="colorBlock" title="FF00FF" -->
+<!-- 								style="background-color: #FF00FF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Type')" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 							<div class="colorBlock" title="FFFFFF" -->
+<!-- 								style="background-color: #FFFFFF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Type')" -->
+<!-- 								onclick="setColorToLabel(this, 'Type')"></div> -->
+<!-- 						</div> -->
+
+<!-- 					</div> -->
+<!-- 					<div class="tabPage4ContentRight"></div> -->
+<!-- 				</div> -->
+<!-- 				<div class="tabPageContentRow" style="margin-top: -4px;"> -->
+<!-- 					<div class="tabPage4ContentLeft"> -->
+<!-- 						<label style="font-weight: normal"> Spacing: </label>  -->
+<!-- 						<input id="colSpacing" class="colorPickerAppearance" -->
+<!-- 							onclick="colorPickerClickHandler(this, 'Space')" -->
+<!-- 							style="margin-left: 3px; " /> -->
+<!-- 						<div id='colorSpaceDropDown' class="colorPicker"> -->
+<!-- 							<div id="spaceColorBlock" class="mainColorBlock" -->
+<!-- 								style="display: inline-block;" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 							<input type="text" id="txtSpaceColor" class="colorText" maxlength="6" -->
+<!-- 								onkeydown="return colorPickerTextInputValidation(event)" -->
+<!-- 								onclick="itemClickHandler(event)" -->
+<!-- 								onkeyup="colorPickerTextInputClickHandler(event, 'Space')"/> <br> -->
+<!-- 							<div class="colorBlock" title="000000" -->
+<!-- 								style="background-color: #000000" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Space')" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 							<div class="colorBlock" title="FF0000" -->
+<!-- 								style="background-color: #FF0000" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Space')" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 							<div class="colorBlock" title="FF8800" -->
+<!-- 								style="background-color: #FF8800" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Space')" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 							<div class="colorBlock" title="FFFF00" -->
+<!-- 								style="background-color: #FFFF00" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Space')" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 							<div class="colorBlock" title="88FF00" -->
+<!-- 								style="background-color: #88FF00" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Space')" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 							<div class="colorBlock" title="00FF00" -->
+<!-- 								style="background-color: #00FF00" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Space')" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 							<div class="colorBlock" title="00FF88" -->
+<!-- 								style="background-color: #00FF88" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Space')" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 							<div class="colorBlock" title="00FFFF" -->
+<!-- 								style="background-color: #00FFFF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Space')" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 							<div class="colorBlock" title="0000FF" -->
+<!-- 								style="background-color: #0000FF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Space')" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 							<div class="colorBlock" title="8800FF" -->
+<!-- 								style="background-color: #8800FF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Space')" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 							<div class="colorBlock" title="FF00FF" -->
+<!-- 								style="background-color: #FF00FF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Space')" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 							<div class="colorBlock" title="FFFFFF" -->
+<!-- 								style="background-color: #FFFFFF" -->
+<!-- 								onmouseover="setColorValueToTextBox(this, 'Space')" -->
+<!-- 								onclick="setColorToLabel(this, 'Spacing')"></div> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="tabPageContentRow" style="padding-top: 15px;"> -->
+
+<!-- 					<div class="tabPage4ContentLeft psElement" id="colorRadio"> -->
+<!-- 						<label>Color Mode</label> -->
+<!-- 						<div id="radio" onclick="radioButtonClickHandler(event, 'legendColorMode')"> -->
+<!-- 							<input type="radio" id="rgbRadioButton" name="radio" value="RGB" -->
+<!-- 								checked="checked"><span>RGB</span> <input type="radio" -->
+<!-- 								id="hsbRadioButton" name="radio" value="HSB"><span>HSB</span> -->
+<!-- 							<input type="radio" id="cmykRadioButton" name="radio" -->
+<!-- 								value="CMYK"><span style='margin-right: 38px;'>CMYK</span> -->
+<!-- 							<input type="radio" id="hslRadioButton" name="radio" value="HSL"><span>HSL</span> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+					
+<!-- 					<div class="tabPage4ContentLeft nonPsElement" id="colorList"> -->
+<!-- 						<label>Color Mode</label>  -->
+<!-- 						<select class="dropdown" id="lstColorMode"  -->
+<!-- 							onchange="comboBoxChangeHandler(this, 'legendColorMode')"> -->
+<!-- 							<option value="CMYK">CMYK</option> -->
+<!-- 							<option value="HSB">HSB</option> -->
+<!-- 							<option value="HSL">HSL</option> -->
+<!-- 							<option value="RGB">RGB</option> -->
+<!-- 						</select> -->
+<!-- 					</div> -->
+
+<!-- 					<div class="tabPage4ContentRight"></div> -->
+<!-- 				</div> -->
+
+<!-- 				<div class="tabPageEmptyRow"></div> -->
+
+<!-- 				<div class="tabPageCheckBoxRow"> -->
+<!-- 					<input type="checkbox" value="DisplayRGBAsHex" -->
+<!-- 						id="useHexColor" -->
+<!-- 						onclick="checkBoxChangeHandler(this)" /> <label -->
+<!-- 						for="useHexColor"> Display RGB As Hex</label> -->
+<!-- 				</div> -->
+				
+<!-- 				<div class="tabPageCheckBoxRow nonPsElement" id="specToEdgeCheckbox"> -->
+<!-- 					<input type="checkbox" value="CanvasEdge" id="specToEdge" -->
+<!-- 						onclick="checkBoxChangeHandler(this)" />  -->
+<!-- 					<label for="specToEdge"> Print Spec to Canvas edge</label> -->
+<!-- 				</div> -->
+
+<!-- 				<div class="tabPageContentRow" style="padding-top: 10px;"> -->
+<!-- 					<div class="tabPage4ContentLeft"> -->
+<!-- 						<label>Scale Specs</label> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+<!-- 				<div class="tabPageCheckBoxRow" style="margin-top: -15px;"> -->
+<!-- 					<input type="checkbox" value="ScaleBy" id="useScaleBy" -->
+<!-- 						style="vertical-align: middle" onclick="useScaleByClickHandler()" /> -->
+<!-- 					<label for="useScaleBy">Scale By</label> <input type="text" -->
+<!-- 						class="inputStyleSmall" id="txtScaleBy" value="x1" -->
+<!-- 						onclick="itemClickHandler(event)" -->
+<!-- 						maxlength="4" onchange="txtScaleByChangeHandler()" /> (e.g. x2 or /2) -->
+<!-- 				</div> -->
+				
+<!-- 				<div class="tabPageContentRow nonIdElement" style="padding-top: 10px;"> -->
+<!-- 					<div class="tabPage4ContentLeft"> -->
+<!-- 						<label>iOS option</label> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+
+<!-- 				<div class="tabPageCheckBoxRow nonIdElement" style="margin-top: -15px;"> -->
+<!-- 					<input type="checkbox" value="rgbTransformation"  -->
+<!-- 						id="rgbTransformIntoPercentage" -->
+<!-- 						onclick="checkBoxChangeHandler(this)" /> <label -->
+<!-- 						for="useHexColor"> Transform RGB Into Percentage</label> -->
+<!-- 				</div> -->
+				
+<!-- 				<form class="tabPageContentRow nonIdElement" style="margin-top: 5px; margin-left: -5px;"  -->
+<!-- 					onclick="radioButtonClickHandler(event, 'decimalFractionValue')"> -->
+<!-- 					<input type="radio" name="decimalFractionOptions" id="decimalRadioButton"  -->
+<!-- 						value="decimal" ><label for="decimal"> Decimal </label> -->
+<!-- 					<input type="radio" name="decimalFractionOptions" id="fractionRadioButton" -->
+<!-- 						value="fraction"><label	for="fraction"> Fraction</label> -->
+<!-- 				</form> -->
+			
 
 		</div>
-
+		<div style="margin-bottom: 2px !important;"> Testing </div>
 	</div>
 
 </body>

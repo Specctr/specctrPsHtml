@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="5.0" ExtensionBundleId="SpecctrMaster" ExtensionBundleVersion="3.0.7.h"
+<ExtensionManifest Version="5.0" ExtensionBundleId="SpecctrMaster" ExtensionBundleVersion="3.0.10.h"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
@@ -159,8 +159,7 @@ each party and (ii) in a written contract signed by both parties.]]>
 			<Locale Code="All" />
 		</LocaleList>
 		<RequiredRuntimeList>
-			<RequiredRuntime Name="CSXS" Version="5.0" />
-
+		    <RequiredRuntime Name="CSXS" Version="5.0" />
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>

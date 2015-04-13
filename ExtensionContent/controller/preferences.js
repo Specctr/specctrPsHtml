@@ -3,50 +3,44 @@ File-Name: preferences.js
 Description: This file includes all the functions related to reading/writing preferences of panel.
  */
 
-/**
- * Get extension id of the html panel.
- */
-function getExtensionId() {
-	var csInterface = new CSInterface();
-	var gExtensionId = csInterface.getExtensionID();
-	return gExtensionId;
-}
+var pref = {};
+
 /**
  * Set permissions like read only, write only etc to file or folder.
  * @param filePath {string} The path of the file or folder.
  * @param permission {number} The permissions in numeric format like 0777.
  */
-function setPermissionToFile(filePath, permission) {
+pref.setPermissionToFile = function(filePath, permission) {
 	window.cep.fs.chmod(filePath, permission);
-}
+};
 
 /**
  * Read the file and return its data.
  * @param filePath {string}  The path of the file to read.
  * @return An object with the data or empty string.
  */
-function readFile(filePath) {
+pref.readFile = function(filePath) {
 	var result = window.cep.fs.readFile(filePath);
 	if (result.err != window.cep.fs.NO_ERROR)
 		return "";
 
 	return result.data;
-}
+};
 
 /**
  * Writes data to the file
  * @param filePath {string}  The path of the file to read.
  * @param data {string} The data to write to the file.
  */
-function writeFile(filePath, data) {
+pref.writeFile = function(filePath, data) {
 	window.cep.fs.writeFile(filePath, data);
-}
+};
 
 /**
  * Create the directory where preferences stores, if not exist.
  * @return The path of the directory.
  */
-function getPrefernceDirectory() {
+pref.getPrefernceDirectory = function() {
 	var csInterface = new CSInterface();
 	var prefsFile = csInterface.getSystemPath(SystemPath.USER_DATA)
 			+ "/LocalStore";
@@ -56,7 +50,7 @@ function getPrefernceDirectory() {
 		window.cep.fs.makedir(prefsFile);
 
 	return prefsFile;
-}
+};
 
 /**
  * Get the path of license or log file.
@@ -64,19 +58,19 @@ function getPrefernceDirectory() {
  * .log or .license.
  * @return The path of the file according to the file extension input.
  */
-function getFilePath(fileExtension) {
+pref.getFilePath = function(fileExtension) {
 	if(extensionId === '')
-		extensionId = getExtensionId();
+		extensionId = specctrUtility.getExtensionId();
 	var fileName = extensionId + fileExtension;
-	var filePath = getPrefernceDirectory() + "/" + fileName;
+	var filePath = this.getPrefernceDirectory() + "/" + fileName;
 	return filePath;
-}
+};
 
 /**
  * Get the config file path.
  * @return The path of the config file {name: specctrPhotoshopConfig.json}.
  */
-function getConfigFilePath() {
+pref.getConfigFilePath = function() {
 	var configFileName = "";
 	if (hostApplication === photoshop)
 		configFileName = "/specctrPhotoshopConfig.json";
@@ -85,43 +79,43 @@ function getConfigFilePath() {
 	else if (hostApplication === indesign)
 		configFileName = "/specctrIndesignConfig.json";
 	
-	var path = getPrefernceDirectory() + configFileName;
+	var path = this.getPrefernceDirectory() + configFileName;
 	return path;
-}
+};
 
 /**
  * Read the config file {name: specctrPhotoshopConfig.json}.
  * @return An object with the data or empty string.
  */
-function readAppPrefs() {
-	configFilePath = getConfigFilePath();
-	var data = readFile(configFilePath);
+pref.readAppPrefs = function() {
+	configFilePath = this.getConfigFilePath();
+	var data = this.readFile(configFilePath);
 
 	if (data !== "")
 		data = JSON.parse(data);
 
 	return data;
-}
+};
 
 /**
  * Write the data to the config file.
  */
-function writeAppPrefs() {
+pref.writeAppPrefs = function() {
 	if (!configFilePath.length) {
-		configFilePath = getConfigFilePath();
+		configFilePath = this.getConfigFilePath();
 	}
 
-	setPermissionToFile(configFilePath, filePermission.WriteOnly);
+	this.setPermissionToFile(configFilePath, filePermission.WriteOnly);
 	var data = JSON.stringify(model);
-	writeFile(configFilePath, data);
-	setPermissionToFile(configFilePath, filePermission.ReadOnly);
-}
+	this.writeFile(configFilePath, data);
+	this.setPermissionToFile(configFilePath, filePermission.ReadOnly);
+};
 
 /**
  * Create the data for log file.
  * @param message {string} Successful or failure message of activation.
  */
-function createLogData(message) {
+pref.createLogData = function(message) {
 	var date = new Date();
 	var logData = date.getMonth() + "/" + date.getDate() + "/"
 			+ date.getFullYear();
@@ -129,7 +123,7 @@ function createLogData(message) {
 			+ date.getSeconds();
 	logData += ' - "' + message + '"\n';
 	return logData;
-}
+};
 
 /**
  * Create the license or log file and make them read only.
@@ -137,9 +131,9 @@ function createLogData(message) {
  * .log or .license.
  * @param data {string} The data to write to the file.
  */
-function addFileToPreferenceFolder(fileExtension, data) {
-	var filePath = getFilePath(fileExtension);
-	setPermissionToFile(filePath, filePermission.WriteOnly);
-	writeFile(filePath, data);
-	setPermissionToFile(filePath, filePermission.ReadOnly);
-}
+pref.addFileToPreferenceFolder = function(fileExtension, data) {
+	var filePath = this.getFilePath(fileExtension);
+	this.setPermissionToFile(filePath, filePermission.WriteOnly);
+	this.writeFile(filePath, data);
+	this.setPermissionToFile(filePath, filePermission.ReadOnly);
+};

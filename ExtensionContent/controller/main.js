@@ -4,14 +4,80 @@ Description: Include methods to initialize the panel's component according to th
 Include all spec button click handlers and methods to communicate between js and jsx.  
  */
 
+var specctrInit = {};
+SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
+SPECCTR_API = SPECCTR_HOST += "/api/v1";
+
+/**
+ * Validate the license of the user and move to the tab container
+ *  if user's credentials valid.
+ */
+function activateButtonClickHandler() {
+	// Get Extension Id and matching productCode.
+	var productCodes = {
+		// Photoshop 2.0.
+		"SpecctrPs-Pro" : "63221",
+		"SpecctrPs-10" : "63222",
+		"SpecctrPs-20" : "63223",
+		"SpecctrPs-30" : "63224",
+		"SpecctrPs-Site" : "63225",
+
+		// Illustrator 2.0.
+		"SpecctrPro" : "63233",
+		"SpecctrBusiness10" : "63235",
+		"SpecctrBusiness20" : "63236",
+		"SpecctrBusiness30" : "63237",
+		"SpecctrBusinessSite" : "63238",
+
+		// Indesign 2.0.
+		"Specctr-Pro-ID" : "63240",
+		"Specctr-Business-10" : "63241",
+		"Specctr-Business-20" : "63242",
+		"Specctr-Business-30" : "63243",
+		"Specctr-Business-Site" : "63244"
+	};
+
+	if(extensionId === '')
+		extensionId = specctrUtility.getExtensionId();
+
+	var logData = "";
+
+	// If no installed extension is matched with productCodes values.
+	if (!productCodes[extensionId]) {
+		logData = "Incorrect product code";
+		specctrUI.showDialog(logData);
+		logData = pref.createLogData(logData);
+		pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
+		return;
+	}
+
+	var urlRequest = SPECCTR_API += "/register_machine?";
+	urlRequest += "&email=" + $("#emailInput").val();
+	urlRequest += "&password=" + $("#passwordInput").val();
+
+	$.ajax({
+		url:urlRequest,
+		type: 'POST',
+		contentType: "application/json",
+		dataType: "json",
+		success: completeHandler,
+		error: function(xhr) {
+			var response = JSON.parse(xhr.responseText);
+			specctrUI.showDialog(response.message);
+			logData = pref.createLogData(response.message);
+			pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
+		}
+	});
+}
+
 /**
  * Callback function which is called when validation of user's license take place.
  * @param response {object} The object of the response came from the activation request.
  * @param status {string} The status of the activation request.
  */
 function completeHandler(response, status) {
-	var logData = createLogData(response.message);
-	addFileToPreferenceFolder('.log', logData);	//Create log file.
+	var logData = pref.createLogData(response.message);
+	pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
 
 	// If unsuccessful, return without saving the data in file.
 	if (response.success) {
@@ -21,105 +87,13 @@ function completeHandler(response, status) {
 			machine_id: response.machine_id,
 			api_key: response.api_key
 		};
-		addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs)); //Create license file.
-		init();
+		pref.addFileToPreferenceFolder('.license', 
+				JSON.stringify(activationPrefs)); //Create license file.
+		specctrInit.init();
 	} else {
 		analytics.trackActivation('failed');
-		showDialog(response.message);
+		specctrUI.showDialog(response.message);
 		return;
-	}
-}
-
-/**
- * Set model values to UI components.
- */
-function setModelToUIComponents() {
-	
-	//Set icons to the buttons.
-	var iconPostString = ".png";
-	var buttonIconPaths = ["../Images/Icon_object", "../Images/Icon_coordinates",
-	                       "../Images/DimensionButtonIcons/WH_11", 
-	                       "../Images/SpacingButtonIcons/Spacing_TL"];
-	var buttonIds = ["#imgProperty", "#imgCoordinate", "#dimensionIcon", "#spacingIcon"];
-	
-	if(window.devicePixelRatio > 1)	//For retina display: 2 pixel ratio; 
-		iconPostString = "_x2" + iconPostString;
-
-	for (var i = 0; i < 4; i++) {
-		$(buttonIds[i]).attr("src", buttonIconPaths[i] + iconPostString);
-	}
-
-	//Set text and combo box values.
-	$("#canvasExpandSize").val(model.canvasExpandSize);
-	$("#lstSize").val(model.legendFontSize);
-	$("#lstLineWeight").val(model.armWeight);
-	$("#lstColorMode").val(model.legendColorMode);
-	
-	//Set check boxes values.
-	var appSpecificCheckBoxesId;
-	var checkBoxesId = ["shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
-	                    "textColor", "textStyle", "textAlignment", "textLeading",
-	                    "textTracking", "textAlpha", "useHexColor", "useScaleBy",
-	                    "rgbTransformIntoPercentage"];
-	
-	if (hostApplication === photoshop) {
-		appSpecificCheckBoxesId = ["shapeFill", "shapeStroke", 
-		                           "shapeEffects", "textEffects"];
-	} else {
-		appSpecificCheckBoxesId = ["shapeFillColor", "shapeFillStyle", 
-		                           "shapeStrokeColor", "shapeStrokeStyle", 
-		                           "shapeStrokeSize", "specToEdge"];
-	}
-
-	Array.prototype.push.apply(checkBoxesId, appSpecificCheckBoxesId);
-	var totalCheckBoxes = checkBoxesId.length;
-	
-	for (var i = 0; i < totalCheckBoxes; i++) {
-		$("#" + checkBoxesId[i]).prop("checked", model[checkBoxesId[i]]);
-	}
-	
-	//Set color for dropdown.
-	$("#colObject").css("background-color", model.legendColorObject);
-	$("#colType").css("background-color", model.legendColorType);
-	$("#colSpacing").css("background-color", model.legendColorSpacing);
-	
-	//Set radio buttons values.
-	var radioButtonIds = [model.legendColorMode.toLowerCase(), 
-	                       model.decimalFractionValue];
-	for (var i = 0; i < 2; i++) {
-		$("#" + radioButtonIds[i] + "RadioButton").prop("checked", true);
-	}
-	
-	// Enable or disable scale text according to selection of check box.
-	if (model.useScaleBy)
-		enableTextField("txtScaleBy");
-	else
-		disableTextField("txtScaleBy");
-	
-	//Get font list according to host application.
-	var extScript = "$.specctr"+ hostApplication +"." + "getFontList()";
-	evalScript(extScript, loadFontsToList);
-}
-
-/**
- * Set the values of the objects(check boxes in responsive tab) from model and
- * enable/disable the text boxes.
- */
-function setModelToResponsive() {
-	var textFieldIds = ["relativeWidth", "relativeHeight",
-	                    "baseFontSize", "baseLineHeight"];
-	
-	var checkBoxIds = ["specInPrcntg", "specInEM"];
-	
-	for (var i = 0; i < 4; i += 2) {
-		$("#" + checkBoxIds[i/2]).prop("checked", model[checkBoxIds[i/2]]);
-		if (model[checkBoxIds[i/2]]) {
-			enableTextField(textFieldIds[i]);
-			enableTextField(textFieldIds[i+1]);
-		} else {
-			disableTextField(textFieldIds[i]);
-			disableTextField(textFieldIds[i+1]);
-		}
 	}
 }
 
@@ -130,16 +104,16 @@ function setModelToResponsive() {
 function onLoaded() {
 	// Handle exceptions of any missing components.
 	try {
-		createDialog();
+		specctrUI.createDialog();
 		var isLicensed = false;
 		var appPrefs;
 
 		//Get the host application name.
-		hostApplication = getHostApp();
+		hostApplication = specctrUtility.getHostApp();
 		loadJSX(); // Load the jsx files present in \jsx folder.
 
 		if (hostApplication === '') {
-			showDialog('Cannot load the extension.\nRequired host application not found!');
+			specctrUI.showDialog('Cannot load the extension.\nRequired host application not found!');
 			return;
 		} else if (hostApplication === photoshop) {
 			$(".psElement").show();
@@ -150,18 +124,18 @@ function onLoaded() {
 		}
 
 		addApplicationEventListener();
-		appPrefs = readAppPrefs();	//Read the config file and look for the isLicensed value.
+		appPrefs = pref.readAppPrefs();	//Read the config file and look for the isLicensed value.
 		if (appPrefs !== "") {
 			if (appPrefs.hasOwnProperty("isLicensed"))
 				isLicensed = appPrefs.isLicensed;
-			setModelValueFromPreferences();
+			specctrInit.setModelValueFromPreferences();
 		}
 
 		//Migrating isLicensed from config file to license file, if present.
 		var activationPrefs = {};
 		
-		var licenseFilePath = getFilePath('.license');
-		activationPrefs = readFile(licenseFilePath);	//Read the licensed file.
+		var licenseFilePath = pref.getFilePath('.license');
+		activationPrefs = pref.readFile(licenseFilePath);	//Read the licensed file.
 
 		if (activationPrefs === "")
 			return;
@@ -172,92 +146,11 @@ function onLoaded() {
 		api_key = activationPrefs.api_key;
 		machine_id = activationPrefs.machine_id;
 		
-
 		if (isLicensed)
-			init();
+			specctrInit.init();
 		
-	} catch (e) {
-		console.log(e);
-	}
-}
-
-/**
- * Initialize the values of the tab conatainer's components.
- */
-function init() {
-	// Handle exceptions of missing components
-	try {
-		// Load tab container..
-		$("#loginContainer").hide();
-		$("#tabContainer").show();
-
-		setModelValueFromPreferences();
-		var navitem = $("#tabContainer .tabs ul li:eq(0)"); // Set current tab.
-
-		// Store which tab we are on.
-		var ident = navitem.attr("id").split("_")[1];
-		navitem.parent().attr("data-current", ident);
-
-		changeImagesOfTabs(parseInt(ident)); // Set Current Tab with proper Image.
-		
-		 // Set current tab with class of active tab header.
-		navitem.attr("class", "tabActiveHeader");
-
-		// Hide the tab contents we don't need.
-		var noOfPages = $(".tabpage").length;
-		for (var i = 1; i < noOfPages; i++)
-			$("#tabpage_" + (i + 1)).css("display", "none");
-
-		// Register click events to all tabs.
-		$("#tabContainer .tabs ul li").each(function(){
-			$(this).click(tabClickHandler);
-		});
-
-		setModelToUIComponents();
-		setModelToResponsive();
 	} catch (e) {
 		alert(e);
-	}
-}
-
-/**
- * Set the Specctr configuration file data to model values.
- */
-function setModelValueFromPreferences() {
-	var appPrefs = readAppPrefs();
-
-	if (!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha"))
-		return;
-	
-	var i, propertyApplicationSpecific;
-	var propertyName = ["shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
-	                    "textAlignment", "textColor", "textStyle", "textLeading", 
-	                    "textTracking", "textAlpha", "useHexColor", "specInPrcntg", 
-	                    "useScaleBy","specInEM", "rgbTransformIntoPercentage"];
-	
-	if (hostApplication === photoshop) {
-		propertyApplicationSpecific = ["shapeFill", "shapeStroke", "shapeEffects", "textEffects"];
-	} else {
-		propertyApplicationSpecific = ["shapeFillColor", "shapeFillStyle", "shapeStrokeColor", 
-		                               "shapeStrokeStyle", "shapeStrokeSize", "specToEdge"];
-	}
-	
-	Array.prototype.push.apply(propertyName, propertyApplicationSpecific);
-	var noOfPropertyItem = propertyName.length;
-	for (i = 0; i < noOfPropertyItem; i++){
-		model[propertyName[i]] = appPrefs[propertyName[i]] ? true : false;
-	}
-	
-	var textBoxIds = ["canvasExpandSize", "legendFontSize", "armWeight"];
-	for (i = 0; i < 3; i++) {
-		model[textBoxIds[i]] = Number(appPrefs[textBoxIds[i]]);
-	}
-	
-	var dropDownIds = ["legendColorObject", "legendColorType", "legendColorSpacing",
-	                   "legendColorMode", "decimalFractionValue", "legendFont"];
-	for (i = 0; i < 6; i++) {
-		if (appPrefs.hasOwnProperty(dropDownIds[i]))
-			model[dropDownIds[i]] = appPrefs[dropDownIds[i]];
 	}
 }
 
@@ -420,10 +313,10 @@ function syncCss() {
 				dataType: "json",
 				data: data,
 				success: function(response) {
-					showDialog('success');
+					specctrUI.showDialog('success');
 				},
 				error: function(xhr) {
-					showDialog('error');
+					specctrUI.showDialog('error');
 				}
 			});
 		});
@@ -475,11 +368,189 @@ function loadFontsToList(result) {
 }
 
 /**
+ * Initialize the values of the tab conatainer's components.
+ */
+specctrInit.init = function() {
+	// Handle exceptions of missing components
+	try {
+		// Load tab container..
+		$("#loginContainer").hide();
+		$("#tabContainer").show();
+
+		this.setModelValueFromPreferences();
+		var navitem = $("#tabContainer .tabs ul li:eq(0)"); // Set current tab.
+
+		// Store which tab we are on.
+		var ident = navitem.attr("id").split("_")[1];
+		navitem.parent().attr("data-current", ident);
+
+		specctrUtility.changeImagesOfTabs(parseInt(ident)); // Set Current Tab with proper Image.
+		
+		 // Set current tab with class of active tab header.
+		navitem.attr("class", "tabActiveHeader");
+
+		// Hide the tab contents we don't need.
+		var noOfPages = $(".tabpage").length;
+		for (var i = 1; i < noOfPages; i++)
+			$("#tabpage_" + (i + 1)).css("display", "none");
+
+		// Register click events to all tabs.
+		$("#tabContainer .tabs ul li").each(function(){
+			$(this).click(tabClickHandler);
+		});
+
+		this.setModelToUIComponents();
+		this.setModelToResponsive();
+	} catch (e) {
+		alert(e);
+	}
+};
+
+/**
+ * Set the Specctr configuration file data to model values.
+ */
+specctrInit.setModelValueFromPreferences = function() {
+	var appPrefs = pref.readAppPrefs();
+
+	if (!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha"))
+		return;
+	
+	var i, propertyApplicationSpecific;
+	var propertyName = ["shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
+	                    "textAlignment", "textColor", "textStyle", "textLeading", 
+	                    "textTracking", "textAlpha", "useHexColor", "specInPrcntg", 
+	                    "useScaleBy","specInEM", "rgbTransformIntoPercentage"];
+	
+	if (hostApplication === photoshop) {
+		propertyApplicationSpecific = ["shapeFill", "shapeStroke", "shapeEffects", "textEffects"];
+	} else {
+		propertyApplicationSpecific = ["shapeFillColor", "shapeFillStyle", "shapeStrokeColor", 
+		                               "shapeStrokeStyle", "shapeStrokeSize", "specToEdge"];
+	}
+	
+	Array.prototype.push.apply(propertyName, propertyApplicationSpecific);
+	var noOfPropertyItem = propertyName.length;
+	for (i = 0; i < noOfPropertyItem; i++){
+		model[propertyName[i]] = appPrefs[propertyName[i]] ? true : false;
+	}
+	
+	var textBoxIds = ["canvasExpandSize", "legendFontSize", "armWeight"];
+	for (i = 0; i < 3; i++) {
+		model[textBoxIds[i]] = Number(appPrefs[textBoxIds[i]]);
+	}
+	
+	var dropDownIds = ["legendColorObject", "legendColorType", "legendColorSpacing",
+	                   "legendColorMode", "decimalFractionValue", "legendFont"];
+	for (i = 0; i < 6; i++) {
+		if (appPrefs.hasOwnProperty(dropDownIds[i]))
+			model[dropDownIds[i]] = appPrefs[dropDownIds[i]];
+	}
+};
+
+/**
+ * Set model values to UI components.
+ */
+specctrInit.setModelToUIComponents = function() {
+	
+	//Set icons to the buttons.
+	var iconPostString = ".png";
+	var buttonIconPaths = ["../Images/Icon_object", "../Images/Icon_coordinates",
+	                       "../Images/DimensionButtonIcons/WH_11", 
+	                       "../Images/SpacingButtonIcons/Spacing_TL"];
+	var buttonIds = ["#imgProperty", "#imgCoordinate", "#dimensionIcon", "#spacingIcon"];
+	
+	if(window.devicePixelRatio > 1)	//For retina display: 2 pixel ratio; 
+		iconPostString = "_x2" + iconPostString;
+
+	for (var i = 0; i < 4; i++) {
+		$(buttonIds[i]).attr("src", buttonIconPaths[i] + iconPostString);
+	}
+
+	//Set text and combo box values.
+	$("#canvasExpandSize").val(model.canvasExpandSize);
+	$("#lstSize").val(model.legendFontSize);
+	$("#lstLineWeight").val(model.armWeight);
+	$("#lstColorMode").val(model.legendColorMode);
+	
+	//Set check boxes values.
+	var appSpecificCheckBoxesId;
+	var checkBoxesId = ["shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
+	                    "textColor", "textStyle", "textAlignment", "textLeading",
+	                    "textTracking", "textAlpha", "useHexColor", "useScaleBy",
+	                    "rgbTransformIntoPercentage"];
+	
+	if (hostApplication === photoshop) {
+		appSpecificCheckBoxesId = ["shapeFill", "shapeStroke", 
+		                           "shapeEffects", "textEffects"];
+	} else {
+		appSpecificCheckBoxesId = ["shapeFillColor", "shapeFillStyle", 
+		                           "shapeStrokeColor", "shapeStrokeStyle", 
+		                           "shapeStrokeSize", "specToEdge"];
+	}
+
+	Array.prototype.push.apply(checkBoxesId, appSpecificCheckBoxesId);
+	var totalCheckBoxes = checkBoxesId.length;
+	
+	for (var i = 0; i < totalCheckBoxes; i++) {
+		var checkBox = $("#" + checkBoxesId[i]); 
+		checkBox.prop("checked", model[checkBoxesId[i]]);
+		var parent = checkBox.parent();
+		if (parent.hasClass('tabPage2Content') && model[checkBoxesId[i]])
+			parent.children().last().addClass("setBlueLabel");
+	}
+	
+	//Set color for dropdown.
+	$("#colObject").css("background-color", model.legendColorObject);
+	$("#colType").css("background-color", model.legendColorType);
+	$("#colSpacing").css("background-color", model.legendColorSpacing);
+	
+	//Set radio buttons values.
+	var radioButtonIds = [model.legendColorMode.toLowerCase(), 
+	                       model.decimalFractionValue];
+	for (var i = 0; i < 2; i++) {
+		$("#" + radioButtonIds[i] + "RadioButton").prop("checked", true);
+	}
+	
+	// Enable or disable scale text according to selection of check box.
+	if (model.useScaleBy)
+		specctrUtility.enableTextField("txtScaleBy");
+	else
+		specctrUtility.disableTextField("txtScaleBy");
+	
+	//Get font list according to host application.
+	var extScript = "$.specctr"+ hostApplication +"." + "getFontList()";
+	evalScript(extScript, loadFontsToList);
+};
+
+/**
+ * Set the values of the objects(check boxes in responsive tab) from model and
+ * enable/disable the text boxes.
+ */
+specctrInit.setModelToResponsive = function() {
+	var textFieldIds = ["relativeWidth", "relativeHeight",
+	                    "baseFontSize", "baseLineHeight"];
+	
+	var checkBoxIds = ["specInPrcntg", "specInEM"];
+	
+	for (var i = 0; i < 4; i += 2) {
+		$("#" + checkBoxIds[i/2]).prop("checked", model[checkBoxIds[i/2]]);
+		if (model[checkBoxIds[i/2]]) {
+			specctrUtility.enableTextField(textFieldIds[i]);
+			specctrUtility.enableTextField(textFieldIds[i+1]);
+		} else {
+			specctrUtility.disableTextField(textFieldIds[i]);
+			specctrUtility.disableTextField(textFieldIds[i+1]);
+		}
+	}
+};
+
+//----------------- Specctr Event Listeners -----------------//
+/**
  * Dispatch event to loose the focus from photoshop html panel.
  */
 function loseFocusFromPanel() {
 	if(extensionId === '')
-		extensionId = getExtensionId();
+		extensionId = specctrUtility.getExtensionId();
 	var csEvent = new CSEvent("com.adobe.PhotoshopLoseFocus", "APPLICATION");  
 	csEvent.extensionId = extensionId;
 	var csInterface = new CSInterface();
