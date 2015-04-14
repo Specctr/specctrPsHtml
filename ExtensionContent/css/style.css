@@ -31,7 +31,7 @@ body {
 }
 
 .container {
-	Height: 598px;
+	Height: 400px;
 	Width: 222px;
 	background-color: #E8E8E8;
 	margin: 0 auto;
@@ -73,21 +73,29 @@ input[type="text"],input[type="email"],input[type="password"] {
 	padding: 1px;
 	border-top: 1px solid #6D6F70 !important;
 	width: 187px;
+	background-color: #ffffff;
 	-webkit-user-select: auto;
 	cursor: text;
 }
 
 .tabTitle {
 	text-align: center;
-	font-family: Aauxpro-bold;
+	font-family: sans-serif;
 	font-size: 11px;
 	font-style: normal;
 	color: #808080;
-	background-color: #E1E1E1;
+	background-color: #D9D9D9;
 	width: 222px;
 	height: 23px;
 	padding-top: 8px;
 	margin-left: -9px !important; 
+}
+
+.footerNote {
+	font-family: sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	color: #808080;
 }
 
 .menu {
@@ -180,6 +188,12 @@ input[type="text"],input[type="email"],input[type="password"] {
 	padding-top: 5px;
 }
 
+.tabs>ul>li>img {
+	margin-top: 6px;
+	width: 48px;
+	height: 34px; 
+}
+
 #tabpage_2>div>label {
 	padding-top: 5px;
 	padding-left: 8px;
@@ -202,12 +216,29 @@ input[type="text"],input[type="email"],input[type="password"] {
 	padding: 10px 10px 25px;
 	background: #FFFFFF;
 	color: #333;
-	height: 580px;
+	height: 520px;
 }
+
+.floatRight {
+	float: right;
+}
+
+.footer {
+	height: 30px;
+	
+}
+
+.marginShift8px {
+	margin-left: -8px !important;
+} 
+
+.marginShift1px {
+	margin-left: -1px !important;
+} 
 
 .tabPage2PropertiesHeader {
 	font-size: medium;
-	font-family: "Arial";
+	font-family: sans-serif;
 	font-size: 16px;
 	width: 198px;
 	margin-top: 20px;
@@ -216,7 +247,7 @@ input[type="text"],input[type="email"],input[type="password"] {
 }
 
 .tabPage2Content {
-	font-family: "Arial";
+	font-family: sans-serif;
 	font-size: 13px;
 	width: 198px;
 	margin-bottom: 10px;
@@ -224,13 +255,13 @@ input[type="text"],input[type="email"],input[type="password"] {
 }
 
 .tabPage3Content {
-	font-family: "Arial";
+	font-family: sans-serif;
 	font-size: 11px;
 	width: 180px;
 }
 
 .tabPageContentSubHeaderRow {
-	font-family: "Arial";
+	font-family: sans-serif;
 	font-size: 11px;
 	width: 180px;
 	padding-top: 10px;
@@ -240,7 +271,7 @@ input[type="text"],input[type="email"],input[type="password"] {
 
 .tabPageContentRow {
 	display: table;
-	font-family: "Arial";
+	font-family: sans-serif;
 	font-size: 11px;
 	width: 208px;
 	padding-top: 5px;
@@ -249,21 +280,21 @@ input[type="text"],input[type="email"],input[type="password"] {
 }
 
 .tabPageContentLeft {
-	font-family: "Arial";
+	font-family: sans-serif;
 	font-size: 11px;
 	width: 80px;
 	display: table-cell;
 }
 
 .tabPageContentRight {
-	font-family: "Arial";
+	font-family: sans-serif;
 	font-size: 11px;
 	width: 100px;
 	display: table-cell;
 }
 
 .tabPage2Header {
-	font-family: Arial Unicode MS;
+	font-family: sans-serif;
 	font-size: 13px;
 	text-align: center;
 	padding-bottom: 10px;
@@ -339,13 +370,6 @@ input[type="text"],input[type="email"],input[type="password"] {
 	color: #58585B !important;
 }
 
-.addNoteTextStyle {
-	margin-left: 50px !important;
-	font-family: Arial-BoldMT !important;
-	font-size: 20px !important;
-	color: #58585B !important;
-}
-
 .subscriptionNote {
 	font-family: Arial !important;
 	font-size: 12px !important;
@@ -390,6 +414,7 @@ input[type="text"],input[type="email"],input[type="password"] {
 .expandButton {
 	border-left: 1px solid #C9CBCC;
 	border-right: 1px solid #C9CBCC;
+	width: 112px !important;
 }
 
 .tblCell {
@@ -436,7 +461,7 @@ input[type="text"]:disabled {
 	margin-right: 5px !important;
 	text-align: left !important;
 	padding: 0px !important;
-	font-family: Verdana !important;
+	font-family: sans-serif !important;
 	font-size: 11px !important;
 	-webkit-user-select: auto;
 }
@@ -686,6 +711,12 @@ label {
 	border: 1px #AEAEAE inset;
 }
 
+#settingPage {
+	padding-left: 7px !important;
+	height: 605px !important;
+	background-color: #E1E1E1;
+}
+
 #canvasExpandSize {
 	width: 28px;
 	height: 20px;
@@ -693,6 +724,10 @@ label {
 	font-family: Verdana;
 	font-size: 11px;
 	-webkit-user-select: auto;
+}
+
+.backGroundColorGrey {
+	background-color: #E1E1E1 !important;
 }
 
 .ui-dialog {
@@ -727,6 +762,14 @@ label {
 	.adjustSpacingLabel {
 		margin-left: -10px !important;
 	}
+}
+
+.hideBlock {
+	display: none;
+}
+
+.showBlock {
+	display: block;
 }
 
 .psElement {
