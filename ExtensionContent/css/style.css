@@ -16,28 +16,80 @@ figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,a
 	vertical-align: baseline;
 }
 
+/*----------Default styles of components.----------------------*/
 body {
 	font-family: sans-serif;
-	color: #0B333C;
 	overflow: hidden;
-}
-
-* {
 	-webkit-user-select: none;
 	-khtml-user-select: none;
 	-moz-user-select: -moz-none;
 	-o-user-select: none;
 	user-select: none;
+	border: 2px solid #C9CBCC !important;
 }
 
-.container {
-	Height: 400px;
-	Width: 222px;
-	background-color: #E8E8E8;
+input[type="text"],input[type="email"],input[type="password"] {
+	border: 1px solid #C9CBCC !important;
+	padding: 2px;
+	height: 20px;
+	background-color: #ffffff;
+	-webkit-user-select: auto;
+	cursor: text;
+}
+
+label {
+	cursor: none;
+}
+/*-------------------------------------------------------------*/
+
+/*----Common styles used in entire panel in different block----*/
+.hideBlock {
+	display: none;
+}
+
+.showBlock {
+	display: block;
+}
+
+.psElement {
+	display: none;
+}
+
+.nonPsElement {
+	display: block;
+}
+
+.button {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-image: linear-gradient(to top, #E1E1E1 0%, #F8F8F8 100%);
+	width: 198px;
 	margin: 0 auto;
-	border: 1px solid #B7BABC;
+	cursor: pointer;
 }
 
+.button label {
+	cursor: pointer !important;
+}
+
+.border {
+	border-top: 1px solid #C9CBCC;
+	border-bottom: 1px solid #6D6F70;
+	background-image: linear-gradient(#C9CBCC, #6D6F70),
+		linear-gradient(#C9CBCC, #6D6F70);
+	background-size: 1px 100%;
+	background-position: 0 0, 100% 0;
+	background-repeat: no-repeat;
+}
+
+.border:hover {
+	border: 1px solid red;
+	background-image: none;
+}
+
+/*-------------------------------------------------------------*/
+
+/*----------------Login container styles-----------------------*/
 #dvLoginContainer {
 	border: none;
 	Height: 360px;
@@ -67,35 +119,105 @@ body {
 	font-size: 13px;
 	color: #4B4B4B;
 }
+/*-------------------------------------------------------------*/
 
-input[type="text"],input[type="email"],input[type="password"] {
-	border: 1px solid #C9CBCC !important;
-	padding: 1px;
-	border-top: 1px solid #6D6F70 !important;
-	width: 187px;
-	background-color: #ffffff;
-	-webkit-user-select: auto;
-	cursor: text;
+/*------------------Modal dialog styling-----------------------*/
+.ui-dialog {
+	font-size: 10px !important;
+}
+
+.ui-state-default .ui-icon {
+	background-image: url("../Images/ui-icons_888888_256x240.png")
+		!important;
+}
+
+.ui-widget-overlay {
+	opacity: .60 !important;
+	background-color: rgb(50, 50, 50) !important;
+}
+/*-------------------------------------------------------------*/
+
+/*------------------Tab container styles-----------------------*/
+
+/* Style applied on tabs block */
+.tabs {
+	height: 48px;
+}
+
+.tabs>ul {
+	list-style: none;
+	cursor: pointer;
+}
+
+.tabs>ul>li {
+	text-align: center;
+	border: none;
+	background: #FFFFFF;
+	float: left;
+	width: 55.5px;
+	height: 48px;
+	cursor: pointer;
+	padding-top: 8px;
+}
+
+.tabs>ul>li>img {
+	margin-top: 4px;
+	width: 48px;
+	height: 34px; 
+}
+
+/* Style applied on tab pages */
+.tabscontent {
+	padding: 10px 10px 25px;
+	background: #FFFFFF;
+	height: 522px;
 }
 
 .tabTitle {
 	text-align: center;
 	font-family: sans-serif;
 	font-size: 11px;
-	font-style: normal;
+	font-style: bold;
 	color: #808080;
 	background-color: #D9D9D9;
 	width: 222px;
 	height: 23px;
 	padding-top: 8px;
-	margin-left: -9px !important; 
+	margin-left: -10px; 
 }
 
-.footerNote {
-	font-family: sans-serif;
-	font-size: 11px;
-	font-style: normal;
-	color: #808080;
+/* Style applied on first tab page */
+#tabpage_1 .border:hover {
+	width: 198px;
+}
+
+#tabpage_1 .border2:hover {
+	border: 2px solid red;
+	background-image: none;
+	width: 198px;
+	margin-top: 0px;
+}
+
+#tabpage_1 .isOpen:hover {
+	border: 1px solid transparent !important;
+	background-image: none;
+	width: 198px;
+}
+
+#tabpage_1 .isOpen:hover .buttonSelected {
+	margin-left: -1px;
+}
+
+#tabpage_1 .isOpen .buttonSelected {
+	border: 0px solid #000 !important;
+	border-width: 1px 1px 0px 1px !important;
+	background-image: none;
+	width: 198px;
+	margin-bottom: -1px;
+}
+
+#tabpage_1 ul {
+	width: 200px !important;
 }
 
 .menu {
@@ -105,50 +227,106 @@ input[type="text"],input[type="email"],input[type="password"] {
 
 .menu li {
 	list-style-type: none;
-	width: 190px;
 	text-align: center;
 	font-family: sans-serif;
 	font-size: 13px;
 	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 200px;
 }
 
-.border {
-	border-top: 1px solid #C9CBCC;
-	border-bottom: 1px solid #6D6F70;
-	background-image: linear-gradient(#C9CBCC, #6D6F70),
-		linear-gradient(#C9CBCC, #6D6F70);
-	background-size: 1px 100%;
-	background-position: 0 0, 100% 0;
+.imgButton {
+	padding: 0px;
+	height: 49px;
+	display: table;
+	text-align: left;
+}
+
+.imgButton img {
+	display: table-cell;
+	float: left;
+	width: 49px;
+	margin-left: 10px;
+	background-size: 49px 49px;
+}
+
+.imgButton label {
+	display: table-cell;
+	float: left;
+	margin-left: 10px;
+	margin-top: 15px;
+	width: 100px;
+	font-family: Arial-BoldMT !important;
+	font-size: 14px !important;
+	color: #58585B !important;
+}
+
+.dropdownArrow {
+	float: right;
+	margin-top: 22px;
+	margin-right: 5px;
+	background: url("../Images/navArrowGreyDown.png");
 	background-repeat: no-repeat;
+	width: 15px;
+	height: 10px;
 }
 
-.border:hover {
-	border: 1px solid red;
-	background-image: none;
+.dropdownArrowUp {
+	float: right;
+	margin-top: 20px;
+	margin-right: 5px;
+	background: url("../Images/navArrowGreyUp.png");
+	background-repeat: no-repeat;
+	width: 15px;
+	height: 10px;
 }
 
-.button {
-	padding-top: 10px;
-	padding-bottom: 10px;
-	background-image: linear-gradient(to top, #E1E1E1 0%, #F8F8F8 100%);
+.options {
+	display: none;
 	width: 198px;
-	margin: 0 auto;
-	cursor: pointer;
+	border: 1px solid #000;
+	position: absolute;
+	background-image: linear-gradient(to bottom, #E1E1E1 0%, #F8F8F8 20%);
+	border-top: none;
 }
 
-.button2 {
-	padding-top: 10px;
-	padding-bottom: 10px;
-	background-color: #FFF;
-	background-image: none;
-	width: 186px;
-	margin: 0 auto;
+.option {
+	float: left;
+	width: 49.5px;
+	height: 50px;
 	cursor: pointer;
+	background-position: center;
 }
 
-.button label,.button2 label {
-	cursor: pointer !important;
+.border2 {
+	border: 2px solid #BDBDBD;
+	width: 198px !important;
+	background-color: #FFF !important;
+	background-image: none !important;
 }
+
+.line {
+	border: 1px solid #D6D6D6;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.footerNote {
+	font-family: sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	color: #808080;
+}
+
+
+
+
+
+
+
+
+
 
 #dvLoginContainer ul {
 	margin-top: 70px;
@@ -166,58 +344,16 @@ input[type="text"],input[type="email"],input[type="password"] {
 	padding: 20px;
 }
 
-.tabs {
-	height: 50px;
-}
 
-.tabs>ul {
-	font-size: 1em;
-	list-style: none;
-	cursor: pointer;
-	padding-top: 5px;
-}
 
-.tabs>ul>li {
-	text-align: center;
-	border: none;
-	background: #FFFFFF;
-	float: left;
-	width: 55.5px;
-	height: 50px;
-	cursor: pointer;
-	padding-top: 5px;
-}
-
-.tabs>ul>li>img {
-	margin-top: 6px;
-	width: 48px;
-	height: 34px; 
-}
-
-#tabpage_2>div>label {
+.padding5pxTop8pxLeft {
 	padding-top: 5px;
 	padding-left: 8px;
 }
 
-#tabContainer {
-	border-top-left-radius: 2px;
-	border-top-right-radius: 2px;
-}
 
-.tabscontent {
-	-moz-border-radius-topleft: 0px;
-	-moz-border-radius-topright: 4px;
-	-moz-border-radius-bottomright: 4px;
-	-moz-border-radius-bottomleft: 4px;
-	border-top-left-radius: 0px;
-	border-top-right-radius: 4px;
-	border-bottom-right-radius: 4px;
-	border-bottom-left-radius: 4px;
-	padding: 10px 10px 25px;
-	background: #FFFFFF;
-	color: #333;
-	height: 520px;
-}
+
+
 
 .floatRight {
 	float: right;
@@ -235,6 +371,22 @@ input[type="text"],input[type="email"],input[type="password"] {
 .marginShift1px {
 	margin-left: -1px !important;
 } 
+
+.marginTopBottom10px {
+	margin-top: 10px !important;
+	margin-bottom: 10px !important;
+}
+
+.colorPickerStyle {
+	margin-top: 10px !important;
+	margin-left: 15px !important;
+}
+
+.colorPickerStyle>label {
+	font-weight: normal;
+	font-family: sans-serif;
+	font-size: 14px;
+}
 
 .tabPage2PropertiesHeader {
 	font-size: medium;
@@ -273,10 +425,18 @@ input[type="text"],input[type="email"],input[type="password"] {
 	display: table;
 	font-family: sans-serif;
 	font-size: 11px;
-	width: 208px;
-	padding-top: 5px;
+	width: 211px;
 	padding-bottom: 5px;
-	height: 25px;
+	height: 70px;
+}
+
+.tabPage4ContentRow {
+	display: table;
+	font-family: sans-serif;
+	font-size: 11px;
+	width: 211px;
+	padding-bottom: 5px;
+	height: 120px;
 }
 
 .tabPageContentLeft {
@@ -296,79 +456,25 @@ input[type="text"],input[type="email"],input[type="password"] {
 .tabPage2Header {
 	font-family: sans-serif;
 	font-size: 13px;
-	text-align: center;
-	padding-bottom: 10px;
+	text-align: left;
 	padding-top: 10px;
 }
 
 .tabPage2SubHeader {
 	font-size: small;
 	margin-bottom: 10px;
+	margin-top: 10px;
 }
 
 .boldText {
 	font-weight: bold;
 }
 
-.imgButton {
-	padding: 0px;
-	height: 49px;
-	display: table;
-	text-align: left;
-}
 
-.imgButton img {
-	display: table-cell;
-	float: left;
-	width: 49px;
-	margin-left: 15px;
-	background-size: 49px 49px;
-}
 
-.imgButton label {
-	display: table-cell;
-	float: left;
-	margin-left: 5px;
-	margin-top: 15px;
-	width: 100px;
-	text-align: center;
-}
 
-#tabpage_1 .border:hover {
-	border: 1px solid red;
-	background-image: none;
-	width: 198px;
-}
 
-#tabpage_1 .border2:hover {
-	border: 2px solid red;
-	background-image: none;
-	width: 198px;
-	margin-top: 0px;
-}
 
-#tabpage_1 .isOpen:hover {
-	border: 1px solid transparent !important;
-	background-image: none;
-	width: 198px;
-}
-
-#tabpage_1 .isOpen:hover .buttonSelected {
-	margin-left: -1px;
-}
-
-#tabpage_1 .isOpen .buttonSelected {
-	border: 0px solid #000 !important;
-	border-width: 1px 1px 0px 1px !important;
-	background-image: none;
-	width: 198px;
-}
-
-.buttonTextStyle {
-	font-family: Arial-BoldMT !important;
-	font-size: 14px !important;
-	color: #58585B !important;
-}
 
 .subscriptionNote {
 	font-family: Arial !important;
@@ -376,26 +482,11 @@ input[type="text"],input[type="email"],input[type="password"] {
 	color: #808080 !important;
 }
 
-#tabpage_1 ul {
-	width: 200px !important;
-}
 
-#tabpage_1 .menu li {
-	margin-top: 10px;
-	margin-bottom: 10px;
-	width: 200px;
-}
 
-.border2 {
-	border: 2px solid #BDBDBD;
-	width: 198px !important;
-}
 
-.line {
-	border: 1px solid #D6D6D6;
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
+
+
 
 .textNormal {
 	font-weight: normal;
@@ -488,42 +579,11 @@ label {
 	background-color: #F3F3F3;
 }
 
-.dropdownArrow {
-	float: right;
-	margin-top: 22px;
-	margin-right: 5px;
-	background: url("../Images/navArrowGreyDown.png");
-	background-repeat: no-repeat;
-	width: 15px;
-	height: 10px;
-}
 
-.dropdownArrowUp {
-	float: right;
-	margin-top: 20px;
-	margin-right: 5px;
-	background: url("../Images/navArrowGreyUp.png");
-	background-repeat: no-repeat;
-	width: 15px;
-	height: 10px;
-}
 
-.options {
-	display: none;
-	width: 198px;
-	border: 1px solid #000;
-	position: absolute;
-	background-image: linear-gradient(to bottom, #E1E1E1 0%, #F8F8F8 20%);
-	border-top: none;
-}
 
-.option {
-	float: left;
-	width: 49.5px;
-	height: 50px;
-	cursor: pointer;
-	background-position: center;
-}
+
+
 
 .propertyCellOption {
 	float: left;
@@ -576,16 +636,17 @@ label {
 
 .tabPage4ContentLeft {
 	font-family: Arial;
-	font-size: 1em;
+	font-size: 11px;
 	width: 140px;
 	display: table-cell;
 	float: left;
 	margin-left: -5px;
+	vertical-align: top;
 }
 
 .tabPage4ContentRight {
 	font-family: Arial;
-	font-size: 1em;
+	font-size: 11px;
 	width: 70px;
 	display: table-cell;
 	vertical-align: top;
@@ -594,13 +655,15 @@ label {
 .tabPage4ContentLeft label {
 	float: left;
 	margin-left: 5px;
-	font-weight: bold;
+	font-weight: normal;
+	color: #808080;
 }
 
 .tabPage4ContentRight label {
 	float: left;
 	margin-left: 5px;
-	font-weight: bold;
+	font-weight: normal;
+	color: #808080;
 }
 
 .downButtonStyle {
@@ -628,9 +691,7 @@ label {
 .tabPageCheckBoxRow {
 	font-family: "Arial";
 	font-size: 11px;
-	width: 220px;
-	padding-top: 5px;
-	padding-bottom: 3px;
+	width: 200px;
 }
 
 .inputStyleSmall {
@@ -643,7 +704,9 @@ label {
 	padding-left: 5px;
 	-webkit-user-select: auto;
 }
-
+.width150px {
+	width: 150px;
+}
 .colorPickerAppearance {
 	background: url("../Images/colorPickerImage.png") no-repeat scroll 0 0
 		transparent;
@@ -712,9 +775,16 @@ label {
 }
 
 #settingPage {
-	padding-left: 7px !important;
+	padding-left: 9px !important;
 	height: 605px !important;
 	background-color: #E1E1E1;
+}
+
+.settingline {
+	border: 1px solid #808080;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	width: 200px;
 }
 
 #canvasExpandSize {
@@ -730,52 +800,8 @@ label {
 	background-color: #E1E1E1 !important;
 }
 
-.ui-dialog {
-	font-size: 10px !important;
-}
 
-.ui-state-default .ui-icon {
-	background-image: url("../Images/ui-icons_888888_256x240.png")
-		!important;
-}
-
-.ui-widget-overlay {
-	opacity: .60 !important;
-	background-color: rgb(50, 50, 50) !important;
-}
-
-.adjustSpacingImage {
-	height: 49px;
-	margin-left: 15px;
-}
-
-.adjustSpacingLabel {
-	margin-left: -15px !important;
-}
 
 @media ( -webkit-min-device-pixel-ratio : 2) {
-	.adjustSpacingImage {
-		margin-top: 2px !important;
-		height: 45px !important;
-		margin-left: 10px !important;
-	}
-	.adjustSpacingLabel {
-		margin-left: -10px !important;
-	}
-}
 
-.hideBlock {
-	display: none;
-}
-
-.showBlock {
-	display: block;
-}
-
-.psElement {
-	display: none;
-}
-
-.nonPsElement {
-	display: block;
 }

@@ -6,6 +6,22 @@ click event handlers etc.
 
 var specctrUI = {};
 
+function toggleSettingPage(element){
+	specctrUtility.changeTextColor($("#footerLabel"));
+	
+	if($("#tabBlock").is(":visible")) {
+		$("#settingIcon").attr("src", "../Images/Icon_prefs_active.png");
+		$("#tabBlock").css("display", "none");
+		$("#settingPage").css("display", "block");
+		$("#settingBlock").addClass("backGroundColorGrey");
+	} else {
+		$("#settingIcon").attr("src", "../Images/Icon_prefs.png");
+		$("#settingPage").css("display", "none");
+		$("#tabBlock").css("display", "block");
+		$("#settingBlock").removeClass("backGroundColorGrey");
+	}
+}
+
 /**
  * Click event handler of tabs. Modify styles to tabs and 
  * call the function to change images on tab.
