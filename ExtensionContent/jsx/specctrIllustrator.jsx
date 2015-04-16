@@ -121,7 +121,7 @@ $.specctrAi = {
 
             var styleText = "";
             var text, variableId;
-            var dimensionSpecsInfo = this.getStyleFromOtherSpecs("Dimensions", "-dimensionCss:");           //Get the array of width/height specs info. 
+            var dimensionSpecsInfo = this.getStyleFromOtherSpecs("Dimensions", "-dimensionCss:");   //Get the array of width/height specs info. 
             var noOfDimensionSpecs = dimensionSpecsInfo.length;               //Number of width/height specs present in the document.
             var noOfGroups = objectProperties.groupItems.length;                //Number of groups present in Object Properties layer group.
             var noOfCoordinateSpecs = coordinateSpecsInfo.length;            //Number of coordinate specs present in the document.
@@ -1589,17 +1589,18 @@ $.specctrAi = {
                         //Create text at given font size, font value, font color.
                         var textColor = new RGBColor();
                         textColor.red = 255;
-                        textColor.green = 255;
-                        textColor.blue = 255;
+                        textColor.green = 0;
+                        textColor.blue = 0;
                         
-                        var number = app.activeDocument.textFrames.add();
-                        number.contents = noOfSpecs;
-                        number.textRange.characterAttributes.fillColor = textColor;
-                        number.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
-                        number.textRange.characterAttributes.size = model.legendFontSize;
-                        
-                        dia = Math.abs(number.visibleBounds[3] - number.visibleBounds[1]) + 8;
-                        firstBullet = this.createBullet(newColor, number, dia,
+                        var specNumber = app.activeDocument.textFrames.add();
+                        specNumber.contents = noOfSpecs;
+                        specNumber.textRange.characterAttributes.fillColor = textColor;
+                        specNumber.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
+                        specNumber.textRange.characterAttributes.size = model.legendFontSize;
+
+                        dia = Math.abs(specNumber.visibleBounds[3] - specNumber.visibleBounds[1]) + 8;
+                        alert(dia + " " + Math.abs(specNumber.visibleBounds[3] - specNumber.visibleBounds[1]));
+                        firstBullet = this.createBullet(newColor, specNumber, dia,
                                                    spec.visibleBounds[1], spec.visibleBounds[0]);
                         if (group)
                             firstBullet.move(group, ElementPlacement.INSIDE);
@@ -2424,41 +2425,50 @@ $.specctrAi = {
         switch (color.typename) {
             case "RGBColor":
                 switch (model.legendColorMode) {
-                case "HSB":
-                    result = this.rgbToHsv(color);
-                break;
-            
-                case "HSL":
-                    result = this.rgbToHsl(color);
-                break;
-            
-                case "RGB":
-                default:
-                    if (model.useHexColor) {
+                    case "HSB":
+                        result = this.rgbToHsv(color);
+                    break;
+                
+                    case "HSL":
+                        result = this.rgbToHsl(color);
+                    break;
+                
+                    case "RGB AS HEX":
                         var red = Math.round(color.red).toString(16);
+                        var green = Math.round(color.green).toString(16);
+                        var blue = Math.round(color.blue).toString(16);
                         
                         if (red.length == 1) 
                             red = "0" + red;
-                            
-                        var green = Math.round(color.green).toString(16);
                         
                         if (green.length == 1) 
                             green = "0" + green;
-                            
-                        var blue = Math.round(color.blue).toString(16);
                         
                         if (blue.length == 1) 
                             blue = "0" + blue;
                     
                         result = "#" + red + green + blue;
-                    } else {
-                        result = "rgb(" + Math.round(color.red) + ", " + Math.round(color.green) + ", " + Math.round(color.blue) + ")";
-                    }
+                        break;
+
+                    case "iOS (RGB as %)":
+                        result = "rgb(" + Math.round(color.red / 255 * 100) + ", " +  
+                                        Math.round(color.green / 255 * 100) + ", " + 
+                                        Math.round(color.blue / 255 * 100) + ")";
+                        break;
+                        
+                    case "RGB":
+                    default:
+                        result = "rgb(" + Math.round(color.red) + ", " + 
+                                        Math.round(color.green) + ", " + 
+                                        Math.round(color.blue) + ")";                    
                 }
             break;
             
             case "CMYKColor":
-            result = "cmyk(" + Math.round(color.cyan) + ", " + Math.round(color.magenta) + ", " + Math.round(color.yellow) + ", " + Math.round(color.black) + ")";
+            result = "cmyk(" + Math.round(color.cyan) + ", " + 
+                            Math.round(color.magenta) + ", " + 
+                            Math.round(color.yellow) + ", " + 
+                            Math.round(color.black) + ")";
             break;
             
             case "LabColor":

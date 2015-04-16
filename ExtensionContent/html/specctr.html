@@ -201,21 +201,20 @@
 							<div class="border2 button" onclick="syncCss()">
 								<label>Sync CSS</label>
 							</div>
-							<div class="line mb20Px"></div> 
-							<label class="textNormal">EXPAND CANVAS</label>
+							<div class="line marginBottom20px"></div> 
+							<label>EXPAND CANVAS</label>
 						</li>
 	
 						<li>
-							<div class="tblCell pxWidth">
-								<label class="lbl10Px" for="txtPx">By (px)</label> 
+							<div class="alignLeftMiddle">
+								<label class="label10Px">By (px)</label> 
 								<input	id="canvasExpandSize" onclick="itemClickHandler(event)"
 									onchange="textBoxChangeHandler(this.id)" maxlength="4"
 									onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
 							</div>
 	
-							<div class="border tblCell expandButton">
-								<div class="button imgButton" id="dvExpand"
-									onclick="expandCanvas()">
+							<div class="border alignLeftMiddle expandButton">
+								<div class="button imgButton" id="dvExpand"	onclick="expandCanvas()">
 									<img src="../Images/Icon_expand.png"/> 
 									<label>Expand</label>
 								</div>
@@ -228,105 +227,103 @@
 				<!-- Starting of setting tab. -->
 				<div id="tabpage_2" class="tabpage">
 					<div class="tabTitle">Pick the properties you want to display</div>
-					<div class="tabPage2PropertiesHeader boldText">
-						Shape Properties</div>
+					<div class="tabPage2PropertiesHeader">Shape Properties</div>
 					<div class="tabPage2Content nonPsElement" id="fillColor">
 						<input type="checkbox" value="1" id="shapeFillColor"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="shapeFillColor">Fill Color</label>
+						<label for="shapeFillColor">Fill Color</label>
 					</div>
 					<div class="tabPage2Content nonPsElement" id="fillStyle">
 						<input type="checkbox" value="2" id="shapeFillStyle"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="shapeFillStyle">Fill Style</label>
+						<label for="shapeFillStyle">Fill Style</label>
 					</div>
 					<div class="tabPage2Content nonPsElement" id="strokeColor">
 						<input type="checkbox" value="3" id="shapeStrokeColor"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="shapeStrokeColor">Stroke Color</label>
+						<label for="shapeStrokeColor">Stroke Color</label>
 					</div>
 					<div class="tabPage2Content nonPsElement" id="strokeStyle">
 						<input type="checkbox" value="4" id="shapeStrokeStyle"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="shapeStrokeStyle">Stroke Style</label>
+						<label for="shapeStrokeStyle">Stroke Style</label>
 					</div>
 					<div class="tabPage2Content nonPsElement" id="strokeSize">
 						<input type="checkbox" value="5" id="shapeStrokeSize"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="shapeStrokeSize">Stroke Size</label>
+						<label for="shapeStrokeSize">Stroke Size</label>
 					</div>
 					<div class="tabPage2Content psElement" id="fill">
 						<input type="checkbox" value="1" id="shapeFill"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="shapeFill">Fill</label>
+						<label for="shapeFill">Fill</label>
 					</div>
 					<div class="tabPage2Content psElement" id="stroke">
 						<input type="checkbox" value="2" id="shapeStroke"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="shapeStroke">Stroke</label>
+						<label for="shapeStroke">Stroke</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="3" id="shapeAlpha"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="shapeAlpha">Alpha</label>
+						<label for="shapeAlpha">Alpha</label>
 					</div>
 					<div class="tabPage2Content psElement">
 						<input type="checkbox" value="4" id="shapeEffects"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="shapeEffects">Effects</label>
+						<label  for="shapeEffects">Effects</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="5" id="shapeBorderRadius"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="shapeBorderRadius">Border Radius</label>
+						<label  for="shapeBorderRadius">Border Radius</label>
 					</div>
 	
-					<div class="tabPage2PropertiesHeader boldText">Text
-						Properties</div>
+					<div class="tabPage2PropertiesHeader">Text Properties</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="6" id="textFont"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="textFont">Font Family</label>
+						<label  for="textFont">Font Family</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="7" id="textSize"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="textSize">Font Size</label>
+						<label  for="textSize">Font Size</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="8" id="textColor"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="textColor">Color</label>
+						<label  for="textColor">Color</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="9" id="textStyle"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="textStyle">Font Style</label>
+						<label  for="textStyle">Font Style</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="10" id="textAlignment"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="textAlignment">Text-Align</label>
+						<label  for="textAlignment">Text-Align</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="11" id="textLeading"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="textLeading">Line-Height</label>
+						<label  for="textLeading">Line-Height</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="12" id="textTracking"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for=textTracking>Letter Spacing</label>
+						<label  for=textTracking>Letter Spacing</label>
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="13" id="textAlpha"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="textAlpha">Alpha</label>
+						<label  for="textAlpha">Alpha</label>
 					</div>
 					<div class="tabPage2Content psElement">
 						<input type="checkbox" value="14" id="textEffects"
 							onclick="checkBoxChangeHandler(this)" /> 
-						<label class="padding5pxTop8pxLeft" for="textEffects">Effects</label>
+						<label  for="textEffects">Effects</label>
 					</div>
 				</div>
 				<!-- Ending of setting tab. -->
@@ -335,63 +332,54 @@
 				<div id="tabpage_3" class="tabpage">
 					<div class="tabTitle">Responsive Options</div>
 	
-					<span class="boldText tabPage2SubHeader">Distance/Spacing</span>
+					<div class="responsivePageHeader marginBottom20px">Distance/Spacing</div>
 	
-					<div class="tabPageContentSubHeaderRow">
+					<div class="tabPageCheckBoxRow height100px" >
 						<input type="checkbox" value="1" id="specInPrcntg"
 							onchange="specInPercentageChangeHandler()" /> 
-						<label for="specInPrcntg"> Spec Distance by %</label>
-					</div>
-	
-					<div class="tabPageContentRow">
-						<div class="tabPageContentLeft">
-							<label>100% Width:</label>
+						<label for="specInPrcntg">Spec Distance by %</label>
+						<div class="height25px marginTopBottom10px">
+							<label class="alignLeftMiddle">100% Width:</label>
+							<div class="floatRight marginRight20px">
+								<input type="text" class="inputStyle" id="relativeWidth" maxlength="6"
+									onchange="textBoxChangeHandler(this.id)" onclick="itemClickHandler(event)"
+									onkeypress="return restrictInputToDecimal(event)" />px
+							</div>
 						</div>
-						<div class="tabPageContentRight">
-							<input type="text" class="inputStyle" id="relativeWidth" maxlength="6"
-								onchange="textBoxChangeHandler(this.id)" onclick="itemClickHandler(event)"
-								onkeypress="return restrictInputToDecimal(event)" />px
-						</div>
-					</div>
-	
-					<div class="tabPageContentRow">
-						<div class="tabPageContentLeft">100% Height:</div>
-						<div class="tabPageContentRight">
-							<input type="text" class="inputStyle" id="relativeHeight" maxlength="6"
-								onchange="textBoxChangeHandler(this.id)" onclick="itemClickHandler(event)"
-								onkeypress="return restrictInputToDecimal(event)" />px
+						<div>
+							<label class="alignLeftMiddle">100% Height:</label>
+							<div class="floatRight  marginRight20px">
+								<input type="text" class="inputStyle" id="relativeHeight" maxlength="6"
+									onchange="textBoxChangeHandler(this.id)" onclick="itemClickHandler(event)"
+									onkeypress="return restrictInputToDecimal(event)" />px
+							</div>
 						</div>
 					</div>
 	
-					<div class="tabPageContentSubHeaderRow"></div>
+					<div class="responsivePageHeader marginBottom20px">Base Typography</div>
 	
-					<span class="boldText tabPage2SubHeader">Base Typography</span><br />
-	
-					<div class="tabPageContentSubHeaderRow">
+					<div class="tabPageCheckBoxRow height100px">
 						<input type="checkbox" value="1" id="specInEM"
 							onchange="specInEMChangeHandler(this)" /> 
 						<label for="specInEM">Spec in em</label>
-					</div>
-	
-					<div class="tabPageContentRow">
-						<div class="tabPageContentLeft">
-							Base font size:<br />
+						<div class="height25px marginTopBottom10px">
+							<label class="alignLeftMiddle">Base font size:</label>
+							<div class="floatRight marginRight20px">
+								<input type="text" class="inputStyle" id="baseFontSize"
+									maxlength="6" onchange="textBoxChangeHandler(this.id)"
+									value="16" onclick="itemClickHandler(event)"
+									onkeypress="return restrictInputToDecimal(event)" />px
+							</div>
 						</div>
-						<div class="tabPageContentRight">
-							<input type="text" class="inputStyle" id="baseFontSize"
-								maxlength="6" onchange="textBoxChangeHandler(this.id)"
-								value="16" onclick="itemClickHandler(event)"
-								onkeypress="return restrictInputToDecimal(event)" /> px<br />
-						</div>
-					</div>
 	
-					<div class="tabPageContentRow">
-						<div class="tabPageContentLeft">Base line height:</div>
-						<div class="tabPageContentRight">
-							<input type="text" class="inputStyle" id="baseLineHeight"
-								maxlength="6" onchange="textBoxChangeHandler(this.id)"
-								value="22.4" onclick="itemClickHandler(event)"
-								onkeypress="return restrictInputToDecimal(event)" />px
+						<div>
+							<label class="alignLeftMiddle">Base line height:</label>
+							<div class="floatRight marginRight20px">
+								<input type="text" class="inputStyle" id="baseLineHeight"
+									maxlength="6" onchange="textBoxChangeHandler(this.id)"
+									value="22.4" onclick="itemClickHandler(event)"
+									onkeypress="return restrictInputToDecimal(event)" />px
+							</div>
 						</div>
 					</div>
 	
@@ -401,14 +389,14 @@
 				<!-- Starting of cloud tab. -->
 				<div id="tabpage_4" class="tabpage">
 					<div class="tabTitle">Specctr Clouds</div>
-					<div style="margin-top: 30px;">
+					<div class="marginTop30px">
 						<label class="subscriptionNote boldText">SUBSCRIPTION PLAN:</label>
 					</div>
-					<div style="margin-top: 20px;">
+					<div class="marginTop20px">
 						<label class="subscriptionNote" style="float: right;">15 DAYS REMAINING</label>
 						<label class="subscriptionNote" style="float: left;">TRIAL</label>
 					</div>
-					<div style="margin-top: 50px !important; text-align: center;">
+					<div class="textAllignCenter marginTop50px">
 						<a class="link" href="#">Activate Specctr Pro Today!</a>
 					</div>
 				</div>
@@ -423,10 +411,10 @@
 				<img class="floatRight" src="../Images/closeIcon.png" onclick="toggleSettingPage(this)"/>
 			</div>
 			
-			<div class="tabPage2Header boldText">Formatting</div>
+			<div class="settingPageHeader">Formatting</div>
 			<div class="settingline"></div>
-				<div class="tabPage4ContentRow">
-					<div class="tabPage4ContentLeft">
+				<div class="settingPageFirstChildBlock">
+					<div class="firstChildLeftBlock">
 						<div>
 							<label>FONT</label> 
 							<select class="dropdown" id="lstFont"
@@ -437,17 +425,16 @@
 
 						 	
 				 		<label class="marginTopBottom10px width150px">SPEC COLOR</label>
-					 		<div class="marginTopBottom10px">
+					 		<div>
 								<div class="colorPickerStyle">
-									<label>Shape:</label>
+									<label>Shape</label>
 									<input id="colObject" class="colorPickerAppearance"
-										onclick="colorPickerClickHandler(this, 'Shape')"
-										style="margin-left: 17px !important;" />
+										onclick="colorPickerClickHandler(this, 'Shape')"/>
 									<div id='colorShapeDropDown' class="colorPicker">
 										<div id="shapeColorBlock" class="mainColorBlock"
 											style="display: inline-block;"
 											onclick="setColorToLabel(this, 'Object')"></div>
-										<input type="text" id="txtShapeColor" class="colorText"  maxlength="6"
+										<input type="text" id="txtShapeColor" class="colorText" maxlength="6"
 											onclick="itemClickHandler(event)"
 											onkeydown="return colorPickerTextInputValidation(event)"
 											onkeyup="colorPickerTextInputClickHandler(event, 'Shape')"/> <br>
@@ -503,10 +490,9 @@
 								</div>
 								
 								<div class="colorPickerStyle">
-									<label>Type:</label> 
+									<label>Type</label> 
 									<input id="colType" class="colorPickerAppearance"
-										onclick="colorPickerClickHandler(this, 'Type')"
-										style="margin-left: 17px;" />
+										onclick="colorPickerClickHandler(this, 'Type')"/>
 									<div id='colorTypeDropDown' class="colorPicker">
 										<div id="typeColorBlock" class="mainColorBlock"
 											style="display: inline-block;"
@@ -567,10 +553,9 @@
 								</div>
 								
 								<div class="colorPickerStyle">
-									<label>Spacing:</label> 
+									<label>Spacing</label> 
 									<input id="colSpacing" class="colorPickerAppearance"
-										onclick="colorPickerClickHandler(this, 'Space')"
-										style="margin-left: 3px; " />
+										onclick="colorPickerClickHandler(this, 'Space')"/>
 									<div id='colorSpaceDropDown' class="colorPicker">
 										<div id="spaceColorBlock" class="mainColorBlock"
 											style="display: inline-block;"
@@ -632,7 +617,7 @@
 							</div>
 					</div>
 					
-					<div class="tabPage4ContentRight">
+					<div class="firstChildRightBlock">
 						<div>
 							<label>SIZE</label><br /> 
 							<select class="smalldropdown" id="lstSize"
@@ -670,17 +655,17 @@
 					</div>
 				</div>
 				
-				<div class="tabPageCheckBoxRow marginTopBottom10px" id="specToEdgeCheckbox">
+				<div class="tabPageCheckBoxRow marginTopBottom10px marginTop15px" id="specToEdgeCheckbox">
 					<input type="checkbox" value="CanvasEdge" id="specToEdge"
 						onclick="checkBoxChangeHandler(this)" /> 
-					<label class="padding5pxTop8pxLeft" for="specToEdge">Print Spec to Canvas Edge</label>
+					<label class="settingPageLabel" for="specToEdge">Print Spec to Canvas Edge</label>
 				</div>
 
-				<div class="tabPage2Header boldText">Properties</div>
+				<div class="settingPageHeader marginTop20px">Properties</div>
 				<div class="settingline"></div>
 
-				<div class="tabPage4ContentLeft" id="colorList">
-					<label>COLOR MODE</label>
+				<div class="settingPageSecondChildBlock marginTop20px" id="colorList">
+					<label class="marginTopBottom10px width150px settingPageLabel">COLOR MODE</label>
 					<select class="dropdown" id="lstColorMode" 
 						onchange="comboBoxChangeHandler(this, 'legendColorMode')">
 						<option value="RGB AS HEX">RGB AS HEX</option>
@@ -690,39 +675,41 @@
 						<option value="HSL">HSL</option>
 						<option value="iOS (RGB as %)">iOS (RGB as %)</option>
 					</select>
-					<div class="marginTopBottom10px"></div>
 				</div>
 				
-				<div class="tabPage2Header boldText">Measurements</div>
+				<div class="settingPageHeader">Measurements</div>
 				<div class="settingline"></div>
 				
-				<form class="nonIdElement marginTopBottom10px" 
+				<form class="nonIdElement marginTopBottom10px width150px" 
 					onclick="radioButtonClickHandler(event, 'decimalFractionValue')">
-					<input type="radio" name="decimalFractionOptions" id="decimalRadioButton" 
-						value="decimal" >
-					<label for="decimalRadioButton">Decimal </label>
-					<input type="radio" name="decimalFractionOptions" id="fractionRadioButton"
-						value="fraction">
-					<label for="fractionRadioButton">Fraction</label>
+					<input type="radio"  name="decimalFractionOptions" id="decimalRadioButton" 
+						value="decimal" class="marginBottom1px">
+					<label class="radioLabel" for="decimalRadioButton">Decimal </label>
+					<div class="floatRight">
+						<input type="radio" name="decimalFractionOptions" id="fractionRadioButton"
+							value="fraction" class="marginBottom1px">
+						<label class="radioLabel" for="fractionRadioButton">Fraction</label>
+					</div>
 				</form>
 				
-				<div class="tabPageCheckBoxRow marginTopBottom10px" id="includeStrokeCheckbox">
+				<div class="tabPageCheckBoxRow marginLeft6px marginTopBottom20px" id="includeStrokeCheckbox">
 					<input type="checkbox" id="includeStroke" onclick="checkBoxChangeHandler(this)" /> 
-					<label class="padding5pxTop8pxLeft" for="includeStroke">Include Stroke in Measurement</label>
+					<label class="settingPageLabel" for="includeStroke">Include Stroke in Measurement</label>
 				</div>
 
-				<div class="marginTopBottom10px">
+				<div class="settingPageLabel">
 					<label class="width150px">SCALE SPECS BY:</label>
-					<input type="checkbox" value="ScaleBy" id="useScaleBy"
-						style="vertical-align: middle" onclick="useScaleByClickHandler()" />
-					<input type="text"
-						class="inputStyleSmall" id="txtScaleBy" value="x1"
-						onclick="itemClickHandler(event)"
-						maxlength="4" onchange="txtScaleByChangeHandler()" /> (e.g. x2 or /2)
+					<div class="marginTopBottom10px">
+						<input type="checkbox" value="ScaleBy" id="useScaleBy"
+							class="alignMiddle" onclick="useScaleByClickHandler()" />
+						<input type="text" class="inputStyleSmall" id="txtScaleBy" value="x1"
+							onclick="itemClickHandler(event)"
+							maxlength="4" onchange="txtScaleByChangeHandler()" />(e.g. x2 or /2)
+					</div>
 				</div>
-		</div>
+			</div>
 		
-		<div id="settingBlock" class="footer" onclick="toggleSettingPage(this)"> 
+		<div id="settingBlock" class="height30px" onclick="toggleSettingPage(this)"> 
 			<img id="settingIcon" class="floatRight" style="margin-bottom: 4px;"
 			 src="../Images/Icon_prefs.png" width="32" height="24"/>
 		 	<label id="footerLabel" style="margin-top: 3px; margin-right: -2px;" 

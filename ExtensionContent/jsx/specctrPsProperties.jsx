@@ -771,36 +771,34 @@ $.specctrPsProperties = {
                         result = this.rgbToHsl(colorType);
                         break;
 
-                    case "RGB":
+                    case "RGB AS HEX":
+                        var red = Math.round(colorType.red).toString(16);
+                        if (red.length === 1)
+                            red = "0" + red;
+
+                        var green = Math.round(colorType.green).toString(16);
+                        if (green.length === 1) 
+                            green = "0" + green;
+
+                        var blue = Math.round(colorType.blue).toString(16);
+                        if (blue.length === 1) 
+                            blue = "0" + blue;
+
+                        result = "#" + red + green + blue;
+                        break;
+                    
+                    case "iOS (RGB as %)":
+                        var rVal = Math.round(colorType.red / 255 * 100);
+                        var gVal =  Math.round(colorType.green / 255 * 100);
+                        var bVal =  Math.round(colorType.blue / 255 * 100);
+                        result = "rgb(" + rVal + ", " + gVal + ", " + bVal + ")";
+                        break;
+                        
                     default:
-                        if (model.useHexColor) {
-                            var red = Math.round(colorType.red).toString(16);
-                            if (red.length === 1)
-                                red = "0" + red;
-
-                            var green = Math.round(colorType.green).toString(16);
-                            if (green.length === 1) 
-                                green = "0" + green;
-
-                            var blue = Math.round(colorType.blue).toString(16);
-                            if (blue.length === 1) 
-                                blue = "0" + blue;
-
-                            result = "#" + red + green + blue;
-                        } else {
-                            
-                            if(model.rgbTransformIntoPercentage === true) {
-                                var rVal = Math.round(colorType.red / 255 * 100);
-                                var gVal =  Math.round(colorType.green / 255 * 100);
-                                var bVal =  Math.round(colorType.blue / 255 * 100);
-                            } else {
-                                rVal = Math.round(colorType.red);
-                                gVal =  Math.round(colorType.green);
-                                bVal =  Math.round(colorType.blue);
-                            }
-                            
-                            result = "rgb(" + rVal + ", " + gVal + ", " + bVal + ")";
-                        }
+                        rVal = Math.round(colorType.red);
+                        gVal =  Math.round(colorType.green);
+                        bVal =  Math.round(colorType.blue);
+                        result = "rgb(" + rVal + ", " + gVal + ", " + bVal + ")";
                 }
                 break;
 

@@ -37,8 +37,17 @@ input[type="text"],input[type="email"],input[type="password"] {
 	cursor: text;
 }
 
+input[type="checkbox"] {
+	vertical-align: bottom;
+	margin: 0px;
+}
+
+input[type="text"]:disabled {
+	background: #e1e1e1 !important;
+}
+
 label {
-	cursor: none;
+	cursor: default;
 }
 /*-------------------------------------------------------------*/
 
@@ -68,6 +77,11 @@ label {
 	cursor: pointer;
 }
 
+.button:hover, .buttonSelected {
+	background-image: none;
+	background-color: #F3F3F3;
+}
+
 .button label {
 	cursor: pointer !important;
 }
@@ -87,6 +101,102 @@ label {
 	background-image: none;
 }
 
+.backGroundColorGrey {
+	background-color: #E1E1E1 !important;
+}
+
+.marginTop15px {
+	margin-top: 15px !important;
+}
+
+.marginTop20px {
+	margin-top: 20px;
+}
+
+.marginTop30px {
+	margin-top: 30px;
+}
+
+.marginTop50px {
+	margin-top: 50px;
+}
+
+.marginBottom20px {
+	margin-bottom: 20px !important;
+}
+
+.marginBottom1px {
+	margin-bottom: 1px !important;
+}
+
+.marginRight20px {
+	margin-right: 20px !important;
+}
+
+.marginTopBottom10px {
+	margin-top: 10px !important;
+	margin-bottom: 10px !important;
+}
+
+.marginLeft6px {
+	margin-left: 6px !important;
+}
+
+.marginTopBottom20px {
+	margin-top: 20px !important;
+	margin-bottom: 20px !important;
+}
+
+.label10Px {
+	font-family: sans-serif;
+	font-size: 10px;
+	color: #4B4B4B;
+}
+
+.alignLeftMiddle {
+	display: inline-block;
+	vertical-align: middle;
+	text-align: left;
+}
+
+.alignMiddle{
+	vertical-align: middle !important;
+}
+
+.link {
+	color: #3199F6;
+	font-family: sans-serif;
+	font-size: 11px;
+	cursor: pointer;
+}
+
+.floatRight {
+	float: right;
+}
+
+.floatLeft {
+	float: left;
+}
+
+.textAllignCenter {
+	text-align: center;
+}
+
+.boldText {
+	font-weight: bold;
+}
+
+.height30px {
+	height: 30px;
+}
+
+.setBlueLabel {
+	color: #0000FF !important;
+}
+
+.width150px {
+	width: 150px !important;
+}
 /*-------------------------------------------------------------*/
 
 /*----------------Login container styles-----------------------*/
@@ -99,6 +209,15 @@ label {
 
 #dvLoginContainer .button {
 	width: 188px;
+}
+
+#dvLoginContainer ul {
+	margin-top: 70px;
+}
+
+.help {
+	text-align: center;
+	padding: 20px;
 }
 
 .logo {
@@ -137,9 +256,11 @@ label {
 }
 /*-------------------------------------------------------------*/
 
-/*------------------Tab container styles-----------------------*/
+/*-------------------------------------------------------------
+------------------Tab container styles-------------------------
+---------------------------------------------------------------*/
 
-/* Style applied on tabs block */
+/*---------------Style applied on tabs block-------------------*/
 .tabs {
 	height: 48px;
 }
@@ -165,8 +286,9 @@ label {
 	width: 48px;
 	height: 34px; 
 }
+/*-------------------------------------------------------------*/
 
-/* Style applied on tab pages */
+/*---------------Style applied on tab pages--------------------*/
 .tabscontent {
 	padding: 10px 10px 25px;
 	background: #FFFFFF;
@@ -186,7 +308,14 @@ label {
 	margin-left: -10px; 
 }
 
-/* Style applied on first tab page */
+.tabPageCheckBoxRow {
+	font-family: Arial;
+	font-size: 11px;
+	width: 200px;
+}
+/*-------------------------------------------------------------*/
+
+/*---------------Style applied on first tab page---------------*/
 #tabpage_1 .border:hover {
 	width: 198px;
 }
@@ -209,7 +338,7 @@ label {
 }
 
 #tabpage_1 .isOpen .buttonSelected {
-	border: 0px solid #000 !important;
+	border: 0px solid #000000 !important;
 	border-width: 1px 1px 0px 1px !important;
 	background-image: none;
 	width: 198px;
@@ -260,6 +389,7 @@ label {
 	font-family: Arial-BoldMT !important;
 	font-size: 14px !important;
 	color: #58585B !important;
+	font-style: bold !important;
 }
 
 .dropdownArrow {
@@ -312,206 +442,19 @@ label {
 	margin-bottom: 10px;
 }
 
-.footerNote {
-	font-family: sans-serif;
-	font-size: 11px;
-	font-style: normal;
-	color: #808080;
-}
-
-
-
-
-
-
-
-
-
-
-#dvLoginContainer ul {
-	margin-top: 70px;
-}
-
-.link {
-	color: #3199F6;
-	font-family: sans-serif;
-	font-size: 11px;
-	cursor: pointer;
-}
-
-.help {
-	text-align: center;
-	padding: 20px;
-}
-
-
-
-.padding5pxTop8pxLeft {
-	padding-top: 5px;
-	padding-left: 8px;
-}
-
-
-
-
-
-.floatRight {
-	float: right;
-}
-
-.footer {
-	height: 30px;
-	
-}
-
-.marginShift8px {
-	margin-left: -8px !important;
-} 
-
-.marginShift1px {
-	margin-left: -1px !important;
-} 
-
-.marginTopBottom10px {
-	margin-top: 10px !important;
-	margin-bottom: 10px !important;
-}
-
-.colorPickerStyle {
-	margin-top: 10px !important;
-	margin-left: 15px !important;
-}
-
-.colorPickerStyle>label {
-	font-weight: normal;
-	font-family: sans-serif;
-	font-size: 14px;
-}
-
-.tabPage2PropertiesHeader {
-	font-size: medium;
-	font-family: sans-serif;
-	font-size: 16px;
-	width: 198px;
-	margin-top: 20px;
-	margin-left: 20px;
-	margin-bottom: 15px;
-}
-
-.tabPage2Content {
-	font-family: sans-serif;
-	font-size: 13px;
-	width: 198px;
-	margin-bottom: 10px;
-	margin-left: 22px;
-}
-
-.tabPage3Content {
-	font-family: sans-serif;
-	font-size: 11px;
-	width: 180px;
-}
-
-.tabPageContentSubHeaderRow {
-	font-family: sans-serif;
-	font-size: 11px;
-	width: 180px;
-	padding-top: 10px;
-	padding-bottom: 5px;
-	height: 25px;
-}
-
-.tabPageContentRow {
-	display: table;
-	font-family: sans-serif;
-	font-size: 11px;
-	width: 211px;
-	padding-bottom: 5px;
-	height: 70px;
-}
-
-.tabPage4ContentRow {
-	display: table;
-	font-family: sans-serif;
-	font-size: 11px;
-	width: 211px;
-	padding-bottom: 5px;
-	height: 120px;
-}
-
-.tabPageContentLeft {
-	font-family: sans-serif;
-	font-size: 11px;
-	width: 80px;
-	display: table-cell;
-}
-
-.tabPageContentRight {
-	font-family: sans-serif;
-	font-size: 11px;
-	width: 100px;
-	display: table-cell;
-}
-
-.tabPage2Header {
-	font-family: sans-serif;
-	font-size: 13px;
-	text-align: left;
-	padding-top: 10px;
-}
-
-.tabPage2SubHeader {
-	font-size: small;
-	margin-bottom: 10px;
-	margin-top: 10px;
-}
-
-.boldText {
-	font-weight: bold;
-}
-
-
-
-
-
-
-
-.subscriptionNote {
-	font-family: Arial !important;
-	font-size: 12px !important;
-	color: #808080 !important;
-}
-
-
-
-
-
-
-
-.textNormal {
-	font-weight: normal;
-}
-
-.mb20Px {
-	margin-bottom: 20px !important;
-}
-
-.lbl10Px {
-	font-family: sans-serif;
-	font-size: 10px;
-	color: #4B4B4B;
-}
-
 .expandButton {
 	border-left: 1px solid #C9CBCC;
 	border-right: 1px solid #C9CBCC;
 	width: 112px !important;
 }
 
-.tblCell {
-	display: inline-block;
-	vertical-align: middle;
-	text-align: left;
+#canvasExpandSize {
+	width: 28px;
+	height: 20px;
+	padding-left: 3px;
+	font-family: Verdana;
+	font-size: 11px;
+	-webkit-user-select: auto;
 }
 
 #dvExpand {
@@ -531,73 +474,172 @@ label {
 	margin-top: 11px;
 	width: 50px;
 }
+/*-------------------------------------------------------------*/
 
-.pxWidth {
-	width: 75px;
+/*--------------Style applied on second tab page---------------*/
+.tabPage2PropertiesHeader {
+	font-style: bold;
+	font-size: 16px;
+	width: 198px;
+	margin-top: 20px;
+	margin-left: 20px;
+	margin-bottom: 15px;
 }
 
-input[type="checkbox"] {
-	vertical-align: bottom;
-	margin: 0px;
+.tabPage2Content {
+	font-size: 13px;
+	width: 198px;
+	margin-bottom: 10px;
+	margin-left: 22px;
 }
 
-input[type="text"]:disabled {
-	background: #e1e1e1 !important;
+.tabPage2Content label {
+	padding-top: 5px;
+	padding-left: 8px;
+}
+/*-------------------------------------------------------------*/
+
+/*--------------Style applied on third tab page----------------*/
+.responsivePageHeader {
+	font-size: 14px;
+	margin-bottom: 10px;
+	margin-top: 20px !important;
+	margin-left: 5px;
+	font-weight: bold;
+	color: #58585B;
+}
+
+.height100px {
+	height: 100px !important;
+}
+
+.height25px {
+	height: 25px !important;
 }
 
 .inputStyle {
-	width: 60px !important;
-	height: 20px !important;
+	width: 60px;
+	height: 20px;
 	margin-left: 5px !important;
 	margin-right: 5px !important;
 	text-align: left !important;
-	padding: 0px !important;
+	padding: 2px 0px 0px 2px !important;
 	font-family: sans-serif !important;
-	font-size: 11px !important;
+	font-size: 12px !important;
 	-webkit-user-select: auto;
 }
+/*-------------------------------------------------------------*/
 
-.floatRight input[type='checkbox'] {
-	margin-right: 3px;
+/*--------------Style applied on fourth tab page----------------*/
+.subscriptionNote {
+	font-family: Arial !important;
+	font-size: 12px !important;
+	color: #808080 !important;
+}
+/*-------------------------------------------------------------*/
+
+/*--------------Style applied on setting page----------------*/
+#settingPage {
+	padding-left: 9px !important;
+	height: 605px !important;
+	background-color: #E1E1E1;
 }
 
-label {
-	color: #0C0D0D;
+.settingline {
+	border: 1px solid #808080;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	width: 200px;
 }
 
-.setBlueLabel {
-	color: #0000FF !important;
+.settingPageHeader {
+	font-family: sans-serif;
+	font-size: 13px;
+	text-align: left;
+	padding-top: 10px;
+	font-weight: bold;
 }
 
-.button:hover {
-	background-image: none;
-	background-color: #F3F3F3;
-}
-
-.buttonSelected {
-	background-image: none;
-	background-color: #F3F3F3;
-}
-
-
-
-
-
-
-
-.propertyCellOption {
-	float: left;
-	width: 99px;
-	height: 49px;
-	cursor: pointer;
-	background-position: center;
-	text-align: center;
-	vertical-align: middle; 
-	background-repeat: no-repeat;
-}
-
-.active {
+.settingPageFirstChildBlock {
 	display: table;
+	font-family: sans-serif;
+	font-size: 11px;
+	width: 211px;
+	padding-bottom: 5px;
+	height: 120px;
+}
+
+.firstChildLeftBlock {
+	font-family: Arial;
+	font-size: 11px;
+	width: 140px;
+	display: table-cell;
+	float: left;
+	margin-left: -5px;
+	vertical-align: top;
+}
+
+.firstChildLeftBlock label {
+	float: left;
+	margin-left: 5px;
+	font-weight: normal;
+	color: #707070;
+}
+
+.firstChildLeftBlock .colorBlock {
+	float: left;
+	width: 18px;
+	height: 16px;
+	cursor: pointer;
+	border: 1px solid #000000;
+}
+
+.firstChildLeftBlock .colorBlock:HOVER {
+	border: 1px solid #ffffff;
+}
+
+.firstChildLeftBlock .colorPicker {
+	display: none;
+	margin-left: 64px !important;
+	margin-top: 2px !important;
+	padding-left: 4px !important;
+	width: 125px;
+	height: 70px;
+	border: 1px solid #AEAEAE;
+	position: absolute;
+	background-image: linear-gradient(to bottom, #E1E1E1 0%, #F8F8F8 20%);
+	cursor: pointer;
+}
+
+.firstChildLeftBlock .colorText {
+	width: 60px;
+	margin-left: 3px !important;
+	margin-top: 1px !important;
+	display: inline-block;
+}
+
+.firstChildLeftBlock .mainColorBlock {
+	float: left;
+	width: 28px;
+	height: 16px;
+	cursor: pointer;
+	margin-top: 1px !important;
+	border: 1px #AEAEAE inset;
+}
+
+.firstChildRightBlock {
+	font-family: Arial;
+	font-size: 11px;
+	width: 70px;
+	display: table-cell;
+	vertical-align: top;
+}
+
+.firstChildRightBlock label {
+	float: left;
+	margin-left: 5px;
+	font-weight: normal;
+	color: #707070;
 }
 
 .dropdown {
@@ -612,9 +654,36 @@ label {
 	font-family: Arial;
 	font-weight: bold;
 	vertical-align: middle;
-	width: 132px !important;
+	width: 134px !important;
 	-webkit-appearance: none;
 	font-size: 1em;
+}
+
+.colorPickerStyle {
+	margin-top: 5px !important;
+	margin-left: 10px !important;
+	height: 30x;
+	width: 150px;
+}
+
+.colorPickerStyle>label {
+	font-weight: normal;
+	font-family: sans-serif;
+	font-size: 14px;
+	width: 60px;
+}
+
+.colorPickerAppearance {
+	background: url("../Images/colorPickerImage.png") no-repeat scroll 0 0 transparent;
+	color: transparent;
+	text-align: center;
+	width: 35px !important;
+	height: 20px !important;
+	cursor: pointer !important;
+	border: 0px transparent !important;
+	background-color: #ff0000;
+	margin-top: -4px;
+	-webkit-appearance: none;
 }
 
 .smalldropdown {
@@ -634,64 +703,30 @@ label {
 	font-size: 1em;
 }
 
-.tabPage4ContentLeft {
+.settingPageLabel {
+	margin-left: 5px;
+	font-family: Arial;
+	font-size: 11px;
+	font-weight: normal;
+	color: #707070;
+}
+
+.settingPageSecondChildBlock {
 	font-family: Arial;
 	font-size: 11px;
 	width: 140px;
 	display: table-cell;
-	float: left;
 	margin-left: -5px;
 	vertical-align: top;
+	height: 70px;
 }
 
-.tabPage4ContentRight {
+.radioLabel {
+	margin-left: -2px !important;
 	font-family: Arial;
-	font-size: 11px;
-	width: 70px;
-	display: table-cell;
-	vertical-align: top;
-}
-
-.tabPage4ContentLeft label {
-	float: left;
-	margin-left: 5px;
+	font-size: 12px;
 	font-weight: normal;
-	color: #808080;
-}
-
-.tabPage4ContentRight label {
-	float: left;
-	margin-left: 5px;
-	font-weight: normal;
-	color: #808080;
-}
-
-.downButtonStyle {
-	background: url(../Images/dropdown_arrow.JPG);
-	background-position: center;
-	background-repeat: no-repeat;
-	height: 21px;
-	width: 21px;
-	cursor: pointer;
-	margin-left: 45px;
-	margin-top: -24px;
-}
-
-.tabPageEmptyRow {
-	font-family: "Arial";
-	font-size: 11px;
-	width: 220px;
-	height: 15px;
-}
-
-.fontNormal {
-	font-weight: normal;
-}
-
-.tabPageCheckBoxRow {
-	font-family: "Arial";
-	font-size: 11px;
-	width: 200px;
+	color: #707070;
 }
 
 .inputStyleSmall {
@@ -700,107 +735,17 @@ label {
 	margin-left: 5px !important;
 	margin-right: 5px !important;
 	text-align: left !important;
-	padding: 0px !important;
-	padding-left: 5px;
+	padding-left: 5px !important;
 	-webkit-user-select: auto;
 }
-.width150px {
-	width: 150px;
-}
-.colorPickerAppearance {
-	background: url("../Images/colorPickerImage.png") no-repeat scroll 0 0
-		transparent;
-	width: 35px !important;
-	height: 20px !important;
-	cursor: pointer;
-	border: 0px transparent !important;
-	background-color: #ff0000;
-	margin-top: -4px;
-	-webkit-appearance: none;
-}
 
-#radio {
-	float: left;
-	display: block;
-	width: 200px;
-}
-
-#radio input {
-	margin: 7px;
-}
-
-#radio span {
-	margin-right: 46px;
-	margin-top: 6px;
-}
-
-.tabPage4ContentLeft .colorBlock {
-	float: left;
-	width: 18px;
-	height: 16px;
-	cursor: pointer;
-	border: 1px solid #000;
-}
-
-.tabPage4ContentLeft .colorBlock:HOVER {
-	border: 1px solid #ffffff;
-}
-
-.tabPage4ContentLeft .colorPicker {
-	display: none;
-	margin-left: 49px !important;
-	margin-top: 2px !important;
-	padding-left: 4px !important;
-	width: 125px;
-	height: 70px;
-	border: 1px solid #AEAEAE;
-	position: absolute;
-	background-image: linear-gradient(to bottom, #E1E1E1 0%, #F8F8F8 20%);
-}
-
-.tabPage4ContentLeft .colorText {
-	width: 60px;
-	margin-left: 3px !important;
-	margin-top: 1px !important;
-	display: inline-block;
-}
-
-.tabPage4ContentLeft .mainColorBlock {
-	float: left;
-	width: 28px;
-	height: 16px;
-	cursor: pointer;
-	margin-top: 1px !important;
-	border: 1px #AEAEAE inset;
-}
-
-#settingPage {
-	padding-left: 9px !important;
-	height: 605px !important;
-	background-color: #E1E1E1;
-}
-
-.settingline {
-	border: 1px solid #808080;
-	margin-top: 5px;
-	margin-bottom: 10px;
-	width: 200px;
-}
-
-#canvasExpandSize {
-	width: 28px;
-	height: 20px;
-	padding-left: 3px;
-	font-family: Verdana;
+.footerNote {
+	font-family: sans-serif;
 	font-size: 11px;
-	-webkit-user-select: auto;
+	font-style: normal;
+	color: #808080;
 }
-
-.backGroundColorGrey {
-	background-color: #E1E1E1 !important;
-}
-
-
+/*-------------------------------------------------------------*/
 
 @media ( -webkit-min-device-pixel-ratio : 2) {
 

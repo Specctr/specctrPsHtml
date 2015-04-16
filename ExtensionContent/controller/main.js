@@ -418,8 +418,8 @@ specctrInit.setModelValueFromPreferences = function() {
 	var i, propertyApplicationSpecific;
 	var propertyName = ["shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
 	                    "textAlignment", "textColor", "textStyle", "textLeading", 
-	                    "textTracking", "textAlpha", "useHexColor", "specInPrcntg", 
-	                    "useScaleBy","specInEM", "rgbTransformIntoPercentage"];
+	                    "textTracking", "textAlpha","specInPrcntg", "useScaleBy",
+	                    "specInEM"];
 	
 	if (hostApplication === photoshop) {
 		propertyApplicationSpecific = ["shapeFill", "shapeStroke", "shapeEffects", "textEffects"];
@@ -476,8 +476,7 @@ specctrInit.setModelToUIComponents = function() {
 	var appSpecificCheckBoxesId;
 	var checkBoxesId = ["shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
 	                    "textColor", "textStyle", "textAlignment", "textLeading",
-	                    "textTracking", "textAlpha", "useHexColor", "useScaleBy",
-	                    "rgbTransformIntoPercentage"];
+	                    "textTracking", "textAlpha", "useScaleBy"];
 	
 	if (hostApplication === photoshop) {
 		appSpecificCheckBoxesId = ["shapeFill", "shapeStroke", 

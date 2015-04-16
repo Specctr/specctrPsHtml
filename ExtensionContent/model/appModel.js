@@ -36,7 +36,6 @@ var model = {
 	legendColorObject:		'#FF0000',
 	legendColorType:		'#FF0000',
 	legendColorSpacing:		'#FF0000',
-	useHexColor:			true,
 	legendColorMode:		'RGB',
 	specToEdge:				true,
 
@@ -69,7 +68,6 @@ var model = {
 	useScaleBy: false,
 	scaleValue: 'x1',
 	
-	rgbTransformIntoPercentage: false,
 	decimalFractionValue: 'decimal',
 	specOption: 'Line'
 };
