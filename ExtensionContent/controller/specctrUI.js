@@ -6,7 +6,10 @@ click event handlers etc.
 
 var specctrUI = {};
 
-function toggleSettingPage(element){
+/**
+ * Show/hide the setting tab page.
+ */
+function toggleSettingPage(){
 	specctrUtility.changeTextColor($("#footerLabel"));
 	
 	if($("#tabBlock").is(":visible")) {

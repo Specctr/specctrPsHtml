@@ -254,7 +254,6 @@ $.specctrAi = {
         var isExportedSuccessfully = false;
         try {
             var coordinateSpecsInfo = this.getStyleFromOtherSpecs("Coordinates", "-coordinateCss:");           //Get the array of coordinate specs info.
-            
             var styleText = cssBodyText;            //Add the body text at the top of css file.
             styleText += this.getCssForText(coordinateSpecsInfo);        //Get the style text for those Text items on which property specs is applied.
             styleText += this.getCssForPathItems(coordinateSpecsInfo);    //Get the style text for those Path items on which property specs is applied.    
@@ -264,40 +263,12 @@ $.specctrAi = {
                 return isExportedSuccessfully;
             }
 
-            //Create the file and export it.
-            var cssFile = "";
-            var cssFilePath = "";
-            var doc = app.activeDocument;
-            var documentPath = doc.path;        //Get the path of the current ai file.
-            cssFilePath = "~/desktop/Styles.css";
+            var cssInfo = {
+	    	document_name: app.activeDocument.name,
+	    	text: styleText
+            };
+            return JSON.stringify(cssInfo);
         
-            if (documentPath != "")                          //If source file's path exist then change the path of css file to the location of that file.
-                cssFilePath = documentPath + "/Styles.css";
-        
-            cssFile = File(cssFilePath);
-        
-            if (cssFile.exists) {
-                var replaceFileFlag = confirm("Styles.css already exists in this location.\rDo you want to replace it?", true, "Specctr");
-                if (!replaceFileFlag)
-                    return isExportedSuccessfully;
-            }
-        
-            //Create and write the css file.
-            if (cssFile) {
-                cssFile.open("w");
-                cssFile.write(styleText);
-                cssFile.close;
-            
-                if (replaceFileFlag)
-                    alert("Styles.css is exported.");
-                else 
-                    alert("Styles.css is exported to " + cssFilePath);
-            } else {
-                alert("Unable to export the specs!");
-                return isExportedSuccessfully;
-            }
-        
-            isExportedSuccessfully = true;
         } catch(e) {
             alert(e);
         }

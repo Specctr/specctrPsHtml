@@ -284,20 +284,9 @@ function exportCss() {
 
 	try {
 		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "exportCss()");
-	} catch (e) {
-		console.log(e);
-	}
-}
 
-/**
- * Call the 'uploadCss' method from .jsx in Ps only.
- */
-function syncCss() {
-	try{
-		setModel();
 		// Upload specs to Specctr.
-		cssText = evalScript("$.specctrPsExportCss.uploadCss()", function(cssInfo){
+		evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo){
 			var css = JSON.parse(cssInfo);
 			var cssJson = CSSJSON.toJSON(css.text);
 			var data = JSON.stringify({
@@ -320,6 +309,18 @@ function syncCss() {
 				}
 			});
 		});
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+/**
+ * Call the 'uploadCss' method from .jsx in Ps only.
+ */
+function syncCss() {
+	try{
+		setModel();
+		
 	} catch(e) {
 		console.log(e);
 	}	

@@ -29,57 +29,14 @@ $.specctrPsExportCss = {
 	    styleText += this.getCssForShape(coordinateSpecsInfo);
 	    return styleText;
 	},
-	
-	uploadCss: function() {
-		var cssInfo = {
+		
+    //Export the spec layer's css to specctr server.
+    exportCss : function() {
+       var cssInfo = {
 	    	document_name: app.activeDocument.name,
 	    	text: $.specctrPsExportCss.getCss()
 	    };
 	    return JSON.stringify(cssInfo);
-	},
-		
-    //Export the spec layer into css text file.
-    exportCss : function() {
-        var styleText = $.specctrPsExportCss.getCss();
-        if(styleText == "") {
-            alert("No spec present to export!");
-            return;
-        }
-        
-        //Create the file and export it.
-        var cssFile = "";
-        var cssFilePath = "";
-        try {
-            var documentPath = app.activeDocument.path;
-        } catch(e) {
-            documentPath = "";
-        }
-        
-        if(documentPath)
-            cssFilePath = documentPath + "/Styles.css";
-        else
-            cssFilePath = "~/desktop/Styles.css";
-
-        cssFile = File(cssFilePath);
-        if(cssFile.exists) {
-            var replaceFileFlag = confirm("Styles.css already exists in this location.\rDo you want to replace it?", true, "Specctr");
-            if(!replaceFileFlag)
-                return;
-        }
-            
-        if(cssFile) {
-            cssFile.open("w");
-            cssFile.write(styleText);
-            cssFile.close;
-            
-            if(replaceFileFlag)
-                alert("Styles.css is exported.");
-            else 
-                alert("Styles.css is exported to " + cssFilePath);
-        } else {
-            alert("Unable to export!");
-            return;
-        }
     },
 
     //Get the coordinate or width/height spec style info.
