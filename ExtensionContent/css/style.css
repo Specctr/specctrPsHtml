@@ -275,9 +275,10 @@ label {
 	border: none;
 	background: #FFFFFF;
 	float: left;
-	width: 55.5px;
+	width: 55px;
 	height: 48px;
 	cursor: pointer;
+	overflow: hidden;
 	padding-top: 8px;
 }
 
