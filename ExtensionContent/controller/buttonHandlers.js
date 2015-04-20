@@ -100,7 +100,6 @@ function dropDownCellClickHandler(cellId, selectionClass, modelValue) {
 			
 			cellHandler.addClass(selectionClass);
 			buttonFeature.changeDimensionButtonIcon();
-
 		} else if (cellHandler.parent().attr("id") == "spacingDropDown") {
 			
 			cellHandler.toggleClass(selectionClass);
@@ -122,7 +121,9 @@ function dropDownCellClickHandler(cellId, selectionClass, modelValue) {
 			buttonFeature.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 			model.specOption = modelValue;
 			cellHandler.addClass(selectionClass);
+			buttonFeature.changePropertyButtonIcon();
 		}
+		
 	} catch (e) {
 		alert(e);
 	}
@@ -267,4 +268,25 @@ buttonFeature.changeSpacingButtonIcon = function() {
 	} catch (e) {
 		console.log(e);
 	}
+};
+
+/**
+ * Change the property button icon according to the selection of cells in the grid.
+ * */
+buttonFeature.changePropertyButtonIcon = function (){
+	try {
+		var iconPath = "../Images/PropertiesDropDownIcons/spec";
+		var imageExtension = ".png";
+		
+		//For retina display: 2 pixel ratio; 
+		if(window.devicePixelRatio > 1)
+			imageExtension = "_x2.png";
+	
+		iconPath = iconPath + model.specOption + "_selected" + imageExtension;
+		$("#imgProperty").attr("src", iconPath);
+		
+	} catch (e) {
+		console.log(e);
+	}
+	
 };

@@ -71,7 +71,7 @@ label {
 .button {
 	padding-top: 10px;
 	padding-bottom: 10px;
-	background-image: linear-gradient(to top, #E1E1E1 0%, #F8F8F8 100%);
+	background-color: #E8E8E8;
 	width: 198px;
 	margin: 0 auto;
 	cursor: pointer;
@@ -87,13 +87,15 @@ label {
 }
 
 .border {
+/* 	border: 1px solid #E6E6E6; */
+	background-image: none;
 	border-top: 1px solid #C9CBCC;
 	border-bottom: 1px solid #6D6F70;
 	background-image: linear-gradient(#C9CBCC, #6D6F70),
 		linear-gradient(#C9CBCC, #6D6F70);
-	background-size: 1px 100%;
-	background-position: 0 0, 100% 0;
-	background-repeat: no-repeat;
+/* 	background-size: 1px 100%; */
+/* 	background-position: 0 0, 100% 0; */
+/* 	background-repeat: no-repeat; */
 }
 
 .border:hover {
@@ -103,6 +105,54 @@ label {
 
 .backGroundColorGrey {
 	background-color: #E1E1E1 !important;
+}
+
+.bgColor000000 {
+	background-color: #000000 !important;
+}
+
+.bgColorFF0000 {
+	background-color: #FF0000 !important;
+}
+
+.bgColorFF8800 {
+	background-color: #FF8800 !important;
+}
+
+.bgColorFFFF00 {
+	background-color: #FFFF00 !important;
+}
+
+.bgColor88FF00 {
+	background-color: #88FF00 !important;
+}
+
+.bgColor00FF00 {
+	background-color: #00FF00 !important;
+}
+
+.bgColor00FF88 {
+	background-color: #00FF88 !important;
+}
+
+.bgColor00FFFF {
+	background-color: #00FFFF !important;
+}
+
+.bgColor0000FF {
+	background-color: #0000FF !important;
+}
+
+.bgColor8800FF {
+	background-color: #8800FF !important;
+}
+
+.bgColorFF00FF {
+	background-color: #FF00FF !important;
+}
+
+.bgColorFFFFFF {
+	background-color: #FFFFFF !important;
 }
 
 .marginTop15px {
@@ -197,6 +247,7 @@ label {
 .width150px {
 	width: 150px !important;
 }
+
 /*-------------------------------------------------------------*/
 
 /*----------------Login container styles-----------------------*/
@@ -359,7 +410,6 @@ label {
 	text-align: center;
 	font-family: sans-serif;
 	font-size: 13px;
-	font-weight: bold;
 	margin-top: 10px;
 	margin-bottom: 10px;
 	width: 200px;
@@ -386,10 +436,9 @@ label {
 	margin-left: 10px;
 	margin-top: 15px;
 	width: 100px;
-	font-family: Arial-BoldMT !important;
-	font-size: 14px !important;
-	color: #58585B !important;
-	font-style: bold !important;
+	font-family: Arial !important;
+	font-size: 18px !important;
+	color: #3a3a3a !important;
 }
 
 .dropdownArrow {
@@ -429,51 +478,15 @@ label {
 	background-position: center;
 }
 
-.border2 {
-	border: 2px solid #BDBDBD;
-	width: 198px !important;
-	background-color: #FFF !important;
-	background-image: none !important;
-}
-
-.line {
-	border: 1px solid #D6D6D6;
-	margin-top: 10px;
-	margin-bottom: 10px;
-}
-
-.expandButton {
-	border-left: 1px solid #C9CBCC;
-	border-right: 1px solid #C9CBCC;
-	width: 112px !important;
-}
-
 #canvasExpandSize {
-	width: 28px;
-	height: 20px;
+	width: 160px;
+	height: 40px;
 	padding-left: 3px;
-	font-family: Verdana;
-	font-size: 11px;
+	font-family: Arial;
+	font-size: 16px;
 	-webkit-user-select: auto;
 }
 
-#dvExpand {
-	width: 110px;
-	height: 40px;
-}
-
-#dvExpand img {
-	margin-left: 8px;
-	width: 42px;
-	height: 32px;
-	margin-top: 4px;
-}
-
-#dvExpand label {
-	margin-left: 0px;
-	margin-top: 11px;
-	width: 50px;
-}
 /*-------------------------------------------------------------*/
 
 /*--------------Style applied on second tab page---------------*/
@@ -625,6 +638,7 @@ label {
 	cursor: pointer;
 	margin-top: 1px !important;
 	border: 1px #AEAEAE inset;
+	display: inline-block;
 }
 
 .firstChildRightBlock {
@@ -744,6 +758,15 @@ label {
 	font-size: 11px;
 	font-style: normal;
 	color: #808080;
+}
+
+#settingIcon {
+	margin-bottom: 4px;
+}
+
+#footerLabel {
+	margin-top: 3px; 
+	margin-right: -2px;
 }
 /*-------------------------------------------------------------*/
 

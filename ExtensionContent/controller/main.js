@@ -455,15 +455,19 @@ specctrInit.setModelToUIComponents = function() {
 	
 	//Set icons to the buttons.
 	var iconPostString = ".png";
-	var buttonIconPaths = ["../Images/Icon_object", "../Images/Icon_coordinates",
+	var buttonIconPaths = ["../Images/PropertiesDropDownIcons/specLine_selected", 
+	                       "../Images/Icon_coordinates", 
 	                       "../Images/DimensionButtonIcons/WH_11", 
-	                       "../Images/SpacingButtonIcons/Spacing_TL"];
-	var buttonIds = ["#imgProperty", "#imgCoordinate", "#dimensionIcon", "#spacingIcon"];
+	                       "../Images/SpacingButtonIcons/Spacing_TL", 
+	                       "../Images/Icon_note", "../Images/Icon_exportCSS"];
+	var buttonIds = ["#imgProperty", "#imgCoordinate", "#dimensionIcon", "#spacingIcon", 
+	                 "#imgNote", "#imgExportCss"];
 	
+	var noOfButtons = buttonIds.length;
 	if(window.devicePixelRatio > 1)	//For retina display: 2 pixel ratio; 
 		iconPostString = "_x2" + iconPostString;
 
-	for (var i = 0; i < 4; i++) {
+	for (var i = 0; i < noOfButtons; i++) {
 		$(buttonIds[i]).attr("src", buttonIconPaths[i] + iconPostString);
 	}
 

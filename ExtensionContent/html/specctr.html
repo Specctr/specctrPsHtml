@@ -117,12 +117,20 @@
 							
 						</li>
 	
+						<!-- Add Note button. -->
+						<li class="border nonIdElement" onclick="addNoteSpecs()">
+							<div class="button imgButton" id="btnAddNote" onclick="addNoteButton_clickHandler()">
+								<img id="imgNote" alt="Note specs"/>
+								<label>Add Note</label>
+							</div>
+						</li>
+						
 						<!-- Width/Height button. -->
 						<li class="border" id="liWh">
 						
 							<div class="button imgButton" id="btnWh" onclick="specButtonsClickHandler(this)">
 								<img id="dimensionIcon"/> 
-								<label>Width / Height</label>
+								<label>Width/Height</label>
 								<div class="dropdownArrow" id="imgWhDdlArrow"
 									onclick="buttonDropDownClickHandler(event, this)"></div>
 							</div>
@@ -188,36 +196,32 @@
 							</div>
 						</li>
 	
-						<!-- Add Note button. -->
-						<li class="border nonIdElement" onclick="addNoteSpecs()">
-							<div class="button imgButton" id="btnAddNote" onclick="addNoteButton_clickHandler()">
-								<img id="imgNote" alt="Note specs" src="../Images/Icon_note.png" />
-								<label>Add Note</label>
-							</div>
-						</li>
-	
-						<li class="border" onclick="exportCss()">
-							<div class="button imgButton">
-								<img id="imgNote" alt="Note specs" src="../Images/Icon_note.png" />
-								<label>Export CSS</label>
-							</div>
-						</li>
-	
-						<li>
-							<div class="alignLeftMiddle">
-								<label class="label10Px">By (px)</label> 
-								<input	id="canvasExpandSize" onclick="itemClickHandler(event)"
-									onchange="textBoxChangeHandler(this.id)" maxlength="4"
-									onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
-							</div>
-	
-							<div class="border alignLeftMiddle expandButton">
-								<div class="button imgButton" id="dvExpand"	onclick="expandCanvas()">
-									<img src="../Images/Icon_expand.png"/> 
+						<!-- Expand button. -->
+						<li class="border" id="liExpand">
+							<div class="button imgButton" id="btnExpand" onclick="expandCanvas()">
+									<img id="imgExpand" alt="Expand" src="../Images/Icon_expand.png"/> 
 									<label>Expand</label>
+									<div id="imgExpandDdlArrow" class="dropdownArrow"
+										onclick="buttonDropDownClickHandler(event, this)"></div>
+							</div>
+							<div class="options" id="expandDropDown">
+								<div class="option">
+									<label>By</label>
+									<input	id="canvasExpandSize" onclick="itemClickHandler(event)"
+										onchange="textBoxChangeHandler(this.id)" maxlength="4"
+										onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
 								</div>
 							</div>
 						</li>
+						
+						<!-- Export css button. -->
+						<li class="border" onclick="exportCss()">
+							<div class="button imgButton">
+								<img id="imgExportCss" alt="Export css"/>
+								<label>Export CSS</label>
+							</div>
+						</li>
+						
 					</ul>
 				</div>
 				<!-- Ending of main tab. -->
@@ -391,8 +395,8 @@
 						<label class="subscriptionNote boldText">SUBSCRIPTION PLAN:</label>
 					</div>
 					<div class="marginTop20px">
-						<label class="subscriptionNote" style="float: right;">15 DAYS REMAINING</label>
-						<label class="subscriptionNote" style="float: left;">TRIAL</label>
+						<label class="subscriptionNote floatRight">15 DAYS REMAINING</label>
+						<label class="subscriptionNote floatLeft">TRIAL</label>
 					</div>
 					<div class="textAllignCenter marginTop50px">
 						<a class="link" href="#">Activate Specctr Pro Today!</a>
@@ -430,58 +434,45 @@
 										onclick="colorPickerClickHandler(this, 'Shape')"/>
 									<div id='colorShapeDropDown' class="colorPicker">
 										<div id="shapeColorBlock" class="mainColorBlock"
-											style="display: inline-block;"
 											onclick="setColorToLabel(this, 'Object')"></div>
 										<input type="text" id="txtShapeColor" class="colorText" maxlength="6"
 											onclick="itemClickHandler(event)"
 											onkeydown="return colorPickerTextInputValidation(event)"
 											onkeyup="colorPickerTextInputClickHandler(event, 'Shape')"/> <br>
-										<div class="colorBlock" title="000000"
-											style="background-color: #000000"
+										<div class="colorBlock bgColor000000" title="000000"
 											onmouseover="setColorValueToTextBox(this, 'Shape')"
 											onclick="setColorToLabel(this, 'Object')"></div>
-										<div class="colorBlock" title="FF0000"
-											style="background-color: #FF0000"
+										<div class="colorBlock bgColorFF0000" title="FF0000"
 											onmouseover="setColorValueToTextBox(this, 'Shape')"
 											onclick="setColorToLabel(this, 'Object')"></div>
-										<div class="colorBlock" title="FF8800"
-											style="background-color: #FF8800"
+										<div class="colorBlock bgColorFF8800" title="FF8800"
 											onmouseover="setColorValueToTextBox(this, 'Shape')"
 											onclick="setColorToLabel(this, 'Object')"></div>
-										<div class="colorBlock" title="FFFF00"
-											style="background-color: #FFFF00"
+										<div class="colorBlock bgColorFFFF00" title="FFFF00"
 											onmouseover="setColorValueToTextBox(this, 'Shape')"
 											onclick="setColorToLabel(this, 'Object')"></div>
-										<div class="colorBlock" title="88FF00"
-											style="background-color: #88FF00"
+										<div class="colorBlock bgColor88FF00" title="88FF00"
 											onmouseover="setColorValueToTextBox(this, 'Shape')"
 											onclick="setColorToLabel(this, 'Object')"></div>
-										<div class="colorBlock" title="00FF00"
-											style="background-color: #00FF00"
+										<div class="colorBlock bgColor00FF00" title="00FF00"
 											onmouseover="setColorValueToTextBox(this, 'Shape')"
 											onclick="setColorToLabel(this, 'Object')"></div>
-										<div class="colorBlock" title="00FF88"
-											style="background-color: #00FF88"
+										<div class="colorBlock bgColor00FF88" title="00FF88"
 											onmouseover="setColorValueToTextBox(this, 'Shape')"
 											onclick="setColorToLabel(this, 'Object')"></div>
-										<div class="colorBlock" title="00FFFF"
-											style="background-color: #00FFFF"
+										<div class="colorBlock bgColor00FFFF" title="00FFFF"
 											onmouseover="setColorValueToTextBox(this, 'Shape')"
 											onclick="setColorToLabel(this, 'Object')"></div>
-										<div class="colorBlock" title="0000FF"
-											style="background-color: #0000FF"
+										<div class="colorBlock bgColor0000FF" title="0000FF"
 											onmouseover="setColorValueToTextBox(this, 'Shape')"
 											onclick="setColorToLabel(this, 'Object')"></div>
-										<div class="colorBlock" title="8800FF"
-											style="background-color: #8800FF"
+										<div class="colorBlock bgColor8800FF" title="8800FF"
 											onmouseover="setColorValueToTextBox(this, 'Shape')"
 											onclick="setColorToLabel(this, 'Object')"></div>
-										<div class="colorBlock" title="FF00FF"
-											style="background-color: #FF00FF"
+										<div class="colorBlock bgColorFF00FF" title="FF00FF"
 											onmouseover="setColorValueToTextBox(this, 'Shape')"
 											onclick="setColorToLabel(this, 'Object')"></div>
-										<div class="colorBlock" title="FFFFFF"
-											style="background-color: #FFFFFF"
+										<div class="colorBlock bgColorFFFFFF" title="FFFFFF"
 											onmouseover="setColorValueToTextBox(this, 'Shape')"
 											onclick="setColorToLabel(this, 'Object')"></div>
 									</div>
@@ -493,58 +484,45 @@
 										onclick="colorPickerClickHandler(this, 'Type')"/>
 									<div id='colorTypeDropDown' class="colorPicker">
 										<div id="typeColorBlock" class="mainColorBlock"
-											style="display: inline-block;"
 											onclick="setColorToLabel(this, 'Type')"></div>
 										<input type="text" id="txtTypeColor" class="colorText" maxlength="6"
 											onkeydown="return colorPickerTextInputValidation(event)"
 											onclick="itemClickHandler(event)"
 											onkeyup="colorPickerTextInputClickHandler(event, 'Type')"/> <br>
-										<div class="colorBlock" title="000000"
-											style="background-color: #000000"
+										<div class="colorBlock bgColor000000" title="000000"
 											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
-										<div class="colorBlock" title="FF0000"
-											style="background-color: #FF0000"
+										<div class="colorBlock bgColorFF0000" title="FF0000"
 											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
-										<div class="colorBlock" title="FF8800"
-											style="background-color: #FF8800"
+										<div class="colorBlock bgColorFF8800" title="FF8800"
 											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
-										<div class="colorBlock" title="FFFF00"
-											style="background-color: #FFFF00"
+										<div class="colorBlock bgColorFFFF00" title="FFFF00"
 											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
-										<div class="colorBlock" title="88FF00"
-											style="background-color: #88FF00"
+										<div class="colorBlock bgColor88FF00" title="88FF00"
 											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
-										<div class="colorBlock" title="00FF00"
-											style="background-color: #00FF00"
+										<div class="colorBlock bgColor00FF00" title="00FF00"
 											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
-										<div class="colorBlock" title="00FF88"
-											style="background-color: #00FF88"
+										<div class="colorBlock bgColor00FF88" title="00FF88"
 											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
-										<div class="colorBlock" title="00FFFF"
-											style="background-color: #00FFFF"
+										<div class="colorBlock bgColor00FFFF" title="00FFFF"
 											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
-										<div class="colorBlock" title="0000FF"
-											style="background-color: #0000FF"
+										<div class="colorBlock bgColor0000FF" title="0000FF"
 											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
-										<div class="colorBlock" title="8800FF"
-											style="background-color: #8800FF"
+										<div class="colorBlock bgColor8800FF" title="8800FF"
 											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
-										<div class="colorBlock" title="FF00FF"
-											style="background-color: #FF00FF"
-											onmouseover="setColorValueToTextBox(this, 'Type')"
+										<div class="colorBlock bgColorFF00FF" title="FF00FF"
+											nmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
-										<div class="colorBlock" title="FFFFFF"
-											style="background-color: #FFFFFF"
+										<div class="colorBlock bgColorFFFFFF" title="FFFFFF"
 											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
 									</div>
@@ -556,58 +534,45 @@
 										onclick="colorPickerClickHandler(this, 'Space')"/>
 									<div id='colorSpaceDropDown' class="colorPicker">
 										<div id="spaceColorBlock" class="mainColorBlock"
-											style="display: inline-block;"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
 										<input type="text" id="txtSpaceColor" class="colorText" maxlength="6"
 											onkeydown="return colorPickerTextInputValidation(event)"
 											onclick="itemClickHandler(event)"
 											onkeyup="colorPickerTextInputClickHandler(event, 'Space')"/> <br>
-										<div class="colorBlock" title="000000"
-											style="background-color: #000000"
+										<div class="colorBlock bgColor000000" title="000000"
 											onmouseover="setColorValueToTextBox(this, 'Space')"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
-										<div class="colorBlock" title="FF0000"
-											style="background-color: #FF0000"
+										<div class="colorBlock bgColorFF0000" title="FF0000"
 											onmouseover="setColorValueToTextBox(this, 'Space')"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
-										<div class="colorBlock" title="FF8800"
-											style="background-color: #FF8800"
+										<div class="colorBlock bgColorFF8800" title="FF8800"
 											onmouseover="setColorValueToTextBox(this, 'Space')"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
-										<div class="colorBlock" title="FFFF00"
-											style="background-color: #FFFF00"
+										<div class="colorBlock bgColorFFFF00" title="FFFF00"
 											onmouseover="setColorValueToTextBox(this, 'Space')"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
-										<div class="colorBlock" title="88FF00"
-											style="background-color: #88FF00"
+										<div class="colorBlock bgColor88FF00" title="88FF00"
 											onmouseover="setColorValueToTextBox(this, 'Space')"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
-										<div class="colorBlock" title="00FF00"
-											style="background-color: #00FF00"
+										<div class="colorBlock bgColor00FF00" title="00FF00"
 											onmouseover="setColorValueToTextBox(this, 'Space')"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
-										<div class="colorBlock" title="00FF88"
-											style="background-color: #00FF88"
+										<div class="colorBlock bgColor00FF88" title="00FF88"
 											onmouseover="setColorValueToTextBox(this, 'Space')"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
-										<div class="colorBlock" title="00FFFF"
-											style="background-color: #00FFFF"
+										<div class="colorBlock bgColor00FFFF" title="00FFFF"
 											onmouseover="setColorValueToTextBox(this, 'Space')"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
-										<div class="colorBlock" title="0000FF"
-											style="background-color: #0000FF"
+										<div class="colorBlock bgColor0000FF" title="0000FF"
 											onmouseover="setColorValueToTextBox(this, 'Space')"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
-										<div class="colorBlock" title="8800FF"
-											style="background-color: #8800FF"
+										<div class="colorBlock bgColor8800FF" title="8800FF"
 											onmouseover="setColorValueToTextBox(this, 'Space')"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
-										<div class="colorBlock" title="FF00FF"
-											style="background-color: #FF00FF"
+										<div class="colorBlock bgColorFF00FF" title="FF00FF"
 											onmouseover="setColorValueToTextBox(this, 'Space')"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
-										<div class="colorBlock" title="FFFFFF"
-											style="background-color: #FFFFFF"
+										<div class="colorBlock bgColorFFFFFF" title="FFFFFF"
 											onmouseover="setColorValueToTextBox(this, 'Space')"
 											onclick="setColorToLabel(this, 'Spacing')"></div>
 									</div>
@@ -708,10 +673,9 @@
 			</div>
 		
 		<div id="settingBlock" class="height30px" onclick="toggleSettingPage(this)"> 
-			<img id="settingIcon" class="floatRight" style="margin-bottom: 4px;"
+			<img id="settingIcon" class="floatRight"
 			 src="../Images/Icon_prefs.png" width="32" height="24"/>
-		 	<label id="footerLabel" style="margin-top: 3px; margin-right: -2px;" 
-		 	class="floatRight footerNote">Settings</label>
+		 	<label id="footerLabel"	class="floatRight footerNote">Settings</label>
 		 </div>
 	</div>
 

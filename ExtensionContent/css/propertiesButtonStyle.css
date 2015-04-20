@@ -29,11 +29,11 @@ Description: Includes styling code related to coordinate button.
 }
 
 #imgPropertiesBullet {
-    background-image: url('../Images/PropertiesDropDownIcons/specNumber.png');
+    background-image: url('../Images/PropertiesDropDownIcons/specBullet.png');
 }
 
 .specBulletSelected {
-	background-image: url('../Images/PropertiesDropDownIcons/specNumber_selected.png') !important;
+	background-image: url('../Images/PropertiesDropDownIcons/specBullet_selected.png') !important;
 	background-color: #D2D2D2;
 }
 
@@ -51,11 +51,11 @@ Description: Includes styling code related to coordinate button.
     }
     
     #imgPropertiesBullet {
-    	background-image: url('../Images/PropertiesDropDownIcons/specNumber_x2.png');
+    	background-image: url('../Images/PropertiesDropDownIcons/specBullet_x2.png');
     	background-size: 49px 49px;
 	}
     .specBulletSelected {
-		background-image: url('../Images/PropertiesDropDownIcons/specNumber_selected_x2.png') !important;
+		background-image: url('../Images/PropertiesDropDownIcons/specBullet_selected_x2.png') !important;
 		background-color: #D2D2D2;
 		background-size: 49px 49px;
     }
