@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ROOT="/Users/${USER}/Dropbox"
-version="3.0.1.m"
+version="${1}m"
 
 java  -jar "${ROOT}/signingtoolkit/ucf.jar" \
       -package \

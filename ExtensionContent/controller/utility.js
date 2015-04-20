@@ -68,14 +68,14 @@ specctrUtility.changeImagesOfTabs = function(selectedTab) {
 	try {
 		var isImageChanged = true, size = "";
 		var iconExtension = ".png";
-		var activeImageEndString = "_active";
-		var tabIconPath = ["../Images/Icon_main", "../Images/Icon_settings", 
-		                   "../Images/Icon_responsive", "../Images/Icon_cloud"];
+		var activeImageEndString = "_selected";
+		var tabIconPath = ["../Images/tabs/tabs_spec", "../Images/tabs/tabs_properties", 
+		                   "../Images/tabs/tabs_responsive", "../Images/tabs/tabs_cloud"];
 		
 		//For retina display: 2 pixel ratio; 
 		//We have only first tab icon in x2 for that 'selectedTab === 1' check is used.
 		if (window.devicePixelRatio > 1 && selectedTab === 1)
-			size = "_x2";
+			size = "";
 
 		tabIconPath[selectedTab-1] += activeImageEndString;	//Set active icon path.
 		
