@@ -99,8 +99,8 @@
 					<ul class="menu">
 	
 						<!-- Property button. -->
-						<li class="border" id="liProperties">
-							<div class="button imgButton" id="btnProperties" 
+						<li id="liProperties">
+							<div class="button border imgButton" id="btnProperties" 
 								onclick="specButtonsClickHandler(this)">
 								<img id="imgProperty" alt="Shape/Text" /> 
 								<label>Properties</label>
@@ -118,17 +118,17 @@
 						</li>
 	
 						<!-- Add Note button. -->
-						<li class="border nonIdElement" onclick="addNoteSpecs()">
-							<div class="button imgButton" id="btnAddNote" onclick="addNoteButton_clickHandler()">
+						<li class="nonIdElement" onclick="addNoteSpecs()">
+							<div class="button border imgButton" id="btnAddNote" onclick="addNoteButton_clickHandler()">
 								<img id="imgNote" alt="Note specs"/>
 								<label>Add Note</label>
 							</div>
 						</li>
 						
 						<!-- Width/Height button. -->
-						<li class="border" id="liWh">
+						<li id="liWh">
 						
-							<div class="button imgButton" id="btnWh" onclick="specButtonsClickHandler(this)">
+							<div class="button border imgButton" id="btnWh" onclick="specButtonsClickHandler(this)">
 								<img id="dimensionIcon"/> 
 								<label>Width/Height</label>
 								<div class="dropdownArrow" id="imgWhDdlArrow"
@@ -157,8 +157,8 @@
 						</li>
 	
 						<!-- Spacing button. -->
-						<li class="border" id="liSpacing">
-							<div class="button imgButton" id="btnSpacing" onclick="specButtonsClickHandler(this)">
+						<li id="liSpacing">
+							<div class="button border imgButton" id="btnSpacing" onclick="specButtonsClickHandler(this)">
 								<img id="spacingIcon"/>
 								<label>Spacing</label>
 								<div id="imgSpacingDdlArrow" class="dropdownArrow"
@@ -177,8 +177,8 @@
 						</li>
 	
 						<!-- Coordinate button. -->
-						<li class="border" id="liCoordinate">
-							<div class="button imgButton" id="btnCoordinate" onclick="specButtonsClickHandler(this)">
+						<li id="liCoordinate">
+							<div class="button border imgButton" id="btnCoordinate" onclick="specButtonsClickHandler(this)">
 								<img id="imgCoordinate" alt="Coordinates" /> 
 								<label>Coordinates</label>
 								<div id="imgCoordinateDdlArrow" class="dropdownArrow"
@@ -197,26 +197,26 @@
 						</li>
 	
 						<!-- Expand button. -->
-						<li class="border" id="liExpand">
-							<div class="button imgButton" id="btnExpand" onclick="expandCanvas()">
+						<li id="liExpand">
+							<div class="button border imgButton" id="btnExpand" onclick="expandCanvas()">
 									<img id="imgExpand" alt="Expand" src="../Images/Icon_expand.png"/> 
 									<label>Expand</label>
 									<div id="imgExpandDdlArrow" class="dropdownArrow"
 										onclick="buttonDropDownClickHandler(event, this)"></div>
 							</div>
 							<div class="options" id="expandDropDown">
-								<div class="option">
+								<div>
 									<label>By</label>
 									<input	id="canvasExpandSize" onclick="itemClickHandler(event)"
-										onchange="textBoxChangeHandler(this.id)" maxlength="4"
+										onchange="textBoxChangeHandler(this.id)" maxlength="4" placeholder="200 px"
 										onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
 								</div>
 							</div>
 						</li>
 						
 						<!-- Export css button. -->
-						<li class="border" onclick="exportCss()">
-							<div class="button imgButton">
+						<li onclick="exportCss()">
+							<div class="button border imgButton">
 								<img id="imgExportCss" alt="Export css"/>
 								<label>Export CSS</label>
 							</div>
@@ -520,7 +520,7 @@
 											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
 										<div class="colorBlock bgColorFF00FF" title="FF00FF"
-											nmouseover="setColorValueToTextBox(this, 'Type')"
+											onmouseover="setColorValueToTextBox(this, 'Type')"
 											onclick="setColorToLabel(this, 'Type')"></div>
 										<div class="colorBlock bgColorFFFFFF" title="FFFFFF"
 											onmouseover="setColorValueToTextBox(this, 'Type')"

@@ -10,7 +10,7 @@ if(typeof($)=== 'undefined')
 $.specctrPsExportCss = {
 	//Generate css string for specs.
 	getCss : function() {
-	    if(!app.documents.length)           //Checking document is open or not.
+        if(!app.documents.length)           //Checking document is open or not.
 	        return;
 	    
 	    try {
@@ -22,19 +22,19 @@ $.specctrPsExportCss = {
 	    
 	    if(ExternalObject.AdobeXMPScript == null)
 	        ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
-	
+
 	    var coordinateSpecsInfo = this.getStyleFromOtherSpecs("Coordinates");           //Get the array of coordinate specs info.
 	    var styleText = $.specctrPsCommon.getCssBodyText();            //Add the body text at the top of css file.
 	    styleText += this.getCssForText(coordinateSpecsInfo);
 	    styleText += this.getCssForShape(coordinateSpecsInfo);
-	    return styleText;
+        return styleText; 
 	},
-		
+
     //Export the spec layer's css to specctr server.
     exportCss : function() {
        var cssInfo = {
 	    	document_name: app.activeDocument.name,
-	    	text: $.specctrPsExportCss.getCss()
+	    	text: this.getCss()
 	    };
 	    return JSON.stringify(cssInfo);
     },

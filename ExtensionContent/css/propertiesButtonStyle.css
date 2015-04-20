@@ -12,11 +12,7 @@ Description: Includes styling code related to coordinate button.
 }
 
 #liProperties .options {
-    height: 50px;
-}
-
-#liProperties:hover .options {
-    margin-left: -1px !important;
+    height: 51px;
 }
 
 #imgPropertiesLine {

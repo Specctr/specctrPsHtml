@@ -11,11 +11,7 @@ Description: Includes styling code related to coordinate button.
 }
 
 #liCoordinate .options {
-    height: 50px;
-}
-
-#liCoordinate:hover .options {
-    margin-left: -1px !important;
+    height: 51px;
 }
 
 #imgTopLeft {

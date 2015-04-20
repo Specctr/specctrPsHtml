@@ -456,10 +456,12 @@ specctrInit.setModelToUIComponents = function() {
 	//Set icons to the buttons.
 	var iconPostString = ".png";
 	var buttonIconPaths = ["../Images/PropertiesDropDownIcons/specLine_selected", 
-	                       "../Images/Icon_coordinates", 
+	                       "../Images/CoordinateButtonIcons/Icon_coordinates", 
 	                       "../Images/DimensionButtonIcons/WH_11", 
 	                       "../Images/SpacingButtonIcons/Spacing_TL", 
-	                       "../Images/Icon_note", "../Images/Icon_exportCSS"];
+	                       "../Images/NoteButtonIcons/Icon_note", 
+	                       "../Images/ExportCssButtonIcons/Icon_exportCSS"];
+	
 	var buttonIds = ["#imgProperty", "#imgCoordinate", "#dimensionIcon", "#spacingIcon", 
 	                 "#imgNote", "#imgExportCss"];
 	

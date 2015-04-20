@@ -68,41 +68,6 @@ label {
 	display: block;
 }
 
-.button {
-	padding-top: 10px;
-	padding-bottom: 10px;
-	background-color: #E8E8E8;
-	width: 198px;
-	margin: 0 auto;
-	cursor: pointer;
-}
-
-.button:hover, .buttonSelected {
-	background-image: none;
-	background-color: #F3F3F3;
-}
-
-.button label {
-	cursor: pointer !important;
-}
-
-.border {
-/* 	border: 1px solid #E6E6E6; */
-	background-image: none;
-	border-top: 1px solid #C9CBCC;
-	border-bottom: 1px solid #6D6F70;
-	background-image: linear-gradient(#C9CBCC, #6D6F70),
-		linear-gradient(#C9CBCC, #6D6F70);
-/* 	background-size: 1px 100%; */
-/* 	background-position: 0 0, 100% 0; */
-/* 	background-repeat: no-repeat; */
-}
-
-.border:hover {
-	border: 1px solid red;
-	background-image: none;
-}
-
 .backGroundColorGrey {
 	background-color: #E1E1E1 !important;
 }
@@ -368,37 +333,14 @@ label {
 /*-------------------------------------------------------------*/
 
 /*---------------Style applied on first tab page---------------*/
-#tabpage_1 .border:hover {
-	width: 198px;
-}
-
-#tabpage_1 .border2:hover {
-	border: 2px solid red;
-	background-image: none;
-	width: 198px;
-	margin-top: 0px;
-}
-
-#tabpage_1 .isOpen:hover {
-	border: 1px solid transparent !important;
-	background-image: none;
-	width: 198px;
-}
-
-#tabpage_1 .isOpen:hover .buttonSelected {
-	margin-left: -1px;
-}
 
 #tabpage_1 .isOpen .buttonSelected {
-	border: 0px solid #000000 !important;
-	border-width: 1px 1px 0px 1px !important;
-	background-image: none;
-	width: 198px;
-	margin-bottom: -1px;
+	border: 1px solid #808080 !important;
+	border-bottom-color: transparent !important;
 }
 
 #tabpage_1 ul {
-	width: 200px !important;
+	width: 198px !important;
 }
 
 .menu {
@@ -408,12 +350,39 @@ label {
 
 .menu li {
 	list-style-type: none;
-	text-align: center;
 	font-family: sans-serif;
 	font-size: 13px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-	width: 200px;
+	width: 198px;
+}
+
+.button {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	background-color: #E8E8E8;
+	width: 198px;
+	margin: 0 auto;
+	cursor: pointer;
+}
+
+.button:hover, .buttonSelected {
+	background-image: none;
+	background-color: #F3F3F3;
+}
+
+.button label {
+	cursor: pointer !important;
+}
+
+.border {
+	border: 1px solid #E8E8E8;
+	background-image: none;
+}
+
+.border:hover {
+	border: 1px solid red;
+	background-image: none;
 }
 
 .imgButton {
@@ -465,10 +434,11 @@ label {
 .options {
 	display: none;
 	width: 198px;
-	border: 1px solid #000;
+	border: 1px solid #808080;
 	position: absolute;
 	background-image: linear-gradient(to bottom, #E1E1E1 0%, #F8F8F8 20%);
 	border-top: none;
+	margin-top: -1px !important;
 }
 
 .option {
@@ -486,8 +456,15 @@ label {
 	font-family: Arial;
 	font-size: 16px;
 	-webkit-user-select: auto;
+	border: none;
 }
 
+#expandDropDown div {
+	width: 200px;
+	height: 50px;
+	cursor: pointer;
+	background-position: center;
+}
 /*-------------------------------------------------------------*/
 
 /*--------------Style applied on second tab page---------------*/

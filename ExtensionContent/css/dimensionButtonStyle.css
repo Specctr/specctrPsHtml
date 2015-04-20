@@ -3,11 +3,7 @@ File-Name: dimensionButtonStyle.css
 Description: Includes styling code related to dimension button. 
 */
 #liWh .options {
-	height: 100px;
-}
-
-#liWh:hover .options {
-	margin-left: -1px !important;
+	height: 101px;
 }
 
 #imgNoSelectionWidth {
