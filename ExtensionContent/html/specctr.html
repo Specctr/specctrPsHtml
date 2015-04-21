@@ -109,10 +109,10 @@
 							</div>
 							
 							<div class="options" id="propertiesDropDown">
-								<div class="option specLineSelected" id="imgPropertiesLine"
-									onclick="dropDownCellClickHandler(this.id, 'specLineSelected', 'Line')"></div>
-								<div class="option" id="imgPropertiesBullet"
+								<div class="option specBulletSelected" id="imgPropertiesBullet"
 									onclick="dropDownCellClickHandler(this.id, 'specBulletSelected', 'Bullet')"></div>
+								<div class="option" id="imgPropertiesLine"
+									onclick="dropDownCellClickHandler(this.id, 'specLineSelected', 'Line')"></div>
 							</div>
 							
 						</li>
@@ -206,8 +206,8 @@
 							</div>
 							<div class="options" id="expandDropDown">
 								<div>
-									<label>By</label>
-									<input	id="canvasExpandSize" onclick="itemClickHandler(event)"
+									<label>By:</label>
+									<input	id="canvasExpandSize" onclick="itemClickHandler(event)" 
 										onchange="textBoxChangeHandler(this.id)" maxlength="4" placeholder="200 px"
 										onkeypress='return event.charCode >= 48 && event.charCode <= 57' />
 								</div>

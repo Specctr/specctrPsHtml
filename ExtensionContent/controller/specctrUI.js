@@ -11,17 +11,17 @@ var specctrUI = {};
  */
 function toggleSettingPage(){
 	specctrUtility.changeTextColor($("#footerLabel"));
-	
+
 	if($("#tabBlock").is(":visible")) {
 		$("#settingIcon").attr("src", "../Images/Icon_prefs_active.png");
 		$("#tabBlock").css("display", "none");
 		$("#settingPage").css("display", "block");
-		$("#settingBlock").addClass("backGroundColorGrey");
+		$("#settingBlock").addClass("bgColorE1E1E1");
 	} else {
 		$("#settingIcon").attr("src", "../Images/Icon_prefs.png");
 		$("#settingPage").css("display", "none");
 		$("#tabBlock").css("display", "block");
-		$("#settingBlock").removeClass("backGroundColorGrey");
+		$("#settingBlock").removeClass("bgColorE1E1E1");
 	}
 }
 
@@ -72,7 +72,7 @@ function itemClickHandler(event) {
  */
 function checkBoxChangeHandler(checkBox) {
 	model[checkBox.id] = checkBox.checked;
-	
+
 	//Change the checkbox label color to blue.
 	var parent = $(checkBox).parent();
 	if ($(parent).hasClass('tabPage2Content')) {

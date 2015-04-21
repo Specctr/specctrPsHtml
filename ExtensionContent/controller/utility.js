@@ -21,7 +21,7 @@ specctrUtility.getHostApp = function() {
 	} else if (appName.indexOf("IDSN") >= 0) {
 		currentApplication = "Id";
 	}
-	
+
 	return currentApplication;
 };
 
@@ -71,19 +71,19 @@ specctrUtility.changeImagesOfTabs = function(selectedTab) {
 		var activeImageEndString = "_selected";
 		var tabIconPath = ["../Images/tabs/tabs_spec", "../Images/tabs/tabs_properties", 
 		                   "../Images/tabs/tabs_responsive", "../Images/tabs/tabs_cloud"];
-		
+
 		//For retina display: 2 pixel ratio; 
 		if (window.devicePixelRatio > 1)
 			size = "";
 
 		tabIconPath[selectedTab-1] += activeImageEndString;	//Set active icon path.
-		
+
 		//Set icons to their respective tabs.
 		for (var i = 0; i < 4; i++) {
 			$("#tabImage_" + (i + 1)).attr("src", 
 					tabIconPath[i] + size + iconExtension);
 		}
-		
+
 	} catch (e) {
 		isImageChanged = false;
 	}

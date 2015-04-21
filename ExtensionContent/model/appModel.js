@@ -4,79 +4,79 @@ Description: This file keeps the global variables used in all other files.
  */
 
 var model = {
-	shapeFill:			true,
-	shapeStroke:		true,
-	shapeEffects:		true,
-	
-	shapeFillColor:		true,
-	shapeFillStyle:		true,
-	shapeStrokeColor:	true,
-	shapeStrokeStyle:	true,
-	shapeStrokeSize:	true,
-	
-	shapeAlpha:			false,
-	shapeBorderRadius: 	false,
+		shapeFill:			true,
+		shapeStroke:		true,
+		shapeEffects:		true,
 
-	textFont:		true,
-	textSize:		true,
-	textAlignment:	true,
-	textColor:		true,
-	textStyle:		true,
-	textLeading:	true,
-	textTracking:	true,
-	textAlpha:		false,
-	textEffects:	true,
+		shapeFillColor:		true,
+		shapeFillStyle:		true,
+		shapeStrokeColor:	true,
+		shapeStrokeStyle:	true,
+		shapeStrokeSize:	true,
 
-	canvasExpandSize: 250,
+		shapeAlpha:			false,
+		shapeBorderRadius: 	false,
 
-	//legend settings
-	legendFont: 			'ArialMT',
-	legendFontFamily:		'Arial',
-	legendFontSize:			12,
-	legendColorObject:		'#FF0000',
-	legendColorType:		'#FF0000',
-	legendColorSpacing:		'#FF0000',
-	legendColorMode:		'RGB',
-	specToEdge:				true,
+		textFont:		true,
+		textSize:		true,
+		textAlignment:	true,
+		textColor:		true,
+		textStyle:		true,
+		textLeading:	true,
+		textTracking:	true,
+		textAlpha:		false,
+		textEffects:	true,
 
-	armWeight:		1,
-	typeUnits: 		'pt',
-	distanceUnits:	'px',
-	
-	//Coordinate spec options
-	coordinateCellNumber:	0,
-	
-	//Spacing spec options
-	spaceLeft:		true,
-	spaceTop:		true,
-	spaceRight:		false,
-	spaceBottom:	false,
+		canvasExpandSize: 250,
 
-	//Dimension spec options
-	heightPos:	1,
-	widthPos:	1,
+		//legend settings
+		legendFont: 			'ArialMT',
+		legendFontFamily:		'Arial',
+		legendFontSize:			12,
+		legendColorObject:		'#FF0000',
+		legendColorType:		'#FF0000',
+		legendColorSpacing:		'#FF0000',
+		legendColorMode:		'RGB',
+		specToEdge:				true,
 
-	//Responsive tab options
-	specInPrcntg:	false,
-	specInEM:		false,
-	relativeHeight:		0,
-	relativeWidth:		0,
-	baseFontSize:	16,
-	baseLineHeight: 22.4,
+		armWeight:		1,
+		typeUnits: 		'pt',
+		distanceUnits:	'px',
 
-	//Scaling specs
-	useScaleBy: false,
-	scaleValue: 'x1',
-	
-	decimalFractionValue: 'decimal',
-	specOption: 'Line'
+		//Coordinate spec options
+		coordinateCellNumber:	0,
+
+		//Spacing spec options
+		spaceLeft:		true,
+		spaceTop:		true,
+		spaceRight:		false,
+		spaceBottom:	false,
+
+		//Dimension spec options
+		heightPos:	1,
+		widthPos:	1,
+
+		//Responsive tab options
+		specInPrcntg:	false,
+		specInEM:		false,
+		relativeHeight:		0,
+		relativeWidth:		0,
+		baseFontSize:	16,
+		baseLineHeight: 22.4,
+
+		//Scaling specs
+		useScaleBy: false,
+		scaleValue: 'x1',
+
+		decimalFractionValue: 'decimal',
+		specOption: 'Bullet'
 };
 
 var filePermission = {
-	ReadOnly : 0444,
-	WriteOnly : 0222,
-	ReadWrite : 0666,
-	ReadWriteExecute : 0777
+		ReadOnly : 0444,
+		WriteOnly : 0222,
+		ReadWrite : 0666,
+		ReadWriteExecute : 0777
 };
 
 var configFilePath = '';
