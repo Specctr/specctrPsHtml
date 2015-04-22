@@ -53,11 +53,20 @@ specctrUtility.enableTextField = function(textField) {
 };
 
 /**
- * Change the label's text color to #blue.
+ * Change the label's text color to #blue of second tab's check-boxes.
  * @param label {label object} Reference of the label.
  */
 specctrUtility.changeTextColor = function(label) {
 	$(label).toggleClass("setBlueLabel");
+};
+
+/**
+ * Set the colorpicker color at the time of initialization.
+ * @param element {element object} Reference of the color picker.
+ */
+specctrUtility.setColorPickerColor = function(elementId, color) {
+	$(elementId).css("background-color", color);
+	$(elementId).parent().children().first().css("color", color);
 };
 
 /**
@@ -71,7 +80,8 @@ specctrUtility.changeImagesOfTabs = function(selectedTab) {
 		var activeImageEndString = "_selected";
 		var tabIconPath = ["../Images/tabs/tabs_spec", "../Images/tabs/tabs_properties", 
 		                   "../Images/tabs/tabs_responsive", "../Images/tabs/tabs_cloud"];
-
+		var arrayLength = tabIconPath.length;
+		
 		//For retina display: 2 pixel ratio; 
 		if (window.devicePixelRatio > 1)
 			size = "";
@@ -79,7 +89,7 @@ specctrUtility.changeImagesOfTabs = function(selectedTab) {
 		tabIconPath[selectedTab-1] += activeImageEndString;	//Set active icon path.
 
 		//Set icons to their respective tabs.
-		for (var i = 0; i < 4; i++) {
+		for (var i = 0; i < arrayLength; i++) {
 			$("#tabImage_" + (i + 1)).attr("src", 
 					tabIconPath[i] + size + iconExtension);
 		}

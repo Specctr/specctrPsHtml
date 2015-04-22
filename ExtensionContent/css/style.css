@@ -499,6 +499,7 @@ label {
 	padding-top: 5px;
 	padding-left: 8px;
 }
+
 /*-------------------------------------------------------------*/
 
 /*--------------Style applied on third tab page----------------*/
@@ -633,14 +634,14 @@ label {
 .firstChildRightBlock {
 	font-family: Arial;
 	font-size: 11px;
-	width: 70px;
+	width: 75px;
 	display: table-cell;
 	vertical-align: top;
 }
 
 .firstChildRightBlock label {
 	float: left;
-	margin-left: 5px;
+	margin-left: 2px;
 	font-weight: normal;
 	color: #707070;
 }

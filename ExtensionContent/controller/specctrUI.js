@@ -51,11 +51,11 @@ function tabClickHandler() {
 
 		$("#tabpage_" + ident).css("display", "block");
 		this.parentNode.setAttribute("data-current", ident);
+		
 	} catch (e) {
-		console.log(e);
 		return false;
 	}
-
+	
 	return true;
 }
 
@@ -231,6 +231,7 @@ function setColorToLabel(element, colorPickerBlock) {
 
 	$("#col" + colorPickerBlock).css("background-color", color);
 	$("#" + element.parentNode.id).slideUp(100);
+	$(element.parentNode.parentNode).children().first().css("color", color);
 	model[value] = color;
 	pref.writeAppPrefs();
 }

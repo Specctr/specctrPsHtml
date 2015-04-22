@@ -185,12 +185,8 @@ function evalScript(script, callback) {
  * Evaluates the script and pass the model object to extendscript file(.jsx).
  */
 function setModel() {
-	try {
-		var methodName = "setModel('" + JSON.stringify(model) + "')";
-		evalScript("$.specctr" + hostApplication + "." + methodName);
-	} catch (e) {
-		console.log(e);
-	}
+	var methodName = "setModel('" + JSON.stringify(model) + "')";
+	evalScript("$.specctr" + hostApplication + "." + methodName);
 }
 
 /**
@@ -198,14 +194,9 @@ function setModel() {
  */
 function expandCanvas() {
 	analytics.trackFeature('expand_canvas');
-
-	try {
-		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "createCanvasBorder()");
-		writeAppPrefs();
-	} catch (e) {
-		console.log(e);
-	}
+	setModel();
+	evalScript("$.specctr" + hostApplication + "." + "createCanvasBorder()");
+	pref.writeAppPrefs();
 }
 
 /**
@@ -213,12 +204,8 @@ function expandCanvas() {
  */
 function createDimensionSpecs() {
 	analytics.trackFeature('create_dimension_specs');
-	try {
-		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "createDimensionSpecs()");
-	} catch (e) {
-		console.log(e);
-	}
+	setModel();
+	evalScript("$.specctr" + hostApplication + "." + "createDimensionSpecs()");
 }
 
 /**
@@ -226,13 +213,8 @@ function createDimensionSpecs() {
  */
 function createSpacingSpecs() {
 	analytics.trackFeature('create_spacing_specs');
-
-	try {
-		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "createSpacingSpecs()");
-	} catch (e) {
-		console.log(e);
-	}
+	setModel();
+	evalScript("$.specctr" + hostApplication + "." + "createSpacingSpecs()");
 }
 
 /**
@@ -240,13 +222,8 @@ function createSpacingSpecs() {
  */
 function createCoordinateSpecs() {
 	analytics.trackFeature('create_coordinate_specs');
-
-	try {
-		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "createCoordinateSpecs()");
-	} catch (e) {
-		console.log(e);
-	}
+	setModel();
+	evalScript("$.specctr" + hostApplication + "." + "createCoordinateSpecs()");
 }
 
 /**
@@ -254,13 +231,8 @@ function createCoordinateSpecs() {
  */
 function addNoteSpecs() {
 	analytics.trackFeature('create_note_specs');
-
-	try {
-		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs()");
-	} catch (e) {
-		console.log(e);
-	}
+	setModel();
+	evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs()");
 }
 
 /**
@@ -268,13 +240,8 @@ function addNoteSpecs() {
  */
 function createPropertySpecs() {
 	analytics.trackFeature('create_property_specs');
-
-	try {
-		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()");
-	} catch (e) {
-		console.log(e);
-	}
+	setModel();
+	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()");
 }
 
 /**
@@ -282,38 +249,35 @@ function createPropertySpecs() {
  */
 function exportCss() {
 	analytics.trackFeature('export_css');
+	setModel();
 
-	try {
-		setModel();
-
-		// Upload specs to Specctr.
-		evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo){
-
-			var css = JSON.parse(cssInfo);
-			var cssJson = CSSJSON.toJSON(css.text);
-			var data = JSON.stringify({
-				api_key: api_key,
-				machine_id: machine_id,
-				document_name: css.document_name,
-				css_items: cssJson.children
-			});
-			$.ajax({
-				url: SPECCTR_API + "/css_items",
-				type: "POST",
-				contentType: "application/json;charset=utf-8",
-				dataType: "json",
-				data: data,
-				success: function(response) {
-					specctrUI.showDialog('success');
-				},
-				error: function(xhr) {
-					specctrUI.showDialog('error');
-				}
-			});
+	// Upload specs to Specctr.
+	evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo){
+		pref.writeFile("G:\\text.txt", cssInfo);
+alert(cssInfo);
+		var css = JSON.parse(cssInfo);
+		var cssJson = CSSJSON.toJSON(css.text);
+		var data = JSON.stringify({
+			api_key: api_key,
+			machine_id: machine_id,
+			document_name: css.document_name,
+			css_items: cssJson.children
 		});
-	} catch (e) {
-		console.log(e);
-	}
+
+		$.ajax({
+			url: SPECCTR_API + "/css_items",
+			type: "POST",
+			contentType: "application/json;charset=utf-8",
+			dataType: "json",
+			data: data,
+			success: function(response) {
+				specctrUI.showDialog('success');
+			},
+			error: function(xhr) {
+				specctrUI.showDialog('error');
+			}
+		});
+	});
 }
 
 /**
@@ -420,19 +384,21 @@ specctrInit.setModelValueFromPreferences = function() {
 	}
 
 	Array.prototype.push.apply(propertyName, propertyApplicationSpecific);
-	var noOfPropertyItem = propertyName.length;
-	for (i = 0; i < noOfPropertyItem; i++){
+	var arrayLength = propertyName.length;
+	for (i = 0; i < arrayLength; i++){
 		model[propertyName[i]] = appPrefs[propertyName[i]] ? true : false;
 	}
 
 	var textBoxIds = ["canvasExpandSize", "legendFontSize", "armWeight"];
-	for (i = 0; i < 3; i++) {
+	arrayLength = textBoxIds.length;
+	for (i = 0; i < arrayLength; i++) {
 		model[textBoxIds[i]] = Number(appPrefs[textBoxIds[i]]);
 	}
 
 	var dropDownIds = ["legendColorObject", "legendColorType", "legendColorSpacing",
 	                   "legendColorMode", "decimalFractionValue", "legendFont"];
-	for (i = 0; i < 6; i++) {
+	arrayLength = dropDownIds.length;
+	for (i = 0; i < arrayLength; i++) {
 		if (appPrefs.hasOwnProperty(dropDownIds[i]))
 			model[dropDownIds[i]] = appPrefs[dropDownIds[i]];
 	}
@@ -442,7 +408,6 @@ specctrInit.setModelValueFromPreferences = function() {
  * Set model values to UI components.
  */
 specctrInit.setModelToUIComponents = function() {
-
 	//Set icons to the buttons.
 	var iconPostString = ".png";
 	var buttonIconPaths = ["../Images/PropertiesDropDownIcons/specBullet_selected", 
@@ -458,7 +423,8 @@ specctrInit.setModelToUIComponents = function() {
 	if(window.devicePixelRatio > 1)	//For retina display: 2 pixel ratio; 
 		iconPostString = "_x2" + iconPostString;
 
-	for (var i = 0; i < 6; i++) {
+	var arrayLength = buttonIds.length;
+	for (var i = 0; i < arrayLength; i++) {
 		$(buttonIds[i]).attr("src", buttonIconPaths[i] + iconPostString);
 	}
 
@@ -484,9 +450,9 @@ specctrInit.setModelToUIComponents = function() {
 	}
 
 	Array.prototype.push.apply(checkBoxesId, appSpecificCheckBoxesId);
-	var totalCheckBoxes = checkBoxesId.length;
+	arrayLength = checkBoxesId.length;
 
-	for (var i = 0; i < totalCheckBoxes; i++) {
+	for (var i = 0; i < arrayLength; i++) {
 		var checkBox = $("#" + checkBoxesId[i]); 
 		checkBox.prop("checked", model[checkBoxesId[i]]);
 		var parent = checkBox.parent();
@@ -495,14 +461,15 @@ specctrInit.setModelToUIComponents = function() {
 	}
 
 	//Set color for dropdown.
-	$("#colObject").css("background-color", model.legendColorObject);
-	$("#colType").css("background-color", model.legendColorType);
-	$("#colSpacing").css("background-color", model.legendColorSpacing);
-
+	specctrUtility.setColorPickerColor("#colObject", model.legendColorObject);
+	specctrUtility.setColorPickerColor("#colType", model.legendColorType);
+	specctrUtility.setColorPickerColor("#colSpacing", model.legendColorSpacing);
+	
 	//Set radio buttons values.
 	var radioButtonIds = [model.legendColorMode.toLowerCase(), 
 	                      model.decimalFractionValue];
-	for (var i = 0; i < 2; i++) {
+	arrayLength = radioButtonIds.length;
+	for (var i = 0; i < arrayLength; i++) {
 		$("#" + radioButtonIds[i] + "RadioButton").prop("checked", true);
 	}
 
@@ -526,8 +493,9 @@ specctrInit.setModelToResponsive = function() {
 	                    "baseFontSize", "baseLineHeight"];
 
 	var checkBoxIds = ["specInPrcntg", "specInEM"];
+	var arrayLength = textFieldIds.length;
 
-	for (var i = 0; i < 4; i += 2) {
+	for (var i = 0; i < arrayLength; i += 2) {
 		$("#" + checkBoxIds[i/2]).prop("checked", model[checkBoxIds[i/2]]);
 		if (model[checkBoxIds[i/2]]) {
 			specctrUtility.enableTextField(textFieldIds[i]);

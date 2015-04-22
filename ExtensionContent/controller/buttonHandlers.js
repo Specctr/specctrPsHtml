@@ -211,82 +211,67 @@ buttonFeature.removeClassesOfCell = function(parent, classArray, startIndex) {
  * Change the dimension button icon according to the selection of cells in the grid.
  * */
 buttonFeature.changeDimensionButtonIcon = function() {
-	//Handle the exceptions like no image is found..
-	try {
-		var imagePath = "../Images/DimensionButtonIcons/WH_";
-		var imageExtension = ".png";
+	var imagePath = "../Images/DimensionButtonIcons/WH_";
+	var imageExtension = ".png";
 
-		//For retina display: 2 pixel ratio; 
-		if(window.devicePixelRatio > 1)
-			imageExtension = "_x2.png";
+	//For retina display: 2 pixel ratio; 
+	if(window.devicePixelRatio > 1)
+		imageExtension = "_x2.png";
 
-		var dimensionIcons = [];
-		var min = 0, max = 3;
+	var dimensionIcons = [];
+	var min = 0, max = 3;
 
-		//Creating and initializing 2D array with dimension button icons.
-		for (var i = min; i <= max; i++) {
-			dimensionIcons.push([]);
-			dimensionIcons[i].push(new Array(max));
-			for (var j = min; j <= max; j++)
-				dimensionIcons[i][j] = imagePath + i + "" + j + imageExtension;
-		}
-
-		$("#dimensionIcon").attr("src", dimensionIcons[model.widthPos][model.heightPos]);
-	} catch (e) {
-		console.log(e);
+	//Creating and initializing 2D array with dimension button icons.
+	for (var i = min; i <= max; i++) {
+		dimensionIcons.push([]);
+		dimensionIcons[i].push(new Array(max));
+		for (var j = min; j <= max; j++)
+			dimensionIcons[i][j] = imagePath + i + "" + j + imageExtension;
 	}
+
+	$("#dimensionIcon").attr("src", dimensionIcons[model.widthPos][model.heightPos]);
 };
 
 /**
  * Change the spacing button icon according to the selection of cells in the grid.
  * */
 buttonFeature.changeSpacingButtonIcon = function() {
-	try {
-		var iconPath = "../Images/SpacingButtonIcons/Spacing_";
-		var imageExtension = ".png";
+	var iconPath = "../Images/SpacingButtonIcons/Spacing_";
+	var imageExtension = ".png";
 
-		//For retina display: 2 pixel ratio; 
-		if(window.devicePixelRatio > 1)
-			imageExtension = "_x2.png";
+	//For retina display: 2 pixel ratio; 
+	if(window.devicePixelRatio > 1)
+		imageExtension = "_x2.png";
 
-		//Array of spacing button icons.
-		var spacingIcons = [ iconPath + "None" + imageExtension, iconPath + "B" + imageExtension,
-		                     iconPath + "L" + imageExtension, iconPath + "BL" + imageExtension, 
-		                     iconPath + "R" + imageExtension, iconPath + "BR" + imageExtension, 
-		                     iconPath + "LR" + imageExtension, iconPath + "BLR" + imageExtension,
-		                     iconPath + "T" + imageExtension, iconPath + "BT" + imageExtension, 
-		                     iconPath + "TL" + imageExtension, iconPath + "LTB" + imageExtension, 
-		                     iconPath + "TR" + imageExtension, iconPath + "BTR" + imageExtension, 
-		                     iconPath + "LTR" + imageExtension, iconPath + "All" + imageExtension];
+	//Array of spacing button icons.
+	var spacingIcons = [ iconPath + "None" + imageExtension, iconPath + "B" + imageExtension,
+	                     iconPath + "L" + imageExtension, iconPath + "BL" + imageExtension, 
+	                     iconPath + "R" + imageExtension, iconPath + "BR" + imageExtension, 
+	                     iconPath + "LR" + imageExtension, iconPath + "BLR" + imageExtension,
+	                     iconPath + "T" + imageExtension, iconPath + "BT" + imageExtension, 
+	                     iconPath + "TL" + imageExtension, iconPath + "LTB" + imageExtension, 
+	                     iconPath + "TR" + imageExtension, iconPath + "BTR" + imageExtension, 
+	                     iconPath + "LTR" + imageExtension, iconPath + "All" + imageExtension];
 
-		//Calculate the index of button icon.
-		var indexSpacingIcon = (model.spaceTop | 0) * 8
-		+ (model.spaceRight | 0) * 4 + (model.spaceLeft | 0) * 2
-		+ (model.spaceBottom | 0);
+	//Calculate the index of button icon.
+	var indexSpacingIcon = (model.spaceTop | 0) * 8
+	+ (model.spaceRight | 0) * 4 + (model.spaceLeft | 0) * 2
+	+ (model.spaceBottom | 0);
 
-		$("#spacingIcon").attr("src", spacingIcons[indexSpacingIcon]);
-	} catch (e) {
-		console.log(e);
-	}
+	$("#spacingIcon").attr("src", spacingIcons[indexSpacingIcon]);
 };
 
 /**
  * Change the property button icon according to the selection of cells in the grid.
  * */
 buttonFeature.changePropertyButtonIcon = function (){
-	try {
-		var iconPath = "../Images/PropertiesDropDownIcons/spec";
-		var imageExtension = ".png";
+	var iconPath = "../Images/PropertiesDropDownIcons/spec";
+	var imageExtension = ".png";
 
-		//For retina display: 2 pixel ratio; 
-		if(window.devicePixelRatio > 1)
-			imageExtension = "_x2.png";
+	//For retina display: 2 pixel ratio; 
+	if(window.devicePixelRatio > 1)
+		imageExtension = "_x2.png";
 
-		iconPath = iconPath + model.specOption + "_selected" + imageExtension;
-		$("#imgProperty").attr("src", iconPath);
-
-	} catch (e) {
-		console.log(e);
-	}
-
+	iconPath = iconPath + model.specOption + "_selected" + imageExtension;
+	$("#imgProperty").attr("src", iconPath);
 };
