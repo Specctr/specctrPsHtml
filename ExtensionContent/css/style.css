@@ -68,8 +68,8 @@ label {
 	display: block;
 }
 
-.bgColorE1E1E1 {
-	background-color: #E1E1E1 !important;
+.bgColorE6E6E6 {
+	background-color: #E6E6E6 !important;
 }
 
 .bgColor000000 {
@@ -545,7 +545,27 @@ label {
 #settingPage {
 	padding-left: 9px !important;
 	height: 605px !important;
-	background-color: #E1E1E1;
+	background-color: #E6E6E6;
+}
+
+.settingHeader {
+	text-align: center;
+	font-family: Arial;
+	font-size: 11px;
+	font-style: bold;
+	color: #808080;
+	background-color: #E6E6E6;
+	width: 222px;
+	height: 20px;
+	padding-top: 5px;
+	margin-left: -10px;
+}
+
+.settingHeader img {
+	float: right;
+	width: 20px;
+	height: 20px;
+	margin-top: -4px !important;
 }
 
 .settingline {

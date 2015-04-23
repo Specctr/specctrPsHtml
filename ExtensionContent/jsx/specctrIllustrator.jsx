@@ -257,7 +257,7 @@ $.specctrAi = {
             var styleText = cssBodyText;            //Add the body text at the top of css file.
             styleText += this.getCssForText(coordinateSpecsInfo);        //Get the style text for those Text items on which property specs is applied.
             styleText += this.getCssForPathItems(coordinateSpecsInfo);    //Get the style text for those Path items on which property specs is applied.    
-        
+
             if (styleText == "") {
                 alert("Unable to export the specs!");
                 return isExportedSuccessfully;
@@ -267,6 +267,7 @@ $.specctrAi = {
 	    	document_name: app.activeDocument.name,
 	    	text: styleText
             };
+
             return JSON.stringify(cssInfo);
         
         } catch(e) {
@@ -638,7 +639,7 @@ $.specctrAi = {
                 bottom = Math.round(bottom / relativeTop * 100) + "%";
             }
         
-            var styleText = "\tleft: " + left + ";\r\ttop: " + top + ";" +
+            var styleText = "\tleft: " + left + ";\r\ttop: " + top +
                             ";\r\tright: " + right + ";\r\tbottom: " + bottom + ";";
 
             var newColor = this.legendColor(model.legendColorSpacing);
@@ -1329,7 +1330,7 @@ $.specctrAi = {
                 try {
                     dataString = this.separateNoteAndStyleText(allPageItems[i].note);
                     
-                    if (dataString.search("-css:") > 0) {
+                    if (dataString.search("-css:") > 0 && updateSpecName == "propertySpec") {
                         if (!buttonInvoked)
                             cssText = this.separateNoteAndStyleText(allPageItems[i].note, "style");
                     
@@ -1380,7 +1381,8 @@ $.specctrAi = {
                         var data = noteData["spec"];
                         if (!buttonInvoked && propSpecUndo[idVar.name] && propSpecUndo[idVar.name].updated 
                             && data.updated && data.updated != propSpecUndo[idVar.name].updated) {
-                            spec.note = spec.note + "-css:" + cssText;
+                            if(cssText)
+                                spec.note = spec.note + "-css:" + cssText;
                             propSpecUndo[idVar.name].updated = data.updated;
                             return;
                         }
@@ -1388,7 +1390,8 @@ $.specctrAi = {
 
                     if (arm && model.specOption == "Line" && !this.positionChanged(source, noteData["source"].position) && 
                             !this.positionChanged(spec, noteData["spec"].position)) {
-                        spec.note = spec.note + "-css:" + cssText;
+                        if(cssText)
+                            spec.note = spec.note + "-css:" + cssText;
                         return true;
                     }
                 }
@@ -1560,8 +1563,8 @@ $.specctrAi = {
                         //Create text at given font size, font value, font color.
                         var textColor = new RGBColor();
                         textColor.red = 255;
-                        textColor.green = 0;
-                        textColor.blue = 0;
+                        textColor.green = 255;
+                        textColor.blue = 255;
                         
                         var specNumber = app.activeDocument.textFrames.add();
                         specNumber.contents = noOfSpecs;
@@ -1570,8 +1573,7 @@ $.specctrAi = {
                         specNumber.textRange.characterAttributes.size = model.legendFontSize;
 
                         dia = Math.abs(specNumber.visibleBounds[3] - specNumber.visibleBounds[1]) + 8;
-                        alert(dia + " " + Math.abs(specNumber.visibleBounds[3] - specNumber.visibleBounds[1]));
-                        firstBullet = this.createBullet(newColor, specNumber, dia,
+                         firstBullet = this.createBullet(newColor, specNumber, dia,
                                                    spec.visibleBounds[1], spec.visibleBounds[0]);
                         if (group)
                             firstBullet.move(group, ElementPlacement.INSIDE);
@@ -1676,6 +1678,7 @@ $.specctrAi = {
             } catch (e) {
                 alert(e);
             }
+
             if(!noOfSpecs)
                 noOfSpecs = 1;
                 
@@ -1685,6 +1688,10 @@ $.specctrAi = {
                 for (var i = 0; i < allPageItems.length; i++) {
                     try {
                         var dataString = this.separateNoteAndStyleText(allPageItems[i].note);
+    
+                        if (dataString.search("-css:") > 0)
+                            cssText = this.separateNoteAndStyleText(allPageItems[i].note, "style");
+                        
                         allPageItems[i].note = dataString;
                         var data;
                         try {
@@ -1732,12 +1739,19 @@ $.specctrAi = {
                 } catch(e){}
             }
             
-            //If spec
             if (idVar && !isSpecCreated) {
+                
+                if(cssText)
+                    spec.note = spec.note + "-css:" + cssText;
+                
                 this.updateConnection("propertySpec");
                 return;
             }
 
+            //If font has not any bold type member.
+            if(!newFontName)
+                newFontName = model.legendFont;
+                
             if (!group)  //positioning
                 group = app.activeDocument.groupItems.add();
              
@@ -1852,6 +1866,7 @@ $.specctrAi = {
             }
 
              if(model.specOption == "Bullet") {
+
                 specctrLayer.note = noOfSpecs + 1;
                 var dia;
                  //Create text at given font size, font value, font color.
@@ -1859,7 +1874,7 @@ $.specctrAi = {
                 textColor.red = 255;
                 textColor.green = 255;
                 textColor.blue = 255;
-                
+
                 var number = app.activeDocument.textFrames.add();
                 number.contents = noOfSpecs;
                 number.textRange.characterAttributes.fillColor = textColor;
@@ -1869,6 +1884,7 @@ $.specctrAi = {
                  dia = Math.abs(number.visibleBounds[3] - number.visibleBounds[1]) + 8;
                  firstBullet = this.createBullet(newColor, number, dia,
                                            spec.visibleBounds[1], spec.visibleBounds[0]);
+                
                  secondBullet = firstBullet.duplicate();
                  secondBullet.translate(pageItemBounds[0] - secondBullet.visibleBounds[0] - dia - 1, 
                         pageItemBounds[1] - secondBullet.visibleBounds[1]);
@@ -1992,6 +2008,8 @@ $.specctrAi = {
                 for (var i = 0; i < allPageItems.length; i++) {
                     try {
                         var dataString = this.separateNoteAndStyleText(allPageItems[i].note);
+                        if (dataString.search("-css:") > 0)
+                            cssText = this.separateNoteAndStyleText(allPageItems[i].note, "style");
                         allPageItems[i].note = dataString;
                         var data;
                         try {    
@@ -2013,8 +2031,9 @@ $.specctrAi = {
                 }
             }
         
-        var yReference = 0;
-        
+            var yReference = 0;
+            if(cssText) 
+                propertySpec.note = propertySpec.note + "-css:" + cssText;
 
             if (!spec) {
                 isSpecCreated = true;
@@ -2578,9 +2597,8 @@ $.specctrAi = {
     getSpecsInfoForPathItem : function(pageItem) {
         var infoText = "";
         var pathItem = pageItem;
-        
         var name = pageItem.name;
-        
+
         if (!name)
             name = "<Path>";
             
@@ -2589,9 +2607,10 @@ $.specctrAi = {
         
         if (model.shapeFillStyle || model.shapeFillColor) {    
             try {
+                
                 infoText += "Fill:";
-                cssText += "\tfill: ";
                 if (model.shapeFillStyle) {
+                    cssText += "\tfill: ";
                     if(pathItem.filled) {
                         infoText += "\rSolid";
                         cssText += "solid;";
@@ -2604,7 +2623,7 @@ $.specctrAi = {
                 if (model.shapeFillColor && pathItem.filled) {
                     var color = this.colorAsString(pathItem.fillColor);
                     infoText += "\r" + color;
-                    cssText += "\r\tcolor: " + color.toLowerCase()+";";
+                    cssText += "\r\tbackground: " + color.toLowerCase()+";";
                 }
             } catch(e) {}
         }

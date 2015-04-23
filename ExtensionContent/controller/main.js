@@ -253,8 +253,7 @@ function exportCss() {
 
 	// Upload specs to Specctr.
 	evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo){
-		pref.writeFile("G:\\text.txt", cssInfo);
-alert(cssInfo);
+
 		var css = JSON.parse(cssInfo);
 		var cssJson = CSSJSON.toJSON(css.text);
 		var data = JSON.stringify({
@@ -415,10 +414,11 @@ specctrInit.setModelToUIComponents = function() {
 	                       "../Images/DimensionButtonIcons/WH_11", 
 	                       "../Images/SpacingButtonIcons/Spacing_TL", 
 	                       "../Images/NoteButtonIcons/Icon_note", 
+	                       "../Images/ExpandButtonIcons/Icon_expand",
 	                       "../Images/ExportCssButtonIcons/Icon_exportCSS"];
 
 	var buttonIds = ["#imgProperty", "#imgCoordinate", "#dimensionIcon", "#spacingIcon", 
-	                 "#imgNote", "#imgExportCss"];
+	                 "#imgNote", "#imgExpand", "#imgExportCss"];
 
 	if(window.devicePixelRatio > 1)	//For retina display: 2 pixel ratio; 
 		iconPostString = "_x2" + iconPostString;

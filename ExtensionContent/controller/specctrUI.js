@@ -16,12 +16,12 @@ function toggleSettingPage(){
 		$("#settingIcon").attr("src", "../Images/Icon_prefs_active.png");
 		$("#tabBlock").css("display", "none");
 		$("#settingPage").css("display", "block");
-		$("#settingBlock").addClass("bgColorE1E1E1");
+		$("#settingBlock").addClass("bgColorE6E6E6");
 	} else {
 		$("#settingIcon").attr("src", "../Images/Icon_prefs.png");
 		$("#settingPage").css("display", "none");
 		$("#tabBlock").css("display", "block");
-		$("#settingBlock").removeClass("bgColorE1E1E1");
+		$("#settingBlock").removeClass("bgColorE6E6E6");
 	}
 }
 
