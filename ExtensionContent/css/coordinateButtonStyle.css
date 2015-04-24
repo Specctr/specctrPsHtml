@@ -5,15 +5,6 @@ File-Name: coordinateButtonStyle.css
 Description: Includes styling code related to coordinate button. 
 */
 
-#liCoordinate .option {
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-#liCoordinate .options {
-    height: 51px;
-}
-
 #imgTopLeft {
     background-image: url('../Images/CoordinateDropDownIcons/coordinates_topleft.png');
 }

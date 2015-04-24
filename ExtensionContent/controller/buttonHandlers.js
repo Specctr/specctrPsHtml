@@ -112,7 +112,7 @@ function dropDownCellClickHandler(cellId, selectionClass, modelValue) {
 			classForSelection = ["topLeftSelected", "topRightSelected",
 			                     "bottomRightSelected", "bottomLeftSelected"];
 			buttonFeature.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
-			model[modelValue] = selectedCellIndex;
+			model.coordinateCellNumber = selectedCellIndex;
 			cellHandler.addClass(selectionClass);
 
 		} else {

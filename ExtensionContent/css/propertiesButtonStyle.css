@@ -6,13 +6,7 @@ Description: Includes styling code related to coordinate button.
 */
 
 #liProperties .option {
-    background-repeat: no-repeat;
-    background-position: center;
-    width: 99px;
-}
-
-#liProperties .options {
-    height: 51px;
+    width: 111px;
 }
 
 #imgPropertiesLine {

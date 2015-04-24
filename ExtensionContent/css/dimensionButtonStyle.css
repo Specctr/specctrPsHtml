@@ -2,8 +2,9 @@
 File-Name: dimensionButtonStyle.css
 Description: Includes styling code related to dimension button. 
 */
+
 #liWh .options {
-	height: 101px;
+	height: 100px;
 }
 
 #imgNoSelectionWidth {

@@ -3,15 +3,6 @@ File-Name: spacingButtonStyle.css
 Description: Includes styling code related to spacing button. 
 */
 
-#liSpacing .option {
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-#liSpacing .options {
-    height: 51px;
-}
-
 #imgSpaceTop {
     background-image: url('../Images/SpacingDropDownIcons/SpaceTop.png');
 }

@@ -100,7 +100,7 @@
 	
 						<!-- Property button. -->
 						<li id="liProperties">
-							<div class="button border imgButton" id="btnProperties" 
+							<div class="button border " id="btnProperties" 
 								onclick="specButtonsClickHandler(this)">
 								<img id="imgProperty" alt="Shape/Text" /> 
 								<label>Properties</label>
@@ -119,7 +119,7 @@
 	
 						<!-- Add Note button. -->
 						<li class="nonIdElement" onclick="addNoteSpecs()">
-							<div class="button border imgButton" id="btnAddNote" onclick="addNoteButton_clickHandler()">
+							<div class="button border " id="btnAddNote" onclick="addNoteButton_clickHandler()">
 								<img id="imgNote" alt="Note specs"/>
 								<label>Add Note</label>
 							</div>
@@ -128,7 +128,7 @@
 						<!-- Width/Height button. -->
 						<li id="liWh">
 						
-							<div class="button border imgButton" id="btnWh" onclick="specButtonsClickHandler(this)">
+							<div class="button border " id="btnWh" onclick="specButtonsClickHandler(this)">
 								<img id="dimensionIcon"/> 
 								<label>Width/Height</label>
 								<div class="dropdownArrow" id="imgWhDdlArrow"
@@ -157,7 +157,7 @@
 	
 						<!-- Spacing button. -->
 						<li id="liSpacing">
-							<div class="button border imgButton" id="btnSpacing" onclick="specButtonsClickHandler(this)">
+							<div class="button border " id="btnSpacing" onclick="specButtonsClickHandler(this)">
 								<img id="spacingIcon"/>
 								<label>Spacing</label>
 								<div id="imgSpacingDdlArrow" class="dropdownArrow"
@@ -177,7 +177,7 @@
 	
 						<!-- Coordinate button. -->
 						<li id="liCoordinate">
-							<div class="button border imgButton" id="btnCoordinate" onclick="specButtonsClickHandler(this)">
+							<div class="button border " id="btnCoordinate" onclick="specButtonsClickHandler(this)">
 								<img id="imgCoordinate" alt="Coordinates" /> 
 								<label>Coordinates</label>
 								<div id="imgCoordinateDdlArrow" class="dropdownArrow"
@@ -197,7 +197,7 @@
 	
 						<!-- Expand button. -->
 						<li id="liExpand">
-							<div class="button border imgButton" id="btnExpand" onclick="expandCanvas()">
+							<div class="button border " id="btnExpand" onclick="expandCanvas()">
 									<img id="imgExpand" alt="Expand"/> 
 									<label>Expand</label>
 									<div id="imgExpandDdlArrow" class="dropdownArrow"
@@ -215,7 +215,7 @@
 						
 						<!-- Export css button. -->
 						<li onclick="exportCss()">
-							<div class="button border imgButton">
+							<div class="button border ">
 								<img id="imgExportCss" alt="Export css"/>
 								<label>Export CSS</label>
 							</div>
@@ -335,7 +335,7 @@
 	
 					<div class="responsivePageHeader marginBottom20px">Distance/Spacing</div>
 	
-					<div class="tabPageCheckBoxRow height100px" >
+					<div class="tabPageCheckBoxRow marginLeft14px height100px" >
 						<input type="checkbox" value="1" id="specInPrcntg"
 							onchange="specInPercentageChangeHandler()" /> 
 						<label for="specInPrcntg">Spec Distance by %</label>
@@ -359,7 +359,7 @@
 	
 					<div class="responsivePageHeader marginBottom20px">Base Typography</div>
 	
-					<div class="tabPageCheckBoxRow height100px">
+					<div class="tabPageCheckBoxRow marginLeft14px height100px">
 						<input type="checkbox" value="1" id="specInEM"
 							onchange="specInEMChangeHandler(this)" /> 
 						<label for="specInEM">Spec in em</label>
@@ -393,7 +393,7 @@
 					<div class="marginTop30px">
 						<label class="subscriptionNote boldText">SUBSCRIPTION PLAN:</label>
 					</div>
-					<div class="marginTop20px">
+					<div class="marginTop20px width216px">
 						<label class="subscriptionNote floatRight">15 DAYS REMAINING</label>
 						<label class="subscriptionNote floatLeft">TRIAL</label>
 					</div>
@@ -424,7 +424,6 @@
 							</select>
 						</div>
 
-						 	
 				 		<label class="marginTopBottom10px width150px">SPEC COLOR</label>
 					 		<div>
 								<div class="colorPickerStyle">
@@ -617,7 +616,7 @@
 					</div>
 				</div>
 				
-				<div class="tabPageCheckBoxRow marginTopBottom10px marginTop15px" id="specToEdgeCheckbox">
+				<div class="tabPageCheckBoxRow marginTopBottom10px" id="specToEdgeCheckbox">
 					<input type="checkbox" value="CanvasEdge" id="specToEdge"
 						onclick="checkBoxChangeHandler(this)" /> 
 					<label class="settingPageLabel" for="specToEdge">Print Spec to Canvas Edge</label>
@@ -654,7 +653,7 @@
 					</div>
 				</form>
 				
-				<div class="tabPageCheckBoxRow marginLeft6px marginTopBottom20px" id="includeStrokeCheckbox">
+				<div class="tabPageCheckBoxRow" id="includeStrokeCheckbox">
 					<input type="checkbox" id="includeStroke" onclick="checkBoxChangeHandler(this)" /> 
 					<label class="settingPageLabel" for="includeStroke">Include Stroke in Measurement</label>
 				</div>
