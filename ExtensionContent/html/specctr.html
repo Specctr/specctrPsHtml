@@ -627,9 +627,9 @@
 
 				<div class="settingPageSecondChildBlock marginTop20px" id="colorList">
 					<label class="marginTopBottom10px width150px settingPageLabel">COLOR MODE</label>
-					<select class="dropdown" id="lstColorMode" 
+					<select class="dropdown" id="lstColorMode" onclick="itemClickHandler(event)"
 						onchange="comboBoxChangeHandler(this, 'legendColorMode')">
-						<option value="RGB AS HEX">RGB AS HEX</option>
+						<option value="HEX">HEX</option>
 						<option value="RGB">RGB</option>
 						<option value="CMYK">CMYK</option>
 						<option value="HSB">HSB</option>

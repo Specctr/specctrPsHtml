@@ -771,7 +771,7 @@ $.specctrPsProperties = {
                         result = this.rgbToHsl(colorType);
                         break;
 
-                    case "RGB AS HEX":
+                    case "HEX":
                         var red = Math.round(colorType.red).toString(16);
                         if (red.length === 1)
                             red = "0" + red;
@@ -803,7 +803,8 @@ $.specctrPsProperties = {
                 break;
 
                 case "CMYKColor":
-                    result = "cmyk(" + Math.round(colorType.cyan) + ", " + Math.round(colorType.magenta) + ", " + Math.round(colorType.yellow) + ", " + Math.round(colorType.black) + ")";
+                    result = "cmyk(" + Math.round(colorType.cyan) + ", " + Math.round(colorType.magenta) + 
+                            ", " + Math.round(colorType.yellow) + ", " + Math.round(colorType.black) + ")";
                     break;
 
                 case "LabColor":

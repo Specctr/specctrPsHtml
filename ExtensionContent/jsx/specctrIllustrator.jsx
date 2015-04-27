@@ -2424,7 +2424,7 @@ $.specctrAi = {
                         result = this.rgbToHsl(color);
                     break;
                 
-                    case "RGB AS HEX":
+                    case "HEX":
                         var red = Math.round(color.red).toString(16);
                         var green = Math.round(color.green).toString(16);
                         var blue = Math.round(color.blue).toString(16);
