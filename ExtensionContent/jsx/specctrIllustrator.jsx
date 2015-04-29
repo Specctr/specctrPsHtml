@@ -153,7 +153,7 @@ $.specctrAi = {
                     }
                 
                     if (text != "")
-                        styleText += text + "\r\r";
+                        styleText += text;
                 } catch(e) {}
                 
                 noOfGroups = noOfGroups - 1;
@@ -202,7 +202,7 @@ $.specctrAi = {
                     text = this.addSpecsStyleTextToCss(variableId, text, coordinateSpecsInfo);
                     
                     if (text != "")
-                        styleText += text + "\r\r";
+                        styleText += text;
                 } catch(e) {}
                 
                 noOfGroups = noOfGroups - 1;
@@ -431,7 +431,7 @@ $.specctrAi = {
             var idVar = pageItem.visibilityVariable;
             this.removeSpecGroup(idVar, name);
        
-            var styleText = "\twidth: " + widthForSpec + ";\r\theight: " + heightForSpec +";";
+            var styleText = "width: " + widthForSpec + ";height: " + heightForSpec +";";
             var spacing = 10 + model.armWeight;
             var newColor = this.legendColor(model.legendColorSpacing);
             var itemsGroup = app.activeDocument.groupItems.add();
@@ -639,8 +639,8 @@ $.specctrAi = {
                 bottom = Math.round(bottom / relativeTop * 100) + "%";
             }
         
-            var styleText = "\tleft: " + left + ";\r\ttop: " + top +
-                            ";\r\tright: " + right + ";\r\tbottom: " + bottom + ";";
+            var styleText = "left: " + left + ";top: " + top +
+                            ";right: " + right + ";bottom: " + bottom + ";";
 
             var newColor = this.legendColor(model.legendColorSpacing);
             var itemsGroup = app.activeDocument.groupItems.add();
@@ -1324,18 +1324,15 @@ $.specctrAi = {
 
             var allPageItems = idVar.pageItems;
             var source, arm, spec, group, itemCircle, bulletGroup, firstBullet, secondBullet;
-            var newColor = this.legendColor(model.legendColorObject);
             var noteData = ({});
             var noOfSpecs = "";
             for (var i = 0; i < allPageItems.length; i++) {
                 try {
                     dataString = this.separateNoteAndStyleText(allPageItems[i].note);
                     
-                    if (dataString.search("-css:") > 0 && updateSpecName == "propertySpec") {
-                        if (!buttonInvoked)
+                    if (allPageItems[i].note.search("-css:") > 0 && updateSpecName == "propertySpec") {
+                        if (!buttonInvoked) 
                             cssText = this.separateNoteAndStyleText(allPageItems[i].note, "style");
-                    
-                        dataString = this.separateNoteAndStyleText(allPageItems[i].note);
                         allPageItems[i].note = dataString;
                     }
                     
@@ -1396,6 +1393,12 @@ $.specctrAi = {
                         return true;
                     }
                 }
+                var newColor;
+            
+                if(source.typename == "TextFrame")
+                    newColor = this.legendColor(model.legendColorType); 
+                else
+                    newColor = this.legendColor(model.legendColorObject);
                 
                 var aItem = source;
                 var bItem = spec;
@@ -1600,20 +1603,20 @@ $.specctrAi = {
                 }
             }
             
-            if (idVar && source && spec && arm) {
+            if (idVar && source && spec && (arm || firstBullet)) {
                     if (updateSpecName == "propertySpec") {
                         var date = new Date();
                         var updated = date.getTime();
-                    
+
                         if (!propSpecUndo[idVar.name]) 
                             propSpecUndo[idVar.name] = ({});
-                        
+
                         propSpecUndo[idVar.name].updated = updated;
                         spec.note = "({type:'spec',updated:'" + updated + "',varName:'" + idVar.name + 
                                                 "',position:'" + spec.visibleBounds.join("|") + "'})" + "-css:" + cssText;
                         source.note = "({type:'source',updated:'" + updated + "',varName:'" + idVar.name  + "',noOfSpecs:'" + noOfSpecs +
                                                 "',position:'" + source.visibleBounds.join("|") + "'})";
-                    
+
                     } else if (updateSpecName == "noteSpec") {
                         spec.note = "({type:'noteSpec',varName:'" + idVar.name + "'})";
                     }
@@ -1689,11 +1692,8 @@ $.specctrAi = {
                 for (var i = 0; i < allPageItems.length; i++) {
                     try {
                         var dataString = this.separateNoteAndStyleText(allPageItems[i].note);
-    
-                        if (dataString.search("-css:") > 0)
-                            cssText = this.separateNoteAndStyleText(allPageItems[i].note, "style");
-                        
                         allPageItems[i].note = dataString;
+                        
                         var data;
                         try {
                             data = eval(dataString);
@@ -1741,10 +1741,9 @@ $.specctrAi = {
             }
             
             if (idVar && !isSpecCreated) {
-                
-                if(cssText)
-                    spec.note = spec.note + "-css:" + cssText;
-                
+                if(spec.note.search("-css:") < 0)
+                    spec.note += "-css:" + cssText;
+                    
                 this.updateConnection("propertySpec");
                 return;
             }
@@ -1993,7 +1992,12 @@ $.specctrAi = {
             var spacing = 30;
             var legendLayer;
             var isSpecCreated = false;
-            var newColor = this.legendColor(model.legendColorObject);
+            var newColor;
+
+            if(sourceItem.typename == "TextFrame")
+                newColor = this.legendColor(model.legendColorType); 
+            else
+                newColor = this.legendColor(model.legendColorObject);
                 
             var arm, spec, group, itemCircle, infoText = "#Add_Notes";
             var pageItem = sourceItem;
@@ -2009,8 +2013,10 @@ $.specctrAi = {
                 for (var i = 0; i < allPageItems.length; i++) {
                     try {
                         var dataString = this.separateNoteAndStyleText(allPageItems[i].note);
-                        if (dataString.search("-css:") > 0)
+                        
+                        if (allPageItems[i].note.search("-css:") > 0)
                             cssText = this.separateNoteAndStyleText(allPageItems[i].note, "style");
+                        
                         allPageItems[i].note = dataString;
                         var data;
                         try {    
@@ -2033,7 +2039,7 @@ $.specctrAi = {
             }
         
             var yReference = 0;
-            if(cssText) 
+            if(propertySpec.note.search("-css:") < 0) 
                 propertySpec.note = propertySpec.note + "-css:" + cssText;
 
             if (!spec) {
@@ -2579,18 +2585,18 @@ $.specctrAi = {
         if (!name)
             name = infoText.toLowerCase();
             
-        cssText = "." + name.toLowerCase() + " {\r\t" + infoText.toLowerCase() + ";";        
+        cssText = "." + name.toLowerCase() + " {" + infoText.toLowerCase() + ";";        
         infoText = name + "\r";
         
         try {
             if (model.textAlpha) {
                 var alpha = Math.round(pageItem.opacity) + "%";
                 infoText += "\r\rAlpha:\r" +  alpha;
-                cssText += "\r\topacity: " + alpha + ";";
+                cssText += "opacity: " + alpha + ";";
             }
         } catch(e) {}
 
-        cssText += "\r}";
+        cssText += "}";
         return infoText;
     },
 
@@ -2603,7 +2609,7 @@ $.specctrAi = {
         if (!name)
             name = "<Path>";
             
-        cssText = "." + name.toLowerCase() + " {\r";
+        cssText = "." + name.toLowerCase() + " {";
         infoText = name + "\r";
         
         if (model.shapeFillStyle || model.shapeFillColor) {    
@@ -2611,7 +2617,7 @@ $.specctrAi = {
                 
                 infoText += "Fill:";
                 if (model.shapeFillStyle) {
-                    cssText += "\tfill: ";
+                    cssText += "fill: ";
                     if(pathItem.filled) {
                         infoText += "\rSolid";
                         cssText += "solid;";
@@ -2624,7 +2630,7 @@ $.specctrAi = {
                 if (model.shapeFillColor && pathItem.filled) {
                     var color = this.colorAsString(pathItem.fillColor);
                     infoText += "\r" + color;
-                    cssText += "\r\tbackground: " + color.toLowerCase()+";";
+                    cssText += "background: " + color.toLowerCase()+";";
                 }
             } catch(e) {}
         }
@@ -2637,7 +2643,7 @@ $.specctrAi = {
                 infoText += "Stroke:";
                
                 if (model.shapeStrokeStyle) {
-                    cssText += "\r\tstroke-style: ";
+                    cssText += "stroke-style: ";
                     if (pathItem.stroked) {
                         if (pathItem.strokeDashes.length) {
                             infoText += "\r" + "Dashed ";
@@ -2655,13 +2661,13 @@ $.specctrAi = {
                 if (model.shapeStrokeSize  && pathItem.stroked) {
                     var strokeWidth = this.pointsToUnitsString(pathItem.strokeWidth, null);
                     infoText += "\r" + strokeWidth;
-                    cssText += "\r\tstroke-width: " + strokeWidth + ";";
+                    cssText += "stroke-width: " + strokeWidth + ";";
                 }
 
                 if (model.shapeStrokeColor  && pathItem.stroked) {
                     var strokeColor = this.colorAsString(pathItem.strokeColor);
                     infoText += "\r" + strokeColor;
-                    cssText += "\r\tstroke-color: " + strokeColor.toLowerCase() + ";";
+                    cssText += "stroke-color: " + strokeColor.toLowerCase() + ";";
                 }
 
             } catch(e) {};
@@ -2669,11 +2675,10 @@ $.specctrAi = {
         if (model.shapeAlpha) {
             if (infoText != "") {
                 infoText += "\r\r";
-                cssText += "\r";
             }
         
             infoText += "Alpha:\r" + Math.round(pageItem.opacity) + "%";
-            cssText += "\topacity: " + Math.round(pageItem.opacity) + "%" + ";";
+            cssText += "opacity: " + Math.round(pageItem.opacity) + "%" + ";";
         }
 
          if (model.shapeBorderRadius) {        //Get the corner radius of the shape object.
@@ -2684,11 +2689,11 @@ $.specctrAi = {
 
                 if (roundCornerValue != "") {
                     infoText += "Border-radius:\r" + roundCornerValue;
-                    cssText += "\r\tborder-radius: " + roundCornerValue + ";";
+                    cssText += "border-radius: " + roundCornerValue + ";";
                 }
             }
 
-        cssText += "\r}";
+        cssText += "}";
         
         return infoText;
     },
@@ -2741,12 +2746,12 @@ $.specctrAi = {
             if (model.textFont) {
                 var fontFamily = attr.textFont.name;
                 infoText += "\rFont-Family: " + fontFamily;
-                cssText += "\r\tfont-family: " + fontFamily + ";";
+                cssText += "font-family: " + fontFamily + ";";
             }
         
             if (model.textSize) {
                 infoText += "\rFont-Size: " + fontSize;
-                cssText += "\r\tfont-size: " + fontSize + ";";
+                cssText += "font-size: " + fontSize + ";";
             }
         
             if (model.textColor) {
@@ -2756,7 +2761,7 @@ $.specctrAi = {
                     alpha = "";
                 }
                 infoText += "\rColor: " + textColor;
-                cssText += "\r\tcolor: " + textColor + ";";
+                cssText += "color: " + textColor + ";";
             }
         
             if (model.textStyle) {
@@ -2770,7 +2775,7 @@ $.specctrAi = {
                     styleString = "small caps";
 
                 infoText += "\rFont-Style: " + styleString;
-                cssText += "\r\tfont-style: " + styleString + ";";
+                cssText += "font-style: " + styleString + ";";
                 
                 styleString = "";
                 if (attr.baselinePosition == FontBaselineOption.SUBSCRIPT) 
@@ -2794,7 +2799,7 @@ $.specctrAi = {
 
                 if (styleString != "") {
                     infoText += "\rText-Decoration: " + styleString;
-                    cssText += "\r\ttext-decoration: " + styleString + ";";
+                    cssText += "text-decoration: " + styleString + ";";
                 }
             }
         
@@ -2803,30 +2808,30 @@ $.specctrAi = {
                 s = s.substring(14, 15) + s.substring(15).toLowerCase();
                 s = s.toLowerCase();
                 infoText += "\rText-Align: " + s ;
-                cssText += "\r\ttext-align: " + s + ";";
+                cssText += "text-align: " + s + ";";
             }
 
             if (model.textLeading) {
                 infoText += "\rLine-Height: " + leading;
-                cssText += "\r\tline-height: " + leading + ";";
+                cssText += "line-height: " + leading + ";";
             }
         
             if (model.textTracking) {
                 var tracking = Math.round(attr.tracking / 1000 * 100) / 100 + " em";
                 infoText += "\rLetter-Spacing: " + tracking;
-                cssText += "\r\tletter-spacing: " + tracking + ";";
+                cssText += "letter-spacing: " + tracking + ";";
             }
 
             if (alpha != "") {
                 infoText += "\rOpacity: " + alpha;
-                cssText += "\r\topacity: " + alpha;
+                cssText += "opacity: " + alpha + ";";
             }
         } catch(e) {};
         
-        cssText += "\r}";
+        cssText += "}";
         
         if (model.specInEM)
-            cssBodyText = "body {\r\tfont-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;\r}\r\r";
+            cssBodyText = "body {font-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;}";
         
         return infoText;
     },

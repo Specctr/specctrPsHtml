@@ -253,7 +253,7 @@ function exportCss() {
 
 	// Upload specs to Specctr.
 	evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo){
-
+		pref.writeFile(pref.getPrefernceDirectory() + "/style.css", cssInfo);	//For testing only.
 		var css = JSON.parse(cssInfo);
 		var cssJson = CSSJSON.toJSON(css.text);
 		var data = JSON.stringify({
@@ -466,8 +466,7 @@ specctrInit.setModelToUIComponents = function() {
 	specctrUtility.setColorPickerColor("#colSpacing", model.legendColorSpacing);
 	
 	//Set radio buttons values.
-	var radioButtonIds = [model.legendColorMode.toLowerCase(), 
-	                      model.decimalFractionValue];
+	var radioButtonIds = [model.decimalFractionValue];
 	arrayLength = radioButtonIds.length;
 	for (var i = 0; i < arrayLength; i++) {
 		$("#" + radioButtonIds[i] + "RadioButton").prop("checked", true);
