@@ -1,10 +1,8 @@
 /*
 File-Name: specctrUI.js
-Description: Includes all the methods related to UI component like change event handlers, 
-click event handlers etc. 
+Description: Includes all the methods related to UI components (checkboxes, textBoxes, comboBoxes etc) 
+like change event handlers, click event handlers etc. 
  */
-
-var specctrUI = {};
 
 /**
  * Show/hide the setting tab page.
@@ -22,6 +20,24 @@ function toggleSettingPage(){
 		$("#settingPage").css("display", "none");
 		$("#tabBlock").css("display", "block");
 		$("#settingBlock").removeClass("bgColorE6E6E6");
+	}
+}
+
+/**
+ * Toggle the login page according to subscription.
+ * @param (label object) The object of the login footer label.
+ */
+function toggleLoginPage(element) {
+	if($("#loginBlock").hasClass("hideBlock")) {
+		$("#activateBlock").removeClass().addClass("hideBlock");
+		$("#loginBlock").removeClass().addClass("showBlock");
+		$("#loignHeaderLabel").html("Hi! Welcome back! <br> Please login:");
+		$(element).text("Not a member? Sign up");
+	} else {
+		$("#loginBlock").removeClass().addClass("hideBlock");
+		$("#activateBlock").removeClass().addClass("showBlock");
+		$("#loignHeaderLabel").html("Hi! Welcome to Specctr! <br> Sign up for a free 15 day trial!");
+		$(element).text("Already a member? Sign in");
 	}
 }
 
@@ -352,28 +368,3 @@ function restrictInputToDecimal(event) {
 
 	return true;
 }
-
-/**
- * Set the style of dialog at the time of initialization of panel. 
- */
-specctrUI.createDialog = function() {
-	$("#dialog").dialog({
-		autoOpen : false,
-		resizable: false,
-		width : 200,
-		height : 80,
-		modal : true,
-		buttons : []
-	});
-};
-
-/**
- * Open the dialog with the passed message.
- * @param message {string} The message that appear in the dialog.
- */
-specctrUI.showDialog = function(message) {
-	var dialogRef = $("#dialog");
-	dialogRef.text(message);
-	dialogRef.dialog("open");
-	dialogRef.dialog({position:'center'});
-};

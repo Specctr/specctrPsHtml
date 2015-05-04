@@ -5,97 +5,6 @@ Include all spec button click handlers and methods to communicate between js and
  */
 
 var specctrInit = {};
-SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
-SPECCTR_API = SPECCTR_HOST += "/api/v1";
-
-/**
- * Validate the license of the user and move to the tab container
- *  if user's credentials valid.
- */
-function activateButtonClickHandler() {
-	// Get Extension Id and matching productCode.
-	var productCodes = {
-			// Photoshop 2.0.
-			"SpecctrPs-Pro" : "63221",
-			"SpecctrPs-10" : "63222",
-			"SpecctrPs-20" : "63223",
-			"SpecctrPs-30" : "63224",
-			"SpecctrPs-Site" : "63225",
-
-			// Illustrator 2.0.
-			"SpecctrPro" : "63233",
-			"SpecctrBusiness10" : "63235",
-			"SpecctrBusiness20" : "63236",
-			"SpecctrBusiness30" : "63237",
-			"SpecctrBusinessSite" : "63238",
-
-			// Indesign 2.0.
-			"Specctr-Pro-ID" : "63240",
-			"Specctr-Business-10" : "63241",
-			"Specctr-Business-20" : "63242",
-			"Specctr-Business-30" : "63243",
-			"Specctr-Business-Site" : "63244"
-	};
-
-	if(extensionId === '')
-		extensionId = specctrUtility.getExtensionId();
-
-	var logData = "";
-
-	// If no installed extension is matched with productCodes values.
-	if (!productCodes[extensionId]) {
-		logData = "Incorrect product code";
-		specctrUI.showDialog(logData);
-		logData = pref.createLogData(logData);
-		pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
-		return;
-	}
-
-	var urlRequest = SPECCTR_API += "/register_machine?";
-	urlRequest += "&email=" + $("#emailInput").val();
-	urlRequest += "&password=" + $("#passwordInput").val();
-
-	$.ajax({
-		url:urlRequest,
-		type: 'POST',
-		contentType: "application/json",
-		dataType: "json",
-		success: completeHandler,
-		error: function(xhr) {
-			var response = JSON.parse(xhr.responseText);
-			specctrUI.showDialog(response.message);
-			logData = pref.createLogData(response.message);
-			pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
-		}
-	});
-}
-
-/**
- * Callback function which is called when validation of user's license take place.
- * @param response {object} The object of the response came from the activation request.
- * @param status {string} The status of the activation request.
- */
-function completeHandler(response, status) {
-	var logData = pref.createLogData(response.message);
-	pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
-
-	// If unsuccessful, return without saving the data in file.
-	if (response.success) {
-		analytics.trackActivation('succeeded');	
-		var activationPrefs = {
-				licensed : true,
-				machine_id: response.machine_id,
-				api_key: response.api_key
-		};
-		pref.addFileToPreferenceFolder('.license', 
-				JSON.stringify(activationPrefs)); //Create license file.
-		specctrInit.init();
-	} else {
-		analytics.trackActivation('failed');
-		specctrUI.showDialog(response.message);
-		return;
-	}
-}
 
 /**
  * Load the jsx and show/hide the login container 
@@ -104,7 +13,7 @@ function completeHandler(response, status) {
 function onLoaded() {
 	// Handle exceptions of any missing components.
 	try {
-		specctrUI.createDialog();
+		specctrDialog.createAlertDialog();
 		var isLicensed = false;
 		var appPrefs;
 
@@ -113,14 +22,11 @@ function onLoaded() {
 		loadJSX(); // Load the jsx files present in \jsx folder.
 
 		if (hostApplication === '') {
-			specctrUI.showDialog('Cannot load the extension.\nRequired host application not found!');
+			specctrDialog.showAlert('Cannot load the extension.\nRequired host application not found!');
 			return;
 		} else if (hostApplication === photoshop) {
 			$(".psElement").show();
 			$(".nonPsElement").hide();
-		} else if (hostApplication === indesign) {
-			$(".nonIdElement").hide();
-			$("#imgCoordinateDdlArrow").remove();
 		}
 
 		addApplicationEventListener();
@@ -187,96 +93,6 @@ function evalScript(script, callback) {
 function setModel() {
 	var methodName = "setModel('" + JSON.stringify(model) + "')";
 	evalScript("$.specctr" + hostApplication + "." + methodName);
-}
-
-/**
- * Call the 'createCanvasBorder' method from .jsx based on host application.
- */
-function expandCanvas() {
-	analytics.trackFeature('expand_canvas');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createCanvasBorder()");
-	pref.writeAppPrefs();
-}
-
-/**
- * Call the 'createDimensionSpecsForItem' method from .jsx based on host application.
- */
-function createDimensionSpecs() {
-	analytics.trackFeature('create_dimension_specs');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createDimensionSpecs()");
-}
-
-/**
- * Call the 'createSpacingSpecs' method from .jsx based on host application.
- */
-function createSpacingSpecs() {
-	analytics.trackFeature('create_spacing_specs');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createSpacingSpecs()");
-}
-
-/**
- * Call the 'createCoordinateSpecs' method from .jsx based on host application.
- */
-function createCoordinateSpecs() {
-	analytics.trackFeature('create_coordinate_specs');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createCoordinateSpecs()");
-}
-
-/**
- * Call the 'addNoteSpecs' method from .jsx based on host application.
- */
-function addNoteSpecs() {
-	analytics.trackFeature('create_note_specs');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs()");
-}
-
-/**
- * Call the 'createPropertySpecsForItem' method from .jsx based on host application.
- */
-function createPropertySpecs() {
-	analytics.trackFeature('create_property_specs');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()");
-}
-
-/**
- * Call the 'exportCss' method from .jsx based on host application.
- */
-function exportCss() {
-	analytics.trackFeature('export_css');
-	setModel();
-
-	// Upload specs to Specctr.
-	evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo){
-		pref.writeFile(pref.getPrefernceDirectory() + "/style.css", cssInfo);	//For testing only.
-		var css = JSON.parse(cssInfo);
-		var cssJson = CSSJSON.toJSON(css.text);
-		var data = JSON.stringify({
-			api_key: api_key,
-			machine_id: machine_id,
-			document_name: css.document_name,
-			css_items: cssJson.children
-		});
-
-		$.ajax({
-			url: SPECCTR_API + "/css_items",
-			type: "POST",
-			contentType: "application/json;charset=utf-8",
-			dataType: "json",
-			data: data,
-			success: function(response) {
-				specctrUI.showDialog('success');
-			},
-			error: function(xhr) {
-				specctrUI.showDialog('error');
-			}
-		});
-	});
 }
 
 /**

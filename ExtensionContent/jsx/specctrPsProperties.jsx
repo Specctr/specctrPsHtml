@@ -175,7 +175,7 @@ $.specctrPsProperties = {
             }
         
             if(cssText === "")
-                cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
+                cssText = name + " {" + infoText.toLowerCase() + "}";
             
              var xmpData = [{layerHandler : legendLayer, 
                                     properties : [{name : "idLayer", value : idLayer}, 
@@ -315,7 +315,7 @@ $.specctrPsProperties = {
             }
 
             if(cssText == "")
-                cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
+                cssText = name + " {" + infoText.toLowerCase() + "}";
 
             var xmpData = [{layerHandler : spec,
                                         properties : [{name : "css", value : cssText}]
@@ -429,7 +429,7 @@ $.specctrPsProperties = {
                         font = kDefaultFontVal;
                         
                     infoText += "\rFont-Family: " + font;
-                    cssText += "\r\tfont-family: " + font + ";";
+                    cssText += "font-family: " + font + ";";
                 }
 
                 //Get the font size.
@@ -452,7 +452,7 @@ $.specctrPsProperties = {
                     }
 
                     infoText += "\rFont-Size: " + fontSize;
-                    cssText += "\r\tfont-size: " + fontSize + ";";
+                    cssText += "font-size: " + fontSize + ";";
                 }
             
                 //Get the color of text.
@@ -465,7 +465,7 @@ $.specctrPsProperties = {
                         alpha = "";
                     }
                     infoText += "\rColor: " + color;
-                     cssText += "\r\tcolor: "+ color.toLowerCase() + ";";
+                     cssText += "color: "+ color.toLowerCase() + ";";
                 }
 
                 //Get the style of text.
@@ -477,7 +477,7 @@ $.specctrPsProperties = {
                         styleString += "/ italic";
 
                     infoText += "\rFont-Style: " + styleString;
-                    cssText += "\r\tfont-style: "+ styleString + ";";
+                    cssText += "font-style: "+ styleString + ";";
                     styleString = "";
 
                     if (underline != "" && underline != "underlineOff" )
@@ -490,7 +490,7 @@ $.specctrPsProperties = {
                 
                     if(styleString != "") {
                         infoText += "\rText-Decoration: " + styleString;
-                        cssText += "\r\ttext-decoration: "+ styleString + ";";
+                        cssText += "text-decoration: "+ styleString + ";";
                     }
                 }
 
@@ -500,12 +500,12 @@ $.specctrPsProperties = {
                         var s = textItem.justification.toString();
                         s = s.substring(14,15).toLowerCase() + s.substring(15).toLowerCase();
                         infoText += "\rText-Align: " + s;
-                        cssText += "\r\ttext-align: " + s + ";";
+                        cssText += "text-align: " + s + ";";
                     }
                 } catch(e) {
                    var alignment = this.getAlignment();
                    infoText += "\rText-Align: " + alignment;
-                   cssText += "\r\ttext-align: " + alignment + ";";
+                   cssText += "text-align: " + alignment + ";";
                 }
            
                 if (model.textLeading) {
@@ -530,18 +530,18 @@ $.specctrPsProperties = {
                     }
                 
                     infoText += "\rLine-Height: " + leading;
-                    cssText += "\r\tline-height: " + leading + ";";
+                    cssText += "line-height: " + leading + ";";
                 }
 
                 if (model.textTracking) {
                     var tracking = Math.round(tracking / 1000 * 100) / 100 + " em";
                     infoText += "\rLetter-Spacing: " + tracking;
-                    cssText += "\r\tletter-spacing: " + tracking + ";";
+                    cssText += "letter-spacing: " + tracking + ";";
                 }
             
                 if (alpha != "") {
                     infoText += "\rOpacity: " + alpha;
-                    cssText += "\r\topacity: " + alpha + ";";
+                    cssText += "opacity: " + alpha + ";";
                 }
             
                 if (model.textEffects) {
@@ -560,9 +560,9 @@ $.specctrPsProperties = {
             alert(e);
         }
 
-        cssText += "\r}";
+        cssText += "}";
         if(model.specInEM) {
-            cssBodyText = "body {\r\tfont-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;\r}\r\r";
+            cssBodyText = "body {font-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;}";
             $.specctrPsCommon.setCssBodyText(cssBodyText);
         }
         
@@ -609,7 +609,7 @@ $.specctrPsProperties = {
                     }
                 
                     infoText += cssColor;
-                    cssText += "\r\tbackground: " + cssColor + ";";
+                    cssText += "background: " + cssColor + ";";
                 } else if(pathItem.kind == LayerKind.GRADIENTFILL) {
                     var gradientValue = "";
                     infoText += "\rBackground: ";
@@ -623,7 +623,7 @@ $.specctrPsProperties = {
                     }
                     
                     infoText += gradientValue;
-                    cssText += "\r\tbackground: " + gradientValue +";";
+                    cssText += "background: " + gradientValue +";";
                 }
             }
         } catch(e) {}
@@ -638,7 +638,7 @@ $.specctrPsProperties = {
             
             if(alpha != "") {
                 infoText += "\rOpacity: "+alpha;
-                cssText += "\r\topacity: "+alpha+";";
+                cssText += "opacity: "+alpha+";";
             }
         
             if(model.shapeEffects) {
@@ -653,12 +653,12 @@ $.specctrPsProperties = {
                 var roundCornerValue = this.getRoundCornerValue();
                 if(roundCornerValue != "") {
                     infoText += "\r" + roundCornerValue;
-                    cssText += "\r\t" + roundCornerValue.toLowerCase() + ";";
+                    cssText += "" + roundCornerValue.toLowerCase() + ";";
                 }
             }
         } catch(e) {}
         
-        cssText += "\r}";
+        cssText += "}";
         doc.activeLayer = pageItem;
         return infoText;
     },
@@ -1091,14 +1091,14 @@ $.specctrPsProperties = {
         }
         var infoText = sourceItem.kind.toString().replace ("LayerKind.", "");
         var pageItem = sourceItem;
-        cssText = "." + pageItem.name.toLowerCase() + " {\r\t" + infoText.toLowerCase() + ";";
+        cssText = "." + pageItem.name.toLowerCase() + " {" + infoText.toLowerCase() + ";";
 
         if(model.textAlpha) {
-            var opacityString = "\r\tOpacity: " + Math.round(pageItem.opacity) / 100;
-            infoText += opacityString;
+            var opacityString = "Opacity: " + Math.round(pageItem.opacity) / 100;
+            infoText += "\r\t" + opacityString;
             cssText += opacityString.toLowerCase() + ";";
         }
-        cssText += "\r}";
+        cssText += "}";
         return infoText;
     },
 

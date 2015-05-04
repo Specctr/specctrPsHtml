@@ -18,8 +18,10 @@
 
 <script src="../controller/preferences.js"></script>
 <script src="../controller/utility.js"></script>
+<script src="../controller/specctrDialog.js"></script>
 <script src="../controller/specctrUI.js"></script>
 <script src="../controller/main.js"></script>
+<script src="../controller/buttonController.js"></script>
 <script src="../controller/buttonHandlers.js"></script>
 
 <script src="../lib/cs_host_adapter.js"></script>
@@ -40,32 +42,65 @@
 	<!-- Login container start here -->
 	<div class="showBlock" id="loginContainer">
 		<div id="dvLoginContainer">
-			<div class="logo"></div>
-			<div class="row">
-				<label for="txtEmail">Email:</label> 
-				<input type="email" id="emailInput"
-					placeholder="Email" name="txtEmail"
+			<div class="loginHeader">
+				<label id="loignHeaderLabel"> Hi! Welcome to Specctr! <br> Sign up for a free 15 day trial! 
+				</label>
+			</div>
+			
+			<ul class="hideBlock" id="loginBlock">
+				<li>
+					<input class="loginTextItem" type="email" id="loginEmail"
+					placeholder="Email"
 					onclick="itemClickHandler(event)"
 					onkeydown="textKeyDownHandler(event)"/>
-			</div>
-			<div class="row">
-				<label for="txtPassword">Password:</label> 
-				<input type="password" id="passwordInput" name="txtPassword"
-					placeholder="Password" 
+				</li>
+				
+				<li>
+					<input class="loginTextItem" type="password" id="loginPassword"
+					placeholder="Password"
 					onclick="itemClickHandler(event)"
 					onkeydown="textKeyDownHandler(event)"/>
-			</div>
-			<ul class="menu">
-				<li class="border">
-					<div id="activateButton" class="button" 
-						onclick="activateButtonClickHandler()">
-						<label>Activate Specctr</label>
+				</li>
+				
+				<li>
+					<div class="loginPageButton" id="loginButton">
+						<label>Login</label>
 					</div>
 				</li>
 			</ul>
-			<div class="help">
-				<label class="link">Need Help?</label>
-			</div>
+			
+			<ul id="activateBlock">
+				<li>
+					<input class="loginTextItem" id="firsName"
+					placeholder="First Name"
+					onclick="itemClickHandler(event)"
+					onkeydown="textKeyDownHandler(event)"/>
+				</li>
+
+				<li>
+					<input class="loginTextItem" id="secondName"
+					placeholder="Last Name" 
+					onclick="itemClickHandler(event)"
+					onkeydown="textKeyDownHandler(event)"/>
+				</li>
+				
+				<li>
+					<input class="loginTextItem" type="email" id="emailInput"
+					placeholder="Email"
+					onclick="itemClickHandler(event)"
+					onkeydown="textKeyDownHandler(event)"/>
+				</li>
+				
+				<li>
+					<div class="loginPageButton" id="activateButton" 
+						onclick="activateButtonClickHandler()">
+						<label>Activate</label>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div id="loginFooter">
+			<label onclick="toggleLoginPage(this)">Already a member? Sign in</label>
 		</div>
 	</div>
 	<!-- Login container end here -->
@@ -118,7 +153,7 @@
 						</li>
 	
 						<!-- Add Note button. -->
-						<li class="nonIdElement" onclick="addNoteSpecs()">
+						<li onclick="addNoteSpecs()">
 							<div class="button border " id="btnAddNote" onclick="addNoteButton_clickHandler()">
 								<img id="imgNote" alt="Note specs"/>
 								<label>Add Note</label>
@@ -183,7 +218,7 @@
 								<div id="imgCoordinateDdlArrow" class="dropdownArrow"
 									onclick="buttonDropDownClickHandler(event, this)"></div>
 							</div>
-							<div class="options nonIdElement" id="coordinateDropDown">
+							<div class="options" id="coordinateDropDown">
 								<div class="option topLeftSelected" id="imgTopLeft"
 									onclick="dropDownCellClickHandler(this.id, 'topLeftSelected')"></div>
 								<div class="option" id="imgTopRight"
@@ -641,7 +676,7 @@
 				<div class="settingPageHeader">Measurements</div>
 				<div class="settingline"></div>
 				
-				<form class="nonIdElement marginTopBottom10px width150px" 
+				<form class="marginTopBottom10px width150px" 
 					onclick="radioButtonClickHandler(event, 'decimalFractionValue')">
 					<input type="radio"  name="decimalFractionOptions" id="decimalRadioButton" 
 						value="decimal" class="marginBottom1px">
