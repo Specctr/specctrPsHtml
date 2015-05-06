@@ -29,12 +29,16 @@ function toggleSettingPage(){
  */
 function toggleLoginPage(element) {
 	if($("#loginBlock").hasClass("hideBlock")) {
+		$("#specctrLoginImage").removeClass().addClass("showBlock");
 		$("#activateBlock").removeClass().addClass("hideBlock");
+		$("#loginHeaderDiv").removeClass().addClass("activationHeader");
 		$("#loginBlock").removeClass().addClass("showBlock");
 		$("#loignHeaderLabel").html("Hi! Welcome back! <br> Please login:");
 		$(element).text("Not a member? Sign up");
 	} else {
+		$("#specctrLoginImage").removeClass().addClass("hideBlock");
 		$("#loginBlock").removeClass().addClass("hideBlock");
+		$("#loginHeaderDiv").removeClass().addClass("loginHeader");
 		$("#activateBlock").removeClass().addClass("showBlock");
 		$("#loignHeaderLabel").html("Hi! Welcome to Specctr! <br> Sign up for a free 15 day trial!");
 		$(element).text("Already a member? Sign in");

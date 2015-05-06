@@ -42,7 +42,8 @@
 	<!-- Login container start here -->
 	<div class="showBlock" id="loginContainer">
 		<div id="dvLoginContainer">
-			<div class="loginHeader">
+			<img alt="specctrLoginImage" class="hideBlock" id="specctrLoginImage" src="../Images/specctrLogo.png">
+			<div id="loginHeaderDiv" class="loginHeader">
 				<label id="loignHeaderLabel"> Hi! Welcome to Specctr! <br> Sign up for a free 15 day trial! 
 				</label>
 			</div>
@@ -71,14 +72,14 @@
 			
 			<ul id="activateBlock">
 				<li>
-					<input class="loginTextItem" id="firsName"
+					<input class="loginTextItem" type="text" id="firsName"
 					placeholder="First Name"
 					onclick="itemClickHandler(event)"
 					onkeydown="textKeyDownHandler(event)"/>
 				</li>
 
 				<li>
-					<input class="loginTextItem" id="secondName"
+					<input class="loginTextItem" type="text" id="secondName"
 					placeholder="Last Name" 
 					onclick="itemClickHandler(event)"
 					onkeydown="textKeyDownHandler(event)"/>

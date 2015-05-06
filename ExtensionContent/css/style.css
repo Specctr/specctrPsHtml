@@ -223,12 +223,22 @@ label {
 	background-color: #2266ff;
 }
 
+#dvLoginContainer {
+	height: 470px;
+}
+
 #dvLoginContainer ul {
+	height: 200px;
 	margin-left: 10px;
 }
 
 #dvLoginContainer ul li{
 	margin-bottom: 15px;
+}
+
+#specctrLoginImage {
+	padding-left: 75px;
+	padding-top: 30px;
 }
 
 .loginTextItem {
@@ -244,7 +254,13 @@ label {
 	padding-top: 70px;
 }
 
-.loginHeader label {
+.activationHeader {
+	padding-top: 30px;
+	height: 120px;
+	padding-left: 15px;
+}
+
+#loignHeaderLabel {
 	color: #ffffff;
 	font-family: Arial;
 	font-size: 24px;
@@ -267,7 +283,7 @@ label {
 }
 
 #loginFooter {
-	margin-top: 66px !important;
+	margin-top: 20px !important;
 	width: 240px!important;
 	text-align: center;
 }
