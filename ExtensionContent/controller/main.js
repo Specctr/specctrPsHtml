@@ -106,7 +106,7 @@ function completeHandler(response, status) {
 function onLoaded() {
 	// Handle exceptions of any missing components.
 	try {
-		specctrUI.createDialog();
+		specctrDialog.createAlertDialog();
 		var isLicensed = false;
 		var appPrefs;
 
@@ -115,14 +115,11 @@ function onLoaded() {
 		loadJSX(); // Load the jsx files present in \jsx folder.
 
 		if (hostApplication === '') {
-			specctrUI.showDialog('Cannot load the extension.\nRequired host application not found!');
+			specctrDialog.showAlert('Cannot load the extension.\nRequired host application not found!');
 			return;
 		} else if (hostApplication === photoshop) {
 			$(".psElement").show();
 			$(".nonPsElement").hide();
-		} else if (hostApplication === indesign) {
-			$(".nonIdElement").hide();
-			$("#imgCoordinateDdlArrow").remove();
 		}
 
 		addApplicationEventListener();
@@ -189,96 +186,6 @@ function evalScript(script, callback) {
 function setModel() {
 	var methodName = "setModel('" + JSON.stringify(model) + "')";
 	evalScript("$.specctr" + hostApplication + "." + methodName);
-}
-
-/**
- * Call the 'createCanvasBorder' method from .jsx based on host application.
- */
-function expandCanvas() {
-	analytics.trackFeature('expand_canvas');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createCanvasBorder()");
-	pref.writeAppPrefs();
-}
-
-/**
- * Call the 'createDimensionSpecsForItem' method from .jsx based on host application.
- */
-function createDimensionSpecs() {
-	analytics.trackFeature('create_dimension_specs');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createDimensionSpecs()");
-}
-
-/**
- * Call the 'createSpacingSpecs' method from .jsx based on host application.
- */
-function createSpacingSpecs() {
-	analytics.trackFeature('create_spacing_specs');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createSpacingSpecs()");
-}
-
-/**
- * Call the 'createCoordinateSpecs' method from .jsx based on host application.
- */
-function createCoordinateSpecs() {
-	analytics.trackFeature('create_coordinate_specs');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createCoordinateSpecs()");
-}
-
-/**
- * Call the 'addNoteSpecs' method from .jsx based on host application.
- */
-function addNoteSpecs() {
-	analytics.trackFeature('create_note_specs');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs()");
-}
-
-/**
- * Call the 'createPropertySpecsForItem' method from .jsx based on host application.
- */
-function createPropertySpecs() {
-	analytics.trackFeature('create_property_specs');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()");
-}
-
-/**
- * Call the 'exportCss' method from .jsx based on host application.
- */
-function exportCss() {
-	analytics.trackFeature('export_css');
-	setModel();
-
-	// Upload specs to Specctr.
-	evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo){
-
-		var css = JSON.parse(cssInfo);
-		var cssJson = CSSJSON.toJSON(css.text);
-		var data = JSON.stringify({
-			api_key: api_key,
-			machine_id: machine_id,
-			document_name: css.document_name,
-			css_items: cssJson.children
-		});
-
-		$.ajax({
-			url: SPECCTR_API + "/css_items",
-			type: "POST",
-			contentType: "application/json;charset=utf-8",
-			dataType: "json",
-			data: data,
-			success: function(response) {
-				specctrUI.showDialog('success');
-			},
-			error: function(xhr) {
-				specctrUI.showDialog('error');
-			}
-		});
-	});
 }
 
 /**
@@ -470,8 +377,7 @@ specctrInit.setModelToUIComponents = function() {
 	specctrUtility.setColorPickerColor("#colSpacing", model.legendColorSpacing);
 	
 	//Set radio buttons values.
-	var radioButtonIds = [model.legendColorMode.toLowerCase(), 
-	                      model.decimalFractionValue];
+	var radioButtonIds = [model.decimalFractionValue];
 	arrayLength = radioButtonIds.length;
 	for (var i = 0; i < arrayLength; i++) {
 		$("#" + radioButtonIds[i] + "RadioButton").prop("checked", true);

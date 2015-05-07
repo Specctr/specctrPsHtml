@@ -36,7 +36,13 @@ $.specctrPsAddNote = {
         
         var doc = app.activeDocument;
         var infoText = "#Add_Note";
-        var newColor = $.specctrPsCommon.legendColor(model.legendColorObject);
+        var newColor;
+        
+        if(sourceItem.kind == LayerKind.TEXT)
+            newColor = $.specctrPsCommon.legendColor(model.legendColorType);
+        else
+            newColor = $.specctrPsCommon.legendColor(model.legendColorObject);
+            
         var artLayer = sourceItem;
 
         var spec, idLayer, idSpec, lyr;
@@ -161,7 +167,13 @@ $.specctrPsAddNote = {
         var doc = app.activeDocument;
         var originalDPI = doc.resolution;
         var spacing = 10;
-        var newColor = $.specctrPsCommon.legendColor(model.legendColorObject);
+        var newColor;
+        
+        if(sourceItem.kind == LayerKind.TEXT)
+            newColor = $.specctrPsCommon.legendColor(model.legendColorType);
+        else
+            newColor = $.specctrPsCommon.legendColor(model.legendColorObject);
+            
         var infoText, isBulletCreated;
         var font = model.legendFont;
         var artLayerBounds = bounds;

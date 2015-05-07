@@ -175,7 +175,7 @@ $.specctrPsProperties = {
             }
         
             if(cssText === "")
-                cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
+                cssText = name + " {" + infoText.toLowerCase() + "}";
             
              var xmpData = [{layerHandler : legendLayer, 
                                     properties : [{name : "idLayer", value : idLayer}, 
@@ -315,7 +315,7 @@ $.specctrPsProperties = {
             }
 
             if(cssText == "")
-                cssText = name + " {\r" + infoText.toLowerCase() + "\r}";
+                cssText = name + " {" + infoText.toLowerCase() + "}";
 
             var xmpData = [{layerHandler : spec,
                                         properties : [{name : "css", value : cssText}]
@@ -335,13 +335,16 @@ $.specctrPsProperties = {
     //Get the properties of the text item.
     getSpecsInfoForTextItem : function(pageItem) {
         var textItem = pageItem.textItem;
-        var infoText = "", color="", mFactor = "";
-        var alpha = "", leading = "", size = "", font = "";
-        var kDefaultLeadVal = 120.0, kDefaultFontVal='MyriadPro-Regular', kDefaultFontSize= 12;
-        var underline = "", strike = "", bold = "",  italic = "";
-        var tracking = "", isAutoLeading="", rltvFontSize = 16;
+        var infoText = "";
+        var rltvFontSize = 16;
 
         try {
+            var name = pageItem.name;
+            var wordsArray = name.split(" ");
+            if(wordsArray.length > 2)
+                name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
+            cssText = name.toLowerCase()+" {";
+            
             var sizeID = stringIDToTypeID("size");
             var transformID = stringIDToTypeID("transform");
             var yyID = stringIDToTypeID("yy");
@@ -353,6 +356,8 @@ $.specctrPsProperties = {
             var syntheticItalicID = stringIDToTypeID("syntheticItalic");
             var autoLeadingID = stringIDToTypeID("autoLeading");
             var colorID = stringIDToTypeID("color");
+            var fromId = stringIDToTypeID("from");
+            var toId = stringIDToTypeID("to");
 
             var ref = new ActionReference();
             ref.putEnumerated( charIDToTypeID('Lyr '), charIDToTypeID('Ordn'), charIDToTypeID('Trgt') ); 
@@ -362,235 +367,202 @@ $.specctrPsProperties = {
             var textStyleRangeID = stringIDToTypeID("textStyleRange");
             var textStyleID = stringIDToTypeID("textStyle");
             var txtList = desc.getList(textStyleRangeID);
-            var txtDesc = txtList.getObjectValue(0);
-            if(txtDesc.hasKey(textStyleID)) {
-                var rangeList = desc.getList(textStyleRangeID);
-                var styleDesc = rangeList.getObjectValue(0).getObjectValue(textStyleID);
-                if(styleDesc.hasKey(sizeID)) {
-                    size =  styleDesc.getDouble(sizeID);
-                    if(desc.hasKey(transformID)) {
-                        mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
-                        size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
-                    }
+            var rangeListCount =txtList.count;
+            for (var i = 0; i < rangeListCount; i++) {
+                var alpha = "", leading = "", size = "", font = "";
+                var kDefaultLeadVal = 120.0, kDefaultFontVal='MyriadPro-Regular', kDefaultFontSize= 12;
+                var underline = "", strike = "", bold = "",  italic = "";
+                var tracking = "", isAutoLeading="", color="", mFactor = "";
+                
+                var from = txtList.getObjectValue(i).getInteger(fromId);
+                var to = txtList.getObjectValue(i).getInteger(toId);
+                if(i > 0) {
+                    if (txtList.getObjectValue(i - 1).getInteger(fromId) == from 
+                        && txtList.getObjectValue(i - 1).getInteger(toId) == to) 
+                            continue; 
+                    
+                    infoText += "\r";
                 }
-                if(styleDesc.hasKey(fontPostScriptID))
-                    font =  styleDesc.getString(fontPostScriptID);
-                if(styleDesc.hasKey(trackingID))
-                    tracking =  styleDesc.getString(trackingID);
-                if(styleDesc.hasKey(underlineID))
-                    underline = typeIDToStringID(styleDesc.getEnumerationValue(underlineID));
-                if(styleDesc.hasKey(strikethroughID))
-                    strike = typeIDToStringID(styleDesc.getEnumerationValue(strikethroughID));
-                if(styleDesc.hasKey(syntheticBoldID))
-                    bold = styleDesc.getBoolean(syntheticBoldID);
-                if(styleDesc.hasKey(syntheticItalicID))
-                    italic = styleDesc.getBoolean(syntheticItalicID);
-                if(styleDesc.hasKey(autoLeadingID)) {
-                    isAutoLeading = styleDesc.getBoolean(autoLeadingID);
-                    if(isAutoLeading == false) {
-                         leading = styleDesc.getDouble(stringIDToTypeID("leading"));
-                         if(desc.hasKey(transformID)) {
-                             mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
-                             leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
-                         }
-                    }
-                }
-                 if(styleDesc.hasKey(colorID)) 
-                    color = this.getColor(styleDesc.getObjectValue(colorID));
-            }
-
-            //Paragraph styles.
-            var paragraphStyleID = stringIDToTypeID("paragraphStyle");
-            var defaultStyleID = stringIDToTypeID("defaultStyle");
-            var paraList = desc.getList(stringIDToTypeID("paragraphStyleRange"));
-            var paraDesc = paraList.getObjectValue(0);
-            if (paraDesc.hasKey(paragraphStyleID)) {
-                var paraStyle = paraDesc.getObjectValue(paragraphStyleID);
-                if(paraStyle.hasKey(defaultStyleID)) {
-                    var defStyle = paraStyle.getObjectValue(defaultStyleID);
-                    if(font === "" && defStyle.hasKey(fontPostScriptID)) 
-                        font = defStyle.getString(fontPostScriptID);
-                    if(size === " " && defStyle.hasKey(sizeID)) {
-                        size = defStyle.getDouble(sizeID);
+                
+                var txtDesc = txtList.getObjectValue(i);
+                if(txtDesc.hasKey(textStyleID)) {
+                    var rangeList = desc.getList(textStyleRangeID);
+                    var styleDesc = rangeList.getObjectValue(i).getObjectValue(textStyleID);
+                    if(styleDesc.hasKey(sizeID)) {
+                        size =  styleDesc.getDouble(sizeID);
                         if(desc.hasKey(transformID)) {
-                            var mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
+                            mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
                             size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                         }
                     }
-                    if(tracking === "" && defStyle.hasKey(trackingID))
-                        tracking = defStyle.getInteger(trackingID);
-                    if(underline === "" && defStyle.hasKey(underlineID))
-                        underline = typeIDToStringID(defStyle.getEnumerationValue(underlineID));
-                    if (strike === "" && defStyle.hasKey(strikethroughID))
-                        strike = typeIDToStringID(defStyle.getEnumerationValue(strikethroughID));
-                    if (bold === "" && defStyle.hasKey(syntheticBoldID))
-                        bold = defStyle.getBoolean(syntheticBoldID);
-                    if (italic === "" && defStyle.hasKey(syntheticItalicID))
-                        italic = defStyle.getBoolean(syntheticItalicID);
-                    if (leading === "" && defStyle.hasKey(autoLeadingID)) {
-                        isAutoLeading = defStyle.getBoolean(autoLeadingID);
+                    if(styleDesc.hasKey(fontPostScriptID))
+                        font =  styleDesc.getString(fontPostScriptID);
+                    if(styleDesc.hasKey(trackingID))
+                        tracking =  styleDesc.getString(trackingID);
+                    if(styleDesc.hasKey(underlineID))
+                        underline = typeIDToStringID(styleDesc.getEnumerationValue(underlineID));
+                    if(styleDesc.hasKey(strikethroughID))
+                        strike = typeIDToStringID(styleDesc.getEnumerationValue(strikethroughID));
+                    if(styleDesc.hasKey(syntheticBoldID))
+                        bold = styleDesc.getBoolean(syntheticBoldID);
+                    if(styleDesc.hasKey(syntheticItalicID))
+                        italic = styleDesc.getBoolean(syntheticItalicID);
+                    if(styleDesc.hasKey(autoLeadingID)) {
+                        isAutoLeading = styleDesc.getBoolean(autoLeadingID);
                         if(isAutoLeading == false) {
-                            leading = defStyle.getDouble(stringIDToTypeID("leading"));
-                            if(desc.hasKey(transformID)) {
-                                mFactor = desc.getObjectValue(transformID).getUnitDoubleValue(yyID);
-                                leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
-                            }
-                         }
-                     }
-                    if (color === "" && defStyle.hasKey(colorID)) 
-                        color = this.getColor(defStyle.getObjectValue(colorID));
+                             leading = styleDesc.getDouble(stringIDToTypeID("leading"));
+                             if(desc.hasKey(transformID)) {
+                                 mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
+                                 leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+                             }
+                        }
+                    }
+                     if(styleDesc.hasKey(colorID)) 
+                        color = this.getColor(styleDesc.getObjectValue(colorID));
+                }
+                
+                if(model.textAlpha)
+                    alpha = Math.round(pageItem.opacity)/100 ;
+
+                if (model.textFont) {
+                    if(font == "")
+                        font = kDefaultFontVal;
+                        
+                    infoText += "\rFont-Family: " + font;
+                    cssText += "font-family: " + font + ";";
+                }
+
+                //Get the font size.
+                if (model.textSize) {
+                    if(size == "")
+                        size = kDefaultFontSize;
+                    var fontSize = "";
+                    //Calculate the font size in 'em' units.
+                    if(model.specInEM) {
+                        if(model.baseFontSize != 0)
+                            rltvFontSize = model.baseFontSize;
+                            
+                        if($.specctrPsCommon.getTypeUnits() == 'mm')
+                            rltvFontSize = $.specctrPsCommon.pointsToUnitsString(rltvFontSize, Units.MM).toString().replace(' mm','');
+                        
+                        fontSize = Math.round(size / rltvFontSize * 100) / 100 + " em";
+                    } else {
+                        fontSize = Math.round(size * 100) / 100;
+                        fontSize = $.specctrPsCommon.getScaledValue(fontSize) + " " + $.specctrPsCommon.getTypeUnits();
+                    }
+
+                    infoText += "\rFont-Size: " + fontSize;
+                    cssText += "font-size: " + fontSize + ";";
+                }
+            
+                //Get the color of text.
+                if (model.textColor) {
+                    if(color == "")
+                        color = this.getDefaultColor();
+                    color = this.colorAsString(color);
+                    if(alpha != "" && color.indexOf("(") >= 0) {
+                        color = this.convertColorIntoCss(color, alpha);
+                        alpha = "";
+                    }
+                    infoText += "\rColor: " + color;
+                     cssText += "color: "+ color.toLowerCase() + ";";
+                }
+
+                //Get the style of text.
+                if (model.textStyle) {
+                    var styleString = "normal";
+                    if (bold == true) 
+                        styleString = "bold";
+                    if (italic == true) 
+                        styleString += "/ italic";
+
+                    infoText += "\rFont-Style: " + styleString;
+                    cssText += "font-style: "+ styleString + ";";
+                    styleString = "";
+
+                    if (underline != "" && underline != "underlineOff" )
+                        styleString = "underline";
+                    if (strike != "" && strike != "strikethroughOff") {
+                        if(styleString != "")
+                            styleString += "/ ";
+                        styleString += "strike-through";
+                    }
+                
+                    if(styleString != "") {
+                        infoText += "\rText-Decoration: " + styleString;
+                        cssText += "text-decoration: "+ styleString + ";";
+                    }
+                }
+
+                //Get the alignment of the text.
+                try {
+                    if (model.textAlignment) {
+                        var s = textItem.justification.toString();
+                        s = s.substring(14,15).toLowerCase() + s.substring(15).toLowerCase();
+                        infoText += "\rText-Align: " + s;
+                        cssText += "text-align: " + s + ";";
+                    }
+                } catch(e) {
+                   var alignment = this.getAlignment();
+                   infoText += "\rText-Align: " + alignment;
+                   cssText += "text-align: " + alignment + ";";
+                }
+           
+                if (model.textLeading) {
+                    if(leading == "" || isAutoLeading == true)
+                        leading =  size / 100 * Math.round(kDefaultLeadVal);
+                    leading = leading.toString().replace("px", "");
+                    
+                    //Calculate the line height in 'em' units.
+                    if(model.specInEM) {
+                        var rltvLineHeight = "";
+                        if(model.baseLineHeight != 0)
+                            rltvLineHeight = model.baseLineHeight;
+                        else
+                            rltvLineHeight = rltvFontSize * 1.4;
+                        
+                         if($.specctrPsCommon.getTypeUnits() == 'mm')
+                                rltvLineHeight = $.specctrPsCommon.pointsToUnitsString(rltvLineHeight, Units.MM).toString().replace(' mm','');
+                        
+                        leading = Math.round(leading / rltvLineHeight * 100) / 100 + " em";
+                    } else {   
+                        leading = Math.round(leading * 100) / 100 + " " + $.specctrPsCommon.getTypeUnits();
+                    }
+                
+                    infoText += "\rLine-Height: " + leading;
+                    cssText += "line-height: " + leading + ";";
+                }
+
+                if (model.textTracking) {
+                    var tracking = Math.round(tracking / 1000 * 100) / 100 + " em";
+                    infoText += "\rLetter-Spacing: " + tracking;
+                    cssText += "letter-spacing: " + tracking + ";";
+                }
+            
+                if (alpha != "") {
+                    infoText += "\rOpacity: " + alpha;
+                    cssText += "opacity: " + alpha + ";";
+                }
+            
+                if (model.textEffects) {
+                    var strokeVal = this.getStrokeValOfLayer(pageItem);
+                    if(strokeVal != "")
+                        infoText += strokeVal;
+                        
+                    var effectValue = this.getEffectsOfLayer();
+                    if(effectValue != "")
+                        infoText += effectValue;
+                        
+                     app.activeDocument.activeLayer = pageItem;
                 }
             }
         } catch(e) {
             alert(e);
         }
 
-        try {
-            if(model.textAlpha)
-                alpha = Math.round(pageItem.opacity)/100 ;
-
-            var name = pageItem.name;
-            var wordsArray = name.split(" ");
-            if(wordsArray.length > 2)
-                name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
-
-            cssText = name.toLowerCase()+" {";
-            if (model.textFont) {
-                if(font == "")
-                    font = kDefaultFontVal;
-                    
-                infoText += "\rFont-Family: " + font;
-                cssText += "\r\tfont-family: " + font + ";";
-            }
-
-            //Get the font size.
-            if (model.textSize) {
-                if(size == "")
-                    size = kDefaultFontSize;
-                var fontSize = "";
-                //Calculate the font size in 'em' units.
-                if(model.specInEM) {
-                    if(model.baseFontSize != 0)
-                        rltvFontSize = model.baseFontSize;
-                        
-                    if($.specctrPsCommon.getTypeUnits() == 'mm')
-                        rltvFontSize = $.specctrPsCommon.pointsToUnitsString(rltvFontSize, Units.MM).toString().replace(' mm','');
-                    
-                    fontSize = Math.round(size / rltvFontSize * 100) / 100 + " em";
-                } else {
-                    fontSize = Math.round(size * 100) / 100;
-                    fontSize = $.specctrPsCommon.getScaledValue(fontSize) + " " + $.specctrPsCommon.getTypeUnits();
-                }
-
-                infoText += "\rFont-Size: " + fontSize;
-                cssText += "\r\tfont-size: " + fontSize + ";";
-            }
-        
-            //Get the color of text.
-            if (model.textColor) {
-                if(color == "")
-                    color = this.getDefaultColor();
-                color = this.colorAsString(color);
-                if(alpha != "" && color.indexOf("(") >= 0) {
-                    color = this.convertColorIntoCss(color, alpha);
-                    alpha = "";
-                }
-                infoText += "\rColor: " + color;
-                 cssText += "\r\tcolor: "+ color.toLowerCase() + ";";
-            }
-
-            //Get the style of text.
-            if (model.textStyle) {
-                var styleString = "normal";
-                if (bold == true) 
-                    styleString = "bold";
-                if (italic == true) 
-                    styleString += "/ italic";
-
-                infoText += "\rFont-Style: " + styleString;
-                cssText += "\r\tfont-style: "+ styleString + ";";
-                styleString = "";
-
-                if (underline != "" && underline != "underlineOff" )
-                    styleString = "underline";
-                if (strike != "" && strike != "strikethroughOff") {
-                    if(styleString != "")
-                        styleString += "/ ";
-                    styleString += "strike-through";
-                }
-            
-                if(styleString != "") {
-                    infoText += "\rText-Decoration: " + styleString;
-                    cssText += "\r\ttext-decoration: "+ styleString + ";";
-                }
-            }
-
-            //Get the alignment of the text.
-            try {
-                if (model.textAlignment) {
-                    var s = textItem.justification.toString();
-                    s = s.substring(14,15).toLowerCase() + s.substring(15).toLowerCase();
-                    infoText += "\rText-Align: " + s;
-                    cssText += "\r\ttext-align: " + s + ";";
-                }
-            } catch(e) {
-               var alignment = this.getAlignment();
-               infoText += "\rText-Align: " + alignment;
-               cssText += "\r\ttext-align: " + alignment + ";";
-            }
-       
-            if (model.textLeading) {
-                if(leading == "" || isAutoLeading == true)
-                    leading =  size / 100 * Math.round(kDefaultLeadVal);
-                leading = leading.toString().replace("px", "");
-                
-                //Calculate the line height in 'em' units.
-                if(model.specInEM) {
-                    var rltvLineHeight = "";
-                    if(model.baseLineHeight != 0)
-                        rltvLineHeight = model.baseLineHeight;
-                    else
-                        rltvLineHeight = rltvFontSize * 1.4;
-                    
-                     if($.specctrPsCommon.getTypeUnits() == 'mm')
-                            rltvLineHeight = $.specctrPsCommon.pointsToUnitsString(rltvLineHeight, Units.MM).toString().replace(' mm','');
-                    
-                    leading = Math.round(leading / rltvLineHeight * 100) / 100 + " em";
-                } else {   
-                    leading = Math.round(leading * 100) / 100 + " " + $.specctrPsCommon.getTypeUnits();
-                }
-            
-                infoText += "\rLine-Height: " + leading;
-                cssText += "\r\tline-height: " + leading + ";";
-            }
-
-            if (model.textTracking) {
-                var tracking = Math.round(tracking / 1000 * 100) / 100 + " em";
-                infoText += "\rLetter-Spacing: " + tracking;
-                cssText += "\r\tletter-spacing: " + tracking + ";";
-            }
-        
-            if (alpha != "") {
-                infoText += "\rOpacity: " + alpha;
-                cssText += "\r\topacity: " + alpha + ";";
-            }
-        
-            if (model.textEffects) {
-                var strokeVal = this.getStrokeValOfLayer(pageItem);
-                if(strokeVal != "")
-                    infoText += strokeVal;
-                    
-                var effectValue = this.getEffectsOfLayer();
-                if(effectValue != "")
-                    infoText += effectValue;
-                    
-                 doc.activeLayer = pageItem;
-            }
-        } catch(e) {}
-        
-        cssText += "\r}";
+        cssText += "}";
         if(model.specInEM) {
-            cssBodyText = "body {\r\tfont-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;\r}\r\r";
+            cssBodyText = "body {font-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;}";
             $.specctrPsCommon.setCssBodyText(cssBodyText);
         }
         
@@ -637,7 +609,7 @@ $.specctrPsProperties = {
                     }
                 
                     infoText += cssColor;
-                    cssText += "\r\tbackground: " + cssColor + ";";
+                    cssText += "background: " + cssColor + ";";
                 } else if(pathItem.kind == LayerKind.GRADIENTFILL) {
                     var gradientValue = "";
                     infoText += "\rBackground: ";
@@ -651,7 +623,7 @@ $.specctrPsProperties = {
                     }
                     
                     infoText += gradientValue;
-                    cssText += "\r\tbackground: " + gradientValue +";";
+                    cssText += "background: " + gradientValue +";";
                 }
             }
         } catch(e) {}
@@ -666,7 +638,7 @@ $.specctrPsProperties = {
             
             if(alpha != "") {
                 infoText += "\rOpacity: "+alpha;
-                cssText += "\r\topacity: "+alpha+";";
+                cssText += "opacity: "+alpha+";";
             }
         
             if(model.shapeEffects) {
@@ -681,12 +653,12 @@ $.specctrPsProperties = {
                 var roundCornerValue = this.getRoundCornerValue();
                 if(roundCornerValue != "") {
                     infoText += "\r" + roundCornerValue;
-                    cssText += "\r\t" + roundCornerValue.toLowerCase() + ";";
+                    cssText += "" + roundCornerValue.toLowerCase() + ";";
                 }
             }
         } catch(e) {}
         
-        cssText += "\r}";
+        cssText += "}";
         doc.activeLayer = pageItem;
         return infoText;
     },
@@ -700,6 +672,7 @@ $.specctrPsProperties = {
 
     //Get the color value of selected color model in UI.
     colorAsString : function(c) {
+        this.deselecAllLayers();        //To avoid color change on selected item.
         var result = "";
         var color = c;
         var newColor, colorType;
@@ -771,7 +744,7 @@ $.specctrPsProperties = {
                         result = this.rgbToHsl(colorType);
                         break;
 
-                    case "RGB AS HEX":
+                    case "HEX":
                         var red = Math.round(colorType.red).toString(16);
                         if (red.length === 1)
                             red = "0" + red;
@@ -803,7 +776,8 @@ $.specctrPsProperties = {
                 break;
 
                 case "CMYKColor":
-                    result = "cmyk(" + Math.round(colorType.cyan) + ", " + Math.round(colorType.magenta) + ", " + Math.round(colorType.yellow) + ", " + Math.round(colorType.black) + ")";
+                    result = "cmyk(" + Math.round(colorType.cyan) + ", " + Math.round(colorType.magenta) + 
+                            ", " + Math.round(colorType.yellow) + ", " + Math.round(colorType.black) + ")";
                     break;
 
                 case "LabColor":
@@ -1117,14 +1091,14 @@ $.specctrPsProperties = {
         }
         var infoText = sourceItem.kind.toString().replace ("LayerKind.", "");
         var pageItem = sourceItem;
-        cssText = "." + pageItem.name.toLowerCase() + " {\r\t" + infoText.toLowerCase() + ";";
+        cssText = "." + pageItem.name.toLowerCase() + " {" + infoText.toLowerCase() + ";";
 
         if(model.textAlpha) {
-            var opacityString = "\r\tOpacity: " + Math.round(pageItem.opacity) / 100;
-            infoText += opacityString;
+            var opacityString = "Opacity: " + Math.round(pageItem.opacity) / 100;
+            infoText += "\r\t" + opacityString;
             cssText += opacityString.toLowerCase() + ";";
         }
-        cssText += "\r}";
+        cssText += "}";
         return infoText;
     },
 
@@ -1168,5 +1142,15 @@ $.specctrPsProperties = {
         }
         return newLayer;
     },
-
+    
+    //Deselect all selected layers from active document.
+    deselecAllLayers : function() {
+        try {
+            var desc = new ActionDescriptor();   
+            var ref = new ActionReference();   
+            ref.putEnumerated( charIDToTypeID('Lyr '), charIDToTypeID('Ordn'), charIDToTypeID('Trgt') );   
+            desc.putReference( charIDToTypeID('null'), ref );   
+            executeAction( stringIDToTypeID('selectNoLayers'), desc, DialogModes.NO );  
+        } catch (e) {}
+    }
 };
