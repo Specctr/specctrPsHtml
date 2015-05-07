@@ -4,72 +4,10 @@ Description: Include methods to initialize the panel's component according to th
 Include all spec button click handlers and methods to communicate between js and jsx.  
  */
 
-var Specctr = window.Specctr;
+var Specctr = window.Specctr || {};
 var specctrInit = {};
 SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
 SPECCTR_API = SPECCTR_HOST += "/api/v1";
-
-/**
- * Validate the license of the user and move to the tab container
- *  if user's credentials valid.
- */
-function activateButtonClickHandler() {
-	// Get Extension Id and matching productCode.
-	var productCodes = {
-			// Photoshop 2.0.
-			"SpecctrPs-Pro" : "63221",
-			"SpecctrPs-10" : "63222",
-			"SpecctrPs-20" : "63223",
-			"SpecctrPs-30" : "63224",
-			"SpecctrPs-Site" : "63225",
-
-			// Illustrator 2.0.
-			"SpecctrPro" : "63233",
-			"SpecctrBusiness10" : "63235",
-			"SpecctrBusiness20" : "63236",
-			"SpecctrBusiness30" : "63237",
-			"SpecctrBusinessSite" : "63238",
-
-			// Indesign 2.0.
-			"Specctr-Pro-ID" : "63240",
-			"Specctr-Business-10" : "63241",
-			"Specctr-Business-20" : "63242",
-			"Specctr-Business-30" : "63243",
-			"Specctr-Business-Site" : "63244"
-	};
-
-	if(extensionId === '')
-		extensionId = specctrUtility.getExtensionId();
-
-	var logData = "";
-
-	// If no installed extension is matched with productCodes values.
-	if (!productCodes[extensionId]) {
-		logData = "Incorrect product code";
-		specctrUI.showDialog(logData);
-		logData = pref.createLogData(logData);
-		pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
-		return;
-	}
-
-	var urlRequest = SPECCTR_API + "/register_machine?";
-	urlRequest += "&email=" + $("#emailInput").val();
-	urlRequest += "&password=" + $("#passwordInput").val();
-
-	$.ajax({
-		url:urlRequest,
-		type: 'POST',
-		contentType: "application/json",
-		dataType: "json",
-		success: completeHandler,
-		error: function(xhr) {
-			var response = JSON.parse(xhr.responseText);
-			specctrUI.showDialog(response.message);
-			logData = pref.createLogData(response.message);
-			pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
-		}
-	});
-}
 
 /**
  * Callback function which is called when validation of user's license take place.
@@ -149,6 +87,7 @@ function onLoaded() {
 			specctrInit.init();
 
 	} catch (e) {
+		console.log(e.stack);
 		alert(e);
 	}
 }

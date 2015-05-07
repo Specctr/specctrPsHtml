@@ -10,14 +10,13 @@
 <meta charset="utf-8">
 <script src="../lib/CSInterface.js"></script>
 <script src="../lib/jquery-1.9.1.js"></script>
-<script src="../lib/loader.js"></script>
 <script src="../lib/statsc-client.js"></script>
 <script src="../lib/analytics.js"></script>
 <script src="../lib/jquery-ui-1.10.2.custom.js"></script>
 <script src="../lib/cssjson.js"></script>
 
+<script src="../controller/loader.js"></script>
 <script src="../model/appModel.js"></script>
-
 <script src="../views/cloudTab.js"></script>
 
 
@@ -34,6 +33,7 @@
 <script src="../lib/ai_host_adapter.js"></script>
 
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/style.css">
+<link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/loginStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/propertiesButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/dimensionButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/spacingButtonStyle.css">
@@ -70,7 +70,8 @@
 				</li>
 				
 				<li>
-					<div class="loginPageButton" id="loginButton">
+					<div class="loginPageButton" id="loginButton"
+						onclick="loginButtonClickHandler()">
 						<label>Login</label>
 					</div>
 				</li>

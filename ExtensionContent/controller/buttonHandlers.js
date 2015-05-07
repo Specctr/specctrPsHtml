@@ -3,52 +3,15 @@ File-Name: buttonHandlers.js
 Description: Consist all the event handlers of buttons present in panel such as click handlers.
  */
 
+
 /**
  * Validate the license of the user and move to the tab container
  *  if user's credentials valid.
  */
-function activateButtonClickHandler() {
-	// Get Extension Id and matching productCode.
-	var productCodes = {
-			// Photoshop 2.0.
-			"SpecctrPs-Pro" : "63221",
-			"SpecctrPs-10" : "63222",
-			"SpecctrPs-20" : "63223",
-			"SpecctrPs-30" : "63224",
-			"SpecctrPs-Site" : "63225",
-
-			// Illustrator 2.0.
-			"SpecctrPro" : "63233",
-			"SpecctrBusiness10" : "63235",
-			"SpecctrBusiness20" : "63236",
-			"SpecctrBusiness30" : "63237",
-			"SpecctrBusinessSite" : "63238",
-
-			// Indesign 2.0.
-			"Specctr-Pro-ID" : "63240",
-			"Specctr-Business-10" : "63241",
-			"Specctr-Business-20" : "63242",
-			"Specctr-Business-30" : "63243",
-			"Specctr-Business-Site" : "63244"
-	};
-
-	if(extensionId === '')
-		extensionId = specctrUtility.getExtensionId();
-
-	var logData = "";
-
-	// If no installed extension is matched with productCodes values.
-	if (!productCodes[extensionId]) {
-		logData = "Incorrect product code";
-		specctrDialog.showAlert(logData);
-		logData = pref.createLogData(logData);
-		pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
-		return;
-	}
-
-	var urlRequest = SPECCTR_API += "/register_machine?";
-	urlRequest += "&email=" + $("#emailInput").val();
-	urlRequest += "&password=" + $("#passwordInput").val();
+function loginButtonClickHandler() {
+	var urlRequest = SPECCTR_API + "/register_machine?";
+	urlRequest += "&email=" + $("#loginEmail").val();
+	urlRequest += "&password=" + $("#loginPassword").val();
 
 	$.ajax({
 		url:urlRequest,
@@ -58,8 +21,8 @@ function activateButtonClickHandler() {
 		success: completeHandler,
 		error: function(xhr) {
 			var response = JSON.parse(xhr.responseText);
-			specctrDialog.showAlert(response.message);
-			logData = pref.createLogData(response.message);
+			specctrUI.showDialog(response.message);
+			var logData = pref.createLogData(response.message);
 			pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
 		}
 	});
