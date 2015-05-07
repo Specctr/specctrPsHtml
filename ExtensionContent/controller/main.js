@@ -6,8 +6,6 @@ Include all spec button click handlers and methods to communicate between js and
 
 var Specctr = window.Specctr || {};
 var specctrInit = {};
-SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
-SPECCTR_API = SPECCTR_HOST += "/api/v1";
 
 /**
  * Callback function which is called when validation of user's license take place.
@@ -32,8 +30,7 @@ function completeHandler(response, status) {
 		specctrInit.init();
 	} else {
 		analytics.trackActivation('failed');
-		specctrUI.showDialog(response.message);
-		return;
+		specctrDialog.showAlert(response.message);
 	}
 }
 

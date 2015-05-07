@@ -402,7 +402,7 @@ $.specctrAi = {
             var width = pageItemBounds[2] - pageItemBounds[0];
             var heightForSpec = height;
             var widthForSpec = width;
-        
+
             //Responsive option is checked or not.
             if (!model.specInPrcntg) {
                 //Values after applying scaling.
