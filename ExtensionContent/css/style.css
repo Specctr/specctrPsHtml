@@ -47,7 +47,7 @@ input[type="text"]:disabled {
 }
 
 label {
-	cursor: default;
+	cursor: inherit;
 }
 /*-------------------------------------------------------------*/
 

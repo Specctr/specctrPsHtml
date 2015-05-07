@@ -10,14 +10,20 @@
 <meta charset="utf-8">
 <script src="../lib/CSInterface.js"></script>
 <script src="../lib/jquery-1.9.1.js"></script>
+<script src="../lib/loader.js"></script>
 <script src="../lib/statsc-client.js"></script>
 <script src="../lib/analytics.js"></script>
 <script src="../lib/jquery-ui-1.10.2.custom.js"></script>
 <script src="../lib/cssjson.js"></script>
+
 <script src="../model/appModel.js"></script>
+
+<script src="../views/cloudTab.js"></script>
+
 
 <script src="../controller/preferences.js"></script>
 <script src="../controller/utility.js"></script>
+<script src="../controller/api/auth.js"></script>
 <script src="../controller/specctrUI.js"></script>
 <script src="../controller/main.js"></script>
 <script src="../controller/buttonHandlers.js"></script>
@@ -390,15 +396,29 @@
 				<!-- Starting of cloud tab. -->
 				<div id="tabpage_4" class="tabpage">
 					<div class="tabTitle">Specctr Clouds</div>
-					<div class="marginTop30px">
-						<label class="subscriptionNote boldText">SUBSCRIPTION PLAN:</label>
+					<div class="plan-container">
+						<div class="email marginTop30px">
+							<label class="email subscriptionNote boldText">EMAIL:</label>
+							<span id="userEmail" class="email subscriptionNote boldText"></span>						
+						</div>
+						
+						<div class="plan marginTop30px">
+							<label class="subscriptionNote boldText">PLAN:</label>
+							<span id="planName" class="plan subscriptionNote boldText"></span>
+						</div>
+						
+						<div class="plan marginTop30px subscriptionNote textAlignCenter">
+							<a id="user-profile-link" class="link" href="">Specctr Profile</a>
+						</div>
 					</div>
-					<div class="marginTop20px width216px">
-						<label class="subscriptionNote floatRight">15 DAYS REMAINING</label>
-						<label class="subscriptionNote floatLeft">TRIAL</label>
-					</div>
-					<div class="textAllignCenter marginTop50px">
-						<a class="link" href="#">Activate Specctr Pro Today!</a>
+					
+					<div class="trial-container hideBlock">
+						<div class="trial marginTop20px width216px">
+							<label class="subscriptionNote floatRight">15 DAYS REMAINING</label>
+						</div>
+						<div class="trial textAllignCenter marginTop50px">
+							<a class="link" href="#">Activate Specctr Pro Today!</a>
+						</div>
 					</div>
 				</div>
 				<!-- Ending of cloud tab. -->

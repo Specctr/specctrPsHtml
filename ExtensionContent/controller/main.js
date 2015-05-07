@@ -4,6 +4,7 @@ Description: Include methods to initialize the panel's component according to th
 Include all spec button click handlers and methods to communicate between js and jsx.  
  */
 
+var Specctr = window.Specctr;
 var specctrInit = {};
 SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
 SPECCTR_API = SPECCTR_HOST += "/api/v1";
@@ -51,7 +52,7 @@ function activateButtonClickHandler() {
 		return;
 	}
 
-	var urlRequest = SPECCTR_API += "/register_machine?";
+	var urlRequest = SPECCTR_API + "/register_machine?";
 	urlRequest += "&email=" + $("#emailInput").val();
 	urlRequest += "&password=" + $("#passwordInput").val();
 
@@ -85,7 +86,8 @@ function completeHandler(response, status) {
 		var activationPrefs = {
 				licensed : true,
 				machine_id: response.machine_id,
-				api_key: response.api_key
+				api_key: response.api_key,
+				email: response.email
 		};
 		pref.addFileToPreferenceFolder('.license', 
 				JSON.stringify(activationPrefs)); //Create license file.
@@ -140,7 +142,7 @@ function onLoaded() {
 		if (activationPrefs === "")
 			return;
 		else
-			activationPrefs = JSON.parse(activationPrefs);
+			activationPrefs = Specctr.Activation = JSON.parse(activationPrefs);
 
 		isLicensed = activationPrefs.licensed;
 		api_key = activationPrefs.api_key;
@@ -355,6 +357,8 @@ specctrInit.init = function() {
 
 		this.setModelToUIComponents();
 		this.setModelToResponsive();
+		
+		Specctr.Auth.checkStatus(Specctr.Activation);
 	} catch (e) {
 		alert(e);
 	}
