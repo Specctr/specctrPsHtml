@@ -1,3 +1,87 @@
+/*
+File-Name: loginStyle.css
+Description: Includes styling code related to login page. 
+*/
+
 ul#loginBlock, ul#activateBlock {
 	list-style-type: none;
+}
+
+#loginContainer {
+	border: none;
+	Height: 541px;
+	Width: 241px;
+	background-color: #2266ff;
+}
+
+#dvLoginContainer {
+	height: 470px;
+}
+
+#dvLoginContainer ul {
+	height: 200px;
+	margin-left: 10px;
+}
+
+#dvLoginContainer ul li{
+	margin-bottom: 15px;
+}
+
+#specctrLoginImage {
+	padding-left: 75px;
+	padding-top: 30px;
+}
+
+.loginTextItem {
+	height: 30px !important;
+	width: 218px;
+	font-size: 18px;
+	font-family: Arial;
+}
+
+.loginHeader {
+	height: 170px;
+	padding-left: 15px;
+	padding-top: 70px;
+}
+
+.activationHeader {
+	padding-top: 30px;
+	height: 120px;
+	padding-left: 15px;
+}
+
+#loignHeaderLabel {
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 24px;
+}
+
+.loginPageButton {
+	width: 220px !important;
+	border: 1px solid #ffffff;
+	height: 30px !important;
+	padding-top: 3px;
+	text-align: center;
+	cursor: pointer;
+}
+
+.loginPageButton label {
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 20px; 
+	cursor: pointer;
+}
+
+#loginFooter {
+	margin-top: 20px !important;
+	width: 240px!important;
+	text-align: center;
+}
+
+#loginFooter label {
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 14px;
+	cursor: pointer;
 }

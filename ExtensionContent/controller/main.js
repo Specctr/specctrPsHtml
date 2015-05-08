@@ -15,7 +15,7 @@ var specctrInit = {};
 function completeHandler(response, status) {
 	var logData = pref.createLogData(response.message);
 	pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
-
+	
 	// If unsuccessful, return without saving the data in file.
 	if (response.success) {
 		analytics.trackActivation('succeeded');	

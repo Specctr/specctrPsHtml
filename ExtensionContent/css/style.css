@@ -42,6 +42,11 @@ input[type="checkbox"] {
 	margin: 0px;
 }
 
+input[type="radio"] {
+	margin-left: 0px !important;
+	margin-bottom: 1px !important;
+}
+
 input[type="text"]:disabled {
 	background: #e1e1e1 !important;
 }
@@ -66,10 +71,6 @@ label {
 
 .nonPsElement {
 	display: block;
-}
-
-.bgColorE6E6E6 {
-	background-color: #E6E6E6 !important;
 }
 
 .bgColor000000 {
@@ -213,87 +214,6 @@ label {
 	width: 150px !important;
 }
 
-/*-------------------------------------------------------------*/
-
-/*----------------Login container styles-----------------------*/
-#loginContainer {
-	border: none;
-	Height: 541px;
-	Width: 241px;
-	background-color: #2266ff;
-}
-
-#dvLoginContainer {
-	height: 470px;
-}
-
-#dvLoginContainer ul {
-	height: 200px;
-	margin-left: 10px;
-}
-
-#dvLoginContainer ul li{
-	margin-bottom: 15px;
-}
-
-#specctrLoginImage {
-	padding-left: 75px;
-	padding-top: 30px;
-}
-
-.loginTextItem {
-	height: 30px !important;
-	width: 218px;
-	font-size: 18px;
-	font-family: Arial;
-}
-
-.loginHeader {
-	height: 170px;
-	padding-left: 15px;
-	padding-top: 70px;
-}
-
-.activationHeader {
-	padding-top: 30px;
-	height: 120px;
-	padding-left: 15px;
-}
-
-#loignHeaderLabel {
-	color: #ffffff;
-	font-family: Arial;
-	font-size: 24px;
-}
-
-.loginPageButton {
-	width: 220px !important;
-	border: 1px solid #ffffff;
-	height: 30px !important;
-	padding-top: 3px;
-	text-align: center;
-	cursor: pointer;
-}
-
-.loginPageButton label {
-	color: #ffffff;
-	font-family: Arial;
-	font-size: 20px; 
-	cursor: pointer;
-}
-
-#loginFooter {
-	margin-top: 20px !important;
-	width: 240px!important;
-	text-align: center;
-}
-
-#loginFooter label {
-	color: #ffffff;
-	font-family: Arial;
-	font-size: 14px;
-	cursor: pointer;
-}
 /*-------------------------------------------------------------*/
 
 /*------------------Modal dialog styling-----------------------*/
@@ -564,9 +484,12 @@ label {
 
 /*--------------Style applied on setting page----------------*/
 #settingPage {
-	padding-left: 9px !important;
+	padding-left: 6px !important;
 	height: 503px !important;
-	background-color: #E6E6E6;
+	background-color: #ECECEC;
+	border: 1px solid #C9CBCC;
+	border-right-width: 3px;
+	border-bottom: none;
 }
 
 .settingHeader {
@@ -574,32 +497,35 @@ label {
 	font-family: Arial;
 	font-size: 11px;
 	color: #808080;
-	background-color: #E6E6E6;
-	height: 20px;
+	background-color: #F9F9F9;
+	height: 18px;
 	padding-top: 5px;
-	margin-left: -10px;
+	margin-left: -6px;
+	padding-left: 23px;
 }
 
 .settingHeader img {
 	float: right;
 	width: 20px;
 	height: 20px;
-	margin-top: -4px !important;
+	margin-top: -3px !important;
+	margin-right: 3px;
 }
 
 .settingline {
-	border: 1px solid #808080;
+	border: 1px solid #666766;
 	margin-top: 5px;
 	margin-bottom: 6px;
-	width: 219px;
+	width: 216px;
 }
 
 .settingPageHeader {
-	font-family: sans-serif;
+	font-family: Arial;
 	font-size: 13px;
 	text-align: left;
 	padding-top: 4px;
 	font-weight: bold;
+	color: #666666;
 }
 
 .settingPageFirstChildBlock {
@@ -617,13 +543,11 @@ label {
 	width: 140px;
 	display: table-cell;
 	float: left;
-	margin-left: -5px;
 	vertical-align: top;
 }
 
 .firstChildLeftBlock label {
 	float: left;
-	margin-left: 5px;
 	font-weight: normal;
 	color: #707070;
 }
@@ -704,8 +628,6 @@ label {
 
 .colorPickerStyle {
 	margin-top: 5px !important;
-	margin-left: 10px !important;
-	height: 30x;
 	width: 150px;
 }
 
@@ -747,7 +669,6 @@ label {
 }
 
 .settingPageLabel {
-	margin-left: 5px;
 	font-family: Arial;
 	font-size: 11px;
 	font-weight: normal;
@@ -781,11 +702,24 @@ label {
 }
 
 #includeStrokeCheckbox {
-	margin: 15px 0px 15px 6px;
+	margin: 15px 0px 15px 0px;
 }
 
 #settingBlock {
 	height: 38px;
+}
+
+.settingFooter {
+	background-color: #ECECEC;
+	border: 1px solid #C9CBCC;
+	border-right-width: 3px;
+	border-top: none;
+	height: 37px !important;
+}
+
+.setFooterLayOut {
+	margin-right: -3px;
+	margin-top: -1px;
 }
 
 #settingIcon {
@@ -798,6 +732,7 @@ label {
 	font-style: normal;
 	color: #808080;
 	margin-top: 3px; 
+	cursor: pointer;
 }
 /*-------------------------------------------------------------*/
 

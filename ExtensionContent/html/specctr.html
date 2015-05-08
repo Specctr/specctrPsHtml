@@ -700,11 +700,11 @@
 				<form class="marginTopBottom10px width150px" 
 					onclick="radioButtonClickHandler(event, 'decimalFractionValue')">
 					<input type="radio"  name="decimalFractionOptions" id="decimalRadioButton" 
-						value="decimal" class="marginBottom1px">
+						value="decimal">
 					<label class="radioLabel" for="decimalRadioButton">Decimal </label>
 					<div class="floatRight">
 						<input type="radio" name="decimalFractionOptions" id="fractionRadioButton"
-							value="fraction" class="marginBottom1px">
+							value="fraction">
 						<label class="radioLabel" for="fractionRadioButton">Fraction</label>
 					</div>
 				</form>
@@ -726,10 +726,12 @@
 				</div>
 			</div>
 		
-		<div id="settingBlock" class="height30px" onclick="toggleSettingPage(this)"> 
-			<img id="settingIcon" class="floatRight"
-			 src="../Images/Icon_prefs.png" width="32" height="24"/>
-		 	<label id="footerLabel"	class="floatRight footerNote">Settings</label>
+		<div id="settingBlock" onclick="toggleSettingPage(this)"> 
+			<div id="settingBlokChildDiv">
+				<img id="settingIcon" class="floatRight"
+				 src="../Images/Icon_prefs.png" width="32" height="24"/>
+			 	<label id="footerLabel"	class="floatRight footerNote">Settings</label>
+		 	</div>
 		 </div>
 	</div>
 

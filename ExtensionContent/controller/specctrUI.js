@@ -14,12 +14,14 @@ function toggleSettingPage(){
 		$("#settingIcon").attr("src", "../Images/Icon_prefs_active.png");
 		$("#tabBlock").css("display", "none");
 		$("#settingPage").css("display", "block");
-		$("#settingBlock").addClass("bgColorE6E6E6");
+		$("#settingBlock").addClass("settingFooter");
+		$("#settingBlokChildDiv").addClass("setFooterLayOut");
 	} else {
 		$("#settingIcon").attr("src", "../Images/Icon_prefs.png");
 		$("#settingPage").css("display", "none");
 		$("#tabBlock").css("display", "block");
-		$("#settingBlock").removeClass("bgColorE6E6E6");
+		$("#settingBlock").removeClass("settingFooter");
+		$("#settingBlokChildDiv").removeClass("setFooterLayOut");
 	}
 }
 
