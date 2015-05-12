@@ -16,6 +16,18 @@ var cssText = "";
 var cssBodyText = "";
 var propSpecUndo=({});
 
+Array.prototype.uniquePush = function (value){
+    var temp = [];
+    this.push(value);
+    this.sort();
+    var arrayLength = this.length;
+    for(i=0;i<arrayLength;i++){
+        if(this[i]==this[i+1]) {continue}
+        temp[temp.length]=this[i];
+    }
+    return temp;
+}
+
 $.specctrAi = {
     //Get the application font's name and font's family.
     getFontList : function() {
@@ -1795,7 +1807,7 @@ $.specctrAi = {
 
            spec.translate(specX, (yReference - spec.visibleBounds[1]));			
            spec.move(group, ElementPlacement.INSIDE);
-           
+
            if(arm)
                 arm.remove();
             
@@ -2702,12 +2714,10 @@ $.specctrAi = {
     getSpecsInfoForTextItem : function(pageItem) {
         var infoText = "";
         var textItem = pageItem;
+        var fontSize = [], leading = [], fontFamily = [], tracking = [],
+        textColor = [], fontStyle = [], textDecoration = [], alignment = [];
         
-        var attr = textItem.textRanges[0].characterAttributes;
-        var paraAttr = textItem.paragraphs[0].paragraphAttributes;
-        
-         var name = textItem.name;
-        
+        var name = textItem.name;
         if (!name)
             name = textItem.contents;
         
@@ -2717,10 +2727,11 @@ $.specctrAi = {
                     
         cssText = name.toLowerCase() + " {";
         infoText = name;
-        
         try {
-            var fontSize, leading, alpha = "";
-            
+            var alpha = "";
+            if (model.textAlpha)
+                alpha = Math.round(pageItem.opacity) / 100;
+                
             if (model.specInEM) {
                 var rltvFontSize = 16, rltvLineHeight;
                 
@@ -2731,98 +2742,140 @@ $.specctrAi = {
                     rltvLineHeight = model.baseLineHeight;
                 else
                     rltvLineHeight = rltvFontSize * 1.4;
+            } 
+            
+            var textRangeLength = textItem.textRanges.length;
+            for (var i = 0; i < textRangeLength; i++) {
+                var attr = textItem.textRanges[i].characterAttributes;
+                if(model.specInEM) {
+                    fontSize = fontSize.uniquePush(Math.round(attr.size / rltvFontSize * 100) / 100 + " em");
+                    leading = leading.uniquePush (Math.round(attr.leading / rltvLineHeight * 100) / 100 + " em");
+                } else {
+                    fontSize = fontSize.uniquePush(this.getScaledValue(Math.round(attr.size * 10) / 10) + " " + this.typeUnits());
+                    leading = leading.uniquePush(Math.round(attr.leading * 10) / 10 + " " + this.typeUnits());
+                }
                 
-                fontSize = Math.round(attr.size / rltvFontSize * 100) / 100 + " em";
-                leading = Math.round(attr.leading / rltvLineHeight * 100) / 100 + " em";
-            } else {
-                fontSize = Math.round(attr.size * 10) / 10;
-                fontSize = this.getScaledValue(fontSize) + " " + this.typeUnits();
-                leading = Math.round(attr.leading * 10) / 10 + " " + this.typeUnits();
+                if (model.textFont)
+                    fontFamily = fontFamily.uniquePush(attr.textFont.name);
+                
+                if (model.textTracking)
+                    tracking = tracking.uniquePush(Math.round(attr.tracking / 1000 * 100) / 100 + " em");
+                
+                if (model.textColor)
+                    textColor = textColor.uniquePush(this.colorAsString(attr.fillColor));
+             
+                if (model.textStyle) {
+                    var styleString = "normal";
+
+                    if (attr.capitalization == FontCapsOption.ALLCAPS) 
+                        styleString = "all caps";
+                    if (attr.capitalization == FontCapsOption.ALLSMALLCAPS) 
+                        styleString = "all small caps";
+                    if (attr.capitalization == FontCapsOption.SMALLCAPS) 
+                        styleString = "small caps";
+                    
+                    fontStyle = fontStyle.uniquePush(styleString);
+                    
+                    styleString = "";
+                    if (attr.baselinePosition == FontBaselineOption.SUBSCRIPT) 
+                        styleString = "sub-script";
+                    else if (attr.baselinePosition == FontBaselineOption.SUPERSCRIPT) 
+                        textStyleString = "super-script";
+
+                    if (attr.underline) {
+                        if (styleString != "")
+                            styleString += " / ";
+                            
+                        styleString += "underline";
+                    }
+                
+                    if (attr.strikeThrough) {
+                        if(styleString != "")
+                            styleString += " / ";
+                        
+                        styleString += "strike-through";
+                    }
+
+                    if (styleString != "")
+                        textDecoration = textDecoration.uniquePush(styleString);
+                }
             }
             
-             if (model.textAlpha)
-                alpha = Math.round(pageItem.opacity) / 100;
-            
+            //Set it in infoText.
             if (model.textFont) {
-                var fontFamily = attr.textFont.name;
+                fontFamily = fontFamily.join();
                 infoText += "\rFont-Family: " + fontFamily;
-                cssText += "font-family: " + fontFamily + ";";
+                cssText += "font-family: " + fontFamily ;
             }
         
             if (model.textSize) {
+                fontSize = fontSize.join();
                 infoText += "\rFont-Size: " + fontSize;
                 cssText += "font-size: " + fontSize + ";";
             }
         
             if (model.textColor) {
-                var textColor = this.colorAsString(attr.fillColor);
-                if (alpha != "" && textColor.indexOf("(") >= 0) {
-                    textColor = this.convertColorIntoCss(textColor, alpha);
-                    alpha = "";
+                 var tempArray = [];
+
+                for (i = 0; i < textColor.length; i++) {
+                    var value = textColor[i];
+                    if (alpha != "" && value.indexOf("(") >= 0) {
+                        tempArray.push(this.convertColorIntoCss(value, alpha));
+                        model.textAlpha = false;
+                    } else {
+                        tempArray.push(value);
+                    }
                 }
+                textColor = tempArray.join();
                 infoText += "\rColor: " + textColor;
                 cssText += "color: " + textColor + ";";
             }
         
             if (model.textStyle) {
-                var styleString = "normal";
-
-                if (attr.capitalization == FontCapsOption.ALLCAPS) 
-                    styleString = "all caps";
-                if (attr.capitalization == FontCapsOption.ALLSMALLCAPS) 
-                    styleString = "all small caps";
-                if (attr.capitalization == FontCapsOption.SMALLCAPS) 
-                    styleString = "small caps";
-
-                infoText += "\rFont-Style: " + styleString;
-                cssText += "font-style: " + styleString + ";";
+                fontStyle = fontStyle.join()
+                infoText += "\rFont-Style: " + fontStyle;
+                cssText += "font-style: " + fontStyle + ";";
                 
-                styleString = "";
-                if (attr.baselinePosition == FontBaselineOption.SUBSCRIPT) 
-                    styleString = "sub-script";
-                else if (attr.baselinePosition == FontBaselineOption.SUPERSCRIPT) 
-                    styleString = "super-script";
-
-                if (attr.underline) {
-                    if (styleString != "")
-                        styleString += " / ";
-                        
-                    styleString += "underline";
-                }
-            
-                if (attr.strikeThrough) {
-                    if(styleString != "")
-                        styleString += " / ";
-                    
-                    styleString += "strike-through";
-                }
-
-                if (styleString != "") {
-                    infoText += "\rText-Decoration: " + styleString;
-                    cssText += "text-decoration: " + styleString + ";";
+                if (textDecoration.length) {
+                    textDecoration = textDecoration.join();
+                    infoText += "\rText-Decoration: " + textDecoration;
+                    cssText += "text-decoration: " +  textDecoration + ";";
                 }
             }
         
             if (model.textAlignment) {
-                var s = paraAttr.justification.toString();
-                s = s.substring(14, 15) + s.substring(15).toLowerCase();
-                s = s.toLowerCase();
-                infoText += "\rText-Align: " + s ;
-                cssText += "text-align: " + s + ";";
+                var paragraphLength = textItem.paragraphs.length;
+                var paraAttr, s;
+                for (i = 0; i < paragraphLength; i++) {
+                    //Handle the empty line exceptions.
+                    try {
+                        paraAttr = textItem.paragraphs[i].paragraphAttributes;
+                        s = paraAttr.justification.toString();
+                        s = s.substring(14, 15) + s.substring(15).toLowerCase();
+                        alignment = alignment.uniquePush(s.toLowerCase());
+                    } catch (e) {
+                         continue;
+                    }
+                }
+            
+                alignment = alignment.join();
+                infoText += "\rText-Align: " + alignment;
+                cssText += "text-align: " + alignment + ";";
             }
 
             if (model.textLeading) {
+                leading = leading.join();
                 infoText += "\rLine-Height: " + leading;
                 cssText += "line-height: " + leading + ";";
             }
         
             if (model.textTracking) {
-                var tracking = Math.round(attr.tracking / 1000 * 100) / 100 + " em";
+                tracking = tracking.join();
                 infoText += "\rLetter-Spacing: " + tracking;
                 cssText += "letter-spacing: " + tracking + ";";
             }
 
-            if (alpha != "") {
+            if (model.textAlpha) {
                 infoText += "\rOpacity: " + alpha;
                 cssText += "opacity: " + alpha + ";";
             }
