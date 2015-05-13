@@ -76,7 +76,7 @@
 				</li>
 			</ul>
 			
-			<ul id="activateBlock">
+			<ul class="showBlock" id="activateBlock">
 				<li>
 					<input class="loginTextItem" type="text" id="firsName"
 					placeholder="First Name"
@@ -143,25 +143,25 @@
 						<!-- Property button. -->
 						<li id="liProperties">
 							<div class="button border " id="btnProperties" 
-								onclick="specButtonsClickHandler(this)">
+								onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
 								<img id="imgProperty" alt="Shape/Text" /> 
 								<label>Properties</label>
 								<div class="dropdownArrow" id="imgPropertiesDdlArrow"
-									onclick="buttonDropDownClickHandler(event, this)"></div>
+									onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)"></div>
 							</div>
 							
 							<div class="options" id="propertiesDropDown">
 								<div class="option specBulletSelected" id="imgPropertiesBullet"
-									onclick="dropDownCellClickHandler(this.id, 'specBulletSelected', 'Bullet')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'specBulletSelected', 'Bullet')"></div>
 								<div class="option" id="imgPropertiesLine"
-									onclick="dropDownCellClickHandler(this.id, 'specLineSelected', 'Line')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'specLineSelected', 'Line')"></div>
 							</div>
 							
 						</li>
 	
 						<!-- Add Note button. -->
-						<li onclick="addNoteSpecs()">
-							<div class="button border " id="btnAddNote" onclick="addNoteButton_clickHandler()">
+						<li onclick="Specctr.buttonHandlers.addNoteSpecs()">
+							<div class="button border " id="btnAddNote">
 								<img id="imgNote" alt="Note specs"/>
 								<label>Add Note</label>
 							</div>
@@ -170,80 +170,84 @@
 						<!-- Width/Height button. -->
 						<li id="liWh">
 						
-							<div class="button border " id="btnWh" onclick="specButtonsClickHandler(this)">
+							<div class="button border " id="btnWh" 
+							onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
 								<img id="dimensionIcon"/> 
 								<label>Width/Height</label>
 								<div class="dropdownArrow" id="imgWhDdlArrow"
-									onclick="buttonDropDownClickHandler(event, this)"></div>
+									onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)"></div>
 							</div>
 							
 							<div class="options" id="dimensionDropDown">
 								<div class="option" id="imgNoSelectionWidth" title="width"
-									onclick="dropDownCellClickHandler(this.id, 'noSelectionSelected')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'noSelectionSelected')"></div>
 								<div class="option widthTopSelected" id="imgWidthTop" title="width"
-									onclick="dropDownCellClickHandler(this.id, 'widthTopSelected')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'widthTopSelected')"></div>
 								<div class="option" id="imgWidthBottom" title="width"
-									onclick="dropDownCellClickHandler(this.id, 'widthBottomSelected')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'widthBottomSelected')"></div>
 								<div class="option" id="imgWidthCenter" title="width"
-									onclick="dropDownCellClickHandler(this.id, 'widthCenterSelected')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'widthCenterSelected')"></div>
 								<div class="option" id="imgNoSelectionHeight" title="height"
-									onclick="dropDownCellClickHandler(this.id, 'noSelectionSelected')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'noSelectionSelected')"></div>
 								<div class="option heightLeftSelected" id="imgHeightLeft" title="height"
-									onclick="dropDownCellClickHandler(this.id, 'heightLeftSelected')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'heightLeftSelected')"></div>
 								<div class="option" id="imgHeightRight" title="height"
-									onclick="dropDownCellClickHandler(this.id, 'heightRightSelected')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'heightRightSelected')"></div>
 								<div class="option" id="imgHeightCenter" title="height"
-									onclick="dropDownCellClickHandler(this.id, 'heightCenterSelected')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'heightCenterSelected')"></div>
 							</div>
 						</li>
 	
 						<!-- Spacing button. -->
 						<li id="liSpacing">
-							<div class="button border " id="btnSpacing" onclick="specButtonsClickHandler(this)">
+							<div class="button border " id="btnSpacing" 
+							onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
 								<img id="spacingIcon"/>
 								<label>Spacing</label>
 								<div id="imgSpacingDdlArrow" class="dropdownArrow"
-									onclick="buttonDropDownClickHandler(event, this)"></div>
+									onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)"></div>
 							</div>
 							<div class="options" id="spacingDropDown">
 								<div class="option topSelected" id="imgSpaceTop"
-									onclick="dropDownCellClickHandler(this.id, 'topSelected', 'spaceTop')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'topSelected', 'spaceTop')"></div>
 								<div class="option" id="imgSpaceRight"
-									onclick="dropDownCellClickHandler(this.id, 'rightSelected', 'spaceRight')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'rightSelected', 'spaceRight')"></div>
 								<div class="option" id="imgSpaceBottom"
-									onclick="dropDownCellClickHandler(this.id, 'bottomSelected', 'spaceBottom')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'bottomSelected', 'spaceBottom')"></div>
 								<div class="option leftSelected" id="imgSpaceLeft"
-									onclick="dropDownCellClickHandler(this.id, 'leftSelected', 'spaceLeft')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'leftSelected', 'spaceLeft')"></div>
 							</div>
 						</li>
 	
 						<!-- Coordinate button. -->
 						<li id="liCoordinate">
-							<div class="button border " id="btnCoordinate" onclick="specButtonsClickHandler(this)">
+							<div class="button border " id="btnCoordinate" 
+							onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
 								<img id="imgCoordinate" alt="Coordinates" /> 
 								<label>Coordinates</label>
 								<div id="imgCoordinateDdlArrow" class="dropdownArrow"
-									onclick="buttonDropDownClickHandler(event, this)"></div>
+									onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)"></div>
 							</div>
 							<div class="options" id="coordinateDropDown">
 								<div class="option topLeftSelected" id="imgTopLeft"
-									onclick="dropDownCellClickHandler(this.id, 'topLeftSelected')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'topLeftSelected')"></div>
 								<div class="option" id="imgTopRight"
-									onclick="dropDownCellClickHandler(this.id, 'topRightSelected')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'topRightSelected')"></div>
 								<div class="option" id="imgBottomRight"
-									onclick="dropDownCellClickHandler(this.id, 'bottomRightSelected')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'bottomRightSelected')"></div>
 								<div class="option" id="imgBottomLeft"
-									onclick="dropDownCellClickHandler(this.id, 'bottomLeftSelected')"></div>
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'bottomLeftSelected')"></div>
 							</div>
 						</li>
 
 						<!-- Expand button. -->
 						<li id="liExpand">
-							<div class="button border " id="btnExpand" onclick="expandCanvas()">
+							<div class="button border " id="btnExpand" 
+							onclick="Specctr.buttonHandlers.expandCanvas()">
 									<img id="imgExpand" alt="Expand"/> 
 									<label>Expand</label>
 									<div id="imgExpandDdlArrow" class="dropdownArrow"
-										onclick="buttonDropDownClickHandler(event, this)"></div>
+										onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)"></div>
 							</div>
 							<div class="options" id="expandDropDown">
 								<div>
@@ -256,7 +260,7 @@
 						</li>
 						
 						<!-- Export css button. -->
-						<li onclick="exportCss()">
+						<li onclick="Specctr.buttonHandlers.exportCss()">
 							<div class="button border ">
 								<img id="imgExportCss" alt="Export css"/>
 								<label>Export CSS</label>

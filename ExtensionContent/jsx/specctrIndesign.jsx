@@ -305,20 +305,14 @@ Array.prototype.pushOnce = function(obj)
 $.specctrId = {
     //Get the application font's name and font's family and add event listener for indesign.
     getFontList : function() {
-        
         //Add event listener for indesign.
-        var xLib = null;
-        var plugExternalLib = File(File($.fileName).parent.parent).fullName+"/lib/PlugPlugExternalObject.dll";
-        try {
-            var xLib = new ExternalObject("lib:"+ plugExternalLib);
-        } catch (e) {}
         app.addEventListener("afterSelectionAttributeChanged", $.specctrId.myEventHandlerWrapper, false);
-        
+
         // Set Indesign default units.
         with(app.scriptPreferences) {
             measurementUnit = MeasurementUnits.POINTS;
         }
-    
+
         //Get application font info.
         var font = app.fonts.everyItem().getElements().slice(0);
         var appFontLength = font.length;

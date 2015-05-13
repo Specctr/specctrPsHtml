@@ -3,67 +3,67 @@ File-Name: buttonHandlers.js
 Description: Consist all the event handlers of buttons present in panel such as click handlers.
  */
 
+Specctr = Specctr || {};
 
-/**
- * Call the 'createCanvasBorder' method from .jsx based on host application.
- */
-function expandCanvas() {
-	analytics.trackFeature('expand_canvas');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createCanvasBorder()");
-	pref.writeAppPrefs();
-}
+Specctr.buttonHandlers = {
+	/**
+	 * Call the 'createCanvasBorder' method from .jsx based on host application.
+	 */
+	expandCanvas : Specctr.Utility.tryCatchLog(function(){
+		analytics.trackFeature('expand_canvas');
+		setModel();
+		evalScript("$.specctr" + hostApplication + "." + "createCanvasBorder()");
+		pref.writeAppPrefs();
+	}),
+	
+	/**
+	 * Call the 'addNoteSpecs' method from .jsx based on host application.
+	 */
+	addNoteSpecs : Specctr.Utility.tryCatchLog(function(){
+		analytics.trackFeature('create_note_specs');
+		setModel();
+		evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs()");
+	}),
+	
+	/**
+	 * Call the 'exportCss' method from .jsx based on host application.
+	 */
+	exportCss : Specctr.Utility.tryCatchLog(function(){
+		analytics.trackFeature('export_css');
+		setModel();
 
-/**
- * Call the 'addNoteSpecs' method from .jsx based on host application.
- */
-function addNoteSpecs() {
-	analytics.trackFeature('create_note_specs');
-	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs()");
-}
+		// Upload specs to Specctr.
+		evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo){
+			var css = JSON.parse(cssInfo);
+			var cssJson = CSSJSON.toJSON(css.text);
+			var data = JSON.stringify({
+				api_key: api_key,
+				machine_id: machine_id,
+				document_name: css.document_name,
+				css_items: cssJson.children,
+			});
 
-/**
- * Call the 'exportCss' method from .jsx based on host application.
- */
-function exportCss() {
-	analytics.trackFeature('export_css');
-	setModel();
-
-	// Upload specs to Specctr.
-	evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo){
-		var css = JSON.parse(cssInfo);
-		var cssJson = CSSJSON.toJSON(css.text);
-		var data = JSON.stringify({
-			api_key: api_key,
-			machine_id: machine_id,
-			document_name: css.document_name,
-			css_items: cssJson.children,
+			$.ajax({
+				url: SPECCTR_API + "/css_items",
+				type: "POST",
+				contentType: "application/json;charset=utf-8",
+				dataType: "json",
+				data: data,
+				success: function(response) {
+					specctrDialog.showAlert('success');
+				},
+				error: function(xhr) {
+					specctrDialog.showAlert('error');
+				}
+			});
 		});
-
-		$.ajax({
-			url: SPECCTR_API + "/css_items",
-			type: "POST",
-			contentType: "application/json;charset=utf-8",
-			dataType: "json",
-			data: data,
-			success: function(response) {
-				specctrDialog.showAlert('success');
-			},
-			error: function(xhr) {
-				specctrDialog.showAlert('error');
-			}
-		});
-	});
-}
-
-/**
- * Closing/Opening Spacing popup button according to dropdown cell selection and call
- * creating spec function accordingly.
- * */
-function specButtonsClickHandler(specButton) {
-	try {
-
+	}),
+	
+	/**
+	 * Closing/Opening Spacing popup button according to dropdown cell selection and call
+	 * creating spec function accordingly.
+	 * */
+	specButtonsClickHandler : Specctr.Utility.tryCatchLog(function(specButton){
 		//Close all dropdowns.
 		buttonController.closeAllDropDown();
 
@@ -88,17 +88,12 @@ function specButtonsClickHandler(specButton) {
 		} else if (specButton.id == "btnCoordinate") {
 			buttonController.createCoordinateSpecs();
 		}
+	}),
 
-	} catch (e) {
-		alert(e);
-	}
-}
-
-/**
- * Adding/Removing style classes on opening/closing of button's drop-down.
- * */
-function buttonDropDownClickHandler(event, specButton) {
-	try {
+	/**
+	 * Adding/Removing style classes on opening/closing of button's drop-down.
+	 * */
+	buttonDropDownClickHandler: Specctr.Utility.tryCatchLog(function(event, specButton) {
 		event.stopPropagation();	//Stop the click event from bubbling to parent div.
 
 		var buttonId = specButton.parentNode.id;
@@ -113,20 +108,15 @@ function buttonDropDownClickHandler(event, specButton) {
 
 		//Call the spec methods respective to the clicked button's Id.
 		buttonController.toggleDropDown(liId, buttonId, dropDownId, imageDropDownArrowId);
+	}),
 
-	} catch (e) {
-		alert(e);
-	}
-}
-
-/**
- * Change the appearance of selected cell in the property dropdown.
- * @param cellId {string} The id of selected cell.
- * @param selectionClass {string} The css class that has to be toggled.
- * @param modelValue {string} The value to be changed in model object.
- * */
-function dropDownCellClickHandler(cellId, selectionClass, modelValue) {
-	try {
+	/**
+	 * Change the appearance of selected cell in the property dropdown.
+	 * @param cellId {string} The id of selected cell.
+	 * @param selectionClass {string} The css class that has to be toggled.
+	 * @param modelValue {string} The value to be changed in model object.
+	 * */
+	dropDownCellClickHandler : Specctr.Utility.tryCatchLog(function(cellId, selectionClass, modelValue) {
 		var selectedCellIndex, classForSelection;
 		var cellHandler = $("#" + cellId);
 
@@ -174,8 +164,6 @@ function dropDownCellClickHandler(cellId, selectionClass, modelValue) {
 			cellHandler.addClass(selectionClass);
 			buttonController.changePropertyButtonIcon();
 		}
+	})
 
-	} catch (e) {
-		alert(e);
-	}
-}
+};

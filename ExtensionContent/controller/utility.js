@@ -3,6 +3,7 @@ File-Name: utility.js
 Description: This file includes common utility functions used by more than one files.
  */
 
+
 var specctrUtility = Specctr.Utility = {};
 
 /**
@@ -129,7 +130,7 @@ Specctr.Utility.tryCatchLog = function(func) {
 		try{
 			func.apply(this, arguments);
 		}catch(e){
-			pref.logError(e.stack);
+			pref.logError(e);
 		}	
 	};
 };
