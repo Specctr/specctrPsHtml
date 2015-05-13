@@ -124,3 +124,13 @@ specctrUtility.rgbToHex = function(colorVal) {
 	return colorVal;
 };
 
+Specctr.Utility.tryCatchLog = function(func) {
+	return function() {
+		try{
+			func.apply(this, arguments);
+		}catch(e){
+			pref.logError(e.stack);
+		}	
+	};
+};
+

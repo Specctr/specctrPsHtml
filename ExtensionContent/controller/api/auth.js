@@ -4,48 +4,44 @@ Specctr.Auth = {
 	 * Validate the license of the user and move to the tab container
 	 *  if user's credentials valid.
 	 */
-	login: function() {
-		try {
-			var urlRequest = SPECCTR_API + "/register_machine?";
-			urlRequest += "&email=" + $("#loginEmail").val();
-			urlRequest += "&password=" + $("#loginPassword").val();
-	
-			$.ajax({
-				url:urlRequest,
-				type: 'POST',
-				contentType: "application/json",
-				dataType: "json",
-				success: function(response, status) {
-					var logData = pref.createLogData(response.message);
-					pref.addFileToPreferenceFolder('.log', logData);	//Create log file.		
-					// If unsuccessful, return without saving the data in file.
-					if (response.success) {
-						analytics.trackActivation('succeeded');	
-						var activationPrefs = Specctr.Activation = {
-								licensed : true,
-								machine_id: response.machine_id,
-								api_key: response.api_key,
-								email: response.email
-						};
-						pref.addFileToPreferenceFolder('.license', 
-								JSON.stringify(activationPrefs)); //Create license file.
-						pref.log('Logged in bro.');
-						specctrInit.init();
-					} else {
-						analytics.trackActivation('failed');
-						specctrDialog.showAlert(response.message);
-					}
-				},
-				error: function(xhr) {
-					var response = JSON.parse(xhr.responseText);
+	login: Specctr.Utility.tryCatchLog(function(ev) {
+		var urlRequest = SPECCTR_API + "/register_machine?";
+		urlRequest += "&email=" + $("#loginEmail").val();
+		urlRequest += "&password=" + $("#loginPassword").val();
+
+		$.ajax({
+			url:urlRequest,
+			type: 'POST',
+			contentType: "application/json",
+			dataType: "json",
+			success: function(response, status) {
+				var logData = pref.createLogData(response.message);
+				pref.addFileToPreferenceFolder('.log', logData);	//Create log file.		
+				// If unsuccessful, return without saving the data in file.
+				if (response.success) {
+					analytics.trackActivation('succeeded');	
+					var activationPrefs = Specctr.Activation = {
+							licensed : true,
+							machine_id: response.machine_id,
+							api_key: response.api_key,
+							email: response.email
+					};
+					pref.addFileToPreferenceFolder('.license', 
+							JSON.stringify(activationPrefs)); //Create license file.
+					pref.log('Logged in bro.');
+					specctrInit.init();
+				} else {
+					analytics.trackActivation('failed');
 					specctrDialog.showAlert(response.message);
-					pref.log(response.message);
 				}
-			});
-		}catch(e){
-			pref.logError(e);
-		}
-	},
+			},
+			error: function(xhr) {
+				var response = JSON.parse(xhr.responseText);
+				specctrDialog.showAlert(response.message);
+				pref.log(response.message);
+			}
+		});
+	}),
 	
 		
 	checkStatus: function(activation) {
