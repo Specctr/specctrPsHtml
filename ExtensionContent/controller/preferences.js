@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 /*
 File-Name: preferences.js
 Description: This file includes all the functions related to reading/writing preferences of panel.
@@ -136,4 +138,19 @@ pref.addFileToPreferenceFolder = function(fileExtension, data) {
 	this.setPermissionToFile(filePath, filePermission.WriteOnly);
 	this.writeFile(filePath, data);
 	this.setPermissionToFile(filePath, filePermission.ReadOnly);
+};
+
+pref.log = function(message) {
+	var filePath = this.getFilePath('.log');
+	pref.setPermissionToFile(filePath, filePermission.WriteOnly);
+	message = pref.createLogData(message);
+	fs.appendFile(filePath, message, function (err) {
+	    if (err) throw err;
+	    console.log('The "data to append" was appended to file!');
+	    pref.setPermissionToFile(filePath, filePermission.ReadOnly);
+	});	
+};
+
+pref.logError = function(e) {
+	pref.log(e.stack);
 };

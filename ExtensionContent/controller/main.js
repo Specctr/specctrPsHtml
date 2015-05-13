@@ -8,33 +8,6 @@ var Specctr = window.Specctr || {};
 var specctrInit = {};
 
 /**
- * Callback function which is called when validation of user's license take place.
- * @param response {object} The object of the response came from the activation request.
- * @param status {string} The status of the activation request.
- */
-function completeHandler(response, status) {
-	var logData = pref.createLogData(response.message);
-	pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
-	
-	// If unsuccessful, return without saving the data in file.
-	if (response.success) {
-		analytics.trackActivation('succeeded');	
-		var activationPrefs = {
-				licensed : true,
-				machine_id: response.machine_id,
-				api_key: response.api_key,
-				email: response.email
-		};
-		pref.addFileToPreferenceFolder('.license', 
-				JSON.stringify(activationPrefs)); //Create license file.
-		specctrInit.init();
-	} else {
-		analytics.trackActivation('failed');
-		specctrDialog.showAlert(response.message);
-	}
-}
-
-/**
  * Load the jsx and show/hide the login container 
  * according to the license value in preferences.
  */
@@ -204,6 +177,7 @@ specctrInit.init = function() {
 		Specctr.Auth.checkStatus(Specctr.Activation);
 	} catch (e) {
 		alert(e);
+		console.log(e + "\n" + e.stack);
 	}
 };
 

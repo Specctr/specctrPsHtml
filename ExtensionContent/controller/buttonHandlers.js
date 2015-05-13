@@ -3,29 +3,6 @@ File-Name: buttonHandlers.js
 Description: Consist all the event handlers of buttons present in panel such as click handlers.
  */
 
-/**
- * Validate the license of the user and move to the tab container
- *  if user's credentials valid.
- */
-function loginButtonClickHandler() {
-	var urlRequest = SPECCTR_API + "/register_machine?";
-	urlRequest += "&email=" + $("#loginEmail").val();
-	urlRequest += "&password=" + $("#loginPassword").val();
-
-	$.ajax({
-		url:urlRequest,
-		type: 'POST',
-		contentType: "application/json",
-		dataType: "json",
-		success: completeHandler,
-		error: function(xhr) {
-			var response = JSON.parse(xhr.responseText);
-			specctrDialog.showAlert(response.message);
-			var logData = pref.createLogData(response.message);
-			pref.addFileToPreferenceFolder('.log', logData);	//Create log file.
-		}
-	});
-}
 
 /**
  * Call the 'createCanvasBorder' method from .jsx based on host application.

@@ -3,7 +3,7 @@ File-Name: utility.js
 Description: This file includes common utility functions used by more than one files.
  */
 
-var specctrUtility = {};
+var specctrUtility = Specctr.Utility = {};
 
 /**
  * Get the current host application name.
