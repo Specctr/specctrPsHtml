@@ -1,82 +1,89 @@
 /*
 Name: appModel.js
-Description: This file keeps the global variables used in all other files. 
+Description: This file keeps all the global/const variables used in all other files. 
  */
 
+var _ = require('underscore');
+
+var Specctr = {
+	Views: {},
+	Models: {}
+};
+
 var model = {
-		shapeFill:			true,
-		shapeStroke:		true,
-		shapeEffects:		true,
+	shapeFill:			true,
+	shapeStroke:		true,
+	shapeEffects:		true,
 
-		shapeFillColor:		true,
-		shapeFillStyle:		true,
-		shapeStrokeColor:	true,
-		shapeStrokeStyle:	true,
-		shapeStrokeSize:	true,
+	shapeFillColor:		true,
+	shapeFillStyle:		true,
+	shapeStrokeColor:	true,
+	shapeStrokeStyle:	true,
+	shapeStrokeSize:	true,
 
-		shapeAlpha:			false,
-		shapeBorderRadius: 	false,
+	shapeAlpha:			false,
+	shapeBorderRadius: 	false,
 
-		textFont:		true,
-		textSize:		true,
-		textAlignment:	true,
-		textColor:		true,
-		textStyle:		true,
-		textLeading:	true,
-		textTracking:	true,
-		textAlpha:		false,
-		textEffects:	true,
+	textFont:		true,
+	textSize:		true,
+	textAlignment:	true,
+	textColor:		true,
+	textStyle:		true,
+	textLeading:	true,
+	textTracking:	true,
+	textAlpha:		false,
+	textEffects:	true,
 
-		canvasExpandSize: 250,
+	canvasExpandSize: 250,
 
-		//legend settings
-		legendFont: 			'ArialMT',
-		legendFontFamily:		'Arial',
-		legendFontSize:			12,
-		legendColorObject:		'#FF0000',
-		legendColorType:		'#FF0000',
-		legendColorSpacing:		'#FF0000',
-		legendColorMode:		'RGB',
-		specToEdge:				true,
+	//legend settings
+	legendFont: 			'ArialMT',
+	legendFontFamily:		'Arial',
+	legendFontSize:			12,
+	legendColorObject:		'#FF0000',
+	legendColorType:		'#FF0000',
+	legendColorSpacing:		'#FF0000',
+	legendColorMode:		'RGB',
+	specToEdge:				true,
 
-		armWeight:		1,
-		typeUnits: 		'pt',
-		distanceUnits:	'px',
+	armWeight:		1,
+	typeUnits: 		'pt',
+	distanceUnits:	'px',
 
-		//Coordinate spec options
-		coordinateCellNumber:	0,
+	//Coordinate spec options
+	coordinateCellNumber:	0,
 
-		//Spacing spec options
-		spaceLeft:		true,
-		spaceTop:		true,
-		spaceRight:		false,
-		spaceBottom:	false,
+	//Spacing spec options
+	spaceLeft:		true,
+	spaceTop:		true,
+	spaceRight:		false,
+	spaceBottom:	false,
 
-		//Dimension spec options
-		heightPos:	1,
-		widthPos:	1,
+	//Dimension spec options
+	heightPos:	1,
+	widthPos:	1,
 
-		//Responsive tab options
-		specInPrcntg:	false,
-		specInEM:		false,
-		relativeHeight:		0,
-		relativeWidth:		0,
-		baseFontSize:	16,
-		baseLineHeight: 22.4,
+	//Responsive tab options
+	specInPrcntg:	false,
+	specInEM:		false,
+	relativeHeight:		0,
+	relativeWidth:		0,
+	baseFontSize:	16,
+	baseLineHeight: 22.4,
 
-		//Scaling specs
-		useScaleBy: false,
-		scaleValue: 'x1',
+	//Scaling specs
+	useScaleBy: false,
+	scaleValue: 'x1',
 
-		decimalFractionValue: 'decimal',
-		specOption: 'Bullet'
+	decimalFractionValue: 'decimal',
+	specOption: 'Bullet'
 };
 
 var filePermission = {
-		ReadOnly : 0444,
-		WriteOnly : 0222,
-		ReadWrite : 0666,
-		ReadWriteExecute : 0777
+	ReadOnly : 0444,
+	WriteOnly : 0222,
+	ReadWrite : 0666,
+	ReadWriteExecute : 0777
 };
 
 var configFilePath = '';
