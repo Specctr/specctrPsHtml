@@ -62,7 +62,7 @@ pref.getPrefernceDirectory = function() {
  */
 pref.getFilePath = function(fileExtension) {
 	if(extensionId === '')
-		extensionId = specctrUtility.getExtensionId();
+		extensionId = Specctr.Utility.getExtensionId();
 	var fileName = extensionId + fileExtension;
 	var filePath = this.getPrefernceDirectory() + "/" + fileName;
 	return filePath;

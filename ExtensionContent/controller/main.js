@@ -4,7 +4,7 @@ Description: Include methods to initialize the panel's component according to th
 Include all spec button click handlers and methods to communicate between js and jsx.  
  */
 
-var Specctr = window.Specctr || {};
+Specctr = Specctr || {};
 var specctrInit = {};
 
 /**
@@ -17,7 +17,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	var appPrefs;
 
 	//Get the host application name.
-	hostApplication = specctrUtility.getHostApp();
+	hostApplication = Specctr.Utility.getHostApp();
 	loadJSX(); // Load the jsx files present in \jsx folder.
 
 	if (hostApplication === '') {
@@ -146,7 +146,7 @@ specctrInit.init = Specctr.Utility.tryCatchLog(function() {
 	var ident = navitem.attr("id").split("_")[1];
 	navitem.parent().attr("data-current", ident);
 
-	specctrUtility.changeImagesOfTabs(parseInt(ident)); // Set Current Tab with proper Image.
+    Specctr.Utility.changeImagesOfTabs(parseInt(ident)); // Set Current Tab with proper Image.
 
 	// Set current tab with class of active tab header.
 	navitem.attr("class", "tabActiveHeader");
@@ -156,15 +156,43 @@ specctrInit.init = Specctr.Utility.tryCatchLog(function() {
 	for (var i = 1; i < noOfPages; i++)
 		$("#tabpage_" + (i + 1)).css("display", "none");
 
-	// Register click events to all tabs.
-	$("#tabContainer .tabs ul li").each(function(){
-		$(this).click(tabClickHandler);
-	});
+    // Register click events to all tabs.
+    $("#tabContainer .tabs ul li").each(function(){
+        $(this).click(Specctr.UI.tabClickHandler);
+    });
 
-	this.setModelToUIComponents();
-	this.setModelToResponsive();
-	
-	Specctr.Auth.checkStatus(Specctr.Activation);
+    // Register click and mouseover events to colorpicker color blocks.
+    $("#colorShapeDropDown .colorBlock").each(function(){
+        $(this).click(function(){
+            Specctr.UI.setColorToLabel(this, 'Object');
+        });
+        $(this).mouseover(function(){
+            Specctr.UI.setColorValueToTextBox(this, 'Shape');
+        });
+    });
+    
+    $("#colorTypeDropDown .colorBlock").each(function(){
+        $(this).click(function(){
+            Specctr.UI.setColorToLabel(this, 'Type');
+        });
+        $(this).mouseover(function(){
+            Specctr.UI.setColorValueToTextBox(this, 'Type');
+        });
+    });
+    
+    $("#colorSpaceDropDown .colorBlock").each(function(){
+        $(this).click(function(){
+            Specctr.UI.setColorToLabel(this, 'Spacing');
+        });
+        $(this).mouseover(function(){
+            Specctr.UI.setColorValueToTextBox(this, 'Space');
+        });
+    });
+    
+    this.setModelToUIComponents();
+    this.setModelToResponsive();
+    
+    Specctr.Auth.checkStatus(Specctr.Activation);
 });
 
 /**
@@ -268,9 +296,9 @@ specctrInit.setModelToUIComponents = function() {
 	}
 
 	//Set color for dropdown.
-	specctrUtility.setColorPickerColor("#colObject", model.legendColorObject);
-	specctrUtility.setColorPickerColor("#colType", model.legendColorType);
-	specctrUtility.setColorPickerColor("#colSpacing", model.legendColorSpacing);
+	Specctr.Utility.setColorPickerColor("#colObject", model.legendColorObject);
+	Specctr.Utility.setColorPickerColor("#colType", model.legendColorType);
+	Specctr.Utility.setColorPickerColor("#colSpacing", model.legendColorSpacing);
 	
 	//Set radio buttons values.
 	var radioButtonIds = [model.decimalFractionValue];
@@ -281,9 +309,9 @@ specctrInit.setModelToUIComponents = function() {
 
 	// Enable or disable scale text according to selection of check box.
 	if (model.useScaleBy)
-		specctrUtility.enableTextField("txtScaleBy");
+		Specctr.Utility.enableTextField("txtScaleBy");
 	else
-		specctrUtility.disableTextField("txtScaleBy");
+		Specctr.Utility.disableTextField("txtScaleBy");
 
 	//Get font list according to host application.
 	var extScript = "$.specctr"+ hostApplication +"." + "getFontList()";
@@ -304,11 +332,11 @@ specctrInit.setModelToResponsive = function() {
 	for (var i = 0; i < arrayLength; i += 2) {
 		$("#" + checkBoxIds[i/2]).prop("checked", model[checkBoxIds[i/2]]);
 		if (model[checkBoxIds[i/2]]) {
-			specctrUtility.enableTextField(textFieldIds[i]);
-			specctrUtility.enableTextField(textFieldIds[i+1]);
+			Specctr.Utility.enableTextField(textFieldIds[i]);
+			Specctr.Utility.enableTextField(textFieldIds[i+1]);
 		} else {
-			specctrUtility.disableTextField(textFieldIds[i]);
-			specctrUtility.disableTextField(textFieldIds[i+1]);
+			Specctr.Utility.disableTextField(textFieldIds[i]);
+			Specctr.Utility.disableTextField(textFieldIds[i+1]);
 		}
 	}
 };
@@ -319,7 +347,7 @@ specctrInit.setModelToResponsive = function() {
  */
 function loseFocusFromPanel() {
 	if(extensionId === '')
-		extensionId = specctrUtility.getExtensionId();
+		extensionId = Specctr.Utility.getExtensionId();
 	var csEvent = new CSEvent("com.adobe.PhotoshopLoseFocus", "APPLICATION");  
 	csEvent.extensionId = extensionId;
 	var csInterface = new CSInterface();
