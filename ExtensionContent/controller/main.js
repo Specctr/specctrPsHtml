@@ -5,7 +5,7 @@ Include all spec button click handlers and methods to communicate between js and
  */
 
 Specctr = Specctr || {};
-var specctrInit = {};
+Specctr.Init = {};
 
 /**
  * Load the jsx and show/hide the login container 
@@ -33,7 +33,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	if (appPrefs !== "") {
 		if (appPrefs.hasOwnProperty("isLicensed"))
 			isLicensed = appPrefs.isLicensed;
-		specctrInit.setModelValueFromPreferences();
+		Specctr.Init.setModelValueFromPreferences();
 	}
 
 	//Migrating isLicensed from config file to license file, if present.
@@ -50,7 +50,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	machine_id = activationPrefs.machine_id;
 
 	if (isLicensed)
-		specctrInit.init();
+		Specctr.Init.init();
 });
 
 /**
@@ -133,7 +133,7 @@ function loadFontsToList(result) {
 /**
  * Initialize the values of the tab conatainer's components.
  */
-specctrInit.init = Specctr.Utility.tryCatchLog(function() {
+Specctr.Init.init = Specctr.Utility.tryCatchLog(function() {
 	pref.log("Initializing Specctr.");
 	// Load tab container..
 	$("#loginContainer").hide();
@@ -198,7 +198,7 @@ specctrInit.init = Specctr.Utility.tryCatchLog(function() {
 /**
  * Set the Specctr configuration file data to model values.
  */
-specctrInit.setModelValueFromPreferences = function() {
+Specctr.Init.setModelValueFromPreferences = function() {
 	var appPrefs = pref.readAppPrefs();
 
 	if (!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha"))
@@ -241,7 +241,7 @@ specctrInit.setModelValueFromPreferences = function() {
 /**
  * Set model values to UI components.
  */
-specctrInit.setModelToUIComponents = function() {
+Specctr.Init.setModelToUIComponents = function() {
 	//Set icons to the buttons.
 	var iconPostString = ".png";
 	var buttonIconPaths = ["../Images/PropertiesDropDownIcons/specBullet_selected", 
@@ -322,7 +322,7 @@ specctrInit.setModelToUIComponents = function() {
  * Set the values of the objects(check boxes in responsive tab) from model and
  * enable/disable the text boxes.
  */
-specctrInit.setModelToResponsive = function() {
+Specctr.Init.setModelToResponsive = function() {
 	var textFieldIds = ["relativeWidth", "relativeHeight",
 	                    "baseFontSize", "baseLineHeight"];
 

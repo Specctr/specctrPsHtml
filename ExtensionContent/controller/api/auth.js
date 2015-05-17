@@ -27,7 +27,7 @@ Specctr.Auth = {
 					};
 					pref.addFileToPreferenceFolder('.license', 
 						JSON.stringify(activationPrefs)); //Create license file.
-					specctrInit.init();
+					Specctr.Init.init();
 				} else {
 					analytics.trackActivation('failed');
 					specctrDialog.showAlert(response.message);
