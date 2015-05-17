@@ -8,13 +8,12 @@ CloudTab.renderPlan = function(activation) {
 	$('#userEmail').html(activation.email);
 	$('#planName').html(activation.plan);
 	
-	var $profileLink = $('#user-profile_link');
-	$profileLink.attr('href', activation.user_profile_url);
-	$profileLink.on('click', function(ev) {
+	var $profileLink = $('#user-profile-link');
+	$profileLink.on('click', Specctr.Utility.tryCatchLog(function(ev) {
+		pref.log("Opening profile in browser.");
 		ev.preventDefault();
 		ev.stopPropagation();
 		
-		var url = $(ev.currentTarget).attr('href');
-		new CSInterface.openURLInDefaultBrowser(url);
-	});
+		new CSInterface().openURLInDefaultBrowser(activation.user_profile_url);
+	}));
 };

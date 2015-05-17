@@ -14,21 +14,19 @@ Specctr.Auth = {
 			type: 'POST',
 			contentType: "application/json",
 			dataType: "json",
-			success: function(response, status) {
-				var logData = pref.createLogData(response.message);
-				pref.addFileToPreferenceFolder('.log', logData);	//Create log file.		
+			success: function(response, textStatus, xhr) {				
+				pref.log(xhr.status + " - " + response.message);
 				// If unsuccessful, return without saving the data in file.
 				if (response.success) {
 					analytics.trackActivation('succeeded');	
 					var activationPrefs = Specctr.Activation = {
-							licensed : true,
-							machine_id: response.machine_id,
-							api_key: response.api_key,
-							email: response.email
+						licensed : true,
+						machine_id: response.machine_id,
+						api_key: response.api_key,
+						email: response.user	
 					};
 					pref.addFileToPreferenceFolder('.license', 
-							JSON.stringify(activationPrefs)); //Create license file.
-					pref.log('Logged in bro.');
+						JSON.stringify(activationPrefs)); //Create license file.
 					specctrInit.init();
 				} else {
 					analytics.trackActivation('failed');
@@ -36,45 +34,36 @@ Specctr.Auth = {
 				}
 			},
 			error: function(xhr) {
+				pref.log(xhr.status + " - " + response.message);
 				var response = JSON.parse(xhr.responseText);
 				specctrDialog.showAlert(response.message);
-				pref.log(response.message);
 			}
 		});
 	}),
 	
 		
-	checkStatus: function(activation) {
-		try{
-			var urlRequest = SPECCTR_API + "/subscriptions/status";
-	
-			$.ajax({
-				url:urlRequest,
-				type: 'GET',
-				contentType: "application/json",
-				dataType: "json",
-				data: {
-					api_key: activation.api_key,
-					machine_id: activation.machine_id
-				}
-			}).done(function(response){
-				_.extend(activation, response);
-				Specctr.Views.CloudTab.renderPlan(activation);
-			}).fail(function(xhr){
-				alert(xhr.status);
-			});
-		}catch(e){
-			console.log(e + "\n" + e.stack);
-		}
-	}
-};
+	checkStatus: Specctr.Utility.tryCatchLog(function(activation) {
+		var urlRequest = SPECCTR_API + "/subscriptions/status";
 
-/**
- * Callback function which is called when validation of user's license take place.
- * @param response {object} The object of the response came from the activation request.
- * @param status {string} The status of the activation request.
- */
-function loginSuccessHandler(response, status) {
-	
-}
+		$.ajax({
+			url:urlRequest,
+			type: 'GET',
+			contentType: "application/json",
+			dataType: "json",
+			data: {
+				api_key: activation.api_key,
+				machine_id: activation.machine_id
+			}
+		}).done(function(response, status, xhr){
+			pref.log(xhr.status + " - " + "Status verified as active.");
+			_.extend(activation, response);
+			pref.addFileToPreferenceFolder('.license', JSON.stringify(activation));
+			Specctr.Views.CloudTab.renderPlan(activation);
+		}).fail(function(xhr){
+			pref.log(xhr.status + " - " + "Unable to verify active status.");
+			Specctr.Views.CloudTab.renderPlan(activation);
+			
+		});
+	})
+};
 

@@ -11,56 +11,47 @@ var specctrInit = {};
  * Load the jsx and show/hide the login container 
  * according to the license value in preferences.
  */
-function onLoaded() {
-	// Handle exceptions of any missing components.
-	try {
-		specctrDialog.createAlertDialog();
-		var isLicensed = false;
-		var appPrefs;
+onLoaded = Specctr.Utility.tryCatchLog(function() {
+	specctrDialog.createAlertDialog();
+	var isLicensed = false;
+	var appPrefs;
 
-		//Get the host application name.
-		hostApplication = specctrUtility.getHostApp();
-		loadJSX(); // Load the jsx files present in \jsx folder.
+	//Get the host application name.
+	hostApplication = specctrUtility.getHostApp();
+	loadJSX(); // Load the jsx files present in \jsx folder.
 
-		if (hostApplication === '') {
-			specctrDialog.showAlert('Cannot load the extension.\nRequired host application not found!');
-			return;
-		} else if (hostApplication === photoshop) {
-			$(".psElement").show();
-			$(".nonPsElement").hide();
-		}
-
-		addApplicationEventListener();
-		appPrefs = pref.readAppPrefs();	//Read the config file and look for the isLicensed value.
-		if (appPrefs !== "") {
-			if (appPrefs.hasOwnProperty("isLicensed"))
-				isLicensed = appPrefs.isLicensed;
-			specctrInit.setModelValueFromPreferences();
-		}
-
-		//Migrating isLicensed from config file to license file, if present.
-		var activationPrefs = {};
-
-		var licenseFilePath = pref.getFilePath('.license');
-		activationPrefs = pref.readFile(licenseFilePath);	//Read the licensed file.
-
-		if (activationPrefs === "")
-			return;
-		else
-			activationPrefs = Specctr.Activation = JSON.parse(activationPrefs);
-
-		isLicensed = activationPrefs.licensed;
-		api_key = activationPrefs.api_key;
-		machine_id = activationPrefs.machine_id;
-
-		if (isLicensed)
-			specctrInit.init();
-
-	} catch (e) {
-		console.log(e.stack);
-		alert(e);
+	if (hostApplication === '') {
+		specctrDialog.showAlert('Cannot load the extension.\nRequired host application not found!');
+		return;
+	} else if (hostApplication === photoshop) {
+		$(".psElement").show();
+		$(".nonPsElement").hide();
 	}
-}
+
+	addApplicationEventListener();
+	appPrefs = pref.readAppPrefs();	//Read the config file and look for the isLicensed value.
+	if (appPrefs !== "") {
+		if (appPrefs.hasOwnProperty("isLicensed"))
+			isLicensed = appPrefs.isLicensed;
+		specctrInit.setModelValueFromPreferences();
+	}
+
+	//Migrating isLicensed from config file to license file, if present.
+	var licenseFilePath = pref.getFilePath('.license');
+	var activationPrefs = pref.readFile(licenseFilePath);	//Read the licensed file.
+
+	if (activationPrefs === "")
+		return;
+	else
+		activationPrefs = Specctr.Activation = JSON.parse(activationPrefs);
+
+	isLicensed = activationPrefs.licensed;
+	api_key = activationPrefs.api_key;
+	machine_id = activationPrefs.machine_id;
+
+	if (isLicensed)
+		specctrInit.init();
+});
 
 /**
  * Load JSX file into the scripting context of the product. 
@@ -142,44 +133,39 @@ function loadFontsToList(result) {
 /**
  * Initialize the values of the tab conatainer's components.
  */
-specctrInit.init = function() {
-	// Handle exceptions of missing components
-	try {
-		// Load tab container..
-		$("#loginContainer").hide();
-		$("#tabContainer").show();
+specctrInit.init = Specctr.Utility.tryCatchLog(function() {
+	pref.log("Initializing Specctr.");
+	// Load tab container..
+	$("#loginContainer").hide();
+	$("#tabContainer").show();
 
-		this.setModelValueFromPreferences();
-		var navitem = $("#tabContainer .tabs ul li:eq(0)"); // Set current tab.
+	this.setModelValueFromPreferences();
+	var navitem = $("#tabContainer .tabs ul li:eq(0)"); // Set current tab.
 
-		// Store which tab we are on.
-		var ident = navitem.attr("id").split("_")[1];
-		navitem.parent().attr("data-current", ident);
+	// Store which tab we are on.
+	var ident = navitem.attr("id").split("_")[1];
+	navitem.parent().attr("data-current", ident);
 
-		specctrUtility.changeImagesOfTabs(parseInt(ident)); // Set Current Tab with proper Image.
+	specctrUtility.changeImagesOfTabs(parseInt(ident)); // Set Current Tab with proper Image.
 
-		// Set current tab with class of active tab header.
-		navitem.attr("class", "tabActiveHeader");
+	// Set current tab with class of active tab header.
+	navitem.attr("class", "tabActiveHeader");
 
-		// Hide the tab contents we don't need.
-		var noOfPages = $(".tabpage").length;
-		for (var i = 1; i < noOfPages; i++)
-			$("#tabpage_" + (i + 1)).css("display", "none");
+	// Hide the tab contents we don't need.
+	var noOfPages = $(".tabpage").length;
+	for (var i = 1; i < noOfPages; i++)
+		$("#tabpage_" + (i + 1)).css("display", "none");
 
-		// Register click events to all tabs.
-		$("#tabContainer .tabs ul li").each(function(){
-			$(this).click(tabClickHandler);
-		});
+	// Register click events to all tabs.
+	$("#tabContainer .tabs ul li").each(function(){
+		$(this).click(tabClickHandler);
+	});
 
-		this.setModelToUIComponents();
-		this.setModelToResponsive();
-		
-		Specctr.Auth.checkStatus(Specctr.Activation);
-	} catch (e) {
-		alert(e);
-		console.log(e + "\n" + e.stack);
-	}
-};
+	this.setModelToUIComponents();
+	this.setModelToResponsive();
+	
+	Specctr.Auth.checkStatus(Specctr.Activation);
+});
 
 /**
  * Set the Specctr configuration file data to model values.

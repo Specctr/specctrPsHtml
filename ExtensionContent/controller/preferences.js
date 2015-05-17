@@ -155,3 +155,15 @@ pref.log = function(message) {
 pref.logError = function(e) {
 	pref.log(e.stack);
 };
+
+pref.logResSuccess = function(xhr, response) {
+	if (response === null) {
+		response = JSON.parse(xhr.responseText);
+	} 
+	pref.log(xhr.status + " - " + response.message);
+};
+
+pref.logResError = function(xhr) {
+	var response = JSON.parse(xhr.responseText);
+	pref.log(xhr.status + " - " + response.message);
+};

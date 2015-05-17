@@ -125,6 +125,7 @@ specctrUtility.rgbToHex = function(colorVal) {
 	return colorVal;
 };
 
+// Wrap passed function in a try catch block and log any errors.
 Specctr.Utility.tryCatchLog = function(func) {
 	return function() {
 		try{
@@ -132,6 +133,20 @@ Specctr.Utility.tryCatchLog = function(func) {
 		}catch(e){
 			pref.logError(e);
 		}	
+	};
+};
+
+// Log the response and then wrap handler in try catch block.
+Specctr.Utility.resHandler = function(func) {
+	return function() {
+		if (arguments[0].readyState) {
+			console.log("Log response error.");
+			pref.logResError(arguments[0]);
+		}else if (arguments[2] && arguments[2].readyState) {
+			console.log("Log response success.");
+			pref.logResSuccess(arguments[2], arguments[0]);
+		}
+		Specctr.Utility.tryCatchLog(func);
 	};
 };
 
