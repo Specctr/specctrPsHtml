@@ -32,6 +32,7 @@
 
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/style.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/loginStyle.css">
+<link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/cloudTab.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/propertiesButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/dimensionButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/spacingButtonStyle.css">
@@ -116,17 +117,17 @@
 		<div id="tabBlock">
 		
 			<div class="tabs">
-				<ul>
-					<li id="tabHeader_1">
+				<ul class="tabList">
+					<li id="tabHeader_1" class="panelTab">
 						<img id="tabImage_1" src="../Images/Icon_main.png"/>
 					</li>
-					<li id="tabHeader_2">
+					<li id="tabHeader_2" class="panelTab">
 						<img id="tabImage_2" src="../Images/Icon_settings.png"/>
 					</li>
-					<li id="tabHeader_3">
+					<li id="tabHeader_3" class="panelTab">
 						<img id="tabImage_3" src="../Images/Icon_responsive.png"/>
 					</li>
-					<li id="tabHeader_4">
+					<li id="tabHeader_4" class="panelTab">
 						<img id="tabImage_4" src="../Images/Icon_cloud.png"/>
 					</li>
 				</ul>
@@ -436,16 +437,21 @@
 	
 				<!-- Starting of cloud tab. -->
 				<div id="tabpage_4" class="tabpage">
-					<div class="tabTitle">Specctr Clouds</div>
+					<div class="tabTitle">Specctr Cloud</div>
 					<div class="plan-container">
-						<div class="email marginTop30px">
-							<label class="email subscriptionNote boldText">EMAIL:</label>
-							<span id="userEmail" class="email subscriptionNote boldText"></span>						
+						<div class="plan marginTop30px">
+							<label class="subscriptionNote boldText">STATUS:</label>
+							<span id="planStatus" class="planStatus subscriptionNote boldText"></span>
 						</div>
-						
+					
 						<div class="plan marginTop30px">
 							<label class="subscriptionNote boldText">PLAN:</label>
 							<span id="planName" class="plan subscriptionNote boldText"></span>
+						</div>
+									
+						<div class="email marginTop30px">
+							<label class="email subscriptionNote boldText">EMAIL:</label>
+							<span id="userEmail" class="email subscriptionNote boldText"></span>						
 						</div>
 						
 						<div class="plan marginTop30px subscriptionNote textAlignCenter">

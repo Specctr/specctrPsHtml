@@ -54,8 +54,17 @@ Specctr.UI = {
 	 * call the function to change images on tab.
 	 */
 	tabClickHandler : Specctr.Utility.tryCatchLog(function(){
-		var ident = this.id.split("_")[1];
-		var current = this.parentNode.getAttribute("data-current");
+		if ($(this).hasClass('disabled')) {
+			return;
+		};
+		var ident = this.id.split("_")[1];		
+		Specctr.UI.showTab(ident);
+	}),
+	
+	// Show tab.
+	showTab: Specctr.Utility.tryCatchLog(function(ident) {
+		var tabElement = $('#tabHeader_' + ident)[0].parentNode;
+		var current = tabElement.getAttribute("data-current");
 
 		// Remove class of active tab header and hide old contents
 		var currentTabHeader = $("#tabHeader_" + current);
@@ -73,7 +82,19 @@ Specctr.UI = {
 		Specctr.Utility.changeImagesOfTabs(parseInt(ident));
 
 		$("#tabpage_" + ident).css("display", "block");
-		this.parentNode.setAttribute("data-current", ident);
+		tabElement.setAttribute("data-current", ident);
+	}),
+	
+	enableAllTabs: Specctr.Utility.tryCatchLog(function() {
+		for(var i = 1; i <= 4; i++) {
+			$('#tabHeader_' + i).removeClass('disabled');
+		}		
+	}),
+	
+	disableNonCloudTabs: Specctr.Utility.tryCatchLog(function() {
+		for(var i = 1; i <= 3; i++) {
+			$('#tabHeader_' + i).addClass('disabled');
+		}		
 	}),
 	
 	/**

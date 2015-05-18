@@ -12,6 +12,7 @@ Specctr.Init = {};
  * according to the license value in preferences.
  */
 onLoaded = Specctr.Utility.tryCatchLog(function() {
+	pref.log('Loading Specctr.');
 	specctrDialog.createAlertDialog();
 	var isLicensed = false;
 	var appPrefs;

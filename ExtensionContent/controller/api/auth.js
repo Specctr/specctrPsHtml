@@ -54,16 +54,29 @@ Specctr.Auth = {
 				api_key: activation.api_key,
 				machine_id: activation.machine_id
 			}
-		}).done(function(response, status, xhr){
+		}).done(Specctr.Utility.tryCatchLog(function(response, status, xhr){
 			pref.log(xhr.status + " - " + "Status verified as active.");
 			_.extend(activation, response);
 			pref.addFileToPreferenceFolder('.license', JSON.stringify(activation));
 			Specctr.Views.CloudTab.renderPlan(activation);
-		}).fail(function(xhr){
-			pref.log(xhr.status + " - " + "Unable to verify active status.");
-			Specctr.Views.CloudTab.renderPlan(activation);
-			
-		});
+			Specctr.UI.enableAllTabs();
+		})).fail(Specctr.Utility.tryCatchLog(function(xhr){
+			if (xhr.status === 401) {
+				pref.log(xhr.status + " - " + "Unauthorized ");
+				// Load login container..		
+				$("#tabContainer").hide();
+				$("#loginContainer").show();
+			}
+			else {
+				pref.log(xhr.status + " - " + "Inactive subscription.");
+				var response = JSON.parse(xhr.responseText);
+				_.extend(activation, response);
+				pref.addFileToPreferenceFolder('.license', JSON.stringify(activation));
+				Specctr.Views.CloudTab.renderPlan(activation);
+				Specctr.UI.showTab(4);
+				Specctr.UI.disableNonCloudTabs();
+			}	
+		}));
 	})
 };
 

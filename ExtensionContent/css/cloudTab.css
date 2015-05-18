@@ -1,0 +1,7 @@
+#planStatus.alert {
+	color: red !important;
+}
+
+ul.tabList li.disabled{
+	opacity: .4;
+}
