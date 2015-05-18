@@ -23,6 +23,7 @@
 <script src="../controller/utility.js"></script>
 <script src="../controller/api/auth.js"></script>
 <script src="../controller/specctrUI.js"></script>
+<script src="../controller/specctrInit.js"></script>
 <script src="../controller/main.js"></script>
 <script src="../controller/specButtonAPI/buttonController.js"></script>
 <script src="../controller/specButtonAPI/buttonHandlers.js"></script>
@@ -58,14 +59,14 @@
 					<input class="loginTextItem" type="email" id="loginEmail"
 					placeholder="Email"
 					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event)"/>
+					onkeydown="Specctr.UI.textKeyDownHandler(event, '#loginButton')"/>
 				</li>
 				
 				<li>
 					<input class="loginTextItem" type="password" id="loginPassword"
 					placeholder="Password"
 					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event)"/>
+					onkeydown="Specctr.UI.textKeyDownHandler(event, '#loginButton')"/>
 				</li>
 				
 				<li>
@@ -81,21 +82,21 @@
 					<input class="loginTextItem" type="text" id="firsName"
 					placeholder="First Name"
 					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event)"/>
+					onkeydown="Specctr.UI.textKeyDownHandler(event, '#activateButton')"/>
 				</li>
 
 				<li>
 					<input class="loginTextItem" type="text" id="secondName"
 					placeholder="Last Name" 
 					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event)"/>
+					onkeydown="Specctr.UI.textKeyDownHandler(event, '#activateButton')"/>
 				</li>
 				
 				<li>
 					<input class="loginTextItem" type="email" id="emailInput"
 					placeholder="Email"
 					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event)"/>
+					onkeydown="Specctr.UI.textKeyDownHandler(event, '#activateButton')"/>
 				</li>
 				
 				<li>

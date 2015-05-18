@@ -408,7 +408,11 @@ $.specctrAi = {
             
             var name = "Dimensions";
             var legendLayer = this.legendSpecLayer(name);
-            var pageItemBounds = this.itemBounds(pageItem);
+            
+            if(model.includeStroke)
+                var pageItemBounds = this.itemBounds(pageItem);
+            else
+                pageItemBounds = this.itemBoundsWithoutStroke(pageItem);
 
             var height = pageItemBounds[1] - pageItemBounds[3];
             var width = pageItemBounds[2] - pageItemBounds[0];
@@ -906,21 +910,23 @@ $.specctrAi = {
     createSpacingSpecsForItems : function(aItem, bItem) {			
         try {
             var name = "Spacing";
+            var isOverlapped = false;
             var legendLayer = this.legendSpecLayer(name);
             var spacing = 10 + model.armWeight;
             var newColor = this.legendColor(model.legendColorSpacing); 
-            
             var idVarForFirstItem = aItem.visibilityVariable;
             var idVarForSecondItem = bItem.visibilityVariable;
             this.removeSpacingItemsGroup(idVarForFirstItem, idVarForSecondItem, name);
-            
             var itemsGroup = app.activeDocument.groupItems.add();
         
-            var aItemBounds = this.itemBounds(aItem);
-            var bItemBounds = this.itemBounds(bItem);
-        
-            var isOverlapped = false;
-        
+            if(model.includeStroke) {
+                var aItemBounds = this.itemBounds(aItem);
+                var bItemBounds = this.itemBounds(bItem);
+            } else {
+                aItemBounds = this.itemBoundsWithoutStroke(aItem);
+                bItemBounds = this.itemBoundsWithoutStroke(bItem);
+            }
+            
             //check overlap
             if (aItemBounds[0] < bItemBounds[2] && aItemBounds[2] > bItemBounds[0] &&
                 aItemBounds[3] < bItemBounds[1] && aItemBounds[1] > bItemBounds[3])
@@ -1037,12 +1043,15 @@ $.specctrAi = {
             var spacing = 10 + model.armWeight;
             var artRect = this.originalArtboardRect();
             
-            var pageItemBounds = this.itemBounds(pageItem);
+            if(model.includeStroke) 
+                var pageItemBounds = this.itemBounds(pageItem);
+            else 
+                pageItemBounds = this.itemBoundsWithoutStroke(pageItem);
+            
             var toTop = -pageItemBounds[1] + artRect[1];
             var toLeft = pageItemBounds[0] - artRect[0];
             var toBottom = pageItemBounds[3] - artRect[3];
             var toRight = -pageItemBounds[2] + artRect[2];
-            
             var idVar = pageItem.visibilityVariable;
             this.removeSpecGroup(idVar, name);
 
@@ -1075,7 +1084,6 @@ $.specctrAi = {
        
             var height = pageItemBounds[1] - pageItemBounds[3];
             var width = pageItemBounds[2] - pageItemBounds[0];
-                
             var newColor = this.legendColor(model.legendColorSpacing);
             var itemsGroup = app.activeDocument.groupItems.add();
                 
@@ -2244,6 +2252,20 @@ $.specctrAi = {
         if (separateStringValue == "style")
             return arr[1];
         return arr[0];
+    },
+    
+    //Return the bounds of the object without stroke excluding text frame object.
+    itemBoundsWithoutStroke : function (artItem) {
+        var bounds = artItem.geometricBounds;
+        if (artItem.typename == "TextFrame") {
+            try {
+                var dup = artItem.duplicate();
+                var target = dup.createOutline();
+                bounds = target.visibleBounds;
+                target.remove();
+            } catch(e) {}
+        }
+        return bounds;
     },
 
     //Return the bounds of the object including stroke width.

@@ -45,6 +45,7 @@ var model = {
 	legendColorSpacing:		'#FF0000',
 	legendColorMode:		'RGB',
 	specToEdge:				true,
+	includeStroke:			true,
 
 	armWeight:		1,
 	typeUnits: 		'pt',

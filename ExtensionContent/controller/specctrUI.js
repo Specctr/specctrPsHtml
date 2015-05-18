@@ -365,9 +365,9 @@ Specctr.UI = {
 	 * @param event {event type} The keyDown event dispatched after pressing key
 	 * in textbox. 
 	 */
-	textKeyDownHandler : Specctr.Utility.tryCatchLog(function(event){
+	textKeyDownHandler : Specctr.Utility.tryCatchLog(function(event, buttonId){
 		if (event.keyCode == 13)
-			$("#activateButton").trigger("click");
+			$(buttonId).trigger("click");
 	}),
 
 	/**
