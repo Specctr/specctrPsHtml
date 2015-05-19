@@ -10,6 +10,7 @@ if(typeof($)=== 'undefined')
 
 var heightChoice = { "Left" : 1 , "Right" : 2, "Center" : 3 };
 var widthChoice = { "Top" : 1 , "Bottom" : 2, "Center" : 3 };
+var model;
 
 $.specctrPsDimension = {
     //Suspend the history of creating dimension spec of layer.
@@ -19,17 +20,23 @@ $.specctrPsDimension = {
             if(artLayer === undefined || !$.specctrPsCommon.startUpCheckBeforeSpeccing(artLayer))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
                 return;
 
-            var pref = app.preferences;
-            var startRulerUnits = pref.rulerUnits; 
-            pref.rulerUnits = Units.PIXELS;
+            model = $.specctrPsCommon.getModel();
             
-            var ref = new ActionReference();
-            ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
-            var layer = executeActionGet(ref);
-            if(layer.hasKey(stringIDToTypeID('layerEffects')) && layer.getBoolean(stringIDToTypeID('layerFXVisible')))
-                var bounds = $.specctrPsCommon.returnBounds(artLayer);
-            else
-                bounds = artLayer.bounds;
+            if(model.includeStroke) {
+                var pref = app.preferences;
+                var startRulerUnits = pref.rulerUnits; 
+                pref.rulerUnits = Units.PIXELS;
+                var ref = new ActionReference();
+                ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
+                var layer = executeActionGet(ref);
+                if(layer.hasKey(stringIDToTypeID('layerEffects')) && layer.getBoolean(stringIDToTypeID('layerFXVisible')))
+                    var bounds = $.specctrPsCommon.returnBounds(artLayer);
+                else
+                    bounds = artLayer.bounds;
+            } else {
+                bouds = artLayer.boundsNoEffects;
+            }
+            
             pref.rulerUnits = startRulerUnits;
             app.activeDocument.suspendHistory('Dimension Specs', 'this.createDimensionSpecs(artLayer, bounds)');      //Pass bounds and layer for creating dimension spec.
         } catch(e) {}
@@ -51,7 +58,7 @@ $.specctrPsDimension = {
         }
 
         //Create the specs.
-        var model = $.specctrPsCommon.getModel();
+        model = $.specctrPsCommon.getModel();
         var doc = app.activeDocument;
         var startRulerUnits = app.preferences.rulerUnits;
         var startTypeUnits = app.preferences.typeUnits;

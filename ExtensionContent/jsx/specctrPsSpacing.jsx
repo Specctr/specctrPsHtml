@@ -39,14 +39,19 @@ $.specctrPsSpacing = {
                 }
 
                 doc.activeLayer = artLayer1;
-                var ref = new ActionReference();
-                ref.putEnumerated(lyr, ordn, trgt);
-                var layer = executeActionGet(ref);
-                if(layer.hasKey(layerEffects) && layer.getBoolean(layerFXVisible))
-                    var bounds1 = $.specctrPsCommon.returnBounds(artLayer1);
-                else
-                    bounds1 = artLayer1.bounds;
                 
+                if(model.includeStroke) {
+                    var ref = new ActionReference();
+                    ref.putEnumerated(lyr, ordn, trgt);
+                    var layer = executeActionGet(ref);
+                    if(layer.hasKey(layerEffects) && layer.getBoolean(layerFXVisible))
+                        var bounds1 = $.specctrPsCommon.returnBounds(artLayer1);
+                    else
+                        bounds1 = artLayer1.bounds;
+                } else {
+                    bounds1 = artLayer1.boundsNoEffects;
+                }
+            
                 if(artLayer1.kind === LayerKind.TEXT) {
                     doc.activeLayer = artLayer1;
                     app.activeDocument.suspendHistory('TextBaseLine', 'this.getTextBaseLine(artLayer1, artLayer1.textItem)');
@@ -55,13 +60,18 @@ $.specctrPsSpacing = {
                 }
 
                 doc.activeLayer = artLayer2;
-                ref = new ActionReference();
-                ref.putEnumerated(lyr, ordn, trgt);
-                layer = executeActionGet(ref);
-                if(layer.hasKey(layerEffects) && layer.getBoolean(layerFXVisible))
-                    var bounds2 = $.specctrPsCommon.returnBounds(artLayer2);
-                else
-                    bounds2 = artLayer2.bounds;
+                
+                if(model.includeStroke) {
+                    ref = new ActionReference();
+                    ref.putEnumerated(lyr, ordn, trgt);
+                    layer = executeActionGet(ref);
+                    if(layer.hasKey(layerEffects) && layer.getBoolean(layerFXVisible))
+                        var bounds2 = $.specctrPsCommon.returnBounds(artLayer2);
+                    else
+                        bounds2 = artLayer2.bounds;
+                } else {
+                    bounds2 = artLayer2.boundsNoEffects;
+                }
 
                 if(artLayer2.kind === LayerKind.TEXT) {
                     doc.activeLayer = artLayer2;
@@ -78,14 +88,18 @@ $.specctrPsSpacing = {
                 if(!$.specctrPsCommon.startUpCheckBeforeSpeccing(artLayer))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
                     return;
 
-                ref = new ActionReference();
-                ref.putEnumerated(lyr, ordn, trgt);
-                layer = executeActionGet(ref);
-                if(layer.hasKey(layerEffects) && layer.getBoolean(layerFXVisible))
-                    var bounds = $.specctrPsCommon.returnBounds(artLayer);
-                else
-                    bounds = artLayer.bounds;
-                
+                if(model.includeStroke) {
+                    ref = new ActionReference();
+                    ref.putEnumerated(lyr, ordn, trgt);
+                    layer = executeActionGet(ref);
+                    if(layer.hasKey(layerEffects) && layer.getBoolean(layerFXVisible))
+                        var bounds = $.specctrPsCommon.returnBounds(artLayer);
+                    else
+                        bounds = artLayer.bounds;
+                } else {
+                    bounds = artLayer.boundsNoEffects;
+                }
+            
                 if(artLayer.kind === LayerKind.TEXT) {
                     doc.activeLayer = artLayer;
                     app.activeDocument.suspendHistory('TextBaseLine', 'this.getTextBaseLine(artLayer, artLayer.textItem)');

@@ -26,9 +26,10 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	} else if (hostApplication === photoshop) {
 		$(".psElement").show();
 		$(".nonPsElement").hide();
+	} else if (hostApplication === illustrator) {
+		addApplicationEventListener();
 	}
-
-	addApplicationEventListener();
+	
 	appPrefs = pref.readAppPrefs();	//Read the config file and look for the isLicensed value.
 	if (appPrefs !== "") {
 		if (appPrefs.hasOwnProperty("isLicensed"))
@@ -40,10 +41,16 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	var licenseFilePath = pref.getFilePath('.license');
 	var activationPrefs = pref.readFile(licenseFilePath);	//Read the licensed file.
 
-	if (activationPrefs === "")
+	if (activationPrefs === "") {
+		if(hostApplication === illustrator && !window.location.hash) {
+	        window.location = window.location + '#loaded';
+	        window.location.reload();
+	    }
 		return;
-	else
+	}
+	else {
 		activationPrefs = Specctr.Activation = JSON.parse(activationPrefs);
+	}
 
 	isLicensed = activationPrefs.licensed;
 	api_key = activationPrefs.api_key;
