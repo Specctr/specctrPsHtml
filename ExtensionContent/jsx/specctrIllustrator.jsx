@@ -1642,7 +1642,6 @@ $.specctrAi = {
                     }
                 }
             } catch(e) {
-                alert(e);
                 return false;
             }
         return true;
@@ -2018,7 +2017,7 @@ $.specctrAi = {
                 newColor = this.legendColor(model.legendColorType); 
             else
                 newColor = this.legendColor(model.legendColorObject);
-                
+
             var arm, spec, group, itemCircle, infoText = "#Add_Notes";
             var pageItem = sourceItem;
             var pageItemBounds = this.itemBounds(pageItem);
@@ -2059,7 +2058,7 @@ $.specctrAi = {
             }
         
             var yReference = 0;
-            if(propertySpec.note.search("-css:") < 0) 
+            if(propertySpec != undefined && propertySpec.note.search("-css:") < 0) 
                 propertySpec.note = propertySpec.note + "-css:" + cssText;
 
             if (!spec) {

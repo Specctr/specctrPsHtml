@@ -21,11 +21,11 @@ $.specctrPsDimension = {
                 return;
 
             model = $.specctrPsCommon.getModel();
+            var pref = app.preferences;
+            var startRulerUnits = pref.rulerUnits; 
+            pref.rulerUnits = Units.PIXELS;
             
             if(model.includeStroke) {
-                var pref = app.preferences;
-                var startRulerUnits = pref.rulerUnits; 
-                pref.rulerUnits = Units.PIXELS;
                 var ref = new ActionReference();
                 ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
                 var layer = executeActionGet(ref);
@@ -34,7 +34,7 @@ $.specctrPsDimension = {
                 else
                     bounds = artLayer.bounds;
             } else {
-                bouds = artLayer.boundsNoEffects;
+                bounds = artLayer.boundsNoEffects;
             }
             
             pref.rulerUnits = startRulerUnits;

@@ -614,14 +614,14 @@ label {
 	background: url("../Images/Icon_Dropdown.png") no-repeat scroll 0 0
 		transparent;
 	border: medium none;
-	height: 25px;
+	height: 28px;
 	outline: 0 none;
 	overflow: hidden;
 	padding-left: 5px;
 	font-family: Arial;
 	font-weight: bold;
 	vertical-align: middle;
-	width: 134px !important;
+	width: 135px !important;
 	-webkit-appearance: none;
 	font-size: 1em;
 }
@@ -656,7 +656,7 @@ label {
 	background: url("../Images/SmallDropdownIcon.png") no-repeat scroll 0 0
 		transparent;
 	border: medium none;
-	height: 24px;
+	height: 26px;
 	outline: 0 none;
 	overflow: hidden;
 	padding-left: 5px;
