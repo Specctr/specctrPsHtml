@@ -14,7 +14,7 @@ Specctr.Auth = {
 			type: 'POST',
 			contentType: "application/json",
 			dataType: "json",
-			success: function(response, textStatus, xhr) {				
+			success: function(response, textStatus, xhr) {
 				pref.log(xhr.status + " - " + response.message);
 				// If unsuccessful, return without saving the data in file.
 				if (response.success) {
@@ -41,7 +41,9 @@ Specctr.Auth = {
 		});
 	}),
 	
-		
+	/**
+	 * Check subscription status.
+	 */
 	checkStatus: Specctr.Utility.tryCatchLog(function(activation) {
 		var urlRequest = SPECCTR_API + "/subscriptions/status";
 
@@ -77,6 +79,22 @@ Specctr.Auth = {
 				Specctr.UI.disableNonCloudTabs();
 			}	
 		}));
+	}),
+	
+	/**
+	 * Deactivate user's license.
+	 */
+	deActivate: Specctr.Utility.tryCatchLog(function() {
+		//Set the first tab as last selected tab to avoid blank display issue after re-login.
+		$("#tabHeader_1").click();
+		
+		// Load login container.
+		$("#tabContainer").hide();
+		$("#loginContainer").show();
+		
+		//Delete license file from preference folder.
+		var licenseFilePath = pref.getFilePath('.license');
+		pref.deleteFile(licenseFilePath);
 	})
 };
 

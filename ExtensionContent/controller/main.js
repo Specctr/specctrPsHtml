@@ -58,6 +58,11 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 
 	if (isLicensed)
 		Specctr.Init.init();
+	
+	var csInterface = new CSInterface();
+	updateThemeWithAppSkinInfo(csInterface.hostEnvironment.appSkinInfo);
+	// Update the color of the panel when the theme color of the product changed.
+    csInterface.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, onAppThemeColorChanged);
 });
 
 /**
@@ -137,6 +142,48 @@ function loadFontsToList(result) {
 	}
 }
 
+/**
+ * Event listener, listen the app theme color changed event.
+ */
+function onAppThemeColorChanged(event) {
+    // Should get a latest HostEnvironment object from application.
+    var skinInfo = JSON.parse(window.__adobe_cep__.getHostEnvironment()).appSkinInfo;
+    updateThemeWithAppSkinInfo(skinInfo);
+}
+
+/**
+ * Update the theme with the AppSkinInfo retrieved from the host product.
+ */
+function updateThemeWithAppSkinInfo(appSkinInfo) {
+    //Update the background color of the panel
+    var panelBackgroundColor = appSkinInfo.panelBackgroundColor.color;
+    document.body.bgColor = toHex(panelBackgroundColor);
+}
+
+/**
+ * Convert the Color object to string in hexadecimal format;
+ */
+function toHex(color, delta) {
+    function computeValue(value, delta) {
+        var computedValue = !isNaN(delta) ? value + delta : value;
+        if (computedValue < 0) {
+            computedValue = 0;
+        } else if (computedValue > 255) {
+            computedValue = 255;
+        }
+
+        computedValue = computedValue.toString(16);
+        return computedValue.length == 1 ? "0" + computedValue : computedValue;
+    }
+
+    var hex = "";
+    if (color) {
+        with (color) {
+             hex = computeValue(red, delta) + computeValue(green, delta) + computeValue(blue, delta);
+        };
+    }
+    return "#" + hex;
+}
 
 //----------------- Specctr Event Listeners -----------------//
 /**
@@ -173,7 +220,7 @@ function selectionChangeListener(event) {
 				selectionChangeListener);
 
 		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "updateConnection()", addApplicationEventListener);
+		evalScript("$.specctr" + hostApplication + ".updateConnection()", addApplicationEventListener);
 	} catch (e) {}
 
 }

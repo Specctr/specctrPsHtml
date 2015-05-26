@@ -449,7 +449,7 @@
 							<label class="subscriptionNote boldText">PLAN:</label>
 							<span id="planName" class="plan subscriptionNote boldText"></span>
 						</div>
-									
+						
 						<div class="email marginTop30px">
 							<label class="email subscriptionNote boldText">EMAIL:</label>
 							<span id="userEmail" class="email subscriptionNote boldText"></span>						
@@ -468,6 +468,11 @@
 							<a class="link" href="#">Activate Specctr Pro Today!</a>
 						</div>
 					</div>
+					
+					<div id="deActivate" class=" button border marginTop30px" onclick="Specctr.Auth.deActivate()">
+						<label>De-Activate</label>
+					</div>
+
 				</div>
 				<!-- Ending of cloud tab. -->
 	
@@ -612,16 +617,16 @@
 					</div>
 				</div>
 				
-				<div class="tabPageCheckBoxRow marginTopBottom10px" id="specToEdgeCheckbox">
+				<div class="tabPageCheckBoxRow" id="specToEdgeCheckbox">
 					<input type="checkbox" value="CanvasEdge" id="specToEdge"
 						onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 					<label class="settingPageLabel" for="specToEdge">Print Spec to Canvas Edge</label>
 				</div>
 
-				<div class="settingPageHeader marginTop20px">Properties</div>
+				<div class="settingPageHeader">Properties</div>
 				<div class="settingline"></div>
 
-				<div class="settingPageSecondChildBlock marginTop20px" id="colorList">
+				<div class="settingPageSecondChildBlock" id="colorList">
 					<label class="marginTopBottom10px width150px settingPageLabel">COLOR MODE</label>
 					<select class="dropdown" id="lstColorMode" onclick="Specctr.UI.itemClickHandler(event)"
 						onchange="Specctr.UI.comboBoxChangeHandler(this, 'legendColorMode')">
@@ -637,7 +642,7 @@
 				<div class="settingPageHeader">Measurements</div>
 				<div class="settingline"></div>
 				
-				<form class="marginTopBottom10px width150px" 
+				<form class="width150px" 
 					onclick="Specctr.UI.radioButtonClickHandler(event, 'decimalFractionValue')">
 					<input type="radio"  name="decimalFractionOptions" id="decimalRadioButton" 
 						value="decimal">
@@ -656,7 +661,7 @@
 
 				<div class="settingPageLabel">
 					<label class="width150px">SCALE SPECS BY:</label>
-					<div class="marginTopBottom10px">
+					<div class="marginTop3px">
 						<input type="checkbox" value="ScaleBy" id="useScaleBy"
 							class="alignMiddle" onclick="Specctr.UI.useScaleByClickHandler()" />
 						<input type="text" class="inputStyleSmall" id="txtScaleBy" value="x1"

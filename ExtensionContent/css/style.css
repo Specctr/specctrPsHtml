@@ -29,7 +29,7 @@ body {
 }
 
 input[type="text"],input[type="email"],input[type="password"] {
-	border: 1px solid #C9CBCC !important;
+	border: 1px solid #C9CBCC;
 	padding: 2px;
 	height: 20px;
 	background-color: #ffffff;
@@ -121,6 +121,10 @@ label {
 	background-color: #FFFFFF !important;
 }
 
+.marginTop3px {
+	margin-top: 3px !important;
+}
+
 .marginTop15px {
 	margin-top: 15px !important;
 }
@@ -135,6 +139,10 @@ label {
 
 .marginTop50px {
 	margin-top: 50px;
+}
+
+.marginBottom10px {
+	margin-bottom: 10px !important;
 }
 
 .marginBottom20px {
@@ -249,7 +257,6 @@ label {
 .tabs>ul>li {
 	text-align: center;
 	border: none;
-	background: #FFFFFF;
 	float: left;
 	width: 60px;
 	height: 48px;
@@ -269,7 +276,6 @@ label {
 	padding-top: 10px;
 	padding-bottom: 15px;
 	height: 430px;
-	background: #FFFFFF;
 }
 
 .tabTitle {
@@ -480,6 +486,15 @@ label {
 .width216px {
 	width: 216px;
 }
+
+#deActivate {
+	margin-left: 8px;
+}
+
+#deActivate label {
+	margin-left: 60px !important;
+	margin-top: 2px !important;
+}
 /*-------------------------------------------------------------*/
 
 /*--------------Style applied on setting page----------------*/
@@ -498,8 +513,8 @@ label {
 	font-size: 11px;
 	color: #808080;
 	background-color: #F9F9F9;
-	height: 18px;
-	padding-top: 5px;
+	height: 20px;
+	padding-top: 6px;
 	margin-left: -6px;
 	padding-left: 23px;
 }
@@ -510,12 +525,14 @@ label {
 	height: 20px;
 	margin-top: -3px !important;
 	margin-right: 3px;
+	cursor: pointer;
 }
 
 .settingline {
 	border: 1px solid #666766;
+	border-bottom: none;
 	margin-top: 5px;
-	margin-bottom: 6px;
+	margin-bottom: 13px;
 	width: 216px;
 }
 
@@ -523,7 +540,7 @@ label {
 	font-family: Arial;
 	font-size: 13px;
 	text-align: left;
-	padding-top: 4px;
+	padding-top: 13px;
 	font-weight: bold;
 	color: #666666;
 }
@@ -610,10 +627,8 @@ label {
 }
 
 .dropdown {
-	-moz-box-sizing: border-box;
-	background: url("../Images/Icon_Dropdown.png") no-repeat scroll 0 0
-		transparent;
-	border: medium none;
+	background: url("../Images/Icon_Dropdown.png") no-repeat transparent;
+	border: none;
 	height: 28px;
 	outline: 0 none;
 	overflow: hidden;
@@ -621,9 +636,10 @@ label {
 	font-family: Arial;
 	font-weight: bold;
 	vertical-align: middle;
-	width: 135px !important;
+	width: 137px !important;
 	-webkit-appearance: none;
 	font-size: 1em;
+	cursor: pointer;
 }
 
 .colorPickerStyle {
@@ -652,10 +668,9 @@ label {
 }
 
 .smalldropdown {
-	-moz-box-sizing: border-box;
-	background: url("../Images/SmallDropdownIcon.png") no-repeat scroll 0 0
+	background: url("../Images/SmallDropdownIcon.png") no-repeat scroll
 		transparent;
-	border: medium none;
+	border: none;
 	height: 26px;
 	outline: 0 none;
 	overflow: hidden;
@@ -663,9 +678,10 @@ label {
 	font-family: Arial;
 	font-weight: bold;
 	vertical-align: middle;
-	width: 68px !important;
+	width: 70px !important;
 	-webkit-appearance: none;
 	font-size: 1em;
+	cursor: pointer;
 }
 
 .settingPageLabel {
@@ -680,7 +696,7 @@ label {
 	font-size: 11px;
 	width: 140px;
 	display: table-cell;
-	height: 64px;
+	height: 50px;
 }
 
 .radioLabel {
@@ -689,20 +705,30 @@ label {
 	font-size: 12px;
 	font-weight: normal;
 	color: #707070;
+	cursor: pointer;
 }
 
 .inputStyleSmall {
-	width: 35px !important;
-	height: 20px !important;
+	width: 45px !important;
+	height: 15px !important;
 	margin-left: 5px !important;
 	margin-right: 5px !important;
 	text-align: left !important;
 	padding-left: 5px !important;
-	-webkit-user-select: auto;
+	padding-top: 1px !important;
+	border: 1px solid #666766 !important;
+	border-radius: 2px;
+}
+
+#specToEdgeCheckbox {
+	margin-top:5px;
+	margin-bottom:3px;
+	cursor: pointer;
 }
 
 #includeStrokeCheckbox {
-	margin: 15px 0px 15px 0px;
+	margin: 13px 0px 14px 0px;
+	cursor: pointer;
 }
 
 #settingBlock {
@@ -724,6 +750,7 @@ label {
 
 #settingIcon {
 	margin-bottom: 4px;
+	cursor: pointer;
 }
 
 #footerLabel {
