@@ -157,32 +157,10 @@ function onAppThemeColorChanged(event) {
 function updateThemeWithAppSkinInfo(appSkinInfo) {
     //Update the background color of the panel
     var panelBackgroundColor = appSkinInfo.panelBackgroundColor.color;
-    document.body.bgColor = toHex(panelBackgroundColor);
-}
-
-/**
- * Convert the Color object to string in hexadecimal format;
- */
-function toHex(color, delta) {
-    function computeValue(value, delta) {
-        var computedValue = !isNaN(delta) ? value + delta : value;
-        if (computedValue < 0) {
-            computedValue = 0;
-        } else if (computedValue > 255) {
-            computedValue = 255;
-        }
-
-        computedValue = computedValue.toString(16);
-        return computedValue.length == 1 ? "0" + computedValue : computedValue;
-    }
-
-    var hex = "";
-    if (color) {
-        with (color) {
-             hex = computeValue(red, delta) + computeValue(green, delta) + computeValue(blue, delta);
-        };
-    }
-    return "#" + hex;
+    with (panelBackgroundColor) {
+    	var color = "rgb("+ Math.round(red) + ", " + Math.round(green) +", " + Math.round(blue) + ")";
+    };
+    document.body.bgColor = Specctr.Utility.rgbToHex(color);
 }
 
 //----------------- Specctr Event Listeners -----------------//
