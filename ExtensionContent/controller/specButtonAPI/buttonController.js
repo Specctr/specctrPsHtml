@@ -61,7 +61,7 @@ buttonController.closeDropDown = function(id, button, dropDownId) {
  * @param parentId {string} parent (button) id of dropdown.
  * */
 buttonController.closeAllDropDown = function(parentId) {
-	var dropDownIds = ["#spacingDropDown", "#coordinateDropDown",
+	var dropDownIds = ["#spacingDropDown", "#coordinateDropDown", "#noteDropDown",
 	                   "#dimensionDropDown", "#propertiesDropDown", "#expandDropDown"];
 	var arrayLength = dropDownIds.length;
 	

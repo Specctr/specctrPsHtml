@@ -64,8 +64,8 @@ $.specctrPs = {
     },
 
     //Call create add note spec method from specctrPsAddNotes jsx file.
-    addNoteSpecs : function() {
-        $.specctrPsAddNote.addNoteSpecs();
+    addNoteSpecs : function(noteText) {
+        $.specctrPsAddNote.addNoteSpecs(noteText);
     },
 
     //Call create exportCss method from specctrPsExportCss jsx file.

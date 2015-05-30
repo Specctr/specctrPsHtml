@@ -11,6 +11,7 @@ Specctr.buttonHandlers = {
 	 */
 	expandCanvas : Specctr.Utility.tryCatchLog(function(){
 		analytics.trackFeature('expand_canvas');
+		buttonController.closeAllDropDown();
 		setModel();
 		evalScript("$.specctr" + hostApplication + "." + "createCanvasBorder()");
 		pref.writeAppPrefs();
@@ -21,8 +22,15 @@ Specctr.buttonHandlers = {
 	 */
 	addNoteSpecs : Specctr.Utility.tryCatchLog(function(){
 		analytics.trackFeature('create_note_specs');
+		
+		//Get note text from the text area of note button dropdown.
+		var note = $("#noteText").val();
+		if(!note.trim())
+			note = "Add Note Here!";
+
+		buttonController.closeAllDropDown();
 		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs()");
+		evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs('" + note + "')");
 	}),
 	
 	/**

@@ -16,6 +16,10 @@ figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,a
 	vertical-align: baseline;
 }
 
+/*-------------------Load custom fonts.----------------------*/
+
+/*-------------------------------------------------------------*/
+
 /*----------Default styles of components.----------------------*/
 body {
 	font-family: sans-serif;
@@ -407,6 +411,27 @@ label {
 	border: none;
 	margin-top: 8px;
 	margin-left: 4px;
+}
+
+#noteDropDown div {
+	height: 100px;
+	cursor: pointer;
+	background-position: center;
+}
+
+#noteText {
+	margin-top: 4px;
+	width: 212px;
+	height: 88px;
+	padding-left: 8px;
+	padding-top: 4px;
+	font-family: Arial;
+	font-size: 14px;
+	line-height: 20px;
+	outline: 0;
+	-webkit-user-select: auto;
+	border: none;
+	resize: none;
 }
 
 #expandDropDown div {
