@@ -289,6 +289,11 @@
 				<div id="tabpage_2" class="tabpage">
 					<div class="tabTitle">Pick the properties you want to display</div>
 					<div class="tabPage2PropertiesHeader">Shape Properties</div>
+					<div class="tabPage2Content">
+						<input type="checkbox" value="0" id="shapeLayerName"
+							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
+						<label for="shapeLayerName">Layer Name</label>
+					</div>
 					<div class="tabPage2Content nonPsElement" id="fillColor">
 						<input type="checkbox" value="1" id="shapeFillColor"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
@@ -342,47 +347,52 @@
 	
 					<div class="tabPage2PropertiesHeader">Text Properties</div>
 					<div class="tabPage2Content">
-						<input type="checkbox" value="6" id="textFont"
+						<input type="checkbox" value="6" id="textLayerName"
+							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
+						<label  for="textLayerName">Layer Name</label>
+					</div>
+					<div class="tabPage2Content">
+						<input type="checkbox" value="7" id="textFont"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textFont">Font Family</label>
 					</div>
 					<div class="tabPage2Content">
-						<input type="checkbox" value="7" id="textSize"
+						<input type="checkbox" value="8" id="textSize"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textSize">Font Size</label>
 					</div>
 					<div class="tabPage2Content">
-						<input type="checkbox" value="8" id="textColor"
+						<input type="checkbox" value="9" id="textColor"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textColor">Color</label>
 					</div>
 					<div class="tabPage2Content">
-						<input type="checkbox" value="9" id="textStyle"
+						<input type="checkbox" value="10" id="textStyle"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textStyle">Font Style</label>
 					</div>
 					<div class="tabPage2Content">
-						<input type="checkbox" value="10" id="textAlignment"
+						<input type="checkbox" value="11" id="textAlignment"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textAlignment">Text-Align</label>
 					</div>
 					<div class="tabPage2Content">
-						<input type="checkbox" value="11" id="textLeading"
+						<input type="checkbox" value="12" id="textLeading"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textLeading">Line-Height</label>
 					</div>
 					<div class="tabPage2Content">
-						<input type="checkbox" value="12" id="textTracking"
+						<input type="checkbox" value="13" id="textTracking"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for=textTracking>Letter Spacing</label>
 					</div>
 					<div class="tabPage2Content">
-						<input type="checkbox" value="13" id="textAlpha"
+						<input type="checkbox" value="14" id="textAlpha"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textAlpha">Alpha</label>
 					</div>
 					<div class="tabPage2Content psElement">
-						<input type="checkbox" value="14" id="textEffects"
+						<input type="checkbox" value="15" id="textEffects"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textEffects">Effects</label>
 					</div>
@@ -523,17 +533,23 @@
 											onclick="Specctr.UI.itemClickHandler(event)"
 											onkeydown="return Specctr.UI.colorPickerTextInputValidation(event)"
 											onkeyup="Specctr.UI.colorPickerTextInputClickHandler(event, 'Shape')"/> <br>
+										<div class="colorBlock bgColorF44336" title="F44336"></div>
+										<div class="colorBlock bgColorE91E63" title="E91E63"></div>
+										<div class="colorBlock bgColor9C27B0" title="9C27B0"></div>
+										<div class="colorBlock bgColor673AB7" title="673AB7"></div>
+										<div class="colorBlock bgColor3F51B5" title="3F51B5"></div>
+										<div class="colorBlock bgColor2196F3" title="2196F3"></div>
+										<div class="colorBlock bgColor00BCD4" title="00BCD4"></div>
+										<div class="colorBlock bgColor009688" title="009688"></div>
+										<div class="colorBlock bgColor4CAF50" title="4CAF50"></div>
+										<div class="colorBlock bgColor8BC34A" title="8BC34A"></div>
+										<div class="colorBlock bgColorCDDC39" title="CDDC39"></div>
+										<div class="colorBlock bgColorFFEB3B" title="FFEB3B"></div>
+										<div class="colorBlock bgColorFFC107" title="FFC107"></div>
+										<div class="colorBlock bgColorFF9800" title="FF9800"></div>
+										<div class="colorBlock bgColorFF5722" title="FF5722"></div>
 										<div class="colorBlock bgColor000000" title="000000"></div>
-										<div class="colorBlock bgColorFF0000" title="FF0000"></div>
-										<div class="colorBlock bgColorFF8800" title="FF8800"></div>
-										<div class="colorBlock bgColorFFFF00" title="FFFF00"></div>
-										<div class="colorBlock bgColor88FF00" title="88FF00"></div>
-										<div class="colorBlock bgColor00FF00" title="00FF00"></div>
-										<div class="colorBlock bgColor00FF88" title="00FF88"></div>
-										<div class="colorBlock bgColor00FFFF" title="00FFFF"></div>
-										<div class="colorBlock bgColor0000FF" title="0000FF"></div>
-										<div class="colorBlock bgColor8800FF" title="8800FF"></div>
-										<div class="colorBlock bgColorFF00FF" title="FF00FF"></div>
+										<div class="colorBlock bgColorB3B3B3" title="B3B3B3"></div>
 										<div class="colorBlock bgColorFFFFFF" title="FFFFFF"></div>
 									</div>
 								</div>
@@ -549,17 +565,23 @@
 											onkeydown="return Specctr.UI.colorPickerTextInputValidation(event)"
 											onclick="Specctr.UI.itemClickHandler(event)"
 											onkeyup="Specctr.UI.colorPickerTextInputClickHandler(event, 'Type')"/> <br>
+										<div class="colorBlock bgColorF44336" title="F44336"></div>
+										<div class="colorBlock bgColorE91E63" title="E91E63"></div>
+										<div class="colorBlock bgColor9C27B0" title="9C27B0"></div>
+										<div class="colorBlock bgColor673AB7" title="673AB7"></div>
+										<div class="colorBlock bgColor3F51B5" title="3F51B5"></div>
+										<div class="colorBlock bgColor2196F3" title="2196F3"></div>
+										<div class="colorBlock bgColor00BCD4" title="00BCD4"></div>
+										<div class="colorBlock bgColor009688" title="009688"></div>
+										<div class="colorBlock bgColor4CAF50" title="4CAF50"></div>
+										<div class="colorBlock bgColor8BC34A" title="8BC34A"></div>
+										<div class="colorBlock bgColorCDDC39" title="CDDC39"></div>
+										<div class="colorBlock bgColorFFEB3B" title="FFEB3B"></div>
+										<div class="colorBlock bgColorFFC107" title="FFC107"></div>
+										<div class="colorBlock bgColorFF9800" title="FF9800"></div>
+										<div class="colorBlock bgColorFF5722" title="FF5722"></div>
 										<div class="colorBlock bgColor000000" title="000000"></div>
-										<div class="colorBlock bgColorFF0000" title="FF0000"></div>
-										<div class="colorBlock bgColorFF8800" title="FF8800"></div>
-										<div class="colorBlock bgColorFFFF00" title="FFFF00"></div>
-										<div class="colorBlock bgColor88FF00" title="88FF00"></div>
-										<div class="colorBlock bgColor00FF00" title="00FF00"></div>
-										<div class="colorBlock bgColor00FF88" title="00FF88"></div>
-										<div class="colorBlock bgColor00FFFF" title="00FFFF"></div>
-										<div class="colorBlock bgColor0000FF" title="0000FF"></div>
-										<div class="colorBlock bgColor8800FF" title="8800FF"></div>
-										<div class="colorBlock bgColorFF00FF" title="FF00FF"></div>
+										<div class="colorBlock bgColorB3B3B3" title="B3B3B3"></div>
 										<div class="colorBlock bgColorFFFFFF" title="FFFFFF"></div>
 									</div>
 								</div>
@@ -575,17 +597,23 @@
 											onkeydown="return Specctr.UI.colorPickerTextInputValidation(event)"
 											onclick="Specctr.UI.itemClickHandler(event)"
 											onkeyup="Specctr.UI.colorPickerTextInputClickHandler(event, 'Space')"/> <br>
+										<div class="colorBlock bgColorF44336" title="F44336"></div>
+										<div class="colorBlock bgColorE91E63" title="E91E63"></div>
+										<div class="colorBlock bgColor9C27B0" title="9C27B0"></div>
+										<div class="colorBlock bgColor673AB7" title="673AB7"></div>
+										<div class="colorBlock bgColor3F51B5" title="3F51B5"></div>
+										<div class="colorBlock bgColor2196F3" title="2196F3"></div>
+										<div class="colorBlock bgColor00BCD4" title="00BCD4"></div>
+										<div class="colorBlock bgColor009688" title="009688"></div>
+										<div class="colorBlock bgColor4CAF50" title="4CAF50"></div>
+										<div class="colorBlock bgColor8BC34A" title="8BC34A"></div>
+										<div class="colorBlock bgColorCDDC39" title="CDDC39"></div>
+										<div class="colorBlock bgColorFFEB3B" title="FFEB3B"></div>
+										<div class="colorBlock bgColorFFC107" title="FFC107"></div>
+										<div class="colorBlock bgColorFF9800" title="FF9800"></div>
+										<div class="colorBlock bgColorFF5722" title="FF5722"></div>
 										<div class="colorBlock bgColor000000" title="000000"></div>
-										<div class="colorBlock bgColorFF0000" title="FF0000"></div>
-										<div class="colorBlock bgColorFF8800" title="FF8800"></div>
-										<div class="colorBlock bgColorFFFF00" title="FFFF00"></div>
-										<div class="colorBlock bgColor88FF00" title="88FF00"></div>
-										<div class="colorBlock bgColor00FF00" title="00FF00"></div>
-										<div class="colorBlock bgColor00FF88" title="00FF88"></div>
-										<div class="colorBlock bgColor00FFFF" title="00FFFF"></div>
-										<div class="colorBlock bgColor0000FF" title="0000FF"></div>
-										<div class="colorBlock bgColor8800FF" title="8800FF"></div>
-										<div class="colorBlock bgColorFF00FF" title="FF00FF"></div>
+										<div class="colorBlock bgColorB3B3B3" title="B3B3B3"></div>
 										<div class="colorBlock bgColorFFFFFF" title="FFFFFF"></div>
 									</div>
 								</div>

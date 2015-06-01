@@ -81,46 +81,69 @@ label {
 	background-color: #000000 !important;
 }
 
-.bgColorFF0000 {
-	background-color: #FF0000 !important;
+.bgColorB3B3B3 {
+	background-color: #B3B3B3 !important;
 }
 
-.bgColorFF8800 {
-	background-color: #FF8800 !important;
+.bgColorF44336 {
+	background-color: #F44336 !important;
 }
 
-.bgColorFFFF00 {
-	background-color: #FFFF00 !important;
+.bgColorE91E63 {
+	background-color: #E91E63 !important;
 }
 
-.bgColor88FF00 {
-	background-color: #88FF00 !important;
+.bgColor9C27B0 {
+	background-color: #9C27B0 !important;
 }
 
-.bgColor00FF00 {
-	background-color: #00FF00 !important;
+.bgColor673AB7 {
+	background-color: #673AB7 !important;
 }
 
-.bgColor00FF88 {
-	background-color: #00FF88 !important;
+.bgColor3F51B5 {
+	background-color: #3F51B5 !important;
 }
 
-.bgColor00FFFF {
-	background-color: #00FFFF !important;
+.bgColor2196F3 {
+	background-color: #2196F3 !important;
 }
 
-.bgColor0000FF {
-	background-color: #0000FF !important;
+.bgColor00BCD4 {
+	background-color: #00BCD4 !important;
 }
 
-.bgColor8800FF {
-	background-color: #8800FF !important;
+.bgColor009688 {
+	background-color: #009688 !important;
 }
 
-.bgColorFF00FF {
-	background-color: #FF00FF !important;
+.bgColor4CAF50 {
+	background-color: #4CAF50 !important;
 }
 
+.bgColor8BC34A {
+	background-color: #8BC34A !important;
+}
+
+.bgColorCDDC39 {
+	background-color: #CDDC39 !important;
+}
+
+.bgColorFFEB3B {
+	background-color: #FFEB3B !important;
+}
+
+.bgColorFFC107 {
+	background-color: #FFC107 !important;
+}
+
+.bgColorFF9800 {
+	background-color: #FF9800 !important;
+}
+
+.bgColorFF5722 {
+	background-color: #FF5722 !important;
+}
 .bgColorFFFFFF {
 	background-color: #FFFFFF !important;
 }
@@ -279,7 +302,7 @@ label {
 .tabscontent {
 	padding-top: 10px;
 	padding-bottom: 15px;
-	height: 430px;
+	height: 460px;
 }
 
 .tabTitle {
@@ -525,7 +548,7 @@ label {
 /*--------------Style applied on setting page----------------*/
 #settingPage {
 	padding-left: 6px !important;
-	height: 503px !important;
+	height: 533px !important;
 	background-color: #ECECEC;
 	border: 1px solid #C9CBCC;
 	border-right-width: 3px;
@@ -608,11 +631,11 @@ label {
 
 .firstChildLeftBlock .colorPicker {
 	display: none;
-	margin-left: 64px !important;
+	margin-left: 60px !important;
 	margin-top: 2px !important;
 	padding-left: 4px !important;
-	width: 125px;
-	height: 70px;
+	width: 122px;
+	height: 90px;
 	border: 1px solid #AEAEAE;
 	position: absolute;
 	background-image: linear-gradient(to bottom, #E1E1E1 0%, #F8F8F8 20%);
@@ -623,6 +646,7 @@ label {
 	width: 60px;
 	margin-left: 3px !important;
 	margin-top: 1px !important;
+	margin-bottom: 2px !important;
 	display: inline-block;
 }
 

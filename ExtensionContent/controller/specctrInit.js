@@ -81,8 +81,8 @@ Specctr.Init.setModelValueFromPreferences = function() {
 		return;
 
 	var i, propertyApplicationSpecific;
-	var propertyName = ["shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
-	                    "textAlignment", "textColor", "textStyle", "textLeading", 
+	var propertyName = ["shapeLayerName", "shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
+	                    "textLayerName", "textAlignment", "textColor", "textStyle", "textLeading", 
 	                    "textTracking", "textAlpha","specInPrcntg", "useScaleBy",
 	                    "specInEM", "specToEdge", "includeStroke"];
 
@@ -147,8 +147,8 @@ Specctr.Init.setModelToUIComponents = function() {
 
 	//Set check boxes values.
 	var appSpecificCheckBoxesId;
-	var checkBoxesId = ["shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
-	                    "textColor", "textStyle", "textAlignment", "textLeading",
+	var checkBoxesId = ["shapeLayerName", "shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
+	                    "textLayerName", "textColor", "textStyle", "textAlignment", "textLeading",
 	                    "textTracking", "textAlpha", "useScaleBy", "specToEdge", "includeStroke"];
 
 	if (hostApplication === photoshop) {

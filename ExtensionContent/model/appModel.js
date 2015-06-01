@@ -11,19 +11,19 @@ var Specctr = {
 };
 
 var model = {
+	shapeLayerName:		true,
 	shapeFill:			true,
 	shapeStroke:		true,
 	shapeEffects:		true,
-
 	shapeFillColor:		true,
 	shapeFillStyle:		true,
 	shapeStrokeColor:	true,
 	shapeStrokeStyle:	true,
 	shapeStrokeSize:	true,
-
 	shapeAlpha:			false,
 	shapeBorderRadius: 	false,
 
+	textLayerName:	true,
 	textFont:		true,
 	textSize:		true,
 	textAlignment:	true,
