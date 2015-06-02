@@ -679,15 +679,17 @@ label {
 	background: url("../Images/Icon_Dropdown.png") no-repeat transparent;
 	border: none;
 	height: 28px;
+	margin-top: 9px;
 	outline: 0 none;
 	overflow: hidden;
 	padding-left: 5px;
 	font-family: Arial;
-	font-weight: bold;
+	font-weight: normal;
+	color: #666666;
 	vertical-align: middle;
 	width: 137px !important;
 	-webkit-appearance: none;
-	font-size: 1em;
+	font-size: 13px;
 	cursor: pointer;
 }
 
@@ -721,15 +723,17 @@ label {
 		transparent;
 	border: none;
 	height: 26px;
+	margin-top: 9px;
 	outline: 0 none;
 	overflow: hidden;
 	padding-left: 5px;
 	font-family: Arial;
-	font-weight: bold;
+	font-weight: normal;
+	color: #666666;
 	vertical-align: middle;
 	width: 70px !important;
 	-webkit-appearance: none;
-	font-size: 1em;
+	font-size: 13px;
 	cursor: pointer;
 }
 
@@ -745,7 +749,7 @@ label {
 	font-size: 11px;
 	width: 140px;
 	display: table-cell;
-	height: 50px;
+	height: 63px;
 }
 
 .radioLabel {
@@ -767,11 +771,14 @@ label {
 	padding-top: 1px !important;
 	border: 1px solid #666766 !important;
 	border-radius: 2px;
+	font-family: Arial !important;
+	font-size: 13px !important;
+	color: #666666 !important;
 }
 
 #specToEdgeCheckbox {
-	margin-top:5px;
-	margin-bottom:3px;
+	margin-top:6px;
+	margin-bottom:10px;
 	cursor: pointer;
 }
 
