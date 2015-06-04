@@ -13,7 +13,7 @@ var model;
 $.specctrPsAddNote = {
 
    //Suspend the history of creating add note spec of layers.
-   addNoteSpecs : function() {
+   addNoteSpecs : function(noteText) {
        try {
             var sourceItem = $.specctrPsCommon.getActiveLayer();
             if(sourceItem === null || !$.specctrPsCommon.startUpCheckBeforeSpeccing(sourceItem))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
@@ -24,18 +24,18 @@ $.specctrPsAddNote = {
             pref.rulerUnits = Units.PIXELS;
             var bounds = sourceItem.bounds;
             pref.rulerUnits = startRulerUnits;
-            app.activeDocument.suspendHistory('Add note spec', 'this.createNoteSpecs(sourceItem, bounds)');
+            app.activeDocument.suspendHistory('Add note spec', 'this.createNoteSpecs(sourceItem, bounds, noteText)');
         } catch(e) {}
    },
 
     //Create the note specs for the selected art item.
-    createNoteSpecs : function(sourceItem, bounds) {
+    createNoteSpecs : function(sourceItem, bounds, noteText) {
     try {
 
         model = $.specctrPsCommon.getModel();
         
         var doc = app.activeDocument;
-        var infoText = "#Add_Note";
+        var infoText = noteText;
         var newColor;
         
         if(sourceItem.kind == LayerKind.TEXT)

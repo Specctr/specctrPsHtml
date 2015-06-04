@@ -390,13 +390,13 @@ $.specctrAi = {
     //Call the dimension specs function for each selected art on the active artboard.
     createDimensionSpecs : function () {
         try {
-            app.redraw();   //Creates an 'undo' point.        
             var selectionLength = app.selection.length;
             for (var i = 0; i < selectionLength; i++) {
                 var obj = app.selection[i];
                 if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
                     this.createDimensionSpecsForItem(obj);
             }
+            app.redraw();   //Creates an 'undo' point.        
         } catch(e) {}
     },
 
@@ -592,7 +592,6 @@ $.specctrAi = {
             heightText.note = "({type:'dimensionsHeight',varName:'" + idVar.name + "'})" + "-dimensionCss:" + styleText;
             widthText.note = "({type:'dimensionsWidth',varName:'" + idVar.name + "'})" + "-dimensionCss:" + styleText;
         } catch(e) {
-            alert(e);
             return false;
         }
 
@@ -602,13 +601,13 @@ $.specctrAi = {
     //Call the coordinate specs function for each selected art on the active artboard.
     createCoordinateSpecs : function() {
         try {
-            app.redraw();   //Creates an 'undo' point.        
             var selectionLength = app.selection.length;
             for (var i = 0; i < selectionLength; i++) {
                 var obj = app.selection[i];
                 if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
                     this.createCoordinateSpecsForItem(obj);
             }
+            app.redraw();   //Creates an 'undo' point.  
         } catch(e) {}
     },
 
@@ -782,7 +781,6 @@ $.specctrAi = {
             verticalLine.note = "({type:'verticalLine'})";
             coordinateText.note = "({type:'coordinates'})" + "-coordinateCss:" + styleText;
         } catch(e) {
-            alert(e);
             return false;
         }
 
@@ -1025,7 +1023,6 @@ $.specctrAi = {
             //Store the note to the spacing spec's group.
             itemsGroup.note = "({type:spacingGroup,name:" + idVarForFirstItem.name + idVarForSecondItem.name + "})";
         } catch(e) {
-            alert(e);
             return false;
         }
 
@@ -1270,7 +1267,6 @@ $.specctrAi = {
             //Store the unique IDs to the spacing spec's group.
             itemsGroup.visibilityVariable = idVar;
         } catch(e) {
-            alert(e);
             return false;
         }
 
@@ -1282,7 +1278,6 @@ $.specctrAi = {
         var result = false;
 
         try {
-            app.redraw();   //Creates an 'undo' point.        
             if (app.selection.length==2) {	
                 var obj1 = app.selection[0];
                 var obj2 = app.selection[1];
@@ -1297,6 +1292,7 @@ $.specctrAi = {
             } else {
                 alert("Please select one or two art items!");
             }
+            app.redraw();   //Creates an 'undo' point.    
         } catch(e) {}
         
         return result;
@@ -1331,8 +1327,7 @@ $.specctrAi = {
             // Check selected spec item type i.e. property or note, if not defined.
             var updateSpecName = buttonInvoked;
             if(!updateSpecName) {
-                app.redraw();
-                var dataString = this.separateNoteAndStyleText(app.selection[0].note);
+                app.redraw();                var dataString = this.separateNoteAndStyleText(app.selection[0].note);
                 if(dataString.search("'noteGroup'") > 0 || dataString.search("'noteSpec'") > 0) {
                     updateSpecName = "noteSpec";
                 } else if (dataString.search("'group'") > 0 || dataString.search("'spec'") > 0){
@@ -1650,7 +1645,6 @@ $.specctrAi = {
     //Call the property specs function for each selected art on the active artboard.
     createPropertySpecs : function() {
         try {
-            app.redraw();   //Creates an 'undo' point.        
             // Create property specs for all the selected pageItems.
             var selectionLength = app.selection.length;
             for (var i = 0; i < selectionLength; i++) {
@@ -1658,6 +1652,7 @@ $.specctrAi = {
                 if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
                     this.createPropertySpecsForItem(obj);
             }
+            app.redraw();   //Creates an 'undo' point.    
         } catch(e) {}
     },
 
@@ -1993,20 +1988,20 @@ $.specctrAi = {
     },
 
     //Call the add note specs function for each selected art on the active artboard.
-    addNoteSpecs : function() {
+    addNoteSpecs : function(noteText) {
         try {
-            app.redraw();   //Creates an 'undo' point.        
             var selectionLength = app.selection.length;
             for (var i = 0; i < selectionLength; i++) {
                 var obj = app.selection[i];
                 if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
-                    this.addNoteSpecsForItem(obj);
+                    this.addNoteSpecsForItem(obj, noteText);
             }
+            app.redraw();   //Creates an 'undo' point.
         } catch(e) {}
     },
 
     // Add note specs for the selected page item.
-    addNoteSpecsForItem : function (sourceItem) {
+    addNoteSpecsForItem : function (sourceItem, noteText) {
          try {
             var spacing = 30;
             var legendLayer;
@@ -2018,7 +2013,7 @@ $.specctrAi = {
             else
                 newColor = this.legendColor(model.legendColorObject);
 
-            var arm, spec, group, itemCircle, infoText = "#Add_Notes";
+            var arm, spec, group, itemCircle, infoText = noteText;
             var pageItem = sourceItem;
             var pageItemBounds = this.itemBounds(pageItem);
             var idVar = pageItem.visibilityVariable;
@@ -2046,8 +2041,7 @@ $.specctrAi = {
                    
                         switch (data.type) {
                             case "spec": propertySpec = allPageItems[i]; break;
-                            case "noteSpec": spec = allPageItems[i]; 
-                                                       infoText = spec.contents; break;
+                            case "noteSpec": spec = allPageItems[i]; break;
                             case "noteArm": arm = allPageItems[i]; break;
                             case "noteGroup": group = allPageItems[i]; break;
                             case "noteItemCircle": itemCircle = allPageItems[i]; break;

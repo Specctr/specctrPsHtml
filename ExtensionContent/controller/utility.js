@@ -116,8 +116,7 @@ Specctr.Utility = {
 					parts[i] = "0" + parts[i];
 			}
 	
-			var color = "#" + parts.join("");
-			return color;
+			return "#" + parts.join("");
 		} catch (e) {
 			console.log(e);
 		}

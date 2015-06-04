@@ -39,6 +39,14 @@ pref.writeFile = function(filePath, data) {
 };
 
 /**
+ * Delete file
+ * @param filePath {string}  The path of the file to be deleted.
+ */
+pref.deleteFile = function(filePath) {
+	window.cep.fs.deleteFile(filePath);
+};
+
+/**
  * Create the directory where preferences stores, if not exist.
  * @return The path of the directory.
  */

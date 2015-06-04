@@ -83,6 +83,7 @@ $.specctrPsProperties = {
             idLayer = $.specctrPsCommon.getIDOfLayer();   //Get unique ID of selected layer.
             var artLayerBounds = bounds;
             var name = artLayer.name;
+            var nameLength = name.length;
 
             switch(sourceItem.kind) {
                 case LayerKind.TEXT:
@@ -90,9 +91,16 @@ $.specctrPsProperties = {
                     newColor = $.specctrPsCommon.legendColor(model.legendColorType);
                     legendLayer = this.legendPropertiesLayer("Text Specs").layerSets.add();
                     legendLayer.name = "Text Spec ";
-                    var wordsArray = name.split(" ");
-                    if(wordsArray.length > 2)
-                        name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
+                    
+                    if(model.textLayerName) {
+                        var wordsArray = name.split(" ");
+                        if(wordsArray.length > 2)
+                            name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
+                        infoText = "\r"+name+infoText;
+                    } else {
+                        infoText = "\r"+infoText;
+                        nameLength = 0;
+                    }
                     break;
              
                 case LayerKind.GRADIENTFILL:
@@ -100,12 +108,19 @@ $.specctrPsProperties = {
                     infoText = this.getSpecsInfoForPathItem(sourceItem);
                     legendLayer = this.legendPropertiesLayer("Object Specs").layerSets.add();
                     legendLayer.name = "Object Spec ";
+                    if(model.shapeLayerName) {
+                        infoText = "\r"+name+infoText;
+                    } else {
+                        infoText = "\r"+infoText;
+                        nameLength = 0;
+                    }
                     break;
 
                 default: 
                     infoText = this.getSpecsInfoForGeneralItem(sourceItem); 
                     legendLayer = this.legendPropertiesLayer("Object Specs").layerSets.add();
                     legendLayer.name = "Object Spec ";
+                    infoText = "\r"+name+infoText;
             }
 
             if (infoText === "") 
@@ -119,9 +134,6 @@ $.specctrPsProperties = {
             var originalDPI = doc.resolution;
             $.specctrPsCommon.setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
             
-            var nameLength = name.length;
-            infoText = "\r"+name+infoText;
-            
             var isLeft, pos;
             var centerX = (artLayerBounds[0] + artLayerBounds[2]) / 2;             //Get the center of item.
             var centerY = (artLayerBounds[1] + artLayerBounds[3]) / 2;
@@ -134,7 +146,8 @@ $.specctrPsProperties = {
             var specText = spec.textItem;
             specText.kind = TextType.POINTTEXT;
             specText.contents = infoText;
-            this.applyBold(1, nameLength + 1);
+            if(nameLength != 0)
+                this.applyBold(1, nameLength + 1);
             specText.color.rgb = newColor;
             specText.font = font;
             specText.size = model.legendFontSize;
@@ -222,14 +235,20 @@ $.specctrPsProperties = {
                 case LayerKind.TEXT:
                     infoText   = this.getSpecsInfoForTextItem(artLayer);
                     newColor = $.specctrPsCommon.legendColor(model.legendColorType);
-                    var wordsArray = name.split(" ");
-                    if(wordsArray.length > 2)
-                        name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
+                    if(model.textLayerName) {
+                        var wordsArray = name.split(" ");
+                        if(wordsArray.length > 2)
+                            name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
+                    } else {
+                        name = "";
+                    }
                     break;
 
                 case LayerKind.GRADIENTFILL:
                 case LayerKind.SOLIDFILL: 
                     infoText = this.getSpecsInfoForPathItem(artLayer);
+                    if(!model.shapeLayerName)
+                        name = "";
                     break;
 
                 default: 
@@ -262,7 +281,8 @@ $.specctrPsProperties = {
             }
 
             specText.contents = infoText;
-            this.applyBold(1, nameLength+1);
+            if(nameLength != 0)
+                this.applyBold(1, nameLength+1);
             specText.color.rgb = newColor;
             specText.font = font;
             specText.size = model.legendFontSize;
