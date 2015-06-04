@@ -10,6 +10,10 @@ var Specctr = {
 	Models: {}
 };
 
+var SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
+//var SPECCTR_HOST = "http://localhost:5000";
+var SPECCTR_API = SPECCTR_HOST += "/api/v1";
+
 var model = {
 	shapeFill:			true,
 	shapeStroke:		true,
@@ -93,6 +97,5 @@ var hostApplication = '';
 var illustrator = 'Ai';
 var photoshop = 'Ps';
 var indesign = 'Id';
-var SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
-var SPECCTR_API = SPECCTR_HOST += "/api/v1";
+
 
