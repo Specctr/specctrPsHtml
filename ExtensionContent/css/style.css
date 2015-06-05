@@ -17,6 +17,10 @@ figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,a
 }
 
 /*-------------------Load custom fonts.----------------------*/
+@font-face {
+    font-family: aauxProRegular;
+    src: url("../assets/fonts/AauxProRegular.ttf");
+}
 
 /*-------------------------------------------------------------*/
 
@@ -148,8 +152,8 @@ label {
 	background-color: #FFFFFF !important;
 }
 
-.marginTop3px {
-	margin-top: 3px !important;
+.marginTop10px {
+	margin-top: 10px !important;
 }
 
 .marginTop15px {
@@ -302,7 +306,7 @@ label {
 .tabscontent {
 	padding-top: 10px;
 	padding-bottom: 15px;
-	height: 460px;
+	height: 475px;
 }
 
 .tabTitle {
@@ -548,7 +552,7 @@ label {
 /*--------------Style applied on setting page----------------*/
 #settingPage {
 	padding-left: 6px !important;
-	height: 533px !important;
+	height: 548px !important;
 	background-color: #ECECEC;
 	border: 1px solid #C9CBCC;
 	border-right-width: 3px;
@@ -632,7 +636,7 @@ label {
 .firstChildLeftBlock .colorPicker {
 	display: none;
 	margin-left: 60px !important;
-	margin-top: 2px !important;
+	margin-top: -5px !important;
 	padding-left: 4px !important;
 	width: 122px;
 	height: 90px;
@@ -706,16 +710,11 @@ label {
 }
 
 .colorPickerAppearance {
-	background: url("../Images/colorPickerImage.png") no-repeat scroll 0 0 transparent;
-	color: transparent;
 	text-align: center;
-	width: 35px !important;
-	height: 20px !important;
 	cursor: pointer !important;
 	border: 0px transparent !important;
-	background-color: #ff0000;
-	margin-top: -4px;
-	-webkit-appearance: none;
+	margin-top: 0px;
+	background-color: transparent;
 }
 
 .smalldropdown {

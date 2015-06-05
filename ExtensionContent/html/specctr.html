@@ -524,8 +524,9 @@
 					 		<div>
 								<div class="colorPickerStyle">
 									<label>Shape</label>
-									<input id="colObject" class="colorPickerAppearance"
-										onclick="Specctr.UI.colorPickerClickHandler(this, 'Shape')"/>
+									<canvas id="colObject" height="18" width="10" class="colorPickerAppearance"
+										onclick="Specctr.UI.colorPickerClickHandler(this, 'Shape')">
+									</canvas>
 									<div id='colorShapeDropDown' class="colorPicker">
 										<div id="shapeColorBlock" class="mainColorBlock"
 											onclick="Specctr.UI.setColorToLabel(this, 'Object')"></div>
@@ -556,8 +557,9 @@
 								
 								<div class="colorPickerStyle">
 									<label>Type</label> 
-									<input id="colType" class="colorPickerAppearance"
-										onclick="Specctr.UI.colorPickerClickHandler(this, 'Type')"/>
+									<canvas id="colType" height="18" width="10" class="colorPickerAppearance"
+										onclick="Specctr.UI.colorPickerClickHandler(this, 'Type')">
+									</canvas>
 									<div id='colorTypeDropDown' class="colorPicker">
 										<div id="typeColorBlock" class="mainColorBlock"
 											onclick="Specctr.UI.setColorToLabel(this, 'Type')"></div>
@@ -588,8 +590,9 @@
 								
 								<div class="colorPickerStyle">
 									<label>Spacing</label> 
-									<input id="colSpacing" class="colorPickerAppearance"
-										onclick="Specctr.UI.colorPickerClickHandler(this, 'Space')"/>
+									<canvas id="colSpacing" height="18" width="10" class="colorPickerAppearance"
+										onclick="Specctr.UI.colorPickerClickHandler(this, 'Space')">
+									</canvas>
 									<div id='colorSpaceDropDown' class="colorPicker">
 										<div id="spaceColorBlock" class="mainColorBlock"
 											onclick="Specctr.UI.setColorToLabel(this, 'Spacing')"></div>
@@ -702,7 +705,7 @@
 
 				<div class="settingPageLabel">
 					<label class="width150px">SCALE SPECS BY:</label>
-					<div class="marginTop3px">
+					<div class="marginTop10px">
 						<input type="checkbox" value="ScaleBy" id="useScaleBy"
 							class="alignMiddle" onclick="Specctr.UI.useScaleByClickHandler()" />
 						<input type="text" class="inputStyleSmall" id="txtScaleBy" value="x1"

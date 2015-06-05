@@ -172,10 +172,10 @@ Specctr.Init.setModelToUIComponents = function() {
 	}
 
 	//Set color for dropdown.
-	Specctr.Utility.setColorPickerColor("#colObject", model.legendColorObject);
-	Specctr.Utility.setColorPickerColor("#colType", model.legendColorType);
-	Specctr.Utility.setColorPickerColor("#colSpacing", model.legendColorSpacing);
-	
+	Specctr.Utility.createDropForColorPicker("colObject", 5, 0, model.legendColorObject);
+	Specctr.Utility.createDropForColorPicker("colType", 5, 0, model.legendColorType);
+	Specctr.Utility.createDropForColorPicker("colSpacing", 5, 0, model.legendColorSpacing);
+
 	//Set radio buttons values.
 	var radioButtonIds = [model.decimalFractionValue];
 	arrayLength = radioButtonIds.length;
