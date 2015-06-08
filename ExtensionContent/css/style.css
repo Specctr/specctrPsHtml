@@ -680,8 +680,10 @@ label {
 }
 
 .dropdown {
-	background: url("../Images/Icon_Dropdown.png") no-repeat transparent;
-	border: none;
+	background: url("../Images/Icon_Dropdown.png") no-repeat;
+	background-color: #ffffff;
+	border: 1px solid #666666;
+	border-radius: 4px;
 	height: 28px;
 	margin-top: 9px;
 	outline: 0 none;
@@ -691,7 +693,7 @@ label {
 	font-weight: normal;
 	color: #666666;
 	vertical-align: middle;
-	width: 137px !important;
+	width: 135px !important;
 	-webkit-appearance: none;
 	font-size: 13px;
 	cursor: pointer;
@@ -718,9 +720,10 @@ label {
 }
 
 .smalldropdown {
-	background: url("../Images/SmallDropdownIcon.png") no-repeat scroll
-		transparent;
-	border: none;
+	background: url("../Images/SmallDropdownIcon.png") no-repeat;
+	background-color: #ffffff;
+	border: 1px solid #666666;
+	border-radius: 4px;
 	height: 26px;
 	margin-top: 9px;
 	outline: 0 none;
