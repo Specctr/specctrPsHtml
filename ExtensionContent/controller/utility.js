@@ -70,8 +70,8 @@ Specctr.Utility = {
 			var isImageChanged = true, size = "";
 			var iconExtension = ".png";
 			var activeImageEndString = "_selected";
-			var tabIconPath = ["../Images/tabs/tabs_spec", "../Images/tabs/tabs_properties", 
-			                   "../Images/tabs/tabs_responsive", "../Images/tabs/tabs_cloud"];
+			var tabIconPath = ["tabs/tabs_spec", "tabs/tabs_properties", 
+			                   "tabs/tabs_responsive", "tabs/tabs_cloud"];
 			var arrayLength = tabIconPath.length;
 			
 			//For retina display: 2 pixel ratio; 
@@ -83,7 +83,7 @@ Specctr.Utility = {
 			//Set icons to their respective tabs.
 			for (var i = 0; i < arrayLength; i++) {
 				$("#tabImage_" + (i + 1)).attr("src", 
-						tabIconPath[i] + size + iconExtension);
+						imagePath + tabIconPath[i] + size + iconExtension);
 			}
 	
 		} catch (e) {

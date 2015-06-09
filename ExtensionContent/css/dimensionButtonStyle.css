@@ -8,100 +8,100 @@ Description: Includes styling code related to dimension button.
 }
 
 #imgNoSelectionWidth {
-	background-image: url('../Images/DimensionDropDownIcons/NoSelection.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/NoSelection.png');
 }
 
 #imgNoSelectionWidth:hover {
-	background-image: url('../Images/DimensionDropDownIcons/NoSelectionOver.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/NoSelectionOver.png');
 }
 
 .noSelectionSelected {
-	background-image: url('../Images/DimensionDropDownIcons/NoSelectionSelected.png') !important;
+	background-image: url('../assets/images/DimensionDropDownIcons/NoSelectionSelected.png') !important;
 	background-color: #D2D2D2;
 }
 
 #imgWidthTop {
-	background-image: url('../Images/DimensionDropDownIcons/WidthTop.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/WidthTop.png');
 }
 
 #imgWidthTop:hover {
-	background-image: url('../Images/DimensionDropDownIcons/WidthTopOver.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/WidthTopOver.png');
 }
 
 .widthTopSelected {
-	background-image: url('../Images/DimensionDropDownIcons/WidthTopSelected.png') !important;
+	background-image: url('../assets/images/DimensionDropDownIcons/WidthTopSelected.png') !important;
 	background-color: #D2D2D2;
 }
 
 #imgWidthBottom {
-	background-image: url('../Images/DimensionDropDownIcons/WidthBottom.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/WidthBottom.png');
 }
 
 #imgWidthBottom:hover {
-	background-image: url('../Images/DimensionDropDownIcons/WidthBottomOver.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/WidthBottomOver.png');
 }
 
 .widthBottomSelected {
-	background-image: url('../Images/DimensionDropDownIcons/WidthBottomSelected.png') !important;
+	background-image: url('../assets/images/DimensionDropDownIcons/WidthBottomSelected.png') !important;
 	background-color: #D2D2D2;
 }
 
 #imgWidthCenter {
-	background-image: url('../Images/DimensionDropDownIcons/WidthCenter.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/WidthCenter.png');
 }
 
 #imgWidthCenter:hover {
-	background-image: url('../Images/DimensionDropDownIcons/WidthCenterOver.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/WidthCenterOver.png');
 }
 
 .widthCenterSelected {
-	background-image: url('../Images/DimensionDropDownIcons/WidthCenterSelected.png') !important;
+	background-image: url('../assets/images/DimensionDropDownIcons/WidthCenterSelected.png') !important;
 	background-color: #D2D2D2;
 }
 
 #imgNoSelectionHeight {
-	background-image: url('../Images/DimensionDropDownIcons/NoSelection.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/NoSelection.png');
 }
 
 #imgNoSelectionHeight:hover {
-	background-image: url('../Images/DimensionDropDownIcons/NoSelectionOver.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/NoSelectionOver.png');
 }
 
 #imgHeightLeft {
-	background-image: url('../Images/DimensionDropDownIcons/HeightLeft.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/HeightLeft.png');
 }
 
 #imgHeightLeft:hover {
-	background-image: url('../Images/DimensionDropDownIcons/HeightLeftOver.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/HeightLeftOver.png');
 }
 
 .heightLeftSelected {
-	background-image: url('../Images/DimensionDropDownIcons/HeightLeftSelected.png') !important;
+	background-image: url('../assets/images/DimensionDropDownIcons/HeightLeftSelected.png') !important;
 	background-color: #D2D2D2;
 }
 
 #imgHeightRight {
-	background-image: url('../Images/DimensionDropDownIcons/HeightRight.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/HeightRight.png');
 }
 
 #imgHeightRight:hover {
-	background-image: url('../Images/DimensionDropDownIcons/HeightRightOver.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/HeightRightOver.png');
 }
 
 .heightRightSelected {
-	background-image: url('../Images/DimensionDropDownIcons/HeightRightSelected.png') !important;
+	background-image: url('../assets/images/DimensionDropDownIcons/HeightRightSelected.png') !important;
 	background-color: #D2D2D2;
 }
 
 #imgHeightCenter {
-	background-image: url('../Images/DimensionDropDownIcons/HeightCenter.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/HeightCenter.png');
 }
 
 #imgHeightCenter:hover {
-	background-image: url('../Images/DimensionDropDownIcons/HeightCenterOver.png');
+	background-image: url('../assets/images/DimensionDropDownIcons/HeightCenterOver.png');
 }
 
 .heightCenterSelected {
-	background-image: url('../Images/DimensionDropDownIcons/HeightCenterSelected.png') !important;
+	background-image: url('../assets/images/DimensionDropDownIcons/HeightCenterSelected.png') !important;
 	background-color: #D2D2D2;
 }

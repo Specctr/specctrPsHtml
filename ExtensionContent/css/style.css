@@ -261,7 +261,7 @@ label {
 }
 
 .ui-state-default .ui-icon {
-	background-image: url("../Images/ui-icons_888888_256x240.png")
+	background-image: url("../assets/images/ui-icons_888888_256x240.png")
 		!important;
 }
 
@@ -392,7 +392,7 @@ label {
 	float: right;
 	margin-top: 22px;
 	margin-right: 5px;
-	background: url("../Images/navArrowGreyDown.png");
+	background: url("../assets/images/navArrowGreyDown.png");
 	background-repeat: no-repeat;
 	width: 15px;
 	height: 10px;
@@ -402,7 +402,7 @@ label {
 	float: right;
 	margin-top: 20px;
 	margin-right: 5px;
-	background: url("../Images/navArrowGreyUp.png");
+	background: url("../assets/images/navArrowGreyUp.png");
 	background-repeat: no-repeat;
 	width: 15px;
 	height: 10px;
@@ -680,7 +680,7 @@ label {
 }
 
 .dropdown {
-	background: url("../Images/Icon_Dropdown.png") no-repeat;
+	background: url("../assets/images/Icon_Dropdown.png") no-repeat;
 	background-color: #ffffff;
 	border: 1px solid #666666;
 	border-radius: 4px;
@@ -720,7 +720,7 @@ label {
 }
 
 .smalldropdown {
-	background: url("../Images/SmallDropdownIcon.png") no-repeat;
+	background: url("../assets/images/SmallDropdownIcon.png") no-repeat;
 	background-color: #ffffff;
 	border: 1px solid #666666;
 	border-radius: 4px;

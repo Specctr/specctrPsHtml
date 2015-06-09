@@ -4,53 +4,53 @@ Description: Includes styling code related to spacing button.
 */
 
 #imgSpaceTop {
-    background-image: url('../Images/SpacingDropDownIcons/SpaceTop.png');
+    background-image: url('../assets/images/SpacingDropDownIcons/SpaceTop.png');
 }
 
     #imgSpaceTop:hover {
-        background-image: url('../Images/SpacingDropDownIcons/SpaceTopOver.png');
+        background-image: url('../assets/images/SpacingDropDownIcons/SpaceTopOver.png');
     }
 
 .topSelected {
-	background-image: url('../Images/SpacingDropDownIcons/SpaceTopSelected.png') !important;
+	background-image: url('../assets/images/SpacingDropDownIcons/SpaceTopSelected.png') !important;
 	background-color: #D2D2D2;
 }
 
 #imgSpaceRight {
-    background-image: url('../Images/SpacingDropDownIcons/SpaceRight.png');
+    background-image: url('../assets/images/SpacingDropDownIcons/SpaceRight.png');
 }
 
     #imgSpaceRight:hover {
-        background-image: url('../Images/SpacingDropDownIcons/SpaceRightOver.png');
+        background-image: url('../assets/images/SpacingDropDownIcons/SpaceRightOver.png');
     }
 
 .rightSelected {
-	background-image: url('../Images/SpacingDropDownIcons/SpaceRightSelected.png') !important;
+	background-image: url('../assets/images/SpacingDropDownIcons/SpaceRightSelected.png') !important;
 	background-color: #D2D2D2;
 }
 
 #imgSpaceBottom {
-    background-image: url('../Images/SpacingDropDownIcons/SpaceBottom.png');
+    background-image: url('../assets/images/SpacingDropDownIcons/SpaceBottom.png');
 }
 
     #imgSpaceBottom:hover {
-        background-image: url('../Images/SpacingDropDownIcons/SpaceBottomOver.png');
+        background-image: url('../assets/images/SpacingDropDownIcons/SpaceBottomOver.png');
     }
 
 .bottomSelected {
-	background-image: url('../Images/SpacingDropDownIcons/SpaceBottomSelected.png') !important;
+	background-image: url('../assets/images/SpacingDropDownIcons/SpaceBottomSelected.png') !important;
 	background-color: #D2D2D2;
 }
 
 #imgSpaceLeft {
-    background-image: url('../Images/SpacingDropDownIcons/SpaceLeft.png');
+    background-image: url('../assets/images/SpacingDropDownIcons/SpaceLeft.png');
 }
 
     #imgSpaceLeft:hover {
-        background-image: url('../Images/SpacingDropDownIcons/SpaceLeftOver.png');
+        background-image: url('../assets/images/SpacingDropDownIcons/SpaceLeftOver.png');
     }
 
 .leftSelected {
-	background-image: url('../Images/SpacingDropDownIcons/SpaceLeftSelected.png') !important;
+	background-image: url('../assets/images/SpacingDropDownIcons/SpaceLeftSelected.png') !important;
 	background-color: #D2D2D2;
 }

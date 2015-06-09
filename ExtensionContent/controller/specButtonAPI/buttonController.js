@@ -125,7 +125,7 @@ buttonController.removeClassesOfCell = function(parent, classArray, startIndex) 
  * Change the dimension button icon according to the selection of cells in the grid.
  * */
 buttonController.changeDimensionButtonIcon = function() {
-	var imagePath = "../Images/DimensionButtonIcons/WH_";
+	var dimensionIcon = imagePath + "DimensionButtonIcons/WH_";
 	var imageExtension = ".png";
 
 	//For retina display: 2 pixel ratio; 
@@ -140,7 +140,7 @@ buttonController.changeDimensionButtonIcon = function() {
 		dimensionIcons.push([]);
 		dimensionIcons[i].push(new Array(max));
 		for (var j = min; j <= max; j++)
-			dimensionIcons[i][j] = imagePath + i + "" + j + imageExtension;
+			dimensionIcons[i][j] = dimensionIcon + i + "" + j + imageExtension;
 	}
 
 	$("#dimensionIcon").attr("src", dimensionIcons[model.widthPos][model.heightPos]);
@@ -150,7 +150,7 @@ buttonController.changeDimensionButtonIcon = function() {
  * Change the spacing button icon according to the selection of cells in the grid.
  * */
 buttonController.changeSpacingButtonIcon = function() {
-	var iconPath = "../Images/SpacingButtonIcons/Spacing_";
+	var iconPath = imagePath + "SpacingButtonIcons/Spacing_";
 	var imageExtension = ".png";
 
 	//For retina display: 2 pixel ratio; 
@@ -179,7 +179,7 @@ buttonController.changeSpacingButtonIcon = function() {
  * Change the property button icon according to the selection of cells in the grid.
  * */
 buttonController.changePropertyButtonIcon = function (){
-	var iconPath = "../Images/PropertiesDropDownIcons/spec";
+	var iconPath = imagePath + "PropertiesDropDownIcons/spec";
 	var imageExtension = ".png";
 
 	//For retina display: 2 pixel ratio; 

@@ -120,13 +120,13 @@ Specctr.Init.setModelValueFromPreferences = function() {
 Specctr.Init.setModelToUIComponents = function() {
 	//Set icons to the buttons.
 	var iconPostString = ".png";
-	var buttonIconPaths = ["../Images/PropertiesDropDownIcons/specBullet_selected", 
-	                       "../Images/CoordinateButtonIcons/Icon_coordinates", 
-	                       "../Images/DimensionButtonIcons/WH_11", 
-	                       "../Images/SpacingButtonIcons/Spacing_TL", 
-	                       "../Images/NoteButtonIcons/Icon_note", 
-	                       "../Images/ExpandButtonIcons/Icon_expand",
-	                       "../Images/ExportCssButtonIcons/Icon_exportCSS"];
+	var buttonIconPaths = ["PropertiesDropDownIcons/specBullet_selected", 
+	                       "CoordinateButtonIcons/Icon_coordinates", 
+	                       "DimensionButtonIcons/WH_11", 
+	                       "SpacingButtonIcons/Spacing_TL", 
+	                       "NoteButtonIcons/Icon_note", 
+	                       "ExpandButtonIcons/Icon_expand",
+	                       "ExportCssButtonIcons/Icon_exportCSS"];
 
 	var buttonIds = ["#imgProperty", "#imgCoordinate", "#dimensionIcon", "#spacingIcon", 
 	                 "#imgNote", "#imgExpand", "#imgExportCss"];
@@ -136,7 +136,7 @@ Specctr.Init.setModelToUIComponents = function() {
 
 	var arrayLength = buttonIds.length;
 	for (var i = 0; i < arrayLength; i++) {
-		$(buttonIds[i]).attr("src", buttonIconPaths[i] + iconPostString);
+		$(buttonIds[i]).attr("src", imagePath + buttonIconPaths[i] + iconPostString);
 	}
 
 	//Set text and combo box values.
