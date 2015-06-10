@@ -1,0 +1,94 @@
+/*
+File-Name: loadFonts.css
+Description: Loads external fonts to panel. 
+*/
+
+@font-face {
+    font-family: aauxPro;
+    src: url("../assets/fonts/AauxPro");
+}
+
+@font-face {
+    font-family: aauxPro2;
+    src: url("../assets/fonts/AauxPro 2");
+}
+
+@font-face {
+    font-family: aauxProBla;
+    src: url("../assets/fonts/AauxProBla");
+}
+
+@font-face {
+    font-family: aauxProBla2;
+    src: url("../assets/fonts/AauxProBla 2");
+}
+
+@font-face {
+    font-family: aauxProBlaIta;
+    src: url("../assets/fonts/AauxProBlaIta");
+}
+
+@font-face {
+    font-family: aauxProBol;
+    src: url("../assets/fonts/AauxProBol");
+}
+
+@font-face {
+    font-family: aauxProBol2;
+    src: url("../assets/fonts/AauxProBol 2");
+}
+
+@font-face {
+    font-family: aauxProBolIta;
+    src: url("../assets/fonts/AauxProBolIta");
+}
+
+@font-face {
+    font-family: aauxProLig;
+    src: url("../assets/fonts/AauxProLig");
+}
+
+@font-face {
+    font-family: aauxProLigIta;
+    src: url("../assets/fonts/AauxProLigIta");
+}
+
+@font-face {
+    font-family: aauxProMed;
+    src: url("../assets/fonts/AauxProMed");
+}
+
+@font-face {
+    font-family: aauxProMed2;
+    src: url("../assets/fonts/AauxProMed 2");
+}
+
+@font-face {
+    font-family: aauxProMedIta;
+    src: url("../assets/fonts/AauxProMedIta");
+}
+
+@font-face {
+    font-family: aauxProReg;
+    src: url("../assets/fonts/AauxProReg");
+}
+
+@font-face {
+    font-family: aauxProReg2;
+    src: url("../assets/fonts/AauxProReg 2");
+}
+
+@font-face {
+    font-family: aauxProRegIta;
+    src: url("../assets/fonts/AauxProRegIta");
+}
+
+@font-face {
+    font-family: aauxProThi;
+    src: url("../assets/fonts/AauxProThi");
+}
+
+@font-face {
+    font-family: aauxProThiIta;
+    src: url("../assets/fonts/AauxProThiIta");
+}

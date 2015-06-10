@@ -96,3 +96,4 @@ var indesign = 'Id';
 var SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
 var SPECCTR_API = SPECCTR_HOST += "/api/v1";
 var imagePath = "../assets/images/";
+var lightThemeColorValue = 5395026;		//Threshold point for light theme.

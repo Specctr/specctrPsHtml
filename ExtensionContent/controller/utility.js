@@ -83,7 +83,7 @@ Specctr.Utility = {
 			//Set icons to their respective tabs.
 			for (var i = 0; i < arrayLength; i++) {
 				$("#tabImage_" + (i + 1)).attr("src", 
-						imagePath + tabIconPath[i] + size + iconExtension);
+					imagePath + tabIconPath[i] + size + iconExtension);
 			}
 	
 		} catch (e) {
@@ -113,6 +113,18 @@ Specctr.Utility = {
 		}
 	
 		return colorVal;
+	},
+	
+	/**
+	 * Convert hex into decimal.
+	 * @param colorVal {string} hex value.
+	 */
+	hexToDecimal : function(hexValue) {
+		
+		if(hexValue.length === 7)
+			hexValue = hexValue.substring(1);
+		
+		return parseInt(hexValue, 16);
 	},
 	
 	/**
