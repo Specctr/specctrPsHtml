@@ -62,15 +62,6 @@ Specctr.Utility = {
 	},
 	
 	/**
-	 * Set the colorpicker color at the time of initialization.
-	 * @param element {element object} Reference of the color picker.
-	 */
-	setColorPickerColor : function(elementId, color) {
-		$(elementId).css("background-color", color);
-		$(elementId).parent().children().first().css("color", color);
-	},
-	
-	/**
 	 * Change the images of tabs on their selection.
 	 * @param selectedTab {number} The position of selected tab.
 	 */
@@ -79,8 +70,8 @@ Specctr.Utility = {
 			var isImageChanged = true, size = "";
 			var iconExtension = ".png";
 			var activeImageEndString = "_selected";
-			var tabIconPath = ["../Images/tabs/tabs_spec", "../Images/tabs/tabs_properties", 
-			                   "../Images/tabs/tabs_responsive", "../Images/tabs/tabs_cloud"];
+			var tabIconPath = ["tabs/tabs_spec", "tabs/tabs_properties", 
+			                   "tabs/tabs_responsive", "tabs/tabs_cloud"];
 			var arrayLength = tabIconPath.length;
 			
 			//For retina display: 2 pixel ratio; 
@@ -92,7 +83,7 @@ Specctr.Utility = {
 			//Set icons to their respective tabs.
 			for (var i = 0; i < arrayLength; i++) {
 				$("#tabImage_" + (i + 1)).attr("src", 
-						tabIconPath[i] + size + iconExtension);
+					imagePath + tabIconPath[i] + size + iconExtension);
 			}
 	
 		} catch (e) {
@@ -124,6 +115,48 @@ Specctr.Utility = {
 		return colorVal;
 	},
 	
+	/**
+	 * Convert hex into decimal.
+	 * @param colorVal {string} hex value.
+	 */
+	hexToDecimal : function(hexValue) {
+		
+		if(hexValue.length === 7)
+			hexValue = hexValue.substring(1);
+		
+		return parseInt(hexValue, 16);
+	},
+	
+	/**
+	 * Create drop like structure to colorpicker.
+	 * @param id {string} colorpicker block id.
+	 * @param x {number} x coordinate.
+	 * @param y {number} y coordinate.
+	 * @param color {string} fill color value in hex.
+	 */
+	createDropForColorPicker : function(id, x, y, color) {
+		var canvas = document.getElementById(id);
+	    var context = canvas.getContext('2d');
+	    
+	    //Clear the canvas.
+	    context.clearRect(0,0,canvas.width, canvas.height);
+
+	    // begin custom shape
+	    context.beginPath();
+	    context.moveTo(x, y);
+	    context.bezierCurveTo(x-15, y+20, x+15, y+20, x, y);
+	    
+	    // complete custom shape
+	    context.closePath();
+	    context.fillStyle = color;
+	    context.fill();
+	    
+	    $("#"+id).parent().children().first().css("color", color);
+	},
+	
+	/**
+	 * Try catch wrapper for logging errors.
+	 */
 	tryCatchLog : function(func) {
         return function() {
             try{

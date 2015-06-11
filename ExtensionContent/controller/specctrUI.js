@@ -13,13 +13,13 @@ Specctr.UI = {
 		Specctr.Utility.changeTextColor($("#footerLabel"));
 
 		if($("#tabBlock").is(":visible")) {
-			$("#settingIcon").attr("src", "../Images/Icon_prefs_active.png");
+			$("#settingIcon").attr("src", imagePath + "Icon_prefs_active.png");
 			$("#tabBlock").css("display", "none");
 			$("#settingPage").css("display", "block");
 			$("#settingBlock").addClass("settingFooter");
 			$("#settingBlokChildDiv").addClass("setFooterLayOut");
 		} else {
-			$("#settingIcon").attr("src", "../Images/Icon_prefs.png");
+			$("#settingIcon").attr("src", imagePath + "Icon_prefs.png");
 			$("#settingPage").css("display", "none");
 			$("#tabBlock").css("display", "block");
 			$("#settingBlock").removeClass("settingFooter");
@@ -266,9 +266,9 @@ Specctr.UI = {
 			color = Specctr.Utility.rgbToHex(color);
 		}
 
-		$("#col" + colorPickerBlock).css("background-color", color);
+		var colorBlock = "col"+colorPickerBlock;
+		Specctr.Utility.createDropForColorPicker(colorBlock,5, 0, color);
 		$("#" + element.parentNode.id).slideUp(100);
-		$(element.parentNode.parentNode).children().first().css("color", color);
 		model[value] = color;
 		pref.writeAppPrefs();
 	}),
@@ -285,28 +285,20 @@ Specctr.UI = {
 		var colorBlock = "#" + colorPickerBlock.toLowerCase() + "ColorBlock";
 		var valueForTextBox = "";
 
-		var color = element.style.backgroundColor;
-		color = Specctr.Utility.rgbToHex(color);
 		$(dropDownBlock).slideToggle(100);
-		$(colorBlock).css("background-color", color);
-
-		if (color[0] == "#")
-			valueForTextBox = color.substring(1);
-		else
-			valueForTextBox = color;
-
-		$(colorBlockTextbox).val(valueForTextBox.toUpperCase());
-
 		if (colorPickerBlock == "Shape") {
-			model.legendColorObject = color;
+			valueForTextBox = model.legendColorObject;
 			$("#colorSpaceDropDown").slideUp(100);
 			$("#colorTypeDropDown").slideUp(100);
 		} else if (colorPickerBlock == "Type") {
-			model.legendColorType = color;
+			valueForTextBox = model.legendColorType;
 			$("#colorSpaceDropDown").slideUp(100);
 		} else {
-			model.legendColorSpacing = color;
+			valueForTextBox = model.legendColorSpacing;
 		}
+		
+		$(colorBlock).css("background-color", valueForTextBox);
+		$(colorBlockTextbox).val(valueForTextBox.substring(1).toUpperCase());
 	}),
 
 	/**

@@ -10,42 +10,42 @@ Description: Includes styling code related to coordinate button.
 }
 
 #imgPropertiesLine {
-    background-image: url('../Images/PropertiesDropDownIcons/specLine.png');
+    background-image: url('../assets/images/PropertiesDropDownIcons/specLine.png');
 }
 
 .specLineSelected {
-	background-image: url('../Images/PropertiesDropDownIcons/specLine_selected.png') !important;
+	background-image: url('../assets/images/PropertiesDropDownIcons/specLine_selected.png') !important;
 	background-color: #D2D2D2;
 }
 
 #imgPropertiesBullet {
-    background-image: url('../Images/PropertiesDropDownIcons/specBullet.png');
+    background-image: url('../assets/images/PropertiesDropDownIcons/specBullet.png');
 }
 
 .specBulletSelected {
-	background-image: url('../Images/PropertiesDropDownIcons/specBullet_selected.png') !important;
+	background-image: url('../assets/images/PropertiesDropDownIcons/specBullet_selected.png') !important;
 	background-color: #D2D2D2;
 }
 
 @media 
 (-webkit-min-device-pixel-ratio: 2) { 
 	#imgPropertiesLine {
-    	background-image: url('../Images/PropertiesDropDownIcons/specLine_x2.png');
+    	background-image: url('../assets/images/PropertiesDropDownIcons/specLine_x2.png');
     	background-size: 49px 49px;
 	}
 
     .specLineSelected {
-		background-image: url('../Images/PropertiesDropDownIcons/specLine_selected_x2.png') !important;
+		background-image: url('../assets/images/PropertiesDropDownIcons/specLine_selected_x2.png') !important;
 		background-color: #D2D2D2;
 		background-size: 49px 49px;
     }
     
     #imgPropertiesBullet {
-    	background-image: url('../Images/PropertiesDropDownIcons/specBullet_x2.png');
+    	background-image: url('../assets/images/PropertiesDropDownIcons/specBullet_x2.png');
     	background-size: 49px 49px;
 	}
     .specBulletSelected {
-		background-image: url('../Images/PropertiesDropDownIcons/specBullet_selected_x2.png') !important;
+		background-image: url('../assets/images/PropertiesDropDownIcons/specBullet_selected_x2.png') !important;
 		background-color: #D2D2D2;
 		background-size: 49px 49px;
     }

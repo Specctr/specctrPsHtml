@@ -2637,7 +2637,9 @@ $.specctrAi = {
             name = "<Path>";
             
         cssText = "." + name.toLowerCase() + " {";
-        infoText = name + "\r";
+        
+        if(model.shapeLayerName)
+            infoText = name + "\r";
         
         if (model.shapeFillStyle || model.shapeFillColor) {    
             try {
@@ -2732,6 +2734,7 @@ $.specctrAi = {
         var fontSize = [], leading = [], fontFamily = [], tracking = [],
         textColor = [], fontStyle = [], textDecoration = [], alignment = [];
         
+        
         var name = textItem.name;
         if (!name)
             name = textItem.contents;
@@ -2741,7 +2744,10 @@ $.specctrAi = {
             name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
                     
         cssText = name.toLowerCase() + " {";
-        infoText = name;
+        
+        if(model.textLayerName)
+            infoText = name;
+
         try {
             var alpha = "";
             if (model.textAlpha)

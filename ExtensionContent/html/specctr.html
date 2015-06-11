@@ -32,6 +32,7 @@
 <script src="../lib/ai_host_adapter.js"></script>
 
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/style.css">
+<link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/loadFonts.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/loginStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/cloudTab.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/propertiesButtonStyle.css">
@@ -48,7 +49,7 @@
 	<!-- Login container start here -->
 	<div class="showBlock" id="loginContainer">
 		<div id="dvLoginContainer">
-			<img alt="specctrLoginImage" class="hideBlock" id="specctrLoginImage" src="../Images/specctrLogo.png">
+			<img alt="specctrLoginImage" class="hideBlock" id="specctrLoginImage" src="../assets/images/specctrLogo.png">
 			<div id="loginHeaderDiv" class="loginHeader">
 				<label id="loignHeaderLabel"> Hi! Welcome to Specctr! <br> Sign up for a free 15 day trial! 
 				</label>
@@ -120,16 +121,16 @@
 			<div class="tabs">
 				<ul class="tabList">
 					<li id="tabHeader_1" class="panelTab">
-						<img id="tabImage_1" src="../Images/Icon_main.png"/>
+						<img id="tabImage_1" src="../assets/images/Icon_main.png"/>
 					</li>
 					<li id="tabHeader_2" class="panelTab">
-						<img id="tabImage_2" src="../Images/Icon_settings.png"/>
+						<img id="tabImage_2" src="../assets/images/Icon_settings.png"/>
 					</li>
 					<li id="tabHeader_3" class="panelTab">
-						<img id="tabImage_3" src="../Images/Icon_responsive.png"/>
+						<img id="tabImage_3" src="../assets/images/Icon_responsive.png"/>
 					</li>
 					<li id="tabHeader_4" class="panelTab">
-						<img id="tabImage_4" src="../Images/Icon_cloud.png"/>
+						<img id="tabImage_4" src="../assets/images/Icon_cloud.png"/>
 					</li>
 				</ul>
 			</div>
@@ -505,7 +506,7 @@
 		<div id="settingPage" class="hideBlock">
 			<div class="settingHeader">
 				<label>General Settings</label>
-				<img src="../Images/closeIcon.png" onclick="Specctr.UI.toggleSettingPage(this)"/>
+				<img src="../assets/images/closeIcon.png" onclick="Specctr.UI.toggleSettingPage(this)"/>
 			</div>
 			
 			<div class="settingPageHeader">Formatting</div>
@@ -524,8 +525,9 @@
 					 		<div>
 								<div class="colorPickerStyle">
 									<label>Shape</label>
-									<input id="colObject" class="colorPickerAppearance"
-										onclick="Specctr.UI.colorPickerClickHandler(this, 'Shape')"/>
+									<canvas id="colObject" height="18" width="10" class="colorPickerAppearance"
+										onclick="Specctr.UI.colorPickerClickHandler(this, 'Shape')">
+									</canvas>
 									<div id='colorShapeDropDown' class="colorPicker">
 										<div id="shapeColorBlock" class="mainColorBlock"
 											onclick="Specctr.UI.setColorToLabel(this, 'Object')"></div>
@@ -556,8 +558,9 @@
 								
 								<div class="colorPickerStyle">
 									<label>Type</label> 
-									<input id="colType" class="colorPickerAppearance"
-										onclick="Specctr.UI.colorPickerClickHandler(this, 'Type')"/>
+									<canvas id="colType" height="18" width="10" class="colorPickerAppearance"
+										onclick="Specctr.UI.colorPickerClickHandler(this, 'Type')">
+									</canvas>
 									<div id='colorTypeDropDown' class="colorPicker">
 										<div id="typeColorBlock" class="mainColorBlock"
 											onclick="Specctr.UI.setColorToLabel(this, 'Type')"></div>
@@ -588,8 +591,9 @@
 								
 								<div class="colorPickerStyle">
 									<label>Spacing</label> 
-									<input id="colSpacing" class="colorPickerAppearance"
-										onclick="Specctr.UI.colorPickerClickHandler(this, 'Space')"/>
+									<canvas id="colSpacing" height="18" width="10" class="colorPickerAppearance"
+										onclick="Specctr.UI.colorPickerClickHandler(this, 'Space')">
+									</canvas>
 									<div id='colorSpaceDropDown' class="colorPicker">
 										<div id="spaceColorBlock" class="mainColorBlock"
 											onclick="Specctr.UI.setColorToLabel(this, 'Spacing')"></div>
@@ -702,7 +706,7 @@
 
 				<div class="settingPageLabel">
 					<label class="width150px">SCALE SPECS BY:</label>
-					<div class="marginTop3px">
+					<div class="marginTop10px">
 						<input type="checkbox" value="ScaleBy" id="useScaleBy"
 							class="alignMiddle" onclick="Specctr.UI.useScaleByClickHandler()" />
 						<input type="text" class="inputStyleSmall" id="txtScaleBy" value="x1"
@@ -715,7 +719,7 @@
 		<div id="settingBlock" onclick="Specctr.UI.toggleSettingPage(this)"> 
 			<div id="settingBlokChildDiv">
 				<img id="settingIcon" class="floatRight"
-				 src="../Images/Icon_prefs.png" width="32" height="24"/>
+				 src="../assets/images/Icon_prefs.png" width="32" height="24"/>
 			 	<label id="footerLabel"	class="floatRight footerNote">Settings</label>
 		 	</div>
 		 </div>
