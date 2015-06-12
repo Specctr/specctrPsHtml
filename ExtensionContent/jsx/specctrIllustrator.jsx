@@ -1302,6 +1302,10 @@ $.specctrAi = {
     updateConnection : function(buttonInvoked) {
         try {
             if (app.selection.length != 1 ) return;
+            
+            if (!(app.selection[0].parent.parent.name.indexOf("specctr") != -1 || 
+                    app.selection[0].parent.parent.parent.name.indexOf("specctr") != -1)) 
+                    return;
 
             var idVar = app.selection[0].visibilityVariable;
             var anyNote = app.selection[0].note;

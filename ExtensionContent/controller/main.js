@@ -1,7 +1,6 @@
 /*
 File-Name: main.js
-Description: Include methods to initialize the panel's component according to the stored preferences.  
-Include all spec button click handlers and methods to communicate between js and jsx.  
+Description: Include methods to initialize the panel's component according to the stored preferences.
  */
 
 Specctr = Specctr || {};
@@ -160,7 +159,15 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     with (panelBackgroundColor) {
     	var color = "rgb("+ Math.round(red) + ", " + Math.round(green) +", " + Math.round(blue) + ")";
     };
-    document.body.bgColor = Specctr.Utility.rgbToHex(color);
+    
+    var hexValue = Specctr.Utility.rgbToHex(color);
+    document.body.bgColor = hexValue;
+    var decimalValue = Specctr.Utility.hexToDecimal(hexValue);
+
+    if(decimalValue <= lightThemeColorValue)		//Dark theme. 
+    	$(".button label").css("color", "#ffffff");					//value to be applied on all text.
+    else											//Light theme.
+    	$(".button label").css("color", "#212121");					//value to be applied on all text.
 }
 
 //----------------- Specctr Event Listeners -----------------//
@@ -170,7 +177,7 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
 function loseFocusFromPanel() {
 	if(extensionId === '')
 		extensionId = Specctr.Utility.getExtensionId();
-	var csEvent = new CSEvent("com.adobe.PhotoshopLoseFocus", "APPLICATION");  
+	var csEvent = new CSEvent("com.adobe.PhotoshopLoseFocus", "APPLICATION");
 	csEvent.extensionId = extensionId;
 	var csInterface = new CSInterface();
 	csInterface.dispatchEvent(csEvent);
