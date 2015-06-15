@@ -245,6 +245,17 @@ label {
 	width: 150px !important;
 }
 
+.h4 {
+	font-family: aauxProBla;
+	font-size: 13px;
+	color: #666666;
+}
+
+.h5 {
+	font-family: aauxProBol;
+	font-size: 11px;
+	color: #666666;
+}
 /*-------------------------------------------------------------*/
 
 /*------------------Modal dialog styling-----------------------*/
@@ -338,7 +349,6 @@ label {
 }
 
 .button {
- 	background-color: #EDEDED;
 	width: 222px;
 	padding: 0px;
 	display: table;
@@ -368,7 +378,7 @@ label {
 	float: left;
 	margin-left: 16px;
 	margin-top: 15px;
-	font-family: Arial !important;
+	font-family: aauxProBol !important;
 	font-size: 18px !important;
 	cursor: pointer !important;
 }
@@ -471,28 +481,41 @@ label {
 
 /*--------------Style applied on second tab page---------------*/
 .tabPage2PropertiesHeader {
-	font-size: 16px;
-	margin-top: 14px;
+	font-family: aauxProBla;
+	font-size: 17px;
+	color: #666666;
+	margin-top: 12px;
 	margin-left: 20px;
-	margin-bottom: 8px;
+	margin-bottom: 4px;
 }
 
 .tabPage2Content {
-	font-size: 13px;
-	margin-top: 6px;
+	font-family: aauxProBol;
+	font-size: 16px;
+	color: #666666;
+	margin-top: 2px;
 	margin-left: 22px;
 }
 
 .tabPage2Content label {
-	padding-top: 5px;
 	padding-left: 8px;
+}
+
+.tabPage2Content input[type="checkbox"] {
+	margin-bottom: 3px !important;
 }
 
 /*-------------------------------------------------------------*/
 
 /*--------------Style applied on third tab page----------------*/
+#tabpage_3 {
+	color: #666666;
+}
+
 .responsivePageHeader {
-	font-size: 14px;
+	font-family: aauxProBla;
+	font-size: 17px;
+	color: #666666;
 	margin-bottom: 10px;
 	margin-top: 20px !important;
 	margin-left: 10px;
@@ -507,14 +530,15 @@ label {
 }
 
 .inputStyle {
-	width: 60px;
+	width: 55px;
 	height: 20px;
-	margin-left: 5px !important;
 	margin-right: 5px !important;
 	text-align: left !important;
 	padding: 2px 0px 0px 2px !important;
 	font-family: sans-serif !important;
 	font-size: 12px !important;
+	border: 1px solid #666766 !important;
+	border-radius: 2px;
 	-webkit-user-select: auto;
 }
 /*-------------------------------------------------------------*/
@@ -581,11 +605,10 @@ label {
 }
 
 .settingPageHeader {
-	font-family: Arial;
+	font-family: aauxProBla;
 	font-size: 13px;
 	text-align: left;
 	padding-top: 13px;
-	font-weight: bold;
 	color: #666666;
 }
 
@@ -601,7 +624,7 @@ label {
 .firstChildLeftBlock {
 	font-family: Arial;
 	font-size: 11px;
-	width: 140px;
+	width: 130px;
 	display: table-cell;
 	float: left;
 	vertical-align: top;
@@ -610,7 +633,6 @@ label {
 .firstChildLeftBlock label {
 	float: left;
 	font-weight: normal;
-	color: #707070;
 }
 
 .firstChildLeftBlock .colorBlock {
@@ -657,9 +679,7 @@ label {
 }
 
 .firstChildRightBlock {
-	font-family: Arial;
-	font-size: 11px;
-	width: 75px;
+	width: 85px;
 	display: table-cell;
 	vertical-align: top;
 }
@@ -668,7 +688,6 @@ label {
 	float: left;
 	margin-left: 2px;
 	font-weight: normal;
-	color: #707070;
 }
 
 .dropdown {
@@ -732,10 +751,10 @@ label {
 }
 
 .settingPageLabel {
-	font-family: Arial;
-	font-size: 11px;
+	font-family: aauxProBol;
+	font-size: 13px;
 	font-weight: normal;
-	color: #707070;
+	color: #666666;
 }
 
 .settingPageSecondChildBlock {
@@ -804,10 +823,10 @@ label {
 }
 
 #footerLabel {
-	font-family: Arial;
+	font-family: aauxProBol;
 	font-size: 14px;
 	font-style: normal;
-	color: #808080;
+	color: #6d6d6d;
 	margin-top: 3px; 
 	cursor: pointer;
 }
