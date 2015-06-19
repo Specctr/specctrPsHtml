@@ -415,3 +415,25 @@ function restrictInputToDecimal(event) {
 
 		return true;
 }
+
+function createAlertDialog() {
+	$("#dialog").dialog({
+		autoOpen : false,
+		resizable: false,
+		width : 200,
+		height : 80,
+		modal : true,
+		buttons : []
+	});
+}
+
+/**
+ * Open the dialog with the passed message.
+ * @param message {string} The message that appear in the dialog.
+ */
+function showAlert(message) {
+	var dialogRef = $("#dialog");
+	dialogRef.text(message);
+	dialogRef.dialog("open");
+	dialogRef.dialog({position:'center'});
+}

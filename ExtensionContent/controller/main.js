@@ -10,8 +10,10 @@ and reading and writing preferences methods.
  * @param status {string} The status of the activation request.
  */
 function completeHandler(data, status) {
+	try {
 	var arr = data.registered;
-
+	
+	showAlert(status + " ");
 	//If unsuccessful, return without saving the data in config.
 	if (arr.length != 0) {
 		model.isLicensed = true;
@@ -21,6 +23,9 @@ function completeHandler(data, status) {
 
 	writeAppPrefs();
 	init();
+	} catch(e) {
+		alert(e);
+	}
 }
 
 /**
@@ -137,6 +142,7 @@ function onLoaded() {
 		//window.__adobe_cep__.showDevTools();		//For debugging.
 		loadJSX(); //Load the jsx files present in \jsx folder.
 
+		createAlertDialog();
 		var appPrefs = readAppPrefs();
 		if (appPrefs === "")
 			appPrefs.isLicensed = false;
