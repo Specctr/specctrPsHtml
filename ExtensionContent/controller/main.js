@@ -164,10 +164,22 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     document.body.bgColor = hexValue;
     var decimalValue = Specctr.Utility.hexToDecimal(hexValue);
 
-    if(decimalValue <= lightThemeColorValue)		//Dark theme. 
+    if(decimalValue <= lightThemeColorValue) {		//Dark theme. 
     	$(".button label").css("color", "#ffffff");					//value to be applied on all text.
-    else											//Light theme.
+    	
+    	if(decimalValue < extraDarkThemeColorValue)
+    		$(".button").css("background-color", "#5A5A5A");		//4th quadrant.
+    	else
+    		$(".button").css("background-color", "#7E7E7E");		//3rd quadrant.
+    	
+    } else {											//Light theme.
     	$(".button label").css("color", "#212121");					//value to be applied on all text.
+    	
+    	if(decimalValue > extraLightThemeColorValue)			//1st quadrant.
+    		$(".button").css("background-color", "#EEEEEE");
+    	else
+    		$(".button").css("background-color", "#DBDBDB");	//2nd quadrant.
+    }
 }
 
 //----------------- Specctr Event Listeners -----------------//

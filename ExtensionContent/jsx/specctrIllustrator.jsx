@@ -1301,7 +1301,6 @@ $.specctrAi = {
     //Update the property and note spec of the layer whose spec is already present.
     updateConnection : function(buttonInvoked) {
         try {
-            if (app.selection.length != 1 ) return;
             
             if (!(app.selection[0].parent.parent.name.indexOf("specctr") != -1 || 
                     app.selection[0].parent.parent.parent.name.indexOf("specctr") != -1)) 
@@ -1331,8 +1330,8 @@ $.specctrAi = {
             // Check selected spec item type i.e. property or note, if not defined.
             var updateSpecName = buttonInvoked;
             if(!updateSpecName) {
-                app.redraw();                var dataString = this.separateNoteAndStyleText(app.selection[0].note);
-                if(dataString.search("'noteGroup'") > 0 || dataString.search("'noteSpec'") > 0) {
+                var dataString = this.separateNoteAndStyleText(app.selection[0].note);
+                if(dataString.search("'noteGroup'") > 0 || dataString.search("'noteSpec'") > 0 || dataString.search("'noteItemCircle'") > 0) {
                     updateSpecName = "noteSpec";
                 } else if (dataString.search("'group'") > 0 || dataString.search("'spec'") > 0){
                     updateSpecName = "propertySpec";

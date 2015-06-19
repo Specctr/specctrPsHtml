@@ -100,3 +100,5 @@ var indesign = 'Id';
 
 var imagePath = "../assets/images/";
 var lightThemeColorValue = 5395026;		//Threshold point for light theme.
+var extraLightThemeColorValue = 12698049;	//Threshold point for extra light theme.
+var extraDarkThemeColorValue = 4737096;		//Threshold point for extra dark theme.

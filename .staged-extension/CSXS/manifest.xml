@@ -151,16 +151,15 @@ each party and (ii) in a written contract signed by both parties.]]>
 	<ExecutionEnvironment>
 		<HostList>
 			<Host Name="PHSP" Version="[14.0,16.9]" />
-			<Host Name="IDSN" Version="[9.1,12.9]" />
+			<Host Name="IDSN" Version="[9.1,12.0]" />
 			<Host Name="PHXS" Version="[14.0,16.9]" />
-			<Host Name="ILST" Version="[17.0,20.9]" />
+			<Host Name="ILST" Version="[17.0,19.9]" />
 		</HostList>
 		<LocaleList>
 			<Locale Code="All" />
 		</LocaleList>
 		<RequiredRuntimeList>
-			<RequiredRuntime Name="CSXS" Version="5.0" />
-
+		    <RequiredRuntime Name="CSXS" Version="2.0" />
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
