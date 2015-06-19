@@ -416,6 +416,9 @@ function restrictInputToDecimal(event) {
 		return true;
 }
 
+/**
+ * Create modal dialog.
+ */
 function createAlertDialog() {
 	$("#dialog").dialog({
 		autoOpen : false,

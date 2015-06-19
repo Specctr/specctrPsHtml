@@ -11,18 +11,19 @@ and reading and writing preferences methods.
  */
 function completeHandler(data, status) {
 	try {
-	var arr = data.registered;
-	
-	showAlert(status + " ");
-	//If unsuccessful, return without saving the data in config.
-	if (arr.length != 0) {
-		model.isLicensed = true;
-	} else {
-		return;
-	}
+		var arr = data.registered;
+		
+		//If unsuccessful, return without saving the data in config.
+		if (arr.length != 0) {
+			model.isLicensed = true;
+		} else {
+			showAlert(data.message);
+			return;
+		}
 
-	writeAppPrefs();
-	init();
+		writeAppPrefs();
+		init();
+
 	} catch(e) {
 		alert(e);
 	}
