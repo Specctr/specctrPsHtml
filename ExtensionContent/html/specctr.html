@@ -333,7 +333,7 @@
 					<div class="tabPage2Content">
 						<input type="checkbox" value="3" id="shapeAlpha"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
-						<label for="shapeAlpha">Alpha</label>
+						<label for="shapeAlpha">Opacity</label>
 					</div>
 					<div class="tabPage2Content psElement">
 						<input type="checkbox" value="4" id="shapeEffects"
@@ -389,8 +389,8 @@
 					</div>
 					<div class="tabPage2Content">
 						<input type="checkbox" value="14" id="textAlpha"
-							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
-						<label  for="textAlpha">Alpha</label>
+							onclick="Specctr.UI.checkBoxChangeHandler(this)" />
+						<label  for="textAlpha">Opacity</label>
 					</div>
 					<div class="tabPage2Content psElement">
 						<input type="checkbox" value="15" id="textEffects"
@@ -409,9 +409,9 @@
 					<div class="tabPageCheckBoxRow marginLeft14px height100px" >
 						<input type="checkbox" value="1" id="specInPrcntg"
 							onchange="Specctr.UI.specInPercentageChangeHandler()" /> 
-						<label for="specInPrcntg">Spec Distance by %</label>
-						<div class="height25px marginTopBottom10px">
-							<label class="alignLeftMiddle">100% Width:</label>
+						<label class="h4" for="specInPrcntg">Spec Distance by %</label>
+						<div class="height25px width216px marginTopBottom10px">
+							<label class="h5 alignLeftMiddle">100% WIDTH:</label>
 							<div class="floatRight marginRight20px">
 								<input type="text" class="inputStyle" id="relativeWidth" maxlength="6"
 									onchange="Specctr.UI.textBoxChangeHandler(this.id)" 
@@ -419,8 +419,8 @@
 									onkeypress="return Specctr.UI.restrictInputToDecimal(event)" />px
 							</div>
 						</div>
-						<div>
-							<label class="alignLeftMiddle">100% Height:</label>
+						<div  class="width216px">
+							<label class="h5 alignLeftMiddle ">100% HEIGHT:</label>
 							<div class="floatRight  marginRight20px">
 								<input type="text" class="inputStyle" id="relativeHeight" maxlength="6"
 									onchange="Specctr.UI.textBoxChangeHandler(this.id)" 
@@ -435,9 +435,9 @@
 					<div class="tabPageCheckBoxRow marginLeft14px height100px">
 						<input type="checkbox" value="1" id="specInEM"
 							onchange="Specctr.UI.specInEMChangeHandler(this)" /> 
-						<label for="specInEM">Spec in em</label>
-						<div class="height25px marginTopBottom10px">
-							<label class="alignLeftMiddle">Base font size:</label>
+						<label class="h4" for="specInEM">Spec in em</label>
+						<div class="height25px marginTopBottom10px width216px">
+							<label class="h5 alignLeftMiddle">BASE FONT SIZE:</label>
 							<div class="floatRight marginRight20px">
 								<input type="text" class="inputStyle" id="baseFontSize"
 									maxlength="6" onchange="Specctr.UI.textBoxChangeHandler(this.id)"
@@ -446,8 +446,8 @@
 							</div>
 						</div>
 	
-						<div>
-							<label class="alignLeftMiddle">Base line height:</label>
+						<div class="width216px">
+							<label class="h5 alignLeftMiddle">BASE LINE HEIGHT:</label>
 							<div class="floatRight marginRight20px">
 								<input type="text" class="inputStyle" id="baseLineHeight"
 									maxlength="6" onchange="Specctr.UI.textBoxChangeHandler(this.id)"
@@ -514,14 +514,14 @@
 				<div class="settingPageFirstChildBlock">
 					<div class="firstChildLeftBlock">
 						<div>
-							<label>FONT</label> 
+							<label class="h5">FONT</label> 
 							<select class="dropdown" id="lstFont"
 								onchange="Specctr.UI.listFontChangeHandler(this)"
 								onclick="Specctr.UI.itemClickHandler(event)">
 							</select>
 						</div>
 
-				 		<label class="marginTopBottom10px width150px">SPEC COLOR</label>
+				 		<label class="marginTopBottom10px width150px h5">SPEC COLOR</label>
 					 		<div>
 								<div class="colorPickerStyle">
 									<label>Shape</label>
@@ -626,7 +626,7 @@
 					
 					<div class="firstChildRightBlock">
 						<div>
-							<label>SIZE</label><br /> 
+							<label class="h5">SIZE</label><br /> 
 							<select class="smalldropdown" id="lstSize"
 								onchange="Specctr.UI.comboBoxChangeHandler(this, 'legendFontSize')"
 								onclick="Specctr.UI.itemClickHandler(event)">
@@ -645,7 +645,7 @@
 						</div>
 						
 						<div class="marginTopBottom10px">
-							<label>LINE WEIGHT</label>
+							<label class="h5">LINE WEIGHT</label>
 							<select class="smalldropdown" id="lstLineWeight"
 								onclick="Specctr.UI.itemClickHandler(event)"
 								onchange="Specctr.UI.comboBoxChangeHandler(this, 'armWeight')">
@@ -672,7 +672,7 @@
 				<div class="settingline"></div>
 
 				<div class="settingPageSecondChildBlock" id="colorList">
-					<label class="marginTopBottom10px width150px settingPageLabel">COLOR MODE</label>
+					<label class="marginTopBottom10px width150px h5">COLOR MODE</label>
 					<select class="dropdown" id="lstColorMode" onclick="Specctr.UI.itemClickHandler(event)"
 						onchange="Specctr.UI.comboBoxChangeHandler(this, 'legendColorMode')">
 						<option value="HEX">HEX</option>
@@ -704,8 +704,8 @@
 					<label class="settingPageLabel" for="includeStroke">Include Stroke in Measurement</label>
 				</div>
 
-				<div class="settingPageLabel">
-					<label class="width150px">SCALE SPECS BY:</label>
+				<div class="h5">
+					<label class="width150px h5">SCALE SPECS BY:</label>
 					<div class="marginTop10px">
 						<input type="checkbox" value="ScaleBy" id="useScaleBy"
 							class="alignMiddle" onclick="Specctr.UI.useScaleByClickHandler()" />
@@ -720,7 +720,7 @@
 			<div id="settingBlokChildDiv">
 				<img id="settingIcon" class="floatRight"
 				 src="../assets/images/Icon_prefs.png" width="32" height="24"/>
-			 	<label id="footerLabel"	class="floatRight footerNote">Settings</label>
+			 	<label id="footerLabel"	class="floatRight">Settings</label>
 		 	</div>
 		 </div>
 	</div>

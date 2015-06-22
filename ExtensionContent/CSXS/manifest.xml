@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="5.0" ExtensionBundleId="SpecctrMaster" ExtensionBundleVersion="3.0.18.h"
+<ExtensionManifest Version="5.0" ExtensionBundleId="SpecctrMaster" ExtensionBundleVersion="3.0.19.h"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
@@ -150,10 +150,10 @@ each party and (ii) in a written contract signed by both parties.]]>
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
-			<Host Name="PHSP" Version="[14.0,99.9]" />
-			<Host Name="IDSN" Version="[9.1,99.9]" />
-			<Host Name="PHXS" Version="[14.0,99.9]" />
-			<Host Name="ILST" Version="[17.0,99.9]" />
+			<Host Name="PHSP" Version="[14.0,16.9]" />
+			<Host Name="PHXS" Version="[14.0,16.9]" />
+			<Host Name="ILST" Version="[17.0,20.9]" />
+			<Host Name="IDSN" Version="[9.1,12.9]" />
 		</HostList>
 		<LocaleList>
 			<Locale Code="All" />

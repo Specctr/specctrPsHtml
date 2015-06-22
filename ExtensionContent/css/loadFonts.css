@@ -29,6 +29,11 @@ Description: Loads external fonts to panel.
 }
 
 @font-face {
+    font-family: aauxProBold;
+    src: url("../assets/fonts/Aaux ProBold OSF Regular.ttf");
+}
+
+@font-face {
     font-family: aauxProBol;
     src: url("../assets/fonts/AauxProBol");
 }
