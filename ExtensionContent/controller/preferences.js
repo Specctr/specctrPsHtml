@@ -171,7 +171,8 @@ pref.logResSuccess = function(xhr, response) {
 	pref.log(xhr.status + " - " + response.message);
 };
 
-pref.logResError = function(xhr) {
+pref.logResError = function(xhr, message) {
 	var response = JSON.parse(xhr.responseText);
 	pref.log(xhr.status + " - " + response.message);
+	if (message) pref.log(message);
 };

@@ -57,11 +57,13 @@ Specctr.buttonHandlers = {
 				contentType: "application/json;charset=utf-8",
 				dataType: "json",
 				data: data,
-				success: function(response) {
+				success: function(response, xhr) {
 					specctrDialog.showAlert('success');
+					pref.log('Synced css for document: ' + css.document_name);
 				},
 				error: function(xhr) {
 					specctrDialog.showAlert('error');
+					pref.logResError(xhr);
 				}
 			});
 		});
