@@ -349,7 +349,6 @@ label {
 }
 
 .button {
-	background-color: #E8E8E8;
 	width: 222px;
 	padding: 0px;
 	display: table;
@@ -359,7 +358,7 @@ label {
 
 .button:hover, .buttonSelected {
 	background-image: none;
-	background-color: #F3F3F3;
+	background-color: #FFFFFF !important;
 }
 
 .button:hover label, .buttonSelected label{
