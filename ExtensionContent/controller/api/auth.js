@@ -27,6 +27,8 @@ Specctr.Auth = {
 					};
 					pref.addFileToPreferenceFolder('.license', 
 						JSON.stringify(activationPrefs)); //Create license file.
+					
+					$("#loginFooterLabel").click();
 					Specctr.Init.init();
 				} else {
 					analytics.trackActivation('failed');
@@ -34,8 +36,8 @@ Specctr.Auth = {
 				}
 			},
 			error: function(xhr) {
-				pref.log(xhr.status + " - " + response.message);
 				var response = JSON.parse(xhr.responseText);
+				pref.log(xhr.status + " - " + response.message);
 				specctrDialog.showAlert(response.message);
 			}
 		});

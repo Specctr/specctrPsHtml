@@ -43,6 +43,7 @@ pref.writeFile = function(filePath, data) {
  * @param filePath {string}  The path of the file to be deleted.
  */
 pref.deleteFile = function(filePath) {
+	this.setPermissionToFile(filePath, filePermission.ReadWriteExecute);
 	window.cep.fs.deleteFile(filePath);
 };
 

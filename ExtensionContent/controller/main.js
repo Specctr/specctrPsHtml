@@ -23,8 +23,13 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 		specctrDialog.showAlert('Cannot load the extension.\nRequired host application not found!');
 		return;
 	} else if (hostApplication === photoshop) {
+		
 		$(".psElement").show();
 		$(".nonPsElement").hide();
+		lightThemeColorValue = psLightThemeColorVal;
+		extraLightThemeColorValue = psExtraLightThemeColorValue;
+		extraDarkThemeColorValue = psExtraDarkThemeColorValue;
+		
 	} else if (hostApplication === illustrator) {
 		addApplicationEventListener();
 	}
@@ -36,7 +41,20 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 		Specctr.Init.setModelValueFromPreferences();
 	}
 
-	//Migrating isLicensed from config file to license file, if present.
+	// Adding interface event change handler..
+	var csInterface = new CSInterface();
+	
+	//Find the OS type.
+	if(csInterface.getOSInformation().indexOf("Windows") > -1) {
+		$(".tabPage2PropertiesHeader").css("margin-bottom", "0");
+		$(".tabPage2Content").css("margin-top", "0");
+	}
+
+	// Update the color of the panel when the theme color of the product changed.
+	updateThemeWithAppSkinInfo(csInterface.hostEnvironment.appSkinInfo);
+	csInterface.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, onAppThemeColorChanged);
+    
+	// Migrating isLicensed from config file to license file, if present.
 	var licenseFilePath = pref.getFilePath('.license');
 	var activationPrefs = pref.readFile(licenseFilePath);	//Read the licensed file.
 
@@ -57,11 +75,6 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 
 	if (isLicensed)
 		Specctr.Init.init();
-	
-	var csInterface = new CSInterface();
-	updateThemeWithAppSkinInfo(csInterface.hostEnvironment.appSkinInfo);
-	// Update the color of the panel when the theme color of the product changed.
-    csInterface.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, onAppThemeColorChanged);
 });
 
 /**

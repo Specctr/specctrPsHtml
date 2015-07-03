@@ -10,8 +10,8 @@ var Specctr = {
 	Models: {}
 };
 
-//var SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
-var SPECCTR_HOST = "http://localhost:5000";
+var SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
+//var SPECCTR_HOST = "http://localhost:5000";
 var SPECCTR_API = SPECCTR_HOST += "/api/v1";
 
 var model = {
@@ -102,3 +102,7 @@ var imagePath = "../assets/images/";
 var lightThemeColorValue = 5395026;		//Threshold point for light theme.
 var extraLightThemeColorValue = 12698049;	//Threshold point for extra light theme.
 var extraDarkThemeColorValue = 4737096;		//Threshold point for extra dark theme.
+
+var psLightThemeColorVal = 5460820;
+var psExtraLightThemeColorValue = 12105913;
+var psExtraDarkThemeColorValue = 3421237;

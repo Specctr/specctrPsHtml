@@ -9,13 +9,13 @@ ul#loginBlock, ul#activateBlock {
 
 #loginContainer {
 	border: none;
-	Height: 586px;
+	Height: 606px;
 	Width: 241px;
 	background-color: #2266ff;
 }
 
 #dvLoginContainer {
-	height: 515px;
+	height: 535px;
 }
 
 #dvLoginContainer ul {

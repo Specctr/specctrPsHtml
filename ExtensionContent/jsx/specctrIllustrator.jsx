@@ -1303,7 +1303,7 @@ $.specctrAi = {
         try {
             
             if (!(app.selection[0].parent.parent.name.indexOf("specctr") != -1 || 
-                    app.selection[0].parent.parent.parent.name.indexOf("specctr") != -1)) 
+                    app.selection[0].parent.parent.parent.name.indexOf("specctr") != -1) && !buttonInvoked) 
                     return;
 
             var idVar = app.selection[0].visibilityVariable;

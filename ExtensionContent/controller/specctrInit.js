@@ -11,6 +11,7 @@ Specctr.Init = {};
  */
 Specctr.Init.init = Specctr.Utility.tryCatchLog(function() {
 	pref.log("Initializing Specctr.");
+
 	// Load tab container..
 	$("#loginContainer").hide();
 	$("#tabContainer").show();

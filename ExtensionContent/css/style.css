@@ -309,7 +309,7 @@ label {
 .tabscontent {
 	padding-top: 10px;
 	padding-bottom: 15px;
-	height: 475px;
+	height: 495px;
 }
 
 .tabTitle {
@@ -378,7 +378,7 @@ label {
 	float: left;
 	margin-left: 16px;
 	margin-top: 15px;
-	font-family: aauxProBold !important;
+	font-family: aauxProBol !important;
 	font-size: 18px !important;
 	cursor: pointer !important;
 }
@@ -541,11 +541,16 @@ label {
 	border-radius: 2px;
 	-webkit-user-select: auto;
 }
+
+#tabpage_3 input[type="checkbox"] {
+	margin-bottom: 4px !important;
+	margin-right: 8px !important;
+}
 /*-------------------------------------------------------------*/
 
 /*--------------Style applied on fourth tab page----------------*/
 .subscriptionNote {
-	font-family: Arial !important;
+	font-family: aauxPro !important;
 	font-size: 12px !important;
 	margin-left: 10px;
 	color: #808080;
@@ -568,7 +573,7 @@ label {
 /*--------------Style applied on setting page----------------*/
 #settingPage {
 	padding-left: 6px !important;
-	height: 548px !important;
+	height: 568px !important;
 	background-color: #ECECEC;
 	border: 1px solid #C9CBCC;
 	border-right-width: 3px;
@@ -577,7 +582,7 @@ label {
 
 .settingHeader {
 	text-align: center;
-	font-family: Arial;
+	font-family: aauxPro;
 	font-size: 11px;
 	color: #808080;
 	background-color: #F9F9F9;
