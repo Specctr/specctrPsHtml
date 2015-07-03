@@ -51,8 +51,15 @@ buttonController.createPropertySpecs = function() {
 buttonController.closeDropDown = function(id, button, dropDownId) {
 	var liButton = id + " .options";
 	$(liButton).slideUp(100);
+	$(button).hover( function() {
+        $(this).css('background-color', bgColorHoverButton);
+    },
+    function(){
+        $(this).css('background-color', bgColorButton);
+    });
 	$(id).removeClass("isOpen");
 	$(button).removeClass("buttonSelected");
+	$(button).css('background-color', bgColorButton);
 	$(dropDownId).removeClass().addClass("dropdownArrow");
 };
 
@@ -95,11 +102,21 @@ buttonController.openDropDown = function(buttonId) {
  * */
 buttonController.toggleDropDown = function(id, button, dropDownId, imgDropDown) {
 	if ($(dropDownId).is(":visible")) {
+		
+		$(button).hover( function() {
+	        $(this).css('background-color', bgColorHoverButton);
+	    },
+	    function(){
+	        $(this).css('background-color', bgColorButton);
+	    });
+
 		$(id).removeClass("isOpen");
 		$(button).removeClass("buttonSelected");
 	} else {
 		$(id).addClass("isOpen");
 		$(button).addClass("buttonSelected");
+		$(button).css("background-color", bgColorHoverButton);
+		$(button).off( "mouseenter mouseleave" );
 	}
 
 	$(id + " .options").slideToggle(100);

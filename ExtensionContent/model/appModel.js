@@ -98,6 +98,8 @@ var hostApplication = '';
 var illustrator = 'Ai';
 var photoshop = 'Ps';
 var indesign = 'Id';
+var bgColorButton = '';
+var bgColorHoverButton = '';
 
 var imagePath = "../assets/images/";
 var lightThemeColorValue = 5395026;		//Threshold point for light theme.

@@ -362,13 +362,7 @@ label {
 	cursor: pointer;
 }
 
-.button:hover, .buttonSelected {
-	background-image: none;
-	background-color: #FFFFFF !important;
-}
-
 .button:hover label, .buttonSelected label{
-	color: #3577FA !important;
 	font-family: aauxProBol !important;
 }
 
