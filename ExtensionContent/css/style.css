@@ -25,7 +25,7 @@ body {
 	-moz-user-select: -moz-none;
 	-o-user-select: none;
 	user-select: none;
-	border: 2px solid #C9CBCC !important;
+	border: 2px solid #C9CBCC;
 }
 
 input[type="text"],input[type="email"],input[type="password"] {
@@ -239,6 +239,11 @@ label {
 
 .setBlueLabel {
 	color: #3577FA !important;
+	font-weight: bold !important; 
+}
+
+.setSettingColor {
+	color: #3577FA !important;
 }
 
 .width150px {
@@ -249,10 +254,11 @@ label {
 	font-family: aauxProBla;
 	font-size: 13px;
 	color: #666666;
+	font-weight: normal;
 }
 
 .h5 {
-	font-family: aauxProBol;
+	font-family: aauxPro;
 	font-size: 11px;
 	color: #666666;
 }
@@ -343,7 +349,7 @@ label {
 
 .menu li {
 	list-style-type: none;
-	font-family: Arial;
+	font-family: aauxPro;
 	font-size: 13px;
 	margin-top: 6px;
 }
@@ -363,6 +369,7 @@ label {
 
 .button:hover label, .buttonSelected label{
 	color: #3577FA !important;
+	font-family: aauxProBol !important;
 }
 
 .button img {
@@ -378,7 +385,7 @@ label {
 	float: left;
 	margin-left: 16px;
 	margin-top: 15px;
-	font-family: aauxProBol !important;
+	font-family: aauxPro;
 	font-size: 18px !important;
 	cursor: pointer !important;
 }
@@ -490,9 +497,10 @@ label {
 }
 
 .tabPage2Content {
-	font-family: aauxProBol;
+	font-family: aauxPro;
 	font-size: 16px;
-	color: #666666;
+	color: #4d4d4d;
+	font-weight: normal;
 	margin-top: 2px;
 	margin-left: 22px;
 }

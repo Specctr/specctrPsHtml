@@ -176,7 +176,7 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     var hexValue = Specctr.Utility.rgbToHex(color);
     document.body.bgColor = hexValue;
     var decimalValue = Specctr.Utility.hexToDecimal(hexValue);
-
+    
     if(decimalValue <= lightThemeColorValue) {		//Dark theme. 
     	$(".button label").css("color", "#ffffff");					//value to be applied on all text.
     	
@@ -185,6 +185,9 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     	else
     		$(".button").css("background-color", "#7E7E7E");		//3rd quadrant.
     	
+    	isDarkInterface = true;
+    	$('body').css('border', 'none');
+    
     } else {											//Light theme.
     	$(".button label").css("color", "#212121");					//value to be applied on all text.
     	
@@ -192,7 +195,13 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     		$(".button").css("background-color", "#EEEEEE");
     	else
     		$(".button").css("background-color", "#DBDBDB");	//2nd quadrant.
+    	
+    	isDarkInterface = false;
+    	$('body').css('border', '2px solid #C9CBCC');
     }
+    
+    //Change tab icons according to application interface.
+	Specctr.Utility.changeImagesOfTabs($('#tabHeader_1')[0].parentNode.getAttribute("data-current"));
 }
 
 //----------------- Specctr Event Listeners -----------------//

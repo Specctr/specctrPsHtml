@@ -54,11 +54,19 @@ Specctr.Utility = {
 	},
 	
 	/**
-	 * Change the label's text color to #blue of second tab's check-boxes.
+	 * Change the label's text color to #blue and font-weight bold of second tab's check-boxes.
 	 * @param label {label object} Reference of the label.
 	 */
 	changeTextColor : function(label) {
 		$(label).toggleClass("setBlueLabel");
+	},
+	
+	/**
+	 * Change the setting footer's text color to blue.
+	 * @param label {label object} Reference of the label.
+	 */
+	changeSettingFooterColor : function(element) {
+		element.toggleClass("setSettingColor");
 	},
 	
 	/**
@@ -67,23 +75,28 @@ Specctr.Utility = {
 	 */
 	changeImagesOfTabs : function(selectedTab) {
 		try {
-			var isImageChanged = true, size = "";
+			var isImageChanged = true;
 			var iconExtension = ".png";
 			var activeImageEndString = "_selected";
 			var tabIconPath = ["tabs/tabs_spec", "tabs/tabs_properties", 
 			                   "tabs/tabs_responsive", "tabs/tabs_cloud"];
 			var arrayLength = tabIconPath.length;
 			
-			//For retina display: 2 pixel ratio; 
-			if (window.devicePixelRatio > 1)
-				size = "";
-	
-			tabIconPath[selectedTab-1] += activeImageEndString;	//Set active icon path.
+			if (isDarkInterface) 
+				var interfacePostFix = "_white";
+			else 
+				interfacePostFix = "";
 	
 			//Set icons to their respective tabs.
 			for (var i = 0; i < arrayLength; i++) {
+				
+				if(i == (selectedTab-1)) 
+					tabIconPath[i] += activeImageEndString;
+				else
+					tabIconPath[i] += interfacePostFix;
+				
 				$("#tabImage_" + (i + 1)).attr("src", 
-					imagePath + tabIconPath[i] + size + iconExtension);
+					imagePath + tabIconPath[i] + iconExtension);
 			}
 	
 		} catch (e) {

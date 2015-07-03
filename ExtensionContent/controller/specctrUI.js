@@ -10,7 +10,7 @@ Specctr.UI = {
 	 * Show/hide the setting tab page.
 	 */
 	toggleSettingPage : Specctr.Utility.tryCatchLog(function(){
-		Specctr.Utility.changeTextColor($("#footerLabel"));
+		Specctr.Utility.changeSettingFooterColor($("#footerLabel"));
 
 		if($("#tabBlock").is(":visible")) {
 			$("#settingIcon").attr("src", imagePath + "Icon_prefs_active.png");
@@ -57,7 +57,7 @@ Specctr.UI = {
 		if ($(this).hasClass('disabled')) {
 			return;
 		};
-		var ident = this.id.split("_")[1];		
+		var ident = this.id.split("_")[1];
 		Specctr.UI.showTab(ident);
 	}),
 	
