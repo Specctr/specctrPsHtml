@@ -179,13 +179,13 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     
     if(decimalValue <= lightThemeColorValue) {		//Dark theme. 
     	$(".button label").css("color", "#ffffff");					//value to be applied on all text.
+    	$('.tabTitle').css('color', "#ffffff");
     	
-    	if(decimalValue < extraDarkThemeColorValue) {
+    	if(decimalValue < extraDarkThemeColorValue) {	//4th quadrant.
     		bgColorButton = "#5A5A5A";
-    		bgColorHoverButton = "#7E7E7E";		//4th quadrant.
+    		bgColorHoverButton = "#7E7E7E";		
     	}
-    	else {
-    		//3rd quadrant.
+    	else {	//3rd quadrant.
     		bgColorButton = "#7E7E7E";
     		bgColorHoverButton = "#DBDBDB";
     	}
@@ -195,15 +195,14 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     
     } else {											//Light theme.
     	$(".button label").css("color", "#212121");					//value to be applied on all text.
+    	$('.tabTitle').css('color', "#212121");
     	
     	if(decimalValue > extraLightThemeColorValue) {			//1st quadrant.
-    		
     		bgColorButton = "#EEEEEE";
     		bgColorHoverButton = "#FFFFFF";
     	}
     	else {
-    		//2nd quadrant.
-    		bgColorButton = "#DBDBDB";
+    		bgColorButton = "#DBDBDB";	//2nd quadrant.
     		bgColorHoverButton = "#EEEEEE";
     	}
     	
@@ -211,14 +210,9 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     	$('body').css('border', '2px solid #C9CBCC');
     }
     
-    $('.button').hover( function() {
-        $(this).css('background-color', bgColorHoverButton);
-    },
-    function(){
-        $(this).css('background-color', bgColorButton);
-    });
-	
-	$(".button").css("background-color", bgColorButton);
+    $('.tabTitle').css('background-color', bgColorButton);
+    Specctr.UI.setHover('.button', bgColorHoverButton, bgColorButton);
+   	$(".button").css("background-color", bgColorButton);
     
     //Change tab icons according to application interface.
 	Specctr.Utility.changeImagesOfTabs($('#tabHeader_1')[0].parentNode.getAttribute("data-current"));

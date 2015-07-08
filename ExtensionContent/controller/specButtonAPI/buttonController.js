@@ -51,12 +51,7 @@ buttonController.createPropertySpecs = function() {
 buttonController.closeDropDown = function(id, button, dropDownId) {
 	var liButton = id + " .options";
 	$(liButton).slideUp(100);
-	$(button).hover( function() {
-        $(this).css('background-color', bgColorHoverButton);
-    },
-    function(){
-        $(this).css('background-color', bgColorButton);
-    });
+	Specctr.UI.setHover(button, bgColorHoverButton, bgColorButton);
 	$(id).removeClass("isOpen");
 	$(button).removeClass("buttonSelected");
 	$(button).css('background-color', bgColorButton);
@@ -102,14 +97,7 @@ buttonController.openDropDown = function(buttonId) {
  * */
 buttonController.toggleDropDown = function(id, button, dropDownId, imgDropDown) {
 	if ($(dropDownId).is(":visible")) {
-		
-		$(button).hover( function() {
-	        $(this).css('background-color', bgColorHoverButton);
-	    },
-	    function(){
-	        $(this).css('background-color', bgColorButton);
-	    });
-
+		Specctr.UI.setHover(button, bgColorHoverButton, bgColorButton);
 		$(id).removeClass("isOpen");
 		$(button).removeClass("buttonSelected");
 	} else {

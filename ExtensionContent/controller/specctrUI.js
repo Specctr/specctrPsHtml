@@ -272,7 +272,22 @@ Specctr.UI = {
 		model[value] = color;
 		pref.writeAppPrefs();
 	}),
-
+	
+	/**
+	 * Set hover property to the selector.
+	 * @param selector {string} The selector string of UI component.
+	 * @param hoverColor {string} Color at mouse-in to the component.
+	 * @param bgColor {string} Color at mouse-out to the component.
+	 */
+	setHover : Specctr.Utility.tryCatchLog(function(selector, hoverColor, bgColor){
+		$(selector).hover( function() {
+	        $(this).css('background-color', hoverColor);
+	    },
+	    function(){
+	        $(this).css('background-color', bgColor);
+	    });
+	}),
+	
 	/**
 	 * Click handler of shape color-picker. Toggle the dropdown and 
 	 * set the color to the main color block in color picker.
