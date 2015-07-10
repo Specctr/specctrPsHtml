@@ -147,7 +147,12 @@ function onLoaded() {
 		var appPrefs = readAppPrefs();
 		if (appPrefs === "")
 			appPrefs.isLicensed = false;
-			
+		
+		if(!window.location.hash) {
+	        window.location = window.location + '#loaded';
+	        window.location.reload();
+		}
+		
 		//Check if Specctr is licensed, if not, show registration screen.
 		model.isLicensed = appPrefs.isLicensed;
 
