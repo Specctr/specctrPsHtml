@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ExtensionManifest Version="4.0" ExtensionBundleId="specctrAiHtml" ExtensionBundleVersion="2.2.2.h"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<Author>
+		<![CDATA[On Pixel Inc.]]>
+	</Author>	<Contact mailto="info@on-pixel.com"/>	<Legal>
+		<![CDATA[End User License Agreement for Specctr - Pro.
+This End User Software License Agreement (this “Agreement”) is by and between You (“Recipient”), and 
+On Pixel, Inc., a Massachusetts corporation, with a primary place of business at 374 Beacon St. #2
+Somerville, Massachusetts 02464 (“Provider”). This agreement governs your use of the Specctr software 
+plugin (the “Software”). 
+Your use of this software constitutes acceptance of the terms of this Agreement.
+Terms and Conditions
+1. License.
+(a) Grant of Rights. Provider hereby grants Recipient a non-exclusive license to use the Software 
+provided: (i) Recipient may give no more than one (1) concurrent user access to the Software; (ii) 
+Freelance/Single License Recipient may install the Software on no more than two (2) computers;
+(iii) Enterprise/Business License Recipient may install the Software on no more than one (1) computer;  
+(iv) Recipient complies with the restrictions set forth in Subsection 1(b) below. 
+(b) Restrictions. Copies of the Software created or transferred pursuant to this Agreement are 
+licensed, not sold, and Recipient receives no title to or ownership of any copy or of the Software 
+itself. Use of the software in violation of, or outside the terms of, this agreement constitutes 
+copyright infringement. Furthermore, Recipient receives no rights to the Software other than those 
+specifically granted in this Section 1. Without limiting the generality of the foregoing, Recipient will 
+not: (i) modify, create derivative works from, distribute, publicly display, publicly perform, or 
+sublicense the Software; (ii) use the Software for service bureau or time-sharing purposes or in 
+any other way allow third parties to exploit the Software; or (iii) reverse engineer, decompile, 
+disassemble, or otherwise attempt to derive any of the Software’s source code.
+2. Fees.
+Recipient shall pay Provider the license fees for the Software as set forth on Provider’s website at 
+http://www.specctr.com/, including, but not limited to, license fees. All fees shall be non-refundable, and 
+payable on the date they come due. Recipient shall also pay all sales, use, value-added and other taxes, 
+tariffs and duties of any type assessed against Provider except for taxes on Provider’s income.
+3. Warranties. 
+(a) Infringement/Ownership. Provider warrants that it is the owner of the Software and of each and 
+every component thereof, or the recipient of a valid license thereto, and that it has and will 
+maintain the full power and authority to grant the intellectual property and other rights granted in 
+this Agreement without the further consent of any third party. Recipient represents and warrants 
+that it has all necessary rights to use the host software with the licensed Software.2
+(b) Harmful Code. Provider warrants that the Software and any media used to distribute it contain no 
+viruses or other computer instructions or technological means whose purpose is to disrupt, 
+damage, or interfere with the use of computers or related systems.
+(c) Right to Do Business. Each party warrants that it has the full right and authority to enter into, 
+execute, and perform its obligations under this Agreement and that no pending or threatened 
+claim or litigation known to it would have a material adverse impact on its ability to perform as 
+required by this Agreement.
+(d) Disclaimers. EXCEPT FOR THE EXPRESS WARRANTIES SPECIFIED IN THIS SECTION 3, 
+PROVIDER MAKES NO WARRANTIES, EITHER EXPRESS OR IMPLIED, INCLUDING 
+WITHOUT LIMITATION ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS 
+FOR A PARTICULAR PURPOSE. Provider does not warrant that the Software will perform 
+without error or that it will run without immaterial interruption. Provider provides no warranty 
+regarding, and will have no responsibility for, any claim arising out of: (i) a modification of the 
+Software made by anyone other than Provider, unless Provider approves such modification in 
+writing; or (ii) use of the Software in combination with any operating system not authorized in the 
+Documentation or Specifications or with hardware or software specifically forbidden by the 
+Documentation or Specifications. 
+4. Indemnity. 
+Recipient agrees that Provider shall have no liability whatsoever for any use Recipient make of the 
+Software. Recipient shall indemnify and hold harmless Provider from any claims, damages, liabilities, 
+costs and fees (including reasonable attorney fees) arising from Recipient’s use of the Software as well 
+as from Recipient’s failure to comply with any term of this Agreement.
+5. Arbitration.
+ALL CLAIMS AND DISPUTES ARISING UNDER OR RELATING TO THIS AGREEMENT ARE TO BE 
+SETTLED BY BINDING ARBITRATION IN THE STATE OF MASSACHUSETTS OR ANOTHER 
+LOCATION MUTUALLY AGREEABLE TO THE PARTIES. THE ARBITRATION SHALL BE CONDUCTED 
+ON A CONFIDENTIAL BASIS PURSUANT TO THE COMMERCIAL ARBITRATION RULES OF THE 
+AMERICAN ARBITRATION ASSOCIATION. ANY DECISION OR AWARD AS A RESULT OF ANY SUCH 
+ARBITRATION PROCEEDING SHALL BE IN WRITING AND SHALL PROVIDE AN EXPLANATION FOR 
+ALL CONCLUSIONS OF LAW AND FACT AND SHALL INCLUDE THE ASSESSMENT OF COSTS, 
+EXPENSES, AND REASONABLE ATTORNEYS' FEES. ANY SUCH ARBITRATION SHALL BE 
+CONDUCTED BY AN ARBITRATOR EXPERIENCED IN COMPUTER SOFTWARE LICENSING AND 
+SHALL INCLUDE A WRITTEN RECORD OF THE ARBITRATION HEARING. THE PARTIES RESERVE 
+THE RIGHT TO OBJECT TO ANY INDIVIDUAL WHO SHALL BE EMPLOYED BY OR AFFILIATED 
+WITH A COMPETING ORGANIZATION OR ENTITY. AN AWARD OF ARBITRATION MAY BE 
+CONFIRMED IN A COURT OF COMPETENT JURISDICTION.
+6. Limitation of Liability.
+IN NO EVENT WILL PROVIDER’S LIABILITY ARISING OUT OF OR RELATED TO THIS AGREEMENT 
+EXCEED THE AGGREGATE OF FEES PAYABLE TO PROVIDER PURSUANT TO THIS AGREEMENT 
+(INCLUDING FEES BOTH PAID AND DUE) AT THE TIME OF THE EVENT GIVING RISE TO THE 
+LIABILITY. IN NO EVENT WILL PROVIDER BE LIABLE FOR ANY CONSEQUENTIAL, INDIRECT, 
+SPECIAL, INCIDENTAL, OR PUNITIVE DAMAGES. THE LIABILITIES LIMITED BY THIS SECTION 6 
+APPLY: (A) TO LIABILITY FOR NEGLIGENCE; (B) REGARDLESS OF THE FORM OF ACTION, 
+WHETHER IN CONTRACT, TORT, STRICT PRODUCT LIABILITY, OR OTHERWISE; (C) EVEN IF 
+PROVIDER IS ADVISED IN ADVANCE OF THE POSSIBILITY OF THE DAMAGES IN QUESTION AND 
+EVEN IF SUCH DAMAGES WERE FORESEEABLE; AND (D) EVEN IF RECIPIENT’S REMEDIES FAIL 3
+OF THEIR ESSENTIAL PURPOSE. If applicable law limits the application of the provisions of this Section 
+6, Provider’s liability will be limited to the maximum extent permissible.
+7. Term & Termination.
+(a) Term. This Agreement will continue until terminated as set forth in this section. Recipient may 
+terminate this Agreement at any time. Provider may terminate this Agreement immediately if 
+Recipient violates any provision of this agreement or if Provider determines that the Software or 
+any use thereof may result in infringement or violation of third party rights or claims thereof. Any 
+termination of this Agreement shall also terminate the rights and licenses granted to Recipient in 
+this Agreement. On termination of this Agreement for any reason, Recipient shall destroy and 
+remove all copies of this software from all Recipient’s computers, hard drives, networks, and 
+other storage media. Provider’s rights and Recipients obligations shall survive termination of this 
+Agreement.
+(b) Effects of Termination. Upon termination of this Agreement, the licenses granted in Section 1 will 
+terminate and Recipient will cease all use of the Software and delete all copies in its possession 
+or control. The following provisions will survive termination of this Agreement (i) Subsections 3(a) 
+and 3(d) and Section 6 of this Agreement; and (ii) any other provision of this Agreement that must 
+survive termination to fulfill its essential purpose.
+8. Miscellaneous.
+(a) Independent Contractors. The parties are independent contractors and will so represent 
+themselves in all regards. Neither party is the agent of the other and neither may bind the other in 
+any way.
+(b) No Waiver. Neither party will be deemed to have waived any of its rights under this Agreement by 
+lapse of time or by any statement or representation other than (i) by an Authorized 
+Representative and (ii) in an explicit written waiver. No waiver of a breach of this Agreement will 
+constitute a waiver of any prior or subsequent breach of this Agreement.
+(c) Force Majeure. To the extent caused by force majeure, no delay, failure, or default will constitute 
+a breach of this Agreement. 
+(d) Assignment & Successors. Neither party may assign this Agreement or any of its rights or 
+obligations hereunder without the other’s express written consent, except that Provider may 
+assign this Agreement to the surviving party in a merger into another entity. Except to the extent 
+forbidden in the previous sentence, this Agreement will be binding upon and inure to the benefit of 
+the respective successors and assigns of the parties.
+(e) Choice of Law & Jurisdiction. This Agreement will be governed solely by the internal laws of the 
+State of Massachusetts, without reference to such State’s principles of conflicts of law. The 
+parties consent to the personal and exclusive jurisdiction of the federal and state courts of 
+Boston, Massachusetts.
+(f) Severability. To the extent permitted by applicable law, the parties hereby waive any provision of 
+law that would render any clause of this Agreement invalid or otherwise unenforceable in any 
+respect. In the event that a provision of this Agreement is held to be invalid or otherwise 
+unenforceable, such provision will be interpreted to fulfill its intended purpose to the maximum 
+extent permitted by applicable law, and the remaining provisions of this Agreement will continue 
+in full force and effect.
+(g) Bankruptcy Rights. The rights and licenses granted to Recipient in Section 1 of this Agreement 
+are licenses to “intellectual property” rights, as defined in Section 365(n) of the United States 
+Bankruptcy Code (11 U.S.C. Section 101, et seq.). If Provider is subject to any proceeding under 
+the United States Bankruptcy Code, and Provider as debtor in possession or its trustee in 4
+bankruptcy elects to reject this Agreement, Recipient may, pursuant to 11 U.S.C. Section 
+365(n)(1) and (2), retain any and all of the rights granted to it under Sections 1 of this Agreement 
+to the maximum extent permitted by law. This Subsection 8(g) will not be construed to limit or 
+restrict any right or remedy not set forth in this Subsection 8(g), including without limitation the 
+right to retain any license or authority this Agreement grants pursuant to any provision other than 
+Section 1.
+(h) Conflicts among Attachments. In the event of any conflict between the terms of this main body of 
+this Agreement and those of any attachment, the terms of this main body will govern.
+(i) Entire Agreement. This Agreement sets forth the entire agreement of the parties and supersedes 
+all prior or contemporaneous writings, negotiations, and discussions with respect to the subject 
+matter hereof. Neither party has relied upon any such prior or contemporaneous communications.
+(j) Amendment. This Agreement may not be modified except (i) by Authorized Representatives of 
+each party and (ii) in a written contract signed by both parties.]]>
+	</Legal>	<Abstract>
+		<![CDATA[Specctr supercharges Adobe Photoshop by automating spec generation. With the capability to spec dimensions, color, font, spacing, and more, Specctr enables design and development teams to collaborate more accurately, efficiently, and effortlessly.]]>
+	</Abstract>	<ExtensionList>
+		<Extension Id="SpecctrPs-Pro" Version="1.0" />
+	</ExtensionList>
+	<ExecutionEnvironment>
+		<HostList>
+			<Host Name="ILST" Version="[17.0,19.9]" />
+		</HostList>
+		<LocaleList>
+			<Locale Code="All" />
+		</LocaleList>
+		<RequiredRuntimeList>
+			<RequiredRuntime Name="CSXS" Version="4.0" />
+
+		</RequiredRuntimeList>
+	</ExecutionEnvironment>
+	<DispatchInfoList>
+		<Extension Id="SpecctrPs-Pro">
+			<DispatchInfo >
+				<Resources>
+				<MainPath>./html/specctr.html</MainPath>
+				<ScriptPath>./loadFilesOfJsxFolder.jsx</ScriptPath>
+				</Resources>
+				<Lifecycle>
+					<AutoVisible>true</AutoVisible>
+				</Lifecycle>
+				<UI>
+					<Type>Panel</Type>
+					<Menu>Specctr-Pro</Menu>
+					<Geometry>
+						<Size>
+							<Height>492</Height>
+							<Width>224</Width>
+						</Size>
+						<MaxSize>
+							<Height>492</Height>
+							<Width>224</Width>
+						</MaxSize>
+						<MinSize>
+							<Height>492</Height>
+							<Width>224</Width>
+						</MinSize>
+					</Geometry>
+					<Icons>
+						<Icon Type="Normal">./Images/specctr_panel_icon.png</Icon>
+						<Icon Type="RollOver">./Images/specctr_panel_icon_rollover.png</Icon>
+					</Icons>
+				</UI>
+			</DispatchInfo>
+		</Extension>
+	</DispatchInfoList>
+</ExtensionManifest>
