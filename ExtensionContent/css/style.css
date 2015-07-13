@@ -189,8 +189,8 @@ label {
 	margin-left: 6px !important;
 }
 
-.marginLeft14px {
-	margin-left: 14px !important;
+.marginLeft22px {
+	margin-left: 22px !important;
 }
 
 .marginTopBottom20px {
@@ -324,7 +324,7 @@ label {
 	font-size: 11px;
 	color: #808080;	
 	background-color: #D9D9D9;
-	height: 19px;
+	height: 18px;
 	padding-top: 4px;
 }
 
@@ -485,7 +485,7 @@ label {
 	font-family: aauxProBla;
 	font-size: 17px;
 	color: #666666;
-	margin-top: 12px;
+	margin-top: 15px;
 	margin-left: 20px;
 	margin-bottom: 4px;
 }
@@ -519,8 +519,8 @@ label {
 	font-size: 17px;
 	color: #666666;
 	margin-bottom: 10px;
-	margin-top: 20px !important;
-	margin-left: 10px;
+	margin-top: 15px;
+	margin-left: 20px;
 }
 
 .height100px {
