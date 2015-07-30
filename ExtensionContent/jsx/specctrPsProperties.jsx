@@ -479,7 +479,9 @@ $.specctrPsProperties = {
                 if (model.textColor) {
                     if(color == "")
                         color = this.getDefaultColor();
+
                     color = this.colorAsString(color);
+
                     if(alpha != "" && color.indexOf("(") >= 0) {
                         color = this.convertColorIntoCss(color, alpha);
                         alpha = "";
@@ -593,7 +595,8 @@ $.specctrPsProperties = {
     getSpecsInfoForPathItem : function(pageItem) {
         var pathItem = pageItem;
         var doc = app.activeDocument;
-        var alpha = "";
+        var alpha = "", effectValue = "";
+        var borderRadius = "", strokeVal = "";
         
         // Get the layer kind and color value of that layer.
         var infoText = "";
@@ -602,10 +605,24 @@ $.specctrPsProperties = {
         //Gives the opacity for the art layer,
         if(model.shapeAlpha)
             alpha = Math.round(pageItem.opacity)/100;
-
+            
+        if(model.shapeBorderRadius)
+            borderRadius = this.getRoundCornerValue();
+        
+        doc.activeLayer = pageItem;
+        
+        if(model.shapeStroke)
+            strokeVal = this.getStrokeValOfLayer(pageItem);
+        
+        if(model.shapeEffects) {
+            doc.activeLayer = pageItem;
+            effectValue = this.getEffectsOfLayer();
+        }
+        
         try {
             if (model.shapeFill) {  
-                
+                alert("here");
+                doc.activeLayer = pageItem;
                 var ref = new ActionReference();
                 ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
                 var desc = executeActionGet(ref).getList(charIDToTypeID("Adjs")).getObjectValue(0);
@@ -648,36 +665,22 @@ $.specctrPsProperties = {
             }
         } catch(e) {}
 
-        try {
-            doc.activeLayer = pageItem;
-            if(model.shapeStroke) {
-                var strokeVal = this.getStrokeValOfLayer(pageItem);
-                if(strokeVal != "")
-                    infoText += strokeVal;
-            }
-            
-            if(alpha != "") {
-                infoText += "\rOpacity: "+alpha;
-                cssText += "opacity: "+alpha+";";
-            }
+        if(strokeVal != "")
+            infoText += strokeVal;
         
-            if(model.shapeEffects) {
-                var effectValue = this.getEffectsOfLayer();
-                if(effectValue != "")
-                    infoText += effectValue;
-                 doc.activeLayer = pageItem;
-            }
+        if(alpha != "") {
+            infoText += "\rOpacity: "+alpha;
+            cssText += "opacity: "+alpha+";";
+        }
         
-            if(model.shapeBorderRadius) {
-                doc.activeLayer = pageItem;
-                var roundCornerValue = this.getRoundCornerValue();
-                if(roundCornerValue != "") {
-                    infoText += "\r" + roundCornerValue;
-                    cssText += "" + roundCornerValue.toLowerCase() + ";";
-                }
-            }
-        } catch(e) {}
+        if(effectValue != "")
+            infoText += effectValue;
         
+        if(borderRadius != "") {
+            infoText += "\r" + borderRadius;
+            cssText += "" + borderRadius.toLowerCase() + ";";
+        }
+
         cssText += "}";
         doc.activeLayer = pageItem;
         return infoText;
@@ -685,8 +688,9 @@ $.specctrPsProperties = {
 
     //Get the default color value.
     getDefaultColor : function() {
-        var newColor = new RGBColor();
-        newColor.hexValue = "000000";
+        var newColor = new SolidColor();
+        newColor.model = ColorModel.RGB;
+        newColor.rgb.hexValue = "000000";
         return newColor;
     },
 
@@ -913,7 +917,7 @@ $.specctrPsProperties = {
                         infoText += "\rBorder: ";
                         var desc = layerEffectDesc.getObjectValue(stringIDToTypeID('frameFX'));
                         if(desc.getBoolean(stringIDToTypeID('enabled')))
-                            infoText += getStrokeFx(desc);
+                            infoText += this.getStrokeFx(desc);
                         else
                             infoText += " off";
                     }
@@ -922,6 +926,7 @@ $.specctrPsProperties = {
             }
             return infoText;
         } catch(e) {
+            alert(e);
             doc.activeLayer = pageItem;
             return "";
         }
@@ -1094,6 +1099,7 @@ $.specctrPsProperties = {
             }
             infoText +=  Math.abs(parseInt(anchorPoints[2]) - parseInt(anchorPoints[1]));
         } catch(e) {
+            alert(e);
             infoText = "";
         }
 
