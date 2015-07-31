@@ -44,26 +44,26 @@ $.specctrPsExpandCanvas = {
                 if(backgroundLayer)
                     this.lyrIntoBckgrndLyr();                                     //Add layer and convert it into background layer.
                 
-                var borderLayer = this.drawDashBorder();                                       //Create the dashed border.
+                border = this.drawDashBorder();                                       //Create the dashed border.
                 doc = app.activeDocument;
                 
                 try {
                     var specctrLayer = doc.layerSets.getByName(groupName).layerSets.getByName("Specctr");
                     specctrLayer.move(doc.layers[0] , ElementPlacement.PLACEAFTER);     //Move the Specctr folder.
                 } catch(e) {}
-            }
-            
-            doc.resizeCanvas(width + 2*model.canvasExpandSize, 
-                                        height + 2*model.canvasExpandSize, AnchorPosition.MIDDLECENTER);     // Expanding the canvas.
-            
-            //Store border width in metadata. 
-            var xmpData = [{layerHandler : borderLayer, 
+                
+                //Store border width in metadata. 
+                var xmpData = [{layerHandler : border, 
                                         properties : [{name : "borderWidth", value : Math.ceil(model.armWeight).toString ()}]
                                     }
                                 ];
 
-            $.specctrPsCommon.setXmpDataOfLayer(xmpData);
+                $.specctrPsCommon.setXmpDataOfLayer(xmpData);
+            }
             
+            doc.resizeCanvas(width + 2*model.canvasExpandSize, 
+                                        height + 2*model.canvasExpandSize, AnchorPosition.MIDDLECENTER);     // Expanding the canvas.
+
         } catch(e) {
             alert(e);
         }
