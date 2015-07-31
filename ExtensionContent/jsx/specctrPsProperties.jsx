@@ -621,7 +621,6 @@ $.specctrPsProperties = {
         
         try {
             if (model.shapeFill) {  
-                alert("here");
                 doc.activeLayer = pageItem;
                 var ref = new ActionReference();
                 ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
@@ -992,6 +991,7 @@ $.specctrPsProperties = {
                     
             return infoText;
         } catch(e) {
+            alert(e);
             return "";
         }
     },
@@ -1073,6 +1073,16 @@ $.specctrPsProperties = {
             infoText += this.convertColorIntoCss(color, alpha);
         else
             infoText += color+" alpha: "+alpha;
+        
+        return infoText;
+    },
+    
+    //Get the stroke effect's properties values.
+    getStrokeFx : function(strokeDesc)
+    {
+        var infoText = "";
+        infoText += Math.round(strokeDesc.getUnitDoubleValue(stringIDToTypeID('size'))) + " px";
+        infoText += ", " + this.colorAsString(this.getColor(strokeDesc.getObjectValue(stringIDToTypeID('color'))));
         
         return infoText;
     },
