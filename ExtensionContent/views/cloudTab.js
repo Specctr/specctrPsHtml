@@ -15,7 +15,7 @@ var messageMap = {
 		return "Trial (" + daysLeft + " " + daysLabel + " left)";
 	},
 	"subscription.inactive": function(){return "Inactive";},
-	"subscription.none": function(){return "No subscription";},
+	"subscription.none": function(){return "No subscription";}
 };
 
 CloudTab.renderPlan = function(activation) {
