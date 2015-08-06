@@ -48,7 +48,7 @@ Specctr.buttonHandlers = {
 				api_key: api_key,
 				machine_id: machine_id,
 				document_name: css.document_name,
-				css_items: cssJson.children,
+				css_items: cssJson.children
 			});
 
 			$.ajax({
