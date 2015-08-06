@@ -10,7 +10,9 @@ if(typeof($)=== 'undefined')
 
 var model;
 var textBaseLine;
+var artBoardBounds;
 $.specctrPsSpacing = {
+    
     //Suspend the history of creating spacing spec of layers.
     createSpacingSpecs : function() {
         try {
@@ -107,6 +109,21 @@ $.specctrPsSpacing = {
                     bounds[3] =  textBaseLine;
                 }
 
+                //Check artboard is present or not and make changes in bounds accordingly.
+                var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
+                if(isArtBoardPresent) {
+                    // Check for active layer's parent.
+                    artBoardBounds = $.specctrPsCommon.getArtBoardBounds(artLayer);
+                    if(artBoardBounds == null) {
+                        pref.rulerUnits = startRulerUnits;
+                        pref.typeUnits = startTypeUnits;
+                        alert("Property not applicable for this artlayer.");
+                        return;
+                    }
+                } else {
+                    artBoardBounds = null;
+                }
+                
                 pref.rulerUnits = startRulerUnits;
                 pref.typeUnits = startTypeUnits;
                 app.activeDocument.suspendHistory('Spacing spec', 'this.createSpacingSpecsForSingleItem(artLayer, bounds)');
@@ -289,7 +306,14 @@ $.specctrPsSpacing = {
         var width = bounds[2] - bounds[0];
         var armWidth = model.armWeight / 2.0;
         var spacing = 3 + 0.3 * model.armWeight;
-        var cnvsRect = $.specctrPsCommon.originalCanvasSize();       //Get the original canvas size.
+        var cnvsRect;
+        
+        // Original canvas can be active artboard size.
+        if(artBoardBounds == null)
+            cnvsRect = $.specctrPsCommon.originalCanvasSize();       //Get the original canvas size.
+        else 
+            cnvsRect = artBoardBounds;
+        
         var relativeHeight='', relativeWidth='';
         if(model.specInPrcntg) {
              if(model.relativeHeight != 0)
@@ -310,7 +334,7 @@ $.specctrPsSpacing = {
 
         var specItemsGroup = legendLayer.layerSets.add();
         specItemsGroup.name = "SpacingSpec";
-
+        
         var lines = "", specText = "", textLayer = "";
         var distanceValue = "";
         var aPos, bPos, cPos;
@@ -457,6 +481,15 @@ $.specctrPsSpacing = {
         specItemsGroup = $.specctrPsCommon.createSmartObject();
         idSpacingSpec = $.specctrPsCommon.getIDOfLayer();
 
+        //Shifting 'Specctr' to upper layer.
+//        try {
+//        var specctrLayerSet = legendLayer.parent.parent;
+        
+//        alert(doc.layers.length-1);
+//        alert(specctrLayerSet.name);
+//        specctrLayerSet.move(doc.layers[doc.layers.length-1], ElementPlacement.PLACEBEFORE);
+//        $.specctrPsCommon.placeBorderBefore(specctrLayerSet);
+//        } catch (e) {alert(e);}
         doc.activeLayer = artLayer;
         var xmpData = [{layerHandler : artLayer,
                                         properties : [{name : "idSingleSpacingSpec", value :idSpacingSpec}]

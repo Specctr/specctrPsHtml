@@ -734,5 +734,61 @@ $.specctrPsCommon = {
             layer.artLayers.getByName(name).remove();
         } catch (e) {}
     },
+    
+    //Artboard is present in document or not.
+    isArtBoardPresent : function() {
+        var isPresent = false;
+        
+        try {
+            var doc = app.activeDocument;
+            var activeLayer = doc.activeLayer;
+            
+            var layerSetLength = doc.layerSets.length;
+            for (var i = 0; i < layerSetLength; i++) {
+                doc.activeLayer = doc.layerSets[i];
+                var ref = new ActionReference();
+                ref.putEnumerated( charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ) );
+                isPresent = executeActionGet(ref).getBoolean(stringIDToTypeID("artboardEnabled"));
+                if(isPresent)
+                    break;
+            }
+        } catch (e) {}
+        
+        if(activeLayer)
+            doc.activeLayer = activeLayer;
+        
+        //Get the parent of layer and check if it is an artboard.
+        return isPresent;
+    },
+    
+    //Get art board bounds, if any.
+    getArtBoardBounds : function(artLayer) {
+        try {
+            var parent = artLayer.parent;
+            if(parent.typename == "Document")
+                return null;
+                
+            while (parent.parent.typename != "Document") {
+                parent = parent.parent;
+            }
+            
+            app.activeDocument.activeLayer = parent;    //parent is artboard now.
+            var ref = new ActionReference();
+            ref.putEnumerated( charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ) );
+            
+            // get artboard dimensions
+            var artBoardRect = executeActionGet(ref).getObjectValue(stringIDToTypeID("artboard")).getObjectValue(stringIDToTypeID("artboardRect"));
+            var bounds = [];
+            bounds[0] = new UnitValue (artBoardRect.getDouble(stringIDToTypeID("left")), "px");
+            bounds[1] = new UnitValue (artBoardRect.getDouble(stringIDToTypeID("top")), "px");
+            bounds[2] = new UnitValue (artBoardRect.getDouble(stringIDToTypeID("right")), "px");
+            bounds[3] = new UnitValue (artBoardRect.getDouble(stringIDToTypeID("bottom")), "px");
+             
+             return bounds;
+        } catch(e) {}
+        
+        return null;
+    },
+
 };
 
