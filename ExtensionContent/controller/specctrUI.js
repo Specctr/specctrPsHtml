@@ -239,6 +239,8 @@ function txtScaleBy_changeHandler() {
 	model.scaleValue = scaleByHandler.value;
 }
 
+
+
 /**
  * Set the value of font size when changed.
  * @param elementId {string} The id of selected combobox.
@@ -246,7 +248,10 @@ function txtScaleBy_changeHandler() {
  */
 function comboBox_changeHandler(elementId, modelValue) {
 	var comboHandler = document.getElementById(elementId);
-	model[modelValue] = comboHandler.options[comboHandler.selectedIndex].value;
+	var value = comboHandler.options[comboHandler.selectedIndex].value;
+	if(!isNaN(Number(value)))
+		value = Number(value);
+	model[modelValue] = value;
 	writeAppPrefs();
 }
 
