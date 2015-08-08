@@ -156,9 +156,9 @@ each party and (ii) in a written contract signed by both parties.
 	<ExecutionEnvironment>
 		<HostList>
            
-            <Host Name="PHSP" Version="[14.0,16.9]" />
+            <Host Name="PHSP" Version="14.0" />
            
-            <Host Name="PHXS" Version="[14.0,16.9]" />
+            <Host Name="PHXS" Version="14.0" />
         
 		</HostList>
 		<LocaleList>
