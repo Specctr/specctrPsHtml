@@ -14,13 +14,20 @@ $.specctrPsExpandCanvas = {
         try {
             if(!app.documents.length)    //Checking document is open or not.
                 return;
+            
+            var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
+            if(isArtBoardPresent) {
+               alert("Property not applicable for this document.")
+               return;
+            }
+
             app.activeDocument.suspendHistory('Expand Canvas', 'this.expandCanvas()');
         } catch(e) {}
     },
 
     //Expand the canvas.
     expandCanvas : function () {
-       try {
+       try {       
            if(ExternalObject.AdobeXMPScript == null)
                 ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
             

@@ -38,6 +38,8 @@ $.specctrPsDimension = {
             }
             
             pref.rulerUnits = startRulerUnits;
+            //Check artboard is present or not and make changes in bounds accordingly.
+            var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
             app.activeDocument.suspendHistory('Dimension Specs', 'this.createDimensionSpecs(artLayer, bounds)');      //Pass bounds and layer for creating dimension spec.
         } catch(e) {}
     },

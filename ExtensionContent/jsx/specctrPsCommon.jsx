@@ -738,6 +738,7 @@ $.specctrPsCommon = {
     //Artboard is present in document or not.
     isArtBoardPresent : function() {
         var isPresent = false;
+        var isThisArtBoard = false;
         
         try {
             var doc = app.activeDocument;
@@ -748,9 +749,14 @@ $.specctrPsCommon = {
                 doc.activeLayer = doc.layerSets[i];
                 var ref = new ActionReference();
                 ref.putEnumerated( charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ) );
-                isPresent = executeActionGet(ref).getBoolean(stringIDToTypeID("artboardEnabled"));
-                if(isPresent)
-                    break;
+                isThisArtBoard = executeActionGet(ref).getBoolean(stringIDToTypeID("artboardEnabled"));
+                if(isThisArtBoard) {
+                    isPresent = isThisArtBoard;
+                    var desc = new ActionDescriptor();
+                    desc.putReference(charIDToTypeID("null"), ref);
+                    desc.putBoolean(stringIDToTypeID( "autoNestEnabled" ), false);
+                    executeAction(stringIDToTypeID("editArtboardEvent"), desc, DialogModes.NO );
+                }
             }
         } catch (e) {}
         

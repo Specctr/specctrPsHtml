@@ -31,6 +31,9 @@ $.specctrPsSpacing = {
             var layerEffects = stringIDToTypeID('layerEffects');
             var layerFXVisible = stringIDToTypeID('layerFXVisible');
 
+            //Check artboard is present or not and make changes in bounds accordingly.
+            var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
+            
             if(numberOfSelectedItems === 2) {
                 var artLayer1 = $.specctrPsCommon.selectLayerByIndex(selectedArtItems[0]);
                 var artLayer2 = $.specctrPsCommon.selectLayerByIndex(selectedArtItems[1]);
@@ -109,8 +112,6 @@ $.specctrPsSpacing = {
                     bounds[3] =  textBaseLine;
                 }
 
-                //Check artboard is present or not and make changes in bounds accordingly.
-                var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
                 if(isArtBoardPresent) {
                     // Check for active layer's parent.
                     artBoardBounds = $.specctrPsCommon.getArtBoardBounds(artLayer);
@@ -308,7 +309,7 @@ $.specctrPsSpacing = {
         var spacing = 3 + 0.3 * model.armWeight;
         var cnvsRect;
         
-        // Original canvas can be active artboard size.
+        // Canvas can be Artboard.
         if(artBoardBounds == null)
             cnvsRect = $.specctrPsCommon.originalCanvasSize();       //Get the original canvas size.
         else 

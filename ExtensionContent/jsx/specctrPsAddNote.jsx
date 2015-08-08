@@ -24,6 +24,9 @@ $.specctrPsAddNote = {
             pref.rulerUnits = Units.PIXELS;
             var bounds = sourceItem.bounds;
             pref.rulerUnits = startRulerUnits;
+            
+            //Check artboard is present or not and make changes in bounds accordingly.
+            var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
             app.activeDocument.suspendHistory('Add note spec', 'this.createNoteSpecs(sourceItem, bounds, noteText)');
         } catch(e) {}
    },
@@ -33,7 +36,6 @@ $.specctrPsAddNote = {
     try {
 
         model = $.specctrPsCommon.getModel();
-        
         var doc = app.activeDocument;
         var infoText = noteText;
         var newColor;

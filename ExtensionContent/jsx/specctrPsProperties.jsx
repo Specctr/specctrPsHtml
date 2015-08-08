@@ -32,6 +32,9 @@ $.specctrPsProperties = {
                 bounds = sourceItem.bounds;
 
             pref.rulerUnits = startRulerUnits;
+            
+            //Check artboard is present or not and make changes in bounds accordingly.
+            var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
             app.activeDocument.suspendHistory('Property Specs', 'this.createPropertySpecs(sourceItem, bounds)');
         } catch(e) {}
     },

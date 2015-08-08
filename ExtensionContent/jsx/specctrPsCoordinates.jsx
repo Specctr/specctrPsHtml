@@ -8,6 +8,7 @@
 if(typeof($)=== 'undefined')
 	$={};
 
+var artBoardBounds;
 $.specctrPsCoordinates = {
     //Suspend the history of creating coordinates spec of layers.
     createCoordinateSpecs : function() {
@@ -28,6 +29,20 @@ $.specctrPsCoordinates = {
                 bounds = sourceItem.bounds;
 
             pref.rulerUnits = startRulerUnits;
+            
+            //Check artboard is present or not and make changes in bounds accordingly.
+            var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
+            if(isArtBoardPresent) {
+                // Check for active layer's parent.
+                artBoardBounds = $.specctrPsCommon.getArtBoardBounds(sourceItem);
+                if(artBoardBounds == null) {
+                    alert("Property not applicable for this artlayer.");
+                    return;
+                }
+            } else {
+                artBoardBounds = null;
+            }
+    
             app.activeDocument.suspendHistory('Coordinate Info', 'this.createCoordinates(sourceItem, bounds)');
         } catch(e) {}
     },
@@ -41,13 +56,14 @@ $.specctrPsCoordinates = {
             var coordinateText = spec.artLayers.add();
             coordinateText.kind = LayerKind.TEXT;
             var specText = coordinateText.textItem;
+            specText.position = [textX,textY];
             specText.kind = TextType.POINTTEXT;
             specText.justification = justification;
             specText.color.rgb = newColor;
             specText.font = font;
             specText.size = size;
             specText.contents = content;
-            specText.position = [textX, textY];
+            
     },
 
     //Create coordinate specs for the layer.
@@ -69,7 +85,7 @@ $.specctrPsCoordinates = {
             //Save the current preferences
             var model = $.specctrPsCommon.getModel();
             var doc = app.activeDocument;
-            var halfWeight = model.armWeight / 2.0;
+            var halfWeight = model.armWeight / 2;
             var size = model.legendFontSize;
             var spacing = 10 + halfWeight;
             var margin = spacing - 5;
@@ -82,7 +98,14 @@ $.specctrPsCoordinates = {
 
             var font = model.legendFont;
             var newColor = $.specctrPsCommon.legendColor(model.legendColorSpacing);
-            var orgnlCanvas = $.specctrPsCommon.originalCanvasSize();       //Get the original canvas size.
+            var orgnlCanvas;
+             
+             // Canvas can be Artboard.
+            if(artBoardBounds == null)
+                orgnlCanvas = $.specctrPsCommon.originalCanvasSize();       //Get the original canvas size.
+            else 
+                orgnlCanvas = artBoardBounds;
+             
             var left = bounds[0] - orgnlCanvas[0];
             var top = bounds[1] - orgnlCanvas[1];
             var right = bounds[2] - orgnlCanvas[0];
@@ -120,7 +143,7 @@ $.specctrPsCoordinates = {
             var textBottomMargin = bounds[3] - margin;
             var leftJustification = Justification.LEFT;
             var rightJustification = Justification.RIGHT;
-            var styleText = "\tleft: " + left + ";\r\ttop: " + top + 
+            var styleText = "left: " + left + ";\r\ttop: " + top + 
                                         ";\r\tright: " + right + ";\r\tbottom: " + bottom + ";";
 
             if(legendLayer === "") {
