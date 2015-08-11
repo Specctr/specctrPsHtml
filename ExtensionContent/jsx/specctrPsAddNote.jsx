@@ -171,7 +171,7 @@ $.specctrPsAddNote = {
         var spacing = 10;
         var newColor;
         
-        if(sourceItem.kind == LayerKind.TEXT)
+        if(artLayer.kind == LayerKind.TEXT)
             newColor = $.specctrPsCommon.legendColor(model.legendColorType);
         else
             newColor = $.specctrPsCommon.legendColor(model.legendColorObject);

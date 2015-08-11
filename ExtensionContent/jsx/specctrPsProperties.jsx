@@ -608,7 +608,8 @@ $.specctrPsProperties = {
         //Gives the opacity for the art layer,
         if(model.shapeAlpha)
             alpha = Math.round(pageItem.opacity)/100;
-            
+        
+        app.activeDocument.activeLayer = pageItem;
         if(model.shapeBorderRadius)
             borderRadius = this.getRoundCornerValue();
         
