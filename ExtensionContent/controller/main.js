@@ -11,6 +11,12 @@ and reading and writing preferences methods.
  */
 function completeHandler(data, status) {
 	try {
+		if(data.registered == undefined)
+			{
+			showAlert(data);
+			return;
+			}
+		
 		var arr = data.registered;
 		
 		//If unsuccessful, return without saving the data in config.
