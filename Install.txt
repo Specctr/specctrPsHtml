@@ -1,0 +1,25 @@
+Project Name: Specctr-AI
+
+CC 2015
+-------
+1. Run provided installer. OSX .pkg and WIN .exe.
+2. On OSX you may need to change the settings in 'System Preferences' > 'Security and Privacy' to allow installations from "Mac Appstore and Identified Developers".
+
+
+CC 2014 and CS6
+---------------
+1. Download Specctr installer (.mxp or .zxp) 
+2. Double-click to open Adobe's Extension Manager 
+3. Read User License Agreement and hit "Install" 
+4. Restart Photoshop/InDesign/Illustrator/Fireworks 
+5. In Fireworks go to the Window Menu and select Specctr. 
+In Photoshop/Illustrator/InDesign Window Menu > Extensions and select Specctr
+6. Enter your 16-digit license key to activate
+7. Spec Away!
+
+
+
+-------------
+TUTORIALS & SUPPORT
+-------------
+To view our tutorials and for support visit the Specctr Help Center: https://specctr.zendesk.com
