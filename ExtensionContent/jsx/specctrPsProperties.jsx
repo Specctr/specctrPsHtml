@@ -158,12 +158,23 @@ $.specctrPsProperties = {
             
             //Number system..
             if(model.specOption == "Bullet") {
-                //Check if any number is linked with selected art layer or not, if not then assign a number.
-                var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, true);
-                legendLayer.name += number;
-                bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
-                dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
+                
+                if(noteLegendLayer) {
+                     try {
+                        bullet = noteLegendLayer.artLayers.getByName("__sFirstBullet");
+                    } catch (e) {}
+                 }
+         
+              //Check if any number is linked with selected art layer or not, if not then assign a number.
+                if (!bullet) {
+                    var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, true);
+                    bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
+                }
+            
                 var dia = bullet.bounds[2] - bullet.bounds[0];
+                bullet.translate(artLayerBounds[0]-bullet.bounds[0]-dia-1, artLayerBounds[1]-bullet.bounds[1]-1);
+                dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
+                dupBullet.move(legendLayer, ElementPlacement.INSIDE);
                 
                 //Adjust position of spec items.
                $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, noteSpecBottom, spacing, 

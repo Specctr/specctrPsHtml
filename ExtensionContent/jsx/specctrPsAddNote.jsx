@@ -137,6 +137,7 @@ $.specctrPsAddNote = {
             }
 
             //Get the end points for arm.
+            legendLayer.visible = true;
             arm = $.specctrPsCommon.createArm(specText, spec, artLayerBounds, newColor);
             arm.name = "__sArm";
             spec.link(arm);
