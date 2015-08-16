@@ -82,6 +82,13 @@ $.specctrPsProperties = {
             }
          }
 
+        //Check artboard is present or not and make changes in bounds accordingly.
+        var parent = doc;
+        var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
+        if(isArtBoardPresent) {
+            parent = $.specctrPsCommon.getArtBoard(artLayer);
+        }
+    
          try {
             idLayer = $.specctrPsCommon.getIDOfLayer();   //Get unique ID of selected layer.
             var artLayerBounds = bounds;
@@ -92,7 +99,7 @@ $.specctrPsProperties = {
                 case LayerKind.TEXT:
                     infoText  = this.getSpecsInfoForTextItem(sourceItem);
                     newColor = $.specctrPsCommon.legendColor(model.legendColorType);
-                    legendLayer = this.legendPropertiesLayer("Text Specs").layerSets.add();
+                    legendLayer = this.legendPropertiesLayer("Text Specs", parent).layerSets.add();
                     legendLayer.name = "Text Spec ";
                     
                     if(model.textLayerName) {
@@ -109,7 +116,7 @@ $.specctrPsProperties = {
                 case LayerKind.GRADIENTFILL:
                 case LayerKind.SOLIDFILL: 
                     infoText = this.getSpecsInfoForPathItem(sourceItem);
-                    legendLayer = this.legendPropertiesLayer("Object Specs").layerSets.add();
+                    legendLayer = this.legendPropertiesLayer("Object Specs", parent).layerSets.add();
                     legendLayer.name = "Object Spec ";
                     if(model.shapeLayerName) {
                         infoText = "\r"+name+infoText;
@@ -121,7 +128,7 @@ $.specctrPsProperties = {
 
                 default: 
                     infoText = this.getSpecsInfoForGeneralItem(sourceItem); 
-                    legendLayer = this.legendPropertiesLayer("Object Specs").layerSets.add();
+                    legendLayer = this.legendPropertiesLayer("Object Specs", parent).layerSets.add();
                     legendLayer.name = "Object Spec ";
                     infoText = "\r"+name+infoText;
             }
@@ -167,7 +174,7 @@ $.specctrPsProperties = {
          
               //Check if any number is linked with selected art layer or not, if not then assign a number.
                 if (!bullet) {
-                    var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, true);
+                    var number = $.specctrPsCommon.getBulletNumber(artLayer, parent, true);
                     bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
                 }
             
@@ -311,9 +318,8 @@ $.specctrPsProperties = {
 
             if(model.specOption == "Bullet") {
                 $.specctrPsCommon.deleteArtLayerByName(noteLegendLayer, "__sFirstBullet");
-                
                 //Check if any number is linked with selected art layer or not, if not then assign a number.
-               var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, false);
+               var number = $.specctrPsCommon.getBulletNumber(artLayer, legendLayer.parent.parent.parent.parent, false);
                 
                 var bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
                 bullet.name = "__sFirstBullet";
@@ -1183,12 +1189,12 @@ $.specctrPsProperties = {
 
    
     //This function create the artlayer set named 'Text Properties', if not created.
-    legendPropertiesLayer : function(specName) {
+    legendPropertiesLayer : function(specName, parent) {
         var newLayer;
         try {
-            newLayer= $.specctrPsCommon.legendSpecLayer("Properties").layerSets.getByName(specName);
+            newLayer= $.specctrPsCommon.legendSpecLayer("Properties", parent).layerSets.getByName(specName);
         } catch(e) {
-            newLayer= $.specctrPsCommon.legendSpecLayer("Properties").layerSets.add();
+            newLayer= $.specctrPsCommon.legendSpecLayer("Properties", parent).layerSets.add();
             newLayer.name=specName;
         }
         return newLayer;

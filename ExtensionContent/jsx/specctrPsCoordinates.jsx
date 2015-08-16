@@ -98,14 +98,17 @@ $.specctrPsCoordinates = {
 
             var font = model.legendFont;
             var newColor = $.specctrPsCommon.legendColor(model.legendColorSpacing);
-            var orgnlCanvas;
+            var orgnlCanvas, parent;
              
              // Canvas can be Artboard.
-            if(artBoardBounds == null)
+            if(artBoardBounds == null) {
+                parent = doc;
                 orgnlCanvas = $.specctrPsCommon.originalCanvasSize();       //Get the original canvas size.
-            else 
+            } else {
+                parent = $.specctrPsCommon.getArtBoard(sourceItem);
                 orgnlCanvas = artBoardBounds;
-             
+            }
+        
             var left = bounds[0] - orgnlCanvas[0];
             var top = bounds[1] - orgnlCanvas[1];
             var right = bounds[2] - orgnlCanvas[0];
@@ -147,7 +150,7 @@ $.specctrPsCoordinates = {
                                         ";\r\tright: " + right + ";\r\tbottom: " + bottom + ";";
 
             if(legendLayer === "") {
-                legendLayer = $.specctrPsCommon.legendSpecLayer("Coordinates").layerSets.add();            //To create the layer group for coordinate layer.
+                legendLayer = $.specctrPsCommon.legendSpecLayer("Coordinates", parent).layerSets.add();            //To create the layer group for coordinate layer.
                 legendLayer.name = "Specctr Coordinates Mark";
             }
 

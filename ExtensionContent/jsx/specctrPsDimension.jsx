@@ -38,8 +38,7 @@ $.specctrPsDimension = {
             }
             
             pref.rulerUnits = startRulerUnits;
-            //Check artboard is present or not and make changes in bounds accordingly.
-            var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
+            
             app.activeDocument.suspendHistory('Dimension Specs', 'this.createDimensionSpecs(artLayer, bounds)');      //Pass bounds and layer for creating dimension spec.
         } catch(e) {}
     },
@@ -73,9 +72,16 @@ $.specctrPsDimension = {
         var spacing = 10+model.armWeight;
         var armWidth = model.armWeight/2.0;
         var newColor = $.specctrPsCommon.legendColor(model.legendColorSpacing);
+        
+        //Check artboard is present or not and make changes in bounds accordingly.
+        var parent = doc;
+        var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
+        if(isArtBoardPresent) {
+            parent = $.specctrPsCommon.getArtBoard(artLayer);
+        }
 
         if(legendLayer === "") {
-            legendLayer = $.specctrPsCommon.legendSpecLayer("Dimensions").layerSets.add();
+            legendLayer = $.specctrPsCommon.legendSpecLayer("Dimensions", parent).layerSets.add();
             legendLayer.name = "Specctr Dimension Mark"; 
         }
 

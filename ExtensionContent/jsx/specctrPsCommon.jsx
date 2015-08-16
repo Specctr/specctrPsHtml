@@ -224,24 +224,24 @@ $.specctrPsCommon = {
     },
 
     //This function create the artlayer set named 'Dimensions', if not created.
-    legendSpecLayer : function(specName) {
+    legendSpecLayer : function(specName, parent) {
         var newLayer;
         try {
-            newLayer=this.legendLayer().layerSets.getByName(specName);
+            newLayer=this.legendLayer(parent).layerSets.getByName(specName);
         } catch(e) {
-            newLayer=this.legendLayer().layerSets.add();
+            newLayer=this.legendLayer(parent).layerSets.add();
              newLayer.name=specName;
         }
         return newLayer;	
     },
 
     //This function create the artlayer set named 'Specctr', if not created.
-    legendLayer : function() {
+    legendLayer : function(parent) {
         var layerSetRef;
         try {
-            layerSetRef = app.activeDocument.layerSets.getByName("Specctr");
+            layerSetRef = parent.layerSets.getByName("Specctr");
         } catch(e) {
-            layerSetRef = app.activeDocument.layerSets.add();
+             layerSetRef = parent.layerSets.add();
              layerSetRef.name = "Specctr";
              this.placeBorderBefore(layerSetRef);
         }
@@ -420,6 +420,8 @@ $.specctrPsCommon = {
     },
 
     getCssBodyText : function (cssBody) {
+        if(cssBodyText == 'undefined')
+            cssBodyText = "";
         return cssBodyText;
     },
     
@@ -737,7 +739,6 @@ $.specctrPsCommon = {
     
     //Artboard is present in document or not.
     isArtBoardPresent : function() {
-        var isPresent = false;
         var isThisArtBoard = false;
         
         try {
@@ -750,13 +751,8 @@ $.specctrPsCommon = {
                 var ref = new ActionReference();
                 ref.putEnumerated( charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ) );
                 isThisArtBoard = executeActionGet(ref).getBoolean(stringIDToTypeID("artboardEnabled"));
-                if(isThisArtBoard) {
-                    isPresent = isThisArtBoard;
-                    var desc = new ActionDescriptor();
-                    desc.putReference(charIDToTypeID("null"), ref);
-                    desc.putBoolean(stringIDToTypeID( "autoNestEnabled" ), false);
-                    executeAction(stringIDToTypeID("editArtboardEvent"), desc, DialogModes.NO );
-                }
+                if(isThisArtBoard) 
+                    break;
             }
         } catch (e) {}
         
@@ -764,7 +760,7 @@ $.specctrPsCommon = {
             doc.activeLayer = activeLayer;
         
         //Get the parent of layer and check if it is an artboard.
-        return isPresent;
+        return isThisArtBoard;
     },
     
     //Get art board bounds, if any.
@@ -794,6 +790,19 @@ $.specctrPsCommon = {
         } catch(e) {}
         
         return null;
+    },
+
+    getArtBoard : function (artLayer) {
+         try {
+            var parent = artLayer.parent;
+            if(parent.typename == "Document")
+                return app.activeDocument;
+                
+            while (parent.parent.typename != "Document") {
+                parent = parent.parent;
+            }
+            return parent;
+        }catch (e) { return app.activeDocument;}
     },
 
 };

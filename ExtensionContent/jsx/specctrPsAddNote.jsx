@@ -25,8 +25,6 @@ $.specctrPsAddNote = {
             var bounds = sourceItem.bounds;
             pref.rulerUnits = startRulerUnits;
             
-            //Check artboard is present or not and make changes in bounds accordingly.
-            var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
             app.activeDocument.suspendHistory('Add note spec', 'this.createNoteSpecs(sourceItem, bounds, noteText)');
         } catch(e) {}
    },
@@ -88,8 +86,15 @@ $.specctrPsAddNote = {
                 return;
             }
          }
+        //Check artboard is present or not and make changes in bounds accordingly.
+        var parent = doc;
+        var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
+        if(isArtBoardPresent) {
+            parent = $.specctrPsCommon.getArtBoard(artLayer);
+        }
+    
         //Create spec text for art object.
-        legendLayer = $.specctrPsCommon.legendSpecLayer("Add Note").layerSets.add();
+        legendLayer = $.specctrPsCommon.legendSpecLayer("Add Note", parent).layerSets.add();
         legendLayer.name = "Note Spec";
         noteId = $.specctrPsCommon.getIDOfLayer();
         var spec = legendLayer.artLayers.add();
@@ -104,15 +109,16 @@ $.specctrPsAddNote = {
 
         //Number system.
         if(model.specOption == "Bullet") {
+            
              if(propertyLegendLayer) {
                  try {
                     bullet = propertyLegendLayer.artLayers.getByName("__sFirstBullet");
                 } catch (e) {}
              }
-         
+            
             //Check if any number is linked with selected art layer or not, if not then assign a number.
             if (!bullet) {
-                var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, true);
+                var number = $.specctrPsCommon.getBulletNumber(artLayer, parent, true);
                 bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
             }
             
@@ -217,7 +223,7 @@ $.specctrPsAddNote = {
             if(model.specOption == "Bullet") {
                 $.specctrPsCommon.deleteArtLayerByName(propertyLegendLayer, "__sFirstBullet");
                 //Check if any number is linked with selected art layer or not, if not then assign a number.
-                var number = $.specctrPsCommon.getBulletNumber(artLayer, doc, false);
+                var number = $.specctrPsCommon.getBulletNumber(artLayer, legendLayer.parent.parent.parent, false);
                 var bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
                 bullet.name = "__sFirstBullet";
 

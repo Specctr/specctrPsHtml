@@ -30,9 +30,6 @@ $.specctrPsSpacing = {
             var trgt = charIDToTypeID("Trgt");
             var layerEffects = stringIDToTypeID('layerEffects');
             var layerFXVisible = stringIDToTypeID('layerFXVisible');
-
-            //Check artboard is present or not and make changes in bounds accordingly.
-            var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
             
             if(numberOfSelectedItems === 2) {
                 var artLayer1 = $.specctrPsCommon.selectLayerByIndex(selectedArtItems[0]);
@@ -112,6 +109,8 @@ $.specctrPsSpacing = {
                     bounds[3] =  textBaseLine;
                 }
 
+                //Check artboard is present or not and make changes in bounds accordingly.
+                var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
                 if(isArtBoardPresent) {
                     // Check for active layer's parent.
                     artBoardBounds = $.specctrPsCommon.getArtBoardBounds(artLayer);
@@ -173,10 +172,19 @@ $.specctrPsSpacing = {
             bounds1[3]>bounds2[1] && bounds1[1]<bounds2[3]) {
             isOverlapped = true;
         }
+        
+        //Check artboard is present or not and make changes in bounds accordingly.
+        var parent = doc;
+        var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
+        if(isArtBoardPresent) {
+            parent = $.specctrPsCommon.getArtBoard(artLayer1);
+        }
+    
         if(legendLayer === "") {
-            legendLayer = $.specctrPsCommon.legendSpecLayer("Spacing").layerSets.add();
+            legendLayer = $.specctrPsCommon.legendSpecLayer("Spacing", parent).layerSets.add();
             legendLayer.name = "Specctr Spacing Mark";
         }
+    
         var spec = legendLayer.layerSets.add();
         spec.name = "SpacingSpec";
 
@@ -307,14 +315,17 @@ $.specctrPsSpacing = {
         var width = bounds[2] - bounds[0];
         var armWidth = model.armWeight / 2.0;
         var spacing = 3 + 0.3 * model.armWeight;
-        var cnvsRect;
+        var cnvsRect, parent;
         
         // Canvas can be Artboard.
-        if(artBoardBounds == null)
+        if(artBoardBounds == null) {
+            parent = doc;
             cnvsRect = $.specctrPsCommon.originalCanvasSize();       //Get the original canvas size.
-        else 
+        } else {
+            parent = $.specctrPsCommon.getArtBoard(artLayer);
             cnvsRect = artBoardBounds;
-        
+        }
+    
         var relativeHeight='', relativeWidth='';
         if(model.specInPrcntg) {
              if(model.relativeHeight != 0)
@@ -329,7 +340,7 @@ $.specctrPsSpacing = {
         }
 
         if(legendLayer === "") {
-            legendLayer = $.specctrPsCommon.legendSpecLayer("Spacing").layerSets.add();
+            legendLayer = $.specctrPsCommon.legendSpecLayer("Spacing", parent).layerSets.add();
             legendLayer.name = "Specctr Spacing Mark";
         }
 

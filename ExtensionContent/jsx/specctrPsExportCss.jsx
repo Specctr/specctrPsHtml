@@ -13,20 +13,58 @@ $.specctrPsExportCss = {
         if(!app.documents.length)           //Checking document is open or not.
 	        return;
 	    
-	    try {
-	        var propertySpecLayerGroup = app.activeDocument.layerSets.getByName("Specctr").layerSets.getByName("Properties");
-	    } catch(e) {
-	         alert("No spec present to export.");
-	         return;
-	    }
-	    
-	    if(ExternalObject.AdobeXMPScript == null)
-	        ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
+         try {
+            var doc = app.activeDocument;
+            var activeLayer = doc.activeLayer;
+            var parent, isThisArtBoard, isArtBoardPresent = false;
+            var coordinateSpecsInfo, styleText = "", propertySpecLayerGroup;
+            
+            var layerSetLength = doc.layerSets.length;
+            for (var i = 0; i < layerSetLength; i++) {
+                doc.activeLayer = doc.layerSets[i];
+                parent = doc.layerSets[i];
+                var ref = new ActionReference();
+                ref.putEnumerated( charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ) );
+                isThisArtBoard = executeActionGet(ref).getBoolean(stringIDToTypeID("artboardEnabled"));
+                if(isThisArtBoard)  {
+                    try {
+                        propertySpecLayerGroup = parent.layerSets.getByName("Specctr").layerSets.getByName("Properties");
+                    } catch(e) {
+                         return;
+                    }
+                    
+                    if(ExternalObject.AdobeXMPScript == null)
+                        ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
 
-	    var coordinateSpecsInfo = this.getStyleFromOtherSpecs("Coordinates");           //Get the array of coordinate specs info.
-	    var styleText = $.specctrPsCommon.getCssBodyText();            //Add the body text at the top of css file.
-	    styleText += this.getCssForText(coordinateSpecsInfo);
-	    styleText += this.getCssForShape(coordinateSpecsInfo);
+                    coordinateSpecsInfo = this.getStyleFromOtherSpecs("Coordinates", parent);           //Get the array of coordinate specs info.
+                    styleText += $.specctrPsCommon.getCssBodyText();            //Add the body text at the top of css file.
+                    styleText += this.getCssForText(coordinateSpecsInfo, parent);
+                    styleText += this.getCssForShape(coordinateSpecsInfo, parent);
+                    isArtBoardPresent = true;
+                }
+            }
+        } catch (e) {}
+        
+        if(isArtBoardPresent == false) {
+            try {
+                propertySpecLayerGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties");
+            } catch(e) {
+                 alert("No spec present to export.");
+                 return;
+            }
+            
+            if(ExternalObject.AdobeXMPScript == null)
+                ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
+
+            coordinateSpecsInfo = this.getStyleFromOtherSpecs("Coordinates", doc);           //Get the array of coordinate specs info.
+            styleText = $.specctrPsCommon.getCssBodyText();            //Add the body text at the top of css file.
+            styleText += this.getCssForText(coordinateSpecsInfo, doc);
+            styleText += this.getCssForShape(coordinateSpecsInfo, doc);
+        }
+    
+        if(activeLayer)
+            doc.activeLayer = activeLayer;
+
         return styleText; 
 	},
 
@@ -40,11 +78,10 @@ $.specctrPsExportCss = {
     },
 
     //Get the coordinate or width/height spec style info.
-    getStyleFromOtherSpecs : function(specName) {
-        var doc = app.activeDocument;
+    getStyleFromOtherSpecs : function(specName, parent) {
         var specsInfo = [];
         try {
-            var specLayerGroup = doc.layerSets.getByName("Specctr").layerSets.getByName(specName);
+            var specLayerGroup = parent.layerSets.getByName("Specctr").layerSets.getByName(specName);
         } catch(e) {
             return specsInfo;
         }
@@ -65,16 +102,15 @@ $.specctrPsExportCss = {
     },
 
     //Return css text for shape objects.
-    getCssForShape : function(coordinateSpecsInfo) {
-        var doc = app.activeDocument;
+    getCssForShape : function(coordinateSpecsInfo, parent) {
         try {
-            var objectSpecGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties").layerSets.getByName("Object Specs");
+            var objectSpecGroup = parent.layerSets.getByName("Specctr").layerSets.getByName("Properties").layerSets.getByName("Object Specs");
         } catch(e) {
             return "";
         }
         
         var styleText = "";
-        var dimensionSpecsInfo = this.getStyleFromOtherSpecs("Dimensions");           //Get the array of width/height specs info. 
+        var dimensionSpecsInfo = this.getStyleFromOtherSpecs("Dimensions", parent);           //Get the array of width/height specs info. 
         var noOfDimensionSpecs = dimensionSpecsInfo.length;
         var noOfCoordinateSpecs = coordinateSpecsInfo.length;
         var noOfObjectSpecLayerGroups = objectSpecGroup.layerSets.length;
@@ -100,10 +136,9 @@ $.specctrPsExportCss = {
     },
 
     //Return css text for text objects.
-    getCssForText : function(coordinateSpecsInfo) {
-        var doc = app.activeDocument;
+    getCssForText : function(coordinateSpecsInfo, parent) {
         try {
-            var textSpecGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties").layerSets.getByName("Text Specs");
+            var textSpecGroup = parent.layerSets.getByName("Specctr").layerSets.getByName("Properties").layerSets.getByName("Text Specs");
         } catch(e) {
             return "";
         }
