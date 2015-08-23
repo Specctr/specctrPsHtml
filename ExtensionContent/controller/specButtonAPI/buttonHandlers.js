@@ -166,6 +166,13 @@ Specctr.buttonHandlers = {
 			model.coordinateCellNumber = selectedCellIndex;
 			cellHandler.addClass(selectionClass);
 
+		} else if(cellHandler.parent().attr("id") == "cloudUploadDropDown") {
+			
+			classForSelection = ["exportCssSelected", "importCssSelected"];
+			buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
+			model.specOption = modelValue;
+			cellHandler.addClass(selectionClass);
+			//buttonController.changeCloudButtonIcon();
 		} else {
 
 			classForSelection = ["specBulletSelected", "specLineSelected"];

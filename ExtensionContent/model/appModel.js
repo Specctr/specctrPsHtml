@@ -81,7 +81,8 @@ var model = {
 	scaleValue: 'x1',
 
 	decimalFractionValue: 'decimal',
-	specOption: 'Bullet'
+	specOption: 'Bullet',
+	cloudOption: 'Export',
 };
 
 var filePermission = {
