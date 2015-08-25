@@ -55,11 +55,7 @@ function setModel(currModel)
     try
     {
         model = JSON.parse(currModel);
-    }
-    catch(e)
-    {
-        alert(e);
-    }
+    } catch(e) {}
 }
 
 //Create the canvas border and expand the artboard.
@@ -382,11 +378,7 @@ function exportCss()
         }
     
         isExportedSuccessfully = true;
-    }
-    catch(e)
-    {
-        alert(e);
-    }
+    } catch(e) {}
     
     return isExportedSuccessfully;
 }
@@ -741,7 +733,6 @@ function createDimensionSpecsForItem(pageItem)
     }
     catch(e)
     {
-        alert(e);
         return false;
     }
 
@@ -883,7 +874,6 @@ function createCoordinateSpecsForItem(pageItem)
     }
     catch(e)
     {
-        alert(e + " what");
         return false;
     }
 
@@ -1182,7 +1172,6 @@ function createSpacingSpecsForItems(aItem, bItem)
     }
     catch(e)
     {
-        alert(e);
         return false;
     }
 
@@ -1435,7 +1424,6 @@ function createSpacingSpecsForItem(pageItem)
 	}
     catch(e)
     {
-        alert(e);
         return false;
     }
 
@@ -1813,7 +1801,6 @@ propSpecUndo[idVar.name].undoCounter++; //this is Redo return;}*/
     }
     catch(e)
     {
-        alert(e);
         return false;
     }
 
@@ -2099,7 +2086,6 @@ function createPropertySpecsForItem(sourceItem)
     }
     catch(e)
     {
-        alert(e);
         return false;
     }
 
@@ -2369,7 +2355,7 @@ function pointsToUnitsString(value,units)
              break;
              
         case RulerUnits.Inches:
-            result = Math.round(value / 72 * 10000) / 10000 + " in";
+            result = Math.round(value / 72 * 100) / 100 + " in";
             break;
             
         case RulerUnits.Picas:
