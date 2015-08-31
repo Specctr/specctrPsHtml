@@ -35,10 +35,20 @@ Specctr.Auth = {
 					specctrDialog.showAlert(response.message);
 				}
 			},
-			error: function(xhr) {
-				var response = JSON.parse(xhr.responseText);
-				pref.log(xhr.status + " - " + response.message);
-				specctrDialog.showAlert(response.message);
+			error: function(xhr, status, error) {
+				var response = '';
+				try {
+					response = JSON.parse(xhr.responseText);
+				} catch(e) {}
+				
+				if(response) {
+					pref.log(xhr.status + " - " + response.message);
+					specctrDialog.showAlert(response.message);
+				} else {
+					pref.log(status + " - " + error);
+					specctrDialog.showAlert(error);
+				}
+				
 			}
 		});
 	}),
