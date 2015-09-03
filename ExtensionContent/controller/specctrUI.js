@@ -6,6 +6,12 @@ like change event handlers, click event handlers etc.
 
 Specctr = Specctr || {};
 Specctr.UI = {
+		
+	closeCloudPage: Specctr.Utility.tryCatchLog(function(){
+		$("#dvCloudContainer").hide();
+		$("#tabContainer").show();
+	}),
+		
 	/**
 	 * Show/hide the setting tab page.
 	 */
@@ -375,6 +381,25 @@ Specctr.UI = {
 	textKeyDownHandler : Specctr.Utility.tryCatchLog(function(event, buttonId){
 		if (event.keyCode == 13)
 			$(buttonId).trigger("click");
+	}),
+	
+	cloudTextHandler : Specctr.Utility.tryCatchLog(function(event) {
+		if (event.keyCode == 13) {
+			var text = $("#cloudText").val();
+			//trim text;
+			try{
+			text = text.trim();
+			}catch(e){}
+			if(text == "")
+				return;
+			
+			//Add data to table.
+			var table = document.getElementById("projectTable");
+			var row = table.insertRow(-1);
+			var name = row.insertCell(0);
+			name.innerHTML = text;
+			$("#cloudText").val("");
+		}
 	}),
 
 	/**

@@ -1,0 +1,82 @@
+/*
+File-Name: cloudPage.css
+Description: Includes styling code related to cloud upload page. 
+*/
+
+#dvCloudContainer {
+	border: none;
+	Height: 606px;
+	Width: 241px;
+	background-color: #2266ff;
+}
+
+.cloudHeader {
+	height: 80px;
+	padding-left: 40px;
+	padding-top: 100px;
+}
+
+#cloudHeaderLabel {
+	color: #ffffff;
+	font-family: Arial;
+	font-size: 24px;
+}
+
+#attchToProjLabel {
+	color: #C9CBCC;
+	font-family: Arial;
+	font-size: 14px;
+}
+
+#cloudText {
+	height: 25px;
+	width: 210px;
+	font-size: 18px;
+	font-family: Arial;
+}
+
+#uploadButton {
+	width: 210px;
+	border: 1px solid #ffffff;
+	height: 25px;
+	padding-top: 3px;
+	text-align: center;
+	cursor: pointer;
+	color: #ffffff;
+	font-family: Arial;
+}
+
+#projectTable {
+	margin-left: 12px; 
+	width: 216px; 
+	padding: 0px; 
+	margin-top: 2px; 
+	background-color: white; 
+	color: #C9CBCC; 
+	font-family: Arial; 
+	font-size: 16px;
+	cursor: pointer;
+}
+
+#projectTable tr {
+    background-color: white;
+    color: #6d6d6d;
+    height: 25px;
+    vertical-align: middle;
+}
+
+#projectTable tr:HOVER {
+    background-color: #6d6d6d;
+    color: white;
+    height: 25px;
+    vertical-align: middle;
+}
+
+.highlight {
+	background-color: "#6d6d6d";
+	color: "#ffffff";
+}
+
+.marginLeft12 {
+	margin-left: 12px;
+}

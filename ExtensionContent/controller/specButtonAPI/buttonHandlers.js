@@ -33,6 +33,52 @@ Specctr.buttonHandlers = {
 		evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs('" + note + "')");
 	}),
 	
+	cloudButtonHandler: Specctr.Utility.tryCatchLog(function() {
+	
+		var data = {
+				api_key: api_key,
+				machine_id: machine_id,
+			};
+			
+			$.ajax({
+				url: SPECCTR_API + "/projects/list",
+				type: "GET",
+				contentType: "application/json;charset=utf-8",
+				data:data,
+				dataType: "json",
+				success: function(response, xhr) {
+					pref.log(JSON.stringify(response));
+					$("#tabContainer").hide();
+					$("#dvCloudContainer").show();
+					
+					//Add data to table.
+					var table = document.getElementById("projectTable");
+					for(var i = 0; i < response.projects.length; i++) {
+						try{
+						var row = table.insertRow(-1);
+						var name = row.insertCell(0);
+						name.innerHTML = response.projects[i].name;
+						}catch(e){alert(e);}
+					}
+					
+					$("#projectTable tr").on("click",function() {
+						try{
+					    $("#projectTable tr").removeClass("highlight");
+					    $(this).addClass("highlight");
+						}catch(e){
+							alert(e);
+						}
+					});
+					
+				},
+				error: function(xhr) {
+					specctrDialog.showAlert('error');
+					pref.logResError(xhr);
+				}
+			});
+			
+	}),
+	
 	/**
 	 * Call the 'exportCss' method from .jsx based on host application.
 	 */

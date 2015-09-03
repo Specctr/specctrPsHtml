@@ -35,6 +35,7 @@
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/loadFonts.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/loginStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/cloudTab.css">
+<link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/cloudPage.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/propertiesButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/dimensionButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/spacingButtonStyle.css">
@@ -276,7 +277,7 @@
 						</li>
 						
 						<!-- Cloud Upload button. -->
-						<li id="liCloudUpload" onclick="Specctr.buttonHandlers.exportCss()">
+						<li id="liCloudUpload" onclick="Specctr.buttonHandlers.cloudButtonHandler()">
 							<div class="button border " id="btnCloupUpload">
 								<img id="imgExportCss" alt="Cloud Upload"/>
 								<label>Cloud Upload</label>
@@ -733,13 +734,38 @@
 			 	<label id="footerLabel"	class="floatRight">Settings</label>
 		 	</div>
 		 </div>
+
 	</div>
 
+	<div class="hideBlock" id="dvCloudContainer">
+		<div style="float: right">
+			<img src="../assets/images/closeIcon.png" onclick="Specctr.UI.closeCloudPage(this)"/>
+		</div>
+		<div class="cloudHeader">
+			<label id="cloudHeaderLabel"> &nbsp&nbsp Upload To <br>Specctr Cloud </label>
+		</div>
+		<div class="marginLeft12">
+			<label id="attchToProjLabel"> ATTACH TO PROJECT: </label>
+		</div>
+		
+		<div class="marginLeft12 marginTop15px">
+				<input type="text" id="cloudText" placeholder="Create Project +"
+				onkeydown="Specctr.UI.cloudTextHandler(event)"/>
+		</div>
+		
+		<div class="margintLeft12" style="height: 200px; overflow-y: auto; overflow-x: hidden;">
+	    	<table id="projectTable"></table>
+		</div>
+		
+		<div class="marginLeft12 marginTop15px" id="uploadButton">
+			<label id="uploadBtnLabel">UPLOAD</label>
+		</div>
+
+	</div>
+		
 	<!-- Modal dialog. -->
 	<div id="dialog" title="Specctr"></div>
-	
-	<!-- Cloud upload dialog. -->
-	<div id="cloudUploadDialog" title="Specctr"></div>
+
 </body>
 
 </html>
