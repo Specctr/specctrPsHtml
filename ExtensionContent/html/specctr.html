@@ -747,18 +747,18 @@
 		<div class="marginLeft12">
 			<label id="attchToProjLabel"> ATTACH TO PROJECT: </label>
 		</div>
-		
+
 		<div class="marginLeft12 marginTop15px">
 				<input type="text" id="cloudText" placeholder="Create Project +"
 				onkeydown="Specctr.UI.cloudTextHandler(event)"/>
 		</div>
 		
-		<div class="margintLeft12" style="height: 200px; overflow-y: auto; overflow-x: hidden;">
-	    	<table id="projectTable"></table>
+		<div style="overflow-x:hidden; max-height: 225px;">
+			<table id="projectTable"></table>
 		</div>
 		
 		<div class="marginLeft12 marginTop15px" id="uploadButton">
-			<label id="uploadBtnLabel">UPLOAD</label>
+			<label id="uploadBtnLabel" onclick="Specctr.buttonHandlers.exportCss()">UPLOAD</label>
 		</div>
 
 	</div>

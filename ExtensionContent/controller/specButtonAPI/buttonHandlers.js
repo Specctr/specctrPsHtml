@@ -54,18 +54,20 @@ Specctr.buttonHandlers = {
 					//Add data to table.
 					var table = document.getElementById("projectTable");
 					for(var i = 0; i < response.projects.length; i++) {
-						try{
-						var row = table.insertRow(-1);
-						var name = row.insertCell(0);
-						name.innerHTML = response.projects[i].name;
-						}catch(e){alert(e);}
+						try {
+							var row = table.insertRow(-1);
+							var name = row.insertCell(0);
+							name.innerHTML = response.projects[i].name;
+							name.setAttribute('value', response.projects[i].id);
+						} catch(e) {
+							alert(e);
+						}
 					}
 					
 					$("#projectTable tr").on("click",function() {
-						try{
-					    $("#projectTable tr").removeClass("highlight");
-					    $(this).addClass("highlight");
-						}catch(e){
+						try {
+							$(this).addClass('highlight').siblings().removeClass('highlight');
+						} catch(e) {
 							alert(e);
 						}
 					});
@@ -84,8 +86,15 @@ Specctr.buttonHandlers = {
 	 */
 	exportCss : Specctr.Utility.tryCatchLog(function(){
 		analytics.trackFeature('export_css');
+		var selectedProjRef = $("#projectTable").find('.highlight').find('td:first'); 
+		var projectName = selectedProjRef.html();
+		var projectId = selectedProjRef.attr('value');
+		if(!projectName) {
+			specctrDialog.showAlert("Please select a project");
+			return;
+		}
+		
 		setModel();
-
 		// Upload specs to Specctr.
 		evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo){
 			var css = JSON.parse(cssInfo);
@@ -94,9 +103,10 @@ Specctr.buttonHandlers = {
 				api_key: api_key,
 				machine_id: machine_id,
 				document_name: css.document_name,
-				css_items: cssJson.children
+				css_items: cssJson.children,
+				project_id: projectId,
 			});
-
+			pref.log(data);
 			$.ajax({
 				url: SPECCTR_API + "/css_items",
 				type: "POST",

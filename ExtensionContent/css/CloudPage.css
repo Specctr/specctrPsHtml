@@ -46,6 +46,11 @@ Description: Includes styling code related to cloud upload page.
 	font-family: Arial;
 }
 
+#uploadButton:HOVER {
+	border: 2px solid #ffffff;
+	font-weight: b
+}
+
 #projectTable {
 	margin-left: 12px; 
 	width: 216px; 
@@ -56,6 +61,7 @@ Description: Includes styling code related to cloud upload page.
 	font-family: Arial; 
 	font-size: 16px;
 	cursor: pointer;
+	border: none;
 }
 
 #projectTable tr {
@@ -63,18 +69,27 @@ Description: Includes styling code related to cloud upload page.
     color: #6d6d6d;
     height: 25px;
     vertical-align: middle;
+    padding: 0px;
+    border: none;
+}
+
+#projectTable tr td {
+ 	vertical-align: middle;
+ 	padding-left: 3px;
+ 	padding-top: 3px;
+ 	margin: 0px;
 }
 
 #projectTable tr:HOVER {
-    background-color: #6d6d6d;
+    background-color: #C9CBCC;
     color: white;
     height: 25px;
     vertical-align: middle;
 }
 
 .highlight {
-	background-color: "#6d6d6d";
-	color: "#ffffff";
+	background-color: #6d6d6d !important;
+	color: #ffffff !important;
 }
 
 .marginLeft12 {

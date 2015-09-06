@@ -399,6 +399,14 @@ Specctr.UI = {
 			var name = row.insertCell(0);
 			name.innerHTML = text;
 			$("#cloudText").val("");
+			
+			$("#projectTable tr").on("click",function() {
+				try {
+					$(this).addClass('highlight').siblings().removeClass('highlight');
+				} catch(e) {
+					alert(e);
+				}
+			});
 		}
 	}),
 
