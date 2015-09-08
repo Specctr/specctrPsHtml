@@ -88,7 +88,6 @@ Specctr.buttonHandlers = {
 		analytics.trackFeature('export_css');
 		var selectedProjRef = $("#projectTable").find('.highlight').find('td:first'); 
 		var projectName = selectedProjRef.html();
-		var projectId = selectedProjRef.attr('value');
 		if(!projectName) {
 			specctrDialog.showAlert("Please select a project");
 			return;
@@ -104,7 +103,7 @@ Specctr.buttonHandlers = {
 				machine_id: machine_id,
 				document_name: css.document_name,
 				css_items: cssJson.children,
-				project_id: projectId,
+				project_name: projectName,
 			});
 			pref.log(data);
 			$.ajax({

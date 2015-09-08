@@ -393,6 +393,12 @@ Specctr.UI = {
 			if(text == "")
 				return;
 			
+			//Check if it already exist or not..
+			if($("#projectTable tr:contains('"+text+"')").length > 0) {
+				$("#projectTable tr:contains('"+text+"')").addClass('highlight').siblings().removeClass('highlight');
+				return;
+			}
+			
 			//Add data to table.
 			var table = document.getElementById("projectTable");
 			var row = table.insertRow(-1);
