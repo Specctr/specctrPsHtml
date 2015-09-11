@@ -17,7 +17,7 @@ $.specctrPsExpandCanvas = {
             
             var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
             if(isArtBoardPresent) {
-               alert("Property not applicable for this document.")
+               alert("This feature doesn't work with Artboards");
                return;
             }
 
