@@ -209,6 +209,14 @@ function init() {
 	} catch (e) {
 		console.log(e);
 	}
+	
+	try{
+		var csInterface = new CSInterface();
+		csInterface.addEventListener("artselectionchanged", function(event) {
+			var extScript = "ext_ILST_updateConnection(false);";
+			evalScript(extScript);
+		});
+	}catch(e){}
 }
 
 /**

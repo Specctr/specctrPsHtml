@@ -25,6 +25,7 @@ ext_ILST_createCoordinateSpecs = createCoordinateSpecs;
 ext_ILST_createPropertySpecs = createPropertySpecs;
 ext_ILST_exportCss = exportCss;
 ext_ILST_getFonts = getFontList;
+ext_ILST_updateConnection = updateConnection;
 
 //Get the application font's name and font's family.
 function getFontList()
