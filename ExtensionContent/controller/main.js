@@ -159,6 +159,9 @@ function onLoaded() {
 	        window.location.reload();
 		}
 		
+		//Add event listener of AI art changed.
+		addApplicationEventListener();
+		
 		//Check if Specctr is licensed, if not, show registration screen.
 		model.isLicensed = appPrefs.isLicensed;
 
@@ -209,14 +212,6 @@ function init() {
 	} catch (e) {
 		console.log(e);
 	}
-	
-	try{
-		var csInterface = new CSInterface();
-		csInterface.addEventListener("artselectionchanged", function(event) {
-			var extScript = "ext_ILST_updateConnection(false);";
-			evalScript(extScript);
-		});
-	}catch(e){}
 }
 
 /**
@@ -433,4 +428,31 @@ function applyFontToList() {
 			break;
 		}
 	}
+}
+
+/**
+ * Add Ai event listener for art selection change.
+ */
+function addApplicationEventListener(response) { 
+	try {
+		AIEventAdapter.getInstance().addEventListener(AIEvent.ART_SELECTION_CHANGED, 
+				selectionChangeListener);
+	} catch(e) {
+		alert(e);
+	}
+}
+
+/**
+ * Calling updateConnection method on art selection change notifier for Ai.
+ */
+function selectionChangeListener(event) {
+	try {
+		//Remove eventListener.
+		AIEventAdapter.getInstance().removeEventListener(AIEvent.ART_SELECTION_CHANGED, 
+				selectionChangeListener);
+
+		setModel();
+		evalScript("ext_ILST_updateConnection(false);", addApplicationEventListener);
+	} catch (e) {}
+
 }
