@@ -55,6 +55,11 @@ Specctr.buttonHandlers = {
 					var table = document.getElementById("projectTable");
 					for(var i = 0; i < response.projects.length; i++) {
 						try {
+							
+							//Check if project name already exist in table.
+							if($("#projectTable tr:contains('"+response.projects[i].name+"')").length > 0)
+								continue;
+							
 							var row = table.insertRow(-1);
 							var name = row.insertCell(0);
 							name.innerHTML = response.projects[i].name;

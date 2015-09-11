@@ -59,7 +59,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	var activationPrefs = pref.readFile(licenseFilePath);	//Read the licensed file.
 
 	if (activationPrefs === "") {
-		if(hostApplication === illustrator && !window.location.hash) {
+		if(!window.location.hash) {		//reload the panel page for Ai, Ps and Id.
 	        window.location = window.location + '#loaded';
 	        window.location.reload();
 	    }
