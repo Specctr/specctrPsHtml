@@ -41,7 +41,7 @@ Description: Includes styling code related to cloudUpload button.
     }
     
     #imgCloudUploadImportCSS {
-    	background-image: url('../assets/images/CloudUploadDropDownIcons/importCSS_x2.png');
+    	background-image: url('../assets/images/CloudUploadDropDownIcons/importCSS.png');
     	background-size: 49px 49px;
 	}
     .importCssSelected {

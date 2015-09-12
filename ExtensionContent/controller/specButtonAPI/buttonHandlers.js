@@ -156,7 +156,13 @@ Specctr.buttonHandlers = {
 				buttonController.createSpacingSpecs();
 
 		} else if (specButton.id == "btnCoordinate") {
+			
 			buttonController.createCoordinateSpecs();
+			
+		} else if (specButton.id == "btnCloupUpload") {
+			
+			this.cloudButtonHandler();
+			
 		}
 	}),
 
@@ -228,11 +234,11 @@ Specctr.buttonHandlers = {
 
 		} else if(cellHandler.parent().attr("id") == "cloudUploadDropDown") {
 			
-			classForSelection = ["exportCssSelected", "importCssSelected"];
+			classForSelection = ["importCssSelected", "exportCssSelected"];
 			buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
-			model.specOption = modelValue;
+			model.cloudOption = modelValue;
 			cellHandler.addClass(selectionClass);
-			//buttonController.changeCloudButtonIcon();
+			buttonController.changeCloudButtonIcon();
 		} else {
 
 			classForSelection = ["specBulletSelected", "specLineSelected"];

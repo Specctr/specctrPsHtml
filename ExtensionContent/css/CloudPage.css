@@ -16,6 +16,10 @@ Description: Includes styling code related to cloud upload page.
 	padding-top: 100px;
 }
 
+.handCursor {
+	cursor: pointer;
+}
+
 #cloudHeaderLabel {
 	color: #ffffff;
 	font-family: Arial;

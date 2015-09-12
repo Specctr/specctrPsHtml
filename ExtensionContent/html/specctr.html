@@ -275,24 +275,26 @@
 								</div>
 							</div>
 						</li>
-						
+
 						<!-- Cloud Upload button. -->
-						<li id="liCloudUpload" onclick="Specctr.buttonHandlers.cloudButtonHandler()">
-							<div class="button border " id="btnCloupUpload">
+						<li id="liCloudUpload">
+							<div class="button border " id="btnCloupUpload"
+							onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
 								<img id="imgExportCss" alt="Cloud Upload"/>
 								<label>Cloud Upload</label>
-								<div id="imgCloupUpload" class="dropdownArrow"
+								<div id="imgCloupUploadDdlArrow" class="dropdownArrow"
 										onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)"></div>
 							</div>
-							
+
 							<div class="options" id="cloudUploadDropDown">
-								<div class="option exportCssSelected" id="imgCloudUploadExportCSS"
-									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'exportCssSelected', 'Export')"></div>
-								<div class="option" id="imgCloudUploadImportCSS"
-									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'importCssSelected', 'Import')"></div>
+								<div class="option importCssSelected" id="imgCloudUploadImportCSS"
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'importCssSelected', 'import')"></div>
+								
+								<div class="option" id="imgCloudUploadExportCSS"
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'exportCssSelected', 'export')"></div>
 							</div>
 						</li>
-						
+
 					</ul>
 				</div>
 				<!-- Ending of main tab. -->
@@ -739,10 +741,11 @@
 
 	<div class="hideBlock" id="dvCloudContainer">
 		<div style="float: right">
-			<img src="../assets/images/closeIcon.png" onclick="Specctr.UI.closeCloudPage(this)"/>
+			<img class="handCursor" src="../assets/images/closeIcon_white.png" 
+			onclick="Specctr.UI.closeCloudPage(this)"/>
 		</div>
 		<div class="cloudHeader">
-			<label id="cloudHeaderLabel"> &nbsp&nbsp Upload To <br>Specctr Cloud </label>
+			<label id="cloudHeaderLabel"> &nbsp&nbsp Upload to <br>Specctr Cloud </label>
 		</div>
 		<div class="marginLeft12">
 			<label id="attchToProjLabel"> ATTACH TO PROJECT: </label>

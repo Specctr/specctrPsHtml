@@ -82,7 +82,7 @@ var model = {
 
 	decimalFractionValue: 'decimal',
 	specOption: 'Bullet',
-	cloudOption: 'Export',
+	cloudOption: 'export',
 };
 
 var filePermission = {

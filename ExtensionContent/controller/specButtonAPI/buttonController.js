@@ -64,7 +64,8 @@ buttonController.closeDropDown = function(id, button, dropDownId) {
  * */
 buttonController.closeAllDropDown = function(parentId) {
 	var dropDownIds = ["#spacingDropDown", "#coordinateDropDown", "#noteDropDown",
-	                   "#dimensionDropDown", "#propertiesDropDown", "#expandDropDown"];
+	                   "#dimensionDropDown", "#propertiesDropDown", "#expandDropDown",
+	                   "#cloudUploadDropDown"];
 	var arrayLength = dropDownIds.length;
 	
 	for (var i = 0; i < arrayLength; i++) {
@@ -193,4 +194,16 @@ buttonController.changePropertyButtonIcon = function (){
 
 	iconPath = iconPath + model.specOption + "_selected" + imageExtension;
 	$("#imgProperty").attr("src", iconPath);
+};
+
+buttonController.changeCloudButtonIcon = function(){
+	var iconPath = imagePath + "CloudUploadDropDownIcons/";
+	var imageExtension = ".png";
+
+	//For retina display: 2 pixel ratio; 
+	if(window.devicePixelRatio > 1)
+		imageExtension = "_x2.png";
+
+	iconPath = iconPath + model.cloudOption + "CSS_selected" + imageExtension;
+	$("#imgExportCss").attr("src", iconPath);
 };

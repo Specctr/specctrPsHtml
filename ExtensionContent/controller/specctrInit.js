@@ -127,7 +127,7 @@ Specctr.Init.setModelToUIComponents = function() {
 	                       "SpacingButtonIcons/Spacing_TL", 
 	                       "NoteButtonIcons/Icon_note", 
 	                       "ExpandButtonIcons/Icon_expand",
-	                       "ExportCssButtonIcons/Icon_exportCSS"];
+	                       "CloudUploadDropDownIcons/importCSS_selected"];
 
 	var buttonIds = ["#imgProperty", "#imgCoordinate", "#dimensionIcon", "#spacingIcon", 
 	                 "#imgNote", "#imgExpand", "#imgExportCss"];
