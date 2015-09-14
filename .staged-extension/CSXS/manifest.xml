@@ -150,7 +150,7 @@ each party and (ii) in a written contract signed by both parties.]]>
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
-			<Host Name="ILST" Version="[17.0,18.9]" />
+			<Host Name="ILST" Version="[17.0,19.9]" />
 		</HostList>
 		<LocaleList>
 			<Locale Code="All" />
