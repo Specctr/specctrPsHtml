@@ -280,7 +280,45 @@ $.specctrAi = {
 	    	text: styleText
             };
 
-            return JSON.stringify(cssInfo);
+            if(model.cloudOption == "export") {
+                return JSON.stringify(cssInfo);
+            } else {
+                //Create the file and export it.
+                var cssFile = "";
+                var cssFilePath = "";
+                var doc = app.activeDocument;
+                var documentPath = doc.path;        //Get the path of the current ai file.
+                cssFilePath = "~/desktop/Styles.css";
+            
+                if(documentPath != "")                          //If source file's path exist then change the path of css file to the location of that file.
+                    cssFilePath = documentPath + "/Styles.css";
+            
+                cssFile = File(cssFilePath);
+            
+                if(cssFile.exists)
+                {
+                    var replaceFileFlag = confirm("Styles.css already exists in this location.\rDo you want to replace it?", true, "Specctr");
+                    if(!replaceFileFlag)
+                        return TRUE;
+                }
+            
+                //Create and write the css file.
+                if(cssFile) {
+                    cssFile.open("w");
+                    cssFile.write(cssInfo.text);
+                    cssFile.close;
+                
+                    if(replaceFileFlag)
+                        alert("Styles.css is exported.");
+                    else 
+                        alert("Styles.css is exported to " + cssFilePath);
+                        
+                } else {
+                    alert("Unable to export the specs!");
+                    return isExportedSuccessfully;
+                }
+    
+            }
         
         } catch(e) {
             alert(e);

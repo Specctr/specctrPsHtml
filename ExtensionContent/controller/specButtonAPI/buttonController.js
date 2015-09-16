@@ -42,6 +42,66 @@ buttonController.createPropertySpecs = function() {
 	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()");
 };
 
+buttonController.cloudButtonHandler = function() {
+	
+	if(model.cloudOption == "import") {		//Download
+		analytics.trackFeature('export_css');
+		setModel();
+		evalScript("$.specctr" + hostApplication + "." + "exportCss()");
+		return;
+	}
+	
+	var data = {
+		api_key: api_key,
+		machine_id: machine_id,
+	};
+		
+	$.ajax({
+		url: SPECCTR_API + "/projects/list",
+		type: "GET",
+		contentType: "application/json;charset=utf-8",
+		data:data,
+		dataType: "json",
+		success: function(response, xhr) {
+			pref.log(JSON.stringify(response));
+			$("#tabContainer").hide();
+			$("#dvCloudContainer").show();
+			
+			//Add data to table.
+			var table = document.getElementById("projectTable");
+			for(var i = 0; i < response.projects.length; i++) {
+				try {
+					
+					//Check if project name already exist in table.
+					if($("#projectTable tr:contains('"+response.projects[i].name+"')").length > 0)
+						continue;
+					
+					var row = table.insertRow(-1);
+					var name = row.insertCell(0);
+					name.innerHTML = response.projects[i].name;
+					name.setAttribute('value', response.projects[i].id);
+				} catch(e) {
+					alert(e);
+				}
+			}
+			
+			$("#projectTable tr").on("click",function() {
+				try {
+					$(this).addClass('highlight').siblings().removeClass('highlight');
+				} catch(e) {
+					alert(e);
+				}
+			});
+			
+		},
+		error: function(xhr) {
+			specctrDialog.showAlert('error');
+			pref.logResError(xhr);
+		}
+	});
+		
+};
+
 /**
  * Open the dialog with the passed message.
  * @param id {string} li tag id of button.
