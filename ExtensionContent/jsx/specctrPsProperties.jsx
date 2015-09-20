@@ -34,7 +34,6 @@ $.specctrPsProperties = {
             pref.rulerUnits = startRulerUnits;
             
             //Check artboard is present or not and make changes in bounds accordingly.
-            var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
             app.activeDocument.suspendHistory('Property Specs', 'this.createPropertySpecs(sourceItem, bounds)');
         } catch(e) {}
     },
@@ -84,8 +83,11 @@ $.specctrPsProperties = {
 
         //Check artboard is present or not and make changes in bounds accordingly.
         var parent = doc;
-        var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
-        if(isArtBoardPresent) {
+
+        var cnvsRect = $.specctrPsCommon.getArtBoardBounds(artLayer);
+        if(cnvsRect == null) {
+            cnvsRect = [0, 0, doc.width, doc.height];
+        } else {
             parent = $.specctrPsCommon.getArtBoard(artLayer);
         }
     
@@ -184,21 +186,20 @@ $.specctrPsProperties = {
                 dupBullet.move(legendLayer, ElementPlacement.INSIDE);
                 
                 //Adjust position of spec items.
-               $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, noteSpecBottom, spacing, 
-                                                                  doc.width/2.0, centerX, dia, true);
-                                                                  
+               $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, noteSpecBottom, cnvsRect[0] + spacing, 
+                                                                  (cnvsRect[0] + cnvsRect[2])/2.0, centerX, dia, true, cnvsRect);
                 dupBullet.name = "__sSecondBullet";
                 spec.link(dupBullet);
                 legendLayer.visible = true;
                 bullet.visible = true;
             } else {
                 //Calcutate the position of spec text item.
-                if(centerX <=  doc.width/2.0) {
+                if(centerX <=  (cnvsRect[0] + cnvsRect[2])/2.0) {
                     specText.justification = Justification.LEFT;
-                    spec.translate(-(spec.bounds[0]-spacing), noteSpecBottom-spec.bounds[1]);
+                    spec.translate(-(spec.bounds[0]-spacing-cnvsRect[0]), noteSpecBottom-spec.bounds[1]);
                 } else {
                     specText.justification = Justification.RIGHT;
-                    spec.translate(doc.width-spacing-spec.bounds[2], noteSpecBottom-spec.bounds[1]);
+                    spec.translate(cnvsRect[2]-spacing-spec.bounds[2], noteSpecBottom-spec.bounds[1]);
                 }
 
                 //Get the end points for arm.

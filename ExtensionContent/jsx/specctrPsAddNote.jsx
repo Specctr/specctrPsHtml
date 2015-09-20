@@ -88,8 +88,10 @@ $.specctrPsAddNote = {
          }
         //Check artboard is present or not and make changes in bounds accordingly.
         var parent = doc;
-        var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
-        if(isArtBoardPresent) {
+        var cnvsRect = $.specctrPsCommon.getArtBoardBounds(artLayer);
+        if(cnvsRect == null) {
+            cnvsRect = [0, 0, doc.width, doc.height];
+        } else {
             parent = $.specctrPsCommon.getArtBoard(artLayer);
         }
     
@@ -127,19 +129,19 @@ $.specctrPsAddNote = {
             dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
             dupBullet.move(legendLayer, ElementPlacement.INSIDE);
 
-           $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, propertySpecBottom, spacing,
-                                                              doc.width/2.0, centerX, dia, true);
+           $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, propertySpecBottom, cnvsRect[0] + spacing,
+                                                              (cnvsRect[0] + cnvsRect[2])/2.0, centerX, dia, true, cnvsRect);
 
             dupBullet.name = "__sSecondBullet";
             spec.link(dupBullet);
         } else {
             //Calcutate the position of spec text item.
-            if(centerX <=  doc.width/2.0) {
+            if(centerX <=  (cnvsRect[0] + cnvsRect[2])/2.0) {
                 specText.justification = Justification.LEFT;
-                spec.translate(-(spec.bounds[0]-spacing), propertySpecBottom-spec.bounds[1]);
+                spec.translate(-(spec.bounds[0]-spacing - cnvsRect[0]), propertySpecBottom-spec.bounds[1]);
             } else {
                 specText.justification = Justification.RIGHT;
-                spec.translate(doc.width-spacing-spec.bounds[2], propertySpecBottom-spec.bounds[1]);
+                spec.translate(cnvsRect[2]-spacing-spec.bounds[2], propertySpecBottom-spec.bounds[1]);
             }
 
             //Get the end points for arm.

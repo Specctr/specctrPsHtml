@@ -713,9 +713,9 @@ $.specctrPsCommon = {
 
     //Adjust the positions of property specs item on the active document.
     adjustPositionOfSpecItems : function (spec, specText, dupBullet, specYPos, 
-            spacing, condition1, condition2, dia, isNewSpecCreated) {
-        var doc = app.activeDocument;
-         if(condition1 >= condition2) {
+            spacing, condition1, condition2, dia, isNewSpecCreated, canvasBounds) {
+                
+        if(condition1 >= condition2) {
             if(isNewSpecCreated) {
                 specText.justification = Justification.LEFT;
                 spec.translate(-(spec.bounds[0]-spacing-dia), specYPos-spec.bounds[1]);
@@ -724,10 +724,11 @@ $.specctrPsCommon = {
         } else {
             if(isNewSpecCreated) {
                 specText.justification = Justification.RIGHT;
-                spec.translate(doc.width-spacing-spec.bounds[2]-dia, specYPos-spec.bounds[1]);
+                spec.translate(canvasBounds[2]-spacing-spec.bounds[2]-dia+canvasBounds[0], specYPos-spec.bounds[1]);
             }
             dupBullet.translate(spec.bounds[2]-dupBullet.bounds[0]+1, spec.bounds[1]-dupBullet.bounds[1]-1);
         }
+    
     },
 
     //Delete layer using its name .
