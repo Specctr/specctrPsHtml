@@ -729,11 +729,13 @@
 				</div>
 			</div>
 		
-		<div id="settingBlock" onclick="Specctr.UI.toggleSettingPage(this)"> 
+		<div id="settingBlock"> 
 			<div id="settingBlokChildDiv">
 				<img id="settingIcon" class="floatRight"
-				 src="../assets/images/Icon_prefs.png" width="32" height="24"/>
-			 	<label id="footerLabel"	class="floatRight">Settings</label>
+				 src="../assets/images/Icon_prefs.png" width="32" height="24"
+				 onclick="Specctr.UI.toggleSettingPage()"/>
+			 	<label id="footerLabel"	class="floatRight" 
+			 	onclick="Specctr.UI.toggleSettingPage()">Settings</label>
 		 	</div>
 		 </div>
 
