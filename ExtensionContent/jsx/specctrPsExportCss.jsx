@@ -11,7 +11,7 @@ $.specctrPsExportCss = {
 	//Generate css string for specs.
 	getCss : function() {
         if(!app.documents.length)           //Checking document is open or not.
-	        return;
+	        return "";
 	    
          try {
             var doc = app.activeDocument;
@@ -30,7 +30,7 @@ $.specctrPsExportCss = {
                     try {
                         propertySpecLayerGroup = parent.layerSets.getByName("Specctr").layerSets.getByName("Properties");
                     } catch(e) {
-                         return;
+                         return "";
                     }
                     
                     if(ExternalObject.AdobeXMPScript == null)
@@ -50,7 +50,7 @@ $.specctrPsExportCss = {
                 propertySpecLayerGroup = doc.layerSets.getByName("Specctr").layerSets.getByName("Properties");
             } catch(e) {
                  alert("No spec present to export.");
-                 return;
+                 return "";
             }
             
             if(ExternalObject.AdobeXMPScript == null)
@@ -70,10 +70,16 @@ $.specctrPsExportCss = {
 
     //Export the spec layer's css to specctr server.
     exportCss : function() {
+        
+        //Add document_id in the request.
        var cssInfo = {
 	    	document_name: app.activeDocument.name,
+             document_id:  $.specctrPsCommon.getXMPData(app.activeDocument, "document_id") ,
 	    	text: this.getCss()
 	    };
+        
+        if(cssInfo.text == "")
+            return;
         
         //Get model value.
         var model = $.specctrPsCommon.getModel();

@@ -180,17 +180,6 @@ $.specctrPsCommon = {
         }
     },
 
-    //Check that layer has XMPMetadata or not, if yes return the data.
-    getXMPData : function(activeLayer, idStr) {
-        try {
-            var layerXMP = new XMPMeta(activeLayer.xmpMetadata.rawData);
-            var idLayer = layerXMP.getArrayItem(XMPConst.NS_PHOTOSHOP, idStr, 1).toString();
-            if(idLayer != "")
-                return idLayer;
-        } catch(e) {}
-        return null;
-    },
-
     //Make layer active by using ID.
     getLayerByID : function(id) {
         try {
@@ -356,7 +345,7 @@ $.specctrPsCommon = {
             }
 
             for (var k = 0; k < noOfProperties; k++) {
-                try {
+                try { alert(data);
                     propertyName = data[i].properties[k].name;
                     value = data[i].properties[k].value;
                     layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, propertyName, null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);

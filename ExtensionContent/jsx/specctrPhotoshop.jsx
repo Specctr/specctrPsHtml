@@ -38,6 +38,15 @@ $.specctrPs = {
         $.specctrPsCommon.setModel(currModel);
     },
 
+    //Set the document Id in the xmp metadata of document.
+    setDocId : function(docId) {
+        alert(docId);
+        var xmpData = [{layerHandler : app.activeDocument,
+                                        properties : [{name : "document_id", value : docId}]
+                                    }];
+        $.specctrPsCommon.setXmpDataOfLayer(xmpData);
+    },
+
     //Call create canvas border method from specctrPsExpandCanvas jsx file.
     createCanvasBorder : function() {
         $.specctrPsExpandCanvas.createCanvasBorder();

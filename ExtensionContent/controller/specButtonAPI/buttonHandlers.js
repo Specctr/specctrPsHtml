@@ -46,36 +46,32 @@ Specctr.buttonHandlers = {
 		}
 		
 		setModel();
+		
 		// Upload specs to Specctr.
-		evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo){
-			var css = JSON.parse(cssInfo);
-			var cssJson = CSSJSON.toJSON(css.text);
-			var data = JSON.stringify({
-				api_key: api_key,
-				machine_id: machine_id,
-				document_name: css.document_name,
-				css_items: cssJson.children,
-				project_name: projectName,
-			});
-			pref.log(data);
-			$.ajax({
-				url: SPECCTR_API + "/css_items",
-				type: "POST",
-				contentType: "application/json;charset=utf-8",
-				dataType: "json",
-				data: data,
-				success: function(response, xhr) {
-					specctrDialog.showAlert('success');
-					pref.log('Synced css for document: ' + css.document_name);
-				},
-				error: function(xhr) {
-					specctrDialog.showAlert('error');
-					pref.logResError(xhr);
+		evalScript("$.specctr" + hostApplication + "." + "exportCss()", 
+				function(cssInfo) {
+			
+			try {
+			
+				//check if id is present.
+				var IdObject = {
+					project_id: selectedProjRef.attr('value'),
+					document_id: cssInfo.document_Id,
+				};
+	alert(JSON.stringify(IdObject));
+				if(IdObject.project_id == undefined || IdObject.document_id == undefined) {
+					Specctr.cloudAPI.getDocId(cssInfo, selectedProjRef.html());
+				} else {
+					Specctr.cloudAPI.uploadCss(cssInfo, IdObject, false);
 				}
-			});
+				
+			}catch(e){
+				alert(e);
+			}
+			
 		});
 	}),
-	
+		
 	/**
 	 * Closing/Opening Spacing popup button according to dropdown cell selection and call
 	 * creating spec function accordingly.
