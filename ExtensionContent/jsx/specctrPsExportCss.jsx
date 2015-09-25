@@ -70,11 +70,13 @@ $.specctrPsExportCss = {
 
     //Export the spec layer's css to specctr server.
     exportCss : function() {
-        
-        //Add document_id in the request.
-       var cssInfo = {
+        if(ExternalObject.AdobeXMPScript == null)
+            ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
+            
+        var documentId = $.specctrPsCommon.getXMPData(app.activeDocument, "document_id");
+        var cssInfo = {
 	    	document_name: app.activeDocument.name,
-             document_id:  $.specctrPsCommon.getXMPData(app.activeDocument, "document_id") ,
+             document_id:  documentId,
 	    	text: this.getCss()
 	    };
         

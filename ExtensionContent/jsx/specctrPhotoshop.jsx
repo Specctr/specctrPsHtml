@@ -40,7 +40,10 @@ $.specctrPs = {
 
     //Set the document Id in the xmp metadata of document.
     setDocId : function(docId) {
-        alert(docId);
+        alert("setDocId Jsx"+docId);
+        if(ExternalObject.AdobeXMPScript == null)
+            ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
+            
         var xmpData = [{layerHandler : app.activeDocument,
                                         properties : [{name : "document_id", value : docId}]
                                     }];

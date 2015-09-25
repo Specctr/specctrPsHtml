@@ -343,14 +343,15 @@ $.specctrPsCommon = {
             } catch(e) {
                 layerXMP = new XMPMeta();	// layer did not have metadata so create new.
             }
-
+            
             for (var k = 0; k < noOfProperties; k++) {
-                try { alert(data);
+                try {
                     propertyName = data[i].properties[k].name;
                     value = data[i].properties[k].value;
                     layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, propertyName, null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
                     layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, propertyName, 1, value.toString());
-                } catch(e) {}
+                    alert(propertyName + " " + value);
+                } catch(e) {alert(e);}
             }
             layer.xmpMetadata.rawData = layerXMP.serialize();
         }
