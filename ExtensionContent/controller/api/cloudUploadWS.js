@@ -1,9 +1,14 @@
-/**
- * 
+/*
+File-Name: cloudUploadWS.js
+Description: Consist all the ajax call methods for uploading css to servers.
  */
 
 Specctr = Specctr || {};
 Specctr.cloudAPI = {
+	
+	/**
+	 * Get the project list from the server and populate it.
+	 */
 	getProjectList: Specctr.Utility.tryCatchLog(function(data) {
 		$.ajax({
 			url: SPECCTR_API + "/projects/list",
@@ -49,7 +54,10 @@ Specctr.cloudAPI = {
 			}
 		});
 	}),
-		
+	
+	/**
+	 * Get the document Id and project Id from the server.
+	 */
 	getDocId: function(cssInfo, projectName) {
 
 		var css = JSON.parse(cssInfo);
@@ -62,7 +70,7 @@ Specctr.cloudAPI = {
 			css_items: cssJson.children,
 			project_name: projectName,
 		});
-		alert("getDocId");
+
 		$.ajax({
 			url: SPECCTR_API + "/documents",
 			type: "POST",
@@ -70,7 +78,6 @@ Specctr.cloudAPI = {
 			dataType: "json",
 			data: data,
 			success: function(response, xhr) {
-				alert(JSON.stringify(response) + ":getDocId");
 				pref.log('Synced css for document: ' + JSON.stringify(response));
 				Specctr.cloudAPI.uploadCss(cssInfo, response, true);
 			},
@@ -82,11 +89,13 @@ Specctr.cloudAPI = {
 		
 	},
 	
+	/**
+	 * Upload the css to the server to specific document id and store the ids if not persisted.
+	 */
 	uploadCss: Specctr.Utility.tryCatchLog(function (cssInfo, response, bStoreIds) {
 		var css = JSON.parse(cssInfo);
 		var cssJson = CSSJSON.toJSON(css.text);
-		alert('uploadcss: ' + response.document_id);
-		
+
 		var data = JSON.stringify({
 			api_key: api_key,
 			machine_id: machine_id,
@@ -94,7 +103,7 @@ Specctr.cloudAPI = {
 			css_items: cssJson.children,
 			project_id: response.project_id,
 		});
-		
+
 		$.ajax({
 			url: SPECCTR_API + "/documents/" + response.document_id,
 			type: "PUT",
@@ -102,7 +111,6 @@ Specctr.cloudAPI = {
 			dataType: "json",
 			data: data,
 			success: function(response, xhr) {
-				alert("upload Css success " + bStoreIds);
 				specctrDialog.showAlert('success');
 				pref.log('Synced css for document: ' + JSON.stringify(response));
 				
@@ -113,7 +121,6 @@ Specctr.cloudAPI = {
 					selectedProjRef.attr('value', response.project_id);
 					evalScript("$.specctr" + hostApplication + "." + "setDocId('"+response.document_id+"')");
 				}
-				
 
 			},
 			error: function(xhr) {

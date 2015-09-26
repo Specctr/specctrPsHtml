@@ -350,8 +350,7 @@ $.specctrPsCommon = {
                     value = data[i].properties[k].value;
                     layerXMP.appendArrayItem(XMPConst.NS_PHOTOSHOP, propertyName, null, XMPConst.PROP_IS_ARRAY, XMPConst.ARRAY_IS_ORDERED);
                     layerXMP.insertArrayItem(XMPConst.NS_PHOTOSHOP, propertyName, 1, value.toString());
-                    alert(propertyName + " " + value);
-                } catch(e) {alert(e);}
+                } catch(e) {}
             }
             layer.xmpMetadata.rawData = layerXMP.serialize();
         }

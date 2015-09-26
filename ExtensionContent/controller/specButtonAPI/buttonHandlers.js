@@ -53,15 +53,12 @@ Specctr.buttonHandlers = {
 			
 			try {
 				var css = JSON.parse(cssInfo);
-				alert(css.document_id);
-			
+				
 				//check if id is present.
 				var IdObject = {
 					project_id: selectedProjRef.attr('value'),
 					document_id: css.document_id,
 				};
-				
-	alert( "After exportCss Jsx "+JSON.stringify(IdObject));
 				
 				if(IdObject.project_id == undefined || IdObject.document_id == undefined) {
 					Specctr.cloudAPI.getDocId(cssInfo, selectedProjRef.html());
