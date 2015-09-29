@@ -59,7 +59,6 @@ Specctr.cloudAPI = {
 	 * Get the document Id and project Id from the server.
 	 */
 	getDocId: function(cssInfo, projectName) {
-
 		var css = JSON.parse(cssInfo);
 		var cssJson = CSSJSON.toJSON(css.text);
 		

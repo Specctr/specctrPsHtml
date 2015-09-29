@@ -81,7 +81,7 @@ $.specctrPsExportCss = {
 	    };
         
         if(cssInfo.text == "")
-            return;
+            return "";
         
         //Get model value.
         var model = $.specctrPsCommon.getModel();

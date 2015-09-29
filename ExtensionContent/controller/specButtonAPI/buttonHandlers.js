@@ -52,6 +52,10 @@ Specctr.buttonHandlers = {
 				function(cssInfo) {
 			
 			try {
+
+				if(!cssInfo)
+					return;
+
 				var css = JSON.parse(cssInfo);
 				
 				//check if id is present.
@@ -59,11 +63,11 @@ Specctr.buttonHandlers = {
 					project_id: selectedProjRef.attr('value'),
 					document_id: css.document_id,
 				};
-				
-				if(IdObject.project_id == undefined || IdObject.document_id == undefined) {
-					Specctr.cloudAPI.getDocId(cssInfo, selectedProjRef.html());
-				} else {
+
+				if(IdObject.project_id && IdObject.document_id) {
 					Specctr.cloudAPI.uploadCss(cssInfo, IdObject, false);
+				} else {
+					Specctr.cloudAPI.getDocId(cssInfo, selectedProjRef.html());
 				}
 				
 			}catch(e){

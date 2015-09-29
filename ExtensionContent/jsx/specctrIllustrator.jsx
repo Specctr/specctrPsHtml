@@ -52,6 +52,48 @@ $.specctrAi = {
         model = JSON.parse(currModel);
     },
 
+    setDocId : function(docId) {
+         if(ExternalObject.AdobeXMPScript == null)
+            ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
+            
+        this.setXmpData("http://specctr.com", "S_AI_META", "DOC_ID", docId);
+    },
+    
+    setXmpData : function (nsUri, nsPrefix, propertyName, value) {
+        try {
+            
+            if(ExternalObject.AdobeXMPScript == null)
+                ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
+
+            var xmpFile = new XMPFile(app.activeDocument.fullName.fsName, XMPConst.UNKNOWN, XMPConst.OPEN_FOR_UPDATE);
+            var xmp = xmpFile.getXMP();
+            var mt = new XMPMeta(xmp.serialize());
+            XMPMeta.registerNamespace(nsUri, nsPrefix);
+            mt.setProperty(nsUri, propertyName, value);
+            
+            if (xmpFile.canPutXMP(xmp)) 
+                xmpFile.putXMP(mt);
+            
+            xmpFile.closeFile(XMPConst.CLOSE_UPDATE_SAFELY);
+        } catch (e) {}
+    },
+
+    getXmpData: function (nsUri, propertyName) {
+        try {
+            
+            if(ExternalObject.AdobeXMPScript == null)
+                ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
+                
+            var xmpFile = new XMPFile(app.activeDocument.fullName.fsName, XMPConst.UNKNOWN, XMPConst.OPEN_FOR_READ);
+            var xmpPackets = xmpFile.getXMP();
+            var xmp = new XMPMeta(xmpPackets.serialize());
+            return xmp.getProperty(nsUri, propertyName);
+        
+        } catch (e) {
+            return "";
+        }
+    },
+
     //Create the canvas border and expand the artboard.
     createCanvasBorder : function() {
         app.redraw();   //Creates an 'undo' point.
@@ -272,11 +314,13 @@ $.specctrAi = {
 
             if (styleText == "") {
                 alert("Unable to export the specs!");
-                return isExportedSuccessfully;
+                return "";
             }
 
+            var docId = this.getXmpData("http://specctr.com", "DOC_ID") + "";
             var cssInfo = {
 	    	document_name: app.activeDocument.name,
+             document_id:  docId,
 	    	text: styleText
             };
 
