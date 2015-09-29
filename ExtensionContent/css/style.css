@@ -393,10 +393,16 @@ label {
 	background-image: none;
 }
 
+.downArrowParentDiv {
+	float: right;
+	width: 23px;
+	height: 26px;
+	padding-top: 23px;
+	padding-right: 5px;
+}
+
 .dropdownArrow {
 	float: right;
-	margin-top: 22px;
-	margin-right: 5px;
 	background: url("../assets/images/navArrowGreyDown.png");
 	background-repeat: no-repeat;
 	width: 15px;
@@ -405,8 +411,6 @@ label {
 
 .dropdownArrowUp {
 	float: right;
-	margin-top: 20px;
-	margin-right: 5px;
 	background: url("../assets/images/navArrowGreyUp.png");
 	background-repeat: no-repeat;
 	width: 15px;

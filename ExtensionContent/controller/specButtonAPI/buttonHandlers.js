@@ -128,7 +128,7 @@ Specctr.buttonHandlers = {
 		buttonId = "#" + buttonId;
 		var liId = "#" + specButton.parentNode.parentNode.id;
 		var dropDownId = "#" + $(liId+" div:nth-child(2)").attr("id");
-		var imageDropDownArrowId = "#" + specButton.id;
+		var imageDropDownArrowId = "#" + specButton.getElementsByTagName('div')[0].id;
 
 		//Call the spec methods respective to the clicked button's Id.
 		buttonController.toggleDropDown(liId, buttonId, dropDownId, imageDropDownArrowId);

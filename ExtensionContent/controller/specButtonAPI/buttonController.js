@@ -88,7 +88,7 @@ buttonController.closeAllDropDown = function(parentId) {
 	for (var i = 0; i < arrayLength; i++) {
 		var liId = "#" + $(dropDownIds[i]).parent().attr("id");
 		var buttonId = $(liId + " div:nth-child(1)").attr("id");
-		var imageDropDownId = "#" + $("#" + buttonId + " div:nth-child(3)").attr("id");
+		var imageDropDownId = "#" + $("#" + buttonId + " div:nth-child(3)").children(":first").attr("id");
 		if($(dropDownIds[i]).is(":visible") && parentId != buttonId)
 			this.closeDropDown(liId, "#" + buttonId, imageDropDownId);
 	}
