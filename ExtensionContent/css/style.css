@@ -395,10 +395,10 @@ label {
 
 .downArrowParentDiv {
 	float: right;
-	width: 23px;
+	width: 22px;
 	height: 26px;
 	padding-top: 23px;
-	padding-right: 5px;
+	padding-right: 3px;
 }
 
 .dropdownArrow {

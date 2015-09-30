@@ -187,6 +187,11 @@ Specctr.buttonHandlers = {
 			model.cloudOption = modelValue;
 			cellHandler.addClass(selectionClass);
 			buttonController.changeCloudButtonIcon();
+			if(selectionClass == classForSelection[0]) {
+				$('#CloudBtnLbl').text("Cloud Download");
+			} else {
+				$('#CloudBtnLbl').text("Cloud Upload");
+			}
 		} else {
 
 			classForSelection = ["specBulletSelected", "specLineSelected"];
