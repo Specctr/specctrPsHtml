@@ -63,14 +63,14 @@ ul#loginBlock, ul#activateBlock {
 	height: 30px !important;
 	padding-top: 3px;
 	text-align: center;
-	cursor: pointer;
+	cursor: default;
 }
 
 .loginPageButton label {
 	color: #ffffff;
 	font-family: Arial;
 	font-size: 20px; 
-	cursor: pointer;
+	cursor: default;
 }
 
 #loginFooter {
@@ -83,5 +83,5 @@ ul#loginBlock, ul#activateBlock {
 	color: #ffffff;
 	font-family: Arial;
 	font-size: 14px;
-	cursor: pointer;
+	cursor: default;
 }

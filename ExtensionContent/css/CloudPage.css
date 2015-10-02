@@ -17,7 +17,7 @@ Description: Includes styling code related to cloud upload page.
 }
 
 .handCursor {
-	cursor: pointer;
+	cursor: default;
 }
 
 #cloudHeaderLabel {
@@ -45,7 +45,7 @@ Description: Includes styling code related to cloud upload page.
 	height: 25px;
 	padding-top: 3px;
 	text-align: center;
-	cursor: pointer;
+	cursor: default;
 	color: #ffffff;
 	font-family: Arial;
 }
@@ -64,7 +64,7 @@ Description: Includes styling code related to cloud upload page.
 	color: #C9CBCC; 
 	font-family: Arial; 
 	font-size: 16px;
-	cursor: pointer;
+	cursor: default;
 	border: none;
 }
 
