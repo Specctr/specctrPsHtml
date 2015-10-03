@@ -64,6 +64,9 @@ Specctr.buttonHandlers = {
 					document_id: css.document_id,
 				};
 
+				if(IdObject.project_id != css.project_id)
+					IdObject.project_id = '';
+				
 				if(IdObject.project_id && IdObject.document_id) {
 					Specctr.cloudAPI.uploadCss(cssInfo, IdObject, false);
 				} else {

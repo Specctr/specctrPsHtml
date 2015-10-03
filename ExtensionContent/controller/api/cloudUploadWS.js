@@ -9,7 +9,7 @@ Specctr.cloudAPI = {
 	/**
 	 * Get the project list from the server and populate it.
 	 */
-	getProjectList: Specctr.Utility.tryCatchLog(function(data) {
+	getProjectList: Specctr.Utility.tryCatchLog(function(data, projectId) {
 		$.ajax({
 			url: SPECCTR_API + "/projects/list",
 			type: "GET",
@@ -20,33 +20,40 @@ Specctr.cloudAPI = {
 				pref.log(JSON.stringify(response));
 				$("#tabContainer").hide();
 				$("#dvCloudContainer").show();
-				
+
+				var docProject = '';
 				//Add data to table.
 				var table = document.getElementById("projectTable");
 				for(var i = 0; i < response.projects.length; i++) {
 					try {
 						
 						//Check if project name already exist in table.
-						if($("#projectTable tr:contains('"+response.projects[i].name+"')").length > 0)
+						if($("#projectTable tr:contains('"+response.projects[i].name+"')").length > 0) {
+							if(projectId == response.projects[i].id)
+								docProject = $("#projectTable tr:contains('"+response.projects[i].name+"')");
 							continue;
+						}
 						
 						var row = table.insertRow(-1);
 						var name = row.insertCell(0);
 						name.innerHTML = response.projects[i].name;
 						name.setAttribute('value', response.projects[i].id);
-					} catch(e) {
-						alert(e);
-					}
+						
+						if(projectId == response.projects[i].id)
+							docProject = name;
+						
+					} catch(e) {}
 				}
 				
 				$("#projectTable tr").on("click",function() {
-					try {
 						$(this).addClass('highlight').siblings().removeClass('highlight');
-					} catch(e) {
-						alert(e);
-					}
 				});
 				
+				if(projectId) {
+					$(docProject).trigger( "click" );
+				} else {
+					$("#projectTable tr").removeClass('highlight');
+				}
 			},
 			error: function(xhr) {
 				specctrDialog.showAlert('error');
@@ -118,7 +125,14 @@ Specctr.cloudAPI = {
 					//Get the selected project name 
 					var selectedProjRef = $("#projectTable").find('.highlight').find('td:first');
 					selectedProjRef.attr('value', response.project_id);
-					evalScript("$.specctr" + hostApplication + "." + "setDocId('"+response.document_id+"')");
+					evalScript("$.specctr" + hostApplication + "." + "setDocId('"+
+							response.document_id+"','"+ response.project_id + "')", function (response) {
+						$("#dvCloudContainer").hide();
+						$("#tabContainer").show();
+					});
+				} else {
+					$("#dvCloudContainer").hide();
+					$("#tabContainer").show();
 				}
 
 			},

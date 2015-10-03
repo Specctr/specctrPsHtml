@@ -74,9 +74,11 @@ $.specctrPsExportCss = {
             ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
             
         var documentId = $.specctrPsCommon.getXMPData(app.activeDocument, "document_id");
+        var projectId = $.specctrPsCommon.getXMPData(app.activeDocument, "project_id");
         var cssInfo = {
 	    	document_name: app.activeDocument.name,
              document_id:  documentId,
+             project_id: projectId,
 	    	text: this.getCss()
 	    };
         

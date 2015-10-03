@@ -39,15 +39,32 @@ $.specctrPs = {
     },
 
     //Set the document Id in the xmp metadata of document.
-    setDocId : function(docId) {
+    setDocId : function(docId, projectId) {
         
         if(ExternalObject.AdobeXMPScript == null)
             ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
             
         var xmpData = [{layerHandler : app.activeDocument,
-                                        properties : [{name : "document_id", value : docId}]
+                                        properties : [{name : "document_id", value : docId}, 
+                                                            {name : "project_id", value : projectId}]
                                     }];
-        $.specctrPsCommon.setXmpDataOfLayer(xmpData);
+        return $.specctrPsCommon.setXmpDataOfLayer(xmpData);
+    },
+    
+    getProjectIdOfDoc : function() {
+        
+        if(app.documents.length == 0) {
+            return "false";
+        }
+
+         if(ExternalObject.AdobeXMPScript == null)
+            ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
+
+            var projectId = $.specctrPsCommon.getXMPData(app.activeDocument, "project_id");
+            if(projectId == null)
+                return "";
+  
+            return projectId;
     },
 
     //Call create canvas border method from specctrPsExpandCanvas jsx file.

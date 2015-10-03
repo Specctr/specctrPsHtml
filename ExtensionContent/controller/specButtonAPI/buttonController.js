@@ -51,12 +51,21 @@ buttonController.cloudButtonHandler = function() {
 		return;
 	}
 	
-	var data = {
-		api_key: api_key,
-		machine_id: machine_id,
-	};
+	//Check if document is open or not and fetch the project Id associated with it.
+	setModel();
+	evalScript("$.specctr" + hostApplication + "." + "getProjectIdOfDoc()", function (projectId) {
 		
-	Specctr.cloudAPI.getProjectList(data);		
+		if(projectId == "false")
+			return;
+
+		var data = {
+			api_key: api_key,
+			machine_id: machine_id,
+		};
+		
+		//Get project list from server.
+		Specctr.cloudAPI.getProjectList(data, projectId);
+	});		
 };
 
 /**
