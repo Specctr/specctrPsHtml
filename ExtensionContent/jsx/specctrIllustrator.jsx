@@ -52,16 +52,33 @@ $.specctrAi = {
         model = JSON.parse(currModel);
     },
 
-    setDocId : function(docId) {
+    getProjectIdOfDoc : function() {
+        
+        if(app.documents.length == 0) {
+            return "false";
+        }
+    
+        if(ExternalObject.AdobeXMPScript == null)
+            ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
+
+        var projectId = this.getXmpData("http://specctr.com", "PROJ_ID")+"";
+         
+        if(projectId == null)
+                return "";
+ 
+            return projectId;
+    },
+
+    setDocId : function(docId, projectId) {
          if(ExternalObject.AdobeXMPScript == null)
             ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
             
         this.setXmpData("http://specctr.com", "S_AI_META", "DOC_ID", docId);
+        this.setXmpData("http://specctr.com", "S_AI_META", "PROJ_ID", projectId);
     },
     
     setXmpData : function (nsUri, nsPrefix, propertyName, value) {
         try {
-            
             if(ExternalObject.AdobeXMPScript == null)
                 ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
 
@@ -313,14 +330,16 @@ $.specctrAi = {
             styleText += this.getCssForPathItems(coordinateSpecsInfo);    //Get the style text for those Path items on which property specs is applied.    
 
             if (styleText == "") {
-                alert("Unable to export the specs!");
+                alert("No spec present to export.");
                 return "";
             }
 
             var docId = this.getXmpData("http://specctr.com", "DOC_ID") + "";
+            var projId = this.getXmpData("http://specctr.com", "PROJ_ID") + "";
             var cssInfo = {
 	    	document_name: app.activeDocument.name,
              document_id:  docId,
+             project_id: projId,
 	    	text: styleText
             };
 
@@ -2906,12 +2925,14 @@ $.specctrAi = {
                         textDecoration = textDecoration.uniquePush(styleString);
                 }
             }
+        
+            cssText += "text_contents: " + textItem.contents + ";";
             
             //Set it in infoText.
             if (model.textFont) {
                 fontFamily = fontFamily.join();
                 infoText += "\rFont-Family: " + fontFamily;
-                cssText += "font-family: " + fontFamily ;
+                cssText += "font-family: " + fontFamily+ ";" ;
             }
         
             if (model.textSize) {

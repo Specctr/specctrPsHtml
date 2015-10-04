@@ -465,6 +465,8 @@ $.specctrPsProperties = {
                 if(model.textAlpha)
                     alpha = Math.round(pageItem.opacity)/100 ;
 
+                cssText += "text_contents: " + textItem.contents + ";";
+
                 if (model.textFont) {
                     if(font == "")
                         font = kDefaultFontVal;
