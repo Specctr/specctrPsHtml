@@ -192,6 +192,7 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     	
     	isDarkInterface = true;
     	$('body').css('border', 'none');
+    	$('#mainPageList').removeClass('menuSideMarginWithBorder').addClass('menuSideMarginWithOutBorder');
     
     } else {											//Light theme.
     	$(".button label").css("color", "#212121");					//value to be applied on all text.
@@ -208,6 +209,7 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     	
     	isDarkInterface = false;
     	$('body').css('border', '2px solid #C9CBCC');
+    	$('#mainPageList').removeClass('menuSideMarginWithOutBorder').addClass('menuSideMarginWithBorder');
     }
     
     $('.tabTitle').css('background-color', bgColorButton);
