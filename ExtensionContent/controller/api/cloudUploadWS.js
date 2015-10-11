@@ -94,6 +94,19 @@ Specctr.cloudAPI = {
 		});
 		
 	},
+
+    /**
+     * Remove text_content property from css and move up in nested json
+     */
+    moveTextContent: function(cssItems) {
+        _.each(cssItems, function(value, key) {
+            if (value.attributes && value.attributes.text_contents) {
+                value.text_contents = value.attributes.text_contents;
+                delete(value.attributes.text_contents);
+            }
+        });
+        return cssItems;
+    },
 	
 	/**
 	 * Upload the css to the server to specific document id and store the ids if not persisted.
@@ -101,6 +114,9 @@ Specctr.cloudAPI = {
 	uploadCss: Specctr.Utility.tryCatchLog(function (cssInfo, response, bStoreIds) {
 		var css = JSON.parse(cssInfo);
 		var cssJson = CSSJSON.toJSON(css.text);
+        cssJson.children = Specctr.cloudAPI.moveTextContent(cssJson.children);
+
+
 
 		var data = JSON.stringify({
 			api_key: api_key,

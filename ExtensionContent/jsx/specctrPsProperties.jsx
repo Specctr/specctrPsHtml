@@ -384,7 +384,7 @@ $.specctrPsProperties = {
             var wordsArray = name.split(" ");
             if(wordsArray.length > 2)
                 name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
-            cssText = name.toLowerCase()+"{css_items:{attributes:{";
+            cssText = name.toLowerCase()+" {";
             
             var sizeID = stringIDToTypeID("size");
             var transformID = stringIDToTypeID("transform");
@@ -464,6 +464,8 @@ $.specctrPsProperties = {
                 
                 if(model.textAlpha)
                     alpha = Math.round(pageItem.opacity)/100 ;
+
+                cssText += "text_contents: " + textItem.contents + ";";
 
                 if (model.textFont) {
                     if(font == "")
@@ -603,9 +605,7 @@ $.specctrPsProperties = {
             alert(e);
         }
 
-        cssText += "},";
-        cssText += "text_contents: " + textItem.contents + ";}}";
-        
+        cssText += "}";
         if(model.specInEM) {
             cssBodyText = "body {font-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;}";
             $.specctrPsCommon.setCssBodyText(cssBodyText);
@@ -623,7 +623,7 @@ $.specctrPsProperties = {
         
         // Get the layer kind and color value of that layer.
         var infoText = "";
-        cssText = pathItem.name.toLowerCase()+"{css_items:{attributes:{";
+        cssText = "."+pathItem.name.toLowerCase()+" {";
         
         //Gives the opacity for the art layer,
         if(model.shapeAlpha)
@@ -701,10 +701,10 @@ $.specctrPsProperties = {
         
         if(borderRadius != "") {
             infoText += "\r" + borderRadius;
-            cssText += "border-radius: " + borderRadius.toLowerCase() + ";";
+            cssText += "" + borderRadius.toLowerCase() + ";";
         }
 
-        cssText += "}}}";
+        cssText += "}";
         doc.activeLayer = pageItem;
         return infoText;
     },
@@ -1151,14 +1151,14 @@ $.specctrPsProperties = {
         }
         var infoText = sourceItem.kind.toString().replace ("LayerKind.", "");
         var pageItem = sourceItem;
-        cssText = pageItem.name.toLowerCase() + "{css_items:{attributes:{type:" + infoText.toLowerCase() + ";";
+        cssText = "." + pageItem.name.toLowerCase() + " {" + infoText.toLowerCase() + ";";
 
         if(model.textAlpha) {
             var opacityString = "Opacity: " + Math.round(pageItem.opacity) / 100;
             infoText += "\r\t" + opacityString;
             cssText += opacityString.toLowerCase() + ";";
         }
-        cssText += "}}}";
+        cssText += "}";
         return infoText;
     },
 

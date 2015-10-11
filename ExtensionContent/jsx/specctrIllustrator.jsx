@@ -2716,7 +2716,7 @@ $.specctrAi = {
         if (!name)
             name = infoText.toLowerCase();
             
-        cssText = name.toLowerCase() + "{css_items:{attributes:{type:" + infoText.toLowerCase() + ";";        
+        cssText = "." + name.toLowerCase() + " {" + infoText.toLowerCase() + ";";        
         infoText = name + "\r";
         
         try {
@@ -2727,7 +2727,7 @@ $.specctrAi = {
             }
         } catch(e) {}
 
-        cssText += "}}}";
+        cssText += "}";
         return infoText;
     },
 
@@ -2740,7 +2740,7 @@ $.specctrAi = {
         if (!name)
             name = "<Path>";
             
-        cssText = name.toLowerCase() + "{css_items:{attributes:{";
+        cssText = "." + name.toLowerCase() + " {";
         
         if(model.shapeLayerName)
             infoText = name + "\r";
@@ -2826,7 +2826,7 @@ $.specctrAi = {
                 }
             }
 
-        cssText += "}}}";
+        cssText += "}";
         
         return infoText;
     },
@@ -2847,7 +2847,7 @@ $.specctrAi = {
         if (wordsArray.length > 2)
             name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
                     
-        cssText = name.toLowerCase() + "{css_items:{attributes:{";
+        cssText = name.toLowerCase() + " {";
         
         if(model.textLayerName)
             infoText = name;
@@ -2926,6 +2926,8 @@ $.specctrAi = {
                 }
             }
         
+            cssText += "text_contents: " + textItem.contents + ";";
+            
             //Set it in infoText.
             if (model.textFont) {
                 fontFamily = fontFamily.join();
@@ -3006,8 +3008,7 @@ $.specctrAi = {
             }
         } catch(e) {};
         
-        cssText += "},";
-        cssText += "text_contents: " + textItem.contents + ";}}";
+        cssText += "}";
         
         if (model.specInEM)
             cssBodyText = "body {font-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;}";
