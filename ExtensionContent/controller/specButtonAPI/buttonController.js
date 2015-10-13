@@ -233,3 +233,15 @@ buttonController.changeCloudButtonIcon = function(){
 	iconPath = iconPath + model.cloudOption + "CSS_selected" + imageExtension;
 	$("#imgExportCss").attr("src", iconPath);
 };
+
+buttonController.changeCoordinateButtonIcon = function () {
+	var iconPath = imagePath + "CoordinateButtonIcons/Icon_coordinates";
+	var imageExtension = ".png";
+
+	//For retina display: 2 pixel ratio; 
+	if(window.devicePixelRatio > 1)
+		imageExtension = "_x2.png";
+
+	iconPath = iconPath + imageExtension;
+	$("#imgCoordinate").attr("src", iconPath);
+};

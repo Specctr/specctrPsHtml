@@ -116,8 +116,6 @@ Specctr.cloudAPI = {
 		var cssJson = CSSJSON.toJSON(css.text);
         cssJson.children = Specctr.cloudAPI.moveTextContent(cssJson.children);
 
-
-
 		var data = JSON.stringify({
 			api_key: api_key,
 			machine_id: machine_id,

@@ -144,7 +144,7 @@ Specctr.buttonHandlers = {
 	 * @param modelValue {string} The value to be changed in model object.
 	 * */
 	dropDownCellClickHandler : Specctr.Utility.tryCatchLog(function(cellId, selectionClass, modelValue) {
-		var selectedCellIndex, classForSelection;
+		var selectedCellIndex;
 		var cellHandler = $("#" + cellId);
 
 		if(cellHandler.parent().attr("id") == "dimensionDropDown") {
@@ -153,21 +153,12 @@ Specctr.buttonHandlers = {
 
 			//Set values according to cell selection in dimension button.
 			if (selectedRow == "width") {
-				//Selection classes for each cell in width row.
-				classForSelection = ["noSelectionSelected", "widthTopSelected",
-				                     "widthBottomSelected", "widthCenterSelected"];
-				buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 				model.widthPos = selectedCellIndex;
 			} else {
-				//Selection classes for each cell in height row.
-				classForSelection = ["noSelectionSelected", "heightLeftSelected",
-				                     "heightRightSelected", "heightCenterSelected"];
-				buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 4);
 				model.heightPos = selectedCellIndex;
 			}
-
-			cellHandler.addClass(selectionClass);
-			buttonController.changeDimensionButtonIcon();
+			
+			this.setDimensionButton(model.heightPos, model.widthPos);
 		} else if (cellHandler.parent().attr("id") == "spacingDropDown") {
 
 			cellHandler.toggleClass(selectionClass);
@@ -175,34 +166,128 @@ Specctr.buttonHandlers = {
 			buttonController.changeSpacingButtonIcon();
 
 		} else if (cellHandler.parent().attr("id") == "coordinateDropDown") {
-
 			selectedCellIndex = cellHandler.index();
-			classForSelection = ["topLeftSelected", "topRightSelected",
-			                     "bottomRightSelected", "bottomLeftSelected"];
-			buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 			model.coordinateCellNumber = selectedCellIndex;
-			cellHandler.addClass(selectionClass);
+			this.setCoordinateButton(selectedCellIndex);
 
 		} else if(cellHandler.parent().attr("id") == "cloudUploadDropDown") {
-			
-			classForSelection = ["importCssSelected", "exportCssSelected"];
-			buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 			model.cloudOption = modelValue;
-			cellHandler.addClass(selectionClass);
-			buttonController.changeCloudButtonIcon();
-			if(selectionClass == classForSelection[0]) {
+			this.setCloudButton(modelValue);
+			
+		} else {
+			model.specOption = modelValue;
+			this.setPropertyButton(modelValue);
+		}
+		
+		pref.writeAppPrefs();
+	}),
+	
+	/**
+	 * Change the appearance of selected cell in the property button's dropdown and its icon.
+	 * @param cellId {string} The id of selected cell.
+	 * @param selectionClass {string} The css class that has to be toggled.
+	 * */
+	setPropertyButton : function(modelValue) {
+		var cellHandler, selectedClass;	
+		var classForSelection = ["specBulletSelected", "specLineSelected"];
+		if(modelValue == "Bullet") {
+			selectedClass = classForSelection[0];
+			cellHandler = $("#imgPropertiesBullet");
+		} else {
+			selectedClass = classForSelection[1];
+			cellHandler = $("#imgPropertiesLine");
+		}
+
+		buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
+		cellHandler.addClass(selectedClass);
+		buttonController.changePropertyButtonIcon();
+	},
+	
+	 setCoordinateButton : function(modelValue) {
+		 var cellHandler;
+		 switch(modelValue) {
+			 case 1:
+				 cellHandler = $("#imgTopRight");
+				 break;
+			 case 2:
+				 cellHandler = $("#imgBottomRight");
+				 break;
+			 case 3: 
+				 cellHandler = $("#imgBottomLeft");
+				 break;
+			 default: 
+				 cellHandler = $("#imgTopLeft");
+		 }
+		 
+		 var classForSelection = ["topLeftSelected", "topRightSelected",
+		                     "bottomRightSelected", "bottomLeftSelected"];
+		 
+		 var selectedClass = classForSelection[modelValue];
+		 buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
+		 cellHandler.addClass(selectedClass);
+		 
+		 //Add code to change coordinate button icon.
+		 buttonController.changeCoordinateButtonIcon();
+	 },
+	 
+	 setCloudButton : function(modelValue) {
+			var cellHandler, selectedClass;	
+			var classForSelection = ["importCssSelected", "exportCssSelected"];
+			if(modelValue == "import") {
+				selectedClass = classForSelection[0];
+				cellHandler = $("#imgCloudUploadImportCSS");
 				$('#CloudBtnLbl').text("Cloud Download");
 			} else {
+				selectedClass = classForSelection[1];
+				cellHandler = $("#imgCloudUploadExportCSS");
 				$('#CloudBtnLbl').text("Cloud Upload");
 			}
-		} else {
 
-			classForSelection = ["specBulletSelected", "specLineSelected"];
 			buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
-			model.specOption = modelValue;
-			cellHandler.addClass(selectionClass);
-			buttonController.changePropertyButtonIcon();
-		}
-	})
+			cellHandler.addClass(selectedClass);
+			buttonController.changeCloudButtonIcon();
+		},
+	
+	setDimensionButton : function (modelValHeight, modelValWidth) {
+		//Selection classes for each cell in height row.
+		var classForHeightCells = ["noSelectionSelected", "heightLeftSelected",
+		                     "heightRightSelected", "heightCenterSelected"];
+		
+		var heightImgIds = ["#imgNoSelectionHeight", "#imgHeightLeft", 
+		                    "#imgHeightRight", "#imgHeightCenter"];
+		var cellHandler = $(heightImgIds[modelValHeight]);
+		var selectedClass = classForHeightCells[modelValHeight];
+		
+		buttonController.removeClassesOfCell(cellHandler.parent(), classForHeightCells, 4);
+		cellHandler.addClass(selectedClass);
+		
+		//Selection classes for each cell in width row.
+		var classForSelection = ["noSelectionSelected", "widthTopSelected", 
+		                         "widthBottomSelected", "widthCenterSelected"];
+		var widthImgIds = ["#imgNoSelectionWidth", "#imgWidthTop",
+		                   "#imgWidthBottom", "#imgWidthCenter"];
+		
+		cellHandler = $(widthImgIds[modelValWidth]);
+		selectedClass = classForSelection[modelValWidth];
+		buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
+		cellHandler.addClass(selectedClass);
+		
+		buttonController.changeDimensionButtonIcon();
+	},
+	
+	setSpacingButton : function() {
+		if(model.spaceTop)
+			$("#imgSpaceTop").addClass("topSelected");
+		
+		if (model.spaceRight)
+			$("#imgSpaceRight").addClass("rightSelected");
+		
+		if (model.spaceBottom) 
+			$("#imgSpaceBottom").addClass("bottomSelected");
+		
+		if (model.spaceLeft) 
+			$("#imgSpaceLeft").addClass("leftSelected");
 
+		buttonController.changeSpacingButtonIcon();
+	}
 };
