@@ -333,6 +333,25 @@ label {
 	font-size: 11px;
 	width: 200px;
 }
+
+#spinnerBlock {  
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:1;
+    background-color:grey;
+    opacity: .8;
+ }
+
+.loader {
+    position: absolute;
+    left: 47%;
+    top: 44%;
+    display: block;     
+}
+
 /*-------------------------------------------------------------*/
 
 /*---------------Style applied on first tab page---------------*/
@@ -544,6 +563,10 @@ label {
 
 .height25px {
 	height: 25px !important;
+}
+
+.page3labelColor {
+	color: #666666;
 }
 
 .inputStyle {

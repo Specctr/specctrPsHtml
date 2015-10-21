@@ -437,9 +437,9 @@
 					<div class="tabPageCheckBoxRow marginLeft22px height100px" >
 						<input type="checkbox" value="1" id="specInPrcntg"
 							onchange="Specctr.UI.specInPercentageChangeHandler()" /> 
-						<label class="h4" for="specInPrcntg">Spec Distance by %</label>
+						<label class="h4 page3labelColor" for="specInPrcntg">Spec Distance by %</label>
 						<div class="height25px width216px marginTopBottom10px">
-							<label class="h5 alignLeftMiddle">100% WIDTH:</label>
+							<label class="h5 alignLeftMiddle page3labelColor">100% WIDTH:</label>
 							<div class="floatRight marginRight20px">
 								<input type="text" class="inputStyle" id="relativeWidth" maxlength="6"
 									onchange="Specctr.UI.textBoxChangeHandler(this.id)" 
@@ -448,7 +448,7 @@
 							</div>
 						</div>
 						<div  class="width216px">
-							<label class="h5 alignLeftMiddle ">100% HEIGHT:</label>
+							<label class="h5 alignLeftMiddle page3labelColor">100% HEIGHT:</label>
 							<div class="floatRight  marginRight20px">
 								<input type="text" class="inputStyle" id="relativeHeight" maxlength="6"
 									onchange="Specctr.UI.textBoxChangeHandler(this.id)" 
@@ -463,9 +463,9 @@
 					<div class="tabPageCheckBoxRow marginLeft22px height100px">
 						<input type="checkbox" value="1" id="specInEM"
 							onchange="Specctr.UI.specInEMChangeHandler(this)" /> 
-						<label class="h4" for="specInEM">Spec in em</label>
+						<label class="h4 page3labelColor" for="specInEM">Spec in em</label>
 						<div class="height25px marginTopBottom10px width216px">
-							<label class="h5 alignLeftMiddle">BASE FONT SIZE:</label>
+							<label class="h5 alignLeftMiddle page3labelColor">BASE FONT SIZE:</label>
 							<div class="floatRight marginRight20px">
 								<input type="text" class="inputStyle" id="baseFontSize"
 									maxlength="6" onchange="Specctr.UI.textBoxChangeHandler(this.id)"
@@ -475,7 +475,7 @@
 						</div>
 	
 						<div class="width216px">
-							<label class="h5 alignLeftMiddle">BASE LINE HEIGHT:</label>
+							<label class="h5 alignLeftMiddle page3labelColor">BASE LINE HEIGHT:</label>
 							<div class="floatRight marginRight20px">
 								<input type="text" class="inputStyle" id="baseLineHeight"
 									maxlength="6" onchange="Specctr.UI.textBoxChangeHandler(this.id)"
@@ -746,7 +746,7 @@
 		
 		<div id="settingBlock"> 
 			<div id="settingBlokChildDiv">
-                <label id="specctrVersion" class="floatLeft">v.3.01.04</label>
+                <label id="specctrVersion" class="floatLeft">v.3.01.05</label>
 				<img id="settingIcon" class="floatRight"
 				 src="../assets/images/Icon_prefs.png" width="32" height="24"
 				 onclick="Specctr.UI.toggleSettingPage()"/>
@@ -788,6 +788,10 @@
 		
 	<!-- Modal dialog. -->
 	<div id="dialog" title="Specctr"></div>
+	
+	<div id="spinnerBlock">
+		<img alt="" src="../assets/images/spinner.gif" class="loader"></img>
+	</div>
 
 </body>
 

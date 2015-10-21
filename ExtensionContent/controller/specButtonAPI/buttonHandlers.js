@@ -30,7 +30,8 @@ Specctr.buttonHandlers = {
 
 		buttonController.closeAllDropDown();
 		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs('" + note + "')");
+		$("#spinnerBlock").hide();
+		evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs('" + note + "')", CommonCallBack);
 	}),
 	
 	/**
@@ -46,13 +47,16 @@ Specctr.buttonHandlers = {
 		}
 		
 		setModel();
+		$("#spinnerBlock").show();
 		
 		// Upload specs to Specctr.
 		evalScript("$.specctr" + hostApplication + "." + "exportCss()", 
 				function(cssInfo) {
 			
 			try {
-
+				
+				$("#spinnerBlock").hide();
+				
 				if(!cssInfo)
 					return;
 

@@ -11,6 +11,7 @@ Specctr = Specctr || {};
  */
 onLoaded = Specctr.Utility.tryCatchLog(function() {
 	pref.log('Loading Specctr.');
+	
 	specctrDialog.createAlertDialog();
 	var isLicensed = false;
 	var appPrefs;
@@ -20,6 +21,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	loadJSX(); // Load the jsx files present in \jsx folder.
 
 	if (hostApplication === '') {
+		$("#spinnerBlock").hide();
 		specctrDialog.showAlert('Cannot load the extension.\nRequired host application not found!');
 		return;
 	} else if (hostApplication === photoshop) {
@@ -63,6 +65,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	        window.location = window.location + '#loaded';
 	        window.location.reload();
 	    }
+		$("#spinnerBlock").hide();
 		return;
 	}
 	else {
@@ -72,9 +75,11 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	isLicensed = activationPrefs.licensed;
 	api_key = activationPrefs.api_key;
 	machine_id = activationPrefs.machine_id;
-
+	
 	if (isLicensed)
 		Specctr.Init.init();
+	
+	$("#spinnerBlock").hide();
 });
 
 /**
@@ -180,14 +185,17 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     if(decimalValue <= lightThemeColorValue) {		//Dark theme. 
     	$(".button label").css("color", "#ffffff");					//value to be applied on all text.
     	$('.tabTitle').css('color', "#ffffff");
-    	
+    	$('.tabPage2Content').css('color', '#878787');
+    	$('#tabpage_3').css('color', '#878787');
+    	$('#tabpage_4').css('color', '#878787');
+    	$('.page3labelColor').css('color', '#878787');
+
     	if(decimalValue < extraDarkThemeColorValue) {	//4th quadrant.
-    		bgColorButton = "#5A5A5A";
-    		bgColorHoverButton = "#7E7E7E";		
-    	}
-    	else {	//3rd quadrant.
+    		bgColorButton = "#4A4A4A";
+    		bgColorHoverButton = "#4A4A4A";			// Changed the #7E7E7E to #4A4A4A color [By Chen].
+    	} else {	//3rd quadrant.
     		bgColorButton = "#7E7E7E";
-    		bgColorHoverButton = "#DBDBDB";
+    		bgColorHoverButton = "#4A4A4A";		// Changed the #DBDBDB to #4A4A4A color [By Chen].
     	}
     	
     	isDarkInterface = true;
@@ -197,6 +205,10 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     } else {											//Light theme.
     	$(".button label").css("color", "#212121");					//value to be applied on all text.
     	$('.tabTitle').css('color', "#212121");
+    	$('.tabPage2Content').css('color', '#4d4d4d');
+    	$('#tabpage_3').css('color', '#666666');
+    	$('#tabpage_4').css('color', '#666666');
+    	$('.page3labelColor').css('color', '#666666');
     	
     	if(decimalValue > extraLightThemeColorValue) {			//1st quadrant.
     		bgColorButton = "#EEEEEE";

@@ -6,13 +6,18 @@ calling jsx methods etc.
 
 var buttonController = {};
 
+function CommonCallBack() {
+	$("#spinnerBlock").hide();
+}
+
 /**
  * Call the 'createDimensionSpecsForItem' method from .jsx based on host application.
  */
 buttonController.createDimensionSpecs = function() {
 	analytics.trackFeature('create_dimension_specs');
 	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createDimensionSpecs()");
+	$("#spinnerBlock").show();
+	evalScript("$.specctr" + hostApplication + "." + "createDimensionSpecs()", CommonCallBack);
 };
 
 /**
@@ -21,7 +26,8 @@ buttonController.createDimensionSpecs = function() {
 buttonController.createSpacingSpecs = function() {
 	analytics.trackFeature('create_spacing_specs');
 	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createSpacingSpecs()");
+	$("#spinnerBlock").show();
+	evalScript("$.specctr" + hostApplication + "." + "createSpacingSpecs()", CommonCallBack);
 };
 
 /**
@@ -30,7 +36,8 @@ buttonController.createSpacingSpecs = function() {
 buttonController.createCoordinateSpecs = function() {
 	analytics.trackFeature('create_coordinate_specs');
 	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createCoordinateSpecs()");
+	$("#spinnerBlock").show();
+	evalScript("$.specctr" + hostApplication + "." + "createCoordinateSpecs()", CommonCallBack);
 };
 
 /**
@@ -39,7 +46,8 @@ buttonController.createCoordinateSpecs = function() {
 buttonController.createPropertySpecs = function() {
 	analytics.trackFeature('create_property_specs');
 	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()");
+	$("#spinnerBlock").show();
+	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()", CommonCallBack);
 };
 
 buttonController.cloudButtonHandler = function() {
@@ -47,14 +55,18 @@ buttonController.cloudButtonHandler = function() {
 	if(model.cloudOption == "import") {		//Download
 		analytics.trackFeature('export_css');
 		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "exportCss()");
+		$("#spinnerBlock").show();
+		evalScript("$.specctr" + hostApplication + "." + "exportCss()", CommonCallBack );
 		return;
 	}
+
+
 	
 	//Check if document is open or not and fetch the project Id associated with it.
 	setModel();
 	evalScript("$.specctr" + hostApplication + "." + "getProjectIdOfDoc()", function (projectId) {
 		
+		//$("#spinnerBlock").hide();
 		if(projectId == "false")
 			return;
 

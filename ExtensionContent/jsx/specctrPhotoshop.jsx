@@ -75,26 +75,31 @@ $.specctrPs = {
     //Call create dimension spec method from specctrPsDimension jsx file.
     createDimensionSpecs : function() {
         $.specctrPsDimension.createDimensionSpecsForItem();
+        return true;
     },
     
     //Call create spacing spec method from specctrPsSpacing jsx file.
     createSpacingSpecs : function() {
         $.specctrPsSpacing.createSpacingSpecs();
+        return true;
     },
 
     //Call create coordinate spec method from specctrPsCoordinates jsx file.
     createCoordinateSpecs : function() {
         $.specctrPsCoordinates.createCoordinateSpecs();
+        return true;
     },
 
     //Call create property spec method from specctrPsProperties jsx file.
     createPropertySpecs : function() {
         $.specctrPsProperties.createPropertySpecsForItem();
+        return true;
     },
 
     //Call create add note spec method from specctrPsAddNotes jsx file.
     addNoteSpecs : function(noteText) {
         $.specctrPsAddNote.addNoteSpecs(noteText);
+        return true;
     },
 
     //Call create exportCss method from specctrPsExportCss jsx file.

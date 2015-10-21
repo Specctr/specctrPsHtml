@@ -10,6 +10,9 @@ Specctr.cloudAPI = {
 	 * Get the project list from the server and populate it.
 	 */
 	getProjectList: Specctr.Utility.tryCatchLog(function(data, projectId) {
+		
+		$("#spinnerBlock").show();
+		
 		$.ajax({
 			url: SPECCTR_API + "/projects/list",
 			type: "GET",
@@ -18,6 +21,7 @@ Specctr.cloudAPI = {
 			dataType: "json",
 			success: function(response, xhr) {
 				pref.log(JSON.stringify(response));
+				$("#spinnerBlock").hide();
 				$("#tabContainer").hide();
 				$("#dvCloudContainer").show();
 
@@ -56,6 +60,7 @@ Specctr.cloudAPI = {
 				}
 			},
 			error: function(xhr) {
+				$("#spinnerBlock").hide();
 				specctrDialog.showAlert('error');
 				pref.logResError(xhr);
 			}
@@ -69,6 +74,7 @@ Specctr.cloudAPI = {
 		var css = JSON.parse(cssInfo);
 		var cssJson = CSSJSON.toJSON(css.text);
 		
+		$("#spinnerBlock").show();
 		var data = JSON.stringify({
 			api_key: api_key,
 			machine_id: machine_id,
@@ -85,9 +91,11 @@ Specctr.cloudAPI = {
 			data: data,
 			success: function(response, xhr) {
 				pref.log('Synced css for document: ' + JSON.stringify(response));
+				$("#spinnerBlock").hide();
 				Specctr.cloudAPI.uploadCss(cssInfo, response, true);
 			},
 			error: function(xhr) {
+				$("#spinnerBlock").hide();
 				specctrDialog.showAlert('error');
 				pref.logResError(xhr);
 			}
@@ -116,6 +124,7 @@ Specctr.cloudAPI = {
 		var cssJson = CSSJSON.toJSON(css.text);
         cssJson.children = Specctr.cloudAPI.moveTextContent(cssJson.children);
 
+        $("#spinnerBlock").show();
 		var data = JSON.stringify({
 			api_key: api_key,
 			machine_id: machine_id,
@@ -141,16 +150,19 @@ Specctr.cloudAPI = {
 					selectedProjRef.attr('value', response.project_id);
 					evalScript("$.specctr" + hostApplication + "." + "setDocId('"+
 							response.document_id+"','"+ response.project_id + "')", function (response) {
+						$("#spinnerBlock").hide();
 						$("#dvCloudContainer").hide();
 						$("#tabContainer").show();
 					});
 				} else {
+					$("#spinnerBlock").hide();
 					$("#dvCloudContainer").hide();
 					$("#tabContainer").show();
 				}
 
 			},
 			error: function(xhr) {
+				$("#spinnerBlock").hide();
 				specctrDialog.showAlert('error');
 				pref.logResError(xhr);
 			}
