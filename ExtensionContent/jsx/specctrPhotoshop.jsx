@@ -92,7 +92,10 @@ $.specctrPs = {
 
     //Call create property spec method from specctrPsProperties jsx file.
     createPropertySpecs : function() {
-        $.specctrPsProperties.createPropertySpecsForItem();
+        var message = $.specctrPsProperties.createPropertySpecsForItem();
+        if(message)
+            return message;
+            
         return true;
     },
 

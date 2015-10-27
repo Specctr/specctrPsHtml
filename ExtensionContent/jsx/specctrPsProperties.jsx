@@ -13,6 +13,31 @@ var model;
 var cssText = "";
 var cssBodyText = "";
 $.specctrPsProperties = {
+    
+    propertyChecked : function (artItemType) {
+        model = $.specctrPsCommon.getModel();
+        
+        if(artItemType == LayerKind.TEXT) {
+            
+             if(model.textLayerName || model.textFont || model.textSize 
+                || model.textColor ||  model.textStyle || model.textAlignment
+                || model.textLeading ||  model.textTracking || model.textAlpha
+                || model.textEffects)
+                return true;
+            else
+                return false;
+                
+        } else {
+            
+           if(model.shapeLayerName || model.shapeFill || model.shapeStroke 
+                || model.shapeAlpha ||  model.shapeEffects || model.shapeBorderRadius)
+                return true;
+            else
+                return false;
+                
+        }
+    },
+    
     //Suspend the history of creating properties spec of layers.
     createPropertySpecsForItem : function() {
         try {
@@ -20,6 +45,11 @@ $.specctrPsProperties = {
             if(sourceItem === null)
                 return;
 
+            var isPropertyChecked = this.propertyChecked(sourceItem.kind);
+            
+            if(!isPropertyChecked)
+                return "Please select atleast one checkbox in properties.";
+                
             var pref = app.preferences;
             var startRulerUnits = pref.rulerUnits; 
             pref.rulerUnits = Units.PIXELS;
@@ -58,6 +88,12 @@ $.specctrPsProperties = {
                 return;
         } catch (e) {}
 
+        //Save the current preferences
+        var startTypeUnits = app.preferences.typeUnits; 
+        var startRulerUnits = app.preferences.rulerUnits;
+        var originalDPI = doc.resolution;
+        $.specctrPsCommon.setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
+            
         if(ExternalObject.AdobeXMPScript == null)
             ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
         
@@ -77,6 +113,7 @@ $.specctrPsProperties = {
              legendLayer = $.specctrPsCommon.getLayerByID(idSpec);
              if(legendLayer) {
                 this.updateSpec(sourceItem, legendLayer, bounds, noteSpecBottom, noteLegendLayer);
+                $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);
                 return;
             }
          }
@@ -135,17 +172,13 @@ $.specctrPsProperties = {
                     infoText = "\r"+name+infoText;
             }
 
-            if (infoText === "") 
+            if (infoText === "")  {
+                $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);
                 return;
+            }
 
             idSpec = $.specctrPsCommon.getIDOfLayer();
 
-            //Save the current preferences
-            var startTypeUnits = app.preferences.typeUnits; 
-            var startRulerUnits = app.preferences.rulerUnits;
-            var originalDPI = doc.resolution;
-            $.specctrPsCommon.setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
-            
             var isLeft, pos;
             var centerX = (artLayerBounds[0] + artLayerBounds[2]) / 2;             //Get the center of item.
             var centerY = (artLayerBounds[1] + artLayerBounds[3]) / 2;
@@ -276,9 +309,6 @@ $.specctrPsProperties = {
                 default: 
                     infoText = this.getSpecsInfoForGeneralItem(artLayer); 
             }
-        
-            if(infoText == "") 
-                return;
 
             var justification = Justification.LEFT;
             

@@ -83,6 +83,7 @@ $.specctrPsAddNote = {
              legendLayer = $.specctrPsCommon.getLayerByID(noteId);
              if(legendLayer) {
                 this.updateNoteSpec(sourceItem, legendLayer, bounds, propertySpecBottom, propertyLegendLayer);
+                $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);
                 return;
             }
          }

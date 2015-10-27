@@ -10,6 +10,15 @@ function CommonCallBack() {
 	$("#spinnerBlock").hide();
 }
 
+function PropertyCallBack(msg) {
+	$("#spinnerBlock").hide();
+	
+	if(msg != "true") {
+		specctrDialog.showAlert(msg);
+		$("#tabHeader_2").click();
+	}
+}
+
 /**
  * Call the 'createDimensionSpecsForItem' method from .jsx based on host application.
  */
@@ -47,7 +56,7 @@ buttonController.createPropertySpecs = function() {
 	analytics.trackFeature('create_property_specs');
 	setModel();
 	$("#spinnerBlock").show();
-	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()", CommonCallBack);
+	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()", PropertyCallBack);
 };
 
 buttonController.cloudButtonHandler = function() {
