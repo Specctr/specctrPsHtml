@@ -767,6 +767,9 @@ $.specctrPsCommon = {
             app.activeDocument.activeLayer = parent;    //parent is artboard now.
             var ref = new ActionReference();
             ref.putEnumerated( charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ) );
+            var isThisArtBoard = executeActionGet(ref).getBoolean(stringIDToTypeID("artboardEnabled"));
+            if(!isThisArtBoard) 
+                return null;
             
             // get artboard dimensions
             var artBoardRect = executeActionGet(ref).getObjectValue(stringIDToTypeID("artboard")).getObjectValue(stringIDToTypeID("artboardRect"));
