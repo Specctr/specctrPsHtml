@@ -46,9 +46,11 @@ $.specctrPsProperties = {
                 return;
 
             var isPropertyChecked = this.propertyChecked(sourceItem.kind);
-            
             if(!isPropertyChecked)
-                return "Please select atleast one checkbox in properties.";
+                return "Please select the checkboxes from properties.";
+                
+            if(sourceItem.isBackgroundLayer)
+                return "Please select layer other than background.";
                 
             var pref = app.preferences;
             var startRulerUnits = pref.rulerUnits; 
@@ -133,6 +135,13 @@ $.specctrPsProperties = {
             var artLayerBounds = bounds;
             var name = artLayer.name;
             var nameLength = name.length;
+            
+            var specctrLayerSet = $.specctrPsCommon.legendLayer(parent)
+            var spec = specctrLayerSet.artLayers.add();
+            spec.kind = LayerKind.TEXT;
+            var specText = spec.textItem;
+            specText.kind = TextType.POINTTEXT;
+            doc.activeLayer = sourceItem;
 
             switch(sourceItem.kind) {
                 case LayerKind.TEXT:
@@ -173,6 +182,8 @@ $.specctrPsProperties = {
             }
 
             if (infoText === "")  {
+                spec.remove();
+                legendLayer.remove();
                 $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);
                 return;
             }
@@ -186,10 +197,7 @@ $.specctrPsProperties = {
 
             //Create spec text for art object.
             legendLayer.visible = false;
-            var spec = legendLayer.artLayers.add();
-            spec.kind = LayerKind.TEXT;
-            var specText = spec.textItem;
-            specText.kind = TextType.POINTTEXT;
+            spec.move(legendLayer, ElementPlacement.INSIDE)
             specText.contents = infoText;
             if(nameLength != 0)
                 this.applyBold(1, nameLength + 1);
@@ -260,7 +268,7 @@ $.specctrPsProperties = {
 
             $.specctrPsCommon.setXmpDataOfLayer(xmpData);
 
-        } catch(e) {alert(e);}
+        } catch(e) {}
 
         doc.activeLayer = artLayer;
         $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);
@@ -631,9 +639,7 @@ $.specctrPsProperties = {
                      app.activeDocument.activeLayer = pageItem;
                 }
             }
-        } catch(e) {
-            alert(e);
-        }
+        } catch(e) {}
 
         cssText += "}";
         if(model.specInEM) {
@@ -979,7 +985,6 @@ $.specctrPsProperties = {
             }
             return infoText;
         } catch(e) {
-            alert(e);
             doc.activeLayer = pageItem;
             return "";
         }
@@ -1045,7 +1050,6 @@ $.specctrPsProperties = {
                     
             return infoText;
         } catch(e) {
-            alert(e);
             return "";
         }
     },
@@ -1163,7 +1167,6 @@ $.specctrPsProperties = {
             }
             infoText +=  Math.abs(parseInt(anchorPoints[2]) - parseInt(anchorPoints[1]));
         } catch(e) {
-            alert(e);
             infoText = "";
         }
 
@@ -1172,20 +1175,18 @@ $.specctrPsProperties = {
 
     //Get spec info for general items.
     getSpecsInfoForGeneralItem : function(sourceItem) {
-        var infoText;
-        cssText = "";
-        
         if(sourceItem.kind == undefined) {
-            infoText = "";
-            return;
+            return "";
         }
-        var infoText = sourceItem.kind.toString().replace ("LayerKind.", "");
+        
+        cssText = "";
+        var infoText = "\r"+sourceItem.kind.toString().replace ("LayerKind.", "");
         var pageItem = sourceItem;
         cssText = "." + pageItem.name.toLowerCase() + " {" + infoText.toLowerCase() + ";";
 
         if(model.textAlpha) {
             var opacityString = "Opacity: " + Math.round(pageItem.opacity) / 100;
-            infoText += "\r\t" + opacityString;
+            infoText += "\r" + opacityString;
             cssText += opacityString.toLowerCase() + ";";
         }
         cssText += "}";

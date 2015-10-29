@@ -15,7 +15,7 @@ function PropertyCallBack(msg) {
 	
 	if(msg != "true") {
 		specctrDialog.showAlert(msg);
-		$("#tabHeader_2").click();
+		//$("#tabHeader_2").click();
 	}
 }
 
