@@ -56,11 +56,11 @@ Specctr.buttonHandlers = {
 			try {
 				
 				$("#spinnerBlock").hide();
-				
-				if(!cssInfo)
-					return;
-
 				var css = JSON.parse(cssInfo);
+				
+				if(!cssInfo || css.text == "") {
+					return;
+				}
 				
 				//check if id is present.
 				var IdObject = {

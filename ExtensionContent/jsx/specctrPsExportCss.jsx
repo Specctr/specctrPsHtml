@@ -28,9 +28,10 @@ $.specctrPsExportCss = {
                 isThisArtBoard = executeActionGet(ref).getBoolean(stringIDToTypeID("artboardEnabled"));
                 if(isThisArtBoard)  {
                     try {
+                        isArtBoardPresent = true;
                         propertySpecLayerGroup = parent.layerSets.getByName("Specctr").layerSets.getByName("Properties");
                     } catch(e) {
-                         return "";
+                         continue;
                     }
                     
                     if(ExternalObject.AdobeXMPScript == null)
@@ -40,7 +41,6 @@ $.specctrPsExportCss = {
                     styleText += $.specctrPsCommon.getCssBodyText();            //Add the body text at the top of css file.
                     styleText += this.getCssForText(coordinateSpecsInfo, parent);
                     styleText += this.getCssForShape(coordinateSpecsInfo, parent);
-                    isArtBoardPresent = true;
                 }
             }
         } catch (e) {}
@@ -82,9 +82,11 @@ $.specctrPsExportCss = {
 	    	text: this.getCss()
 	    };
         
-        if(cssInfo.text == "")
+        if(cssInfo.text == "") {
+            alert("No spec present to export.");
             return "";
-        
+        }
+    
         //Get model value.
         var model = $.specctrPsCommon.getModel();
  

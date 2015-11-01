@@ -13,10 +13,8 @@ function CommonCallBack() {
 function PropertyCallBack(msg) {
 	$("#spinnerBlock").hide();
 	
-	if(msg != "true") {
+	if(msg != "true" && msg != "undefined")
 		specctrDialog.showAlert(msg);
-		//$("#tabHeader_2").click();
-	}
 }
 
 /**
@@ -69,8 +67,6 @@ buttonController.cloudButtonHandler = function() {
 		return;
 	}
 
-
-	
 	//Check if document is open or not and fetch the project Id associated with it.
 	setModel();
 	evalScript("$.specctr" + hostApplication + "." + "getProjectIdOfDoc()", function (projectId) {
