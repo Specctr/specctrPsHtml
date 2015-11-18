@@ -111,6 +111,14 @@ Specctr.cloudAPI = {
             if (value.attributes && value.attributes.text_contents) {
                 value.text_contents = value.attributes.text_contents;
                 delete(value.attributes.text_contents);
+            } 
+            if (value.attributes && value.attributes.xCoord) {
+            	value.xCoord = value.attributes.xCoord;
+                delete(value.attributes.xCoord);
+            } 
+            if (value.attributes && value.attributes.yCoord) {
+            	value.yCoord = value.attributes.yCoord;
+                delete(value.attributes.yCoord);
             }
         });
         return cssItems;
