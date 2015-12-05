@@ -39,12 +39,6 @@ ul#loginBlock, ul#activateBlock {
 	font-family: Arial;
 }
 
-.loginHeader {
-	height: 170px;
-	padding-left: 15px;
-	padding-top: 70px;
-}
-
 .activationHeader {
 	padding-top: 30px;
 	height: 120px;

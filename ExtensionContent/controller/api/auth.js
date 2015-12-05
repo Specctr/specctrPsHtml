@@ -5,6 +5,9 @@ Specctr.Auth = {
 	 *  if user's credentials valid.
 	 */
 	login: Specctr.Utility.tryCatchLog(function(ev) {
+		
+		$("#spinnerBlock").show();
+		
 		var urlRequest = SPECCTR_API + "/register_machine?";
 		urlRequest += "&email=" + $("#loginEmail").val();
 		urlRequest += "&password=" + $("#loginPassword").val();
@@ -16,6 +19,8 @@ Specctr.Auth = {
 			dataType: "json",
 			success: function(response, textStatus, xhr) {
 				pref.log(xhr.status + " - " + response.message);
+				$("#spinnerBlock").hide();
+				
 				// If unsuccessful, return without saving the data in file.
 				if (response.success) {
 					analytics.trackActivation('succeeded');	
@@ -27,8 +32,7 @@ Specctr.Auth = {
 					};
 					pref.addFileToPreferenceFolder('.license', 
 						JSON.stringify(activationPrefs)); //Create license file.
-					
-					$("#loginFooterLabel").click();
+
 					Specctr.Init.init();
 				} else {
 					analytics.trackActivation('failed');
@@ -36,6 +40,9 @@ Specctr.Auth = {
 				}
 			},
 			error: function(xhr, status, error) {
+
+				$("#spinnerBlock").hide();
+				
 				var response = '';
 				try {
 					response = JSON.parse(xhr.responseText);

@@ -52,13 +52,13 @@
 	<!-- Login container start here -->
 	<div class="showBlock" id="loginContainer">
 		<div id="dvLoginContainer">
-			<img alt="specctrLoginImage" class="hideBlock" id="specctrLoginImage" src="../assets/images/specctrLogo.png">
-			<div id="loginHeaderDiv" class="loginHeader">
-				<label id="loignHeaderLabel"> Hi! Welcome to Specctr! <br> Sign up for a free 15 day trial! 
+			<img alt="specctrLoginImage" id="specctrLoginImage" src="../assets/images/specctrLogo.png">
+			<div id="loginHeaderDiv" class="activationHeader">
+				<label id="loignHeaderLabel"> Hi! Welcome back! <br> Please login: 
 				</label>
 			</div>
 			
-			<ul class="hideBlock" id="loginBlock">
+			<ul id="loginBlock">
 				<li>
 					<input class="loginTextItem" type="email" id="loginEmail"
 					placeholder="Email"
@@ -80,39 +80,9 @@
 					</div>
 				</li>
 			</ul>
-			
-			<ul class="showBlock" id="activateBlock">
-				<li>
-					<input class="loginTextItem" type="text" id="firstName"
-					placeholder="First Name"
-					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event, '#activateButton')"/>
-				</li>
-
-				<li>
-					<input class="loginTextItem" type="text" id="secondName"
-					placeholder="Last Name" 
-					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event, '#activateButton')"/>
-				</li>
-				
-				<li>
-					<input class="loginTextItem" type="email" id="emailInput"
-					placeholder="Email"
-					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event, '#activateButton')"/>
-				</li>
-				
-				<li>
-					<div class="loginPageButton" id="activateButton" 
-						onclick="activateButtonClickHandler()">
-						<label>Activate</label>
-					</div>
-				</li>
-			</ul>
 		</div>
 		<div id="loginFooter">
-			<label id="loginFooterLabel" onclick="Specctr.UI.toggleLoginPage(this)">Already a member? Sign in</label>
+			<label id="loginFooterLabel" onclick="Specctr.UI.loginLinkClickHandler()">Not a member? Sign up</label>
 		</div>
 	</div>
 	<!-- Login container end here -->
@@ -746,7 +716,7 @@
 		
 		<div id="settingBlock"> 
 			<div id="settingBlokChildDiv">
-                <label id="specctrVersion" class="floatLeft">v.3.01.06</label>
+                <label id="specctrVersion" class="floatLeft">v.3.01.07</label>
 				<img id="settingIcon" class="floatRight"
 				 src="../assets/images/Icon_prefs.png" width="32" height="24"
 				 onclick="Specctr.UI.toggleSettingPage()"/>

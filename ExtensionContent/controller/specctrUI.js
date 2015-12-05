@@ -34,25 +34,11 @@ Specctr.UI = {
 	}),
 	
 	/**
-	 * Toggle the login page according to subscription.
-	 * @param (label object) The object of the login footer label.
+	 * Open url in default browser.
 	 */
-	toggleLoginPage : Specctr.Utility.tryCatchLog(function(element){
-		if($("#loginBlock").hasClass("hideBlock")) {
-			$("#specctrLoginImage").removeClass().addClass("showBlock");
-			$("#activateBlock").removeClass().addClass("hideBlock");
-			$("#loginHeaderDiv").removeClass().addClass("activationHeader");
-			$("#loginBlock").removeClass().addClass("showBlock");
-			$("#loignHeaderLabel").html("Hi! Welcome back! <br> Please login:");
-			$(element).text("Not a member? Sign up");
-		} else {
-			$("#specctrLoginImage").removeClass().addClass("hideBlock");
-			$("#loginBlock").removeClass().addClass("hideBlock");
-			$("#loginHeaderDiv").removeClass().addClass("loginHeader");
-			$("#activateBlock").removeClass().addClass("showBlock");
-			$("#loignHeaderLabel").html("Hi! Welcome to Specctr! <br> Sign up for a free 15 day trial!");
-			$(element).text("Already a member? Sign in");
-		}
+	loginLinkClickHandler : Specctr.Utility.tryCatchLog(function(){
+		var csInterface = new CSInterface();
+		csInterface.openURLInDefaultBrowser("https://cloud.specctr.com");
 	}),
 	
 	/**
