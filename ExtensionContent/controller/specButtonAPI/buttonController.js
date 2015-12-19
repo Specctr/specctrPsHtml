@@ -13,7 +13,7 @@ function CommonCallBack() {
 function PropertyCallBack(msg) {
 	$("#spinnerBlock").hide();
 	
-	if(msg != "true" && msg != "undefined")
+	if(msg != "true" && msg != "undefined" && msg != "")
 		specctrDialog.showAlert(msg);
 }
 
