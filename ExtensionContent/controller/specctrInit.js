@@ -12,10 +12,6 @@ Specctr.Init = {};
 Specctr.Init.init = Specctr.Utility.tryCatchLog(function() {
 	pref.log("Initializing Specctr.");
 
-	// Load tab container..
-	$("#loginContainer").hide();
-	$("#tabContainer").show();
-
 	this.setModelValueFromPreferences();
 	var navitem = $("#tabContainer .tabs ul li:eq(0)"); // Set current tab.
 
@@ -68,7 +64,7 @@ Specctr.Init.init = Specctr.Utility.tryCatchLog(function() {
     
     this.setModelToButtons();
     this.setModelToUIComponents();
-    this.setModelToResponsive();
+   // this.setModelToResponsive();
     
     Specctr.Auth.checkStatus(Specctr.Activation);
 });
@@ -115,47 +111,35 @@ Specctr.Init.setModelValueFromPreferences = function() {
 	if (!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha"))
 		return;
 
-	var i, propertyApplicationSpecific;
-	var propertyName = ["shapeLayerName", "shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
-	                    "textLayerName", "textAlignment", "textColor", "textStyle", "textLeading", 
-	                    "textTracking", "textAlpha","specInPrcntg", "useScaleBy",
-	                    "specInEM", "specToEdge", "includeStroke"];
-
-	if (hostApplication === photoshop) {
-		propertyApplicationSpecific = ["shapeFill", "shapeStroke", "shapeEffects", "textEffects"];
-	} else {
-		propertyApplicationSpecific = ["shapeFillColor", "shapeFillStyle", "shapeStrokeColor", 
-		                               "shapeStrokeStyle", "shapeStrokeSize"];
-	}
-
-	Array.prototype.push.apply(propertyName, propertyApplicationSpecific);
+	var i;
+	var propertyName = [ "textFont", "textSize", "textLayerName", "textColor"];
 	var arrayLength = propertyName.length;
 	for (i = 0; i < arrayLength; i++){
 		model[propertyName[i]] = appPrefs[propertyName[i]] ? true : false;
 	}
 
-	var textBoxIds = ["canvasExpandSize", "legendFontSize", "armWeight"];
-	arrayLength = textBoxIds.length;
-	for (i = 0; i < arrayLength; i++) {
-		model[textBoxIds[i]] = Number(appPrefs[textBoxIds[i]]);
-	}
-
-	var dropDownIds = ["legendColorObject", "legendColorType", "legendColorSpacing",
-	                   "legendColorMode", "decimalFractionValue", "legendFont"];
-	arrayLength = dropDownIds.length;
-	for (i = 0; i < arrayLength; i++) {
-		if (appPrefs.hasOwnProperty(dropDownIds[i]))
-			model[dropDownIds[i]] = appPrefs[dropDownIds[i]];
-	}
-	
-	var buttonCellValues = ["specOption", "heightPos", "widthPos", "spaceLeft",
-	                        "spaceTop", "spaceRight", "spaceBottom", "coordinateCellNumber",
-	                        "cloudOption"];
-	arrayLength = buttonCellValues.length;
-	for (i = 0; i < arrayLength; i++) {
-		if (appPrefs.hasOwnProperty(buttonCellValues[i]))
-			model[buttonCellValues[i]] = appPrefs[buttonCellValues[i]];
-	}
+//	var textBoxIds = ["canvasExpandSize", "legendFontSize", "armWeight"];
+//	arrayLength = textBoxIds.length;
+//	for (i = 0; i < arrayLength; i++) {
+//		model[textBoxIds[i]] = Number(appPrefs[textBoxIds[i]]);
+//	}
+//
+//	var dropDownIds = ["legendColorObject", "legendColorType", "legendColorSpacing",
+//	                   "legendColorMode", "decimalFractionValue", "legendFont"];
+//	arrayLength = dropDownIds.length;
+//	for (i = 0; i < arrayLength; i++) {
+//		if (appPrefs.hasOwnProperty(dropDownIds[i]))
+//			model[dropDownIds[i]] = appPrefs[dropDownIds[i]];
+//	}
+//	
+//	var buttonCellValues = ["specOption", "heightPos", "widthPos", "spaceLeft",
+//	                        "spaceTop", "spaceRight", "spaceBottom", "coordinateCellNumber",
+//	                        "cloudOption"];
+//	arrayLength = buttonCellValues.length;
+//	for (i = 0; i < arrayLength; i++) {
+//		if (appPrefs.hasOwnProperty(buttonCellValues[i]))
+//			model[buttonCellValues[i]] = appPrefs[buttonCellValues[i]];
+//	}
 };
 
 /**
@@ -230,12 +214,7 @@ Specctr.Init.setModelToResponsive = function() {
 
 	for (var i = 0; i < arrayLength; i += 2) {
 		$("#" + checkBoxIds[i/2]).prop("checked", model[checkBoxIds[i/2]]);
-		if (model[checkBoxIds[i/2]]) {
-			Specctr.Utility.enableTextField(textFieldIds[i]);
-			Specctr.Utility.enableTextField(textFieldIds[i+1]);
-		} else {
-			Specctr.Utility.disableTextField(textFieldIds[i]);
-			Specctr.Utility.disableTextField(textFieldIds[i+1]);
-		}
+		Specctr.Utility.disableTextField(textFieldIds[i]);
+		Specctr.Utility.disableTextField(textFieldIds[i+1]);
 	}
 };

@@ -55,29 +55,8 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	// Update the color of the panel when the theme color of the product changed.
 	updateThemeWithAppSkinInfo(csInterface.hostEnvironment.appSkinInfo);
 	csInterface.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, onAppThemeColorChanged);
-    
-	// Migrating isLicensed from config file to license file, if present.
-	var licenseFilePath = pref.getFilePath('.license');
-	var activationPrefs = pref.readFile(licenseFilePath);	//Read the licensed file.
 
-	if (activationPrefs === "") {
-		if(!window.location.hash) {		//reload the panel page for Ai, Ps and Id.
-	        window.location = window.location + '#loaded';
-	        window.location.reload();
-	    }
-		$("#spinnerBlock").hide();
-		return;
-	}
-	else {
-		activationPrefs = Specctr.Activation = JSON.parse(activationPrefs);
-	}
-
-	isLicensed = activationPrefs.licensed;
-	api_key = activationPrefs.api_key;
-	machine_id = activationPrefs.machine_id;
-	
-	if (isLicensed)
-		Specctr.Init.init();
+	Specctr.Init.init();
 	
 	$("#spinnerBlock").hide();
 });

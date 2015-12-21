@@ -49,45 +49,7 @@
 
 <body onLoad="onLoaded()" oncontextmenu="return false;" onclick="loseFocusFromPanel()">
 
-	<!-- Login container start here -->
-	<div class="showBlock" id="loginContainer">
-		<div id="dvLoginContainer">
-			<img alt="specctrLoginImage" id="specctrLoginImage" src="../assets/images/specctrLogo.png">
-			<div id="loginHeaderDiv" class="activationHeader">
-				<label id="loignHeaderLabel"> Hi! Welcome back! <br> Please login: 
-				</label>
-			</div>
-			
-			<ul id="loginBlock">
-				<li>
-					<input class="loginTextItem" type="email" id="loginEmail"
-					placeholder="Email"
-					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event, '#loginButton')"/>
-				</li>
-				
-				<li>
-					<input class="loginTextItem" type="password" id="loginPassword"
-					placeholder="Password"
-					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event, '#loginButton')"/>
-				</li>
-				
-				<li>
-					<div class="loginPageButton" id="loginButton"
-						onclick="Specctr.Auth.login()">
-						<label>Login</label>
-					</div>
-				</li>
-			</ul>
-		</div>
-		<div id="loginFooter">
-			<label id="loginFooterLabel" onclick="Specctr.UI.loginLinkClickHandler()">Not a member? Sign up</label>
-		</div>
-	</div>
-	<!-- Login container end here -->
-
-	<div class="hideBlock" id="tabContainer">
+	<div id="tabContainer">
 	
 		<div id="tabBlock">
 		
@@ -138,31 +100,20 @@
 	
 						<!-- Add Note button. -->
 						
-						<li id="liNote">
-							<div class="button border " id="btnAddNote" 
-							onclick="Specctr.buttonHandlers.addNoteSpecs()">
+						<li class="disableBorder" id="liNote">
+							<div class="button border" id="btnAddNote">
 									<img id="imgNote" alt="Note specs"/> 
 									<label>Add Note</label>
-									<div class= "downArrowParentDiv"
-									onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)">
+									<div class= "downArrowParentDiv">
 										<div id="imgNoteDdlArrow" class="dropdownArrow"></div>
 									</div>
-							</div>
-							<div class="options" id="noteDropDown">
-								<div>
-									<textarea id="noteText" onclick="Specctr.UI.itemClickHandler(event)" 
-										onchange="Specctr.UI.textBoxChangeHandler(this.id)" 
-										placeholder="Write a note you want to repeat 
-										for several times, then click the 
-										button to attach it to an object."></textarea>
-								</div>
 							</div>
 						</li>
 						
 						<!-- Width/Height button. -->
 						<li id="liWh">
 						
-							<div class="button border " id="btnWh" 
+							<div class="button border" id="btnWh" 
 							onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
 								<img id="dimensionIcon"/> 
 								<label>Width/Height</label>
@@ -193,48 +144,24 @@
 						</li>
 	
 						<!-- Spacing button. -->
-						<li id="liSpacing">
-							<div class="button border " id="btnSpacing" 
-							onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
+						<li class="disableBorder" id="liSpacing">
+							<div class="button border" id="btnSpacing">
 								<img id="spacingIcon"/>
 								<label>Spacing</label>
-								<div class= "downArrowParentDiv"
-								onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)">
+								<div class= "downArrowParentDiv">
 									<div id="imgSpacingDdlArrow" class="dropdownArrow"></div>
 								</div>
-							</div>
-							<div class="options" id="spacingDropDown">
-								<div class="option" id="imgSpaceTop"
-									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'topSelected', 'spaceTop')"></div>
-								<div class="option" id="imgSpaceRight"
-									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'rightSelected', 'spaceRight')"></div>
-								<div class="option" id="imgSpaceBottom"
-									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'bottomSelected', 'spaceBottom')"></div>
-								<div class="option" id="imgSpaceLeft"
-									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'leftSelected', 'spaceLeft')"></div>
 							</div>
 						</li>
 	
 						<!-- Coordinate button. -->
-						<li id="liCoordinate">
-							<div class="button border " id="btnCoordinate" 
-							onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
+						<li class="disableBorder" id="liCoordinate">
+							<div class="button border" id="btnCoordinate">
 								<img id="imgCoordinate" alt="Coordinates" /> 
 								<label>Coordinates</label>
-								<div class= "downArrowParentDiv" 
-								onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)">
+								<div class= "downArrowParentDiv">
 									<div id="imgCoordinateDdlArrow" class="dropdownArrow"></div>
 								</div>
-							</div>
-							<div class="options" id="coordinateDropDown">
-								<div class="option topLeftSelected" id="imgTopLeft"
-									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'topLeftSelected')"></div>
-								<div class="option" id="imgTopRight"
-									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'topRightSelected')"></div>
-								<div class="option" id="imgBottomRight"
-									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'bottomRightSelected')"></div>
-								<div class="option" id="imgBottomLeft"
-									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'bottomLeftSelected')"></div>
 							</div>
 						</li>
 
@@ -260,23 +187,13 @@
 						</li>
 
 						<!-- Cloud Upload button. -->
-						<li id="liCloudUpload">
-							<div class="button border " id="btnCloupUpload"
-							onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
+						<li class="disableBorder" id="liCloudUpload">
+							<div class="button border" id="btnCloupUpload">
 								<img id="imgExportCss" alt="Cloud Upload"/>
 								<label id="CloudBtnLbl">Cloud Download</label>
-								<div class= "downArrowParentDiv"
-								onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)">
+								<div class= "downArrowParentDiv">
 									<div id="imgCloupUploadDdlArrow" class="dropdownArrow"></div>
 								</div>
-							</div>
-
-							<div class="options" id="cloudUploadDropDown">
-								<div class="option importCssSelected" id="imgCloudUploadImportCSS"
-									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'importCssSelected', 'import')"></div>
-								
-								<div class="option" id="imgCloudUploadExportCSS"
-									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'exportCssSelected', 'export')"></div>
 							</div>
 						</li>
 
@@ -288,58 +205,58 @@
 				<div id="tabpage_2" class="tabpage">
 					<div class="tabTitle">Pick the properties you want to display</div>
 					<div class="tabPage2PropertiesHeader">Shape Properties</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="0" id="shapeLayerName"
+					<div class="tabPage2Content disableDiv">
+						<input type="checkbox" disabled="disabled" value="0" id="shapeLayerName"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label for="shapeLayerName">Layer Name</label>
 					</div>
-					<div class="tabPage2Content nonPsElement" id="fillColor">
-						<input type="checkbox" value="1" id="shapeFillColor"
+					<div class="tabPage2Content nonPsElement disableDiv" id="fillColor">
+						<input type="checkbox" disabled="disabled" value="1" id="shapeFillColor"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label for="shapeFillColor">Fill Color</label>
 					</div>
-					<div class="tabPage2Content nonPsElement" id="fillStyle">
-						<input type="checkbox" value="2" id="shapeFillStyle"
+					<div class="tabPage2Content nonPsElement disableDiv" id="fillStyle">
+						<input type="checkbox" disabled="disabled" value="2" id="shapeFillStyle"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label for="shapeFillStyle">Fill Style</label>
 					</div>
-					<div class="tabPage2Content nonPsElement" id="strokeColor">
-						<input type="checkbox" value="3" id="shapeStrokeColor"
+					<div class="tabPage2Content nonPsElement disableDiv" id="strokeColor">
+						<input type="checkbox" disabled="disabled" value="3" id="shapeStrokeColor"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label for="shapeStrokeColor">Stroke Color</label>
 					</div>
-					<div class="tabPage2Content nonPsElement" id="strokeStyle">
-						<input type="checkbox" value="4" id="shapeStrokeStyle"
+					<div class="tabPage2Content nonPsElement disableDiv" id="strokeStyle">
+						<input type="checkbox" disabled="disabled" value="4" id="shapeStrokeStyle"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label for="shapeStrokeStyle">Stroke Style</label>
 					</div>
-					<div class="tabPage2Content nonPsElement" id="strokeSize">
-						<input type="checkbox" value="5" id="shapeStrokeSize"
+					<div class="tabPage2Content nonPsElement disableDiv" id="strokeSize">
+						<input type="checkbox" disabled="disabled" value="5" id="shapeStrokeSize"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label for="shapeStrokeSize">Stroke Size</label>
 					</div>
-					<div class="tabPage2Content psElement" id="fill">
-						<input type="checkbox" value="1" id="shapeFill"
+					<div class="tabPage2Content psElement disableDiv" id="fill">
+						<input type="checkbox" disabled="disabled" value="1" id="shapeFill"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label for="shapeFill">Fill</label>
 					</div>
-					<div class="tabPage2Content psElement" id="stroke">
-						<input type="checkbox" value="2" id="shapeStroke"
+					<div class="tabPage2Content psElement disableDiv" id="stroke">
+						<input type="checkbox" disabled="disabled" value="2" id="shapeStroke"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label for="shapeStroke">Stroke</label>
 					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="3" id="shapeAlpha"
+					<div class="tabPage2Content disableDiv">
+						<input type="checkbox" disabled="disabled" value="3" id="shapeAlpha"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label for="shapeAlpha">Opacity</label>
 					</div>
-					<div class="tabPage2Content psElement">
-						<input type="checkbox" value="4" id="shapeEffects"
+					<div class="tabPage2Content psElement disableDiv">
+						<input type="checkbox" disabled="disabled" value="4" id="shapeEffects"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="shapeEffects">Effects</label>
 					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="5" id="shapeBorderRadius"
+					<div class="tabPage2Content disableDiv">
+						<input type="checkbox" disabled="disabled" value="5" id="shapeBorderRadius"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="shapeBorderRadius">Border Radius</label>
 					</div>
@@ -365,33 +282,33 @@
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textColor">Color</label>
 					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="10" id="textStyle"
+					<div class="tabPage2Content disableDiv">
+						<input type="checkbox" disabled="disabled" value="10" id="textStyle"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textStyle">Font Style</label>
 					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="11" id="textAlignment"
+					<div class="tabPage2Content disableDiv">
+						<input type="checkbox" disabled="disabled" value="11" id="textAlignment"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textAlignment">Text-Align</label>
 					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="12" id="textLeading"
+					<div class="tabPage2Content disableDiv">
+						<input type="checkbox" disabled="disabled" value="12" id="textLeading"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textLeading">Line-Height</label>
 					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="13" id="textTracking"
+					<div class="tabPage2Content disableDiv">
+						<input type="checkbox" disabled="disabled" value="13" id="textTracking"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for=textTracking>Letter Spacing</label>
 					</div>
-					<div class="tabPage2Content">
-						<input type="checkbox" value="14" id="textAlpha"
+					<div class="tabPage2Content disableDiv">
+						<input type="checkbox" disabled="disabled" value="14" id="textAlpha"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" />
 						<label  for="textAlpha">Opacity</label>
 					</div>
-					<div class="tabPage2Content psElement">
-						<input type="checkbox" value="15" id="textEffects"
+					<div class="tabPage2Content psElement disableDiv">
+						<input type="checkbox" disabled="disabled" value="15" id="textEffects"
 							onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 						<label  for="textEffects">Effects</label>
 					</div>
@@ -404,8 +321,8 @@
 	
 					<div class="responsivePageHeader">Distance/Spacing</div>
 	
-					<div class="tabPageCheckBoxRow marginLeft22px height100px" >
-						<input type="checkbox" value="1" id="specInPrcntg"
+					<div class="tabPageCheckBoxRow marginLeft22px height100px disableDiv" >
+						<input type="checkbox" disabled="disabled" value="1" id="specInPrcntg"
 							onchange="Specctr.UI.specInPercentageChangeHandler()" /> 
 						<label class="h4 page3labelColor" for="specInPrcntg">Spec Distance by %</label>
 						<div class="height25px width216px marginTopBottom10px">
@@ -413,7 +330,7 @@
 							<div class="floatRight marginRight20px">
 								<input type="text" class="inputStyle" id="relativeWidth" maxlength="6"
 									onchange="Specctr.UI.textBoxChangeHandler(this.id)" 
-									onclick="Specctr.UI.itemClickHandler(event)"
+									onclick="Specctr.UI.itemClickHandler(event)" disabled="disabled"
 									onkeypress="return Specctr.UI.restrictInputToDecimal(event)" />px
 							</div>
 						</div>
@@ -422,7 +339,7 @@
 							<div class="floatRight  marginRight20px">
 								<input type="text" class="inputStyle" id="relativeHeight" maxlength="6"
 									onchange="Specctr.UI.textBoxChangeHandler(this.id)" 
-									onclick="Specctr.UI.itemClickHandler(event)"
+									onclick="Specctr.UI.itemClickHandler(event)" disabled="disabled"
 									onkeypress="return Specctr.UI.restrictInputToDecimal(event)" />px
 							</div>
 						</div>
@@ -430,8 +347,8 @@
 	
 					<div class="responsivePageHeader">Base Typography</div>
 	
-					<div class="tabPageCheckBoxRow marginLeft22px height100px">
-						<input type="checkbox" value="1" id="specInEM"
+					<div class="tabPageCheckBoxRow marginLeft22px height100px disableDiv">
+						<input type="checkbox" disabled="disabled" value="1" id="specInEM"
 							onchange="Specctr.UI.specInEMChangeHandler(this)" /> 
 						<label class="h4 page3labelColor" for="specInEM">Spec in em</label>
 						<div class="height25px marginTopBottom10px width216px">
@@ -439,7 +356,7 @@
 							<div class="floatRight marginRight20px">
 								<input type="text" class="inputStyle" id="baseFontSize"
 									maxlength="6" onchange="Specctr.UI.textBoxChangeHandler(this.id)"
-									value="16" onclick="Specctr.UI.itemClickHandler(event)"
+									value="16" onclick="Specctr.UI.itemClickHandler(event)" disabled="disabled"
 									onkeypress="return Specctr.UI.restrictInputToDecimal(event)" />px
 							</div>
 						</div>
@@ -449,7 +366,7 @@
 							<div class="floatRight marginRight20px">
 								<input type="text" class="inputStyle" id="baseLineHeight"
 									maxlength="6" onchange="Specctr.UI.textBoxChangeHandler(this.id)"
-									value="22.4" onclick="Specctr.UI.itemClickHandler(event)"
+									value="22.4" onclick="Specctr.UI.itemClickHandler(event)" disabled="disabled"
 									onkeypress="return Specctr.UI.restrictInputToDecimal(event)" />px
 							</div>
 						</div>
@@ -526,32 +443,6 @@
 									<canvas id="colObject" height="18" width="10" class="colorPickerAppearance"
 										onclick="Specctr.UI.colorPickerClickHandler(this, 'Shape')">
 									</canvas>
-									<div id='colorShapeDropDown' class="colorPicker">
-										<div id="shapeColorBlock" class="mainColorBlock"
-											onclick="Specctr.UI.setColorToLabel(this, 'Object')"></div>
-										<input type="text" id="txtShapeColor" class="colorText" maxlength="6"
-											onclick="Specctr.UI.itemClickHandler(event)"
-											onkeydown="return Specctr.UI.colorPickerTextInputValidation(event)"
-											onkeyup="Specctr.UI.colorPickerTextInputClickHandler(event, 'Shape')"/> <br>
-										<div class="colorBlock bgColorF44336" title="F44336"></div>
-										<div class="colorBlock bgColorE91E63" title="E91E63"></div>
-										<div class="colorBlock bgColor9C27B0" title="9C27B0"></div>
-										<div class="colorBlock bgColor673AB7" title="673AB7"></div>
-										<div class="colorBlock bgColor3F51B5" title="3F51B5"></div>
-										<div class="colorBlock bgColor2196F3" title="2196F3"></div>
-										<div class="colorBlock bgColor00BCD4" title="00BCD4"></div>
-										<div class="colorBlock bgColor009688" title="009688"></div>
-										<div class="colorBlock bgColor4CAF50" title="4CAF50"></div>
-										<div class="colorBlock bgColor8BC34A" title="8BC34A"></div>
-										<div class="colorBlock bgColorCDDC39" title="CDDC39"></div>
-										<div class="colorBlock bgColorFFEB3B" title="FFEB3B"></div>
-										<div class="colorBlock bgColorFFC107" title="FFC107"></div>
-										<div class="colorBlock bgColorFF9800" title="FF9800"></div>
-										<div class="colorBlock bgColorFF5722" title="FF5722"></div>
-										<div class="colorBlock bgColor000000" title="000000"></div>
-										<div class="colorBlock bgColorB3B3B3" title="B3B3B3"></div>
-										<div class="colorBlock bgColorFFFFFF" title="FFFFFF"></div>
-									</div>
 								</div>
 								
 								<div class="colorPickerStyle">
@@ -559,32 +450,6 @@
 									<canvas id="colType" height="18" width="10" class="colorPickerAppearance"
 										onclick="Specctr.UI.colorPickerClickHandler(this, 'Type')">
 									</canvas>
-									<div id='colorTypeDropDown' class="colorPicker">
-										<div id="typeColorBlock" class="mainColorBlock"
-											onclick="Specctr.UI.setColorToLabel(this, 'Type')"></div>
-										<input type="text" id="txtTypeColor" class="colorText" maxlength="6"
-											onkeydown="return Specctr.UI.colorPickerTextInputValidation(event)"
-											onclick="Specctr.UI.itemClickHandler(event)"
-											onkeyup="Specctr.UI.colorPickerTextInputClickHandler(event, 'Type')"/> <br>
-										<div class="colorBlock bgColorF44336" title="F44336"></div>
-										<div class="colorBlock bgColorE91E63" title="E91E63"></div>
-										<div class="colorBlock bgColor9C27B0" title="9C27B0"></div>
-										<div class="colorBlock bgColor673AB7" title="673AB7"></div>
-										<div class="colorBlock bgColor3F51B5" title="3F51B5"></div>
-										<div class="colorBlock bgColor2196F3" title="2196F3"></div>
-										<div class="colorBlock bgColor00BCD4" title="00BCD4"></div>
-										<div class="colorBlock bgColor009688" title="009688"></div>
-										<div class="colorBlock bgColor4CAF50" title="4CAF50"></div>
-										<div class="colorBlock bgColor8BC34A" title="8BC34A"></div>
-										<div class="colorBlock bgColorCDDC39" title="CDDC39"></div>
-										<div class="colorBlock bgColorFFEB3B" title="FFEB3B"></div>
-										<div class="colorBlock bgColorFFC107" title="FFC107"></div>
-										<div class="colorBlock bgColorFF9800" title="FF9800"></div>
-										<div class="colorBlock bgColorFF5722" title="FF5722"></div>
-										<div class="colorBlock bgColor000000" title="000000"></div>
-										<div class="colorBlock bgColorB3B3B3" title="B3B3B3"></div>
-										<div class="colorBlock bgColorFFFFFF" title="FFFFFF"></div>
-									</div>
 								</div>
 								
 								<div class="colorPickerStyle">
@@ -592,32 +457,6 @@
 									<canvas id="colSpacing" height="18" width="10" class="colorPickerAppearance"
 										onclick="Specctr.UI.colorPickerClickHandler(this, 'Space')">
 									</canvas>
-									<div id='colorSpaceDropDown' class="colorPicker">
-										<div id="spaceColorBlock" class="mainColorBlock"
-											onclick="Specctr.UI.setColorToLabel(this, 'Spacing')"></div>
-										<input type="text" id="txtSpaceColor" class="colorText" maxlength="6"
-											onkeydown="return Specctr.UI.colorPickerTextInputValidation(event)"
-											onclick="Specctr.UI.itemClickHandler(event)"
-											onkeyup="Specctr.UI.colorPickerTextInputClickHandler(event, 'Space')"/> <br>
-										<div class="colorBlock bgColorF44336" title="F44336"></div>
-										<div class="colorBlock bgColorE91E63" title="E91E63"></div>
-										<div class="colorBlock bgColor9C27B0" title="9C27B0"></div>
-										<div class="colorBlock bgColor673AB7" title="673AB7"></div>
-										<div class="colorBlock bgColor3F51B5" title="3F51B5"></div>
-										<div class="colorBlock bgColor2196F3" title="2196F3"></div>
-										<div class="colorBlock bgColor00BCD4" title="00BCD4"></div>
-										<div class="colorBlock bgColor009688" title="009688"></div>
-										<div class="colorBlock bgColor4CAF50" title="4CAF50"></div>
-										<div class="colorBlock bgColor8BC34A" title="8BC34A"></div>
-										<div class="colorBlock bgColorCDDC39" title="CDDC39"></div>
-										<div class="colorBlock bgColorFFEB3B" title="FFEB3B"></div>
-										<div class="colorBlock bgColorFFC107" title="FFC107"></div>
-										<div class="colorBlock bgColorFF9800" title="FF9800"></div>
-										<div class="colorBlock bgColorFF5722" title="FF5722"></div>
-										<div class="colorBlock bgColor000000" title="000000"></div>
-										<div class="colorBlock bgColorB3B3B3" title="B3B3B3"></div>
-										<div class="colorBlock bgColorFFFFFF" title="FFFFFF"></div>
-									</div>
 								</div>
 							</div>
 					</div>
@@ -629,16 +468,6 @@
 								onchange="Specctr.UI.comboBoxChangeHandler(this, 'legendFontSize')"
 								onclick="Specctr.UI.itemClickHandler(event)">
 								<option value="8">8</option>
-								<option value="9">9</option>
-								<option value="10">10</option>
-								<option value="11">11</option>
-								<option value="12">12</option>
-								<option value="14">14</option>
-								<option value="16">16</option>
-								<option value="18">18</option>
-								<option value="24">24</option>
-								<option value="36">36</option>
-								<option value="48">48</option>
 							</select>
 						</div>
 						
@@ -647,21 +476,14 @@
 							<select class="smalldropdown" id="lstLineWeight"
 								onclick="Specctr.UI.itemClickHandler(event)"
 								onchange="Specctr.UI.comboBoxChangeHandler(this, 'armWeight')">
-								<option value="0.25">0.25</option>
-								<option value="0.5">0.5</option>
 								<option value="1">1</option>
-								<option value="1.5">1.5</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
 							</select>
 						</div>
 					</div>
 				</div>
 				
-				<div class="tabPageCheckBoxRow" id="specToEdgeCheckbox">
-					<input type="checkbox" value="CanvasEdge" id="specToEdge"
+				<div class="tabPageCheckBoxRow disableDiv" id="specToEdgeCheckbox">
+					<input type="checkbox" disabled="disabled" value="CanvasEdge" id="specToEdge"
 						onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 					<label class="settingPageLabel" for="specToEdge">Print Spec to Canvas Edge</label>
 				</div>
@@ -674,41 +496,35 @@
 					<select class="dropdown" id="lstColorMode" onclick="Specctr.UI.itemClickHandler(event)"
 						onchange="Specctr.UI.comboBoxChangeHandler(this, 'legendColorMode')">
 						<option value="HEX">HEX</option>
-						<option value="RGB">RGB</option>
-						<option value="CMYK">CMYK</option>
-						<option value="HSB">HSB</option>
-						<option value="HSL">HSL</option>
-						<option value="iOS (RGB as %)">iOS (RGB as %)</option>
 					</select>
 				</div>
 				
 				<div class="settingPageHeader">Measurements</div>
 				<div class="settingline"></div>
 				
-				<form class="width150px" 
-					onclick="Specctr.UI.radioButtonClickHandler(event, 'decimalFractionValue')">
-					<input type="radio"  name="decimalFractionOptions" id="decimalRadioButton" 
+				<form class="width150px disableDiv">
+					<input type="radio" disabled="disabled" name="decimalFractionOptions" id="decimalRadioButton" 
 						value="decimal">
 					<label class="radioLabel" for="decimalRadioButton">Decimal </label>
 					<div class="floatRight">
-						<input type="radio" name="decimalFractionOptions" id="fractionRadioButton"
+						<input type="radio" disabled="disabled" name="decimalFractionOptions" id="fractionRadioButton"
 							value="fraction">
 						<label class="radioLabel" for="fractionRadioButton">Fraction</label>
 					</div>
 				</form>
 				
-				<div class="tabPageCheckBoxRow" id="includeStrokeCheckbox">
-					<input type="checkbox" id="includeStroke" onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
+				<div class="tabPageCheckBoxRow disableDiv" id="includeStrokeCheckbox">
+					<input type="checkbox" disabled="disabled" id="includeStroke" onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 					<label class="settingPageLabel" for="includeStroke">Include Stroke in Measurement</label>
 				</div>
 
 				<div class="h5">
 					<label class="width150px h5">SCALE SPECS BY:</label>
-					<div class="marginTop10px">
-						<input type="checkbox" value="ScaleBy" id="useScaleBy"
+					<div class="marginTop10px disableDiv">
+						<input type="checkbox" disabled="disabled" value="ScaleBy" id="useScaleBy"
 							class="alignMiddle" onclick="Specctr.UI.useScaleByClickHandler()" />
 						<input type="text" class="inputStyleSmall" id="txtScaleBy" value="x1"
-							onclick="Specctr.UI.itemClickHandler(event)"
+							onclick="Specctr.UI.itemClickHandler(event)" disabled="disabled"
 							maxlength="4" onchange="Specctr.UI.txtScaleByChangeHandler()" />(e.g. x2 or /2)
 					</div>
 				</div>
@@ -716,7 +532,7 @@
 		
 		<div id="settingBlock"> 
 			<div id="settingBlokChildDiv">
-                <label id="specctrVersion" class="floatLeft">v.3.01.07</label>
+                <label id="specctrVersion" class="floatLeft">Lite.v3.0</label>
 				<img id="settingIcon" class="floatRight"
 				 src="../assets/images/Icon_prefs.png" width="32" height="24"
 				 onclick="Specctr.UI.toggleSettingPage()"/>

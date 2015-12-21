@@ -49,6 +49,7 @@ input[type="radio"] {
 
 input[type="text"]:disabled {
 	background: #e1e1e1 !important;
+	-webkit-user-select: none;
 }
 
 label {
@@ -884,6 +885,24 @@ label {
     margin-top: 3px;
     cursor: default;
 }
+
+/*--------------------Lite Version Styles-------------------------------*/
+
+.disableBorder
+{
+	border-top: 1px solid #C9CBCC;
+    border-bottom: 1px solid #6D6F70;
+    background-image: linear-gradient(#C9CBCC, #6D6F70), linear-gradient(#C9CBCC, #6D6F70);
+    background-size: 1px 100%;
+    background-position: 0 0, 100% 0;
+    background-repeat: no-repeat;
+}
+
+.disableDiv
+{
+	opacity: 0.6;
+}
+
 /*-------------------------------------------------------------*/
 
 @media ( -webkit-min-device-pixel-ratio : 2) {
