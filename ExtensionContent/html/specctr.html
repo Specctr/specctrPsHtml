@@ -101,7 +101,7 @@
 						<!-- Add Note button. -->
 						
 						<li class="disableBorder" id="liNote">
-							<div class="button border" id="btnAddNote">
+							<div class="disableButton" id="btnAddNote">
 									<img id="imgNote" alt="Note specs"/> 
 									<label>Add Note</label>
 									<div class= "downArrowParentDiv">
@@ -145,7 +145,7 @@
 	
 						<!-- Spacing button. -->
 						<li class="disableBorder" id="liSpacing">
-							<div class="button border" id="btnSpacing">
+							<div class="disableButton" id="btnSpacing">
 								<img id="spacingIcon"/>
 								<label>Spacing</label>
 								<div class= "downArrowParentDiv">
@@ -156,7 +156,7 @@
 	
 						<!-- Coordinate button. -->
 						<li class="disableBorder" id="liCoordinate">
-							<div class="button border" id="btnCoordinate">
+							<div class="disableButton" id="btnCoordinate">
 								<img id="imgCoordinate" alt="Coordinates" /> 
 								<label>Coordinates</label>
 								<div class= "downArrowParentDiv">
@@ -188,7 +188,7 @@
 
 						<!-- Cloud Upload button. -->
 						<li class="disableBorder" id="liCloudUpload">
-							<div class="button border" id="btnCloupUpload">
+							<div class="disableButton" id="btnCloupUpload">
 								<img id="imgExportCss" alt="Cloud Upload"/>
 								<label id="CloudBtnLbl">Cloud Download</label>
 								<div class= "downArrowParentDiv">
@@ -395,7 +395,7 @@
 						</div>
 						
 						<div class="plan marginTop30px subscriptionNote textAlignCenter">
-							<a id="user-profile-link" class="link" href="">Specctr Profile</a>
+							<a id="user-profile-link">Specctr Profile</a>
 						</div>
 					</div>
 					
@@ -408,7 +408,7 @@
 						</div>
 					</div>
 					
-					<div id="deActivate" class=" button border marginTop30px" onclick="Specctr.Auth.deActivate()">
+					<div id="deActivate" class="disableButton disableBorder marginTop30px">
 						<label>De-Activate</label>
 					</div>
 
@@ -467,7 +467,7 @@
 							<select class="smalldropdown" id="lstSize"
 								onchange="Specctr.UI.comboBoxChangeHandler(this, 'legendFontSize')"
 								onclick="Specctr.UI.itemClickHandler(event)">
-								<option value="8">8</option>
+								<option value="12">12</option>
 							</select>
 						</div>
 						
@@ -540,35 +540,6 @@
 			 	onclick="Specctr.UI.toggleSettingPage()">Settings</label>
 		 	</div>
 		 </div>
-
-	</div>
-
-	<div class="hideBlock" id="dvCloudContainer">
-		<div style="float: right">
-			<img class="handCursor" src="../assets/images/closeIcon_white.png" 
-			onclick="Specctr.UI.closeCloudPage(this)"/>
-		</div>
-		<div class="cloudHeader">
-			<label id="cloudHeaderLabel"> &nbsp&nbsp Upload to <br>Specctr Cloud </label>
-		</div>
-		<div class="marginLeft12">
-			<label id="attchToProjLabel"> ATTACH TO PROJECT: </label>
-		</div>
-
-		<div class="marginLeft12 marginTop15px">
-				<input type="text" id="cloudText" placeholder="Create Project +" maxlength="50"
-				onclick="Specctr.UI.itemClickHandler(event)"
-				onkeydown="Specctr.UI.cloudTextHandler(event)"/>
-		</div>
-		
-		<div style="overflow-x:hidden; max-height: 225px;">
-			<table id="projectTable"></table>
-		</div>
-		
-		<div class="marginLeft12 marginTop15px" id="uploadButton" 
-			onclick="Specctr.buttonHandlers.exportCss()">
-				<label id="uploadBtnLabel">UPLOAD</label>
-		</div>
 
 	</div>
 		

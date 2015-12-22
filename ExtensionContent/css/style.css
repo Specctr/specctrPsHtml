@@ -888,8 +888,33 @@ label {
 
 /*--------------------Lite Version Styles-------------------------------*/
 
-.disableBorder
-{
+.disableButton {
+	width: 222px;
+	padding: 0px;
+	display: table;
+	text-align: left;
+	cursor: default;
+}
+
+.disableButton img {
+	display: table-cell;
+	float: left;
+	width: 49px;
+	margin-left: 5px;
+	background-size: 49px 49px;
+}
+
+.disableButton label {
+	display: table-cell;
+	float: left;
+	margin-left: 16px;
+	margin-top: 15px;
+	font-family: aauxPro;
+	font-size: 18px !important;
+	cursor: default;
+}
+
+.disableBorder {
 	border-top: 1px solid #C9CBCC;
     border-bottom: 1px solid #6D6F70;
     background-image: linear-gradient(#C9CBCC, #6D6F70), linear-gradient(#C9CBCC, #6D6F70);
@@ -898,8 +923,7 @@ label {
     background-repeat: no-repeat;
 }
 
-.disableDiv
-{
+.disableDiv {
 	opacity: 0.6;
 }
 

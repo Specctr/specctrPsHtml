@@ -118,28 +118,7 @@ Specctr.Init.setModelValueFromPreferences = function() {
 		model[propertyName[i]] = appPrefs[propertyName[i]] ? true : false;
 	}
 
-//	var textBoxIds = ["canvasExpandSize", "legendFontSize", "armWeight"];
-//	arrayLength = textBoxIds.length;
-//	for (i = 0; i < arrayLength; i++) {
-//		model[textBoxIds[i]] = Number(appPrefs[textBoxIds[i]]);
-//	}
-//
-//	var dropDownIds = ["legendColorObject", "legendColorType", "legendColorSpacing",
-//	                   "legendColorMode", "decimalFractionValue", "legendFont"];
-//	arrayLength = dropDownIds.length;
-//	for (i = 0; i < arrayLength; i++) {
-//		if (appPrefs.hasOwnProperty(dropDownIds[i]))
-//			model[dropDownIds[i]] = appPrefs[dropDownIds[i]];
-//	}
-//	
-//	var buttonCellValues = ["specOption", "heightPos", "widthPos", "spaceLeft",
-//	                        "spaceTop", "spaceRight", "spaceBottom", "coordinateCellNumber",
-//	                        "cloudOption"];
-//	arrayLength = buttonCellValues.length;
-//	for (i = 0; i < arrayLength; i++) {
-//		if (appPrefs.hasOwnProperty(buttonCellValues[i]))
-//			model[buttonCellValues[i]] = appPrefs[buttonCellValues[i]];
-//	}
+	model["canvasExpandSize"] = Number(appPrefs["canvasExpandSize"]);
 };
 
 /**

@@ -47,7 +47,7 @@ var model = {
 	legendColorObject:		'#FF0000',
 	legendColorType:		'#FF0000',
 	legendColorSpacing:		'#FF0000',
-	legendColorMode:		'RGB',
+	legendColorMode:		'HEX',
 	specToEdge:				true,
 	includeStroke:			true,
 
