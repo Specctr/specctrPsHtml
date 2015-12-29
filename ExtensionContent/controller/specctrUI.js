@@ -6,7 +6,14 @@ like change event handlers, click event handlers etc.
 
 Specctr = Specctr || {};
 Specctr.UI = {
-		
+	
+	/**
+	 * Description	: Redirect to specctr home page.
+	 */
+	bannerClickHandler : function(){
+		window.cep.util.openURLInDefaultBrowser("http://specctr.com/?utm_source=aiPanelLite&utm_medium=banner&utm_content=bottomBuyBanner&utm_campaign=specctrProduct");
+	},
+	
 	closeCloudPage: Specctr.Utility.tryCatchLog(function(){
 		$("#dvCloudContainer").hide();
 		$("#tabContainer").show();

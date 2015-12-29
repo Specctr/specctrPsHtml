@@ -927,6 +927,11 @@ label {
 	opacity: 0.6;
 }
 
+#banner {
+	margin-left: 10px;
+	cursor: pointer;
+}
+
 /*-------------------------------------------------------------*/
 
 @media ( -webkit-min-device-pixel-ratio : 2) {

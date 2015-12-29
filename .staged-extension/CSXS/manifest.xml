@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="5.0" ExtensionBundleId="SpecctrMaster" ExtensionBundleVersion="3.01.05.h"
+<ExtensionManifest Version="5.0" ExtensionBundleId="SpecctrMasterLite" ExtensionBundleVersion="3.00.00.lh"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
@@ -146,7 +146,7 @@ each party and (ii) in a written contract signed by both parties.]]>
 	</Legal>	<Abstract>
 		<![CDATA[Specctr supercharges Adobe Photoshop by automating spec generation. With the capability to spec dimensions, color, font, spacing, and more, Specctr enables design and development teams to collaborate more accurately, efficiently, and effortlessly.]]>
 	</Abstract>	<ExtensionList>
-		<Extension Id="SpecctrPs-Pro" Version="1.0" />
+		<Extension Id="SpecctrPs-Lite" Version="1.0" />
 	</ExtensionList>
 	<ExecutionEnvironment>
 		<HostList>
@@ -163,7 +163,7 @@ each party and (ii) in a written contract signed by both parties.]]>
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
-		<Extension Id="SpecctrPs-Pro">
+		<Extension Id="SpecctrPs-Lite">
 			<DispatchInfo >
 				<Resources>
                     <MainPath>./html/specctr.html</MainPath>
@@ -177,18 +177,18 @@ each party and (ii) in a written contract signed by both parties.]]>
 				</Lifecycle>
 				<UI>
 					<Type>Panel</Type>
-					<Menu>Specctr-Pro</Menu>
+					<Menu>SpecctrMaster-Lite</Menu>
 					<Geometry>
 						<Size>
-							<Height>610</Height>
+							<Height>670</Height>
 							<Width>244</Width>
 						</Size>
 						<MaxSize>
-							<Height>610</Height>
+							<Height>670</Height>
 							<Width>244</Width>
 						</MaxSize>
 						<MinSize>
-							<Height>610</Height>
+							<Height>670</Height>
 							<Width>244</Width>
 						</MinSize>
 					</Geometry>
