@@ -3,7 +3,19 @@ File-Name: cloudUploadWS.js
 Description: Consist all the ajax call methods for uploading css to servers.
  */
 
-Specctr = Specctr || {};
+if (Specctr.Utility.getHostApp() == "Ps") {
+    var WebSocket = require('ws');
+    var ws = new WebSocket('ws://127.0.0.1:63421');// + Specctr.Generator.PORT);
+    var Q =  require('q');
+
+    var wsDef = Q.defer();
+    ws.on('open', function() {
+        console.log("web sockets open");
+        wsDef.resolve();
+    });
+    var wsConnect = wsDef.promise;
+}
+
 Specctr.cloudAPI = {
 	
 	/**
@@ -133,6 +145,7 @@ Specctr.cloudAPI = {
         cssJson.children = Specctr.cloudAPI.moveTextContent(cssJson.children);
 
         $("#spinnerBlock").show();
+
 		var data = JSON.stringify({
 			api_key: api_key,
 			machine_id: machine_id,
@@ -148,8 +161,8 @@ Specctr.cloudAPI = {
 			dataType: "json",
 			data: data,
 			success: function(response, xhr) {
-				specctrDialog.showAlert('success');
-				pref.log('Synced css for document: ' + JSON.stringify(response));
+			    specctrDialog.showAlert('success');
+			    pref.log('Synced css for document: ' + JSON.stringify(response));
 				
 				//If success store Ids to the selected project and document.
 				if(bStoreIds) {
@@ -168,6 +181,17 @@ Specctr.cloudAPI = {
 					$("#tabContainer").show();
 				}
 
+                if (hostApplication == "Ps") {
+                    wsConnect.done(function() {
+                        ws.send(JSON.stringify({
+                            message: 'specctr_upload',
+                            api_key: api_key,
+                            machine_id: machine_id,
+                            document_id: response.document_id,
+                            project_id: response.project_id
+                        }));
+                    });
+                }
 			},
 			error: function(xhr) {
 				$("#spinnerBlock").hide();

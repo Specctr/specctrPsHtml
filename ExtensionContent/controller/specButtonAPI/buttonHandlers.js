@@ -50,8 +50,7 @@ Specctr.buttonHandlers = {
 		$("#spinnerBlock").show();
 		
 		// Upload specs to Specctr.
-		evalScript("$.specctr" + hostApplication + "." + "exportCss()", 
-				function(cssInfo) {
+		evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo) {
 			
 			try {
 				
