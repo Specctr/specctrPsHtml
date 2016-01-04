@@ -25,6 +25,12 @@ Specctr.Utility = {
 	
 		return currentApplication;
 	},
+
+    withPhotoshop: function(doSomething) {
+        if (this.getHostApp() == "Ps") {
+            doSomething();
+        }
+    },
 	
 	/**
 	 * Get extension id of the html panel.

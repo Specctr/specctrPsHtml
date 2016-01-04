@@ -4,6 +4,7 @@ Description: Include methods to initialize the panel's component according to th
  */
 
 Specctr = Specctr || {};
+Specctr.Generator = Specctr.Generator || {};
 
 /**
  * Load the jsx and show/hide the login container 
@@ -31,6 +32,11 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 		lightThemeColorValue = psLightThemeColorVal;
 		extraLightThemeColorValue = psExtraLightThemeColorValue;
 		extraDarkThemeColorValue = psExtraDarkThemeColorValue;
+
+        var getCustomOptionsJsx = "var desc = app.getCustomOptions('specctrCloud');desc.getString(app.stringIDToTypeID('settings'));";
+        evalScript(getCustomOptionsJsx, Specctr.Utility.tryCatchLog(function (response) {
+            Specctr.Generator.PORT = JSON.parse(response).websocketServerPort;
+        }));
 		
 	} else if (hostApplication === illustrator) {
 		addApplicationEventListener();

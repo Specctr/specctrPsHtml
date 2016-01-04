@@ -10,8 +10,8 @@ var Specctr = {
 	Models: {}
 };
 
-var SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
-//var SPECCTR_HOST = "http://localhost:5000";
+//var SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
+var SPECCTR_HOST = "http://localhost:5002";
 var SPECCTR_API = SPECCTR_HOST += "/api/v1";
 
 var model = {
