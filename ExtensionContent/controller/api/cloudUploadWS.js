@@ -28,26 +28,29 @@ Specctr.cloudAPI = {
 				var docProject = '';
 				//Add data to table.
 				var table = document.getElementById("projectTable");
-				for(var i = 0; i < response.projects.length; i++) {
+				var projectLength = response.projects.length;
+				for(var i = 0; i < projectLength; i++)
 					try {
+						var project = response.projects[i];
+						var itrName = project.name;
+						var itrId = project.id;
 						
 						//Check if project name already exist in table.
-						if($("#projectTable tr:contains('"+response.projects[i].name+"')").length > 0) {
-							if(projectId == response.projects[i].id)
-								docProject = $("#projectTable tr:contains('"+response.projects[i].name+"')");
+						if($("#projectTable tr:contains('"+itrName+"')").length > 0) {
+							if(projectId == itrId)
+								docProject = $("#projectTable tr:contains('"+itrName+"')");
 							continue;
 						}
 						
 						var row = table.insertRow(-1);
 						var name = row.insertCell(0);
-						name.innerHTML = response.projects[i].name;
-						name.setAttribute('value', response.projects[i].id);
+						name.innerHTML = itrName;
+						name.setAttribute('value', itrId);
 						
-						if(projectId == response.projects[i].id)
+						if(projectId == itrId)
 							docProject = name;
 						
 					} catch(e) {}
-				}
 				
 				$("#projectTable tr").on("click",function() {
 						$(this).addClass('highlight').siblings().removeClass('highlight');
