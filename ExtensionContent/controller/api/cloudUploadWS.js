@@ -5,15 +5,22 @@ Description: Consist all the ajax call methods for uploading css to servers.
 
 if (Specctr.Utility.getHostApp() == "Ps") {
     var WebSocket = require('ws');
-    var ws = new WebSocket('ws://127.0.0.1:63421');// + Specctr.Generator.PORT);
     var Q =  require('q');
-
+    var wsConnect;
     var wsDef = Q.defer();
-    ws.on('open', function() {
-        console.log("web sockets open");
-        wsDef.resolve();
-    });
-    var wsConnect = wsDef.promise;
+    var ws;
+
+    var seekingConnect = setInterval(function() {
+        console.log("[specctrCloud] Attempting to connect via WebSockets.");
+        ws = new WebSocket('ws://127.0.0.1:63421');// + Specctr.Generator.PORT);
+        ws.on('open', function() {
+            console.log("[specctrCloud] WebSockets open.");
+            wsDef.resolve();
+            clearInterval(seekingConnect);
+        });
+    
+        wsConnect = wsDef.promise;
+    }, 2000);
 }
 
 Specctr.cloudAPI = {
