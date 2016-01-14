@@ -13,7 +13,7 @@ function CommonCallBack() {
 function PropertyCallBack(msg) {
 	$("#spinnerBlock").hide();
 	
-	if(msg != "true" && msg != "undefined")
+	if(msg != "true" && msg != "undefined" && msg != "")
 		specctrDialog.showAlert(msg);
 }
 
@@ -57,9 +57,12 @@ buttonController.createPropertySpecs = function() {
 	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()", PropertyCallBack);
 };
 
+/**
+ * Upload/Download Css button click handler.
+ */
 buttonController.cloudButtonHandler = function() {
-	
-	if(model.cloudOption == "import") {		//Download
+	//if download cell is selected then download the css at saved .ai/.ps file location.
+	if(model.cloudOption == "import") {
 		analytics.trackFeature('export_css');
 		setModel();
 		$("#spinnerBlock").show();
@@ -69,9 +72,8 @@ buttonController.cloudButtonHandler = function() {
 
 	//Check if document is open or not and fetch the project Id associated with it.
 	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "getProjectIdOfDoc()", function (projectId) {
+	evalScript("$.specctr" + hostApplication + ".getProjectIdOfDoc()", function (projectId) {
 		
-		//$("#spinnerBlock").hide();
 		if(projectId == "false")
 			return;
 
