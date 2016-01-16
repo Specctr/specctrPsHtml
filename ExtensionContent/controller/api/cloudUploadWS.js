@@ -142,6 +142,14 @@ Specctr.cloudAPI = {
             	value.yCoord = value.attributes.yCoord;
                 delete(value.attributes.yCoord);
             }
+            if (value.attributes && value.attributes.layer_index) {
+            	value.layer_index = value.attributes.layer_index;
+                delete(value.attributes.layer_index);
+            }
+            if (value.attributes && value.attributes.layer_id) {
+            	value.layer_id = value.attributes.layer_id;
+                delete(value.attributes.layer_id);
+            }
         });
         return cssItems;
     },
