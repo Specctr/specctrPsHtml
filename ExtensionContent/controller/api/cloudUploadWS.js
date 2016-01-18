@@ -163,8 +163,10 @@ Specctr.cloudAPI = {
         cssJson.children = Specctr.cloudAPI.moveTextContent(cssJson.children);
 
         $("#spinnerBlock").show();
+        var timestamp = Math.floor(Date.now() / 1000);
 
 		var data = JSON.stringify({
+            timestamp: timestamp,
 			api_key: api_key,
 			machine_id: machine_id,
 			document_name: css.document_name,
@@ -201,13 +203,25 @@ Specctr.cloudAPI = {
 
                 if (hostApplication == "Ps") {
                     wsConnect.done(function() {
-                        ws.send(JSON.stringify({
+                        var params = {
                             message: 'specctr_upload',
+                            timestamp: timestamp, 
                             api_key: api_key,
                             machine_id: machine_id,
                             document_id: response.document_id,
                             project_id: response.project_id
-                        }));
+                        };
+                        ws.send(JSON.stringify(params));
+
+                        _.each(cssJson.children, function(cssSpec, name) {
+                            if (cssSpec.layer_index && cssSpec.layer_id) {
+                                ws.send(JSON.stringify(_.extend(params, {
+                                    message: 'specctr_upload_layer',
+                                    layer_id: cssSpec.layer_id,
+                                    layer_index: cssSpec.layer_index
+                                })));
+                            }
+                        });
                     });
                 }
 			},
