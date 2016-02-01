@@ -74,6 +74,7 @@ buttonController.cloudButtonHandler = function() {
 	setModel();
 	evalScript("$.specctr" + hostApplication + ".getProjectIdOfDoc()", function (projectId) {
 		
+		//projectId = false, only if any document is not open. 
 		if(projectId == "false")
 			return;
 
