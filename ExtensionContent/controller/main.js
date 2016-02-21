@@ -33,14 +33,18 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 		extraLightThemeColorValue = psExtraLightThemeColorValue;
 		extraDarkThemeColorValue = psExtraDarkThemeColorValue;
 
+        /*
         var getCustomOptionsJsx = "var desc = app.getCustomOptions('specctrCloud');desc.getString(app.stringIDToTypeID('settings'));";
         evalScript(getCustomOptionsJsx, Specctr.Utility.tryCatchLog(function (response) {
             Specctr.Generator.PORT = JSON.parse(response).websocketServerPort;
         }));
+        */
 		
 	} else if (hostApplication === illustrator) {
 		addApplicationEventListener();
 	}
+
+    $('#specctrVersion').html(Specctr.version);
 	
 	appPrefs = pref.readAppPrefs();	//Read the config file and look for the isLicensed value.
 	if (appPrefs !== "") {

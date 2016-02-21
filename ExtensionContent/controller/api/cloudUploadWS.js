@@ -9,10 +9,21 @@ if (Specctr.Utility.getHostApp() == "Ps") {
     var wsConnect;
     var wsDef = Q.defer();
     var ws;
+    var connErrorLogged = false;
 
-    var seekingConnect = setInterval(function() {
-        console.log("[specctrCloud] Attempting to connect via WebSockets.");
+    var seekingConnect = setInterval(Specctr.Utility.tryCatchLog(function() {
+        var msg = "[cloudUploadWS] Attempting to connect via WebSockets.";
+        console.log(msg);
+        if (!connErrorLogged) logger.info(msg);
+
         ws = new WebSocket('ws://127.0.0.1:63421');// + Specctr.Generator.PORT);
+        ws.on('error', function(err) {
+            if (!connErrorLogged) {
+                console.log(err);
+				logger.error(err);
+                connErrorLogged = true;
+            }
+        });
         ws.on('open', function() {
             console.log("[specctrCloud] WebSockets open.");
             wsDef.resolve();
@@ -20,7 +31,7 @@ if (Specctr.Utility.getHostApp() == "Ps") {
         });
     
         wsConnect = wsDef.promise;
-    }, 2000);
+    }), 10000);
 }
 
 Specctr.cloudAPI = {

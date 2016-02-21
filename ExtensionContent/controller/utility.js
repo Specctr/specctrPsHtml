@@ -2,7 +2,6 @@
 File-Name: utility.js
 Description: This file includes common utility functions used by more than one files.
  */
-
 Specctr = Specctr || {};
 
 Specctr.Utility = {
