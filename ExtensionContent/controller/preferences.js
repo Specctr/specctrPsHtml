@@ -153,12 +153,13 @@ pref.addFileToPreferenceFolder = function(fileExtension, data) {
 };
 
 pref.log = pref.info = function(message) {
+    console.log(message);
 	var filePath = this.getFilePath('.log');
 	pref.setPermissionToFile(filePath, filePermission.WriteOnly);
 	var message = pref.createLogData(message);
 	fs.appendFile(filePath, message, function (err) {
 	    if (err) throw err;
-	    console.log('The "data to append" was appended to file!');
+	    console.log('[preferences] The "data to append" was appended to file!');
 	    pref.setPermissionToFile(filePath, filePermission.ReadOnly);
 	});	
 };

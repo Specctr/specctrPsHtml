@@ -12,9 +12,7 @@ if (Specctr.Utility.getHostApp() == "Ps") {
     var connErrorLogged = false;
 
     var seekingConnect = setInterval(Specctr.Utility.tryCatchLog(function() {
-        var msg = "[cloudUploadWS] Attempting to connect via WebSockets.";
-        console.log(msg);
-        if (!connErrorLogged) logger.info(msg);
+        if (!connErrorLogged) logger.info("[cloudUploadWS] Attempting to connect via WebSockets.");
 
         ws = new WebSocket('ws://127.0.0.1:63421');// + Specctr.Generator.PORT);
         ws.on('error', function(err) {
@@ -25,7 +23,7 @@ if (Specctr.Utility.getHostApp() == "Ps") {
             }
         });
         ws.on('open', function() {
-            console.log("[specctrCloud] WebSockets open.");
+            logger.info("[cloudUploadWS] WebSockets open.");
             wsDef.resolve();
             clearInterval(seekingConnect);
         });
