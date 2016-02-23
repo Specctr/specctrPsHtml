@@ -138,27 +138,14 @@ Specctr.cloudAPI = {
      * Remove text_content property from css and move up in nested json
      */
     moveTextContent: function(cssItems) {
+        var moveAttributes = ['text_contents','xCoord','yCoord','layer_index','layer_id','layer_name','artboard_name','artboard_index','artboard_id','parent_layer_name','parent_layer_id','parent_layer_index'];
         _.each(cssItems, function(value, key) {
-            if (value.attributes && value.attributes.text_contents) {
-                value.text_contents = value.attributes.text_contents;
-                delete(value.attributes.text_contents);
-            } 
-            if (value.attributes && value.attributes.xCoord) {
-            	value.xCoord = value.attributes.xCoord;
-                delete(value.attributes.xCoord);
-            } 
-            if (value.attributes && value.attributes.yCoord) {
-            	value.yCoord = value.attributes.yCoord;
-                delete(value.attributes.yCoord);
-            }
-            if (value.attributes && value.attributes.layer_index) {
-            	value.layer_index = value.attributes.layer_index;
-                delete(value.attributes.layer_index);
-            }
-            if (value.attributes && value.attributes.layer_id) {
-            	value.layer_id = value.attributes.layer_id;
-                delete(value.attributes.layer_id);
-            }
+            _.each(moveAttributes, function(moveAttribute) {
+                if (value.attributes && value.attributes[moveAttribute]) {
+                    value[moveAttribute] = value.attributes[moveAttribute];
+                    delete(value.attributes[moveAttribute]);
+                }  
+            });
         });
         return cssItems;
     },
