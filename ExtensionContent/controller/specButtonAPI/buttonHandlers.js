@@ -239,11 +239,11 @@ Specctr.buttonHandlers = {
 			if(modelValue == "import") {
 				selectedClass = classForSelection[0];
 				cellHandler = $("#imgCloudUploadImportCSS");
-				$('#CloudBtnLbl').text("Cloud Download");
+				$('#CloudBtnLbl').text("Download CSS");
 			} else {
 				selectedClass = classForSelection[1];
 				cellHandler = $("#imgCloudUploadExportCSS");
-				$('#CloudBtnLbl').text("Cloud Upload");
+				$('#CloudBtnLbl').text("Upload Beta");
 			}
 
 			buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
