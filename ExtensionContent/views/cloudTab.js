@@ -14,6 +14,7 @@ var messageMap = {
 		if (daysLeft === 1) daysLabel = "day";
 		return "Trial (" + daysLeft + " " + daysLabel + " left)";
 	},
+    "subscription.past_due": function(activation) {return "Past Due";},
 	"subscription.inactive": function(){return "Inactive";},
 	"subscription.none": function(){return "No subscription";}
 };
@@ -23,7 +24,8 @@ CloudTab.renderPlan = function(activation) {
 	$('#planName').html(activation.plan);
 	if (activation.success) {
 		$('#planStatus').html(messageMap[activation.code](activation));
-		$('#planStatus').removeClass('alert');
+        if (activation.code == 'subscription.past_due')
+            $('#planStatus').addClass('alert');
 
 	}else{
 		$('#planStatus').html(messageMap[activation.code]());

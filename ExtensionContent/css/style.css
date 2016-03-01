@@ -863,6 +863,7 @@ label {
 }
 
 #settingIcon {
+    margin-top: -3px;
 	margin-bottom: 4px;
 	cursor: default;
 }
