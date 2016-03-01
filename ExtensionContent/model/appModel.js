@@ -7,7 +7,7 @@ var _ = require('underscore');
 var winston = require('winston');
 
 var Specctr = {
-    version: "3.01.11",
+    version: "3.01.12",
 	Views: {},
 	Models: {}
 };
