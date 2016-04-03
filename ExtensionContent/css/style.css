@@ -538,7 +538,7 @@ label {
 }
 
 .tabPage2Content input[type="checkbox"] {
-	margin-bottom: 3px !important;
+	margin-bottom: 5px !important;
 }
 
 /*-------------------------------------------------------------*/
@@ -546,6 +546,10 @@ label {
 /*--------------Style applied on third tab page----------------*/
 #tabpage_3 {
 	color: #666666;
+}
+
+#tabpage_3 .h5 {
+	margin-top: 8px !important;
 }
 
 .responsivePageHeader {
@@ -885,6 +889,10 @@ label {
     margin-top: 3px;
     cursor: default;
 }
+
+.adjustCBMargin {
+	margin-bottom: 4px !important;
+} 
 /*-------------------------------------------------------------*/
 
 @media ( -webkit-min-device-pixel-ratio : 2) {
