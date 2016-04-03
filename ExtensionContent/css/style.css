@@ -539,7 +539,7 @@ label {
 }
 
 .tabPage2Content input[type="checkbox"] {
-	margin-bottom: 3px !important;
+	margin-bottom: 5px !important;
 }
 
 /*-------------------------------------------------------------*/
@@ -586,6 +586,10 @@ label {
 #tabpage_3 input[type="checkbox"] {
 	margin-bottom: 4px !important;
 	margin-right: 8px !important;
+}
+
+#tabpage_3 .h5 {
+	margin-top: 8px !important;
 }
 /*-------------------------------------------------------------*/
 
@@ -884,6 +888,10 @@ label {
     color: #ff5050;
     margin-top: 3px;
     cursor: default;
+}
+
+.adjustCBMargin {
+	margin-bottom: 4px !important;
 }
 
 /*--------------------Lite Version Styles-------------------------------*/
