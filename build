@@ -1,3 +1,0 @@
-#!/usr/bin/env bash
-rm -rf /Users/mityaWork/Library/Application\ Support/Adobe/CEP/extensions/SpecctrMaster
-cp -rf ExtensionContent /Users/mityaWork/Library/Application\ Support/Adobe/CEP/extensions/SpecctrMaster

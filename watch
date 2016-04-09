@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-fswatch -o ./ExtensionContent/ | xargs -n1 ./build
+fswatch -o ./ExtensionContent/ | xargs -n1 ./deploy
