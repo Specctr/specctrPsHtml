@@ -59,6 +59,17 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	Specctr.Init.init();
 	
 	$("#spinnerBlock").hide();
+	
+	//Get the bundle version from manifest file.
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		var xmlDoc = this.responseXML;
+		var extManNode = xmlDoc.getElementsByTagName("ExtensionManifest")[0];
+		var bundleVersion = extManNode.getAttribute("ExtensionBundleVersion");
+		$("#specctrVersion").text("v."+bundleVersion);			//Should be v.3.00...
+	};
+	xhttp.open("GET", "../CSXS/manifest.xml", true);
+	xhttp.send();
 });
 
 /**
