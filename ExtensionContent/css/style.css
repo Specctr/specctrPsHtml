@@ -173,6 +173,10 @@ label {
 	margin-bottom: 20px !important;
 }
 
+.marginTop5px{
+	margin-top: 5px !important;	
+}
+
 .marginBottom1px {
 	margin-bottom: 1px !important;
 }
@@ -239,7 +243,7 @@ label {
 }
 
 .setBlueLabel {
-	color: #3577FA !important;
+	color: #4990E2 !important;
 	font-weight: bold !important; 
 }
 
@@ -936,7 +940,7 @@ label {
 }
 
 #banner {
-	margin-left: 10px;
+	margin-left: -1px !important;
 	cursor: pointer;
 }
 

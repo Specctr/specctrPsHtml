@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="5.0" ExtensionBundleId="SpecctrMasterLite" ExtensionBundleVersion="3.00.01.lh"
+<ExtensionManifest Version="5.0" ExtensionBundleId="SpecctrMasterLite" ExtensionBundleVersion="3.00.02.l"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
