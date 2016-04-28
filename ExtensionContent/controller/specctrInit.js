@@ -108,8 +108,14 @@ Specctr.Init.setModelToButtons = function() {
 Specctr.Init.setModelValueFromPreferences = function() {
 	var appPrefs = pref.readAppPrefs();
 
-	if (!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha"))
+	//If no preference is set, default font family should be arial.
+	if (!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha")) {
+		var hostApplication = Specctr.Utility.getHostApp();
+		if(hostApplication == indesign)
+			model.legendFont = "Arial";
 		return;
+	}
+		
 
 	var i;
 	var propertyName = [ "textFont", "textSize", "textLayerName", "textColor"];
@@ -119,6 +125,7 @@ Specctr.Init.setModelValueFromPreferences = function() {
 	}
 
 	model["canvasExpandSize"] = Number(appPrefs["canvasExpandSize"]);
+	model["legendFont"] = appPrefs["legendFont"];
 };
 
 /**
