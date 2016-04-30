@@ -112,8 +112,13 @@ Specctr.Init.setModelToButtons = function() {
 Specctr.Init.setModelValueFromPreferences = function() {
 	var appPrefs = pref.readAppPrefs();
 
-	if (!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha"))
+	if (!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha")) {
+		var hostApplication = Specctr.Utility.getHostApp();
+		if(hostApplication == indesign)
+			model.legendFont = "Arial";
+		
 		return;
+	}
 
 	var i, propertyApplicationSpecific;
 	var propertyName = ["shapeLayerName", "shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
