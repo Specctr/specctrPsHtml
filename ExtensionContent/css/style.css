@@ -25,7 +25,7 @@ body {
 	-moz-user-select: -moz-none;
 	-o-user-select: none;
 	user-select: none;
-	border: 2px solid #C9CBCC;
+	border: 1px solid #C9CBCC;
 }
 
 input[type="text"],input[type="email"],input[type="password"] {
@@ -940,7 +940,7 @@ label {
 }
 
 #banner {
-	margin-left: -1px !important;
+	margin-left: 2px !important;
 	cursor: pointer;
 }
 
