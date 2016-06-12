@@ -43,8 +43,6 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	} else if (hostApplication === illustrator) {
 		addApplicationEventListener();
 	}
-
-    $('#specctrVersion').html(Specctr.version);
 	
 	appPrefs = pref.readAppPrefs();	//Read the config file and look for the isLicensed value.
 	if (appPrefs !== "") {
@@ -90,6 +88,21 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 		Specctr.Init.init();
 	
 	$("#spinnerBlock").hide();
+	
+	//Get the bundle version from manifest file.
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if(xhttp.readyState == 4) {
+			var xmlDoc = this.responseXML;
+			var extManNode = xmlDoc.getElementsByTagName("ExtensionManifest")[0];
+			var bundleVersion = extManNode.getAttribute("ExtensionBundleVersion");
+			$("#specctrVersion").html("v."+bundleVersion);			//Should be v.3.00...
+		}
+	};
+
+	xhttp.open("GET", "../CSXS/manifest.xml", true);
+	xhttp.send();
+
 });
 
 /**

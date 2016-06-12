@@ -11,7 +11,7 @@ ul#loginBlock, ul#activateBlock {
 	border: none;
 	Height: 606px;
 	Width: 241px;
-	background-color: #2266ff;
+	background-color: #4990E2;
 }
 
 #dvLoginContainer {
@@ -20,7 +20,7 @@ ul#loginBlock, ul#activateBlock {
 
 #dvLoginContainer ul {
 	height: 200px;
-	margin-left: 10px;
+	margin-left: 16px;
 }
 
 #dvLoginContainer ul li{
@@ -34,15 +34,16 @@ ul#loginBlock, ul#activateBlock {
 
 .loginTextItem {
 	height: 30px !important;
-	width: 218px;
+	width: 196px;
 	font-size: 18px;
 	font-family: Arial;
+	padding-left: 8px !important;
 }
 
 .activationHeader {
 	padding-top: 30px;
-	height: 120px;
-	padding-left: 15px;
+	height: 86px;
+	padding-left: 16px;
 }
 
 #loignHeaderLabel {
@@ -52,17 +53,17 @@ ul#loginBlock, ul#activateBlock {
 }
 
 .loginPageButton {
-	width: 220px !important;
+	width: 206px !important;
 	border: 1px solid #ffffff;
-	height: 30px !important;
-	padding-top: 3px;
+	height: 40px !important;
+	padding-top: 8px;
 	text-align: center;
 	cursor: default;
 }
 
 .loginPageButton label {
 	color: #ffffff;
-	font-family: Arial;
+	font-family: aauxProBol;
 	font-size: 20px; 
 	cursor: default;
 }
