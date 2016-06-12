@@ -939,13 +939,24 @@ label {
 	opacity: 0.6;
 }
 
-#banner {
-	margin-left: 2px !important;
+.banner {
+	background-image: url('../assets/images/banner.png');
+	width: 245px;
+	height: 65px;
 	cursor: pointer;
+	border: none;
+	background-color: rgb(73,144,226);
 }
 
 /*-------------------------------------------------------------*/
 
 @media ( -webkit-min-device-pixel-ratio : 2) {
-
+	.banner {
+		background-image: url('../assets/images/banner_x2.png');
+		width: 245px;
+		height: 65px;
+		cursor: pointer;
+		border: none;
+		background-color: rgb(73,144,226);
+	}
 }
