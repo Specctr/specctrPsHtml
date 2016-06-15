@@ -55,8 +55,8 @@ ul#loginBlock, ul#activateBlock {
 .loginPageButton {
 	width: 206px !important;
 	border: 1px solid #ffffff;
-	height: 40px !important;
-	padding-top: 8px;
+	height: 35px !important;
+	padding-top: 13px;
 	text-align: center;
 	cursor: default;
 }
