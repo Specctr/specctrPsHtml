@@ -4,8 +4,7 @@ Description: Includes styling code related to cloud upload page.
 */
 
 #dvCloudContainer {
-	border: none;
-	Height: 606px;
+	border: none; Height: 606px;
 	Width: 241px;
 	background-color: #2266ff;
 }
@@ -43,7 +42,7 @@ Description: Includes styling code related to cloud upload page.
 	width: 210px;
 	border: 1px solid #ffffff;
 	height: 25px;
-	padding-top: 3px;
+	padding-top: 8px;
 	text-align: center;
 	cursor: default;
 	color: #ffffff;
@@ -52,8 +51,9 @@ Description: Includes styling code related to cloud upload page.
 
 #uploadButton:HOVER {
 	border: 2px solid #ffffff;
-	font-weight: b
+	font-weight: b;
 }
+
 
 #projectTable {
 	margin-left: 12px; 
@@ -98,4 +98,8 @@ Description: Includes styling code related to cloud upload page.
 
 .marginLeft12 {
 	margin-left: 12px;
+}
+
+#uploadButton.disabled {
+    cursor: not-allowed;
 }

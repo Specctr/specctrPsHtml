@@ -102,7 +102,6 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 
 	xhttp.open("GET", "../CSXS/manifest.xml", true);
 	xhttp.send();
-
 });
 
 /**

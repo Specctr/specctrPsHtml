@@ -29,7 +29,11 @@ if (Specctr.Utility.getHostApp() == "Ps") {
         });
     
         wsConnect = wsDef.promise;
-    }), 10000);
+        wsConnect.done(function() {
+            $("#uploadButton").removeClass("disabled");
+            $("#uploadBtnLabel").html("UPLOAD");
+        });
+    }), 2000);
 }
 
 Specctr.cloudAPI = {
