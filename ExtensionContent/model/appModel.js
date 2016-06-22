@@ -7,7 +7,7 @@ var _ = require('underscore');
 var winston = require('winston');
 
 var Specctr = {
-    version: "3.01.14",
+	Version: "",
 	Views: {},
 	Models: {}
 };
@@ -16,16 +16,7 @@ var SPECCTR_HOST = "https://cloud.specctr.com";
 //var SPECCTR_HOST = "http://localhost:5000";
 var SPECCTR_API = SPECCTR_HOST += "/api/v1";
 
-var BG = Bugsnag = bugsnag = require('bugsnag');
-BG.register("5e2e7c4622cad658564714af7011b905", {sendCode: true});
-BG.appVersion = Specctr.version;
-BG.notifyReleaseStages = ["production"];
-
-if (SPECCTR_HOST == "https://cloud.specctr.com") {
-    BG.releaseStage = "production";
-}else{
-    BG.releaseStage = "development";
-}
+var BG = {};
 
 var model = {
 	shapeLayerName:		true,

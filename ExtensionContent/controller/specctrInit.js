@@ -69,6 +69,7 @@ Specctr.Init.init = Specctr.Utility.tryCatchLog(function() {
     this.setModelToButtons();
     this.setModelToUIComponents();
     this.setModelToResponsive();
+    this.setVersionAtBottom();
     
     Specctr.Auth.checkStatus(Specctr.Activation);
 });
@@ -242,5 +243,41 @@ Specctr.Init.setModelToResponsive = function() {
 			Specctr.Utility.disableTextField(textFieldIds[i]);
 			Specctr.Utility.disableTextField(textFieldIds[i+1]);
 		}
+	}
+};
+
+/**
+ * This method fetch the application version from manifest file and set it at panel bottom.
+ */
+Specctr.Init.setVersionAtBottom = function() {
+	//Get the bundle version from manifest file.
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if(xhttp.readyState == 4) {
+			var xmlDoc = this.responseXML;
+			var extManNode = xmlDoc.getElementsByTagName("ExtensionManifest")[0];
+			Specctr.Version = extManNode.getAttribute("ExtensionBundleVersion");
+			$("#specctrVersion").html("v."+Specctr.Version);			//Should be v.3.00...
+			Specctr.Init.setBugSnagParameters();
+		}
+	};
+
+	xhttp.open("GET", "../CSXS/manifest.xml", true);
+	xhttp.send();
+};
+
+/**
+ * This method set the BugSnag parameters.
+ */
+Specctr.Init.setBugSnagParameters = function() {
+	BG =  Bugsnag = bugsnag = require('bugsnag');
+	BG.register("5e2e7c4622cad658564714af7011b905", {sendCode: true});
+	BG.appVersion = Specctr.Version;
+	BG.notifyReleaseStages = ["production"];
+
+	if (SPECCTR_HOST == "https://cloud.specctr.com") {
+	    BG.releaseStage = "production";
+	}else{
+	    BG.releaseStage = "development";
 	}
 };
