@@ -115,13 +115,16 @@ $.specctrPsAddNote = {
             
              if(propertyLegendLayer) {
                  try {
+                    var number = $.specctrPsCommon.getXMPData(propertyLegendLayer.artLayers.getByName("Specs"), "number");
                     bullet = propertyLegendLayer.artLayers.getByName("__sFirstBullet");
                 } catch (e) {}
              }
             
             //Check if any number is linked with selected art layer or not, if not then assign a number.
             if (!bullet) {
-                var number = $.specctrPsCommon.getBulletNumber(artLayer, parent, true);
+                if(!number)
+                    number = $.specctrPsCommon.getBulletNumber(spec, parent, true);
+                    
                 bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
             }
             
@@ -225,8 +228,17 @@ $.specctrPsAddNote = {
                 
             if(model.specOption == "Bullet") {
                 $.specctrPsCommon.deleteArtLayerByName(propertyLegendLayer, "__sFirstBullet");
+                
+                if(propertyLegendLayer) {
+                     try {
+                        var number = $.specctrPsCommon.getXMPData(propertyLegendLayer.artLayers.getByName("Specs"), "number");
+                    } catch (e) {}
+                 }
+         
                 //Check if any number is linked with selected art layer or not, if not then assign a number.
-                var number = $.specctrPsCommon.getBulletNumber(artLayer, legendLayer.parent.parent.parent, false);
+                if(!number)
+                    number = $.specctrPsCommon.getBulletNumber(spec, legendLayer.parent.parent.parent, false);
+                    
                 var bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
                 bullet.name = "__sFirstBullet";
 
