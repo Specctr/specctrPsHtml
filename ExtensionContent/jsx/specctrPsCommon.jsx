@@ -454,28 +454,10 @@ $.specctrPsCommon = {
         var specctrLayer = doc.layerSets.getByName("Specctr");
         var specctrLayerSet = specctrLayer.layerSets;
         
-         //Check if any number is linked with selected art layer or not, if not then assign a number.
-        var number =  this.getXMPData(spec, "number");
-        
-        try {
-            specctrLayerSet.getByName("Properties");
-        } catch(e) {
-            try {
-                specctrLayerSet.getByName("Add Note");
-            } catch (e) {
-                number = 0;
-                isNewBullet = true;
-            }
-        }
-    
-        if(number == null) {
-            //Number linked with document, this no. tells the total no. of property specs created on document.
-            number = $.specctrPsCommon.getXMPData(specctrLayer, "noOfSpec"); 
-            if(number == null)
-                number = 0;
-        }
-
         if(isNewBullet) {
+            var number = $.specctrPsCommon.getXMPData(specctrLayer, "noOfSpec"); 
+            if(!number) number = 0;
+            
             number = parseInt(number) + 1;
             var xmpData = [{layerHandler : spec, 
                                     properties : [{name : "number", value : number}]
@@ -485,6 +467,8 @@ $.specctrPsCommon = {
                                     }];
             
             this.setXmpDataOfLayer(xmpData);
+        } else {
+            number =  this.getXMPData(spec, "number");
         }
     
         return parseInt(number);

@@ -230,29 +230,16 @@ $.specctrPsProperties = {
             
             //Number system..
             if(model.specOption == "Bullet") {
-                
-                if(noteLegendLayer) {
-                     try {
-                         var number = $.specctrPsCommon.getXMPData(noteLegendLayer.artLayers.getByName("Specs"), "number");
-                        bullet = noteLegendLayer.artLayers.getByName("__sFirstBullet");
-                    } catch (e) {}
-                 }
-         
-              //Check if any number is linked with selected art layer or not, if not then assign a number.
-                if (!bullet) {
-                    if(!number)
-                        number = $.specctrPsCommon.getBulletNumber(spec, parent, true);
-                        
-                    bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
-                }
-            
+               //Check if any number is linked with property spec or not, if not then assign a number.
+                number = $.specctrPsCommon.getBulletNumber(spec, parent, true);
+                bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
                 var dia = bullet.bounds[2] - bullet.bounds[0];
                 bullet.translate(artLayerBounds[0]-bullet.bounds[0]-dia-1, artLayerBounds[1]-bullet.bounds[1]-1);
                 dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
                 dupBullet.move(legendLayer, ElementPlacement.INSIDE);
                 
                 //Adjust position of spec items.
-               $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, noteSpecBottom, cnvsRect[0] + spacing, 
+                $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, noteSpecBottom, cnvsRect[0] + spacing, 
                                                                   (cnvsRect[0] + cnvsRect[2])/2.0, centerX, dia, true, cnvsRect);
                 dupBullet.name = "__sSecondBullet";
                 spec.link(dupBullet);
@@ -385,21 +372,11 @@ $.specctrPsProperties = {
             $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
 
             if(model.specOption == "Bullet") {
-                $.specctrPsCommon.deleteArtLayerByName(noteLegendLayer, "__sFirstBullet");
-                
-                if(noteLegendLayer) {
-                     try {
-                         var number = $.specctrPsCommon.getXMPData(noteLegendLayer.artLayers.getByName("Specs"), "number");
-                    } catch (e) {}
-                 }
-             
                 //Check if any number is linked with selected art layer or not, if not then assign a number.
-                if(!number)
-                    number = $.specctrPsCommon.getBulletNumber(spec, legendLayer.parent.parent.parent.parent, false);
-                
+                var number = $.specctrPsCommon.getBulletNumber(spec, legendLayer.parent.parent.parent.parent, isNewSpecCreated);
                 var bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
                 bullet.name = "__sFirstBullet";
-                
+
                 var dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
                 dupBullet.name = "__sSecondBullet";
                 dupBullet.move(legendLayer, ElementPlacement.INSIDE);
