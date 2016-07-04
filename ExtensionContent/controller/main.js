@@ -5,6 +5,7 @@ Description: Include methods to initialize the panel's component according to th
 
 Specctr = Specctr || {};
 Specctr.Generator = Specctr.Generator || {};
+Specctr.Init.setBugSnagParameters();
 
 /**
  * Load the jsx and show/hide the login container 

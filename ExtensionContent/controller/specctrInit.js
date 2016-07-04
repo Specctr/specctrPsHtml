@@ -258,7 +258,6 @@ Specctr.Init.setVersionAtBottom = function() {
 			var extManNode = xmlDoc.getElementsByTagName("ExtensionManifest")[0];
 			Specctr.Version = extManNode.getAttribute("ExtensionBundleVersion");
 			$("#specctrVersion").html("v."+Specctr.Version);			//Should be v.3.00...
-			Specctr.Init.setBugSnagParameters();
 		}
 	};
 

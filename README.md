@@ -1,3 +1,17 @@
+Master Install Locations:
+MAC:
+WIN:
+
+Log Locations:
+
+MAC:
+/Users/mityaWork/Library/Application Support/LocalStore/SpecctrPs-Pro.log
+/Library/Application Support/LocalStore/SpecctrPs-Pro.log
+
+WIN:
+
+
+
 specctrHtml (Master)
 ================
 

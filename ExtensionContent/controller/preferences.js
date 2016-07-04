@@ -165,7 +165,13 @@ pref.log = pref.info = function(message) {
 };
 
 pref.logError = pref.error = function(e) {
-    bugsnag.notify(e, {user: {email: Specctr.Activation.email, machineId: Specctr.Activation.machine_id}});
+    var email;
+    if(Specctr && Specctr.Activation) email = Specctr.Activation.email;
+
+    var machineId;
+    if(Specctr && Specctr.Activation) machineId = Specctr.Activation.machine_id;
+
+    bugsnag.notify(e, {user: {email: email, machineId: machineId}});
 	pref.log(e.stack);
 };
 
