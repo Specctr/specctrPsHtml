@@ -82,14 +82,17 @@ $.specctrPsAddNote = {
          if(noteId != null) {
              legendLayer = $.specctrPsCommon.getLayerByID(noteId);
              if(legendLayer) {
-                this.updateNoteSpec(sourceItem, legendLayer, bounds, propertySpecBottom, propertyLegendLayer);
+                this.updateNoteSpec(sourceItem, legendLayer, bounds, propertySpecBottom);
+                $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);
                 return;
             }
          }
         //Check artboard is present or not and make changes in bounds accordingly.
         var parent = doc;
-        var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
-        if(isArtBoardPresent) {
+        var cnvsRect = $.specctrPsCommon.getArtBoardBounds(artLayer);
+        if(cnvsRect == null) {
+            cnvsRect = [0, 0, doc.width, doc.height];
+        } else {
             parent = $.specctrPsCommon.getArtBoard(artLayer);
         }
     
@@ -107,47 +110,21 @@ $.specctrPsAddNote = {
         specText.size = model.legendFontSize;
         spec.name = "Specs";
 
-        //Number system.
-        if(model.specOption == "Bullet") {
-            
-             if(propertyLegendLayer) {
-                 try {
-                    bullet = propertyLegendLayer.artLayers.getByName("__sFirstBullet");
-                } catch (e) {}
-             }
-            
-            //Check if any number is linked with selected art layer or not, if not then assign a number.
-            if (!bullet) {
-                var number = $.specctrPsCommon.getBulletNumber(artLayer, parent, true);
-                bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
-            }
-            
-            var dia = bullet.bounds[2] - bullet.bounds[0];
-            bullet.translate(artLayerBounds[0]-bullet.bounds[0]-dia-1, artLayerBounds[1]-bullet.bounds[1]-1);
-            dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
-            dupBullet.move(legendLayer, ElementPlacement.INSIDE);
-
-           $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, propertySpecBottom, spacing,
-                                                              doc.width/2.0, centerX, dia, true);
-
-            dupBullet.name = "__sSecondBullet";
-            spec.link(dupBullet);
+        //Calcutate the position of spec text item.
+        if(centerX <=  (cnvsRect[0] + cnvsRect[2])/2.0) {
+            specText.justification = Justification.LEFT;
+            spec.translate(-(spec.bounds[0]-spacing - cnvsRect[0]), propertySpecBottom-spec.bounds[1]);
         } else {
-            //Calcutate the position of spec text item.
-            if(centerX <=  doc.width/2.0) {
-                specText.justification = Justification.LEFT;
-                spec.translate(-(spec.bounds[0]-spacing), propertySpecBottom-spec.bounds[1]);
-            } else {
-                specText.justification = Justification.RIGHT;
-                spec.translate(doc.width-spacing-spec.bounds[2], propertySpecBottom-spec.bounds[1]);
-            }
-
-            //Get the end points for arm.
-            legendLayer.visible = true;
-            arm = $.specctrPsCommon.createArm(specText, spec, artLayerBounds, newColor);
-            arm.name = "__sArm";
-            spec.link(arm);
+            specText.justification = Justification.RIGHT;
+            spec.translate(cnvsRect[2]-spacing-spec.bounds[2], propertySpecBottom-spec.bounds[1]);
         }
+
+        //Get the end points for arm.
+        legendLayer.visible = true;
+        arm = $.specctrPsCommon.createArm(specText, spec, artLayerBounds, newColor);
+        arm.name = "__sArm";
+        spec.link(arm);
+
         var xmpData = [{layerHandler : legendLayer, 
                                     properties : [{name : "idLayer", value : idLayer}, 
                                                         {name : "idNote", value : noteId}]
@@ -167,7 +144,7 @@ $.specctrPsAddNote = {
     },
 
     //Update the note spec of the layer whose spec is already present.
-    updateNoteSpec : function(artLayer, legendLayer, bounds, specYPos, propertyLegendLayer) {
+    updateNoteSpec : function(artLayer, legendLayer, bounds, specYPos) {
         // Save the current preferences
         var startTypeUnits = app.preferences.typeUnits;
         var startRulerUnits = app.preferences.rulerUnits;
@@ -216,50 +193,29 @@ $.specctrPsAddNote = {
             var centerX = (artLayerBounds[0] + artLayerBounds[2])/2;
             var centerY = (artLayerBounds[1] + artLayerBounds[3]) / 2;
             
-            $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sFirstBullet");
-            $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sSecondBullet");
             $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
                 
-            if(model.specOption == "Bullet") {
-                $.specctrPsCommon.deleteArtLayerByName(propertyLegendLayer, "__sFirstBullet");
-                //Check if any number is linked with selected art layer or not, if not then assign a number.
-                var number = $.specctrPsCommon.getBulletNumber(artLayer, legendLayer.parent.parent.parent, false);
-                var bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
-                bullet.name = "__sFirstBullet";
-
-                var dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
-                dupBullet.name = "__sSecondBullet";
-                dupBullet.move(legendLayer, ElementPlacement.INSIDE);
-
-                var dia = bullet.bounds[2] - bullet.bounds[0];
-                //Adjust position of spec items.
-               $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, specYPos, spacing, centerX, 
-                                                                    (spec.bounds[0] + spec.bounds[2]) / 2.0, dia, isNewSpecCreated);
-
-                bullet.translate(artLayerBounds[0]-bullet.bounds[0]-dia-1, artLayerBounds[1]-bullet.bounds[1]-1);
-                spec.link(dupBullet);
-            } else {
-                //Calcutate the position of spec text item.
-                if (isNewSpecCreated == true) {
-                    if(centerX <=  doc.width/2.0) {
-                        specText.justification = Justification.LEFT;
-                        spec.translate(-(spec.bounds[0]-spacing), specYPos-spec.bounds[1]);
-                    } else {
-                        specText.justification = Justification.RIGHT;
-                        spec.translate(doc.width-spacing-spec.bounds[2], specYPos-spec.bounds[1]);
-                    }
+            //Calcutate the position of spec text item.
+            if (isNewSpecCreated == true) {
+                if(centerX <=  doc.width/2.0) {
+                    specText.justification = Justification.LEFT;
+                    spec.translate(-(spec.bounds[0]-spacing), specYPos-spec.bounds[1]);
+                } else {
+                    specText.justification = Justification.RIGHT;
+                    spec.translate(doc.width-spacing-spec.bounds[2], specYPos-spec.bounds[1]);
                 }
-
-                //Create the arm at  the end points of spec and selected art layer.
-                arm = $.specctrPsCommon.createArm(specText, spec, artLayerBounds, newColor);
-                arm.name = "__sArm";
-                spec.link(arm);
             }
+
+            //Create the arm at  the end points of spec and selected art layer.
+            arm = $.specctrPsCommon.createArm(specText, spec, artLayerBounds, newColor);
+            arm.name = "__sArm";
+            spec.link(arm);
 
         } catch(e) {alert(e);}
 
         doc.activeLayer = artLayer;
         doc.resizeImage(null, null, originalDPI, ResampleMethod.NONE);
+        
         // Reset the application preferences
         app.preferences.typeUnits = startTypeUnits;
         app.preferences.rulerUnits = startRulerUnits;

@@ -5,6 +5,9 @@ Specctr.Auth = {
 	 *  if user's credentials valid.
 	 */
 	login: Specctr.Utility.tryCatchLog(function(ev) {
+		
+		$("#spinnerBlock").show();
+		
 		var urlRequest = SPECCTR_API + "/register_machine?";
 		urlRequest += "&email=" + $("#loginEmail").val();
 		urlRequest += "&password=" + $("#loginPassword").val();
@@ -16,6 +19,8 @@ Specctr.Auth = {
 			dataType: "json",
 			success: function(response, textStatus, xhr) {
 				pref.log(xhr.status + " - " + response.message);
+				$("#spinnerBlock").hide();
+
 				// If unsuccessful, return without saving the data in file.
 				if (response.success) {
 					analytics.trackActivation('succeeded');	
@@ -25,10 +30,14 @@ Specctr.Auth = {
 						api_key: response.api_key,
 						email: response.user	
 					};
+					
+					//Set fresh api key and machine id.
+					api_key = response.api_key;
+					machine_id = response.machine_id;
+					
 					pref.addFileToPreferenceFolder('.license', 
 						JSON.stringify(activationPrefs)); //Create license file.
-					
-					$("#loginFooterLabel").click();
+
 					Specctr.Init.init();
 				} else {
 					analytics.trackActivation('failed');
@@ -36,10 +45,9 @@ Specctr.Auth = {
 				}
 			},
 			error: function(xhr, status, error) {
-				var response = '';
-				try {
-					response = JSON.parse(xhr.responseText);
-				} catch(e) {}
+
+				$("#spinnerBlock").hide();
+				var response = JSON.parse(xhr.responseText);
 				
 				if(response) {
 					pref.log(xhr.status + " - " + response.message);
@@ -75,13 +83,14 @@ Specctr.Auth = {
 			Specctr.Views.CloudTab.renderPlan(activation);
 			Specctr.UI.enableAllTabs();
 		})).fail(Specctr.Utility.tryCatchLog(function(xhr){
+			
 			if (xhr.status === 401) {
 				pref.log(xhr.status + " - " + "Unauthorized ");
 				// Load login container..		
 				$("#tabContainer").hide();
 				$("#loginContainer").show();
-			}
-			else {
+			} else {
+				
 				pref.log(xhr.status + " - " + "Inactive subscription.");
 				var response = JSON.parse(xhr.responseText);
 				_.extend(activation, response);
@@ -107,6 +116,9 @@ Specctr.Auth = {
 		//Delete license file from preference folder.
 		var licenseFilePath = pref.getFilePath('.license');
 		pref.deleteFile(licenseFilePath);
+
+		//refresh api keys.
+		api_key = "";
 	})
 };
 

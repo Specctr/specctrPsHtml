@@ -30,7 +30,8 @@ Specctr.buttonHandlers = {
 
 		buttonController.closeAllDropDown();
 		setModel();
-		evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs('" + note + "')");
+		$("#spinnerBlock").hide();
+		evalScript("$.specctr" + hostApplication + "." + "addNoteSpecs('" + note + "')", CommonCallBack);
 	}),
 	
 	/**
@@ -38,37 +39,50 @@ Specctr.buttonHandlers = {
 	 */
 	exportCss : Specctr.Utility.tryCatchLog(function(){
 		analytics.trackFeature('export_css');
+		var selectedProjRef = $("#projectTable").find('.highlight').find('td:first'); 
+		var projectName = selectedProjRef.html();
+		if(!projectName) {
+			specctrDialog.showAlert("Please select a project");
+			return;
+		}
+		
 		setModel();
-
+		$("#spinnerBlock").show();
+		
 		// Upload specs to Specctr.
-		evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo){
-			var css = JSON.parse(cssInfo);
-			var cssJson = CSSJSON.toJSON(css.text);
-			var data = JSON.stringify({
-				api_key: api_key,
-				machine_id: machine_id,
-				document_name: css.document_name,
-				css_items: cssJson.children
-			});
-
-			$.ajax({
-				url: SPECCTR_API + "/css_items",
-				type: "POST",
-				contentType: "application/json;charset=utf-8",
-				dataType: "json",
-				data: data,
-				success: function(response, xhr) {
-					specctrDialog.showAlert('success');
-					pref.log('Synced css for document: ' + css.document_name);
-				},
-				error: function(xhr) {
-					specctrDialog.showAlert('error');
-					pref.logResError(xhr);
+		evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo) {
+			
+			try {
+				
+				$("#spinnerBlock").hide();
+				var css = JSON.parse(cssInfo);
+				
+				if(!cssInfo || css.text == "") {
+					return;
 				}
-			});
+				
+				//check if id is present.
+				var IdObject = {
+					project_id: selectedProjRef.attr('value'),
+					document_id: css.document_id,
+				};
+
+				if(IdObject.project_id != css.project_id)
+					IdObject.project_id = '';
+				
+				if(IdObject.project_id && IdObject.document_id) {
+					Specctr.cloudAPI.uploadCss(cssInfo, IdObject, false);
+				} else {
+					Specctr.cloudAPI.getDocId(cssInfo, selectedProjRef.html());
+				}
+				
+			}catch(e){
+				alert(e);
+			}
+			
 		});
 	}),
-	
+		
 	/**
 	 * Closing/Opening Spacing popup button according to dropdown cell selection and call
 	 * creating spec function accordingly.
@@ -96,7 +110,13 @@ Specctr.buttonHandlers = {
 				buttonController.createSpacingSpecs();
 
 		} else if (specButton.id == "btnCoordinate") {
+			
 			buttonController.createCoordinateSpecs();
+			
+		} else if (specButton.id == "btnCloupUpload") {
+			
+			buttonController.cloudButtonHandler();
+			
 		}
 	}),
 
@@ -114,7 +134,7 @@ Specctr.buttonHandlers = {
 		buttonId = "#" + buttonId;
 		var liId = "#" + specButton.parentNode.parentNode.id;
 		var dropDownId = "#" + $(liId+" div:nth-child(2)").attr("id");
-		var imageDropDownArrowId = "#" + specButton.id;
+		var imageDropDownArrowId = "#" + specButton.getElementsByTagName('div')[0].id;
 
 		//Call the spec methods respective to the clicked button's Id.
 		buttonController.toggleDropDown(liId, buttonId, dropDownId, imageDropDownArrowId);
@@ -127,7 +147,7 @@ Specctr.buttonHandlers = {
 	 * @param modelValue {string} The value to be changed in model object.
 	 * */
 	dropDownCellClickHandler : Specctr.Utility.tryCatchLog(function(cellId, selectionClass, modelValue) {
-		var selectedCellIndex, classForSelection;
+		var selectedCellIndex;
 		var cellHandler = $("#" + cellId);
 
 		if(cellHandler.parent().attr("id") == "dimensionDropDown") {
@@ -136,21 +156,12 @@ Specctr.buttonHandlers = {
 
 			//Set values according to cell selection in dimension button.
 			if (selectedRow == "width") {
-				//Selection classes for each cell in width row.
-				classForSelection = ["noSelectionSelected", "widthTopSelected",
-				                     "widthBottomSelected", "widthCenterSelected"];
-				buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 				model.widthPos = selectedCellIndex;
 			} else {
-				//Selection classes for each cell in height row.
-				classForSelection = ["noSelectionSelected", "heightLeftSelected",
-				                     "heightRightSelected", "heightCenterSelected"];
-				buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 4);
 				model.heightPos = selectedCellIndex;
 			}
-
-			cellHandler.addClass(selectionClass);
-			buttonController.changeDimensionButtonIcon();
+			
+			this.setDimensionButton(model.heightPos, model.widthPos);
 		} else if (cellHandler.parent().attr("id") == "spacingDropDown") {
 
 			cellHandler.toggleClass(selectionClass);
@@ -158,22 +169,128 @@ Specctr.buttonHandlers = {
 			buttonController.changeSpacingButtonIcon();
 
 		} else if (cellHandler.parent().attr("id") == "coordinateDropDown") {
-
 			selectedCellIndex = cellHandler.index();
-			classForSelection = ["topLeftSelected", "topRightSelected",
-			                     "bottomRightSelected", "bottomLeftSelected"];
-			buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 			model.coordinateCellNumber = selectedCellIndex;
-			cellHandler.addClass(selectionClass);
+			this.setCoordinateButton(selectedCellIndex);
 
+		} else if(cellHandler.parent().attr("id") == "cloudUploadDropDown") {
+			model.cloudOption = modelValue;
+			this.setCloudButton(modelValue);
+			
 		} else {
-
-			classForSelection = ["specBulletSelected", "specLineSelected"];
-			buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
 			model.specOption = modelValue;
-			cellHandler.addClass(selectionClass);
-			buttonController.changePropertyButtonIcon();
+			this.setPropertyButton(modelValue);
 		}
-	})
+		
+		pref.writeAppPrefs();
+	}),
+	
+	/**
+	 * Change the appearance of selected cell in the property button's dropdown and its icon.
+	 * @param cellId {string} The id of selected cell.
+	 * @param selectionClass {string} The css class that has to be toggled.
+	 * */
+	setPropertyButton : function(modelValue) {
+		var cellHandler, selectedClass;	
+		var classForSelection = ["specBulletSelected", "specLineSelected"];
+		if(modelValue == "Bullet") {
+			selectedClass = classForSelection[0];
+			cellHandler = $("#imgPropertiesBullet");
+		} else {
+			selectedClass = classForSelection[1];
+			cellHandler = $("#imgPropertiesLine");
+		}
 
+		buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
+		cellHandler.addClass(selectedClass);
+		buttonController.changePropertyButtonIcon();
+	},
+	
+	 setCoordinateButton : function(modelValue) {
+		 var cellHandler;
+		 switch(modelValue) {
+			 case 1:
+				 cellHandler = $("#imgTopRight");
+				 break;
+			 case 2:
+				 cellHandler = $("#imgBottomRight");
+				 break;
+			 case 3: 
+				 cellHandler = $("#imgBottomLeft");
+				 break;
+			 default: 
+				 cellHandler = $("#imgTopLeft");
+		 }
+		 
+		 var classForSelection = ["topLeftSelected", "topRightSelected",
+		                     "bottomRightSelected", "bottomLeftSelected"];
+		 
+		 var selectedClass = classForSelection[modelValue];
+		 buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
+		 cellHandler.addClass(selectedClass);
+		 
+		 //Add code to change coordinate button icon.
+		 buttonController.changeCoordinateButtonIcon();
+	 },
+	 
+	 setCloudButton : function(modelValue) {
+			var cellHandler, selectedClass;	
+			var classForSelection = ["importCssSelected", "exportCssSelected"];
+			if(modelValue == "import") {
+				selectedClass = classForSelection[0];
+				cellHandler = $("#imgCloudUploadImportCSS");
+				$('#CloudBtnLbl').text("Download CSS");
+			} else {
+				selectedClass = classForSelection[1];
+				cellHandler = $("#imgCloudUploadExportCSS");
+				$('#CloudBtnLbl').text("Upload Beta");
+			}
+
+			buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
+			cellHandler.addClass(selectedClass);
+			buttonController.changeCloudButtonIcon();
+		},
+	
+	setDimensionButton : function (modelValHeight, modelValWidth) {
+		//Selection classes for each cell in height row.
+		var classForHeightCells = ["noSelectionSelected", "heightLeftSelected",
+		                     "heightRightSelected", "heightCenterSelected"];
+		
+		var heightImgIds = ["#imgNoSelectionHeight", "#imgHeightLeft", 
+		                    "#imgHeightRight", "#imgHeightCenter"];
+		var cellHandler = $(heightImgIds[modelValHeight]);
+		var selectedClass = classForHeightCells[modelValHeight];
+		
+		buttonController.removeClassesOfCell(cellHandler.parent(), classForHeightCells, 4);
+		cellHandler.addClass(selectedClass);
+		
+		//Selection classes for each cell in width row.
+		var classForSelection = ["noSelectionSelected", "widthTopSelected", 
+		                         "widthBottomSelected", "widthCenterSelected"];
+		var widthImgIds = ["#imgNoSelectionWidth", "#imgWidthTop",
+		                   "#imgWidthBottom", "#imgWidthCenter"];
+		
+		cellHandler = $(widthImgIds[modelValWidth]);
+		selectedClass = classForSelection[modelValWidth];
+		buttonController.removeClassesOfCell(cellHandler.parent(), classForSelection, 0);
+		cellHandler.addClass(selectedClass);
+		
+		buttonController.changeDimensionButtonIcon();
+	},
+	
+	setSpacingButton : function() {
+		if(model.spaceTop)
+			$("#imgSpaceTop").addClass("topSelected");
+		
+		if (model.spaceRight)
+			$("#imgSpaceRight").addClass("rightSelected");
+		
+		if (model.spaceBottom) 
+			$("#imgSpaceBottom").addClass("bottomSelected");
+		
+		if (model.spaceLeft) 
+			$("#imgSpaceLeft").addClass("leftSelected");
+
+		buttonController.changeSpacingButtonIcon();
+	}
 };

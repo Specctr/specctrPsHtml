@@ -1,0 +1,52 @@
+@CHARSET "ISO-8859-1";
+
+/*
+File-Name: cloudUploadButton.css
+Description: Includes styling code related to cloudUpload button. 
+*/
+
+#liCloudUpload .option {
+    width: 111px;
+}
+
+#imgCloudUploadExportCSS {
+    background-image: url('../assets/images/CloudUploadDropDownIcons/exportCSS.png');
+}
+
+.exportCssSelected {
+	background-image: url('../assets/images/CloudUploadDropDownIcons/exportCSS_selected.png') !important;
+	background-color: #D2D2D2;
+}
+
+#imgCloudUploadImportCSS {
+    background-image: url('../assets/images/CloudUploadDropDownIcons/importCSS.png');
+}
+
+.importCssSelected {
+	background-image: url('../assets/images/CloudUploadDropDownIcons/importCSS_selected.png') !important;
+	background-color: #D2D2D2;
+}
+
+@media 
+(-webkit-min-device-pixel-ratio: 2) { 
+	#imgCloudUploadExportCSS {
+    	background-image: url('../assets/images/CloudUploadDropDownIcons/exportCSS_x2.png');
+    	background-size: 49px 49px;
+	}
+
+    .exportCssSelected {
+		background-image: url('../assets/images/CloudUploadDropDownIcons/exportCSS_selected_x2.png') !important;
+		background-color: #D2D2D2;
+		background-size: 49px 49px;
+    }
+    
+    #imgCloudUploadImportCSS {
+    	background-image: url('../assets/images/CloudUploadDropDownIcons/importCSS.png');
+    	background-size: 49px 49px;
+	}
+    .importCssSelected {
+		background-image: url('../assets/images/CloudUploadDropDownIcons/importCSS_selected_x2.png') !important;
+		background-color: #D2D2D2;
+		background-size: 49px 49px;
+    }
+}

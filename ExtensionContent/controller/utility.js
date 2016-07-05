@@ -2,7 +2,6 @@
 File-Name: utility.js
 Description: This file includes common utility functions used by more than one files.
  */
-
 Specctr = Specctr || {};
 
 Specctr.Utility = {
@@ -25,6 +24,12 @@ Specctr.Utility = {
 	
 		return currentApplication;
 	},
+
+    withPhotoshop: function(doSomething) {
+        if (this.getHostApp() == "Ps") {
+            doSomething();
+        }
+    },
 	
 	/**
 	 * Get extension id of the html panel.

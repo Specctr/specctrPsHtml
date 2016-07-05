@@ -25,6 +25,7 @@
 <script src="../controller/specctrUI.js"></script>
 <script src="../controller/specctrInit.js"></script>
 <script src="../controller/main.js"></script>
+<script src="../controller/api/cloudUploadWS.js"></script>
 <script src="../controller/specButtonAPI/buttonController.js"></script>
 <script src="../controller/specButtonAPI/buttonHandlers.js"></script>
 
@@ -35,10 +36,12 @@
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/loadFonts.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/loginStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/cloudTab.css">
+<link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/cloudPage.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/propertiesButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/dimensionButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/spacingButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/coordinateButtonStyle.css">
+<link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/cloudUploadButton.css">
 <link id="ppstyle" rel="stylesheet" type="text/css" href="../css/jquery-ui-1.10.2.custom.css">
 
 <title>Specctr-Pro</title>
@@ -49,13 +52,13 @@
 	<!-- Login container start here -->
 	<div class="showBlock" id="loginContainer">
 		<div id="dvLoginContainer">
-			<img alt="specctrLoginImage" class="hideBlock" id="specctrLoginImage" src="../assets/images/specctrLogo.png">
-			<div id="loginHeaderDiv" class="loginHeader">
-				<label id="loignHeaderLabel"> Hi! Welcome to Specctr! <br> Sign up for a free 15 day trial! 
+			<img alt="specctrLoginImage" id="specctrLoginImage" src="../assets/images/specctrLogo.png">
+			<div id="loginHeaderDiv" class="activationHeader">
+				<label id="loignHeaderLabel"> Hi! Welcome back! <br> Please login: 
 				</label>
 			</div>
 			
-			<ul class="hideBlock" id="loginBlock">
+			<ul id="loginBlock">
 				<li>
 					<input class="loginTextItem" type="email" id="loginEmail"
 					placeholder="Email"
@@ -70,46 +73,16 @@
 					onkeydown="Specctr.UI.textKeyDownHandler(event, '#loginButton')"/>
 				</li>
 				
-				<li>
+				<li style="margin-top: 30px;">
 					<div class="loginPageButton" id="loginButton"
 						onclick="Specctr.Auth.login()">
 						<label>Login</label>
 					</div>
 				</li>
 			</ul>
-			
-			<ul class="showBlock" id="activateBlock">
-				<li>
-					<input class="loginTextItem" type="text" id="firstName"
-					placeholder="First Name"
-					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event, '#activateButton')"/>
-				</li>
-
-				<li>
-					<input class="loginTextItem" type="text" id="secondName"
-					placeholder="Last Name" 
-					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event, '#activateButton')"/>
-				</li>
-				
-				<li>
-					<input class="loginTextItem" type="email" id="emailInput"
-					placeholder="Email"
-					onclick="Specctr.UI.itemClickHandler(event)"
-					onkeydown="Specctr.UI.textKeyDownHandler(event, '#activateButton')"/>
-				</li>
-				
-				<li>
-					<div class="loginPageButton" id="activateButton" 
-						onclick="activateButtonClickHandler()">
-						<label>Activate</label>
-					</div>
-				</li>
-			</ul>
 		</div>
 		<div id="loginFooter">
-			<label id="loginFooterLabel" onclick="Specctr.UI.toggleLoginPage(this)">Already a member? Sign in</label>
+			<label id="loginFooterLabel" onclick="Specctr.UI.loginLinkClickHandler()">Not a member? Sign up</label>
 		</div>
 	</div>
 	<!-- Login container end here -->
@@ -140,7 +113,7 @@
 				<!-- Starting of main tab. -->
 				<div id="tabpage_1" class="tabpage">
 					<div class="tabTitle">Spec Away!</div>
-					<ul class="menu">
+					<ul id="mainPageList" class="menu">
 	
 						<!-- Property button. -->
 						<li id="liProperties">
@@ -148,8 +121,10 @@
 								onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
 								<img id="imgProperty" alt="Shape/Text" /> 
 								<label>Properties</label>
-								<div class="dropdownArrow" id="imgPropertiesDdlArrow"
-									onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)"></div>
+								<div class= "downArrowParentDiv"
+									onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)">
+										<div class="dropdownArrow" id="imgPropertiesDdlArrow"></div>
+								</div>
 							</div>
 							
 							<div class="options" id="propertiesDropDown">
@@ -168,8 +143,10 @@
 							onclick="Specctr.buttonHandlers.addNoteSpecs()">
 									<img id="imgNote" alt="Note specs"/> 
 									<label>Add Note</label>
-									<div id="imgNoteDdlArrow" class="dropdownArrow"
-										onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)"></div>
+									<div class= "downArrowParentDiv"
+									onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)">
+										<div id="imgNoteDdlArrow" class="dropdownArrow"></div>
+									</div>
 							</div>
 							<div class="options" id="noteDropDown">
 								<div>
@@ -189,14 +166,16 @@
 							onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
 								<img id="dimensionIcon"/> 
 								<label>Width/Height</label>
-								<div class="dropdownArrow" id="imgWhDdlArrow"
-									onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)"></div>
+								<div class= "downArrowParentDiv"
+								onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)">
+									<div class="dropdownArrow" id="imgWhDdlArrow"></div>
+								</div>
 							</div>
 							
 							<div class="options" id="dimensionDropDown">
 								<div class="option" id="imgNoSelectionWidth" title="width"
 									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'noSelectionSelected')"></div>
-								<div class="option widthTopSelected" id="imgWidthTop" title="width"
+								<div class="option" id="imgWidthTop" title="width"
 									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'widthTopSelected')"></div>
 								<div class="option" id="imgWidthBottom" title="width"
 									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'widthBottomSelected')"></div>
@@ -204,7 +183,7 @@
 									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'widthCenterSelected')"></div>
 								<div class="option" id="imgNoSelectionHeight" title="height"
 									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'noSelectionSelected')"></div>
-								<div class="option heightLeftSelected" id="imgHeightLeft" title="height"
+								<div class="option" id="imgHeightLeft" title="height"
 									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'heightLeftSelected')"></div>
 								<div class="option" id="imgHeightRight" title="height"
 									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'heightRightSelected')"></div>
@@ -219,17 +198,19 @@
 							onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
 								<img id="spacingIcon"/>
 								<label>Spacing</label>
-								<div id="imgSpacingDdlArrow" class="dropdownArrow"
-									onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)"></div>
+								<div class= "downArrowParentDiv"
+								onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)">
+									<div id="imgSpacingDdlArrow" class="dropdownArrow"></div>
+								</div>
 							</div>
 							<div class="options" id="spacingDropDown">
-								<div class="option topSelected" id="imgSpaceTop"
+								<div class="option" id="imgSpaceTop"
 									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'topSelected', 'spaceTop')"></div>
 								<div class="option" id="imgSpaceRight"
 									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'rightSelected', 'spaceRight')"></div>
 								<div class="option" id="imgSpaceBottom"
 									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'bottomSelected', 'spaceBottom')"></div>
-								<div class="option leftSelected" id="imgSpaceLeft"
+								<div class="option" id="imgSpaceLeft"
 									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'leftSelected', 'spaceLeft')"></div>
 							</div>
 						</li>
@@ -240,8 +221,10 @@
 							onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
 								<img id="imgCoordinate" alt="Coordinates" /> 
 								<label>Coordinates</label>
-								<div id="imgCoordinateDdlArrow" class="dropdownArrow"
-									onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)"></div>
+								<div class= "downArrowParentDiv" 
+								onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)">
+									<div id="imgCoordinateDdlArrow" class="dropdownArrow"></div>
+								</div>
 							</div>
 							<div class="options" id="coordinateDropDown">
 								<div class="option topLeftSelected" id="imgTopLeft"
@@ -261,8 +244,10 @@
 							onclick="Specctr.buttonHandlers.expandCanvas()">
 									<img id="imgExpand" alt="Expand"/> 
 									<label>Expand</label>
-									<div id="imgExpandDdlArrow" class="dropdownArrow"
-										onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)"></div>
+									<div class= "downArrowParentDiv"
+									onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)">
+										<div id="imgExpandDdlArrow" class="dropdownArrow"></div>
+									</div>
 							</div>
 							<div class="options" id="expandDropDown">
 								<div>
@@ -273,15 +258,28 @@
 								</div>
 							</div>
 						</li>
-						
-						<!-- Export css button. -->
-						<li onclick="Specctr.buttonHandlers.exportCss()">
-							<div class="button border ">
-								<img id="imgExportCss" alt="Export css"/>
-								<label>Export CSS</label>
+
+						<!-- Cloud Upload button. -->
+						<li id="liCloudUpload">
+							<div class="button border " id="btnCloupUpload"
+							onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
+								<img id="imgExportCss" alt="Upload Beta"/>
+								<label id="CloudBtnLbl">Download CSS</label>
+								<div class= "downArrowParentDiv"
+								onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)">
+									<div id="imgCloupUploadDdlArrow" class="dropdownArrow"></div>
+								</div>
+							</div>
+
+							<div class="options" id="cloudUploadDropDown">
+								<div class="option importCssSelected" id="imgCloudUploadImportCSS"
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'importCssSelected', 'import')"></div>
+								
+								<div class="option" id="imgCloudUploadExportCSS"
+									onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'exportCssSelected', 'export')"></div>
 							</div>
 						</li>
-						
+
 					</ul>
 				</div>
 				<!-- Ending of main tab. -->
@@ -409,9 +407,9 @@
 					<div class="tabPageCheckBoxRow marginLeft22px height100px" >
 						<input type="checkbox" value="1" id="specInPrcntg"
 							onchange="Specctr.UI.specInPercentageChangeHandler()" /> 
-						<label class="h4" for="specInPrcntg">Spec Distance by %</label>
+						<label class="h4 page3labelColor" for="specInPrcntg">Spec Distance by %</label>
 						<div class="height25px width216px marginTopBottom10px">
-							<label class="h5 alignLeftMiddle">100% WIDTH:</label>
+							<label class="h5 alignLeftMiddle page3labelColor">100% WIDTH:</label>
 							<div class="floatRight marginRight20px">
 								<input type="text" class="inputStyle" id="relativeWidth" maxlength="6"
 									onchange="Specctr.UI.textBoxChangeHandler(this.id)" 
@@ -420,7 +418,7 @@
 							</div>
 						</div>
 						<div  class="width216px">
-							<label class="h5 alignLeftMiddle ">100% HEIGHT:</label>
+							<label class="h5 alignLeftMiddle page3labelColor">100% HEIGHT:</label>
 							<div class="floatRight  marginRight20px">
 								<input type="text" class="inputStyle" id="relativeHeight" maxlength="6"
 									onchange="Specctr.UI.textBoxChangeHandler(this.id)" 
@@ -435,9 +433,9 @@
 					<div class="tabPageCheckBoxRow marginLeft22px height100px">
 						<input type="checkbox" value="1" id="specInEM"
 							onchange="Specctr.UI.specInEMChangeHandler(this)" /> 
-						<label class="h4" for="specInEM">Spec in em</label>
+						<label class="h4 page3labelColor" for="specInEM">Spec in em</label>
 						<div class="height25px marginTopBottom10px width216px">
-							<label class="h5 alignLeftMiddle">BASE FONT SIZE:</label>
+							<label class="h5 alignLeftMiddle page3labelColor">BASE FONT SIZE:</label>
 							<div class="floatRight marginRight20px">
 								<input type="text" class="inputStyle" id="baseFontSize"
 									maxlength="6" onchange="Specctr.UI.textBoxChangeHandler(this.id)"
@@ -447,7 +445,7 @@
 						</div>
 	
 						<div class="width216px">
-							<label class="h5 alignLeftMiddle">BASE LINE HEIGHT:</label>
+							<label class="h5 alignLeftMiddle page3labelColor">BASE LINE HEIGHT:</label>
 							<div class="floatRight marginRight20px">
 								<input type="text" class="inputStyle" id="baseLineHeight"
 									maxlength="6" onchange="Specctr.UI.textBoxChangeHandler(this.id)"
@@ -663,7 +661,7 @@
 				</div>
 				
 				<div class="tabPageCheckBoxRow" id="specToEdgeCheckbox">
-					<input type="checkbox" value="CanvasEdge" id="specToEdge"
+					<input type="checkbox" class="adjustCBMargin" value="CanvasEdge" id="specToEdge"
 						onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 					<label class="settingPageLabel" for="specToEdge">Print Spec to Canvas Edge</label>
 				</div>
@@ -700,7 +698,7 @@
 				</form>
 				
 				<div class="tabPageCheckBoxRow" id="includeStrokeCheckbox">
-					<input type="checkbox" id="includeStroke" onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
+					<input type="checkbox" class="adjustCBMargin" id="includeStroke" onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
 					<label class="settingPageLabel" for="includeStroke">Include Stroke in Measurement</label>
 				</div>
 
@@ -716,17 +714,56 @@
 				</div>
 			</div>
 		
-		<div id="settingBlock" onclick="Specctr.UI.toggleSettingPage(this)"> 
+		<div id="settingBlock"> 
 			<div id="settingBlokChildDiv">
+                <label id="specctrVersion" class="floatLeft"><!-- this gets set in appModel.js --></label>
 				<img id="settingIcon" class="floatRight"
-				 src="../assets/images/Icon_prefs.png" width="32" height="24"/>
-			 	<label id="footerLabel"	class="floatRight">Settings</label>
+				 src="../assets/images/Icon_prefs.png" width="32" height="24"
+				 onclick="Specctr.UI.toggleSettingPage()"/>
+			 	<label id="footerLabel"	class="floatRight" 
+			 	onclick="Specctr.UI.toggleSettingPage()">Settings</label>
 		 	</div>
 		 </div>
+
 	</div>
 
+	<!-- Upload css page. -->
+	<div class="hideBlock" id="dvCloudContainer">
+		<div style="float: right">
+			<img class="handCursor" src="../assets/images/closeIcon_white.png" 
+			onclick="Specctr.UI.closeCloudPage(this)"/>
+		</div>
+		<div class="cloudHeader">
+			<label id="cloudHeaderLabel"> &nbsp&nbsp Upload to <br>Specctr Cloud </label>
+		</div>
+		<div class="marginLeft12">
+			<label id="attchToProjLabel"> ATTACH TO PROJECT: </label>
+		</div>
+
+		<div class="marginLeft12 marginTop15px">
+				<input type="text" id="cloudText" placeholder="Create Project +" maxlength="50"
+				onclick="Specctr.UI.itemClickHandler(event)"
+				onkeydown="Specctr.UI.cloudTextHandler(event)"/>
+		</div>
+		
+		<div style="overflow-x:hidden; max-height: 225px;">
+			<table id="projectTable"></table>
+		</div>
+		
+		<div class="marginLeft12 marginTop15px disabled" id="uploadButton" 
+			onclick="Specctr.buttonHandlers.exportCss()">
+				<label id="uploadBtnLabel">Connecting...</label>
+		</div>
+
+	</div>
+		
 	<!-- Modal dialog. -->
 	<div id="dialog" title="Specctr"></div>
+	
+	<div id="spinnerBlock">
+		<img alt="" src="../assets/images/spinner.gif" class="loader"></img>
+	</div>
+
 </body>
 
 </html>

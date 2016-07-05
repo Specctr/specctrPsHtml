@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<ExtensionManifest Version="5.0" ExtensionBundleId="SpecctrMaster" ExtensionBundleVersion="3.0.28.h"
+<ExtensionManifest Version="6.0" ExtensionBundleId="SpecctrMaster" ExtensionBundleVersion="3.01.16"
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<Author>
 		<![CDATA[On Pixel Inc.]]>
@@ -159,15 +159,18 @@ each party and (ii) in a written contract signed by both parties.]]>
 			<Locale Code="All" />
 		</LocaleList>
 		<RequiredRuntimeList>
-		    <RequiredRuntime Name="CSXS" Version="5.0" />
+		    <RequiredRuntime Name="CSXS" Version="6.0" />
 		</RequiredRuntimeList>
 	</ExecutionEnvironment>
 	<DispatchInfoList>
 		<Extension Id="SpecctrPs-Pro">
 			<DispatchInfo >
 				<Resources>
-				<MainPath>./html/specctr.html</MainPath>
-				<ScriptPath>./loadFilesOfJsxFolder.jsx</ScriptPath>
+                    <MainPath>./html/specctr.html</MainPath>
+                    <ScriptPath>./loadFilesOfJsxFolder.jsx</ScriptPath>
+                    <CEFCommandLine>
+                      <Parameter>--enable-nodejs</Parameter>
+                    </CEFCommandLine>
 				</Resources>
 				<Lifecycle>
 					<AutoVisible>true</AutoVisible>

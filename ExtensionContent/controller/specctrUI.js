@@ -6,6 +6,12 @@ like change event handlers, click event handlers etc.
 
 Specctr = Specctr || {};
 Specctr.UI = {
+		
+	closeCloudPage: Specctr.Utility.tryCatchLog(function(){
+		$("#dvCloudContainer").hide();
+		$("#tabContainer").show();
+	}),
+		
 	/**
 	 * Show/hide the setting tab page.
 	 */
@@ -28,25 +34,11 @@ Specctr.UI = {
 	}),
 	
 	/**
-	 * Toggle the login page according to subscription.
-	 * @param (label object) The object of the login footer label.
+	 * Open url in default browser.
 	 */
-	toggleLoginPage : Specctr.Utility.tryCatchLog(function(element){
-		if($("#loginBlock").hasClass("hideBlock")) {
-			$("#specctrLoginImage").removeClass().addClass("showBlock");
-			$("#activateBlock").removeClass().addClass("hideBlock");
-			$("#loginHeaderDiv").removeClass().addClass("activationHeader");
-			$("#loginBlock").removeClass().addClass("showBlock");
-			$("#loignHeaderLabel").html("Hi! Welcome back! <br> Please login:");
-			$(element).text("Not a member? Sign up");
-		} else {
-			$("#specctrLoginImage").removeClass().addClass("hideBlock");
-			$("#loginBlock").removeClass().addClass("hideBlock");
-			$("#loginHeaderDiv").removeClass().addClass("loginHeader");
-			$("#activateBlock").removeClass().addClass("showBlock");
-			$("#loignHeaderLabel").html("Hi! Welcome to Specctr! <br> Sign up for a free 15 day trial!");
-			$(element).text("Already a member? Sign in");
-		}
+	loginLinkClickHandler : Specctr.Utility.tryCatchLog(function(){
+		var csInterface = new CSInterface();
+		csInterface.openURLInDefaultBrowser("https://cloud.specctr.com");
 	}),
 	
 	/**
@@ -375,6 +367,39 @@ Specctr.UI = {
 	textKeyDownHandler : Specctr.Utility.tryCatchLog(function(event, buttonId){
 		if (event.keyCode == 13)
 			$(buttonId).trigger("click");
+	}),
+	
+	cloudTextHandler : Specctr.Utility.tryCatchLog(function(event) {
+		if (event.keyCode == 13) {
+			var text = $("#cloudText").val();
+			//trim text;
+			try{
+			text = text.trim();
+			}catch(e){}
+			if(text == "")
+				return;
+			
+			//Check if it already exist or not..
+			if($("#projectTable tr:contains('"+text+"')").length > 0) {
+				$("#projectTable tr:contains('"+text+"')").addClass('highlight').siblings().removeClass('highlight');
+				return;
+			}
+			
+			//Add data to table.
+			var table = document.getElementById("projectTable");
+			var row = table.insertRow(-1);
+			var name = row.insertCell(0);
+			name.innerHTML = text;
+			$("#cloudText").val("");
+			
+			$("#projectTable tr").on("click",function() {
+				try {
+					$(this).addClass('highlight').siblings().removeClass('highlight');
+				} catch(e) {
+					alert(e);
+				}
+			});
+		}
 	}),
 
 	/**

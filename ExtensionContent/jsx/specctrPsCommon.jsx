@@ -180,17 +180,6 @@ $.specctrPsCommon = {
         }
     },
 
-    //Check that layer has XMPMetadata or not, if yes return the data.
-    getXMPData : function(activeLayer, idStr) {
-        try {
-            var layerXMP = new XMPMeta(activeLayer.xmpMetadata.rawData);
-            var idLayer = layerXMP.getArrayItem(XMPConst.NS_PHOTOSHOP, idStr, 1).toString();
-            if(idLayer != "")
-                return idLayer;
-        } catch(e) {}
-        return null;
-    },
-
     //Make layer active by using ID.
     getLayerByID : function(id) {
         try {
@@ -354,7 +343,7 @@ $.specctrPsCommon = {
             } catch(e) {
                 layerXMP = new XMPMeta();	// layer did not have metadata so create new.
             }
-
+            
             for (var k = 0; k < noOfProperties; k++) {
                 try {
                     propertyName = data[i].properties[k].name;
@@ -461,39 +450,27 @@ $.specctrPsCommon = {
     },
 
     // Get number for bullet.
-    getBulletNumber : function (artLayer, doc, isNewBullet) {
-        var specctrLayerSet = doc.layerSets.getByName("Specctr").layerSets;
-         //Check if any number is linked with selected art layer or not, if not then assign a number.
-        var number =  this.getXMPData(artLayer, "number"); //Number linked with art layer.
-        try {
-            specctrLayerSet.getByName("Properties");
-        } catch(e) {
-            try {
-                specctrLayerSet.getByName("Add Note");
-            } catch (e) {
-                number = 0;
-                isNewBullet = true;
-            }
-        }
-        if(number == null) {
-            //Number linked with document, this no. tells the total no. of property specs created on document.
-            number = $.specctrPsCommon.getXMPData(doc, "noOfSpec"); 
-            if(number == null)
-                number = 0;
-            isNewBullet = true;
-        }
-
+    getBulletNumber : function (spec, doc, isNewBullet) {
+        var specctrLayer = doc.layerSets.getByName("Specctr");
+        var specctrLayerSet = specctrLayer.layerSets;
+        
         if(isNewBullet) {
+            var number = $.specctrPsCommon.getXMPData(specctrLayer, "noOfSpec"); 
+            if(!number) number = 0;
+            
             number = parseInt(number) + 1;
-            var xmpData = [{layerHandler : artLayer, 
+            var xmpData = [{layerHandler : spec, 
                                     properties : [{name : "number", value : number}]
                                     }, 
-                                    {layerHandler : doc,
+                                    {layerHandler : specctrLayer,
                                         properties : [{name : "noOfSpec", value : number}]
                                     }];
             
             this.setXmpDataOfLayer(xmpData);
+        } else {
+            number =  this.getXMPData(spec, "number");
         }
+    
         return parseInt(number);
     },
     
@@ -713,9 +690,9 @@ $.specctrPsCommon = {
 
     //Adjust the positions of property specs item on the active document.
     adjustPositionOfSpecItems : function (spec, specText, dupBullet, specYPos, 
-            spacing, condition1, condition2, dia, isNewSpecCreated) {
-        var doc = app.activeDocument;
-         if(condition1 >= condition2) {
+            spacing, condition1, condition2, dia, isNewSpecCreated, canvasBounds) {
+                
+        if(condition1 >= condition2) {
             if(isNewSpecCreated) {
                 specText.justification = Justification.LEFT;
                 spec.translate(-(spec.bounds[0]-spacing-dia), specYPos-spec.bounds[1]);
@@ -724,10 +701,11 @@ $.specctrPsCommon = {
         } else {
             if(isNewSpecCreated) {
                 specText.justification = Justification.RIGHT;
-                spec.translate(doc.width-spacing-spec.bounds[2]-dia, specYPos-spec.bounds[1]);
+                spec.translate(canvasBounds[2]-spacing-spec.bounds[2]-dia+canvasBounds[0], specYPos-spec.bounds[1]);
             }
             dupBullet.translate(spec.bounds[2]-dupBullet.bounds[0]+1, spec.bounds[1]-dupBullet.bounds[1]-1);
         }
+    
     },
 
     //Delete layer using its name .
@@ -777,6 +755,9 @@ $.specctrPsCommon = {
             app.activeDocument.activeLayer = parent;    //parent is artboard now.
             var ref = new ActionReference();
             ref.putEnumerated( charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ) );
+            var isThisArtBoard = executeActionGet(ref).getBoolean(stringIDToTypeID("artboardEnabled"));
+            if(!isThisArtBoard) 
+                return null;
             
             // get artboard dimensions
             var artBoardRect = executeActionGet(ref).getObjectValue(stringIDToTypeID("artboard")).getObjectValue(stringIDToTypeID("artboardRect"));
@@ -796,7 +777,7 @@ $.specctrPsCommon = {
          try {
             var parent = artLayer.parent;
             if(parent.typename == "Document")
-                return app.activeDocument;
+                return parent;
                 
             while (parent.parent.typename != "Document") {
                 parent = parent.parent;

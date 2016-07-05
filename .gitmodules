@@ -1,0 +1,3 @@
+[submodule "specctrGenerator"]
+	path = specctrGenerator
+	url = https://github.com/Specctr/specctrGenerator.git

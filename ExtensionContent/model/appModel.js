@@ -4,15 +4,19 @@ Description: This file keeps all the global/const variables used in all other fi
  */
 
 var _ = require('underscore');
+var winston = require('winston');
 
 var Specctr = {
+	Version: "",
 	Views: {},
 	Models: {}
 };
 
-var SPECCTR_HOST = "http://specctr-subscription.herokuapp.com";
+var SPECCTR_HOST = "https://cloud.specctr.com";
 //var SPECCTR_HOST = "http://localhost:5000";
 var SPECCTR_API = SPECCTR_HOST += "/api/v1";
+
+var BG = {};
 
 var model = {
 	shapeLayerName:		true,
@@ -81,7 +85,8 @@ var model = {
 	scaleValue: 'x1',
 
 	decimalFractionValue: 'decimal',
-	specOption: 'Bullet'
+	specOption: 'Bullet',
+	cloudOption: 'import',		//Download.
 };
 
 var filePermission = {

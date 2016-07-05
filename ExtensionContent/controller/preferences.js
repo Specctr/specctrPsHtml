@@ -1,4 +1,5 @@
 var fs = require('fs');
+logger = {};
 
 /*
 File-Name: preferences.js
@@ -6,6 +7,7 @@ Description: This file includes all the functions related to reading/writing pre
  */
 
 var pref = {};
+logger = pref;
 
 /**
  * Set permissions like read only, write only etc to file or folder.
@@ -150,18 +152,26 @@ pref.addFileToPreferenceFolder = function(fileExtension, data) {
 	this.setPermissionToFile(filePath, filePermission.ReadOnly);
 };
 
-pref.log = function(message) {
+pref.log = pref.info = function(message) {
+    console.log(message);
 	var filePath = this.getFilePath('.log');
 	pref.setPermissionToFile(filePath, filePermission.WriteOnly);
-	message = pref.createLogData(message);
+	var message = pref.createLogData(message);
 	fs.appendFile(filePath, message, function (err) {
 	    if (err) throw err;
-	    console.log('The "data to append" was appended to file!');
+	    console.log('[preferences] The "data to append" was appended to file!');
 	    pref.setPermissionToFile(filePath, filePermission.ReadOnly);
 	});	
 };
 
-pref.logError = function(e) {
+pref.logError = pref.error = function(e) {
+    var email;
+    if(Specctr && Specctr.Activation) email = Specctr.Activation.email;
+
+    var machineId;
+    if(Specctr && Specctr.Activation) machineId = Specctr.Activation.machine_id;
+
+    bugsnag.notify(e, {user: {email: email, machineId: machineId}});
 	pref.log(e.stack);
 };
 
@@ -174,6 +184,8 @@ pref.logResSuccess = function(xhr, response) {
 
 pref.logResError = function(xhr, message) {
 	var response = JSON.parse(xhr.responseText);
-	pref.log(xhr.status + " - " + response.message);
+    var err = xhr.status + " - " + response.message;
+    bugsnag.notify(new Error(err), {user:{email: Specctr.Activation.email, machineId: Specctr.Activation.machine_id}});
+	pref.log(err);
 	if (message) pref.log(message);
 };

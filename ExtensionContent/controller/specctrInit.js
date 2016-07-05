@@ -66,11 +66,46 @@ Specctr.Init.init = Specctr.Utility.tryCatchLog(function() {
         });
     });
     
+    this.setModelToButtons();
     this.setModelToUIComponents();
     this.setModelToResponsive();
+    this.setVersionAtBottom();
     
     Specctr.Auth.checkStatus(Specctr.Activation);
 });
+
+Specctr.Init.setModelToButtons = function() {
+	//Set icon and cell selection of property button according to model value;
+	Specctr.buttonHandlers.setPropertyButton(model.specOption);
+	
+	//Set icon and cell selection of width/height button.
+	Specctr.buttonHandlers.setDimensionButton(model.heightPos, model.widthPos);
+	
+	//Set icon and cell selection of spacing button.
+	Specctr.buttonHandlers.setSpacingButton();
+	
+	//Set icon and cell selection of coordinates button.
+	Specctr.buttonHandlers.setCoordinateButton(model.coordinateCellNumber);
+	
+	//Set icon and cell selection of cloud button.
+	Specctr.buttonHandlers.setCloudButton(model.cloudOption);
+	
+	//Set icons to the buttons.
+	var iconPostString = ".png";
+	var buttonIconPaths = ["NoteButtonIcons/Icon_note", 
+	                       "ExpandButtonIcons/Icon_expand"];
+
+	var buttonIds = ["#imgNote", "#imgExpand"];
+
+	if(window.devicePixelRatio > 1)	//For retina display: 2 pixel ratio; 
+		iconPostString = "_x2" + iconPostString;
+
+	var arrayLength = buttonIds.length;
+	for (var i = 0; i < arrayLength; i++) {
+		$(buttonIds[i]).attr("src", imagePath + buttonIconPaths[i] + iconPostString);
+	}
+	
+};
 
 /**
  * Set the Specctr configuration file data to model values.
@@ -78,8 +113,13 @@ Specctr.Init.init = Specctr.Utility.tryCatchLog(function() {
 Specctr.Init.setModelValueFromPreferences = function() {
 	var appPrefs = pref.readAppPrefs();
 
-	if (!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha"))
+	if (!appPrefs || !appPrefs.hasOwnProperty("shapeAlpha")) {
+		var hostApplication = Specctr.Utility.getHostApp();
+		if(hostApplication == indesign)
+			model.legendFont = "Arial";
+		
 		return;
+	}
 
 	var i, propertyApplicationSpecific;
 	var propertyName = ["shapeLayerName", "shapeAlpha", "shapeBorderRadius", "textFont", "textSize",
@@ -113,33 +153,21 @@ Specctr.Init.setModelValueFromPreferences = function() {
 		if (appPrefs.hasOwnProperty(dropDownIds[i]))
 			model[dropDownIds[i]] = appPrefs[dropDownIds[i]];
 	}
+	
+	var buttonCellValues = ["specOption", "heightPos", "widthPos", "spaceLeft",
+	                        "spaceTop", "spaceRight", "spaceBottom", "coordinateCellNumber",
+	                        "cloudOption"];
+	arrayLength = buttonCellValues.length;
+	for (i = 0; i < arrayLength; i++) {
+		if (appPrefs.hasOwnProperty(buttonCellValues[i]))
+			model[buttonCellValues[i]] = appPrefs[buttonCellValues[i]];
+	}
 };
 
 /**
  * Set model values to UI components.
  */
 Specctr.Init.setModelToUIComponents = function() {
-	//Set icons to the buttons.
-	var iconPostString = ".png";
-	var buttonIconPaths = ["PropertiesDropDownIcons/specBullet_selected", 
-	                       "CoordinateButtonIcons/Icon_coordinates", 
-	                       "DimensionButtonIcons/WH_11", 
-	                       "SpacingButtonIcons/Spacing_TL", 
-	                       "NoteButtonIcons/Icon_note", 
-	                       "ExpandButtonIcons/Icon_expand",
-	                       "ExportCssButtonIcons/Icon_exportCSS"];
-
-	var buttonIds = ["#imgProperty", "#imgCoordinate", "#dimensionIcon", "#spacingIcon", 
-	                 "#imgNote", "#imgExpand", "#imgExportCss"];
-
-	if(window.devicePixelRatio > 1)	//For retina display: 2 pixel ratio; 
-		iconPostString = "_x2" + iconPostString;
-
-	var arrayLength = buttonIds.length;
-	for (var i = 0; i < arrayLength; i++) {
-		$(buttonIds[i]).attr("src", imagePath + buttonIconPaths[i] + iconPostString);
-	}
-
 	//Set text and combo box values.
 	$("#canvasExpandSize").val(model.canvasExpandSize);
 	$("#lstSize").val(model.legendFontSize);
@@ -215,5 +243,40 @@ Specctr.Init.setModelToResponsive = function() {
 			Specctr.Utility.disableTextField(textFieldIds[i]);
 			Specctr.Utility.disableTextField(textFieldIds[i+1]);
 		}
+	}
+};
+
+/**
+ * This method fetch the application version from manifest file and set it at panel bottom.
+ */
+Specctr.Init.setVersionAtBottom = function() {
+	//Get the bundle version from manifest file.
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if(xhttp.readyState == 4) {
+			var xmlDoc = this.responseXML;
+			var extManNode = xmlDoc.getElementsByTagName("ExtensionManifest")[0];
+			Specctr.Version = extManNode.getAttribute("ExtensionBundleVersion");
+			$("#specctrVersion").html("v."+Specctr.Version);			//Should be v.3.00...
+		}
+	};
+
+	xhttp.open("GET", "../CSXS/manifest.xml", true);
+	xhttp.send();
+};
+
+/**
+ * This method set the BugSnag parameters.
+ */
+Specctr.Init.setBugSnagParameters = function() {
+	BG =  Bugsnag = bugsnag = require('bugsnag');
+	BG.register("5e2e7c4622cad658564714af7011b905", {sendCode: true});
+	BG.appVersion = Specctr.Version;
+	BG.notifyReleaseStages = ["production"];
+
+	if (SPECCTR_HOST == "https://cloud.specctr.com") {
+	    BG.releaseStage = "production";
+	}else{
+	    BG.releaseStage = "development";
 	}
 };

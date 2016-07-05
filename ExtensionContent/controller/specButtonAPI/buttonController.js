@@ -6,13 +6,25 @@ calling jsx methods etc.
 
 var buttonController = {};
 
+function CommonCallBack() {
+	$("#spinnerBlock").hide();
+}
+
+function PropertyCallBack(msg) {
+	$("#spinnerBlock").hide();
+	
+	if(msg != "true" && msg != "undefined" && msg != "")
+		specctrDialog.showAlert(msg);
+}
+
 /**
  * Call the 'createDimensionSpecsForItem' method from .jsx based on host application.
  */
 buttonController.createDimensionSpecs = function() {
 	analytics.trackFeature('create_dimension_specs');
 	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createDimensionSpecs()");
+	$("#spinnerBlock").show();
+	evalScript("$.specctr" + hostApplication + "." + "createDimensionSpecs()", CommonCallBack);
 };
 
 /**
@@ -21,7 +33,8 @@ buttonController.createDimensionSpecs = function() {
 buttonController.createSpacingSpecs = function() {
 	analytics.trackFeature('create_spacing_specs');
 	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createSpacingSpecs()");
+	$("#spinnerBlock").show();
+	evalScript("$.specctr" + hostApplication + "." + "createSpacingSpecs()", CommonCallBack);
 };
 
 /**
@@ -30,7 +43,8 @@ buttonController.createSpacingSpecs = function() {
 buttonController.createCoordinateSpecs = function() {
 	analytics.trackFeature('create_coordinate_specs');
 	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createCoordinateSpecs()");
+	$("#spinnerBlock").show();
+	evalScript("$.specctr" + hostApplication + "." + "createCoordinateSpecs()", CommonCallBack);
 };
 
 /**
@@ -39,7 +53,39 @@ buttonController.createCoordinateSpecs = function() {
 buttonController.createPropertySpecs = function() {
 	analytics.trackFeature('create_property_specs');
 	setModel();
-	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()");
+	$("#spinnerBlock").show();
+	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()", PropertyCallBack);
+};
+
+/**
+ * Upload/Download Css button click handler.
+ */
+buttonController.cloudButtonHandler = function() {
+	//if download cell is selected then download the css at saved .ai/.ps file location.
+	if(model.cloudOption == "import") {
+		analytics.trackFeature('export_css');
+		setModel();
+		$("#spinnerBlock").show();
+		evalScript("$.specctr" + hostApplication + "." + "exportCss()", CommonCallBack );
+		return;
+	}
+
+	//Check if document is open or not and fetch the project Id associated with it.
+	setModel();
+	evalScript("$.specctr" + hostApplication + ".getProjectIdOfDoc()", function (projectId) {
+		
+		//projectId = false, only if any document is not open. 
+		if(projectId == "false")
+			return;
+
+		var data = {
+			api_key: api_key,
+			machine_id: machine_id,
+		};
+		
+		//Get project list from server.
+		Specctr.cloudAPI.getProjectList(data, projectId);
+	});		
 };
 
 /**
@@ -64,13 +110,14 @@ buttonController.closeDropDown = function(id, button, dropDownId) {
  * */
 buttonController.closeAllDropDown = function(parentId) {
 	var dropDownIds = ["#spacingDropDown", "#coordinateDropDown", "#noteDropDown",
-	                   "#dimensionDropDown", "#propertiesDropDown", "#expandDropDown"];
+	                   "#dimensionDropDown", "#propertiesDropDown", "#expandDropDown",
+	                   "#cloudUploadDropDown"];
 	var arrayLength = dropDownIds.length;
 	
 	for (var i = 0; i < arrayLength; i++) {
 		var liId = "#" + $(dropDownIds[i]).parent().attr("id");
 		var buttonId = $(liId + " div:nth-child(1)").attr("id");
-		var imageDropDownId = "#" + $("#" + buttonId + " div:nth-child(3)").attr("id");
+		var imageDropDownId = "#" + $("#" + buttonId + " div:nth-child(3)").children(":first").attr("id");
 		if($(dropDownIds[i]).is(":visible") && parentId != buttonId)
 			this.closeDropDown(liId, "#" + buttonId, imageDropDownId);
 	}
@@ -193,4 +240,28 @@ buttonController.changePropertyButtonIcon = function (){
 
 	iconPath = iconPath + model.specOption + "_selected" + imageExtension;
 	$("#imgProperty").attr("src", iconPath);
+};
+
+buttonController.changeCloudButtonIcon = function(){
+	var iconPath = imagePath + "CloudUploadDropDownIcons/";
+	var imageExtension = ".png";
+
+	//For retina display: 2 pixel ratio; 
+	if(window.devicePixelRatio > 1)
+		imageExtension = "_x2.png";
+
+	iconPath = iconPath + model.cloudOption + "CSS_selected" + imageExtension;
+	$("#imgExportCss").attr("src", iconPath);
+};
+
+buttonController.changeCoordinateButtonIcon = function () {
+	var iconPath = imagePath + "CoordinateButtonIcons/Icon_coordinates";
+	var imageExtension = ".png";
+
+	//For retina display: 2 pixel ratio; 
+	if(window.devicePixelRatio > 1)
+		imageExtension = "_x2.png";
+
+	iconPath = iconPath + imageExtension;
+	$("#imgCoordinate").attr("src", iconPath);
 };

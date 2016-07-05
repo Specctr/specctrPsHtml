@@ -13,6 +13,31 @@ var model;
 var cssText = "";
 var cssBodyText = "";
 $.specctrPsProperties = {
+    
+    propertyChecked : function (artItemType) {
+        model = $.specctrPsCommon.getModel();
+        
+        if(artItemType == LayerKind.TEXT) {
+            
+             if(model.textLayerName || model.textFont || model.textSize 
+                || model.textColor ||  model.textStyle || model.textAlignment
+                || model.textLeading ||  model.textTracking || model.textAlpha
+                || model.textEffects)
+                return true;
+            else
+                return false;
+                
+        } else {
+            
+           if(model.shapeLayerName || model.shapeFill || model.shapeStroke 
+                || model.shapeAlpha ||  model.shapeEffects || model.shapeBorderRadius)
+                return true;
+            else
+                return false;
+                
+        }
+    },
+    
     //Suspend the history of creating properties spec of layers.
     createPropertySpecsForItem : function() {
         try {
@@ -20,6 +45,13 @@ $.specctrPsProperties = {
             if(sourceItem === null)
                 return;
 
+            var isPropertyChecked = this.propertyChecked(sourceItem.kind);
+            if(!isPropertyChecked)
+                return "Please select the checkboxes from properties.";
+                
+            if(sourceItem.isBackgroundLayer)
+                return "Please select layer other than background.";
+                
             var pref = app.preferences;
             var startRulerUnits = pref.rulerUnits; 
             pref.rulerUnits = Units.PIXELS;
@@ -34,7 +66,6 @@ $.specctrPsProperties = {
             pref.rulerUnits = startRulerUnits;
             
             //Check artboard is present or not and make changes in bounds accordingly.
-            var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
             app.activeDocument.suspendHistory('Property Specs', 'this.createPropertySpecs(sourceItem, bounds)');
         } catch(e) {}
     },
@@ -59,6 +90,45 @@ $.specctrPsProperties = {
                 return;
         } catch (e) {}
 
+        //Save the current preferences
+        var startTypeUnits = app.preferences.typeUnits; 
+        var startRulerUnits = app.preferences.rulerUnits;
+        var originalDPI = doc.resolution;
+        $.specctrPsCommon.setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
+        
+        var index = this.getIndexOfSelectedLayer();
+        idLayer = $.specctrPsCommon.getIDOfLayer();   //Get unique ID of selected layer.
+
+        //Check artboard is present or not and make changes in bounds accordingly.
+        var parent = doc;
+
+        cssText = "{";
+        
+        var cnvsRect = $.specctrPsCommon.getArtBoardBounds(artLayer);
+        if(cnvsRect == null) {
+            cnvsRect = [0, 0, doc.width, doc.height];
+        } else {
+            parent = $.specctrPsCommon.getArtBoard(artLayer);
+            doc.activeLayer = parent;
+            cssText += "artboard_name:" + parent.name+";";
+            cssText += "artboard_index:" + this.getIndexOfSelectedLayer()+";";
+            cssText += "artboard_id:" + $.specctrPsCommon.getIDOfLayer()+";";
+        }
+    
+        var activeLayerParent = artLayer.parent;
+        
+        //Meaning activeLayerParent is neither doc nor artboard, it is actually group under doc or artboard,.
+        if(activeLayerParent != parent) {
+            doc.activeLayer = activeLayerParent;
+            cssText += "parent_layer_name:" + activeLayerParent.name+";";
+            cssText += "parent_layer_index:" + this.getIndexOfSelectedLayer()+";";
+            cssText += "parent_layer_id:" + $.specctrPsCommon.getIDOfLayer()+";";
+        }
+ 
+        cssText += "layer_name:" + name+";";
+        cssText += "layer_id:" + idLayer+";";
+        cssText += "layer_index:" + index+";";
+
         if(ExternalObject.AdobeXMPScript == null)
             ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
         
@@ -73,77 +143,75 @@ $.specctrPsProperties = {
             }
          }
      
-         idSpec = $.specctrPsCommon.getXMPData(artLayer, "idSpec");			//Check if metadata of the layer is already present or not.
-         if(idSpec != null) {
-             legendLayer = $.specctrPsCommon.getLayerByID(idSpec);
-             if(legendLayer) {
-                this.updateSpec(sourceItem, legendLayer, bounds, noteSpecBottom, noteLegendLayer);
+        idSpec = $.specctrPsCommon.getXMPData(artLayer, "idSpec");			//Check if metadata of the layer is already present or not.
+        if(idSpec != null) {
+            legendLayer = $.specctrPsCommon.getLayerByID(idSpec);
+            if(legendLayer) {
+                this.updateSpec(sourceItem, idLayer, legendLayer, bounds, cnvsRect, noteSpecBottom, noteLegendLayer, index);
+                $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);
                 return;
             }
-         }
-
-        //Check artboard is present or not and make changes in bounds accordingly.
-        var parent = doc;
-        var isArtBoardPresent = $.specctrPsCommon.isArtBoardPresent();
-        if(isArtBoardPresent) {
-            parent = $.specctrPsCommon.getArtBoard(artLayer);
         }
     
          try {
-            idLayer = $.specctrPsCommon.getIDOfLayer();   //Get unique ID of selected layer.
             var artLayerBounds = bounds;
             var name = artLayer.name;
             var nameLength = name.length;
+            
+            var specctrLayerSet = $.specctrPsCommon.legendLayer(parent)
+            var spec = specctrLayerSet.artLayers.add();
+            spec.kind = LayerKind.TEXT;
+            var specText = spec.textItem;
+            specText.kind = TextType.POINTTEXT;
+            doc.activeLayer = sourceItem;
+            
+            var cssBounds = [artLayerBounds[0]-cnvsRect[0], artLayerBounds[1]-cnvsRect[1], 
+                                        artLayerBounds[2]-cnvsRect[0], artLayerBounds[3]-cnvsRect[1]] ;
+            
+            cssText += "xCoord:" + cssBounds[0].toString()+";";
+            cssText += "yCoord:" + cssBounds[1].toString()+";";
+            var cssObjectName = "." + name;
 
             switch(sourceItem.kind) {
                 case LayerKind.TEXT:
+                    cssObjectName = name;
                     infoText  = this.getSpecsInfoForTextItem(sourceItem);
                     newColor = $.specctrPsCommon.legendColor(model.legendColorType);
                     legendLayer = this.legendPropertiesLayer("Text Specs", parent).layerSets.add();
                     legendLayer.name = "Text Spec ";
                     
-                    if(model.textLayerName) {
-                        var wordsArray = name.split(" ");
-                        if(wordsArray.length > 2)
-                            name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
-                        infoText = "\r"+name+infoText;
-                    } else {
-                        infoText = "\r"+infoText;
-                        nameLength = 0;
-                    }
+                    if(!model.textLayerName) nameLength = 0;
+                    
                     break;
              
                 case LayerKind.GRADIENTFILL:
                 case LayerKind.SOLIDFILL: 
-                    infoText = this.getSpecsInfoForPathItem(sourceItem);
+                    infoText = this.getSpecsInfoForPathItem(sourceItem, cssBounds);
                     legendLayer = this.legendPropertiesLayer("Object Specs", parent).layerSets.add();
                     legendLayer.name = "Object Spec ";
-                    if(model.shapeLayerName) {
-                        infoText = "\r"+name+infoText;
-                    } else {
-                        infoText = "\r"+infoText;
-                        nameLength = 0;
-                    }
+                    
+                    if(!model.shapeLayerName) nameLength = 0;
+                    
                     break;
 
                 default: 
-                    infoText = this.getSpecsInfoForGeneralItem(sourceItem); 
+                    infoText = this.getSpecsInfoForGeneralItem(sourceItem, cssBounds); 
                     legendLayer = this.legendPropertiesLayer("Object Specs", parent).layerSets.add();
                     legendLayer.name = "Object Spec ";
-                    infoText = "\r"+name+infoText;
+                    
+                    if(!model.shapeLayerName) nameLength = 0;
+                    
             }
 
-            if (infoText === "") 
+            if (infoText === "")  {
+                spec.remove();
+                legendLayer.remove();
+                $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);
                 return;
+            }
 
             idSpec = $.specctrPsCommon.getIDOfLayer();
 
-            //Save the current preferences
-            var startTypeUnits = app.preferences.typeUnits; 
-            var startRulerUnits = app.preferences.rulerUnits;
-            var originalDPI = doc.resolution;
-            $.specctrPsCommon.setPreferences(Units.PIXELS, TypeUnits.PIXELS, 72);
-            
             var isLeft, pos;
             var centerX = (artLayerBounds[0] + artLayerBounds[2]) / 2;             //Get the center of item.
             var centerY = (artLayerBounds[1] + artLayerBounds[3]) / 2;
@@ -151,10 +219,7 @@ $.specctrPsProperties = {
 
             //Create spec text for art object.
             legendLayer.visible = false;
-            var spec = legendLayer.artLayers.add();
-            spec.kind = LayerKind.TEXT;
-            var specText = spec.textItem;
-            specText.kind = TextType.POINTTEXT;
+            spec.move(legendLayer, ElementPlacement.INSIDE)
             specText.contents = infoText;
             if(nameLength != 0)
                 this.applyBold(1, nameLength + 1);
@@ -165,40 +230,29 @@ $.specctrPsProperties = {
             
             //Number system..
             if(model.specOption == "Bullet") {
-                
-                if(noteLegendLayer) {
-                     try {
-                        bullet = noteLegendLayer.artLayers.getByName("__sFirstBullet");
-                    } catch (e) {}
-                 }
-         
-              //Check if any number is linked with selected art layer or not, if not then assign a number.
-                if (!bullet) {
-                    var number = $.specctrPsCommon.getBulletNumber(artLayer, parent, true);
-                    bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
-                }
-            
+               //Check if any number is linked with property spec or not, if not then assign a number.
+                number = $.specctrPsCommon.getBulletNumber(spec, parent, true);
+                bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
                 var dia = bullet.bounds[2] - bullet.bounds[0];
                 bullet.translate(artLayerBounds[0]-bullet.bounds[0]-dia-1, artLayerBounds[1]-bullet.bounds[1]-1);
                 dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
                 dupBullet.move(legendLayer, ElementPlacement.INSIDE);
                 
                 //Adjust position of spec items.
-               $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, noteSpecBottom, spacing, 
-                                                                  doc.width/2.0, centerX, dia, true);
-                                                                  
+                $.specctrPsCommon.adjustPositionOfSpecItems(spec, specText, dupBullet, noteSpecBottom, cnvsRect[0] + spacing, 
+                                                                  (cnvsRect[0] + cnvsRect[2])/2.0, centerX, dia, true, cnvsRect);
                 dupBullet.name = "__sSecondBullet";
                 spec.link(dupBullet);
                 legendLayer.visible = true;
                 bullet.visible = true;
             } else {
                 //Calcutate the position of spec text item.
-                if(centerX <=  doc.width/2.0) {
+                if(centerX <=  (cnvsRect[0] + cnvsRect[2])/2.0) {
                     specText.justification = Justification.LEFT;
-                    spec.translate(-(spec.bounds[0]-spacing), noteSpecBottom-spec.bounds[1]);
+                    spec.translate(-(spec.bounds[0]-spacing-cnvsRect[0]), noteSpecBottom-spec.bounds[1]);
                 } else {
                     specText.justification = Justification.RIGHT;
-                    spec.translate(doc.width-spacing-spec.bounds[2], noteSpecBottom-spec.bounds[1]);
+                    spec.translate(cnvsRect[2]-spacing-spec.bounds[2], noteSpecBottom-spec.bounds[1]);
                 }
 
                 //Get the end points for arm.
@@ -208,10 +262,9 @@ $.specctrPsProperties = {
                 spec.link(arm);
             }
         
-            if(cssText === "")
-                cssText = name + " {" + infoText.toLowerCase() + "}";
+            var css = cssObjectName + cssText + "}";
             
-             var xmpData = [{layerHandler : legendLayer, 
+            var xmpData = [{layerHandler : legendLayer, 
                                     properties : [{name : "idLayer", value : idLayer}, 
                                                         {name : "idSpec", value : idSpec}]
                                     }, 
@@ -220,20 +273,20 @@ $.specctrPsProperties = {
                                                             {name : "idSpec", value : idSpec}]
                                     },
                                     {layerHandler : spec,
-                                        properties : [{name : "css", value : cssText}]
+                                        properties : [{name : "css", value : css}]
                                     }
                                 ];
 
             $.specctrPsCommon.setXmpDataOfLayer(xmpData);
 
-        } catch(e) {alert(e);}
+        } catch(e) {}
 
         doc.activeLayer = artLayer;
         $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);
     },
 
     //Update the property spec of the layer whose spec is already present.
-    updateSpec : function(artLayer, legendLayer, bounds, specYPos, noteLegendLayer) {
+    updateSpec : function(artLayer, idLayer, legendLayer, bounds, cnvsRect, specYPos, noteLegendLayer, index) {
         // Save the current preferences
         var startTypeUnits = app.preferences.typeUnits;
         var startRulerUnits = app.preferences.rulerUnits;
@@ -249,40 +302,42 @@ $.specctrPsProperties = {
         var pos, idDupBullet, idBullet;
         var isNewSpecCreated = false;
         var name = artLayer.name;
+        var nameLength = name.length;
         doc.activeLayer = artLayer;
+
+        var cssBounds = [artLayerBounds[0]-cnvsRect[0], artLayerBounds[1]-cnvsRect[1], 
+                                        artLayerBounds[2]-cnvsRect[0], artLayerBounds[3]-cnvsRect[1]] ;
+        
+        cssText += "xCoord:" + cssBounds[0].toString() + ";";
+        cssText += "yCoord:" + cssBounds[1].toString()+ ";";
+        var cssObjectName = "." + name;
 
         try {
             switch(artLayer.kind) {
                 case LayerKind.TEXT:
+                    cssObjectName = name;
                     infoText   = this.getSpecsInfoForTextItem(artLayer);
                     newColor = $.specctrPsCommon.legendColor(model.legendColorType);
-                    if(model.textLayerName) {
-                        var wordsArray = name.split(" ");
-                        if(wordsArray.length > 2)
-                            name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
-                    } else {
-                        name = "";
-                    }
+                    
+                    if(!model.textLayerName) nameLength = 0;
+                    
                     break;
 
                 case LayerKind.GRADIENTFILL:
                 case LayerKind.SOLIDFILL: 
-                    infoText = this.getSpecsInfoForPathItem(artLayer);
-                    if(!model.shapeLayerName)
-                        name = "";
+                    infoText = this.getSpecsInfoForPathItem(artLayer, cssBounds);
+                    
+                    if(!model.shapeLayerName) nameLength = 0;
+                    
                     break;
 
                 default: 
-                    infoText = this.getSpecsInfoForGeneralItem(artLayer); 
+                    infoText = this.getSpecsInfoForGeneralItem(artLayer, cssBounds); 
+                    if(!model.shapeLayerName) nameLength = 0;
             }
-        
-            if(infoText == "") 
-                return;
 
             var justification = Justification.LEFT;
             
-            var nameLength = name.length;
-            infoText = "\r"+name+infoText;
             app.preferences.typeUnits = TypeUnits.PIXELS;
             doc.resizeImage(null, null, 72, ResampleMethod.NONE);
 
@@ -317,13 +372,11 @@ $.specctrPsProperties = {
             $.specctrPsCommon.deleteArtLayerByName(legendLayer, "__sArm");
 
             if(model.specOption == "Bullet") {
-                $.specctrPsCommon.deleteArtLayerByName(noteLegendLayer, "__sFirstBullet");
                 //Check if any number is linked with selected art layer or not, if not then assign a number.
-               var number = $.specctrPsCommon.getBulletNumber(artLayer, legendLayer.parent.parent.parent.parent, false);
-                
+                var number = $.specctrPsCommon.getBulletNumber(spec, legendLayer.parent.parent.parent.parent, isNewSpecCreated);
                 var bullet = $.specctrPsCommon.createBullet(legendLayer, number, font, artLayerBounds, newColor);
                 bullet.name = "__sFirstBullet";
-                
+
                 var dupBullet = bullet.duplicate(bullet, ElementPlacement.PLACEBEFORE);
                 dupBullet.name = "__sSecondBullet";
                 dupBullet.move(legendLayer, ElementPlacement.INSIDE);
@@ -354,11 +407,10 @@ $.specctrPsProperties = {
                 spec.link(arm);
             }
 
-            if(cssText == "")
-                cssText = name + " {" + infoText.toLowerCase() + "}";
-
+            var css = cssObjectName + cssText + "}";
+            
             var xmpData = [{layerHandler : spec,
-                                        properties : [{name : "css", value : cssText}]
+                                        properties : [{name : "css", value : css}]
                                     }
                                 ];
             // Set Xmp metadata for spec and bullet.
@@ -379,11 +431,14 @@ $.specctrPsProperties = {
         var rltvFontSize = 16;
 
         try {
+            
+            //Get all the required property of text items.
+            
+            //Get the name of text item.
             var name = pageItem.name;
             var wordsArray = name.split(" ");
             if(wordsArray.length > 2)
                 name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
-            cssText = name.toLowerCase()+" {";
             
             var sizeID = stringIDToTypeID("size");
             var transformID = stringIDToTypeID("transform");
@@ -412,7 +467,7 @@ $.specctrPsProperties = {
                 var alpha = "", leading = "", size = "", font = "";
                 var kDefaultLeadVal = 120.0, kDefaultFontVal='MyriadPro-Regular', kDefaultFontSize= 12;
                 var underline = "", strike = "", bold = "",  italic = "";
-                var tracking = "", isAutoLeading="", color="", mFactor = "";
+                var tracking = 0, isAutoLeading="", color="", mFactor = "";
                 
                 var from = txtList.getObjectValue(i).getInteger(fromId);
                 var to = txtList.getObjectValue(i).getInteger(toId);
@@ -461,247 +516,223 @@ $.specctrPsProperties = {
                         color = this.getColor(styleDesc.getObjectValue(colorID));
                 }
                 
-                if(model.textAlpha)
-                    alpha = Math.round(pageItem.opacity)/100 ;
-
-                if (model.textFont) {
-                    if(font == "")
-                        font = kDefaultFontVal;
-                        
-                    infoText += "\rFont-Family: " + font;
-                    cssText += "font-family: " + font + ";";
-                }
-
-                //Get the font size.
-                if (model.textSize) {
-                    if(size == "")
-                        size = kDefaultFontSize;
-                    var fontSize = "";
-                    //Calculate the font size in 'em' units.
-                    if(model.specInEM) {
-                        if(model.baseFontSize != 0)
-                            rltvFontSize = model.baseFontSize;
-                            
-                        if($.specctrPsCommon.getTypeUnits() == 'mm')
-                            rltvFontSize = $.specctrPsCommon.pointsToUnitsString(rltvFontSize, Units.MM).toString().replace(' mm','');
-                        
-                        fontSize = Math.round(size / rltvFontSize * 100) / 100 + " em";
-                    } else {
-                        fontSize = Math.round(size * 100) / 100;
-                        fontSize = $.specctrPsCommon.getScaledValue(fontSize) + " " + $.specctrPsCommon.getTypeUnits();
-                    }
-
-                    infoText += "\rFont-Size: " + fontSize;
-                    cssText += "font-size: " + fontSize + ";";
-                }
-            
-                //Get the color of text.
-                if (model.textColor) {
-                    if(color == "")
-                        color = this.getDefaultColor();
-
-                    color = this.colorAsString(color);
-
-                    if(alpha != "" && color.indexOf("(") >= 0) {
-                        color = this.convertColorIntoCss(color, alpha);
-                        alpha = "";
-                    }
-                    infoText += "\rColor: " + color;
-                     cssText += "color: "+ color.toLowerCase() + ";";
-                }
-
-                //Get the style of text.
-                if (model.textStyle) {
-                    var styleString = "normal";
-                    if (bold == true) 
-                        styleString = "bold";
-                    if (italic == true) 
-                        styleString += "/ italic";
-
-                    infoText += "\rFont-Style: " + styleString;
-                    cssText += "font-style: "+ styleString + ";";
-                    styleString = "";
-
-                    if (underline != "" && underline != "underlineOff" )
-                        styleString = "underline";
-                    if (strike != "" && strike != "strikethroughOff") {
-                        if(styleString != "")
-                            styleString += "/ ";
-                        styleString += "strike-through";
-                    }
+                //If no font then set default font.
+                if(font == "") font = kDefaultFontVal;
+                if(size == "") size = kDefaultFontSize;
                 
-                    if(styleString != "") {
-                        infoText += "\rText-Decoration: " + styleString;
-                        cssText += "text-decoration: "+ styleString + ";";
-                    }
-                }
-
-                //Get the alignment of the text.
-                try {
-                    if (model.textAlignment) {
-                        var s = textItem.justification.toString();
-                        s = s.substring(14,15).toLowerCase() + s.substring(15).toLowerCase();
-                        infoText += "\rText-Align: " + s;
-                        cssText += "text-align: " + s + ";";
-                    }
-                } catch(e) {
-                   var alignment = this.getAlignment();
-                   infoText += "\rText-Align: " + alignment;
-                   cssText += "text-align: " + alignment + ";";
-                }
-           
-                if (model.textLeading) {
-                    if(leading == "" || isAutoLeading == true)
-                        leading =  size / 100 * Math.round(kDefaultLeadVal);
-                    leading = leading.toString().replace("px", "");
+                //Get the font size if responsive option selected
+                var fontSize = "";
+                if(model.specInEM) {
+                    if(model.baseFontSize != 0)
+                        rltvFontSize = model.baseFontSize;
+                        
+                    if($.specctrPsCommon.getTypeUnits() == 'mm')
+                        rltvFontSize = $.specctrPsCommon.pointsToUnitsString(rltvFontSize, Units.MM).toString().replace(' mm','');
                     
-                    //Calculate the line height in 'em' units.
-                    if(model.specInEM) {
-                        var rltvLineHeight = "";
-                        if(model.baseLineHeight != 0)
-                            rltvLineHeight = model.baseLineHeight;
-                        else
-                            rltvLineHeight = rltvFontSize * 1.4;
-                        
-                         if($.specctrPsCommon.getTypeUnits() == 'mm')
-                                rltvLineHeight = $.specctrPsCommon.pointsToUnitsString(rltvLineHeight, Units.MM).toString().replace(' mm','');
-                        
-                        leading = Math.round(leading / rltvLineHeight * 100) / 100 + " em";
-                    } else {   
-                        leading = Math.round(leading * 100) / 100 + " " + $.specctrPsCommon.getTypeUnits();
-                    }
+                    fontSize = Math.round(size / rltvFontSize * 100) / 100 + " em";
+                } else {
+                    fontSize = Math.round(size * 100) / 100;
+                    fontSize = $.specctrPsCommon.getScaledValue(fontSize) + " " + $.specctrPsCommon.getTypeUnits();
+                }
+ 
+                //Get alpha/opacity of text item.
+                alpha = Math.round(pageItem.opacity)/100 ;
                 
-                    infoText += "\rLine-Height: " + leading;
-                    cssText += "line-height: " + leading + ";";
+                //Get color
+                if(color == "") color = this.getDefaultColor();
+                
+                color = this.colorAsString(color);
+
+                if(alpha != "" && color.indexOf("(") >= 0) {
+                    color = this.convertColorIntoCss(color, alpha);
+                    alpha = "";
                 }
 
-                if (model.textTracking) {
-                    var tracking = Math.round(tracking / 1000 * 100) / 100 + " em";
-                    infoText += "\rLetter-Spacing: " + tracking;
-                    cssText += "letter-spacing: " + tracking + ";";
+                // Get the style of the text item.
+                var styleString = "normal", textDecorationStyle = "";
+                if (bold == true) styleString = "bold";
+                if (italic == true) styleString += "/ italic";
+                if (underline != "" && underline != "underlineOff" ) textDecorationStyle = "underline";
+                if (strike != "" && strike != "strikethroughOff") {
+                    if(textDecorationStyle != "") textDecorationStyle += "/ ";
+                    textDecorationStyle += "strike-through";
                 }
             
-                if (alpha != "") {
-                    infoText += "\rOpacity: " + alpha;
-                    cssText += "opacity: " + alpha + ";";
+                //Get the alignment of the text.
+                var alignment = "";
+                try {
+                    alignment = textItem.justification.toString();
+                    alignment = alignment.substring(14,15).toLowerCase() + alignment.substring(15).toLowerCase();
+                } catch(e) {
+                   alignment = this.getAlignment();
                 }
+            
+                //Get text leading.
+                if(leading == "" || isAutoLeading == true)
+                    leading =  size/100*Math.round(kDefaultLeadVal);
+                
+                leading = leading.toString().replace("px", "");
+                
+                //Calculate the line height in 'em' units.
+                if(model.specInEM) {
+                    var rltvLineHeight = "";
+                    if(model.baseLineHeight != 0)
+                        rltvLineHeight = model.baseLineHeight;
+                    else
+                        rltvLineHeight = rltvFontSize * 1.4;
+                    
+                     if($.specctrPsCommon.getTypeUnits() == 'mm')
+                            rltvLineHeight = $.specctrPsCommon.pointsToUnitsString(rltvLineHeight, Units.MM).toString().replace(' mm','');
+                    
+                    leading = Math.round(leading / rltvLineHeight * 100) / 100 + " em";
+                } else {   
+                    leading = Math.round(leading * 100) / 100 + " " + $.specctrPsCommon.getTypeUnits();
+                }
+
+                //Get tracking of the text item.
+                tracking = Math.round(tracking / 1000 * 100) / 100 + " em";
+                
+                //Set css for the selected text item.
+                cssText += "text_contents:" + textItem.contents +";";
+                cssText += "font-family:" + font+";";
+                cssText += "font-size:" + fontSize+";";
+                cssText += "color:" + color.toLowerCase()+";";
+                cssText += "font-style:" + styleString+";";
+                
+                if(textDecorationStyle != "") 
+                    cssText += "text-decoration:" + textDecorationStyle+";";
+                
+                cssText += "text-align:" + alignment+";";
+                cssText += "line-height:" + leading+";";
+                cssText += "letter-spacing:" + tracking+";";
+                
+                if(alpha != "") 
+                    cssText += "opacity:" + alpha+";";
+
+                //Add properties which are enabled in details tab.
+                if (model.textLayerName) infoText = "\r" + name;
+                if (model.textFont) infoText += "\rFont-Family: " + font;
+                if (model.textSize) infoText += "\rFont-Size: " + fontSize;
+                if (model.textColor) infoText += "\rColor: " + color;
+
+                if (model.textStyle) {
+                    infoText += "\rFont-Style: " + styleString;
+                    if(textDecorationStyle != "")
+                        infoText += "\rText-Decoration: " + textDecorationStyle;
+                }
+
+                if (model.textAlignment) infoText += "\rText-Align: " + alignment;
+                if (model.textLeading) infoText += "\rLine-Height: " + leading;
+                if (model.textTracking) infoText += "\rLetter-Spacing: " + tracking;
+                if (alpha != "") infoText += "\rOpacity: " + alpha;
             
                 if (model.textEffects) {
                     var strokeVal = this.getStrokeValOfLayer(pageItem);
-                    if(strokeVal != "")
-                        infoText += strokeVal;
+                    if(strokeVal != "none" && strokeVal != "") infoText += "\rBorder: " + strokeVal;
                         
                     var effectValue = this.getEffectsOfLayer();
-                    if(effectValue != "")
-                        infoText += effectValue;
-                        
-                     app.activeDocument.activeLayer = pageItem;
+                    if(effectValue != "") infoText += effectValue;
                 }
+            
             }
-        } catch(e) {
-            alert(e);
-        }
+        } catch(e) {}
 
-        cssText += "}";
         if(model.specInEM) {
             cssBodyText = "body {font-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;}";
             $.specctrPsCommon.setCssBodyText(cssBodyText);
         }
-        
+            
+        app.activeDocument.activeLayer = pageItem;
         return infoText;
     },
 
     //Getting info for shape object.
-    getSpecsInfoForPathItem : function(pageItem) {
+    getSpecsInfoForPathItem : function(pageItem, cssBounds) {
         var pathItem = pageItem;
         var doc = app.activeDocument;
         var alpha = "", effectValue = "";
         var borderRadius = "", strokeVal = "";
         
         // Get the layer kind and color value of that layer.
+        var name = pathItem.name;
         var infoText = "";
-        cssText = "."+pathItem.name.toLowerCase()+" {";
         
         //Gives the opacity for the art layer,
-        if(model.shapeAlpha)
-            alpha = Math.round(pageItem.opacity)/100;
-        
-        app.activeDocument.activeLayer = pageItem;
-        if(model.shapeBorderRadius)
-            borderRadius = this.getRoundCornerValue();
-        
-        doc.activeLayer = pageItem;
-        
-        if(model.shapeStroke)
-            strokeVal = this.getStrokeValOfLayer(pageItem);
-        
-        if(model.shapeEffects) {
-            doc.activeLayer = pageItem;
-            effectValue = this.getEffectsOfLayer();
-        }
+        alpha = Math.round(pageItem.opacity)/100;
         
         try {
-            if (model.shapeFill) {  
                 doc.activeLayer = pageItem;
                 var ref = new ActionReference();
                 ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
                 var desc = executeActionGet(ref).getList(charIDToTypeID("Adjs")).getObjectValue(0);
                 doc.activeLayer = doc.layers[doc.layers.length-1];
 
+                var shapeFillVal = "", swatchName = "";
                 if(pathItem.kind == LayerKind.SOLIDFILL) {
                     var colorDescriptor = desc.getObjectValue(stringIDToTypeID('color'));
                     var solidColor = this.getColor(colorDescriptor);
                     var color = this.colorAsString(solidColor);
-                    var swatchName = $.specctrPsSwatches.readFromRuntime(solidColor);
-                    if(swatchName !== undefined)
-                        infoText +="\r" + swatchName;
-                    var cssColor = "";
+                    swatchName = $.specctrPsSwatches.readFromRuntime(solidColor);
                     
-                    infoText += "\rBackground: ";
-                    if(alpha != "" && color.indexOf("(") >= 0) {
-                        cssColor = this.convertColorIntoCss(color, alpha);
+                    if(model.shapeAlpha && color.indexOf("(") >= 0) {
+                        shapeFillVal = this.convertColorIntoCss(color, alpha);
                         alpha = "";
                     } else {
-                        cssColor = color;
+                        shapeFillVal = color;
                     }
                 
-                    infoText += cssColor;
-                    cssText += "background: " + cssColor + ";";
                 } else if(pathItem.kind == LayerKind.GRADIENTFILL) {
-                    var gradientValue = "";
-                    infoText += "\rBackground: ";
-                    gradientValue =  typeIDToStringID(desc.getEnumerationValue(charIDToTypeID("Type")))+" gradient ";
+                    
+                    shapeFillVal =  typeIDToStringID(desc.getEnumerationValue(charIDToTypeID("Type")))+" gradient ";
                     desc = desc.getObjectValue(charIDToTypeID("Grad"));
                     var colorList = desc.getList(charIDToTypeID("Clrs"));
                     var count = colorList.count;                                                 //Number of color stops in gradient
                     for( var c = 0; c < count; c++ ) {
                         desc = colorList.getObjectValue(c);                                            // get color descriptor
-                        gradientValue += this.colorAsString(this.getColor(desc.getObjectValue(stringIDToTypeID('color'))))+" ";
+                        shapeFillVal += this.colorAsString(this.getColor(desc.getObjectValue(stringIDToTypeID('color'))))+" ";
                     }
                     
-                    infoText += gradientValue;
-                    cssText += "background: " + gradientValue +";";
                 }
-            }
+
         } catch(e) {}
-
-        if(strokeVal != "")
-            infoText += strokeVal;
         
-        if(alpha != "") {
-            infoText += "\rOpacity: "+alpha;
-            cssText += "opacity: "+alpha+";";
+        // Get the round corner values.
+        doc.activeLayer = pageItem;
+        borderRadius = this.getRoundCornerValue();
+        
+        doc.activeLayer = pageItem;
+        strokeVal = this.getStrokeValOfLayer(pageItem);
+        
+        //Set css for selected shape item.
+        cssText += "background:" + shapeFillVal+";";
+        cssText += "border:" + strokeVal+";";
+        
+        if(alpha != "") 
+            cssText += "opacity:" + alpha+";";
+            
+        cssText += "border-radius:" + borderRadius.toString()+";";
+        cssText += "height:" +  (cssBounds[3]-cssBounds[1]).toString()+";";
+        cssText += "width:" + (cssBounds[2]-cssBounds[0]).toString()+";";
+
+        
+        //Add properties which are enabled in details tab.
+        if(model.shapeLayerName) infoText += "\r" + name;
+        if(model.shapeFill) {
+            if(swatchName !== "") infoText +="\r" + swatchName;
+            infoText += "\rBackground: " + shapeFillVal;
         }
         
-        if(effectValue != "")
+        if(model.shapeStroke) infoText += "\rBorder: " + strokeVal;
+        if(model.shapeAlpha && alpha != "") infoText += "\rOpacity: "+alpha;
+        
+        if(model.shapeEffects) {
+            doc.activeLayer = pageItem;
+            effectValue = this.getEffectsOfLayer();
             infoText += effectValue;
-        
-        if(borderRadius != "") {
-            infoText += "\r" + borderRadius;
-            cssText += "" + borderRadius.toLowerCase() + ";";
         }
-
-        cssText += "}";
+        
+        if(model.shapeBorderRadius) infoText += "\rBorder-radius: " + borderRadius;
+        
         doc.activeLayer = pageItem;
         return infoText;
     },
@@ -934,19 +965,20 @@ $.specctrPsProperties = {
                     doc.activeLayer = doc.layers[doc.layers.length-1];
                        
                     if(layerEffectDesc.hasKey(stringIDToTypeID('frameFX'))) {
-                        infoText += "\rBorder: ";
                         var desc = layerEffectDesc.getObjectValue(stringIDToTypeID('frameFX'));
                         if(desc.getBoolean(stringIDToTypeID('enabled')))
                             infoText += this.getStrokeFx(desc);
                         else
-                            infoText += " off";
+                            infoText += "off";
                     }
                     doc.activeLayer = pageItem;
                 }
+            } else {
+                infoText += "none";
             }
+        
             return infoText;
         } catch(e) {
-            alert(e);
             doc.activeLayer = pageItem;
             return "";
         }
@@ -1012,7 +1044,6 @@ $.specctrPsProperties = {
                     
             return infoText;
         } catch(e) {
-            alert(e);
             return "";
         }
     },
@@ -1111,7 +1142,6 @@ $.specctrPsProperties = {
     //Get the round corner value of the shape object.
     getRoundCornerValue : function() {
         try {
-            var infoText = "Border-radius: ";
             var doc = app.activeDocument;
             var anchorPoints = [];
             var shape = doc.pathItems[0];
@@ -1120,7 +1150,7 @@ $.specctrPsProperties = {
             var point = "";
 
             if(points.length < 5)
-                return infoText+"0";
+                return "0";
             if(points.length != 8)
                 return "";
 
@@ -1128,34 +1158,35 @@ $.specctrPsProperties = {
                 point = points[k];
                 anchorPoints[k] =  point.anchor[0];
             }
-            infoText +=  Math.abs(parseInt(anchorPoints[2]) - parseInt(anchorPoints[1]));
-        } catch(e) {
-            alert(e);
-            infoText = "";
-        }
+        
+            return  Math.abs(parseInt(anchorPoints[2]) - parseInt(anchorPoints[1])).toString();
+            
+        } catch(e) {}
 
-        return infoText;
+        return "";
     },
 
     //Get spec info for general items.
-    getSpecsInfoForGeneralItem : function(sourceItem) {
-        var infoText;
-        cssText = "";
-        
+    getSpecsInfoForGeneralItem : function(sourceItem, cssBounds) {
         if(sourceItem.kind == undefined) {
-            infoText = "";
-            return;
+            return "";
         }
-        var infoText = sourceItem.kind.toString().replace ("LayerKind.", "");
+        
         var pageItem = sourceItem;
-        cssText = "." + pageItem.name.toLowerCase() + " {" + infoText.toLowerCase() + ";";
+        
+        var name = pageItem.name;
+        var type = pageItem.kind.toString().replace ("LayerKind.", "").toLowerCase();
+        var alpha = Math.round(pageItem.opacity) / 100;
+        
+        cssText += "type:" + type+";";
+        cssText += "opacity:" + alpha+";";
+        cssText += "height:" + (cssBounds[3]-cssBounds[1]).toString()+";";
+        cssText += "width:" + (cssBounds[2]-cssBounds[0]).toString()+";";
 
-        if(model.textAlpha) {
-            var opacityString = "Opacity: " + Math.round(pageItem.opacity) / 100;
-            infoText += "\r\t" + opacityString;
-            cssText += opacityString.toLowerCase() + ";";
-        }
-        cssText += "}";
+        var infoText = "";
+        if(model.shapeLayerName) infoText = "\r"+name+"\r"+type;
+        if(model.shapeAlpha) infoText += "\rOpacity: " + opacityString;
+        
         return infoText;
     },
 
@@ -1209,5 +1240,34 @@ $.specctrPsProperties = {
             desc.putReference( charIDToTypeID('null'), ref );   
             executeAction( stringIDToTypeID('selectNoLayers'), desc, DialogModes.NO );  
         } catch (e) {}
+    },
+
+    getIndexOfSelectedLayer : function() {
+        try {
+            var doc = app.activeDocument;
+            var isBackGroundPresent = false;
+
+            try {
+                if(doc.backgroundLayer)
+                    isBackGroundPresent = true;
+            } catch(e) {
+                isBackGroundPresent = false;
+            }
+            
+            var index;
+            var layerRef = new ActionReference(); 
+            layerRef.putProperty(app.charIDToTypeID("Prpr"), app.charIDToTypeID("ItmI")); 
+            layerRef.putEnumerated(app.charIDToTypeID("Lyr "), app.charIDToTypeID("Ordn"), app.charIDToTypeID("Trgt")); 
+                
+            if(isBackGroundPresent) 
+                index = app.executeActionGet(layerRef).getInteger(app.charIDToTypeID("ItmI"))-1; 
+            else 
+                index = app.executeActionGet(layerRef).getInteger(app.charIDToTypeID("ItmI")); 
+                
+        } catch(e) {
+            index = 0;        
+        }
+    
+        return index;
     }
 };

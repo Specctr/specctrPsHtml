@@ -218,7 +218,7 @@ label {
 	color: #3199F6;
 	font-family: sans-serif;
 	font-size: 11px;
-	cursor: pointer;
+	cursor: default;
 }
 
 .floatRight {
@@ -238,12 +238,12 @@ label {
 }
 
 .setBlueLabel {
-	color: #3577FA !important;
+	color: #4990E2 !important;
 	font-weight: bold !important; 
 }
 
 .setSettingColor {
-	color: #3577FA !important;
+	color: #4990E2 !important;
 }
 
 .width150px {
@@ -291,7 +291,7 @@ label {
 
 .tabs>ul {
 	list-style: none;
-	cursor: pointer;
+	cursor: default;
 }
 
 .tabs>ul>li {
@@ -300,7 +300,7 @@ label {
 	float: left;
 	width: 60px;
 	height: 48px;
-	cursor: pointer;
+	cursor: default;
 	overflow: hidden;
 	padding-top: 6px;
 }
@@ -333,6 +333,25 @@ label {
 	font-size: 11px;
 	width: 200px;
 }
+
+#spinnerBlock {  
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    z-index:1;
+    background-color:grey;
+    opacity: .8;
+ }
+
+.loader {
+    position: absolute;
+    left: 47%;
+    top: 44%;
+    display: block;     
+}
+
 /*-------------------------------------------------------------*/
 
 /*---------------Style applied on first tab page---------------*/
@@ -344,7 +363,8 @@ label {
 }
 
 .menu {
-	margin: 15px 8px 0px 8px;
+	margin-top: 15px;
+	margin-bottom: 0px;
 }
 
 .menu li {
@@ -354,12 +374,22 @@ label {
 	margin-top: 6px;
 }
 
+.menuSideMarginWithBorder {
+	margin-left: 8px;
+	margin-right: 8px;
+}
+
+.menuSideMarginWithOutBorder {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
 .button {
 	width: 222px;
 	padding: 0px;
 	display: table;
 	text-align: left;
-	cursor: pointer;
+	cursor: default;
 }
 
 .button:hover label, .buttonSelected label{
@@ -381,7 +411,7 @@ label {
 	margin-top: 15px;
 	font-family: aauxPro;
 	font-size: 18px !important;
-	cursor: pointer !important;
+	cursor: default;
 }
 
 .border {
@@ -393,10 +423,16 @@ label {
 	background-image: none;
 }
 
+.downArrowParentDiv {
+	float: right;
+	width: 22px;
+	height: 26px;
+	padding-top: 23px;
+	padding-right: 3px;
+}
+
 .dropdownArrow {
 	float: right;
-	margin-top: 22px;
-	margin-right: 5px;
 	background: url("../assets/images/navArrowGreyDown.png");
 	background-repeat: no-repeat;
 	width: 15px;
@@ -405,8 +441,6 @@ label {
 
 .dropdownArrowUp {
 	float: right;
-	margin-top: 20px;
-	margin-right: 5px;
 	background: url("../assets/images/navArrowGreyUp.png");
 	background-repeat: no-repeat;
 	width: 15px;
@@ -427,7 +461,7 @@ label {
 	float: left;
 	width: 55.5px;
 	height: 50px;
-	cursor: pointer;
+	cursor: default;
 	background-position: center;
 	background-repeat: no-repeat;
 }
@@ -447,7 +481,7 @@ label {
 
 #noteDropDown div {
 	height: 100px;
-	cursor: pointer;
+	cursor: default;
 	background-position: center;
 }
 
@@ -468,7 +502,7 @@ label {
 
 #expandDropDown div {
 	height: 50px;
-	cursor: pointer;
+	cursor: default;
 	background-position: center;
 }
 
@@ -504,7 +538,7 @@ label {
 }
 
 .tabPage2Content input[type="checkbox"] {
-	margin-bottom: 3px !important;
+	margin-bottom: 5px !important;
 }
 
 /*-------------------------------------------------------------*/
@@ -512,6 +546,10 @@ label {
 /*--------------Style applied on third tab page----------------*/
 #tabpage_3 {
 	color: #666666;
+}
+
+#tabpage_3 .h5 {
+	margin-top: 8px !important;
 }
 
 .responsivePageHeader {
@@ -529,6 +567,10 @@ label {
 
 .height25px {
 	height: 25px !important;
+}
+
+.page3labelColor {
+	color: #666666;
 }
 
 .inputStyle {
@@ -600,7 +642,7 @@ label {
 	height: 20px;
 	margin-top: -3px !important;
 	margin-right: 3px;
-	cursor: pointer;
+	cursor: default;
 }
 
 .settingline {
@@ -646,7 +688,7 @@ label {
 	float: left;
 	width: 18px;
 	height: 16px;
-	cursor: pointer;
+	cursor: default;
 	border: 1px solid #000000;
 }
 
@@ -664,7 +706,7 @@ label {
 	border: 1px solid #AEAEAE;
 	position: absolute;
 	background-image: linear-gradient(to bottom, #E1E1E1 0%, #F8F8F8 20%);
-	cursor: pointer;
+	cursor: default;
 }
 
 .firstChildLeftBlock .colorText {
@@ -679,7 +721,7 @@ label {
 	float: left;
 	width: 28px;
 	height: 16px;
-	cursor: pointer;
+	cursor: default;
 	margin-top: 1px !important;
 	border: 1px #AEAEAE inset;
 	display: inline-block;
@@ -714,7 +756,7 @@ label {
 	width: 135px !important;
 	-webkit-appearance: none;
 	font-size: 13px;
-	cursor: pointer;
+	cursor: default;
 }
 
 .colorPickerStyle {
@@ -731,7 +773,7 @@ label {
 
 .colorPickerAppearance {
 	text-align: center;
-	cursor: pointer !important;
+	cursor: default;
 	border: 0px transparent !important;
 	margin-top: 0px;
 	background-color: transparent;
@@ -754,7 +796,7 @@ label {
 	width: 70px !important;
 	-webkit-appearance: none;
 	font-size: 13px;
-	cursor: pointer;
+	cursor: default;
 }
 
 .settingPageLabel {
@@ -778,7 +820,7 @@ label {
 	font-size: 12px;
 	font-weight: normal;
 	color: #707070;
-	cursor: pointer;
+	cursor: default;
 }
 
 .inputStyleSmall {
@@ -799,12 +841,12 @@ label {
 #specToEdgeCheckbox {
 	margin-top:6px;
 	margin-bottom:10px;
-	cursor: pointer;
+	cursor: default;
 }
 
 #includeStrokeCheckbox {
 	margin: 13px 0px 14px 0px;
-	cursor: pointer;
+	cursor: default;
 }
 
 #settingBlock {
@@ -825,8 +867,9 @@ label {
 }
 
 #settingIcon {
+    margin-top: -3px;
 	margin-bottom: 4px;
-	cursor: pointer;
+	cursor: default;
 }
 
 #footerLabel {
@@ -835,8 +878,21 @@ label {
 	font-style: normal;
 	color: #6d6d6d;
 	margin-top: 3px; 
-	cursor: pointer;
+	cursor: default;
 }
+
+#specctrVersion {  
+    font-family: aauxProBol;
+    font-size: 14px;
+    font-style: normal;
+    color: #ff5050;
+    margin-top: 3px;
+    cursor: default;
+}
+
+.adjustCBMargin {
+	margin-bottom: 4px !important;
+} 
 /*-------------------------------------------------------------*/
 
 @media ( -webkit-min-device-pixel-ratio : 2) {

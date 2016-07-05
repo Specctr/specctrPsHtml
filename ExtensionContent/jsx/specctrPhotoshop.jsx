@@ -38,6 +38,35 @@ $.specctrPs = {
         $.specctrPsCommon.setModel(currModel);
     },
 
+    //Set the document Id in the xmp metadata of document.
+    setDocId : function(docId, projectId) {
+        
+        if(ExternalObject.AdobeXMPScript == null)
+            ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
+            
+        var xmpData = [{layerHandler : app.activeDocument,
+                                        properties : [{name : "document_id", value : docId}, 
+                                                            {name : "project_id", value : projectId}]
+                                    }];
+        return $.specctrPsCommon.setXmpDataOfLayer(xmpData);
+    },
+    
+    getProjectIdOfDoc : function() {
+        
+        if(app.documents.length == 0) {
+            return "false";
+        }
+
+         if(ExternalObject.AdobeXMPScript == null)
+            ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');
+
+            var projectId = $.specctrPsCommon.getXMPData(app.activeDocument, "project_id");
+            if(projectId == null)
+                return "";
+  
+            return projectId;
+    },
+
     //Call create canvas border method from specctrPsExpandCanvas jsx file.
     createCanvasBorder : function() {
         $.specctrPsExpandCanvas.createCanvasBorder();
@@ -46,26 +75,34 @@ $.specctrPs = {
     //Call create dimension spec method from specctrPsDimension jsx file.
     createDimensionSpecs : function() {
         $.specctrPsDimension.createDimensionSpecsForItem();
+        return true;
     },
     
     //Call create spacing spec method from specctrPsSpacing jsx file.
     createSpacingSpecs : function() {
         $.specctrPsSpacing.createSpacingSpecs();
+        return true;
     },
 
     //Call create coordinate spec method from specctrPsCoordinates jsx file.
     createCoordinateSpecs : function() {
         $.specctrPsCoordinates.createCoordinateSpecs();
+        return true;
     },
 
     //Call create property spec method from specctrPsProperties jsx file.
     createPropertySpecs : function() {
-        $.specctrPsProperties.createPropertySpecsForItem();
+        var message = $.specctrPsProperties.createPropertySpecsForItem();
+        if(message)
+            return message;
+            
+        return true;
     },
 
     //Call create add note spec method from specctrPsAddNotes jsx file.
     addNoteSpecs : function(noteText) {
         $.specctrPsAddNote.addNoteSpecs(noteText);
+        return true;
     },
 
     //Call create exportCss method from specctrPsExportCss jsx file.
