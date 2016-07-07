@@ -27,6 +27,8 @@ Specctr.buttonHandlers = {
 		var note = $("#noteText").val();
 		if(!note.trim())
 			note = "Add Note Here!";
+		else
+			note = Specctr.Utility.addEscapeChars(note);	//Add backslash char to support single quotes in spec note.
 
 		buttonController.closeAllDropDown();
 		setModel();
