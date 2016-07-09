@@ -12,7 +12,7 @@
 <script src="../lib/jquery-1.9.1.js"></script>
 <script src="../lib/statsc-client.js"></script>
 <script src="../lib/analytics.js"></script>
-<script src="../lib/jquery-ui-1.10.2.custom.js"></script>
+<script src="../vendor/jquery-ui/jquery-ui.min.js"></script> <!-- 1.11.4 -->
 <script src="../lib/cssjson.js"></script>
 
 <script src="../model/appModel.js"></script>
@@ -42,7 +42,8 @@
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/spacingButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/coordinateButtonStyle.css">
 <link id="ppstyle" rel="stylesheet" type="text/css"	href="../css/cloudUploadButton.css">
-<link id="ppstyle" rel="stylesheet" type="text/css" href="../css/jquery-ui-1.10.2.custom.css">
+<link id="ppstyle" rel="stylesheet" type="text/css" href="../vendor/jquery-ui/jquery-ui.min.css"><!-- 1.11.4 -->
+
 
 <title>Specctr-Pro</title>
 </head>
@@ -52,7 +53,9 @@
 	<!-- Login container start here -->
 	<div class="showBlock" id="loginContainer">
 		<div id="dvLoginContainer">
-			<img alt="specctrLoginImage" id="specctrLoginImage" src="../assets/images/specctrLogo.png">
+            <div id="logoContainer">
+                <img alt="specctrLoginImage" id="specctrLoginImage" src="../assets/images/specctrLogo.png">
+            </div>
 			<div id="loginHeaderDiv" class="activationHeader">
 				<label id="loignHeaderLabel"> Hi! Welcome back! <br> Please login: 
 				</label>
