@@ -12,7 +12,7 @@ specctrDialog.createAlertDialog = function() {
 	$("#dialog").dialog({
 		autoOpen : false,
 		resizable: false,
-		width : 206,
+		width : 196,
 		height : 100,
 		modal : true,
 		buttons : []
