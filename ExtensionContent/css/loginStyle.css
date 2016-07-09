@@ -45,6 +45,7 @@ ul#loginBlock, ul#activateBlock {
 }
 
 .activationHeader {
+    text-align: center;
 	padding-top: 30px;
 	height: 86px;
     width: 201px;
