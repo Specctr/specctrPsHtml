@@ -250,20 +250,26 @@ Specctr.Init.setModelToResponsive = function() {
  * This method fetch the application version from manifest file and set it at panel bottom.
  */
 Specctr.Init.setVersionAtBottom = function() {
+    this.getLocalVersion(function(version) {
+        Specctr.Version = version;
+        $("#specctrVersion").html("v."+Specctr.Version); 
+    })
+};
+
+Specctr.Init.getLocalVersion = function(callback) {
 	//Get the bundle version from manifest file.
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
 		if(xhttp.readyState == 4) {
 			var xmlDoc = this.responseXML;
 			var extManNode = xmlDoc.getElementsByTagName("ExtensionManifest")[0];
-			Specctr.Version = extManNode.getAttribute("ExtensionBundleVersion");
-			$("#specctrVersion").html("v."+Specctr.Version);			//Should be v.3.00...
+            callback(extManNode.getAttribute("ExtensionBundleVersion"));
 		}
 	};
 
 	xhttp.open("GET", "../CSXS/manifest.xml", true);
 	xhttp.send();
-};
+}
 
 /**
  * This method set the BugSnag parameters.

@@ -12,9 +12,9 @@ var Specctr = {
 	Models: {}
 };
 
-//var SPECCTR_HOST = "https://cloud.specctr.com";
-var SPECCTR_HOST = "http://localhost:5000";
-var SPECCTR_API = SPECCTR_HOST += "/api/v1";
+var SPECCTR_HOST = "https://cloud.specctr.com";
+//var SPECCTR_HOST = "http://localhost:5000";
+var SPECCTR_API = SPECCTR_HOST + "/api/v1";
 
 var BG = {};
 

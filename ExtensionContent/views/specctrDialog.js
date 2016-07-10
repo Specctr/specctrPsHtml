@@ -25,7 +25,7 @@ specctrDialog.createAlertDialog = function() {
  */
 specctrDialog.showAlert = function(message) {
 	var dialogRef = $("#dialog");
-	dialogRef.text(message);
+	dialogRef.html(message);
 	dialogRef.dialog("open");
 	dialogRef.dialog({position:'center'});
 };

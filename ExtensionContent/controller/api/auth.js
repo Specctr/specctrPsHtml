@@ -1,3 +1,5 @@
+var semver = require('semver');
+
 Specctr = Specctr || {};
 Specctr.Auth = {
 	/**
@@ -36,7 +38,7 @@ Specctr.Auth = {
 					machine_id = response.machine_id;
 					
 					pref.addFileToPreferenceFolder('.license', 
-						JSON.stringify(activationPrefs)); //Create license file.
+					JSON.stringify(activationPrefs)); //Create license file.
 
 					Specctr.Init.init();
 				} else {
@@ -82,6 +84,30 @@ Specctr.Auth = {
 			pref.addFileToPreferenceFolder('.license', JSON.stringify(activation));
 			Specctr.Views.CloudTab.renderPlan(activation);
 			Specctr.UI.enableAllTabs();
+            Specctr.Init.getLocalVersion(function(version) {
+                var notify = function(newVersion){
+                    specctrDialog.showAlert("Please download and install the latest version: <span id='panel-download-link'>" + newVersion + "</span>.");
+                };
+
+                try{
+                    if (version && semver.lt(version, response.version)) {
+                        notify(response.version);  
+                    } 
+                }catch(e){ 
+                    notify(response.version);
+                }
+
+                var $downloadLink = $('#panel-download-link');
+                $downloadLink.css({'textDecoration':'underline', 'cursor':'pointer'});
+                $('.ui-widget button.ui-button').css('outline', 'none');
+                $downloadLink.on('click', Specctr.Utility.tryCatchLog(function(ev) {
+                    pref.log("Opening download panel page in browser.");
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                    
+                    new CSInterface().openURLInDefaultBrowser(SPECCTR_HOST + "/downloads/extension");
+                }));
+            })
 		})).fail(Specctr.Utility.tryCatchLog(function(xhr){
 			
 			if (xhr.status === 401) {
