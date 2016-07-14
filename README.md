@@ -9,7 +9,7 @@ MAC:
 /Library/Application Support/LocalStore/SpecctrPs-Pro.log
 
 WIN:
-
+C:\Users\<your user>\AppData\Roaming\LocalStore\SpecctrPs-Pro.log
 
 
 specctrHtml (Master)
