@@ -629,7 +629,8 @@ $.specctrPsProperties = {
                 if (model.textEffects) {
                     var strokeVal = this.getStrokeValOfLayer(pageItem);
                     if(strokeVal != "none" && strokeVal != "") infoText += "\rBorder: " + strokeVal;
-                        
+                    
+                    app.activeDocument.activeLayer = pageItem;
                     var effectValue = this.getEffectsOfLayer();
                     if(effectValue != "") infoText += effectValue;
                 }
@@ -973,14 +974,15 @@ $.specctrPsProperties = {
                     }
                     doc.activeLayer = pageItem;
                 }
-            } else {
-                infoText += "none";
             }
+        
+            if(infoText == "")
+                infoText += "none";
         
             return infoText;
         } catch(e) {
             doc.activeLayer = pageItem;
-            return "";
+            return "none";
         }
     },
 
@@ -1017,7 +1019,7 @@ $.specctrPsProperties = {
                         else
                             infoText += "\rColor-Overlay: off";
                     }
-                    
+
                     //Get InnerShadow values
                     if(layerEffectDesc.hasKey(stringIDToTypeID('innerShadow'))) {
                         desc = layerEffectDesc.getObjectValue(stringIDToTypeID('innerShadow'));
@@ -1026,7 +1028,7 @@ $.specctrPsProperties = {
                         else
                             infoText += "\rInner-Shadow: off";
                     }
-                
+
                     //Get DropShadow values
                     if(layerEffectDesc.hasKey(stringIDToTypeID('dropShadow'))) {
                         desc = layerEffectDesc.getObjectValue(stringIDToTypeID('dropShadow'));
@@ -1041,7 +1043,7 @@ $.specctrPsProperties = {
             } else {
                 infoText += "\rEffect: none";
             }
-                    
+
             return infoText;
         } catch(e) {
             return "";
