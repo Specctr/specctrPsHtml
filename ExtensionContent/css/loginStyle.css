@@ -3,33 +3,38 @@ File-Name: loginStyle.css
 Description: Includes styling code related to login page. 
 */
 
-ul#loginBlock, ul#activateBlock {
-	list-style-type: none;
-}
-
 #loginContainer {
 	border: none;
-	Height: 606px;
-	Width: 241px;
+	height: 610px;
+	width: 244px;
 	background-color: #4990E2;
 }
 
 #dvLoginContainer {
+    width: 244px;
 	height: 535px;
 }
 
 #dvLoginContainer ul {
 	height: 200px;
-	margin-left: 16px;
 }
 
 #dvLoginContainer ul li{
 	margin-bottom: 15px;
 }
 
+#logoContainer {
+    margin: 0 auto;
+    width: 86px;    
+}
 #specctrLoginImage {
-	padding-left: 75px;
 	padding-top: 30px;
+}
+
+ul#loginBlock, ul#activateBlock {
+    width: 200px;
+    margin: 0 auto;
+	list-style-type: none;
 }
 
 .loginTextItem {
@@ -37,13 +42,14 @@ ul#loginBlock, ul#activateBlock {
 	width: 196px;
 	font-size: 18px;
 	font-family: Arial;
-	padding-left: 8px !important;
 }
 
 .activationHeader {
+    text-align: center;
 	padding-top: 30px;
 	height: 86px;
-	padding-left: 16px;
+    width: 201px;
+    margin: 0 auto;
 }
 
 #loignHeaderLabel {
@@ -53,7 +59,7 @@ ul#loginBlock, ul#activateBlock {
 }
 
 .loginPageButton {
-	width: 206px !important;
+	width: 200px !important;
 	border: 1px solid #ffffff;
 	height: 35px !important;
 	padding-top: 13px;
@@ -70,7 +76,7 @@ ul#loginBlock, ul#activateBlock {
 
 #loginFooter {
 	margin-top: 20px !important;
-	width: 240px!important;
+	width: 244px !important;
 	text-align: center;
 }
 
