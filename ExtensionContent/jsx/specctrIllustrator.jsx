@@ -645,13 +645,19 @@ $.specctrAi = {
     //Create coordinate specs for the selected page item.
     createCoordinateSpecsForItem : function(pageItem) {
         try {
+            var defaultCoordSystem = app.coordinateSystem;
+            app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
+            
             var name = "Coordinates";
             var legendLayer = this.legendSpecLayer(name);    //Create the 'Coordinates' layer group.
             var pageItemBounds = this.itemBounds(pageItem);
-            var top = -pageItemBounds[1];
-            var left = pageItemBounds[0];
-            var right = pageItemBounds[2];
-            var bottom = -pageItemBounds[3];
+            var originalArtboardSize = this.originalArtboardRect();
+            
+            var left = pageItemBounds[0]-originalArtboardSize[0];
+            var top = originalArtboardSize[1]-pageItemBounds[1];
+            var right = pageItemBounds[2]-originalArtboardSize[0];
+            var bottom = originalArtboardSize[1]-pageItemBounds[3];
+            
             var spacing = 10 + model.armWeight;
             var armWeight = model.armWeight / 2;
             var idVar = pageItem.visibilityVariable;
@@ -667,7 +673,6 @@ $.specctrAi = {
             } else {
                 //Relative distance with respect to original canvas Or the given values in the text boxes of Responsive tab.
                 var relativeTop = '', relativeLeft = '';
-                var originalArtboardSize = this.originalArtboardRect();       //Get the original size of artboard.
                 
                 if (model.relativeHeight != 0)
                     relativeTop = model.relativeHeight;
@@ -760,7 +765,7 @@ $.specctrAi = {
                 
                 coordinateText = app.activeDocument.textFrames.pointText([pageItemBounds[0] - 0.5 * spacing, 
                                             pageItemBounds[3] - spacing - armWeight], TextOrientation.HORIZONTAL);
-                coordinateText.contents = "x: " + right + " y: " + bottom;
+                coordinateText.contents = "x: " + left + " y: " + bottom;
                 coordinateText.textRange.paragraphAttributes.justification = Justification.RIGHT;
             
                 horizontalLine = app.activeDocument.compoundPathItems.add();
@@ -809,9 +814,11 @@ $.specctrAi = {
             verticalLine.note = "({type:'verticalLine'})";
             coordinateText.note = "({type:'coordinates'})";
         } catch(e) {
+            app.coordinateSystem = defaultCoordSystem;
             return false;
         }
 
+        app.coordinateSystem = defaultCoordSystem;
         return true;
     },
 
