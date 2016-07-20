@@ -399,6 +399,11 @@ $.specctrPsProperties = {
                         specText.justification = Justification.RIGHT;
                         spec.translate(doc.width-spacing-spec.bounds[2], specYPos-spec.bounds[1]);
                     }
+                } else {
+                    if(centerX > ((spec.bounds[0] + spec.bounds [2])/2.0))
+                        specText.justification = Justification.LEFT;
+                    else
+                        specText.justification = Justification.RIGHT;
                 }
 
                 //Create the arm at  the end points of spec and selected art layer.

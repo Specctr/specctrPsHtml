@@ -453,9 +453,10 @@ $.specctrPsCommon = {
     getBulletNumber : function (spec, doc, isNewBullet) {
         var specctrLayer = doc.layerSets.getByName("Specctr");
         var specctrLayerSet = specctrLayer.layerSets;
+        var number = this.getXMPData(spec, "number");
         
-        if(isNewBullet) {
-            var number = $.specctrPsCommon.getXMPData(specctrLayer, "noOfSpec"); 
+        if(!number) {
+            number = $.specctrPsCommon.getXMPData(specctrLayer, "noOfSpec"); 
             if(!number) number = 0;
             
             number = parseInt(number) + 1;
@@ -467,8 +468,6 @@ $.specctrPsCommon = {
                                     }];
             
             this.setXmpDataOfLayer(xmpData);
-        } else {
-            number =  this.getXMPData(spec, "number");
         }
     
         return parseInt(number);
@@ -693,16 +692,14 @@ $.specctrPsCommon = {
             spacing, condition1, condition2, dia, isNewSpecCreated, canvasBounds) {
                 
         if(condition1 >= condition2) {
-            if(isNewSpecCreated) {
-                specText.justification = Justification.LEFT;
+            specText.justification = Justification.LEFT;
+            if(isNewSpecCreated)
                 spec.translate(-(spec.bounds[0]-spacing-dia), specYPos-spec.bounds[1]);
-            }
             dupBullet.translate(spec.bounds[0]-dupBullet.bounds[0]-dia-1, spec.bounds[1]-dupBullet.bounds[1]-1);
         } else {
-            if(isNewSpecCreated) {
-                specText.justification = Justification.RIGHT;
+            specText.justification = Justification.RIGHT;
+            if(isNewSpecCreated)
                 spec.translate(canvasBounds[2]-spacing-spec.bounds[2]-dia+canvasBounds[0], specYPos-spec.bounds[1]);
-            }
             dupBullet.translate(spec.bounds[2]-dupBullet.bounds[0]+1, spec.bounds[1]-dupBullet.bounds[1]-1);
         }
     
