@@ -9,6 +9,13 @@ Description: This file includes all the functions related to reading/writing pre
 var pref = {};
 logger = pref;
 
+var filePermission = filePermission || {
+	ReadOnly : 0444,
+	WriteOnly : 0222,
+	ReadWrite : 0666,
+	ReadWriteExecute : 0777
+};
+
 /*
  * Send errors to error handling service.
  */
@@ -25,7 +32,7 @@ pref.snagBug = function(err, message) {
     var message = message || "";
 
     console.log(err);
-    bugsnag.notify(err, {user: {email: email, machineId: machineId, panelVersion: version}, message: message});
+    bugsnag.notify(err, {user: {email: email, machineId: machineId}, panelVersion: version, message: message});
 };
 
 /**
