@@ -37,8 +37,7 @@ Specctr.Auth = {
 					api_key = response.api_key;
 					machine_id = response.machine_id;
 					
-					pref.addFileToPreferenceFolder('.license', 
-					JSON.stringify(activationPrefs)); //Create license file.
+					pref.addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs)); //Create license file.
 
 					Specctr.Init.init();
 				} else {

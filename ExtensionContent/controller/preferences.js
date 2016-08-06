@@ -9,6 +9,25 @@ Description: This file includes all the functions related to reading/writing pre
 var pref = {};
 logger = pref;
 
+/*
+ * Send errors to error handling service.
+ */
+pref.snagBug = function(err, message) {
+    var email;
+    if(Specctr && Specctr.Activation) email = Specctr.Activation.email;
+
+    var machineId;
+    if(Specctr && Specctr.Activation) machineId = Specctr.Activation.machine_id;
+
+    var version;
+    if(Specctr && Specctr.Version) version = Specctr.Version;
+
+    var message = message || "";
+
+    console.log(err);
+    bugsnag.notify(err, {user: {email: email, machineId: machineId, panelVersion: version}, message: message});
+};
+
 /**
  * Set permissions like read only, write only etc to file or folder.
  * @param filePath {string} The path of the file or folder.
@@ -153,39 +172,36 @@ pref.addFileToPreferenceFolder = function(fileExtension, data) {
 };
 
 pref.log = pref.info = function(message) {
-    console.log(message);
-	var filePath = this.getFilePath('.log');
-	pref.setPermissionToFile(filePath, filePermission.WriteOnly);
-	var message = pref.createLogData(message);
-	fs.appendFile(filePath, message, function (err) {
-	    if (err) throw err;
-	    console.log('[preferences] The "data to append" was appended to file!');
-	    pref.setPermissionToFile(filePath, filePermission.ReadOnly);
-	});	
+    try{
+        console.log(message);
+        var filePath = this.getFilePath('.log');
+        pref.setPermissionToFile(filePath, filePermission.WriteOnly);
+        var message = pref.createLogData(message);
+        fs.appendFile(filePath, message, function (err) {
+            if (err) throw err;
+            pref.setPermissionToFile(filePath, filePermission.ReadOnly);
+        });	
+    }catch(err){
+        pref.snagBug(err, message);
+    }
 };
 
-pref.logError = pref.error = function(e) {
-    var email;
-    if(Specctr && Specctr.Activation) email = Specctr.Activation.email;
-
-    var machineId;
-    if(Specctr && Specctr.Activation) machineId = Specctr.Activation.machine_id;
-
-    bugsnag.notify(e, {user: {email: email, machineId: machineId}});
-	pref.log(e.stack);
+pref.logError = pref.error = function(err) {
+    pref.snagBug(err);
+	pref.log(err.stack);
 };
 
 pref.logResSuccess = function(xhr, response) {
-	if (response === null) {
-		response = JSON.parse(xhr.responseText);
-	} 
-	pref.log(xhr.status + " - " + response.message);
+    if (response === null) {
+        response = JSON.parse(xhr.responseText);
+    } 
+    pref.log(xhr.status + " - " + response.message);
 };
 
 pref.logResError = function(xhr, message) {
 	var response = JSON.parse(xhr.responseText);
     var err = xhr.status + " - " + response.message;
-    bugsnag.notify(new Error(err), {user:{email: Specctr.Activation.email, machineId: Specctr.Activation.machine_id}});
+    pref.snagBug(new Error(err));
 	pref.log(err);
 	if (message) pref.log(message);
 };

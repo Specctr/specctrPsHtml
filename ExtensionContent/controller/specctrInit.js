@@ -252,6 +252,7 @@ Specctr.Init.setModelToResponsive = function() {
 Specctr.Init.setVersionAtBottom = function() {
     this.getLocalVersion(function(version) {
         Specctr.Version = version;
+        if (Specctr && Specctr.Activation) Specctr.Activation.version = version;
         $("#specctrVersion").html("v."+Specctr.Version); 
     })
 };
