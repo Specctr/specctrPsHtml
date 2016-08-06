@@ -1,8 +1,13 @@
-Master Install Locations:
-MAC:
-WIN:
+*Master Install Locations:*
 
-Log Locations:
+MAC:
+/Library/Application\ Support/Adobe/CEP/extensions/SpecctrMaster
+/Users/mityaWork/Library/Application\ Support/Adobe/CEP/extensions/SpecctrMaster
+
+WIN:
+C:\Program Files\Common Files\Adobe\CEP\extensions
+
+*Log Locations:*
 
 MAC:
 /Users/mityaWork/Library/Application Support/LocalStore/SpecctrPs-Pro.log
