@@ -17,6 +17,13 @@ WIN:
 C:\Users\<your user>\AppData\Roaming\LocalStore\SpecctrPs-Pro.log
 
 
+*Utility Scripts*
+
+MAC:
+./uninstall
+./deploy
+
+
 specctrHtml (Master)
 ================
 
