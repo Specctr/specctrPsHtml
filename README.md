@@ -88,7 +88,7 @@ How to Debug the project:
 <ExtensionList>
     <Extension Id="">
         <HostList>
-           <Host Name="PHXS" Port="8080"/> 
+           <Host Name="PHXS" Port="5050"/> 
         </HostList>
     </Extension>
 </ExtensionList>
