@@ -11,8 +11,8 @@ Specctr.Auth = {
 		$("#spinnerBlock").show();
 		
 		var urlRequest = SPECCTR_API + "/register_machine?";
-		urlRequest += "&email=" + $("#loginEmail").val();
-		urlRequest += "&password=" + $("#loginPassword").val();
+		urlRequest += "&email=" + encodeURIComponent($("#loginEmail").val());
+		urlRequest += "&password=" + encodeURIComponent($("#loginPassword").val());
 
 		$.ajax({
 			url:urlRequest,
