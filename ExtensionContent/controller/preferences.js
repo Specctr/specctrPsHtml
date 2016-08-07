@@ -156,7 +156,6 @@ pref.writeAppPrefs = function() {
  */
 pref.createLogData = function(message) {
 	var date = new Date();
-	console.log(date);
 	var logData = date.getMonth() + 1 + "/" + date.getDate() + "/"
 			+ date.getFullYear();
 	logData += " " + date.getHours() + ":" + date.getMinutes() + ":"
