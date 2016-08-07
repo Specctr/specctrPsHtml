@@ -5,3 +5,7 @@
 ul.tabList li.disabled{
 	opacity: .4;
 }
+
+#cloudText {
+    font-size: 10px;
+}
