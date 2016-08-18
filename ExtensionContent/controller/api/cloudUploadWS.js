@@ -34,6 +34,11 @@ if (Specctr.Utility.getHostApp() == "Ps") {
             $("#uploadBtnLabel").html("UPLOAD");
         });
     }), 2000);
+}else{
+    $(document).ready(function() {
+        $("#uploadButton").removeClass("disabled");
+        $("#uploadBtnLabel").html("UPLOAD");
+    });
 }
 
 Specctr.cloudAPI = {
