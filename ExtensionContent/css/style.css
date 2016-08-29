@@ -51,6 +51,11 @@ input[type="text"]:disabled {
 	background: #e1e1e1 !important;
 }
 
+[placeholder]:focus::-webkit-input-placeholder {
+  transition: opacity 0.1s 0.1s ease; 
+  opacity: 0;
+}
+
 label {
 	cursor: inherit;
 }
