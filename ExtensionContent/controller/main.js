@@ -84,6 +84,10 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	isLicensed = activationPrefs.licensed;
 	api_key = activationPrefs.api_key;
 	machine_id = activationPrefs.machine_id;
+
+    if (activationPrefs.host) {
+        SPECCTR_HOST = activationPrefs.host;
+    }
 	
 	if (isLicensed)
 		Specctr.Init.init();
