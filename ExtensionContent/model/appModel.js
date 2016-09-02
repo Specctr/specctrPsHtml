@@ -14,7 +14,15 @@ var Specctr = {
 
 var SPECCTR_HOST = "https://cloud.specctr.com";
 //var SPECCTR_HOST = "http://localhost:5000";
-var SPECCTR_API = SPECCTR_HOST + "/api/v1";
+
+function getHost() {
+    return SPECCTR_HOST;
+}
+
+function getApi() {
+    return getHost() + "/api/v1";;
+}
+
 
 var BG = {};
 

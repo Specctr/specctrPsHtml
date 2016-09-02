@@ -2,7 +2,7 @@
 
 MAC:
 /Library/Application\ Support/Adobe/CEP/extensions/SpecctrMaster
-/Users/mityaWork/Library/Application\ Support/Adobe/CEP/extensions/SpecctrMaster
+/Users/<user>/Library/Application\ Support/Adobe/CEP/extensions/SpecctrMaster
 
 WIN:
 C:\Program Files\Common Files\Adobe\CEP\extensions
@@ -10,11 +10,16 @@ C:\Program Files\Common Files\Adobe\CEP\extensions
 *Log Locations:*
 
 MAC:
-/Users/mityaWork/Library/Application Support/LocalStore/SpecctrPs-Pro.log
-/Library/Application Support/LocalStore/SpecctrPs-Pro.log
+/Users/<user>/Library/Application\ Support/LocalStore/SpecctrPs-Pro.log
+/Library/Application\ Support/LocalStore/SpecctrPs-Pro.log
 
 WIN:
-C:\Users\<your user>\AppData\Roaming\LocalStore\SpecctrPs-Pro.log
+C:\Users\<user>\AppData\Roaming\LocalStore\SpecctrPs-Pro.log
+
+*App Config:*
+
+MAC:
+/Users/<user>/Library/Application\ Support/LocalStore/specctrPhotoshopConfig.json
 
 
 *Utility Scripts*

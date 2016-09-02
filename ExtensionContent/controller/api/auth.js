@@ -10,7 +10,7 @@ Specctr.Auth = {
 		
 		$("#spinnerBlock").show();
 		
-		var urlRequest = SPECCTR_API + "/register_machine?";
+		var urlRequest = getApi() + "/register_machine?";
 		urlRequest += "&email=" + encodeURIComponent($("#loginEmail").val());
 		urlRequest += "&password=" + encodeURIComponent($("#loginPassword").val());
 
@@ -30,7 +30,8 @@ Specctr.Auth = {
 						licensed : true,
 						machine_id: response.machine_id,
 						api_key: response.api_key,
-						email: response.user	
+						email: response.user,
+                        host: getHost()
 					};
 					
 					//Set fresh api key and machine id.
@@ -66,7 +67,7 @@ Specctr.Auth = {
 	 * Check subscription status.
 	 */
 	checkStatus: Specctr.Utility.tryCatchLog(function(activation) {
-		var urlRequest = SPECCTR_API + "/subscriptions/status";
+		var urlRequest = getApi() + "/subscriptions/status";
 
 		$.ajax({
 			url:urlRequest,

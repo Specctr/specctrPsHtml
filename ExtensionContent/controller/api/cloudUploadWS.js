@@ -51,7 +51,7 @@ Specctr.cloudAPI = {
 		$("#spinnerBlock").show();
 		
 		$.ajax({
-			url: SPECCTR_API + "/projects/list",
+			url: getApi() + "/projects/list",
 			type: "GET",
 			contentType: "application/json;charset=utf-8",
 			data:data,
@@ -124,7 +124,7 @@ Specctr.cloudAPI = {
 		});
 
 		$.ajax({
-			url: SPECCTR_API + "/documents",
+			url: getApi() + "/documents",
 			type: "POST",
 			contentType: "application/json;charset=utf-8",
 			dataType: "json",
@@ -180,7 +180,7 @@ Specctr.cloudAPI = {
 		});
 
 		$.ajax({
-			url: SPECCTR_API + "/documents/" + response.document_id,
+			url: getApi() + "/documents/" + response.document_id,
 			type: "PUT",
 			contentType: "application/json;charset=utf-8",
 			dataType: "json",
@@ -214,7 +214,8 @@ Specctr.cloudAPI = {
                             api_key: api_key,
                             machine_id: machine_id,
                             document_id: response.document_id,
-                            project_id: response.project_id
+                            project_id: response.project_id,
+                            host: getHost()
                         };
                         ws.send(JSON.stringify(params));
 
