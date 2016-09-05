@@ -59,11 +59,12 @@ Specctr.buttonHandlers = {
 			try {
 				
 				$("#spinnerBlock").hide();
-				var css = JSON.parse(cssInfo);
-				
-				if(!cssInfo || css.text == "") {
+				if(!cssInfo)
 					return;
-				}
+				
+				var css = JSON.parse(cssInfo);
+				if(css.text == "")
+					return;
 				
 				//check if id is present.
 				var IdObject = {
@@ -80,7 +81,7 @@ Specctr.buttonHandlers = {
 					Specctr.cloudAPI.getDocId(cssInfo, selectedProjRef.html());
 				}
 				
-			}catch(e){
+			} catch(e){
 				alert(e);
 			}
 			

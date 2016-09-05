@@ -11,8 +11,9 @@ Description: Includes styling code related to cloud upload page.
 
 .cloudHeader {
 	height: 80px;
-	padding-left: 40px;
-	padding-top: 100px;
+	width: 100%;
+	text-align: center;
+	padding-top: 70px;
 }
 
 .handCursor {
@@ -21,8 +22,9 @@ Description: Includes styling code related to cloud upload page.
 
 #cloudHeaderLabel {
 	color: #ffffff;
-	font-family: Arial;
-	font-size: 24px;
+	font-family: aauxProBol;
+	font-size: 25px;
+	font-style: normal;
 }
 
 #attchToProjLabel {
