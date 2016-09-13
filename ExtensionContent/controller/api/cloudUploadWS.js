@@ -31,13 +31,15 @@ if (Specctr.Utility.getHostApp() == "Ps") {
         wsConnect = wsDef.promise;
         wsConnect.done(function() {
             $("#uploadButton").removeClass("disabled");
-            $("#uploadBtnLabel").html("UPLOAD");
+            $("#uploadBtnLabel").html("Upload");
+            $("#uploadingGif").hide();
         });
     }), 2000);
 }else{
     $(document).ready(function() {
         $("#uploadButton").removeClass("disabled");
-        $("#uploadBtnLabel").html("UPLOAD");
+        $("#uploadBtnLabel").html("Upload");
+        $("#uploadingGif").hide();
     });
 }
 
@@ -48,7 +50,7 @@ Specctr.cloudAPI = {
 	 */
 	getProjectList: Specctr.Utility.tryCatchLog(function(data, projectId) {
 		
-		$("#spinnerBlock").show();
+	//	$("#spinnerBlock").show();
 		
 		$.ajax({
 			url: getApi() + "/projects/list",
@@ -58,7 +60,7 @@ Specctr.cloudAPI = {
 			dataType: "json",
 			success: function(response, xhr) {
 				pref.log(JSON.stringify(response));
-				$("#spinnerBlock").hide();
+		//		$("#spinnerBlock").hide();
 				$("#tabContainer").hide();
 				$("#dvCloudContainer").show();
 
@@ -100,7 +102,9 @@ Specctr.cloudAPI = {
 				}
 			},
 			error: function(xhr) {
-				$("#spinnerBlock").hide();
+				//$("#spinnerBlock").hide();
+				$("#uploadBtnLabel").html("Upload");
+				$("#uploadingGif").hide();
 				specctrDialog.showAlert('error');
 				pref.logResError(xhr);
 			}
@@ -114,7 +118,7 @@ Specctr.cloudAPI = {
 		var css = JSON.parse(cssInfo);
 		var cssJson = CSSJSON.toJSON(css.text);
 		
-		$("#spinnerBlock").show();
+//		$("#spinnerBlock").show();
 		var data = JSON.stringify({
 			api_key: api_key,
 			machine_id: machine_id,
@@ -131,11 +135,13 @@ Specctr.cloudAPI = {
 			data: data,
 			success: function(response, xhr) {
 				pref.log('Synced css for document: ' + JSON.stringify(response));
-				$("#spinnerBlock").hide();
+	//			$("#spinnerBlock").hide();
 				Specctr.cloudAPI.uploadCss(cssInfo, response, true);
 			},
 			error: function(xhr) {
-				$("#spinnerBlock").hide();
+				//$("#spinnerBlock").hide();
+				$("#uploadBtnLabel").html("Upload");
+				$("#uploadingGif").hide();
 				specctrDialog.showAlert('error');
 				pref.logResError(xhr);
 			}
@@ -167,7 +173,7 @@ Specctr.cloudAPI = {
 		var cssJson = CSSJSON.toJSON(css.text);
         cssJson.children = Specctr.cloudAPI.moveTextContent(cssJson.children);
 
-        $("#spinnerBlock").show();
+        //$("#spinnerBlock").show();
         var timestamp = Math.floor(Date.now() / 1000);
 
 		var data = JSON.stringify({
@@ -186,7 +192,7 @@ Specctr.cloudAPI = {
 			dataType: "json",
 			data: data,
 			success: function(response, xhr) {
-			    specctrDialog.showAlert('success');
+			    //specctrDialog.showAlert('success');
 			    pref.log('Synced css for document: ' + JSON.stringify(response));
 				
 				//If success store Ids to the selected project and document.
@@ -196,14 +202,24 @@ Specctr.cloudAPI = {
 					selectedProjRef.attr('value', response.project_id);
 					evalScript("$.specctr" + hostApplication + "." + "setDocId('"+
 							response.document_id+"','"+ response.project_id + "')", function (response) {
-						$("#spinnerBlock").hide();
-						$("#dvCloudContainer").hide();
-						$("#tabContainer").show();
+						//$("#spinnerBlock").hide();
+						$("#uploadBtnLabel").html("Upload");
+						$("#uploadingGif").hide();
+						$("#dvCloudContainer").css("background-color","#009688");
+						$("#cloudHeaderLabel").html("Success!");
+						$("#attchToProjLabel").html("Your specs have been up-<br>loaded to Specctr Cloud");
+						$("#mainUploadBlock").hide();
+						$("#successUploadBlock").show();
 					});
 				} else {
-					$("#spinnerBlock").hide();
-					$("#dvCloudContainer").hide();
-					$("#tabContainer").show();
+					//$("#spinnerBlock").hide();
+					$("#uploadBtnLabel").html("Upload");
+					$("#uploadingGif").hide();
+					$("#dvCloudContainer").css("background-color","#009688");
+					$("#cloudHeaderLabel").html("Success!");
+					$("#attchToProjLabel").html("Your specs have been up-<br>loaded to Specctr Cloud");
+					$("#mainUploadBlock").hide();
+					$("#successUploadBlock").show();
 				}
 
                 if (hostApplication == "Ps") {
@@ -232,7 +248,9 @@ Specctr.cloudAPI = {
                 }
 			},
 			error: function(xhr) {
-				$("#spinnerBlock").hide();
+				//$("#spinnerBlock").hide();
+				$("#uploadBtnLabel").html("Upload");
+				$("#uploadingGif").hide();
 				specctrDialog.showAlert('error');
 				pref.logResError(xhr);
 			}

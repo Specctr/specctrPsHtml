@@ -6,7 +6,7 @@ Description: Includes styling code related to cloud upload page.
 #dvCloudContainer {
 	border: none; Height: 606px;
 	Width: 241px;
-	background-color: #2266ff;
+	background-color: #4990E2;
 }
 
 .cloudHeader {
@@ -25,37 +25,84 @@ Description: Includes styling code related to cloud upload page.
 	font-family: aauxProBol;
 	font-size: 25px;
 	font-style: normal;
+	line-height: 1.2;
+}
+
+.projFolderText {
+	height: 70px;
+	width: 100%;
+	text-align: center;
+	padding-top: 0px;
+}
+
+.White17AauxReg{
+	font-family: aauxPro !important;
+	font-size: 17px !important;
+	color: #ffffff !important;
+	font-style: normal;
 }
 
 #attchToProjLabel {
-	color: #C9CBCC;
-	font-family: Arial;
-	font-size: 14px;
+}
+
+.cloudTextDiv {
+	height: 40px;
+	width: 100%;
+	text-align: center;
+	padding-top: 0px;
 }
 
 #cloudText {
 	height: 25px;
 	width: 210px;
-	font-size: 18px;
-	font-family: Arial;
+	background-color: transparent;  
+	border-style: solid;  
+	border-width: 0px 0px 1px 0px;  
+	border-color: #ffffff;
+	outline: 0;
+}
+
+#cloudTextPlus {
+	width: 17px;
+	background-color: transparent;  
+	border-style: none;  
+	outline: 0;
+	background: url("../assets/images/plus_15.png") no-repeat;
+	margin-left: -22px;
+	cursor: default;
 }
 
 #uploadButton {
-	width: 210px;
+	width: 184px;
 	border: 1px solid #ffffff;
-	height: 25px;
-	padding-top: 8px;
+	height: 30px;
+	padding-top: 5px;
 	text-align: center;
+    -webkit-border-radius:5px;
 	cursor: default;
+	margin-top: 25px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#uploadBtnLabel {
 	color: #ffffff;
-	font-family: Arial;
+	font-family: aauxPro;
+	font-weight: normal;
+	font-size: 17px;
 }
 
 #uploadButton:HOVER {
 	border: 2px solid #ffffff;
-	font-weight: b;
+	font-weight: bold;
 }
 
+#uploadingGif {
+	width: 100%;
+	text-align: center;
+	display: none;
+	margin-bottom: 0px;
+}
 
 #projectTable {
 	margin-left: 12px; 
@@ -63,16 +110,16 @@ Description: Includes styling code related to cloud upload page.
 	padding: 0px; 
 	margin-top: 2px; 
 	background-color: white; 
-	color: #C9CBCC; 
-	font-family: Arial; 
-	font-size: 16px;
+	color: #000000; 
+	font-family: aauxPro; 
+	font-size: 17px;
 	cursor: default;
 	border: none;
 }
 
 #projectTable tr {
     background-color: white;
-    color: #6d6d6d;
+    color: #000000;
     height: 25px;
     vertical-align: middle;
     padding: 0px;
@@ -88,7 +135,7 @@ Description: Includes styling code related to cloud upload page.
 
 #projectTable tr:HOVER {
     background-color: #C9CBCC;
-    color: white;
+    color: #000000;
     height: 25px;
     vertical-align: middle;
 }
@@ -98,10 +145,18 @@ Description: Includes styling code related to cloud upload page.
 	color: #ffffff !important;
 }
 
-.marginLeft12 {
-	margin-left: 12px;
-}
-
 #uploadButton.disabled {
     cursor: not-allowed;
+}
+
+.projectLink {
+	color: #ffffff;
+	font-family: aauxProBol;
+	font-size: 17px;
+	cursor: default;
+}
+
+#successUploadBlock {
+	text-align: center;
+	margin-top: 30px;
 }

@@ -56,6 +56,10 @@ input[type="text"]:disabled {
   opacity: 0;
 }
 
+::-webkit-input-placeholder {
+   color: white;
+}
+
 label {
 	cursor: inherit;
 }

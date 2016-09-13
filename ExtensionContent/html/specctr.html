@@ -735,31 +735,40 @@
 
         <!-- Upload css page. -->
         <div class="hideBlock" id="dvCloudContainer">
-            <div style="float: right">
-                <img class="handCursor" src="../assets/images/closeIcon_white.png" 
+            <div style="float: right; margin-top: 10px; margin-right: 10px;">
+                <img class="handCursor" src="../assets/images/closeIcon_white_20.png" 
                                         onclick="Specctr.UI.closeCloudPage(this)"/>
             </div>
             <div class="cloudHeader">
                 <label id="cloudHeaderLabel">Upload to Specctr<br>Cloud</label>
             </div>
-            <div class="marginLeft12">
-                <label id="attchToProjLabel"> ATTACH TO PROJECT: </label>
+            <div class="projFolderText">
+                <label id="attchToProjLabel" class="White17AauxReg">Choose a project folder to<br>upload specs to:</label>
             </div>
+			
+			<div id="mainUploadBlock">
+	            <div class="cloudTextDiv">
+	                <input type="text" id="cloudText" class="White17AauxReg" placeholder="Create New Project" maxlength="50"
+	                     onclick="Specctr.UI.itemClickHandler(event)" onkeydown="Specctr.UI.cloudTextHandler(event)"/>
+	                <input type="text" id="cloudTextPlus" maxlength="0" onmousedown="return false;" onclick="Specctr.UI.cloudTextHandler(event)" />
+	            </div>
+	
+	            <div style="overflow-x:hidden; max-height: 200px;">
+	                <table id="projectTable"></table>
+	            </div>
+	
+		        <div class="disabled" id="uploadButton" onclick="Specctr.buttonHandlers.exportCss(event)">
+		            <label id="uploadBtnLabel">Connecting...</label>
+		        </div>
+	        </div>
+	        
+	        <div id="successUploadBlock" class="hideBlock">
+	        	 <a class="projectLink" href="#">See them here!</a>
+	        </div>
 
-            <div class="marginLeft12 marginTop15px">
-                <input style="font-size:14px;" type="text" id="cloudText" placeholder="New Project + hit 'Enter'" maxlength="50"
-                                                                                 onclick="Specctr.UI.itemClickHandler(event)"
-                                                                                 onkeydown="Specctr.UI.cloudTextHandler(event)"/>
-            </div>
-
-            <div style="overflow-x:hidden; max-height: 225px;">
-                <table id="projectTable"></table>
-            </div>
-
-            <div class="marginLeft12 marginTop15px disabled" id="uploadButton" 
-                                                             onclick="Specctr.buttonHandlers.exportCss(event)">
-                <label id="uploadBtnLabel">Connecting...</label>
-            </div>
+	        <div id="uploadingGif">
+            	<img alt="" src="../assets/images/loading-dribble-inner_blue_cropped_small.gif"></img>
+        	</div>
 
         </div>
 

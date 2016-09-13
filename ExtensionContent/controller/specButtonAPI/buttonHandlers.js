@@ -51,20 +51,30 @@ Specctr.buttonHandlers = {
 		}
 		
 		setModel();
-		$("#spinnerBlock").show();
+		//$("#spinnerBlock").show();
+		$("#uploadBtnLabel").html("Uploading...");
+		$("#uploadingGif").show();
 		
 		// Upload specs to Specctr.
 		evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo) {
 			
 			try {
 				
-				$("#spinnerBlock").hide();
-				if(!cssInfo)
+				
+				if(!cssInfo) {
+//					$("#spinnerBlock").hide();
+					$("#uploadBtnLabel").html("Upload");
+					$("#uploadingGif").hide();
 					return;
+				}
 				
 				var css = JSON.parse(cssInfo);
-				if(css.text == "")
+				if(css.text == "") {
+//					$("#spinnerBlock").hide();
+					$("#uploadBtnLabel").html("Upload");
+					$("#uploadingGif").hide();
 					return;
+				}
 				
 				//check if id is present.
 				var IdObject = {

@@ -10,6 +10,11 @@ Specctr.UI = {
 	closeCloudPage: Specctr.Utility.tryCatchLog(function(){
 		$("#dvCloudContainer").hide();
 		$("#tabContainer").show();
+		$("#mainUploadBlock").show();
+		$("#successUploadBlock").hide();
+		$("#dvCloudContainer").css("background-color","#4990E2");
+		$("#cloudHeaderLabel").html("Upload to Specctr<br>Cloud");
+		$("#attchToProjLabel").html("Choose a project folder to<br>upload specs to:");
 	}),
 		
 	/**
@@ -370,7 +375,7 @@ Specctr.UI = {
 	}),
 	
 	cloudTextHandler : Specctr.Utility.tryCatchLog(function(event) {
-		if (event.keyCode == 13) {
+		if (event.keyCode == 13 || event.target.id == "cloudTextPlus") {
 			var text = $("#cloudText").val();
 			//trim text;
 			try{

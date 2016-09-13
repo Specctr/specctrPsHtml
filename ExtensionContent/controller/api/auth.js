@@ -8,7 +8,7 @@ Specctr.Auth = {
 	 */
 	login: Specctr.Utility.tryCatchLog(function(ev) {
 		
-		$("#spinnerBlock").show();
+		//$("#spinnerBlock").show();
 		
 		var urlRequest = getApi() + "/register_machine?";
 		urlRequest += "&email=" + encodeURIComponent($("#loginEmail").val());
@@ -21,7 +21,7 @@ Specctr.Auth = {
 			dataType: "json",
 			success: function(response, textStatus, xhr) {
 				pref.log(xhr.status + " - " + response.message);
-				$("#spinnerBlock").hide();
+				//$("#spinnerBlock").hide();
 
 				// If unsuccessful, return without saving the data in file.
 				if (response.success) {
@@ -48,7 +48,7 @@ Specctr.Auth = {
 			},
 			error: function(xhr, status, error) {
 
-				$("#spinnerBlock").hide();
+				//$("#spinnerBlock").hide();
 				var response = JSON.parse(xhr.responseText);
 				
 				if(response) {
