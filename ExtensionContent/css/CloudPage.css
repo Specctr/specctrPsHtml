@@ -160,3 +160,7 @@ Description: Includes styling code related to cloud upload page.
 	text-align: center;
 	margin-top: 30px;
 }
+
+#cloudText::-webkit-input-placeholder {
+   color: white;
+}

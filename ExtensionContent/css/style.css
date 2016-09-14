@@ -56,10 +56,6 @@ input[type="text"]:disabled {
   opacity: 0;
 }
 
-::-webkit-input-placeholder {
-   color: white;
-}
-
 label {
 	cursor: inherit;
 }
@@ -352,13 +348,14 @@ label {
     z-index:1;
     background-color:grey;
     opacity: .8;
+    display: none;
  }
 
 .loader {
     position: absolute;
     left: 47%;
     top: 44%;
-    display: block;     
+    display: none;     
 }
 
 /*-------------------------------------------------------------*/
@@ -613,13 +610,58 @@ label {
 	width: 216px;
 }
 
+#planUser {
+	font-family: aauxProBol;
+	font-size: 21px;
+	color: #666666;
+	font-style: normal;
+}
+
+#planStatus {
+	font-family: aauxProBol;
+	font-size: 11px;
+	color: #000000;
+	font-style: normal;
+}
+
+.cloudLinkDiv {
+	width: 150px;
+	height: 36px;
+	padding-top: 11px;
+	border-style: solid;  
+	border-width: 0px 0px 1px 0px;  
+	border-color: #808080;
+	margin-left: auto;
+	margin-right: auto;
+	text-align: center;
+}
+
+.linkLabel {
+	font-family: aauxProBol;
+	font-size: 17px;
+	color: #4c7cff;
+	font-style: normal;
+	cursor: default;
+}
+
 #deActivate {
-	margin-left: 8px;
+	margin-top: 30px;
+	margin-left: auto;
+	margin-right: auto;
+	height: 30px;
+	padding-top: 6px;
+	width: 200px;
+	text-align: center;
+	background: transparent;
+	border: 1px solid #000000;
+	-webkit-border-radius: 5px;
 }
 
 #deActivate label {
-	margin-left: 60px !important;
-	margin-top: 2px !important;
+	font-family: aauxProBol;
+	font-size: 17px;
+	color: #000000;
+	font-style: normal;
 }
 /*-------------------------------------------------------------*/
 

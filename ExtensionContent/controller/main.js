@@ -23,7 +23,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	loadJSX(); // Load the jsx files present in \jsx folder.
 
 	if (hostApplication === '') {
-		$("#spinnerBlock").hide();
+		//$("#spinnerBlock").hide();
 		specctrDialog.showAlert('Cannot load the extension.\nRequired host application not found!');
 		return;
 	} else if (hostApplication === photoshop) {
@@ -74,7 +74,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	        window.location = window.location + '#loaded';
 	        window.location.reload();
 	    }
-		$("#spinnerBlock").hide();
+		//$("#spinnerBlock").hide();
 		return;
 	}
 	else {
@@ -92,7 +92,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	if (isLicensed)
 		Specctr.Init.init();
 	
-	$("#spinnerBlock").hide();
+	//$("#spinnerBlock").hide();
 });
 
 /**

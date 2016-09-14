@@ -8,7 +8,10 @@ Specctr.Auth = {
 	 */
 	login: Specctr.Utility.tryCatchLog(function(ev) {
 		
-		//$("#spinnerBlock").show();
+		$("#loginLabel").html("Loging in...");
+		$("#loggingGif").show();
+		$("#loginHeaderDiv").show();
+		$("#errorLoginDiv").hide();
 		
 		var urlRequest = getApi() + "/register_machine?";
 		urlRequest += "&email=" + encodeURIComponent($("#loginEmail").val());
@@ -40,10 +43,15 @@ Specctr.Auth = {
 					
 					pref.addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs)); //Create license file.
 
+					$("#loginLabel").html("Loging");
+					$("#loggingGif").hide();
 					Specctr.Init.init();
 				} else {
 					analytics.trackActivation('failed');
-					specctrDialog.showAlert(response.message);
+					$("#loginLabel").html("Loging");
+					$("#loggingGif").hide();
+					$("#loginHeaderDiv").hide();
+					$("#errorLoginDiv").show();
 				}
 			},
 			error: function(xhr, status, error) {
@@ -53,12 +61,16 @@ Specctr.Auth = {
 				
 				if(response) {
 					pref.log(xhr.status + " - " + response.message);
-					specctrDialog.showAlert(response.message);
+//					specctrDialog.showAlert(response.message);
 				} else {
 					pref.log(status + " - " + error);
-					specctrDialog.showAlert(error);
+//					specctrDialog.showAlert(error);
 				}
 				
+				$("#loginLabel").html("Loging");
+				$("#loggingGif").hide();
+				$("#loginHeaderDiv").hide();
+				$("#errorLoginDiv").show();
 			}
 		});
 	}),
@@ -136,6 +148,8 @@ Specctr.Auth = {
 		$("#tabHeader_1").click();
 		
 		// Load login container.
+		$("#loginHeaderDiv").show();
+		$("#errorLoginDiv").hide();
 		$("#tabContainer").hide();
 		$("#loginContainer").show();
 		

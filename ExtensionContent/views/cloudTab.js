@@ -20,7 +20,8 @@ var messageMap = {
 };
 
 CloudTab.renderPlan = function(activation) {
-	$('#userEmail').html(activation.email);
+	console.log("See to it: \n"+JSON.stringify(activation));
+	$('#planUser').html("Welcome Back<br>"+activation.email);
 	$('#planName').html(activation.plan);
 	if (activation.success) {
 		$('#planStatus').html(messageMap[activation.code](activation));

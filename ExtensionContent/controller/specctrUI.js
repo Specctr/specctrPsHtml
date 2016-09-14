@@ -41,9 +41,17 @@ Specctr.UI = {
 	/**
 	 * Open url in default browser.
 	 */
-	loginLinkClickHandler : Specctr.Utility.tryCatchLog(function(){
+	openCloudSpecctrLink : Specctr.Utility.tryCatchLog(function(){
 		var csInterface = new CSInterface();
 		csInterface.openURLInDefaultBrowser("https://cloud.specctr.com");
+	}),
+	
+	/**
+	 * Open url in default browser.
+	 */
+	openProfileLink : Specctr.Utility.tryCatchLog(function(){
+		var csInterface = new CSInterface();
+		csInterface.openURLInDefaultBrowser("https://cloud.specctr.com/profile");
 	}),
 	
 	/**

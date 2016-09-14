@@ -61,9 +61,15 @@
                 <div id="logoContainer">
                     <img alt="specctrLoginImage" id="specctrLoginImage" src="../assets/images/specctrLogo.png">
                 </div>
+                
                 <div id="loginHeaderDiv" class="activationHeader">
                     <label id="loignHeaderLabel"> Hi! Welcome back! <br> Please login: 
                     </label>
+                </div>
+
+                <div id="errorLoginDiv">
+                	<label class="errorLoginMsg">Wrong email or<br>password. Please try again.</label>
+                	<a class="passErrLink" href="" onclick="Specctr.UI.openCloudSpecctrLink()">Forgot your password?</a>
                 </div>
 
                 <ul id="loginBlock">
@@ -81,16 +87,22 @@
                                                                      onkeydown="Specctr.UI.textKeyDownHandler(event, '#loginButton')"/>
                     </li>
 
-                    <li style="margin-top: 30px;">
+                    <li style="margin-top: 30px; margin-left: 10px;">
                         <div class="loginPageButton" id="loginButton"
                                                      onclick="Specctr.Auth.login()">
-                            <label>Login</label>
+                            <label id="loginLabel">Loging</label>
                         </div>
+                    </li>
+                    
+                    <li>
+	                    <div id="loggingGif">
+            				<img alt="" src="../assets/images/loading-dribble-inner_blue_cropped_small.gif"></img>
+        				</div>
                     </li>
                 </ul>
             </div>
             <div id="loginFooter">
-                <label id="loginFooterLabel" onclick="Specctr.UI.loginLinkClickHandler()">Not a member? Sign up</label>
+                <label id="loginFooterLabel" onclick="Specctr.UI.openCloudSpecctrLink()">Not a member? Sign up</label>
             </div>
         </div>
         <!-- Login container end here -->
@@ -467,8 +479,8 @@
                     <!-- Starting of cloud tab. -->
                     <div id="tabpage_4" class="tabpage">
                         <div class="tabTitle">Specctr Cloud</div>
-                        <div class="plan-container">
-                            <div class="plan marginTop30px">
+                        <!-- <div class="plan-container">
+                             <div class="plan marginTop30px">
                                 <label class="subscriptionNote boldText">STATUS:</label>
                                 <span id="planStatus" class="planStatus subscriptionNote boldText"></span>
                             </div>
@@ -495,11 +507,24 @@
                             <div class="trial textAllignCenter marginTop50px">
                                 <a class="link" href="#">Activate Specctr Pro Today!</a>
                             </div>
-                        </div>
-
-                        <div id="deActivate" class=" button border marginTop30px" onclick="Specctr.Auth.deActivate()">
-                            <label>De-Activate</label>
-                        </div>
+                        </div> -->
+                        
+	                        <div class="marginTop30px" style="margin-left: 10px;">
+	                        	<label id="planUser"></label><br>
+	                        	<label id="planStatus"></label>
+	                        </div>
+	                        
+	                        <div class="marginTop30px cloudLinkDiv">
+	           	            	<label class="linkLabel" onclick="Specctr.UI.openProfileLink()">View Your Account</label>
+	                        </div>
+	                        
+	                        <div class="cloudLinkDiv">
+	           	            	<label class="linkLabel" onclick="Specctr.UI.openCloudSpecctrLink()">See Your Projects</label>
+	                        </div>
+	
+	                        <div id="deActivate" onclick="Specctr.Auth.deActivate()">
+	                            <label style="cursor: default;">Sign Out</label>
+	                        </div>
 
                     </div>
                     <!-- Ending of cloud tab. -->
@@ -732,6 +757,7 @@
             </div>
 
         </div>
+        </div>
 
         <!-- Upload css page. -->
         <div class="hideBlock" id="dvCloudContainer">
@@ -763,7 +789,7 @@
 	        </div>
 	        
 	        <div id="successUploadBlock" class="hideBlock">
-	        	 <a class="projectLink" href="#">See them here!</a>
+	        	 <a class="projectLink" href="#" onclick="Specctr.UI.openCloudSpecctrLink()">See them here!</a>
 	        </div>
 
 	        <div id="uploadingGif">

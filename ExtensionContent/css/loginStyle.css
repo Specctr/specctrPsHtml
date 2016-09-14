@@ -48,7 +48,7 @@ ul#loginBlock, ul#activateBlock {
     text-align: center;
 	padding-top: 30px;
 	height: 86px;
-    width: 201px;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -59,12 +59,13 @@ ul#loginBlock, ul#activateBlock {
 }
 
 .loginPageButton {
-	width: 200px !important;
+	width: 180px;
 	border: 1px solid #ffffff;
-	height: 35px !important;
-	padding-top: 13px;
+	height: 38px;
+	padding-top: 5px;
 	text-align: center;
 	cursor: default;
+	-webkit-border-radius:5px;
 }
 
 .loginPageButton label {
@@ -72,6 +73,7 @@ ul#loginBlock, ul#activateBlock {
 	font-family: aauxProBol;
 	font-size: 20px; 
 	cursor: default;
+	font-style: normal;
 }
 
 #loginFooter {
@@ -83,6 +85,36 @@ ul#loginBlock, ul#activateBlock {
 #loginFooter label {
 	color: #ffffff;
 	font-family: Arial;
+	font-size: 14px;
+	cursor: default;
+}
+
+#loggingGif {
+	width: 100%;
+	text-align: center;
+	display: none;
+	margin-bottom: 0px;
+}
+
+#errorLoginDiv{
+	padding-top: 30px;
+	height: 86px;
+	width: 100%;
+	text-align: center;
+	display: none;
+}
+
+.errorLoginMsg {
+	color: #000000;
+	font-family: aauxProBol;
+	font-size: 17px; 
+	cursor: default;
+	font-style: normal;
+}
+
+.passErrLink {
+	color: #ffffff;
+	font-family: aauxProBol;
 	font-size: 14px;
 	cursor: default;
 }
