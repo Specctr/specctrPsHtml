@@ -76,7 +76,7 @@ Description: Includes styling code related to cloud upload page.
 	width: 184px;
 	border: 1px solid #ffffff;
 	height: 30px;
-	padding-top: 5px;
+	line-height: 30px;
 	text-align: center;
     -webkit-border-radius:5px;
 	cursor: default;

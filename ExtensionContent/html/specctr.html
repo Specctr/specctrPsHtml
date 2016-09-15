@@ -509,22 +509,23 @@
                             </div>
                         </div> -->
                         
-	                        <div class="marginTop30px" style="margin-left: 10px;">
+	                        <div class="marginTop30px" style="margin-left: 10px; margin-bottom: 30px;">
 	                        	<label id="planUser"></label><br>
 	                        	<label id="planStatus"></label>
 	                        </div>
 	                        
-	                        <div class="marginTop30px cloudLinkDiv">
-	           	            	<label class="linkLabel" onclick="Specctr.UI.openProfileLink()">View Your Account</label>
-	                        </div>
+	                        <label class="linkLabel" onclick="Specctr.UI.openProfileLink()">View Your Account</label>
+	                        <div class="cloudLinkDiv"></div>
 	                        
-	                        <div class="cloudLinkDiv">
-	           	            	<label class="linkLabel" onclick="Specctr.UI.openCloudSpecctrLink()">See Your Projects</label>
-	                        </div>
+	                        <label class="linkLabel" onclick="Specctr.UI.openCloudSpecctrLink()">See Your Projects</label>
+	                        <div class="cloudLinkDiv"></div>
+	                        
+	                        <label class="linkLabel" onclick="Specctr.Auth.deActivate()">Log Out</label>
+	                        <div class="cloudLinkDiv"></div>
 	
-	                        <div id="deActivate" onclick="Specctr.Auth.deActivate()">
+	                        <!-- <div id="deActivate" onclick="Specctr.Auth.deActivate()">
 	                            <label style="cursor: default;">Sign Out</label>
-	                        </div>
+	                        </div> -->
 
                     </div>
                     <!-- Ending of cloud tab. -->

@@ -62,7 +62,7 @@ ul#loginBlock, ul#activateBlock {
 	width: 180px;
 	border: 1px solid #ffffff;
 	height: 38px;
-	padding-top: 5px;
+	line-height: 38px;
 	text-align: center;
 	cursor: default;
 	-webkit-border-radius:5px;
