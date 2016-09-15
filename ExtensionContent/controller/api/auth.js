@@ -8,7 +8,7 @@ Specctr.Auth = {
 	 */
 	login: Specctr.Utility.tryCatchLog(function(ev) {
 		
-		$("#loginLabel").html("Loging in...");
+		$("#loginLabel").html("Logging in");
 		$("#loggingGif").show();
 		$("#loginHeaderDiv").show();
 		$("#errorLoginDiv").hide();
@@ -43,12 +43,12 @@ Specctr.Auth = {
 					
 					pref.addFileToPreferenceFolder('.license', JSON.stringify(activationPrefs)); //Create license file.
 
-					$("#loginLabel").html("Loging");
+					$("#loginLabel").html("Log in");
 					$("#loggingGif").hide();
 					Specctr.Init.init();
 				} else {
 					analytics.trackActivation('failed');
-					$("#loginLabel").html("Loging");
+					$("#loginLabel").html("Log in");
 					$("#loggingGif").hide();
 					$("#loginHeaderDiv").hide();
 					$("#errorLoginDiv").show();
@@ -67,7 +67,7 @@ Specctr.Auth = {
 //					specctrDialog.showAlert(error);
 				}
 				
-				$("#loginLabel").html("Loging");
+				$("#loginLabel").html("Log in");
 				$("#loggingGif").hide();
 				$("#loginHeaderDiv").hide();
 				$("#errorLoginDiv").show();
