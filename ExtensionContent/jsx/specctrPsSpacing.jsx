@@ -372,6 +372,8 @@ $.specctrPsSpacing = {
             specText.size = model.legendFontSize;
             specText.contents = distanceValue;
             specText.position = [aPos - armWidth, (bounds[1] + cnvsRect[1]) / 2.0];
+            textLayer.move(specItemsGroup, ElementPlacement.INSIDE);
+            
             cPos = aPos + spacing;
             lines = $.specctrPsCommon.createLine(cPos, cnvsRect[1], cPos, bounds[1], newColor);      //Main top line.
             bPos = bounds[1] - armWidth;
@@ -408,6 +410,8 @@ $.specctrPsSpacing = {
             specText.justification = Justification.CENTER;
             specText.contents = distanceValue;
             specText.position = [(bounds[0] + cnvsRect[0]) / 2.0, cPos - armWidth];
+            textLayer.move(specItemsGroup, ElementPlacement.INSIDE);
+            
             bPos = cPos + spacing;
             lines = $.specctrPsCommon.createLine(cnvsRect[0], bPos, bounds[0], bPos, newColor);    //Main left line.
             bPos = bPos + spacing;
@@ -443,6 +447,8 @@ $.specctrPsSpacing = {
             specText.justification = Justification.CENTER;
             specText.contents = distanceValue;
             specText.position = [(bounds[2] + cnvsRect[2]) / 2.0, cPos - armWidth];
+            textLayer.move(specItemsGroup, ElementPlacement.INSIDE);
+            
             bPos = cPos + spacing;
             lines = $.specctrPsCommon.createLine(cnvsRect[2], bPos, bounds[2], bPos, newColor);    //Main Right line.
             bPos = bPos + spacing;
@@ -479,6 +485,8 @@ $.specctrPsSpacing = {
             specText.justification = Justification.RIGHT;
             specText.contents = distanceValue;
             specText.position = [aPos - armWidth, (bounds[3]+cnvsRect[3])/2.0];
+            textLayer.move(specItemsGroup, ElementPlacement.INSIDE);
+
             cPos = aPos + spacing;
             lines = $.specctrPsCommon.createLine(cPos, cnvsRect[3], cPos, bounds[3], newColor);   //Main bottom line.
             bPos = bounds[3] + armWidth;
@@ -641,6 +649,8 @@ $.specctrPsSpacing = {
             specText.size = model.legendFontSize;
             specText.contents = distance;
             specText.position = [(x1+x2)/2.0, y1-spacing-armWidth];
+            textLayer.move(legendLayer, ElementPlacement.INSIDE);
+            
             var line = $.specctrPsCommon.createLine(x1, y1, x2, y2, newColor);
             var aPos = x2+armWidth;
             var bPos = y1+spacing;
@@ -685,6 +695,8 @@ $.specctrPsSpacing = {
             specText.size = model.legendFontSize;
             specText.contents = distance;
             specText.position = [x1-spacing-armWidth, (y1+y2)/2.0];
+            textLayer.move(legendLayer, ElementPlacement.INSIDE);
+            
             var line = $.specctrPsCommon.createLine(x1, y1, x2, y2, newColor);
             var aPos =  y2+armWidth;
             $.specctrPsCommon.setShape(x1-spacing, aPos, x1+spacing, aPos);    //vertical top line.
