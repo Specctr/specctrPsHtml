@@ -68,19 +68,14 @@ Specctr.cloudAPI = {
 				//Add data to table.
 				var table = document.getElementById("projectTable");
 				var projectLength = response.projects.length;
+                // clear table before repopulating.
+                $("#projectTable").html('');
 				for(var i = 0; i < projectLength; i++)
 					try {
 						var project = response.projects[i];
 						var itrName = project.name;
 						var itrId = project.id;
-						
-						//Check if project name already exist in table.
-						if($("#projectTable tr:contains('"+itrName+"')").length > 0) {
-							if(projectId == itrId)
-								docProject = $("#projectTable tr:contains('"+itrName+"')");
-							continue;
-						}
-						
+							
 						var row = table.insertRow(-1);
 						var name = row.insertCell(0);
 						name.innerHTML = itrName;

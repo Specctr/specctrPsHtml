@@ -43,7 +43,7 @@ Specctr.UI = {
 	 */
 	openCloudSpecctrLink : Specctr.Utility.tryCatchLog(function(){
 		var csInterface = new CSInterface();
-		csInterface.openURLInDefaultBrowser("https://cloud.specctr.com");
+		csInterface.openURLInDefaultBrowser(getHost());
 	}),
 	
 	/**
@@ -51,7 +51,7 @@ Specctr.UI = {
 	 */
 	openProfileLink : Specctr.Utility.tryCatchLog(function(){
 		var csInterface = new CSInterface();
-		csInterface.openURLInDefaultBrowser("https://cloud.specctr.com/profile");
+		csInterface.openURLInDefaultBrowser(getHost() + "/profile");
 	}),
 	
 	/**
