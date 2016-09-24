@@ -4,6 +4,8 @@ var namespace = 'specctr.extension.';
 analytics = {};
 
 analytics.trackFeature = function(feature) {
+    return;
+
 	try {
 		var stat = namespace + feature + '.clicked';
 
@@ -21,6 +23,8 @@ analytics.trackFeature = function(feature) {
 };
 
 analytics.trackActivation = function(action) {
+    return;
+
 	try {
 		var stat = namespace + 'activation.' + action;
 	    statsc.increment(stat);
@@ -30,6 +34,8 @@ analytics.trackActivation = function(action) {
 };
 
 analytics.trackError = function() {
+    return;
+
 	try {
 		var stat = namespace + error + '.' + licenseCode + '.returned';
 		statsc.increment(stat);
