@@ -125,6 +125,7 @@ Specctr.cloudAPI = {
 			document_name: css.document_name,
 			css_items: cssJson.children,
 			project_name: projectName,
+            application: hostApplication
 		});
 
 		$.ajax({
@@ -182,7 +183,8 @@ Specctr.cloudAPI = {
 			machine_id: machine_id,
 			document_name: css.document_name,
 			css_items: cssJson.children,
-			project_id: response.project_id
+			project_id: response.project_id,
+            application: hostApplication
 		});
 
 		$.ajax({
