@@ -620,8 +620,12 @@ label {
 #planStatus {
 	font-family: aauxProBol;
 	font-size: 11px;
-	color: #000000;
+	color: #4cae4c;
 	font-style: normal;
+}
+
+#planStatus.alert {
+	color: #ff5050 !important;
 }
 
 .cloudLinkDiv {

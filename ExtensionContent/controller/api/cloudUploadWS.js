@@ -68,19 +68,14 @@ Specctr.cloudAPI = {
 				//Add data to table.
 				var table = document.getElementById("projectTable");
 				var projectLength = response.projects.length;
+                // clear table before repopulating.
+                $("#projectTable").html('');
 				for(var i = 0; i < projectLength; i++)
 					try {
 						var project = response.projects[i];
 						var itrName = project.name;
 						var itrId = project.id;
-						
-						//Check if project name already exist in table.
-						if($("#projectTable tr:contains('"+itrName+"')").length > 0) {
-							if(projectId == itrId)
-								docProject = $("#projectTable tr:contains('"+itrName+"')");
-							continue;
-						}
-						
+							
 						var row = table.insertRow(-1);
 						var name = row.insertCell(0);
 						name.innerHTML = itrName;
@@ -125,6 +120,7 @@ Specctr.cloudAPI = {
 			document_name: css.document_name,
 			css_items: cssJson.children,
 			project_name: projectName,
+            application: hostApplication
 		});
 
 		$.ajax({
@@ -182,7 +178,8 @@ Specctr.cloudAPI = {
 			machine_id: machine_id,
 			document_name: css.document_name,
 			css_items: cssJson.children,
-			project_id: response.project_id
+			project_id: response.project_id,
+            application: hostApplication
 		});
 
 		$.ajax({
