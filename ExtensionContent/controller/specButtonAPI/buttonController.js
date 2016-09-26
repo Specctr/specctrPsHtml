@@ -65,7 +65,6 @@ buttonController.cloudButtonHandler = function() {
 	if(model.cloudOption == "import") {
 		analytics.trackFeature('export_css');
 		setModel();
-		$("#spinnerBlock").show();
 		evalScript("$.specctr" + hostApplication + "." + "exportCss()", CommonCallBack );
 		return;
 	}
