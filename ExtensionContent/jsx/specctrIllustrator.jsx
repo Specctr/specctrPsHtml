@@ -2646,7 +2646,7 @@ $.specctrAi = {
             var point = "";
             
             if (points.length < 5)
-                return infoText + "0";
+                return infoText + "0 " + this.typeUnits();
             
             if (points.length != 8)
                 return "";
@@ -2656,7 +2656,7 @@ $.specctrAi = {
                 anchorPoints[k] =  point.anchor[0];
             }
         
-            infoText +=  Math.abs(parseInt(anchorPoints[1]) - parseInt(anchorPoints[0]));
+            infoText +=  Math.abs(parseInt(anchorPoints[1]) - parseInt(anchorPoints[0])) + " " + this.typeUnits();
         } catch(e) {
             infoText = "";
         }
@@ -2759,14 +2759,14 @@ $.specctrAi = {
         cssText += "fill: " + fillStyle.toLowerCase() + ";";
         if(color != "") cssText += "background: " + color.toLowerCase()+";";
         cssText += "stroke-style: " + strokeStyle.toLowerCase() + ";";
-        if(strokeWidth != "") cssText += "stroke-width: " + strokeWidth + ";";
+        if(strokeWidth != "") cssText += "stroke-width: " + strokeWidth+ ";";
         if(strokeColor != "") cssText += "stroke-color: " + strokeColor.toLowerCase() + ";";
         cssText += "opacity: " + opacity + ";";
         if(roundCornerValue != "") cssText += "border-radius: " + roundCornerValue + ";";
-        cssText += "height: " + (cssBounds[1]-cssBounds[3]) + ";";
-        cssText += "width: " + (cssBounds[2]-cssBounds[0]) + ";";
-        cssText += "xCoord: " + cssBounds[0] + ";";
-        cssText += "yCoord: " + -cssBounds[1] + ";";
+        cssText += "height: " + (cssBounds[1]-cssBounds[3]) + " " + this.typeUnits() + ";";
+        cssText += "width: " + (cssBounds[2]-cssBounds[0]) + " " + this.typeUnits() + ";";
+        cssText += "xCoord: " + cssBounds[0] + " " + this.typeUnits() + ";";
+        cssText += "yCoord: " + -cssBounds[1] + " " + this.typeUnits() + ";";
         cssText += "}";
 
         //Add properties which are enabled in details tab.
@@ -2937,7 +2937,7 @@ $.specctrAi = {
             cssText += "layer_id: " + layerIndex.toString() + ";";
             cssText += "layer_index: " + layerIndex.toString() + ";";
             cssText += "font-family: " + fontFamily+ ";" ;
-            cssText += "font-size: " + fontSize + ";";
+            cssText += "font-size: " + fontSize +  ";";
             cssText += "color: " + textColor + ";";
             cssText += "font-style: " + fontStyle + ";";
             if (textDecoration != "") cssText += "text-decoration: " +  textDecoration + ";";
@@ -2945,8 +2945,8 @@ $.specctrAi = {
             cssText += "line-height: " + leading + ";";
             cssText += "letter-spacing: " + tracking + ";";
             if(!model.textAlpha) cssText += "opacity: " + opacity + ";";
-            cssText += "xCoord: " + cssBounds[0] + ";";
-            cssText += "yCoord: " + -cssBounds[1] + ";";
+            cssText += "xCoord: " + cssBounds[0] + " " + this.typeUnits() + ";";
+            cssText += "yCoord: " + -cssBounds[1] + " " + this.typeUnits() + ";";
             cssText += "}";
             
             //Add properties which are enabled in details tab.

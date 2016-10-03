@@ -125,7 +125,7 @@ $.specctrPsProperties = {
             cssText += "parent_layer_id:" + $.specctrPsCommon.getIDOfLayer()+";";
         }
  
-        cssText += "layer_name:" + name+";";
+        cssText += "layer_name:" + artLayer.name+";";
         cssText += "layer_id:" + idLayer+";";
         cssText += "layer_index:" + index+";";
 
@@ -1140,8 +1140,8 @@ $.specctrPsProperties = {
     getStrokeFx : function(strokeDesc)
     {
         var infoText = "";
-        infoText += Math.round(strokeDesc.getUnitDoubleValue(stringIDToTypeID('size'))) + " px";
-        infoText += ", " + this.colorAsString(this.getColor(strokeDesc.getObjectValue(stringIDToTypeID('color'))));
+        infoText += Math.round(strokeDesc.getUnitDoubleValue(stringIDToTypeID('size'))) + "px";
+        infoText += " " + this.colorAsString(this.getColor(strokeDesc.getObjectValue(stringIDToTypeID('color'))));
         
         return infoText;
     },
@@ -1157,7 +1157,7 @@ $.specctrPsProperties = {
             var point = "";
 
             if(points.length < 5)
-                return "0";
+                return "0 px";
             if(points.length != 8)
                 return "";
 
@@ -1166,7 +1166,7 @@ $.specctrPsProperties = {
                 anchorPoints[k] =  point.anchor[0];
             }
         
-            return  Math.abs(parseInt(anchorPoints[2]) - parseInt(anchorPoints[1])).toString();
+            return  Math.abs(parseInt(anchorPoints[2]) - parseInt(anchorPoints[1])).toString() + "px";
             
         } catch(e) {}
 
