@@ -11,10 +11,12 @@ C:\Program Files\Common Files\Adobe\CEP\extensions
 
 MAC:
 /Users/<user>/Library/Application\ Support/LocalStore/SpecctrPs-Pro.log
+/Users/<user>/Library/Application\ Support/LocalStore/SpecctrPs-Pro.license
 /Library/Application\ Support/LocalStore/SpecctrPs-Pro.log
 
 WIN:
 C:\Users\<user>\AppData\Roaming\LocalStore\SpecctrPs-Pro.log
+C:\Users\<user>\AppData\Roaming\LocalStore\SpecctrPs-Pro.license
 
 *App Config:*
 
