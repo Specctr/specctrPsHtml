@@ -346,9 +346,7 @@ $.specctrAi = {
     },
 
     //Delete the group item of coordinate specs, width/height specs and spacing specs for single item.
-    removeSpecGroup : function(idVar, groupName) {
-        try {
-            if (idVar) {
+    removeSpecGroup : function(varName, groupName) {
                 try {
                     var parentGroup = app.activeDocument.layers.getByName("specctr").layers.getByName(groupName);
                 } catch(e) {
@@ -357,12 +355,13 @@ $.specctrAi = {
             
                 if (parentGroup) {
                     var noOfIteration = parentGroup.groupItems.length;
+                    
                     while (noOfIteration) {
                         var specGroup = parentGroup.groupItems[noOfIteration - 1];
-                        
+
                         try {       //Handled exception if no visibilityVariable is defined for the group.
                             //If unique Ids of spec's group and given id matches then delete the group.
-                            if (specGroup.visibilityVariable.name == idVar.name) {
+                            if (specGroup.note == varName) {
                                 specGroup.remove();
                                 break; 
                             }
@@ -370,8 +369,6 @@ $.specctrAi = {
                         noOfIteration -= 1;
                     }
                 }
-            }
-        } catch(e) {}
     },
 
     //Apply scaling to the given value.
@@ -423,19 +420,19 @@ $.specctrAi = {
                 if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
                     this.createDimensionSpecsForItem(obj);
             }
-            app.redraw();   //Creates an 'undo' point.        
-        } catch(e) {}
+        
+        } catch(e) {alert(e);}
     },
 
     //Create the dimension spec for the selected page item.
     createDimensionSpecsForItem : function(pageItem) {
         try {
-            if (model.widthPos == 0 && model.heightPos == 0) 
+            if (!model.widthPos && !model.heightPos) 
                 return true;
             
             var name = "Dimensions";
             var legendLayer = this.legendSpecLayer(name);
-            
+
             if(model.includeStroke)
                 var pageItemBounds = this.itemBounds(pageItem);
             else
@@ -477,7 +474,9 @@ $.specctrAi = {
         
             //Delete the width/height spec group if it is already created for the acitve source item on the basis of the visibility variable.
             var idVar = pageItem.visibilityVariable;
-            this.removeSpecGroup(idVar, name);
+            if(idVar) {
+                this.removeSpecGroup(idVar.name, name);
+            }
        
             var spacing = 10 + model.armWeight;
             var newColor = this.legendColor(model.legendColorSpacing);
@@ -519,7 +518,6 @@ $.specctrAi = {
                     widthText.translate(widthText.width);
             
                 widthText.move(legendLayer, ElementPlacement.INSIDE);
-                widthText.note = "({type:dimensionsWidth})";
                 widthText.name = "Specctr Dimension Width Mark";
                 
                 var widthLine = app.activeDocument.compoundPathItems.add();
@@ -581,7 +579,6 @@ $.specctrAi = {
 
                 heightText.textRange.characterAttributes.fillColor = newColor;
                 heightText.move(legendLayer, ElementPlacement.INSIDE);
-                heightText.note = "({type:dimensionsHeight})";
                 heightText.name = "Specctr Dimension Height Mark";
                 
                 var heightLine = app.activeDocument.compoundPathItems.add();
@@ -605,24 +602,16 @@ $.specctrAi = {
                 heightText.move(itemsGroup, ElementPlacement.INSIDE);
             }
      
-            itemsGroup.note = "({type:dimensionsGroup})";
-            itemsGroup.name = "Specctr Dimension Mark";
-            itemsGroup.move(legendLayer, ElementPlacement.INSIDE);
-            
             //Set the id to the page item if no id is assigned to that item.
             if (!idVar)
                 idVar = this.setUniqueIDToItem(pageItem);
-
-            //Store the unique IDs to the width/height spec's component.
-            itemsGroup.visibilityVariable = idVar;
-            heightText.visibilityVariable = idVar;
-            widthText.visibilityVariable = idVar;
-        
-            //Add the note to the width/height spec's component which is used later to get the style text.
-            itemsGroup.note = "({type:'dimensionsGroup'})";
-            heightText.note = "({type:'dimensionsHeight',varName:'" + idVar.name + "'})";
-            widthText.note = "({type:'dimensionsWidth',varName:'" + idVar.name + "'})";
+                
+            itemsGroup.note = idVar.name;
+            itemsGroup.name = "Specctr Dimension Mark";
+            itemsGroup.move(legendLayer, ElementPlacement.INSIDE);
+          
         } catch(e) {
+            alert(e);
             return false;
         }
 
