@@ -346,7 +346,7 @@ $.specctrAi = {
     },
 
     //Delete the group item of coordinate specs, width/height specs and spacing specs for single item.
-    removeSpecGroup : function(varName, groupName) {
+    removeSpecGroup : function(specctrId, groupName) {
                 try {
                     var parentGroup = app.activeDocument.layers.getByName("specctr").layers.getByName(groupName);
                 } catch(e) {
@@ -359,9 +359,8 @@ $.specctrAi = {
                     while (noOfIteration) {
                         var specGroup = parentGroup.groupItems[noOfIteration - 1];
 
-                        try {       //Handled exception if no visibilityVariable is defined for the group.
-                            //If unique Ids of spec's group and given id matches then delete the group.
-                            if (specGroup.note == varName) {
+                        try {
+                            if (specGroup.note == specctrId) {
                                 specGroup.remove();
                                 break; 
                             }
@@ -397,18 +396,13 @@ $.specctrAi = {
         try {
             var date = new Date();
             var id = date.getTime();
-        
-            //Store the unique IDs to the source item.
-            var idVar = app.activeDocument.variables.add();
-            idVar.kind = VariableKind.VISIBILITY;
-            idVar.name = "Var_" + id;
-            pageItem.visibilityVariable = idVar;
-            pageItem.note = "({type:'source',varName:'" + idVar.name + "'})";
+            pageItem.note = '{"type":"source","specctrId":"' + id + '"}';
         } catch(e) {
-            return null;
+            alert(e);
+            id = null;
         }
         
-        return idVar;
+        return id;
     },
 
     //Call the dimension specs function for each selected art on the active artboard.
@@ -417,10 +411,10 @@ $.specctrAi = {
             var selectionLength = app.selection.length;
             for (var i = 0; i < selectionLength; i++) {
                 var obj = app.selection[i];
-                if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
+                if (!obj.note || obj.note.indexOf("source") != -1)
                     this.createDimensionSpecsForItem(obj);
             }
-        
+            app.redraw();
         } catch(e) {alert(e);}
     },
 
@@ -472,10 +466,13 @@ $.specctrAi = {
                 heightForSpec = this.decimalToFraction(heightForSpec);
             }
         
-            //Delete the width/height spec group if it is already created for the acitve source item on the basis of the visibility variable.
-            var idVar = pageItem.visibilityVariable;
-            if(idVar) {
-                this.removeSpecGroup(idVar.name, name);
+            //Delete the width/height spec group if it is already created for the acitve source item on the basis of the note.
+            var specctrId = "";
+            var pItemNote = pageItem.note;
+            if(pItemNote) {
+                var sourceJson = JSON.parse(pItemNote);
+                specctrId = sourceJson.specctrId;
+                this.removeSpecGroup(specctrId, name);
             }
        
             var spacing = 10 + model.armWeight;
@@ -603,13 +600,13 @@ $.specctrAi = {
             }
      
             //Set the id to the page item if no id is assigned to that item.
-            if (!idVar)
-                idVar = this.setUniqueIDToItem(pageItem);
-                
-            itemsGroup.note = idVar.name;
+            if (specctrId == "")
+                specctrId = this.setUniqueIDToItem(pageItem);
+
+            itemsGroup.note = specctrId;
             itemsGroup.name = "Specctr Dimension Mark";
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);
-          
+         
         } catch(e) {
             alert(e);
             return false;
@@ -624,7 +621,7 @@ $.specctrAi = {
             var selectionLength = app.selection.length;
             for (var i = 0; i < selectionLength; i++) {
                 var obj = app.selection[i];
-                if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
+                if (!obj.note || obj.note.indexOf("source") != -1)
                     this.createCoordinateSpecsForItem(obj);
             }
             app.redraw();   //Creates an 'undo' point.  
@@ -633,6 +630,8 @@ $.specctrAi = {
 
     //Create coordinate specs for the selected page item.
     createCoordinateSpecsForItem : function(pageItem) {
+        var bResult = true;
+        
         try {
             var defaultCoordSystem = app.coordinateSystem;
             app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
@@ -649,8 +648,15 @@ $.specctrAi = {
             
             var spacing = 10 + model.armWeight;
             var armWeight = model.armWeight / 2;
-            var idVar = pageItem.visibilityVariable;
-            this.removeSpecGroup(idVar, name);
+            
+             //Delete the width/height spec group if it is already created for the acitve source item on the basis of the note.
+            var specctrId = "";
+            var pItemNote = pageItem.note;
+            if(pItemNote) {
+                var sourceJson = JSON.parse(pItemNote);
+                specctrId = sourceJson.specctrId;
+                this.removeSpecGroup(specctrId, name);
+            }
         
             //Responsive option is selected or not.
             if (!model.specInPrcntg) {
@@ -790,25 +796,16 @@ $.specctrAi = {
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);  //Moving 'Coordinates' group into 'Specctr' layer group.
         
            //Set the id to the page item if no id is assigned to that item.
-            if (!idVar)
-                idVar = this.setUniqueIDToItem(pageItem);
+            if (specctrId == "")
+                specctrId = this.setUniqueIDToItem(pageItem);
 
-            //Store the unique IDs to the coordinate spec's component.
-            coordinateText.visibilityVariable = idVar;
-            itemsGroup.visibilityVariable = idVar;
-        
-            //Add the note to the coordinate spec's component which is used later to get the style text.
-            horizontalLine.note = "({type:'horizontalLine'})";
-            itemsGroup.note = "({type:'coordinatesGroup'})";
-            verticalLine.note = "({type:'verticalLine'})";
-            coordinateText.note = "({type:'coordinates'})";
+            itemsGroup.note = specctrId;
         } catch(e) {
-            app.coordinateSystem = defaultCoordSystem;
-            return false;
+            bResult = false;
         }
 
         app.coordinateSystem = defaultCoordSystem;
-        return true;
+        return bResult;
     },
 
     //Create text for vertical distances for spacing specs between two objects.
