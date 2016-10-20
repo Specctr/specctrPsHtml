@@ -317,23 +317,23 @@ $.specctrAi = {
     },
 
     //Delete the group item of spacing specs between two items.
-    removeSpacingItemsGroup : function(idVarForFirstItem, idVarForSecondItem, groupName) {
+    removeSpacingItemsGroup : function(aSpecctrId, bSpecctrId, groupName) {
          try {
-            if (idVarForFirstItem && idVarForSecondItem) {
+            if (aSpecctrId && bSpecctrId) {
                 try {
                     var parentGroup = app.activeDocument.layers.getByName("specctr").layers.getByName(groupName);
                 } catch(e) {
                     return;
                 }
                 
-                var idVarName =  idVarForFirstItem.name + idVarForSecondItem.name;
+                var  id =  aSpecctrId + bSpecctrId;
                 if (parentGroup) {
                     var noOfIteration = parentGroup.groupItems.length;
                     while (noOfIteration) {
                         var specGroup = parentGroup.groupItems[noOfIteration - 1];
                     
                         //If unique Ids of spec's group consist the given string name then delete the group.
-                        if (specGroup.note.search(idVarName) > 0) {
+                        if (specGroup.note == id) {
                             specGroup.remove();
                             break; 
                         }
@@ -342,7 +342,7 @@ $.specctrAi = {
                     }
                 }
             }
-        } catch(e) {}
+        } catch(e) {alert(e);}
     },
 
     //Delete the group item of coordinate specs, width/height specs and spacing specs for single item.
@@ -864,7 +864,6 @@ $.specctrAi = {
             yText.textRange.characterAttributes.size = model.legendFontSize;
             yText.translate(-yText.width / 2 - spacing * 0.3 - model.armWeight / 2);
             yText.move(legendLayer, ElementPlacement.INSIDE);
-            yText.note = "({type:spacingVerticalText})";
             yText.name = "Specctr Spacing Vertical Text Mark";
             yText.move(itemsGroup, ElementPlacement.INSIDE);
         } catch(e) {}
@@ -923,7 +922,6 @@ $.specctrAi = {
             xText.textRange.paragraphAttributes.justification = Justification.CENTER;			
             xText.textRange.characterAttributes.fillColor = newColor;	
             xText.move(legendLayer, ElementPlacement.INSIDE);
-            xText.note = "({type:spacingHorizontalText})";
             xText.name = "Specctr Spacing Horizontal Text Mark";
             xText.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
             xText.textRange.characterAttributes.size = model.legendFontSize;
@@ -939,9 +937,25 @@ $.specctrAi = {
             var legendLayer = this.legendSpecLayer(name);
             var spacing = 10 + model.armWeight;
             var newColor = this.legendColor(model.legendColorSpacing); 
-            var idVarForFirstItem = aItem.visibilityVariable;
-            var idVarForSecondItem = bItem.visibilityVariable;
-            this.removeSpacingItemsGroup(idVarForFirstItem, idVarForSecondItem, name);
+
+            //Delete the width/height spec group if it is already created for the acitve source item on the basis of the note.
+            var sourceJson;
+            var aSpecctrId = "", bSpecctrId = "";
+            var aItemNote = aItem.note;
+            var bItemNote = bItem.note;
+            
+            if(aItemNote) {
+                sourceJson = JSON.parse(aItemNote);
+                aSpecctrId = sourceJson.specctrId;
+            }
+        
+            if(bItemNote) {
+                sourceJson = JSON.parse(bItemNote);
+                bSpecctrId = sourceJson.specctrId;
+            }
+        
+            this.removeSpacingItemsGroup(aSpecctrId, bSpecctrId, name);
+
             var itemsGroup = app.activeDocument.groupItems.add();
         
             if(model.includeStroke) {
@@ -1037,18 +1051,18 @@ $.specctrAi = {
             }
             
             //Set the id to the page item if no id is assigned to that item.
-            if (!idVarForFirstItem)
-                idVarForFirstItem = this.setUniqueIDToItem(aItem);
+            if (aSpecctrId == "")
+                aSpecctrId = this.setUniqueIDToItem(aItem);
             
+            //Set the id to the page item if no id is assigned to that item.
+            if (bSpecctrId == "")
+                bSpecctrId = this.setUniqueIDToItem(bItem);
+             
+            //Store the note to the spacing spec's group.
+            itemsGroup.note = aSpecctrId + bSpecctrId;
             itemsGroup.name = "Specctr Spacing Mark";
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);
             
-            //Set the id to the page item if no id is assigned to that item.
-            if (!idVarForSecondItem)
-                idVarForSecondItem = this.setUniqueIDToItem(bItem);
-             
-            //Store the note to the spacing spec's group.
-            itemsGroup.note = "({type:spacingGroup,name:" + idVarForFirstItem.name + idVarForSecondItem.name + "})";
         } catch(e) {
             return false;
         }
@@ -1076,9 +1090,16 @@ $.specctrAi = {
             var toLeft = pageItemBounds[0] - artRect[0];
             var toBottom = pageItemBounds[3] - artRect[3];
             var toRight = -pageItemBounds[2] + artRect[2];
-            var idVar = pageItem.visibilityVariable;
-            this.removeSpecGroup(idVar, name);
-
+            
+            //Delete the width/height spec group if it is already created for the acitve source item on the basis of the note.
+            var specctrId = "";
+            var pItemNote = pageItem.note;
+            if(pItemNote) {
+                var sourceJson = JSON.parse(pItemNote);
+                specctrId = sourceJson.specctrId;
+                this.removeSpecGroup(specctrId, name);
+            }
+        
             if (!model.specInPrcntg) {
                 //Value after applying scaling.
                 toTop = this.pointsToUnitsString(this.getScaledValue(toTop), null);
@@ -1129,7 +1150,6 @@ $.specctrAi = {
                 topText.textRange.characterAttributes.size = model.legendFontSize;
                 topText.translate(-topText.width / 2 - spacing * 0.3 - model.armWeight / 2);
                 topText.move(legendLayer, ElementPlacement.INSIDE);
-                topText.note = "({type:spacingVerticalText})";
                 topText.name = "Specctr Spacing Vertical Text Mark";
                 
                 var topFullLine = app.activeDocument.compoundPathItems.add();
@@ -1174,7 +1194,6 @@ $.specctrAi = {
                 
                 bottomText.translate(-bottomText.width / 2 - spacing * 0.3 - model.armWeight / 2);
                 bottomText.move(legendLayer, ElementPlacement.INSIDE);
-                bottomText.note = "({type:spacingVerticalText})";
                 bottomText.name = "Specctr Spacing Vertical Text Mark";
 
                 var bottomFullLine = app.activeDocument.compoundPathItems.add();
@@ -1214,7 +1233,6 @@ $.specctrAi = {
                 leftText.textRange.paragraphAttributes.justification = Justification.CENTER;
                 leftText.textRange.characterAttributes.fillColor = newColor;
                 leftText.move(legendLayer,ElementPlacement.INSIDE);
-                leftText.note = "({type:spacingHorizontalText})";
                 leftText.name = "Specctr Spacing Horizontal Text Mark";
                 
                 leftText.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
@@ -1256,7 +1274,6 @@ $.specctrAi = {
                 rightText.textRange.paragraphAttributes.justification = Justification.CENTER;
                 rightText.textRange.characterAttributes.fillColor = newColor;
                 rightText.move(legendLayer, ElementPlacement.INSIDE);
-                rightText.note = "({type:spacingHorizontalText})";
                 rightText.name = "Specctr Spacing Horizontal Text Mark";
                 
                 rightText.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
@@ -1290,16 +1307,15 @@ $.specctrAi = {
                 rightText.move(itemsGroup, ElementPlacement.INSIDE);
             }
                 
-            itemsGroup.note = "({type:singleSpacingGroup})";
+            //Set the id to the page item if no id is assigned to that item.
+            if (specctrId == "")
+                specctrId = this.setUniqueIDToItem(pageItem);
+                
+            //Store the unique IDs to the spacing spec's group.
+            itemsGroup.note = specctrId;
             itemsGroup.name = "Specctr Spacing Mark";
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);
             
-            //Set the id to the page item if no id is assigned to that item.
-            if (!idVar)
-                idVar = this.setUniqueIDToItem(pageItem);
-
-            //Store the unique IDs to the spacing spec's group.
-            itemsGroup.visibilityVariable = idVar;
         } catch(e) {
             return false;
         }
@@ -1316,17 +1332,18 @@ $.specctrAi = {
                 var obj1 = app.selection[0];
                 var obj2 = app.selection[1];
                 
-                if ((!obj1.visibilityVariable || !obj1.note || obj1.note.indexOf("source")!=-1) && 
-                    (!obj2.visibilityVariable || !obj2.note || obj2.note.indexOf("source")!=-1))
+                if ((!obj1.note || obj1.note.indexOf("source")!=-1) && 
+                    (!obj2.note || obj2.note.indexOf("source")!=-1))
                         this.createSpacingSpecsForItems(obj1,obj2);
             } else if (app.selection.length==1) {
                 var obj=app.selection[0];
-                if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source")!=-1)
+                if (!obj.note || obj.note.indexOf("source")!=-1)
                     this.createSpacingSpecsForItem(obj);
             } else {
                 alert("Please select one or two art items!");
             }
             app.redraw();   //Creates an 'undo' point.    
+            
         } catch(e) {}
         
         return result;
