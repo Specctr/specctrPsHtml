@@ -1703,7 +1703,7 @@ $.specctrAi = {
             var selectionLength = app.selection.length;
             for (var i = 0; i < selectionLength; i++) {
                 var obj = app.selection[i];
-                if (!obj.visibilityVariable || !obj.note || obj.note.indexOf("source") != -1)
+                if (!obj.note || obj.note.indexOf("source") != -1)
                     this.createPropertySpecsForItem(obj);
             }
             app.redraw();   //Creates an 'undo' point.    
@@ -1713,27 +1713,34 @@ $.specctrAi = {
     //Get the property of selected layer and show it on active document.
     createPropertySpecsForItem : function(sourceItem) {
         try {
-            var spacing = 30;
-            var legendLayer;
-
-            var newColor = this.legendColor(model.legendColorObject);
-                            
-            var isSpecCreated = false;
-            var arm, spec, group, itemCircle, infoText, noteSpec, firstBullet, secondBullet;
             var pageItem = sourceItem;
-            var pageItemBounds = this.itemBounds(pageItem);
-            var idVar = pageItem.visibilityVariable;
+
+            //Get the specctrId associated with source item. Try catch block necessary if sourceJson become null.
+            var specctrId = "";
+            try {
+                if(pageItem.note) {
+                    var sourceJson = JSON.parse(pageItem.note);
+                    specctrId = sourceJson.specctrId;
+                }
+            }catch(e) {}
             
+            //Get the layerIndex of pageItem, if unable to get pageItem's index  then fetch parent's index. Default index is 0.
             try{
-                var layerIndex = sourceItem.zOrderPosition;
+                var layerIndex = pageItem.zOrderPosition;
             } catch (e) {
                 try {
-                    layerIndex = sourceItem.parent.zOrderPosition;
+                    layerIndex = pageItem.parent.zOrderPosition;
                 } catch (e) {
                     layerIndex = 0;
                 }
             }
-
+            
+            //Get the source item bounds and default color for specs.
+            var pageItemBounds = this.itemBounds(pageItem);
+            var newColor = this.legendColor(model.legendColorObject);
+            var legendLayer, infoText;
+            
+            //Get the property spec text, spec color (if text art item) and parent group of sepc's items.
             switch (sourceItem.typename) {
                 case "TextFrame": 
                     infoText = this.getSpecsInfoForTextItem(sourceItem, pageItemBounds, layerIndex); 
@@ -1753,63 +1760,73 @@ $.specctrAi = {
 
             if (infoText == "") 
                 return;
-
-            try {
-                var specctrLayer = this.legendLayer();
-                var noOfSpecs = specctrLayer.note;
-            } catch (e) {
-                alert(e);
-            }
-
-            if(!noOfSpecs)
-                noOfSpecs = 1;
                 
-            if (idVar) {      //find spec components
-                var allPageItems = idVar.pageItems;
+            var arm, spec, group, itemCircle, noteSpec, firstBullet, secondBullet, noOfSpecs = "";
 
-                for (var i = 0; i < allPageItems.length; i++) {
-                    try {
-                        var dataString = this.separateNoteAndStyleText(allPageItems[i].note);
-                        allPageItems[i].note = dataString;
-                        
-                        var data;
+            // Get the spec's item in case of updating spec (either by manually or through event)
+            if (legendLayer && specctrId != "") {
+                var noOfIteration = legendLayer.groupItems.length;
+                
+                //Check if spec is already created or not based on the specctrId match stored in note of source item and property spec group.
+                //Iterate through all the group items of property spec group and get all the spec items, if matched.
+                while (noOfIteration) {
+                    group = legendLayer.groupItems[noOfIteration - 1];
+
+                    if (group.note == specctrId) {
                         try {
-                            data = eval(dataString);
-                        } catch(e) {
-                            data = this.deserialize(dataString);
-                        }
-                   
-                        switch (data.type) {
-                            case "noteSpec": noteSpec = allPageItems[i]; break;
-                            case "spec": spec = allPageItems[i]; break;
-                            case "arm": arm = allPageItems[i]; break;
-                            case "group": group = allPageItems[i]; break;
-                            case "itemCircle": itemCircle = allPageItems[i]; break;
-                            case "firstBullet": firstBullet = allPageItems[i]; break;
-                            case "secondBullet": secondBullet = allPageItems[i]; break;
-                            default:
-                        }
-                    } catch(e) {}
+                            spec = group.pageItems.getByName("spec");
+                        } catch (e) {}
+                        
+                        try {
+                            arm = group.pageItems.getByName("arm"); 
+                        } catch(e) {}
+                        
+                        try {
+                        itemCircle = group.pageItems.getByName("itemCircle");
+                        } catch(e) {}
+                        
+                        try {
+                        firstBullet = group.pageItems.getByName("firstBullet");
+                        } catch (e) {}
+                        
+                        try {
+                        secondBullet = group.pageItems.getByName("secondBullet");
+                        } catch (e) {}
+                        
+                        break; 
+                    }
+                
+                    --noOfIteration;
                 }
             }
 
+            //Create spec if its not an update.
+            var isSpecCreated = false;
             if (!spec) {
                 isSpecCreated = true;
                 spec = app.activeDocument.textFrames.add();
                 spec.resize(100.1, 100.1);       //this allows to change justification from right to left later
+                spec.name = "spec";
+            }  else {
+                //Get the bullet number assigned to the spec.
+                var jsonResponse = JSON.parse(spec.note);
+                noOfSpecs = jsonResponse.bulletNo;
             }
 
+            //Set style to property spec as per the specctr panel setting.
             spec.contents = infoText;
             spec.textRange.characterAttributes.fillColor = newColor;
             spec.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
             spec.textRange.characterAttributes.size = model.legendFontSize;
 
-            for (var i = 0; i < spec.story.lines.length; i++) {
+            // Make the first line of specs in bold letters if the selected font from specctr panel has any bold type.
+            var storyLineLength = spec.story.lines.length;
+            for (var i = 0; i < storyLineLength; i++) {
                 try {
                     var currTextRange = spec.story.lines[i];
                     var content = currTextRange.contents;
                     if(content == "Text:" || content == "Stroke:" || content == "Fill:"  || 
-                            content == "Alpha:" || content == "Border-radius:" || i == 0)  {
+                            content == "Opacity:" || content == "Border-radius:" || i == 0)  {
                         try {
                             var newFontName = this.getBoldStyleOfFont();
                             currTextRange.characterAttributes.textFont = app.textFonts.getByName(newFontName);
@@ -1817,22 +1834,15 @@ $.specctrAi = {
                     }
                 } catch(e){}
             }
-            
-            if (idVar && !isSpecCreated) {
-                if(spec.note.search("-css:") < 0)
-                    spec.note += "-css:" + cssText;
-                    
-                this.updateConnection("propertySpec");
-                return;
-            }
 
             //If font has not any bold type member.
             if(!newFontName)
                 newFontName = model.legendFont;
-                
-            if (!group)  //positioning
+
+            //If no group, create it.
+            if (!group) 
                 group = app.activeDocument.groupItems.add();
-             
+
             var currentArtboard = app.activeDocument.artboards[app.activeDocument.artboards.getActiveArtboardIndex()];
             var artRect = currentArtboard.artboardRect;
 
@@ -1840,60 +1850,78 @@ $.specctrAi = {
             var heightItem= pageItemBounds[1] - pageItemBounds[3];
             var heightInfo = spec.visibleBounds[1] - spec.visibleBounds[3];
             var widthInfo = spec.visibleBounds[2] - spec.visibleBounds[0];
-                
-            var centerY = pageItemBounds[1] / 2 + pageItemBounds[3] / 2;
-            var centerX = pageItemBounds[0] / 2 + pageItemBounds[2] / 2;
-            var artboardCenterX = artRect[0] / 2 + artRect[2] / 2;
-            var specX;
-            var specEdge;
-            
-            var yReference = 0;
+
+            var centerY = (pageItemBounds[1] + pageItemBounds[3]) / 2;
+            var centerX = (pageItemBounds[0] + pageItemBounds[2]) / 2;
+
+            var artboardCenterX = (artRect[0] + artRect[2]) / 2;
+            var specX, specEdge;
+
+            var spacing = 30, yReference = 0;
              if(noteSpec) {
                 yReference = noteSpec.visibleBounds[3] - spacing;
             } else {
                 yReference = pageItemBounds[1] - (heightItem - heightInfo) / 2;
             }
 
-            if (centerX <= artboardCenterX) {
-                spec.textRange.paragraphAttributes.justification = Justification.LEFT;
-                    
-                if (model.specToEdge)
-                    specX = artRect[0] - spec.visibleBounds[0] + spacing ;
-                else
-                    specX = pageItemBounds[0] - widthInfo - spacing;
-            } else {
-                spec.textRange.paragraphAttributes.justification = Justification.RIGHT;
-                if (model.specToEdge) {
-                    spec.translate(pageItemBounds[2] - pageItemBounds[0],0);
-                    specX = artRect[2] - spec.visibleBounds[2] - spacing;
+            if(isSpecCreated == true) {
+                if (centerX <= artboardCenterX) {
+                    spec.textRange.paragraphAttributes.justification = Justification.LEFT;
+                        
+                    if (model.specToEdge)
+                        specX = artRect[0] - spec.visibleBounds[0] + spacing ;
+                    else
+                        specX = pageItemBounds[0] - widthInfo - spacing;
                 } else {
-                    specX = pageItemBounds[2] + spacing;
+                    spec.textRange.paragraphAttributes.justification = Justification.RIGHT;
+                    if (model.specToEdge && isSpecCreated == true) {
+                        spec.translate(pageItemBounds[2] - pageItemBounds[0],0);
+                        specX = artRect[2] - spec.visibleBounds[2] - spacing;
+                    } else {
+                        specX = pageItemBounds[2] + spacing;
+                    }
                 }
+            
+                spec.translate(specX, (yReference - spec.visibleBounds[1]));
+            } else {
+                // Right and left justification of specs based on the source item and spec position.
+                // If source item's center x is smaller than spec's center x, set justification to left otherwise right.
+                if(centerX < ((spec.visibleBounds[0] + spec.visibleBounds[2]) / 2))
+                    spec.textRange.paragraphAttributes.justification = Justification.RIGHT;
+                else
+                    spec.textRange.paragraphAttributes.justification = Justification.LEFT;
             }
 
-           spec.translate(specX, (yReference - spec.visibleBounds[1]));			
            spec.move(group, ElementPlacement.INSIDE);
 
-           if(arm)
+            //Remove the existing the arms/bullets if any.
+            if(arm) {
                 arm.remove();
-            
-            if(itemCircle)
+                arm = null;
+            }
+
+            if(itemCircle) {
                 itemCircle.remove();
-            
-            if(firstBullet)
+                itemCircle = null;
+            }
+
+            if(firstBullet) {
                 firstBullet.remove();
-            
-            if(secondBullet)
+                firstBullet = null;
+            }
+
+            if(secondBullet) {
                 secondBullet.remove();
+                secondBullet = null;
+            }
 
-            if (!arm && model.specOption == "Line") {
-               noOfSpecs = "";
+            //Create arm if spec option is line.
+            if (model.specOption == "Line") {
+                //Create line
                 arm = app.activeDocument.pathItems.add();
+                var armX1, armX2;
 
-                var armX1;
-                var armX2;
-                     
-                if (centerX <= artboardCenterX) {
+                if (centerX > ((spec.visibleBounds[0] + spec.visibleBounds[2]) / 2)) {
                     armX1 = pageItemBounds[0];
                     armX2 = spec.visibleBounds[2];
                 } else {
@@ -1905,7 +1933,7 @@ $.specctrAi = {
                 var dx = armPartLength;
                 if (armX1 < armX2) 
                     dx = -dx;
-                    
+
                 if (armDX < armPartLength * 1.3)
                     arm.setEntirePath([[armX2, spec.visibleBounds[1]], [armX1, centerY]]);
                 else
@@ -1917,13 +1945,11 @@ $.specctrAi = {
                 arm.strokeColor = newColor;
                 arm.filled = false;
                 arm.move(group, ElementPlacement.INSIDE);
-            }
-            
-            var circleD = this.circleDiameter(model.armWeight);
-
-            if (!itemCircle && model.specOption == "Line") {
+                arm.name = "arm";
                 
-                if (centerX <= artboardCenterX)
+                //Create item circle
+                var circleD = this.circleDiameter(model.armWeight);
+                 if (centerX > ((spec.visibleBounds[0] + spec.visibleBounds[2]) / 2))
                     itemCircle = app.activeDocument.pathItems.ellipse(centerY + circleD / 2, 
                                                                                                 pageItemBounds[0] - circleD / 2, circleD, circleD);
                 else 
@@ -1941,12 +1967,23 @@ $.specctrAi = {
                 itemCircle.strokeWidth = model.armWeight;
                 itemCircle.stroked = true;
                 itemCircle.move(group, ElementPlacement.INSIDE);
+                itemCircle.name = "itemCircle";
             }
 
+            // Create bullet if spec option is bullet.
              if(model.specOption == "Bullet") {
+                var specctrLayer = this.legendLayer();
+                
+                if(!noOfSpecs)
+                    noOfSpecs = specctrLayer.note;
+                    
+                if(!noOfSpecs)
+                    noOfSpecs = 1;
 
-                specctrLayer.note = noOfSpecs + 1;
-                var dia;
+                //Either new spec created or nothing is assigned to speectrLayer note.
+                if(isSpecCreated == true || !specctrLayer.note) 
+                    specctrLayer.note = noOfSpecs + 1;
+
                  //Create text at given font size, font value, font color.
                 var textColor = new RGBColor();
                 textColor.red = 255;
@@ -1959,65 +1996,29 @@ $.specctrAi = {
                 number.textRange.characterAttributes.textFont = app.textFonts.getByName(newFontName);
                 number.textRange.characterAttributes.size = model.legendFontSize;
                 
-                 dia = Math.abs(number.visibleBounds[3] - number.visibleBounds[1]) + 8;
+                 var dia = Math.abs(number.visibleBounds[3] - number.visibleBounds[1]) + 8;
                  firstBullet = this.createBullet(newColor, number, dia,
                                            spec.visibleBounds[1], spec.visibleBounds[0]);
-                
+                                           
                  secondBullet = firstBullet.duplicate();
                  secondBullet.translate(pageItemBounds[0] - secondBullet.visibleBounds[0] - dia - 1, 
                         pageItemBounds[1] - secondBullet.visibleBounds[1]);
 
                  firstBullet.move(group, ElementPlacement.INSIDE);
                  secondBullet.move(group, ElementPlacement.INSIDE);
+                 firstBullet.name = "firstBullet";
+                 secondBullet.name = "secondBullet";
              }
-         
-            var date = new Date();
-            var id = date.getTime();
-                
-            if (!idVar) {
-                idVar = app.activeDocument.variables.add();
-                idVar.kind = VariableKind.VISIBILITY;
-                idVar.name = "Var_" + id;
-                pageItem.visibilityVariable = idVar;
-            }
-         
-            try {
-                arm.visibilityVariable = idVar;
-                arm.note = "({type:'arm',varName:'" + idVar.name + "'})";
-            } catch(e) {}
-            try {
-                group.visibilityVariable = idVar;
-            } catch(e) {}
-            try {
-                spec.visibilityVariable = idVar;
-            } catch(e) {}
-            try {
-                itemCircle.visibilityVariable = idVar;
-                itemCircle.note = "({type:'itemCircle',varName:'" + idVar.name + "'})";
-            } catch(e) {}
-            try {
-                firstBullet.visibilityVariable = idVar;
-                firstBullet.note = "({type:'firstBullet',varName:'" + idVar.name + "'})";
-            } catch(e) {}
-            try {
-                secondBullet.visibilityVariable = idVar;
-                secondBullet.note = "({type:'secondBullet',varName:'" + idVar.name + "'})";
-            } catch(e) {}
 
-            pageItem.note = "({type:'source',updated:'" + id + "',varName:'" + idVar.name + "',noOfSpecs:'" + noOfSpecs + "',position:'" + 
-                                            pageItem.visibleBounds.join("|") + "'})";
-            group.note = "({type:'group',varName:'" + idVar.name + "'})";
-            
-            if (!propSpecUndo[idVar.name]) 
-                propSpecUndo[idVar.name] = ({});
+            //Set the id to the page item if no id is assigned to that item.
+            if (specctrId == "")
+                specctrId = this.setUniqueIDToItem(pageItem);
 
-            propSpecUndo[idVar.name].updated = id;
-
-            spec.note = "({type:'spec',updated:'" + id + "',varName:'" + idVar.name + "',position:'" + 
-                                    spec.visibleBounds.join("|") + "'})" + "-css:" + cssText ;
-        
             group.name = "Specctr Properties Mark";
             group.move(legendLayer, ElementPlacement.INSIDE);
+            group.note = specctrId;
+            spec.note = '{"bulletNo":"' + noOfSpecs + '","css":"'+cssText+'"}';
+            
         } catch(e) {
             alert(e);
             return false;
@@ -2271,22 +2272,7 @@ $.specctrAi = {
         return true;
     },
 
-    deserialize : function(dataString) {
-        var object = ({});
-        try {
-            var props = dataString.split(",");
-            var propsLength = props.length;
-            for (var i = 0; i < propsLength; i++) {
-                try {
-                    var prop = props[i].split(":");
-                    if (prop.length == 2)
-                        object[prop[0]] = prop[1].split("})")[0];
-                } catch(e) {}
-            }
-        } catch(e) {}
-        return object;
-    },
-
+    
     //Get bold font name of the given font family.
     getBoldStyleOfFont : function() {
         var fonts = app.textFonts;
