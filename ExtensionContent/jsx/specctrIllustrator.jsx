@@ -1350,13 +1350,34 @@ $.specctrAi = {
     },
 
     //Update the property and note spec of the layer whose spec is already present.
-    updateConnection : function(buttonInvoked) {
+    updateConnection : function() {
         try {
-            
-           
-            } catch(e) {
+            //Check if the selected art item have specs or not.
+            if(app.selection.length > 1)
                 return false;
+                
+            var pageItem = app.selection[0];
+            if (pageItem.note && pageItem.note.indexOf("source") >= 0) {
+                //Get specctr Id.
+                var specctrId = "";
+                try {
+                    if(pageItem.note) {
+                        var sourceJson = JSON.parse(pageItem.note);
+                        specctrId = sourceJson.specctrId;
+                    }
+                }catch(e) {}
+                
+                if(specctrId == "")
+                    return false;
+                    
+                this.createPropertySpecsForItem(pageItem, true);
+                this.addNoteSpecsForItem(pageItem, "", true);
+               
             }
+           
+        } catch(e) {
+            return false;
+        }
         return true;
     },
 
@@ -1368,14 +1389,14 @@ $.specctrAi = {
             for (var i = 0; i < selectionLength; i++) {
                 var obj = app.selection[i];
                 if (!obj.note || obj.note.indexOf("source") != -1)
-                    this.createPropertySpecsForItem(obj);
+                    this.createPropertySpecsForItem(obj, false);
             }
             app.redraw();   //Creates an 'undo' point.    
         } catch(e) {}
     },
 
     //Get the property of selected layer and show it on active document.
-    createPropertySpecsForItem : function(sourceItem) {
+    createPropertySpecsForItem : function(sourceItem, bIsAutoUpdate) {
         try {
             var pageItem = sourceItem;
 
@@ -1464,8 +1485,14 @@ $.specctrAi = {
                 }
             
                 //In case source item already have specctrId assigned to it.
-                if(noOfIteration <= 0)
+                if(noOfIteration <= 0) {
+                    if(bIsAutoUpdate == true)
+                        return;
+                        
                     group = null;
+                } else if (!spec && bIsAutoUpdate == true ) {
+                    return;
+                }
             }
 
             //Create spec if its not an update.
@@ -1681,14 +1708,14 @@ $.specctrAi = {
             for (var i = 0; i < selectionLength; i++) {
                 var obj = app.selection[i];
                 if (!obj.note || obj.note.indexOf("source") != -1)
-                    this.addNoteSpecsForItem(obj, noteText);
+                    this.addNoteSpecsForItem(obj, noteText, false);
             }
             app.redraw();   //Creates an 'undo' point.
         } catch(e) {}
     },
 
     // Add note specs for the selected page item.
-    addNoteSpecsForItem : function (sourceItem, noteText) {
+    addNoteSpecsForItem : function (sourceItem, noteText, bIsAutoUpdate) {
          try {
             var pageItem = sourceItem;
 
@@ -1732,8 +1759,14 @@ $.specctrAi = {
                 }
             
                 //In case source item already have specctrId assigned to it.
-                if(noOfIteration <= 0)
+                if(noOfIteration <= 0) {
+                    if(bIsAutoUpdate == true)
+                        return;
+                        
                     group = null;
+                } else if (!spec && bIsAutoUpdate == true ) {
+                    return;
+                }
             }
             
             // Get the color value based on the source art item type.
@@ -1752,7 +1785,9 @@ $.specctrAi = {
                 spec.name = "noteSpec";
             }
 
-            spec.contents = noteText;
+            if(noteText != "")
+                spec.contents = noteText;
+
             spec.textRange.characterAttributes.fillColor = newColor;
             spec.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
             spec.textRange.characterAttributes.size = model.legendFontSize;
