@@ -168,7 +168,7 @@ $.specctrAi = {
             }
 
             var styleText = "";
-            var text, variableId;
+            var text;
             var noOfGroups = objectProperties.groupItems.length;                //Number of groups present in Object Properties layer group.
 
             //Fetch the style text from the specs and return the style text. 
@@ -176,16 +176,16 @@ $.specctrAi = {
                 try {
                     var spec = objectProperties.groupItems[noOfGroups - 1];
                     text = "";
-                    variableId = "";
+                    
+                    var textFrameLen = spec.textFrames.length;
                 
-                    for (var i = 0; i < spec.textFrames.length; i++) {
+                    for (var i = 0; i < textFrameLen; i++) {
                         var textFrame = spec.textFrames[i];
                         text = textFrame.note;
 
                         if (text) {       //Get the css style text from the  property specs text item.
-                            var array = text.split("-css:");
-                            text = array[1];
-                            variableId = textFrame.visibilityVariable.name;
+                            var jsonResponse = JSON.parse(text);
+                            text = jsonResponse.css;
                         }
                     }
                 
@@ -213,7 +213,7 @@ $.specctrAi = {
             }
 
             var styleText = "";
-            var text, variableId;
+            var text;
             var noOfGroups = textProperties.groupItems.length;              //Number of groups present in Text Properties layer group.
 
             //Fetch the style text from the specs and return the style text. 
@@ -221,16 +221,16 @@ $.specctrAi = {
                 try {
                     var textSpec = textProperties.groupItems[noOfGroups - 1];
                     text = "";
-                    variableId = "";
+                    
+                    var textFrameLength = textSpec.textFrames.length;
 
-                    for (var i = 0; i < textSpec.textFrames.length; i++) {
+                    for (var i = 0; i < textFrameLength; i++) {
                         var textFrame = textSpec.textFrames[i];
                         text = textFrame.note;
 
                         if (text) {           //Get the css style text from the specs text item.
-                            var array = text.split("-css:");
-                            text = array[1];
-                            variableId = textFrame.visibilityVariable.name;
+                            var jsonResponse = JSON.parse(text);
+                            text = jsonResponse.css;
                         }
                     }
                 
@@ -1408,7 +1408,7 @@ $.specctrAi = {
                     specctrId = sourceJson.specctrId;
                 }
             }catch(e) {}
-            
+
             //Get the layerIndex of pageItem, if unable to get pageItem's index  then fetch parent's index. Default index is 0.
             try{
                 var layerIndex = pageItem.zOrderPosition;
@@ -1419,7 +1419,7 @@ $.specctrAi = {
                     layerIndex = 0;
                 }
             }
-            
+
             //Get the source item bounds and default color for specs.
             var pageItemBounds = this.itemBounds(pageItem);
             var newColor = this.legendColor(model.legendColorObject);
