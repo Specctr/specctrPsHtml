@@ -347,27 +347,32 @@ $.specctrAi = {
 
     //Delete the group item of coordinate specs, width/height specs and spacing specs for single item.
     removeSpecGroup : function(specctrId, groupName) {
-                try {
-                    var parentGroup = app.activeDocument.layers.getByName("specctr").layers.getByName(groupName);
-                } catch(e) {
-                    return;
-                }
+            try {
+                var parentGroup = app.activeDocument.layers.getByName("specctr").layers.getByName(groupName);
+            } catch(e) {
+                return false;
+            }
+        
+            var bIsSpecRemove = false;
             
-                if (parentGroup) {
-                    var noOfIteration = parentGroup.groupItems.length;
-                    
-                    while (noOfIteration) {
-                        var specGroup = parentGroup.groupItems[noOfIteration - 1];
+            if (parentGroup) {
+                var noOfIteration = parentGroup.groupItems.length;
+                
+                while (noOfIteration) {
+                    var specGroup = parentGroup.groupItems[noOfIteration - 1];
 
-                        try {
-                            if (specGroup.note == specctrId) {
-                                specGroup.remove();
-                                break; 
-                            }
-                        } catch(e) {}
-                        noOfIteration -= 1;
-                    }
+                    try {
+                        if (specGroup.note == specctrId) {
+                            specGroup.remove();
+                            bIsSpecRemove = true;
+                            break; 
+                        }
+                    } catch(e) {}
+                    noOfIteration -= 1;
                 }
+            }
+        
+            return bIsSpecRemove;
     },
 
     //Apply scaling to the given value.
@@ -412,19 +417,34 @@ $.specctrAi = {
             for (var i = 0; i < selectionLength; i++) {
                 var obj = app.selection[i];
                 if (!obj.note || obj.note.indexOf("source") != -1)
-                    this.createDimensionSpecsForItem(obj);
+                    this.createDimensionSpecsForItem(obj, false);
             }
             app.redraw();
         } catch(e) {alert(e);}
     },
 
     //Create the dimension spec for the selected page item.
-    createDimensionSpecsForItem : function(pageItem) {
+    createDimensionSpecsForItem : function(pageItem, bIsAutoUpdate) {
         try {
             if (!model.widthPos && !model.heightPos) 
                 return true;
             
             var name = "Dimensions";
+            
+             //Delete the width/height spec group if it is already created for the acitve source item on the basis of the note.
+            var specctrId = "", isSpecRemoved = false;
+            var pItemNote = pageItem.note;
+            if(pItemNote) {
+                var sourceJson = JSON.parse(pItemNote);
+                specctrId = sourceJson.specctrId;
+                isSpecRemoved = this.removeSpecGroup(specctrId, name);
+            }
+        
+            //If spec not removed, it means no spec was present.
+            if(isSpecRemoved == false && bIsAutoUpdate == true)
+                return;
+            
+            //Get the group for width/height specs.
             var legendLayer = this.legendSpecLayer(name);
 
             if(model.includeStroke)
@@ -466,15 +486,6 @@ $.specctrAi = {
                 heightForSpec = this.decimalToFraction(heightForSpec);
             }
         
-            //Delete the width/height spec group if it is already created for the acitve source item on the basis of the note.
-            var specctrId = "";
-            var pItemNote = pageItem.note;
-            if(pItemNote) {
-                var sourceJson = JSON.parse(pItemNote);
-                specctrId = sourceJson.specctrId;
-                this.removeSpecGroup(specctrId, name);
-            }
-       
             var spacing = 10 + model.armWeight;
             var newColor = this.legendColor(model.legendColorSpacing);
             var itemsGroup = app.activeDocument.groupItems.add();
@@ -622,21 +633,34 @@ $.specctrAi = {
             for (var i = 0; i < selectionLength; i++) {
                 var obj = app.selection[i];
                 if (!obj.note || obj.note.indexOf("source") != -1)
-                    this.createCoordinateSpecsForItem(obj);
+                    this.createCoordinateSpecsForItem(obj, false);
             }
             app.redraw();   //Creates an 'undo' point.  
         } catch(e) {}
     },
 
     //Create coordinate specs for the selected page item.
-    createCoordinateSpecsForItem : function(pageItem) {
+    createCoordinateSpecsForItem : function(pageItem, bIsAutoUpdate) {
         var bResult = true;
         
         try {
+             //Delete the width/height spec group if it is already created for the acitve source item on the basis of the note.
+            var name = "Coordinates", specctrId = "", isSpecRemoved = false;
+            var pItemNote = pageItem.note;
+            if(pItemNote) {
+                try {
+                    var sourceJson = JSON.parse(pItemNote);
+                    specctrId = sourceJson.specctrId;
+                    isSpecRemoved = this.removeSpecGroup(specctrId, name);
+                } catch (e) {}
+            }
+        
+            if(isSpecRemoved == false && bIsAutoUpdate == true)
+                return;
+        
             var defaultCoordSystem = app.coordinateSystem;
             app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
             
-            var name = "Coordinates";
             var legendLayer = this.legendSpecLayer(name);    //Create the 'Coordinates' layer group.
             var pageItemBounds = this.itemBounds(pageItem);
             var originalArtboardSize = this.originalArtboardRect();
@@ -649,15 +673,6 @@ $.specctrAi = {
             var spacing = 10 + model.armWeight;
             var armWeight = model.armWeight / 2;
             
-             //Delete the width/height spec group if it is already created for the acitve source item on the basis of the note.
-            var specctrId = "";
-            var pItemNote = pageItem.note;
-            if(pItemNote) {
-                var sourceJson = JSON.parse(pItemNote);
-                specctrId = sourceJson.specctrId;
-                this.removeSpecGroup(specctrId, name);
-            }
-        
             //Responsive option is selected or not.
             if (!model.specInPrcntg) {
                 //Absolute distance.
@@ -1372,13 +1387,65 @@ $.specctrAi = {
                     
                 this.createPropertySpecsForItem(pageItem, true);
                 this.addNoteSpecsForItem(pageItem, "", true);
+                this.createDimensionSpecsForItem(pageItem, true);
+                this.createCoordinateSpecsForItem(pageItem, true);
+                app.redraw();
                
+            } else if (pageItem.note) {
+                //Check if selected art item is property spec.
+                if(pageItem.name == "Specctr Properties Mark") {
+                    //Get the specctrId from selected page item.
+                    specctrId = pageItem.note;
+
+                    //Get the source item based on the specctrId.
+                    var sourceItem = this.getPageItemBasedOnSpecctrId(specctrId);
+                    
+                    if(sourceItem) {
+                        this.createPropertySpecsForItem(sourceItem, true);
+                        app.redraw();
+                    }
+                } else if (pageItem.name == "Specctr Add Notes") {
+                    //Get the specctrId from selected page item.
+                    specctrId = pageItem.note;
+
+                    //Get the pageItem based on the specctrId.
+                    var sourceItem = this.getPageItemBasedOnSpecctrId(specctrId);
+
+                    if(sourceItem) {
+                        this.addNoteSpecsForItem(sourceItem, "", true);
+                        app.redraw();
+                    }
+                }
             }
            
         } catch(e) {
             return false;
         }
         return true;
+    },
+
+    getPageItemBasedOnSpecctrId : function (specctrId) {
+        var pageItem = null;
+        var pageItems = app.activeDocument.pageItems;
+        var pageItemNo = pageItems.length;
+
+        for (var i = 0; i < pageItemNo; i++) {
+            try {
+                 var fromLastIndex = pageItemNo - 1 - i;
+                 var selPageItem = pageItems[fromLastIndex];
+
+                 if(selPageItem.note && selPageItem.note.search("source") >= 0) {
+                        var sourceJson = JSON.parse(selPageItem.note);
+                        var pageItemSpecctrId = sourceJson.specctrId;
+
+                        if (pageItemSpecctrId == specctrId)
+                            return selPageItem;
+                  }
+                    
+            } catch (e) {}
+        }
+    
+        return null;
     },
 
     //Call the property specs function for each selected art on the active artboard.
@@ -1727,7 +1794,7 @@ $.specctrAi = {
                     specctrId = sourceJson.specctrId;
                 }
             }catch(e) {}
-            
+                        
             // Get the spec's item in case of updating spec (either by manually or through event)
             var legendLayer = this.legendSpecLayer("Add Notes");
             var arm, spec, group, itemCircle;
