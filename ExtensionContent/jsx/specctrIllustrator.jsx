@@ -1086,12 +1086,24 @@ $.specctrAi = {
     },
 
     //Create the spacing spec for the selected page item.
-    createSpacingSpecsForItem : function(pageItem) {
+    createSpacingSpecsForItem : function(pageItem, bIsAutoUpdate) {
         try {
             if (!(model.spaceTop || model.spaceBottom || model.spaceLeft || model.spaceRight)) 
                 return true;
         
-            var name = "Spacing";
+            //Delete the width/height spec group if it is already created for the acitve source item on the basis of the note.
+            var name = "Spacing", specctrId = "", bIsSpecRemoved = false;
+            var pItemNote = pageItem.note;
+            if(pItemNote) {
+                var sourceJson = JSON.parse(pItemNote);
+                specctrId = sourceJson.specctrId;
+                bIsSpecRemoved = this.removeSpecGroup(specctrId, name);
+            }
+        
+            if(bIsSpecRemoved == false && bIsAutoUpdate == true)
+                return;
+        
+            //Get the spacing specctr group layer.
             var legendLayer = this.legendSpecLayer(name);
             var spacing = 10 + model.armWeight;
             var artRect = this.originalArtboardRect();
@@ -1106,14 +1118,7 @@ $.specctrAi = {
             var toBottom = pageItemBounds[3] - artRect[3];
             var toRight = -pageItemBounds[2] + artRect[2];
             
-            //Delete the width/height spec group if it is already created for the acitve source item on the basis of the note.
-            var specctrId = "";
-            var pItemNote = pageItem.note;
-            if(pItemNote) {
-                var sourceJson = JSON.parse(pItemNote);
-                specctrId = sourceJson.specctrId;
-                this.removeSpecGroup(specctrId, name);
-            }
+            
         
             if (!model.specInPrcntg) {
                 //Value after applying scaling.
@@ -1353,7 +1358,7 @@ $.specctrAi = {
             } else if (app.selection.length==1) {
                 var obj=app.selection[0];
                 if (!obj.note || obj.note.indexOf("source")!=-1)
-                    this.createSpacingSpecsForItem(obj);
+                    this.createSpacingSpecsForItem(obj, false);
             } else {
                 alert("Please select one or two art items!");
             }
@@ -1389,6 +1394,7 @@ $.specctrAi = {
                 this.addNoteSpecsForItem(pageItem, "", true);
                 this.createDimensionSpecsForItem(pageItem, true);
                 this.createCoordinateSpecsForItem(pageItem, true);
+                this.createSpacingSpecsForItem(pageItem, true);
                 app.redraw();
                
             } else if (pageItem.note) {
