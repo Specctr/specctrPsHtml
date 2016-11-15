@@ -1634,8 +1634,11 @@ $.specctrAi = {
                     //Iterate through all the group items of note spec group and get all the spec items, if matched.
                     while (count) {
                         var noteGroup = noteLegendLayer.groupItems[count - 1];
+                        
+                        var noteGroupJson = JSON.parse(noteGroup.note);
+                        var noteSpecctrId = noteGroupJson.specctrId;
 
-                        if (noteGroup.note == specctrId) {
+                        if (noteSpecctrId == specctrId) {
                             try {
                                 noteSpec = noteGroup.pageItems.getByName("noteSpec");
                             } catch (e) {}
@@ -1906,8 +1909,11 @@ $.specctrAi = {
                     //Iterate through all the group items of note spec group and get all the spec items, if matched.
                     while (count) {
                         var propGroup = propLegendLayer.groupItems[count - 1];
+                        
+                        var propGroupJson = JSON.parse(propGroup.note);
+                        var propSpecctrId = propGroupJson.specctrId;
 
-                        if (propGroup.note == specctrId) {
+                        if (propSpecctrId == specctrId) {
                             try {
                                 propertySpec = propGroup.pageItems.getByName("spec");
                             } catch (e) {}
