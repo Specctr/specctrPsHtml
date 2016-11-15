@@ -267,6 +267,11 @@ function addApplicationEventListener(response) {
 	try {
 		AIEventAdapter.getInstance().addEventListener(AIEvent.ART_SELECTION_CHANGED, 
 				selectionChangeListener);
+		
+		//Undo
+		AIEventAdapter.getInstance().addEventListener(AIEvent.UNDO_COMMAND_PRE, 
+				setUndoFlag);
+		
 	} catch(e) {
 		alert(e);
 	}
@@ -277,12 +282,21 @@ function addApplicationEventListener(response) {
  */
 function selectionChangeListener(event) {
 	try {
+		if(bUndoFlag) {
+			bUndoFlag = false;
+			return;
+		}
+		
 		//Remove eventListener.
 		AIEventAdapter.getInstance().removeEventListener(AIEvent.ART_SELECTION_CHANGED, 
 				selectionChangeListener);
 
 		setModel();
-		evalScript("$.specctr" + hostApplication + ".updateConnection()", addApplicationEventListener);
+		evalScript("$.specctr" + hostApplication + ".updateConnection('"+ bUndoFlag +"')", addApplicationEventListener);
 	} catch (e) {}
 
+}
+
+function setUndoFlag(event) {
+	bUndoFlag = true;
 }

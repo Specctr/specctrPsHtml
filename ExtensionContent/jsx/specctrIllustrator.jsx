@@ -1399,9 +1399,10 @@ $.specctrAi = {
                
             } else if (pageItem.note) {
                 //Check if selected art item is property spec.
-                if(pageItem.name == "Specctr Properties Mark") {
+                if(pageItem.note.indexOf("property") >= 0) {
                     //Get the specctrId from selected page item.
-                    specctrId = pageItem.note;
+                    var groupJson = JSON.parse(pageItem.note);
+                    specctrId = groupJson.specctrId;
 
                     //Get the source item based on the specctrId.
                     var sourceItem = this.getPageItemBasedOnSpecctrId(specctrId);
@@ -1410,10 +1411,11 @@ $.specctrAi = {
                         this.createPropertySpecsForItem(sourceItem, true);
                         app.redraw();
                     }
-                } else if (pageItem.name == "Specctr Add Notes") {
+                } else if (pageItem.note.indexOf("note") >= 0) {
                     //Get the specctrId from selected page item.
-                    specctrId = pageItem.note;
-
+                    var groupJson = JSON.parse(pageItem.note);
+                    specctrId = groupJson.specctrId;
+                    
                     //Get the pageItem based on the specctrId.
                     var sourceItem = this.getPageItemBasedOnSpecctrId(specctrId);
 
@@ -1529,8 +1531,11 @@ $.specctrAi = {
                 //Iterate through all the group items of property spec group and get all the spec items, if matched.
                 while (noOfIteration) {
                     group = legendLayer.groupItems[noOfIteration - 1];
+                    
+                    var groupJson = JSON.parse(group.note);
+                    groupSpecctrId = groupJson.specctrId;
 
-                    if (group.note == specctrId) {
+                    if (groupSpecctrId == specctrId) {
                         try {
                             spec = group.pageItems.getByName("spec");
                         } catch (e) {}
@@ -1739,7 +1744,8 @@ $.specctrAi = {
 
             group.name = "Specctr Properties Mark";
             group.move(legendLayer, ElementPlacement.INSIDE);
-            group.note = specctrId;
+            group.note = '{"type":"property","specctrId":"' + specctrId + '"}';
+            
             spec.note = '{"bulletNo":"' + noOfSpecs + '","css":"'+cssText+'"}';
             
         } catch(e) {
@@ -1811,8 +1817,11 @@ $.specctrAi = {
                 //Iterate through all the group items of note spec group and get all the spec items, if matched.
                 while (noOfIteration) {
                     group = legendLayer.groupItems[noOfIteration - 1];
+                    
+                    var groupJson = JSON.parse(group.note);
+                    groupSpecctrId = groupJson.specctrId;
 
-                    if (group.note == specctrId) {
+                    if (groupSpecctrId == specctrId) {
                         try {
                             spec = group.pageItems.getByName("noteSpec");
                         } catch (e) {}
@@ -1947,7 +1956,7 @@ $.specctrAi = {
                 specctrId = this.setUniqueIDToItem(pageItem);
 
             group.name = "Specctr Add Notes";
-            group.note = specctrId;
+            group.note =  '{"type":"note","specctrId":"' + specctrId + '"}';
             group.move(legendLayer, ElementPlacement.INSIDE);
         } catch(e) {
             alert(e);
