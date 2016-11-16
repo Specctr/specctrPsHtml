@@ -1370,10 +1370,11 @@ $.specctrAi = {
     },
 
     //Update the property and note spec of the layer whose spec is already present.
-    updateConnection : function() {
+    updateConnection : function(bUndoFlag) {
         try {
+            alert(bUndoFlag);
             //Check if the selected art item have specs or not.
-            if(app.selection.length > 1)
+            if(app.selection.length > 1 || bUndoFlag == "true")
                 return false;
                 
             var pageItem = app.selection[0];
@@ -1399,14 +1400,14 @@ $.specctrAi = {
                
             } else if (pageItem.note) {
                 //Check if selected art item is property spec.
-                if(pageItem.note.indexOf("property") >= 0) {
+                if(pageItem.note.indexOf("property") >= 0 || pageItem.note.indexOf("css") >= 0) {
                     //Get the specctrId from selected page item.
                     var groupJson = JSON.parse(pageItem.note);
                     specctrId = groupJson.specctrId;
 
                     //Get the source item based on the specctrId.
                     var sourceItem = this.getPageItemBasedOnSpecctrId(specctrId);
-                    
+
                     if(sourceItem) {
                         this.createPropertySpecsForItem(sourceItem, true);
                         app.redraw();
@@ -1415,7 +1416,7 @@ $.specctrAi = {
                     //Get the specctrId from selected page item.
                     var groupJson = JSON.parse(pageItem.note);
                     specctrId = groupJson.specctrId;
-                    
+
                     //Get the pageItem based on the specctrId.
                     var sourceItem = this.getPageItemBasedOnSpecctrId(specctrId);
 
@@ -1749,7 +1750,7 @@ $.specctrAi = {
             group.move(legendLayer, ElementPlacement.INSIDE);
             group.note = '{"type":"property","specctrId":"' + specctrId + '"}';
             
-            spec.note = '{"bulletNo":"' + noOfSpecs + '","css":"'+cssText+'"}';
+            spec.note = '{"bulletNo":"' + noOfSpecs + '","css":"'+cssText+'","specctrId":"'+specctrId+'"}';
             
         } catch(e) {
             alert(e);
@@ -1946,7 +1947,7 @@ $.specctrAi = {
                 arm.remove();
                 arm = null;
             }
-            
+
             if(itemCircle) {
                 itemCircle.remove();
                 itemCircle = null;
