@@ -1372,7 +1372,7 @@ $.specctrAi = {
     //Update the property and note spec of the layer whose spec is already present.
     updateConnection : function(bUndoFlag) {
         try {
-            alert(bUndoFlag);
+
             //Check if the selected art item have specs or not.
             if(app.selection.length > 1 || bUndoFlag == "true")
                 return false;
@@ -1405,8 +1405,8 @@ $.specctrAi = {
                     var groupJson = JSON.parse(pageItem.note);
                     specctrId = groupJson.specctrId;
 
-                    //Get the source item based on the specctrId.
-                    var sourceItem = this.getPageItemBasedOnSpecctrId(specctrId);
+                   //Get the source item based on the specctrId.
+                   var sourceItem = this.getPageItemBasedOnSpecctrId(specctrId);
 
                     if(sourceItem) {
                         this.createPropertySpecsForItem(sourceItem, true);
@@ -1417,7 +1417,7 @@ $.specctrAi = {
                     var groupJson = JSON.parse(pageItem.note);
                     specctrId = groupJson.specctrId;
 
-                    //Get the pageItem based on the specctrId.
+                     //Get the pageItem based on the specctrId.
                     var sourceItem = this.getPageItemBasedOnSpecctrId(specctrId);
 
                     if(sourceItem) {
@@ -1626,7 +1626,9 @@ $.specctrAi = {
             //If note spec present, create the property spec just below the note spec for the newly created spec.
             var spacing = 30, yReference = 0, noteSpec;
             if(isSpecCreated == true) {
-                var noteLegendLayer = this.legendSpecLayer("Add Notes");
+                try {
+                    var noteLegendLayer = this.legendLayer().layers.getByName("Add Notes");
+                } catch (e) {}
                 
                 if (noteLegendLayer && specctrId != "") {
                     var count = noteLegendLayer.groupItems.length;
@@ -1646,12 +1648,12 @@ $.specctrAi = {
                             
                             break; 
                         }
-                    
+
                         --count;
                     }
                 
                     //In case source item already have specctrId assigned to it.
-                    if(count <= 0)
+                    if(count == undefined || count <= 0)
                         noteSpec = null;
                 }
             }
@@ -1810,7 +1812,18 @@ $.specctrAi = {
                     specctrId = sourceJson.specctrId;
                 }
             }catch(e) {}
-                        
+
+            if(bIsAutoUpdate == true) {
+                var bIsNotePresent;
+                
+                try {
+                    bIsNotePresent = this.legendLayer().layers.getByName("Add Notes");    //Already present in the 'Specctr' group layer.
+                } catch(e) {}
+                
+                if(!bIsNotePresent)
+                    return;
+            }
+
             // Get the spec's item in case of updating spec (either by manually or through event)
             var legendLayer = this.legendSpecLayer("Add Notes");
             var arm, spec, group, itemCircle;
@@ -1898,10 +1911,13 @@ $.specctrAi = {
             if(isSpecCreated == true) {
                 var propLegendLayer;
                 
-                if(pageItem.typeName == "TextFrame") 
-                    propLegendLayer = this.legendSpecLayer("Text Properties");
-                else
-                    propLegendLayer = this.legendSpecLayer("Object Properties");
+                try {
+                    if(pageItem.typeName == "TextFrame") {
+                        propLegendLayer = this.legendLayer().layers.getByName("Text Properties");
+                    } else {
+                        propLegendLayer = this.legendLayer().layers.getByName("Object Properties");
+                    }
+                } catch(e) {}
                 
                 if (propLegendLayer && specctrId != "") {
                     var count = propLegendLayer.groupItems.length;
@@ -1926,7 +1942,7 @@ $.specctrAi = {
                     }
                 
                     //In case source item already have specctrId assigned to it.
-                    if(count <= 0)
+                    if(count ==undefined || count <= 0)
                         propertySpec = null;
                 }
             }
