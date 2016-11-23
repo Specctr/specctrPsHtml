@@ -1491,6 +1491,9 @@ $.specctrAi = {
             if(bIsUpdate == true) {
                 pageItem = this.getPageItemBasedOnSpecctrId(specctrId);
                 sourceItem = pageItem;
+                
+                if(!sourceItem)
+                    return;
             }
 
             //Get the layerIndex of pageItem, if unable to get pageItem's index  then fetch parent's index. Default index is 0.
@@ -1832,6 +1835,9 @@ $.specctrAi = {
 //~                     return;
                 pageItem = this.getPageItemBasedOnSpecctrId(specctrId);
                 sourceItem = pageItem;
+                
+                if(!sourceItem)
+                    return;
             }
 
             // Get the spec's item in case of updating spec (either by manually or through event)
