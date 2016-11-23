@@ -1466,13 +1466,15 @@ $.specctrAi = {
                 var obj = app.selection[i];
                 if (!obj.note || obj.note.indexOf("source") != -1)
                     this.createPropertySpecsForItem(obj, false);
+                else if (obj.note.indexOf("property") >= 0 || obj.note.indexOf("css") >= 0)
+                    this.createPropertySpecsForItem(obj, true);
             }
             app.redraw();   //Creates an 'undo' point.    
         } catch(e) {}
     },
 
     //Get the property of selected layer and show it on active document.
-    createPropertySpecsForItem : function(sourceItem, bIsAutoUpdate) {
+    createPropertySpecsForItem : function(sourceItem, bIsUpdate) {
         try {
             var pageItem = sourceItem;
 
@@ -1484,6 +1486,12 @@ $.specctrAi = {
                     specctrId = sourceJson.specctrId;
                 }
             }catch(e) {}
+
+            // If spec is selected.
+            if(bIsUpdate == true) {
+                pageItem = this.getPageItemBasedOnSpecctrId(specctrId);
+                sourceItem = pageItem;
+            }
 
             //Get the layerIndex of pageItem, if unable to get pageItem's index  then fetch parent's index. Default index is 0.
             try{
@@ -1565,11 +1573,11 @@ $.specctrAi = {
             
                 //In case source item already have specctrId assigned to it.
                 if(noOfIteration <= 0) {
-                    if(bIsAutoUpdate == true)
+                    if(bIsUpdate == true)
                         return;
                         
                     group = null;
-                } else if (!spec && bIsAutoUpdate == true ) {
+                } else if (!spec && bIsUpdate == true ) {
                     return;
                 }
             }
@@ -1794,13 +1802,15 @@ $.specctrAi = {
                 var obj = app.selection[i];
                 if (!obj.note || obj.note.indexOf("source") != -1)
                     this.addNoteSpecsForItem(obj, noteText, false);
+                else if (obj.note.indexOf("note") >= 0 || obj.note.indexOf("noteSpec") >= 0)
+                    this.addNoteSpecsForItem(obj, noteText, true);
             }
             app.redraw();   //Creates an 'undo' point.
         } catch(e) {}
     },
 
     // Add note specs for the selected page item.
-    addNoteSpecsForItem : function (sourceItem, noteText, bIsAutoUpdate) {
+    addNoteSpecsForItem : function (sourceItem, noteText, bUpdate) {
          try {
             var pageItem = sourceItem;
 
@@ -1813,15 +1823,15 @@ $.specctrAi = {
                 }
             }catch(e) {}
 
-            if(bIsAutoUpdate == true) {
-                var bIsNotePresent;
-                
-                try {
-                    bIsNotePresent = this.legendLayer().layers.getByName("Add Notes");    //Already present in the 'Specctr' group layer.
-                } catch(e) {}
-                
-                if(!bIsNotePresent)
-                    return;
+            if(bUpdate == true) {
+//~                 var bIsNotePresent;
+//~                 try {
+//~                     bIsNotePresent = this.legendLayer().layers.getByName("Add Notes");    //Already present in the 'Specctr' group layer.
+//~                 } catch(e) {}
+//~                 if(!bIsNotePresent)
+//~                     return;
+                pageItem = this.getPageItemBasedOnSpecctrId(specctrId);
+                sourceItem = pageItem;
             }
 
             // Get the spec's item in case of updating spec (either by manually or through event)
@@ -1859,11 +1869,11 @@ $.specctrAi = {
             
                 //In case source item already have specctrId assigned to it.
                 if(noOfIteration <= 0) {
-                    if(bIsAutoUpdate == true)
+                    if(bUpdate == true)
                         return;
                         
                     group = null;
-                } else if (!spec && bIsAutoUpdate == true ) {
+                } else if (!spec && bUpdate == true ) {
                     return;
                 }
             }
@@ -1981,6 +1991,8 @@ $.specctrAi = {
             group.name = "Specctr Add Notes";
             group.note =  '{"type":"note","specctrId":"' + specctrId + '"}';
             group.move(legendLayer, ElementPlacement.INSIDE);
+            
+            spec.note = '{"type":"noteSpec","specctrId":"' + specctrId + '"}';
         } catch(e) {
             alert(e);
             return false;
