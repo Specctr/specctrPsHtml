@@ -434,11 +434,14 @@ $.specctrAi = {
              //Delete the width/height spec group if it is already created for the acitve source item on the basis of the note.
             var specctrId = "", isSpecRemoved = false;
             var pItemNote = pageItem.note;
+            
+            try {
             if(pItemNote) {
                 var sourceJson = JSON.parse(pItemNote);
                 specctrId = sourceJson.specctrId;
                 isSpecRemoved = this.removeSpecGroup(specctrId, name);
             }
+        } catch (e) {pageItem.note = "";}
         
             //If spec not removed, it means no spec was present.
             if(isSpecRemoved == false && bIsAutoUpdate == true)
@@ -652,7 +655,7 @@ $.specctrAi = {
                     var sourceJson = JSON.parse(pItemNote);
                     specctrId = sourceJson.specctrId;
                     isSpecRemoved = this.removeSpecGroup(specctrId, name);
-                } catch (e) {}
+                } catch (e) {pageItem.note = "";}
             }
         
             if(isSpecRemoved == false && bIsAutoUpdate == true)
@@ -959,15 +962,19 @@ $.specctrAi = {
             var aItemNote = aItem.note;
             var bItemNote = bItem.note;
             
+            try {
             if(aItemNote) {
                 sourceJson = JSON.parse(aItemNote);
                 aSpecctrId = sourceJson.specctrId;
             }
+        } catch (e) {aItem.note = "";}
         
+        try {
             if(bItemNote) {
                 sourceJson = JSON.parse(bItemNote);
                 bSpecctrId = sourceJson.specctrId;
             }
+        } catch (e) {bItem.note = "";}
         
             this.removeSpacingItemsGroup(aSpecctrId, bSpecctrId, name);
 
@@ -1094,11 +1101,14 @@ $.specctrAi = {
             //Delete the width/height spec group if it is already created for the acitve source item on the basis of the note.
             var name = "Spacing", specctrId = "", bIsSpecRemoved = false;
             var pItemNote = pageItem.note;
+            
+            try {
             if(pItemNote) {
                 var sourceJson = JSON.parse(pItemNote);
                 specctrId = sourceJson.specctrId;
                 bIsSpecRemoved = this.removeSpecGroup(specctrId, name);
             }
+        } catch (e) {pageItem.note = "";}
         
             if(bIsSpecRemoved == false && bIsAutoUpdate == true)
                 return;
@@ -1485,7 +1495,7 @@ $.specctrAi = {
                     var sourceJson = JSON.parse(pageItem.note);
                     specctrId = sourceJson.specctrId;
                 }
-            }catch(e) {}
+            }catch(e) {pageItem.note = "";}
 
             // If spec is selected.
             if(bIsUpdate == true) {
@@ -1544,32 +1554,34 @@ $.specctrAi = {
                 while (noOfIteration) {
                     group = legendLayer.groupItems[noOfIteration - 1];
                     
-                    var groupJson = JSON.parse(group.note);
-                    groupSpecctrId = groupJson.specctrId;
+                    try {
+                            var groupJson = JSON.parse(group.note);
+                            groupSpecctrId = groupJson.specctrId;
 
-                    if (groupSpecctrId == specctrId) {
-                        try {
-                            spec = group.pageItems.getByName("spec");
-                        } catch (e) {}
-                        
-                        try {
-                            arm = group.pageItems.getByName("arm"); 
-                        } catch(e) {}
-                        
-                        try {
-                        itemCircle = group.pageItems.getByName("itemCircle");
-                        } catch(e) {}
-                        
-                        try {
-                        firstBullet = group.pageItems.getByName("firstBullet");
-                        } catch (e) {}
-                        
-                        try {
-                        secondBullet = group.pageItems.getByName("secondBullet");
-                        } catch (e) {}
-                        
-                        break; 
-                    }
+                            if (groupSpecctrId == specctrId) {
+                                try {
+                                    spec = group.pageItems.getByName("spec");
+                                } catch (e) {}
+                                
+                                try {
+                                    arm = group.pageItems.getByName("arm"); 
+                                } catch(e) {}
+                                
+                                try {
+                                itemCircle = group.pageItems.getByName("itemCircle");
+                                } catch(e) {}
+                                
+                                try {
+                                firstBullet = group.pageItems.getByName("firstBullet");
+                                } catch (e) {}
+                                
+                                try {
+                                secondBullet = group.pageItems.getByName("secondBullet");
+                                } catch (e) {}
+                                
+                                break; 
+                            }
+                    }catch(e){}
                 
                     --noOfIteration;
                 }
@@ -1594,8 +1606,10 @@ $.specctrAi = {
                 spec.name = "spec";
             }  else {
                 //Get the bullet number assigned to the spec.
+                try {
                 var jsonResponse = JSON.parse(spec.note);
                 noOfSpecs = jsonResponse.bulletNo;
+                }catch(e){}
             }
 
             //Set style to property spec as per the specctr panel setting.
@@ -1649,16 +1663,19 @@ $.specctrAi = {
                     while (count) {
                         var noteGroup = noteLegendLayer.groupItems[count - 1];
                         
-                        var noteGroupJson = JSON.parse(noteGroup.note);
-                        var noteSpecctrId = noteGroupJson.specctrId;
+                        try {
+                        
+                            var noteGroupJson = JSON.parse(noteGroup.note);
+                            var noteSpecctrId = noteGroupJson.specctrId;
 
-                        if (noteSpecctrId == specctrId) {
-                            try {
-                                noteSpec = noteGroup.pageItems.getByName("noteSpec");
-                            } catch (e) {}
-                            
-                            break; 
-                        }
+                            if (noteSpecctrId == specctrId) {
+                                try {
+                                    noteSpec = noteGroup.pageItems.getByName("noteSpec");
+                                } catch (e) {}
+                                
+                                break; 
+                            }
+                        } catch (e) {}
 
                         --count;
                     }
@@ -1668,7 +1685,7 @@ $.specctrAi = {
                         noteSpec = null;
                 }
             }
-        
+
             // If noteSpec exist shift the vertical position to the bottom of note spec.
              if(noteSpec) {
                 yReference = noteSpec.visibleBounds[3] - spacing;
@@ -1824,7 +1841,7 @@ $.specctrAi = {
                     var sourceJson = JSON.parse(pageItem.note);
                     specctrId = sourceJson.specctrId;
                 }
-            }catch(e) {}
+            }catch(e) {pageItem.note = "";}
 
             if(bUpdate == true) {
 //~                 var bIsNotePresent;
@@ -1851,24 +1868,26 @@ $.specctrAi = {
                 while (noOfIteration) {
                     group = legendLayer.groupItems[noOfIteration - 1];
                     
-                    var groupJson = JSON.parse(group.note);
-                    groupSpecctrId = groupJson.specctrId;
+                    try {
+                        var groupJson = JSON.parse(group.note);
+                        groupSpecctrId = groupJson.specctrId;
 
-                    if (groupSpecctrId == specctrId) {
-                        try {
-                            spec = group.pageItems.getByName("noteSpec");
-                        } catch (e) {}
-                        
-                        try {
-                            arm = group.pageItems.getByName("arm"); 
-                        } catch(e) {}
-                        
-                        try {
-                        itemCircle = group.pageItems.getByName("itemCircle");
-                        } catch(e) {}
-                        
-                        break; 
-                    }
+                        if (groupSpecctrId == specctrId) {
+                            try {
+                                spec = group.pageItems.getByName("noteSpec");
+                            } catch (e) {}
+                            
+                            try {
+                                arm = group.pageItems.getByName("arm"); 
+                            } catch(e) {}
+                            
+                            try {
+                            itemCircle = group.pageItems.getByName("itemCircle");
+                            } catch(e) {}
+                            
+                            break; 
+                        }
+                    } catch (e) {}
                 
                     --noOfIteration;
                 }
@@ -1943,16 +1962,18 @@ $.specctrAi = {
                     while (count) {
                         var propGroup = propLegendLayer.groupItems[count - 1];
                         
-                        var propGroupJson = JSON.parse(propGroup.note);
-                        var propSpecctrId = propGroupJson.specctrId;
+                        try {
+                            var propGroupJson = JSON.parse(propGroup.note);
+                            var propSpecctrId = propGroupJson.specctrId;
 
-                        if (propSpecctrId == specctrId) {
-                            try {
-                                propertySpec = propGroup.pageItems.getByName("spec");
-                            } catch (e) {}
-                            
-                            break; 
-                        }
+                            if (propSpecctrId == specctrId) {
+                                try {
+                                    propertySpec = propGroup.pageItems.getByName("spec");
+                                } catch (e) {}
+                                
+                                break; 
+                            }
+                        } catch (e) {}
                     
                         --count;
                     }
