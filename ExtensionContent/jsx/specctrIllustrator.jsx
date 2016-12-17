@@ -2678,7 +2678,7 @@ $.specctrAi = {
             parentOrderPosition = 0;
         }
         
-        var alpha = Math.round(pageItem.opacity) + "%";
+        var alpha = Math.round(pageItem.opacity)/100;
         var artboardIndex = app.activeDocument.artboards.getActiveArtboardIndex();
         var currentArtboard = app.activeDocument.artboards[artboardIndex];
         
@@ -2703,7 +2703,7 @@ $.specctrAi = {
         if (model.shapeAlpha) {
             if (infoText != "") infoText += "\r\r";
             
-            infoText += "Alpha:\r" + alpha;
+            infoText += "Opacity:\r" + alpha;
         }
 
         return infoText;
@@ -2740,7 +2740,7 @@ $.specctrAi = {
             parentOrderPosition = 0;
         }
         
-        opacity = Math.round(pageItem.opacity) + "%";
+        opacity = Math.round(pageItem.opacity)/100;
         var roundCornerValue = this.getRoundCornerValue(pageItem); //Get corner radius of pathitem object.
         var artboardIndex = app.activeDocument.artboards.getActiveArtboardIndex();
         var currentArtboard = app.activeDocument.artboards[artboardIndex];
@@ -2789,7 +2789,7 @@ $.specctrAi = {
         if (model.shapeAlpha) {
             if (infoText != "") infoText += "\r\r";
             
-            infoText += "Alpha:\r" + opacity;
+            infoText += "Opacity:\r" + opacity;
         }
     
         if (model.shapeBorderRadius) {
@@ -2886,6 +2886,7 @@ $.specctrAi = {
                 var value = textColor[i];
                 if (alpha != "" && value.indexOf("(") >= 0) {
                     tempArray.push(this.convertColorIntoCss(value, alpha));
+                    alpha = "";
                 } else {
                     tempArray.push(value);
                 }
@@ -2944,7 +2945,7 @@ $.specctrAi = {
             cssText += "text-align: " + alignment + ";";
             cssText += "line-height: " + leading + ";";
             cssText += "letter-spacing: " + tracking + ";";
-            if(!model.textAlpha) cssText += "opacity: " + opacity + ";";
+            cssText += "opacity: " + opacity + ";";
             cssText += "xCoord: " + cssBounds[0] + " " + this.typeUnits() + ";";
             cssText += "yCoord: " + -cssBounds[1] + " " + this.typeUnits() + ";";
             cssText += "}";
@@ -2963,7 +2964,7 @@ $.specctrAi = {
             if (model.textAlignment) infoText += "\rText-Align: " + alignment;
             if (model.textLeading) infoText += "\rLine-Height: " + leading;
             if (model.textTracking) infoText += "\rLetter-Spacing: " + tracking;
-            if (alpha != "" && !model.textColor) infoText += "\rOpacity: " + alpha;
+            if (alpha != "") infoText += "\rOpacity: " + opacity;
 
         } catch(e) {alert(e);};
         
