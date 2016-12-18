@@ -44,7 +44,7 @@ analytics.prefix = function() {
 
 analytics.trackFeature = function(feature) {
 	try {
-	    var stat = this.prefix() + '.' + feature + '.count';
+	    var stat = this.prefix() + '.features.' + feature + '.count';
 		this.send(stat, 1);
 	}catch(e){
 		console.log(e);
@@ -53,7 +53,7 @@ analytics.trackFeature = function(feature) {
 
 analytics.trackActivation = function(status) {
 	try {
-		var stat = this.prefix() + '.' + 'activation.' + status + '.count';
+		var stat = this.prefix() + '.activations.' + status + '.count';
 		this.send(stat, 1);
 	}catch(e){
 		console.log(e);
@@ -62,7 +62,7 @@ analytics.trackActivation = function(status) {
 
 analytics.trackError = function(type) {
 	try {
-		var stat = this.prefix() + '.' + type + '.count';
+		var stat = this.prefix() + '.errors.' + type + '.count';
 		this.send(stat, 1);
 	}catch(e) {
 		console.log(e);
