@@ -32,7 +32,14 @@ analytics.prefix = function() {
         email = "no_email";
     }
 
-    return namespace + '.' + os + '.' + hostApplication + '.' + extId + '.' + email;
+    var version;
+    if (Specctr && Specctr.Version) {
+        version = Specctr.Version.replace(/\./g, "_");
+    }else{
+        version = "no_version";
+    }
+    
+    return namespace + '.' + version + '.' + os + '.' + hostApplication + '.' + extId + '.' + email;
 };
 
 analytics.trackFeature = function(feature) {

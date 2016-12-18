@@ -69,8 +69,10 @@ Specctr.Init.init = Specctr.Utility.tryCatchLog(function() {
     this.setModelToButtons();
     this.setModelToUIComponents();
     this.setModelToResponsive();
-    this.setVersionAtBottom();
-    
+    this.setVersionAtBottom(function(version) { 
+        analytics.trackFeature('initialized');
+    });
+ 
     Specctr.Auth.checkStatus(Specctr.Activation);
 });
 
@@ -249,11 +251,12 @@ Specctr.Init.setModelToResponsive = function() {
 /**
  * This method fetch the application version from manifest file and set it at panel bottom.
  */
-Specctr.Init.setVersionAtBottom = function() {
+Specctr.Init.setVersionAtBottom = function(callback) {
     this.getLocalVersion(function(version) {
         Specctr.Version = version;
         if (Specctr && Specctr.Activation) Specctr.Activation.version = version;
         $("#specctrVersion").html("v."+Specctr.Version); 
+        callback(version);
     })
 };
 
