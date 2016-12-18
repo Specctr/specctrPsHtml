@@ -28,7 +28,7 @@ Specctr.Auth = {
 
 				// If unsuccessful, return without saving the data in file.
 				if (response.success) {
-					analytics.trackActivation('succeeded');	
+					analytics.trackEvent('activation.succeeded');	
 					var activationPrefs = Specctr.Activation = {
 						licensed : true,
 						machine_id: response.machine_id,
@@ -47,7 +47,7 @@ Specctr.Auth = {
 					$("#loggingGif").hide();
 					Specctr.Init.init();
 				} else {
-					analytics.trackActivation('failed');
+					analytics.trackEvent('activation.failed');	
 					$("#loginLabel").html("Log in");
 					$("#loggingGif").hide();
 					$("#loginHeaderDiv").hide();

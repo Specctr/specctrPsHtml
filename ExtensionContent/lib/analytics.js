@@ -51,9 +51,9 @@ analytics.trackFeature = function(feature) {
 	};
 };
 
-analytics.trackActivation = function(status) {
+analytics.trackEvent = function(status) {
 	try {
-		var stat = this.prefix() + '.activations.' + status + '.count';
+		var stat = this.prefix() + '.events.' + status + '.count';
 		this.send(stat, 1);
 	}catch(e){
 		console.log(e);

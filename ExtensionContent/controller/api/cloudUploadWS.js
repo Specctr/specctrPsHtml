@@ -17,6 +17,7 @@ if (Specctr.Utility.getHostApp() == "Ps") {
         ws = new WebSocket('ws://127.0.0.1:63421');// + Specctr.Generator.PORT);
         ws.on('error', function(err) {
             if (!connErrorLogged) {
+                analytics.trackEvent("generator.connection.fail");
                 console.log(err);
 				logger.error(err);
                 connErrorLogged = true;
@@ -24,6 +25,7 @@ if (Specctr.Utility.getHostApp() == "Ps") {
         });
         ws.on('open', function() {
             logger.info("[cloudUploadWS] WebSockets open.");
+            analytics.trackEvent("generator.connection.success");
             wsDef.resolve();
             clearInterval(seekingConnect);
         });

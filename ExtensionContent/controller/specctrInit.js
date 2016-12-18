@@ -70,7 +70,7 @@ Specctr.Init.init = Specctr.Utility.tryCatchLog(function() {
     this.setModelToUIComponents();
     this.setModelToResponsive();
     this.setVersionAtBottom(function(version) { 
-        analytics.trackFeature('initialized');
+        analytics.trackEvent('panel.initialized');
     });
  
     Specctr.Auth.checkStatus(Specctr.Activation);

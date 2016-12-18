@@ -89,7 +89,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
         SPECCTR_HOST = activationPrefs.host;
     }
 	
-	analytics.trackFeature('loaded');
+	analytics.trackEvent('panel.loaded');
 	if (isLicensed)
 		Specctr.Init.init();
 	
