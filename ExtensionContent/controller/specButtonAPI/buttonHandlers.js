@@ -40,9 +40,12 @@ Specctr.buttonHandlers = {
 	 * Call the 'exportCss' method from .jsx based on host application.
 	 */
 	exportCss : Specctr.Utility.tryCatchLog(function(ev){
-        if ($(ev.currentTarget).hasClass('disabled')) return;
+        if ($(ev.currentTarget).hasClass('disabled')) {
+		    analytics.trackFeature('cloud.upload_css_disabled');
+            return;
+        }
 
-		analytics.trackFeature('export_css');
+		analytics.trackFeature('cloud.upload_css');
 		var selectedProjRef = $("#projectTable").find('.highlight').find('td:first'); 
 		var projectName = selectedProjRef.html();
 		if(!projectName) {

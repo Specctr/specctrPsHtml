@@ -195,6 +195,7 @@ pref.log = pref.info = function(message) {
 pref.logError = pref.error = function(err) {
     pref.snagBug(err);
 	pref.log(err.stack);
+    analytics.trackError('err');
 };
 
 pref.logResSuccess = function(xhr, response) {
@@ -210,4 +211,5 @@ pref.logResError = function(xhr, message) {
     pref.snagBug(new Error(err));
 	pref.log(err);
 	if (message) pref.log(message);
+    analytics.trackError('res_err');
 };

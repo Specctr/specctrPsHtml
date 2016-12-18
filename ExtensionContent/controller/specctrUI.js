@@ -42,6 +42,7 @@ Specctr.UI = {
 	 * Open url in default browser.
 	 */
 	openCloudSpecctrLink : Specctr.Utility.tryCatchLog(function(){
+		analytics.trackFeature('cloud.open_projects_link');
 		var csInterface = new CSInterface();
 		csInterface.openURLInDefaultBrowser(getHost());
 	}),
@@ -68,6 +69,8 @@ Specctr.UI = {
 	
 	// Show tab.
 	showTab: Specctr.Utility.tryCatchLog(function(ident) {
+		analytics.trackFeature('tabs.open_' + ident);
+
 		var tabElement = $('#tabHeader_' + ident)[0].parentNode;
 		var current = tabElement.getAttribute("data-current");
 
@@ -383,7 +386,9 @@ Specctr.UI = {
 	}),
 	
 	cloudTextHandler : Specctr.Utility.tryCatchLog(function(event) {
-		if (event.keyCode == 13 || event.target.id == "cloudTextPlus") {
+		if (event.keyCode == 13 || event.target.id == "cloudTextPlus") {  
+		    analytics.trackFeature('cloud.add_project');
+
 			var text = $("#cloudText").val();
 			//trim text;
 			try{

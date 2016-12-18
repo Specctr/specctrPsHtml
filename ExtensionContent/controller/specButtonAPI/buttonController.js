@@ -69,6 +69,8 @@ buttonController.cloudButtonHandler = function() {
 		return;
 	}
 
+
+	analytics.trackFeature('cloud.choose_project');
 	//Check if document is open or not and fetch the project Id associated with it.
 	setModel();
 	evalScript("$.specctr" + hostApplication + ".getProjectIdOfDoc()", function (projectId) {
