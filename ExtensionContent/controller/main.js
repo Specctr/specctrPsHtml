@@ -42,7 +42,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
         */
 		
 	} else if (hostApplication === illustrator) {
-		addApplicationEventListener();
+		//addApplicationEventListener();
 	}
 	
 	appPrefs = pref.readAppPrefs();	//Read the config file and look for the isLicensed value.
@@ -265,25 +265,39 @@ function loseFocusFromPanel() {
  * Add Ai event listener for art selection change.
  */
 function addApplicationEventListener(response) { 
-	try {
-		AIEventAdapter.getInstance().addEventListener(AIEvent.ART_SELECTION_CHANGED, 
-				selectionChangeListener);
-	} catch(e) {
-		alert(e);
-	}
+//	try {
+//		AIEventAdapter.getInstance().addEventListener(AIEvent.ART_SELECTION_CHANGED, 
+//				selectionChangeListener);
+//		
+//		//Undo
+//		AIEventAdapter.getInstance().addEventListener(AIEvent.UNDO_COMMAND_PRE, 
+//				setUndoFlag);
+//		
+//	} catch(e) {
+//		alert(e);
+//	}
 }
 
 /**
  * Calling updateConnection method on art selection change notifier for Ai.
  */
-function selectionChangeListener(event) {
-	try {
-		//Remove eventListener.
-		AIEventAdapter.getInstance().removeEventListener(AIEvent.ART_SELECTION_CHANGED, 
-				selectionChangeListener);
-
-		setModel();
-		evalScript("$.specctr" + hostApplication + ".updateConnection()", addApplicationEventListener);
-	} catch (e) {}
-
-}
+//function selectionChangeListener(event) {
+//	try {
+//		if(bUndoFlag) {
+//			bUndoFlag = false;
+//			return;
+//		}
+//		
+//		//Remove eventListener.
+//		AIEventAdapter.getInstance().removeEventListener(AIEvent.ART_SELECTION_CHANGED, 
+//				selectionChangeListener);
+//
+//		setModel();
+//		evalScript("$.specctr" + hostApplication + ".updateConnection('"+ bUndoFlag +"')", addApplicationEventListener);
+//	} catch (e) {}
+//
+//}
+//
+//function setUndoFlag(event) {
+//	bUndoFlag = true;
+//}

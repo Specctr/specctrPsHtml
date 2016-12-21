@@ -104,6 +104,8 @@ var filePermission = {
 	ReadWriteExecute : 0777
 };
 
+var bUndoFlag = false;
+
 var isDarkInterface = false;
 var configFilePath = '';
 var extensionId = '';
