@@ -174,6 +174,7 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     
     if(decimalValue <= lightThemeColorValue) {		//Dark theme. 
     	$(".button label").css("color", "#ffffff");					//value to be applied on all text.
+    	$(".disableButton label").css("color", "#ffffff");
     	$('.tabTitle').css('color', "#ffffff");
     	$('.tabPage2Content').css('color', '#878787');
     	$('#tabpage_3').css('color', '#878787');
@@ -195,6 +196,7 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     
     } else {											//Light theme.
     	$(".button label").css("color", "#212121");					//value to be applied on all text.
+    	$(".disableButton label").css("color", "#212121");
     	$('.tabTitle').css('color', "#212121");
     	$('.tabPage2Content').css('color', '#4d4d4d');
     	$('#tabpage_3').css('color', '#666666');
