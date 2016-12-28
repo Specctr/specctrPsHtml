@@ -460,6 +460,7 @@ label {
 	background-image: linear-gradient(to bottom, #E1E1E1 0%, #F8F8F8 20%);
 	border-top: none;
 	margin-top: -1px !important;
+	z-index: 1;
 }
 
 .option {
