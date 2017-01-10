@@ -28,11 +28,22 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 		
 		$(".psElement").show();
 		$(".nonPsElement").hide();
-		lightThemeColorValue = psLightThemeColorVal;
+		lightThemeColorValue = psLightThemeColorValue;
 		extraLightThemeColorValue = psExtraLightThemeColorValue;
 		extraDarkThemeColorValue = psExtraDarkThemeColorValue;
 		
 	} else if (hostApplication === illustrator) {
+		var csInterface = new CSInterface();
+		var appInfo = csInterface.getHostEnvironment();
+		
+		//For AI CC 2017, app version = 21.0.0. These values will set for
+		//all app version greater than 21.0.0.
+		if(appInfo.appVersion >= AICC17Version) {
+			lightThemeColorValue = aiLightThemeColorValue;
+			extraLightThemeColorValue = aiExtraLightThemeColorValue;
+			extraDarkThemeColorValue = aiExtraDarkThemeColorValue;
+		}
+		
 		addApplicationEventListener();
 	}
 	
@@ -172,6 +183,9 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     document.body.bgColor = hexValue;
     var decimalValue = Specctr.Utility.hexToDecimal(hexValue);
     
+    var csInterface = new CSInterface();
+	var appName = csInterface.hostEnvironment.appName;
+    
     if(decimalValue <= lightThemeColorValue) {		//Dark theme. 
     	$(".button label").css("color", "#ffffff");					//value to be applied on all text.
     	$(".disableButton label").css("color", "#ffffff");
@@ -206,8 +220,7 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     	if(decimalValue > extraLightThemeColorValue) {			//1st quadrant.
     		bgColorButton = "#EEEEEE";
     		bgColorHoverButton = "#FFFFFF";
-    	}
-    	else {
+    	} else {
     		bgColorButton = "#DBDBDB";	//2nd quadrant.
     		bgColorHoverButton = "#EEEEEE";
     	}

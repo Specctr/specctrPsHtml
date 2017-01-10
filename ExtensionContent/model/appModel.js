@@ -103,10 +103,20 @@ var bgColorButton = '';
 var bgColorHoverButton = '';
 
 var imagePath = "../assets/images/";
+
+var AICC17Version = "21.0.0";
+
+//For others i.e Indesign and AI.
+var extraDarkThemeColorValue = 4737096;		//Threshold point for extra dark theme.
 var lightThemeColorValue = 5395026;		//Threshold point for light theme.
 var extraLightThemeColorValue = 12698049;	//Threshold point for extra light theme.
-var extraDarkThemeColorValue = 4737096;		//Threshold point for extra dark theme.
 
-var psLightThemeColorVal = 5460820;
-var psExtraLightThemeColorValue = 12105913;
+//For AI CC 2017 and later version.
+var aiExtraDarkThemeColorValue = 3289651;		//Threshold point for extra dark theme.
+var aiLightThemeColorValue = 5460819;		//Threshold point for light theme.
+var aiExtraLightThemeColorValue = 12105912;	//Threshold point for extra light theme.
+
+//For photoshop CC to CC 2017
 var psExtraDarkThemeColorValue = 3421237;
+var psLightThemeColorValue = 5460820;
+var psExtraLightThemeColorValue = 12105913;
