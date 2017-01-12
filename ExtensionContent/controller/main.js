@@ -30,7 +30,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 		
 		$(".psElement").show();
 		$(".nonPsElement").hide();
-		lightThemeColorValue = psLightThemeColorVal;
+		lightThemeColorValue = psLightThemeColorValue;
 		extraLightThemeColorValue = psExtraLightThemeColorValue;
 		extraDarkThemeColorValue = psExtraDarkThemeColorValue;
 
@@ -42,6 +42,17 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
         */
 		
 	} else if (hostApplication === illustrator) {
+		var csInterface = new CSInterface();
+		var appInfo = csInterface.getHostEnvironment();
+		
+		//For AI CC 2017, app version = 21.0.0. These values will set for
+		//all app version greater than 21.0.0.
+		if(appInfo.appVersion >= AICC17Version) {
+			lightThemeColorValue = aiLightThemeColorValue;
+			extraLightThemeColorValue = aiExtraLightThemeColorValue;
+			extraDarkThemeColorValue = aiExtraDarkThemeColorValue;
+		}
+		
 		//addApplicationEventListener();
 	}
 	
