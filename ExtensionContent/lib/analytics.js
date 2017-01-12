@@ -7,9 +7,16 @@ var HG_KEY = 'c9070102-3a4f-4fb1-8c6b-542159440c4a';
 analytics = {};
 
 analytics.send = function(stat, value) {
-    var socket = net.createConnection(2003, "https://61bdfcd3.carbon.hostedgraphite.com", function() {
-        socket.write(HG_KEY + "." + stat + " " + value + "\n");
-        socket.end();
+    var socket = net.createConnection(2003, "https://61bdfcd3.carbon.hostedgraphite.com");
+    socket.on('data', function(data) {
+	  console.log('RESPONSE: ' + data);
+	}).on('connect', function() {
+		socket.write(HG_KEY + "." + stat + " " + value + "\n");
+		socket.end();
+	}).on('end', function() {
+	  console.log('HostedGraphite connection ended');
+	}).on('error', function(error) {
+		console.log(error);
     });
 };
 
