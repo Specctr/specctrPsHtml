@@ -15,8 +15,22 @@ analytics.send = function(stat, value) {
 		socket.end();
 	}).on('end', function() {
 	  console.log('HostedGraphite connection ended');
-	}).on('error', function(error) {
-		console.log(error);
+	}).on('error', function(err) {
+        var email;
+        if (Specctr && Specctr.Activation && Specctr.Activation.email) {
+            email = Specctr.Activation.email.replace("@","_at_");
+            email = email.replace(/\./g, "_");
+        }else{
+            email = "no_email";
+        }
+
+        var version;
+        if (Specctr && Specctr.Version) {
+            version = Specctr.Version.replace(/\./g, "_");
+        }else{
+            version = "no_version";
+        }
+        bugsnag.notify(err, {user: {email: email}, version: version});
     });
 };
 
@@ -35,6 +49,7 @@ analytics.prefix = function() {
     var email;
     if (Specctr && Specctr.Activation && Specctr.Activation.email) {
         email = Specctr.Activation.email.replace("@","_at_");
+        email = email.replace(/\./g, "_");
     }else{
         email = "no_email";
     }
