@@ -7,7 +7,7 @@ var HG_KEY = 'c9070102-3a4f-4fb1-8c6b-542159440c4a';
 analytics = {};
 
 analytics.send = function(stat, value) {
-    var socket = net.createConnection(2003, "https://61bdfcd3.carbon.hostedgraphite.com");
+    var socket = net.createConnection(2003, "61bdfcd3.carbon.hostedgraphite.com");
     socket.on('data', function(data) {
 	  console.log('RESPONSE: ' + data);
 	}).on('connect', function() {
