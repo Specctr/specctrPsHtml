@@ -37,10 +37,10 @@ mkdir -p $WIN_DIR
 cp $PKG_BUILD/$VERSION_NAME\.pkg $MAC_DIR/
 cp $EXE_BUILD/$VERSION_NAME\.exe $WIN_DIR/
 
-cd $STAGING
 cp changes.txt $ZIP_DIR
 cp tutorial_3_0.pdf $ZIP_DIR
 
+cd $STAGING/$VERSION
 zip -r $ZIP_DIR\.zip $VERSION_NAME
 cd $ROOT/specctrPsHtml
 
