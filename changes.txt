@@ -22,6 +22,12 @@ To view our tutorials and for support visit the Specctr Help Center: https://spe
 CHANGES
 -------
 
+v.3.1.32
+- Fixed the issue of not updating the panel theme in AI CC 2017.
+- Modified the code to provide the backward compatibility.
+- Updated the manifest version to 3.01.32.
+- Fixed the issue of not sending data to server in analytics js.
+
 v.3.1.31
 - Fix Ai stability issue by moving away from visVar.
 - Added units to border-radius spec in AI and PS both application.
@@ -41,13 +47,15 @@ v.3.1.21
 - Changed the UI for login page, cloud upload page and fourth tab page as per the SpecctrCloudPanel_Updates.pdf.
 - Fixed some minor styling issues.
 
-v.3.1.19
-- Created from master branch at 08/23/2016.
-- Includes all the changes done by M from 3.1.18 to 3.1.19 version.v.3.1.20-h
+v.3.1.20
 - Created from master branch at 08/30/2016.
 - Fixed upload button issue in non-ps applications.
 - Includes the lastest specctr generator.
 - Fixed the placeholder issue in note button's text area.
+
+v.3.1.19
+- Created from master branch at 08/23/2016.
+- Includes all the changes done by M from 3.1.18 to 3.1.19 version.
 
 v.3.1.18
 - Created from master branch at 07/25/2016.
