@@ -2,3 +2,4 @@ specctrPsHtml/
 *.DS_Store
 *.zxp
 *.tmp
+staging/

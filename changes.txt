@@ -1,0 +1,159 @@
+Project Name: Specctr Cloud 3.0
+
+-------------
+HOW TO INSTALL 
+-------------
+
+Adobe CC
+1. Download Specctr installer from Specctr Cloud
+2. Run provided installer. OSX .pkg and WIN .exe. 
+3. Restart Ps/Ai/Id 
+4. Go to the Photoshop/Illustrator/InDesign Window Menu > Extensions and select Specctr
+5. Log in with your user name and password
+6. Spec Away!
+
+-------------
+TUTORIALS & SUPPORT
+-------------
+To view our tutorials and for support visit the Specctr Help Center: https://specctr.zendesk.com
+
+
+-------
+CHANGES
+-------
+
+v.3.1.31
+- Fix Ai stability issue by moving away from visVar.
+- Added units to border-radius spec in AI and PS both application.
+- Border styles to css conversion done and added units to width, height, xcoord and ycoord in css.
+- Fixed the issue of writing the undefined in art layer name in css of ps.
+- Fixed the issue of not showing opacity in property specs for text item.
+- Replaced the keyword "Alpha" to "Opacity" and display it within the range 0 to 1.
+
+v.3.1.22
+- Created from master branch at 09/15/2016.
+- Modified the fourth tab page styling.
+- Fixed the alignment issue of log in button.
+- Fixed the placeholder issue in note button's text area.
+
+v.3.1.21
+- Created from master branch at 09/14/2016.
+- Changed the UI for login page, cloud upload page and fourth tab page as per the SpecctrCloudPanel_Updates.pdf.
+- Fixed some minor styling issues.
+
+v.3.1.19
+- Created from master branch at 08/23/2016.
+- Includes all the changes done by M from 3.1.18 to 3.1.19 version.v.3.1.20-h
+- Created from master branch at 08/30/2016.
+- Fixed upload button issue in non-ps applications.
+- Includes the lastest specctr generator.
+- Fixed the placeholder issue in note button's text area.
+
+v.3.1.18
+- Created from master branch at 07/25/2016.
+- Fixed the coordinate issue. Now coordinate spec will be created with respect to the artboard left top origin.
+- Fixed the issue of not updating the justification of property specs.
+- Updated the manifest version to 3.1.18.
+- Fixed the issue of generating garbage value for bullet number if spec's arm updated to bullet.
+
+v.3.1.17
+- Created from master branch at 07/13/2016.
+- Added the feature to show the dimension and spacing value in fraction in Ai and Id.
+- Disable button until a connection to generator is made.
+- Fixed the issue of not working single/double quotes in note spec.
+- Cleaned up login styling a little by centering things better and widening login div to fill panel.
+- Centered welcome text. previous commit also introduced updated jquery theme as prev version was missing images.
+
+v.3.1.16
+- Created from specctrCloud branch at 07/01/2016.
+- Modified feature of starting bullet number from 1 whenever the specctr folder deleted in PS.
+- Removed the bullet feature from note specs in PS.
+- Modified logic to get the application version from manifest file and show it at panel bottom.
+
+v.3.1.15
+- Created from specctrCloud branch at 06/24/2016.
+- Updated specctrGenerator.
+- Fixed the issue of LOGIN label alignment.
+- Disabled upload button while no connection.
+- Make it compatible with PS CC 2015.5 and AI CC 2015.3.
+
+v.3.1.14
+- Created from specctrCloud branch at 05/27/2016.
+- Fixed AI "Internal Error" alert issue.
+- Modified login page styling.
+- Modified the selected tab icons.
+- Fixed the issue of not selecting the default font to Arial in Indesign.
+- Changed the whole blue color to #4990E2.
+- Added logic to get the version from manifest file.
+
+v.3.1.13
+- Created from specctrCloud branch at 04/04/2016.
+- Fixed alignment issue of check box with label and text boxes and labels.
+
+v.3.1.12
+- Created from specctrCloud branch at 03/27/2016.
+- Completed bullet feature for Indesign.
+
+v.3.1.11
+- Created from specctrCloud branch at 02/28/2016.
+- Completed coordinate spec feature in Indesign.
+- Fixed update arm issue of property spec.
+- Changed Cloud Download to Download Css and Cloud Upload to Upload Beta.
+
+v.3.1.10
+- Created from specctrCloud branch at 02/17/2016.
+- Added note spec feature to indesign.
+
+v.3.1.09
+- Created from specctrCloud branch at 02/03/2016.
+- Added upload/download css feature to indesign.
+
+v.3.1.08
+- Created from specctrAllInOne branch at 01/27/2016.
+- Added layer_id, layer_name, layer_index etc. attributes to css in ps and ai.
+- Added feature to place specctr-generator folder to plugins Generator folder via installers/packages.
+
+v.3.1.07
+- Created from specctrAllInOne branch at 01/04/2016.
+- Fixed dialog issue on creating property spec in Indesign.
+- Added feature to refresh API keys in memory.
+- Added feature to show default sign-in window when no one is signed in.
+
+v.3.1.06
+- Created from Cloud branch at 11/26/2015.
+- Sync all object properties in AI and PS.
+- Changed version number to v.3.01.06.
+
+v.3.1.05
+- Created from Cloud branch at 11/02/2015.
+- Fixed checkbox label's color on dark interface color to make it more visible.
+- Fixed "Could not transform..." issue.
+- Fixed spec fall off the board in regular and artboard docs.
+- Fixed cloud download and upload feature with artboard docs.
+- Changed version number to v.3.01.05 and aligned it to right.
+
+v.3.1.04
+- Created from Cloud branch at 10/14/2015.
+- Added version to left bottom of panel.
+- Added separate sessions stored for buttons feature.
+- Fixed Mouse pointer style inconsistency.
+- Fixed off center panel.
+- Fixed some issues of the upload css feature.
+- Fixed setting button issue.
+- Fixed spec button dropdown issue.
+
+v.3.1.03
+- Created from Cloud branch at 09/18/2015.
+- Added feature to download css to desktop.
+
+v.3.1.02
+- Created from Cloud branch at 09/14/2015.
+- Fixed some cloud upload feature issues.
+- Made changes in cloud upload button UI.
+
+v.3.1.01
+- Created from Cloud branch at 09/08/2015.
+- Added cloud feature to specctr.
+- Created from Cloud branch at 09/08/2015.
+- Implemented method to send project_name to request.
+- Added method to know if project name is already existed or not.
