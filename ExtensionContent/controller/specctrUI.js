@@ -11,6 +11,7 @@ Specctr.UI = {
 	 * Description	: Redirect to specctr home page.
 	 */
 	bannerClickHandler : function(){
+		analytics.trackFeature('cloud.banner_link');
 		window.cep.util.openURLInDefaultBrowser("http://specctr.com/?utm_source=aiPanelLite&utm_medium=banner&utm_content=bottomBuyBanner&utm_campaign=specctrProduct");
 	},
 	
@@ -62,6 +63,8 @@ Specctr.UI = {
 	
 	// Show tab.
 	showTab: Specctr.Utility.tryCatchLog(function(ident) {
+		analytics.trackFeature('tabs.open_' + ident);
+		
 		var tabElement = $('#tabHeader_' + ident)[0].parentNode;
 		var current = tabElement.getAttribute("data-current");
 
@@ -378,6 +381,8 @@ Specctr.UI = {
 	
 	cloudTextHandler : Specctr.Utility.tryCatchLog(function(event) {
 		if (event.keyCode == 13) {
+			analytics.trackFeature('cloud.add_project');
+			
 			var text = $("#cloudText").val();
 			//trim text;
 			try{

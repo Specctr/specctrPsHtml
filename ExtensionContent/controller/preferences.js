@@ -163,6 +163,7 @@ pref.log = function(message) {
 
 pref.logError = function(e) {
 	pref.log(e.stack);
+    analytics.trackError('err');
 };
 
 pref.logResSuccess = function(xhr, response) {
@@ -176,4 +177,5 @@ pref.logResError = function(xhr, message) {
 	var response = JSON.parse(xhr.responseText);
 	pref.log(xhr.status + " - " + response.message);
 	if (message) pref.log(message);
+    analytics.trackError('res_err');
 };

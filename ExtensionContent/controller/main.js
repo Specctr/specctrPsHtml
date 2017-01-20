@@ -67,6 +67,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	updateThemeWithAppSkinInfo(csInterface.hostEnvironment.appSkinInfo);
 	csInterface.addEventListener(CSInterface.THEME_COLOR_CHANGED_EVENT, onAppThemeColorChanged);
 
+	analytics.trackEvent('panel.loaded');
 	Specctr.Init.init();
 	
 	$("#spinnerBlock").hide();
