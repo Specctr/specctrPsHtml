@@ -25,10 +25,9 @@ $.specctrPsCommon = {
     //Get the active layer.
     getActiveLayer : function() {
         var selectedArtItems = this.getSelectedLayers();
-        if(selectedArtItems.length !== 1) {
-            alert("Please select only one art item!");
+        if(selectedArtItems.length !== 1) 
             return;
-        }
+            
         return app.activeDocument.activeLayer;
     },
 
@@ -95,10 +94,8 @@ $.specctrPsCommon = {
     startUpCheckBeforeSpeccing : function(artLayer) {
         try {
             var isLayerValidForSpeccing = true;
-            if(artLayer.typename === "LayerSet" || artLayer.isBackgroundLayer) {
-                alert("Please select one shape or text layer");
+            if(artLayer.typename === "LayerSet" || artLayer.isBackgroundLayer)
                 return false;
-            }
             
             if(ExternalObject.AdobeXMPScript == null)
                 ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.

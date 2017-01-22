@@ -25,7 +25,7 @@ $.specctrPsProperties = {
                 || model.textEffects)
                 return true;
             else
-                return false;
+                return "Please select the checkboxes for text specs.";
                 
         } else {
             
@@ -33,7 +33,7 @@ $.specctrPsProperties = {
                 || model.shapeAlpha ||  model.shapeEffects || model.shapeBorderRadius)
                 return true;
             else
-                return false;
+                return "Shape specs unavailable in Specctr Lite.";
                 
         }
     },
@@ -42,12 +42,12 @@ $.specctrPsProperties = {
     createPropertySpecsForItem : function() {
         try {
             var sourceItem = $.specctrPsCommon.getActiveLayer();
-            if(sourceItem === null)
-                return;
+            if(!sourceItem || !$.specctrPsCommon.startUpCheckBeforeSpeccing(sourceItem))
+                return "Please select single art item to spec!";
 
             var isPropertyChecked = this.propertyChecked(sourceItem.kind);
-            if(!isPropertyChecked)
-                return "Please select the checkboxes from properties.";
+            if(isPropertyChecked != true)
+                return isPropertyChecked;
                 
             if(sourceItem.isBackgroundLayer)
                 return "Please select layer other than background.";
@@ -548,14 +548,15 @@ $.specctrPsProperties = {
                 
                 //Get color
                 if(color == "") color = this.getDefaultColor();
-                
+                  
                 color = this.colorAsString(color);
+                var isColorContainAlpha = false;
 
-                if(alpha != "" && color.indexOf("(") >= 0) {
+                if(color.indexOf("(") >= 0 && model.textAlpha) {
+                    isColorContainAlpha = true;
                     color = this.convertColorIntoCss(color, alpha);
-                    alpha = "";
                 }
-
+            
                 // Get the style of the text item.
                 var styleString = "normal", textDecorationStyle = "";
                 if (bold == true) styleString = "bold";
@@ -614,7 +615,7 @@ $.specctrPsProperties = {
                 cssText += "line-height:" + leading+";";
                 cssText += "letter-spacing:" + tracking+";";
                 
-                if(alpha != "") 
+                if(!isColorContainAlpha) 
                     cssText += "opacity:" + alpha+";";
 
                 //Add properties which are enabled in details tab.
@@ -632,7 +633,7 @@ $.specctrPsProperties = {
                 if (model.textAlignment) infoText += "\rText-Align: " + alignment;
                 if (model.textLeading) infoText += "\rLine-Height: " + leading;
                 if (model.textTracking) infoText += "\rLetter-Spacing: " + tracking;
-                if (alpha != "") infoText += "\rOpacity: " + alpha;
+                if (!isColorContainAlpha && model.textAlpha) infoText += "\rOpacity: " + alpha;
             
                 if (model.textEffects) {
                     var strokeVal = this.getStrokeValOfLayer(pageItem);
@@ -931,6 +932,9 @@ $.specctrPsProperties = {
 
     //Convert color into css style.
     convertColorIntoCss : function(color, alpha) {
+        if(alpha == "")
+            return color;
+            
         var index = color.indexOf("(");
         color = color.substr(0, index)+"a"+color.substr(index)
         color = color.substr(0, color.length-1)+", "+alpha+")";

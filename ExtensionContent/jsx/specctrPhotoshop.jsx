@@ -69,40 +69,32 @@ $.specctrPs = {
 
     //Call create canvas border method from specctrPsExpandCanvas jsx file.
     createCanvasBorder : function() {
-        $.specctrPsExpandCanvas.createCanvasBorder();
+        return $.specctrPsExpandCanvas.createCanvasBorder();
     },
 
     //Call create dimension spec method from specctrPsDimension jsx file.
     createDimensionSpecs : function() {
-        $.specctrPsDimension.createDimensionSpecsForItem();
-        return true;
+        return $.specctrPsDimension.createDimensionSpecsForItem();
     },
     
     //Call create spacing spec method from specctrPsSpacing jsx file.
     createSpacingSpecs : function() {
-        $.specctrPsSpacing.createSpacingSpecs();
-        return true;
+        return $.specctrPsSpacing.createSpacingSpecs();
     },
 
     //Call create coordinate spec method from specctrPsCoordinates jsx file.
     createCoordinateSpecs : function() {
-        $.specctrPsCoordinates.createCoordinateSpecs();
-        return true;
+        return $.specctrPsCoordinates.createCoordinateSpecs();
     },
 
     //Call create property spec method from specctrPsProperties jsx file.
     createPropertySpecs : function() {
-        var message = $.specctrPsProperties.createPropertySpecsForItem();
-        if(message)
-            return message;
-            
-        return true;
+       return $.specctrPsProperties.createPropertySpecsForItem();
     },
 
     //Call create add note spec method from specctrPsAddNotes jsx file.
     addNoteSpecs : function(noteText) {
-        $.specctrPsAddNote.addNoteSpecs(noteText);
-        return true;
+        return $.specctrPsAddNote.addNoteSpecs(noteText);
     },
 
     //Call create exportCss method from specctrPsExportCss jsx file.

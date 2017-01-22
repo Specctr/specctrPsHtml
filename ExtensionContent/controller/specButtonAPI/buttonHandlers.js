@@ -12,6 +12,12 @@ Specctr.buttonHandlers = {
 	expandCanvas : Specctr.Utility.tryCatchLog(function(){
 		analytics.trackFeature('expand_canvas');
 		buttonController.closeAllDropDown();
+		var value = $("#canvasExpandSize").val(); 
+		if (value == "" || value == '0') {
+			specctrDialog.showAlert("Please enter expand canvas size in dropdown!");
+			return;
+		}
+		
 		setModel();
 		evalScript("$.specctr" + hostApplication + "." + "createCanvasBorder()");
 		pref.writeAppPrefs();

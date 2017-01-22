@@ -16,8 +16,8 @@ $.specctrPsAddNote = {
    addNoteSpecs : function(noteText) {
        try {
             var sourceItem = $.specctrPsCommon.getActiveLayer();
-            if(sourceItem === null || !$.specctrPsCommon.startUpCheckBeforeSpeccing(sourceItem))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
-                return;
+            if(!sourceItem|| !$.specctrPsCommon.startUpCheckBeforeSpeccing(sourceItem))      //Check if layer is valid for speccing i.e. not an artlayer set or specced object.
+                return "Please select single art item to spec!";
 
             var pref = app.preferences;
             var startRulerUnits = pref.rulerUnits; 

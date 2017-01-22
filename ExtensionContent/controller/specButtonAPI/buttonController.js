@@ -6,15 +6,12 @@ calling jsx methods etc.
 
 var buttonController = {};
 
-function CommonCallBack() {
-	$("#spinnerBlock").hide();
-}
-
-function PropertyCallBack(msg) {
+function CommonCallBack(msg) {
 	$("#spinnerBlock").hide();
 	
 	if(msg != "true" && msg != "undefined" && msg != "")
 		specctrDialog.showAlert(msg);
+	
 }
 
 /**
@@ -54,7 +51,7 @@ buttonController.createPropertySpecs = function() {
 	analytics.trackFeature('create_property_specs');
 	setModel();
 	$("#spinnerBlock").show();
-	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()", PropertyCallBack);
+	evalScript("$.specctr" + hostApplication + "." + "createPropertySpecs()", CommonCallBack);
 };
 
 buttonController.cloudButtonHandler = function() {

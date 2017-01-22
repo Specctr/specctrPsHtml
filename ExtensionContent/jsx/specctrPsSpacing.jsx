@@ -36,8 +36,7 @@ $.specctrPsSpacing = {
                 var artLayer2 = $.specctrPsCommon.selectLayerByIndex(selectedArtItems[1]);
 
                 if(artLayer1.typename === "LayerSet" || artLayer2.typename === "LayerSet") {
-                    alert("Please select shape layers or text layers only.");
-                    return;
+                    return "Please select shape layers or text layers only.";
                 }
 
                 doc.activeLayer = artLayer1;
@@ -117,8 +116,7 @@ $.specctrPsSpacing = {
                     if(artBoardBounds == null) {
                         pref.rulerUnits = startRulerUnits;
                         pref.typeUnits = startTypeUnits;
-                        alert("Property not applicable for this artlayer.");
-                        return;
+                        return "Spec not applicable for artboards.";
                     }
                 } else {
                     artBoardBounds = null;
@@ -128,7 +126,7 @@ $.specctrPsSpacing = {
                 pref.typeUnits = startTypeUnits;
                 app.activeDocument.suspendHistory('Spacing spec', 'this.createSpacingSpecsForSingleItem(artLayer, bounds)');
             } else {
-                alert("Please select one or two shape/text layer(s)!");
+                return "Please select one or two shape/text layer(s) to spec!";
             }
         } catch(e) {}
     },
