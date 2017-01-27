@@ -61,7 +61,8 @@ analytics.prefix = function() {
         version = "no_version";
     }
     
-    return namespace + '.' + version + '.' + os + '.' + hostApplication + '.' + extId + '.' + email;
+    //return namespace + '.' + version + '.' + os + '.' + hostApplication + '.' + extId + '.' + email;
+    return namespace;
 };
 
 analytics.trackFeature = function(feature) {
