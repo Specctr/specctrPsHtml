@@ -21,6 +21,8 @@ To view our tutorials and for support visit the Specctr Help Center: https://spe
 -------
 CHANGES
 -------
+v.3.1.33
+- Reduce analytics prefix.
 
 v.3.1.32
 - Fixed the issue of not updating the panel theme in AI CC 2017.
