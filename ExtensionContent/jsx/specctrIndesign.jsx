@@ -1753,11 +1753,11 @@ $.specctrId = {
                     arm.paths[0].entirePath =[[armX2,specBounds.y1],[armX2+dx,specBounds.y1],[armX1,centerY]];
                 }
                 arm.insertLabel("specctrSourceId",pageItem.id.toString());
-               arm.insertLabel("specctrType","specctrInfoArm");
+                arm.insertLabel("specctrType","specctrInfoArm");
             }
 
                 var circleD = this.circleDiameter(model.armWeight);
-            if (!itemCircle && model.specOption == "Bullet") {
+            if (!itemCircle && model.specOption == "Line") {
                 
                 if(centerX>= specBounds.center.x) {
                     itemCircle = currPage.ovals.add(legendLayer, undefined, undefined,{strokeWeight:model.armWeight, fillColor:"Paper", strokeColor:newColor , geometricBounds:[centerY-circleD/2,pageItemBounds.x1-circleD/2,centerY+circleD/2,pageItemBounds.x1+circleD/2]});
@@ -2192,264 +2192,245 @@ lightnessTint : function(val,tint)
         return Math.round(Math.min(100,Math.max(0,val+(100-val)*tint/100)));
 },
 
-getSpecsInfoForItem : function(pageItem,itemType)
-				{
-
-					var infoText="";
-                      if(pageItem.name) infoText=pageItem.name+"\r"; //make it bold
-                      
-                      var cssText = "";  //"." ???
-                      /*
-                      
-                      
-                      if(pageItem.name) cssText+=pageItem.name.toLowerCase();
-                      else cssText+=pageItem.constructor.name.toLowerCase();
-                      
-                      cssText+= " {\r\t" + pageItem.constructor.name.toLowerCase() + ";";   //?
-                      */
-                      if(itemType=="shape" || itemType=="mixed") //shape properties
-                      {
-
-                         if(model.shapeFillStyle || model.shapeFillColor) 
-						try{
+getSpecsInfoForItem : function(pageItem,itemType) 
+{
+    var infoText="", name = "";
+    var cssText = "";  
     
-							infoText+="Background: ";
-                              cssText += "\tfill: ";
-                              
-							if(model.shapeFillStyle)
-							{
-								if (pageItem.fillColor.name=="None")
-                                    {
-									infoText+="None";
-                                     cssText += "none;";
-                                     }
-                                     else
-                                     cssText += "solid;";
-							}
+    //shape properties.
+    if(itemType=="shape") {
+        if(pageItem.name) 
+            name = pageItem.name;
+        else
+            name = "<Shape>";
+        
+        if(model.shapeLayerName)
+            infoText=name+"\r";
 
-							if(model.shapeFillColor && pageItem.fillColor.name!="None")
-                            {
-                                 var color = this.colorAsString(pageItem.fillColor,pageItem.fillTint);
-								infoText+=color;
-                                    cssText += "\r\tcolor: "+color.toLowerCase()+";";
-                                }
-                            //tint?
-                              infoText+="\r";
-
-						}catch(e){};
-
-
-					if (model.shapeStrokeStyle || model.shapeStrokeColor || model.shapeStrokeSize) 
-						try{
-							if (pageItem.strokeWeight!=0) infoText+="Border: ";
-                            
-                            
-                            if(model.shapeStrokeSize && pageItem.strokeWeight!=0)
-                            {
-                                    var strokeWidth = this.pointsToUnitsString(pageItem.strokeWeight,null);
-                                    infoText+=  strokeWidth;
-                                    cssText += "\r\tstroke-width: " + strokeWidth + ";";
-                              }
-                          
-                            if(model.shapeStrokeColor && pageItem.strokeWeight!=0)
-                            {
-                                 var strokeColor = this.colorAsString(pageItem.strokeColor,pageItem.strokeTint);
-                                infoText+=", "+strokeColor; 
-                                cssText += "\r\tstroke-color: " + strokeColor.toLowerCase() + ";";
-                
-								   
-                              }  
-
-							if(model.shapeStrokeStyle)
-                                {
-                                    cssText += "\r\tstroke-style: ";
-								 if (pageItem.strokeWeight!=0) 
-                                    {
-                                        infoText+=", "+pageItem.strokeType.name.toLowerCase();
-                                    cssText += pageItem.strokeType.name.toLowerCase()+";";
-                                    }
-                                    else cssText += "none;";
-                                 }   
-                              
-                                if (pageItem.strokeWeight!=0) infoText+="\r";
-
-						}catch(e){};
-                        
-                        
-                        if(model.shapeBorderRadius)
-                        try{
-                                //check if we have radius on any corner
-                                 if(pageItem.topRightCornerOption!=CornerOptions.NONE || pageItem.topLeftCornerOption!=CornerOptions.NONE || pageItem.bottomRightCornerOption!=CornerOptions.NONE || pageItem.bottomLeftCornerOption!=CornerOptions.NONE)
-                                {
-                                    var myRadius = Math.max(pageItem.topRightCornerRadius,pageItem.topLeftCornerRadius,
-                                    pageItem.bottomRightCornerRadius,pageItem.bottomLeftCornerRadius);
-                                    if(myRadius!=0)
-                                    {
-                                    infoText+="Border radius: ";
-                                    var roundCornerValue = this.pointsToUnitsString(myRadius,null);
-                                    infoText+= roundCornerValue;
-                                     infoText+="\r";
-                                     cssText += "\r\tborder-radius: " + roundCornerValue + ";";
-                                     }
-                                }
-                            }catch(e){}
-                        
-                        if(model.shapeAlpha)
-                        {
-                            var alpha = Math.round(pageItem.transparencySettings.blendingSettings.opacity)+"%"; 
-                            infoText+="Opacity: "+  alpha + "\r";      
-                            cssText += "\r\topacity: " + alpha + ";";
-                        }
-                       
-                      }
-                      
-                    
-                      if(itemType=="text" || itemType=="mixed") //text properties
-                      {
-
-                         var fontSize, leading;
-
-                        if(model.specInEM)
-                        {
-                        var rltvFontSize = 16, rltvLineHeight = undefined;
+        if(model.shapeFillStyle || model.shapeFillColor) 
+        try{
+            infoText+="Background: ";
+            cssText += "\tfill: ";
             
-                        if(model.baseFontSize != 0 && !isNaN(model.baseFontSize))
-                            rltvFontSize = parseFloat(model.baseFontSize);
-             
-                        if(model.baseLineHeight != 0 && !isNaN(model.baseLineHeight))
-                            rltvLineHeight = parseFloat(model.baseLineHeight);
-                        else
-                                rltvLineHeight = rltvFontSize * 1.4;
-                        }
-    
+            if(model.shapeFillStyle) {
+                if(pageItem.fillColor.name=="None") {
+                    infoText+="None";
+                    cssText += "none;";
+                 } else {
+                     infoText+="solid";
+                     cssText += "solid;";
+                 }
+            }
 
-                         var styleRanges = pageItem.texts[0].textStyleRanges.everyItem().getElements().slice(0);
-                         var prevStyleRangeSpec = "";
-                         var cssRanges = [];
-                         
-                         for(var i=0;i<styleRanges.length;i++)
-                        try{
-                        var textItem = styleRanges[i].characters[0];
-                        var currStyleRangeSpec = "";
-                        var currCssRange = "";
-						if(model.textFont)
-							try{
-                                currStyleRangeSpec+="Font-Family: "+textItem.appliedFont.fullName;
-                                currStyleRangeSpec+="\r";
-                                currCssRange += "\r\tfont-family: " + textItem.appliedFont.fullName + ";";
-                                }catch(e){}
+			if(model.shapeFillColor && pageItem.fillColor.name!="None") {
+                var color = this.colorAsString(pageItem.fillColor,pageItem.fillTint);
+                infoText+=color;
+                cssText += "\r\tcolor: "+color.toLowerCase()+";";
+            }
+            
+            infoText+="\r";
+        }catch(e){}
 
-						if(model.textSize)
-                         try{
-                             var fontSize;
-                             if(model.specInEM)
-                             fontSize = Math.round(textItem.pointSize / rltvFontSize *100)/100+" em";
-                             else
-                             fontSize = Math.round(textItem.pointSize*10)/10+" "+this.typeUnits();
-                             
-                             currStyleRangeSpec+="Font-Size: "+ fontSize;
-                                currStyleRangeSpec+="\r";
-                                
-                                currCssRange += "\r\tfont-size: " + fontSize + ";";
-                                }catch(e){}
+        if (model.shapeStrokeStyle || model.shapeStrokeColor || model.shapeStrokeSize) 
+        try{
+            if (pageItem.strokeWeight!=0) infoText+="Border: ";
                             
-                            if(model.textColor)
-                             try{
-                                 var textColor = this.colorAsString(textItem.fillColor,textItem.fillTint);
-							currStyleRangeSpec+="Color: "+textColor;
-                            currStyleRangeSpec+="\r";
-                            currCssRange += "\r\tcolor: " + textColor.toLowerCase() + ";";
-                             }catch(e){}
+            if(model.shapeStrokeSize && pageItem.strokeWeight!=0) {
+                var strokeWidth = this.pointsToUnitsString(pageItem.strokeWeight,null);
+                infoText+=  strokeWidth;
+                cssText += "\r\tstroke-width: " + strokeWidth + ";";
+            }
+          
+            if(model.shapeStrokeColor && pageItem.strokeWeight!=0) {
+                var strokeColor = this.colorAsString(pageItem.strokeColor,pageItem.strokeTint);
+                infoText+=", "+strokeColor; 
+                cssText += "\r\tstroke-color: " + strokeColor.toLowerCase() + ";";
+            }  
 
-						if(model.textAlignment)
-						try{
-                            currStyleRangeSpec+="Text-Align: ";
-							var s = textItem.justification;	
-                            var currAlign;
-                            if(s==Justification.CENTER_ALIGN || s==Justification.CENTER_JUSTIFIED)
-							currAlign="center";
-                            if(s==Justification.LEFT_ALIGN || s==Justification.LEFT_JUSTIFIED)      
-							currAlign="left";
-                            if(s==Justification.RIGHT_ALIGN || s==Justification.RIGHT_JUSTIFIED)      
-                            currAlign = "right";
-							currStyleRangeSpec+=currAlign+" align";
-                            currStyleRangeSpec+="\r";
-                            
-                             currCssRange+= "\r\ttext-align: " + currAlign + ";";
-						}catch(e){}
-    
-						if(model.textLeading)
-                         try{
-                             var leading = textItem.leading;
-                             if (leading==Leading.AUTO) 
-                             leading = textItem.autoLeading/100*textItem.pointSize;
-                              
-                              if(model.specInEM)
-                           leading=Math.round(leading / rltvLineHeight*100)/100+" em";
-                           else
-						leading = Math.round(leading*10)/10+" "+this.typeUnits();
-                        
+            if(model.shapeStrokeStyle) {
+                cssText += "\r\tstroke-style: ";
+                if (pageItem.strokeWeight!=0) {
+                    infoText+=", "+pageItem.strokeType.name.toLowerCase();
+                    cssText += pageItem.strokeType.name.toLowerCase()+";";
+                } else{
+                    cssText += "none;";
+                }
+             }   
                           
-						currStyleRangeSpec+="Line-Height: "+leading;
+            if (pageItem.strokeWeight!=0) infoText+="\r";
+
+        }catch(e){}
                         
-                        currStyleRangeSpec+="\r";
-                        currCssRange+= "\r\tline-height: " + leading + ";";
-                        }catch(e){}
-
-						if(model.textTracking)
-                        try{
-                            var tracking = Math.round(textItem.tracking/1000*100)/100+" em";
-							currStyleRangeSpec+="Letter-Spacing: "+ tracking;
-                            currStyleRangeSpec+="\r";
-                            currCssRange+= "\r\tletter-spacing: " + tracking + ";";
-                            }catch(e){}
-
-						if(model.textStyle)
-						try{
-							var styleString;
-
-							if (textItem.capitalization==Capitalization.ALL_CAPS) styleString="All Caps";
-							if (textItem.capitalization==Capitalization.CAP_TO_SMALL_CAP) styleString="OpenType Small Caps";
-							if (textItem.capitalization==Capitalization.SMALL_CAPS) styleString="Small Caps";
-							if (textItem.capitalization==Capitalization.NORMAL) styleString="Normal";
-
-							if(textItem.position==Position.SUBSCRIPT) styleString+=" subscript";
-							if(textItem.position==Position.SUPERSCRIPT) styleString+=" superscript";
-							if (textItem.underline) styleString+=" underline";
-							if (textItem.strikeThru) styleString+=" strikethrough";
-
-
-							currStyleRangeSpec+="Font-Style: "+styleString;
-                           currStyleRangeSpec+="\r";
-                           currCssRange += "\r\tfont-style: " + styleString.toLowerCase() + ";";
-						}catch(e){}
-
-                    if(currStyleRangeSpec!=prevStyleRangeSpec)
+        if(model.shapeBorderRadius)
+        try{
+                //check if we have radius on any corner
+                 if(pageItem.topRightCornerOption!=CornerOptions.NONE || pageItem.topLeftCornerOption!=CornerOptions.NONE || pageItem.bottomRightCornerOption!=CornerOptions.NONE || pageItem.bottomLeftCornerOption!=CornerOptions.NONE)
+                {
+                    var myRadius = Math.max(pageItem.topRightCornerRadius,pageItem.topLeftCornerRadius,
+                    pageItem.bottomRightCornerRadius,pageItem.bottomLeftCornerRadius);
+                    if(myRadius!=0)
                     {
-                            infoText+=currStyleRangeSpec;
-                            prevStyleRangeSpec = currStyleRangeSpec;
-                            cssRanges.push(currCssRange);
-                    }
+                    infoText+="Border radius: ";
+                    var roundCornerValue = this.pointsToUnitsString(myRadius,null);
+                    infoText+= roundCornerValue;
+                     infoText+="\r";
+                     cssText += "\r\tborder-radius: " + roundCornerValue + ";";
+                     }
+                }
+            }catch(e){}
+        
+            if(model.shapeAlpha) {
+                var alpha = Math.round(pageItem.transparencySettings.blendingSettings.opacity)+"%"; 
+                infoText+="Opacity: "+  alpha + "\r";      
+                cssText += "\r\topacity: " + alpha + ";";
+            }
+      }
+      
+      //text properties
+      if(itemType=="text" || itemType=="mixed") {
+        name=pageItem.name;
+        var fontSize, leading;
+        
+        if(model.specInEM) {
+            var rltvFontSize = 16, rltvLineHeight = undefined;
 
-                    }catch(e){}//end for
-                
-                if(cssRanges.length)
-                    pageItem.insertLabel("css_ranges",cssRanges.toSource());
-                
-                     if(itemType=="text" && model.shapeAlpha)
-                     try{
-                         var alpha = Math.round(pageItem.transparencySettings.blendingSettings.opacity)+"%"; 
-						infoText+="Opacity: "+  alpha + "\r";                  
-                        cssText += "\r\topacity: " + alpha + ";";
-                            }catch(e){}
-                            
-                    }//end text
-	
+            if(model.baseFontSize != 0 && !isNaN(model.baseFontSize))
+                rltvFontSize = parseFloat(model.baseFontSize);
 
-                       pageItem.insertLabel("css_main",cssText);
-                       
-					return infoText;
-				},
+            if(model.baseLineHeight != 0 && !isNaN(model.baseLineHeight))
+                rltvLineHeight = parseFloat(model.baseLineHeight);
+            else
+                rltvLineHeight = rltvFontSize * 1.4;
+        }
+
+        var styleRanges = pageItem.texts[0].textStyleRanges.everyItem().getElements().slice(0);
+        var prevStyleRangeSpec = "";
+        var cssRanges = [];
+         
+        for(var i=0;i<styleRanges.length;i++)
+        try{
+            var textItem = styleRanges[i].characters[0];
+            var currStyleRangeSpec = "";
+            var currCssRange = "";
+            
+            if(!name) {
+                name = pageItem.contents;
+                var wordsArray = name.split(" ");
+                if (wordsArray.length > 2)
+                    name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
+            }
+        
+            if(model.textLayerName)
+                infoText += name + "\r";
+
+            if(model.textFont)
+            try{
+                currStyleRangeSpec+="Font-Family: "+textItem.appliedFont.fullName;
+                currStyleRangeSpec+="\r";
+                currCssRange += "\r\tfont-family: " + textItem.appliedFont.fullName + ";";
+            }catch(e){}
+
+            if(model.textSize)
+            try{
+                var fontSize;
+                if(model.specInEM)
+                    fontSize = Math.round(textItem.pointSize / rltvFontSize *100)/100+" em";
+                else
+                    fontSize = Math.round(textItem.pointSize*10)/10+" "+this.typeUnits();
+             
+                currStyleRangeSpec+="Font-Size: "+ fontSize;
+                currStyleRangeSpec+="\r";
+                currCssRange += "\r\tfont-size: " + fontSize + ";";
+            }catch(e){}
+            
+            if(model.textColor)
+            try{
+                var textColor = this.colorAsString(textItem.fillColor,textItem.fillTint);
+                currStyleRangeSpec+="Color: "+textColor;
+                currStyleRangeSpec+="\r";
+                currCssRange += "\r\tcolor: " + textColor.toLowerCase() + ";";
+            }catch(e){}
+
+            if(model.textAlignment)
+            try{
+                currStyleRangeSpec+="Text-Align: ";
+                var s = textItem.justification;	
+                var currAlign;
+                if(s==Justification.CENTER_ALIGN || s==Justification.CENTER_JUSTIFIED)
+                currAlign="center";
+                if(s==Justification.LEFT_ALIGN || s==Justification.LEFT_JUSTIFIED)      
+                currAlign="left";
+                if(s==Justification.RIGHT_ALIGN || s==Justification.RIGHT_JUSTIFIED)      
+                currAlign = "right";
+                currStyleRangeSpec+=currAlign+" align";
+                currStyleRangeSpec+="\r";
+                currCssRange+= "\r\ttext-align: " + currAlign + ";";
+            }catch(e){}
+
+            if(model.textLeading)
+            try{
+                var leading = textItem.leading;
+                if (leading==Leading.AUTO) 
+                leading = textItem.autoLeading/100*textItem.pointSize;
+              
+                if(model.specInEM)
+                    leading=Math.round(leading / rltvLineHeight*100)/100+" em";
+                else
+                    leading = Math.round(leading*10)/10+" "+this.typeUnits();
+        
+                currStyleRangeSpec+="Line-Height: "+leading;
+        
+                currStyleRangeSpec+="\r";
+                currCssRange+= "\r\tline-height: " + leading + ";";
+            }catch(e){}
+
+            if(model.textTracking)
+            try{
+                var tracking = Math.round(textItem.tracking/1000*100)/100+" em";
+                currStyleRangeSpec+="Letter-Spacing: "+ tracking;
+                currStyleRangeSpec+="\r";
+                currCssRange+= "\r\tletter-spacing: " + tracking + ";";
+            }catch(e){}
+
+            if(model.textStyle)
+            try{
+                var styleString;
+
+                if (textItem.capitalization==Capitalization.ALL_CAPS) styleString="All Caps";
+                if (textItem.capitalization==Capitalization.CAP_TO_SMALL_CAP) styleString="OpenType Small Caps";
+                if (textItem.capitalization==Capitalization.SMALL_CAPS) styleString="Small Caps";
+                if (textItem.capitalization==Capitalization.NORMAL) styleString="Normal";
+
+                if(textItem.position==Position.SUBSCRIPT) styleString+=" subscript";
+                if(textItem.position==Position.SUPERSCRIPT) styleString+=" superscript";
+                if (textItem.underline) styleString+=" underline";
+                if (textItem.strikeThru) styleString+=" strikethrough";
+                currStyleRangeSpec+="Font-Style: "+styleString;
+                currStyleRangeSpec+="\r";
+                currCssRange += "\r\tfont-style: " + styleString.toLowerCase() + ";";
+            }catch(e){}
+       
+        }catch(e){alert(e);}//end for
+
+
+        infoText+=currStyleRangeSpec;
+        cssRanges.push(currCssRange);
+        
+        if(cssRanges.length)
+            pageItem.insertLabel("css_ranges",cssRanges.toSource());
+        
+         if(itemType=="text" && model.textAlpha)
+            try{
+                var alpha = Math.round(pageItem.transparencySettings.blendingSettings.opacity)+"%"; 
+                infoText+="Opacity: "+  alpha + "\r";                  
+                cssText += "\r\topacity: " + alpha + ";";
+            }catch(e){alert(e);}
+            
+    }//end text
+
+    pageItem.insertLabel("css_main",cssText);
+    return infoText;
+},
 
     addIfNotExists : function(colorArray) {                
         var result;
