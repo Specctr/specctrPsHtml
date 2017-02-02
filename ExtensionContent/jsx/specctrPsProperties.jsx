@@ -724,7 +724,12 @@ $.specctrPsProperties = {
         //Add properties which are enabled in details tab.
         if(model.shapeLayerName) infoText += "\r" + name;
         if(model.shapeFill) {
-            if(swatchName !== "") infoText +="\r" + swatchName;
+            
+            if(swatchName) 
+                infoText +="\r" + swatchName;
+            else
+                infoText +="\rCustom Swatch";
+            
             infoText += "\rBackground: " + shapeFillVal;
         }
         
