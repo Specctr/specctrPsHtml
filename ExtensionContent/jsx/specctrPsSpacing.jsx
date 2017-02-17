@@ -355,7 +355,7 @@ $.specctrPsSpacing = {
             if(!model.specInPrcntg) {
                 distanceValue = $.specctrPsCommon.pointsToUnitsString($.specctrPsCommon.getScaledValue(bounds[1] - cnvsRect[1]), startRulerUnits);
             } else {
-                 distanceValue = Math.round((bounds[1] - cnvsRect[1]) / relativeHeight * 10000) / 100 + "%";
+                 distanceValue = Math.round(1.0 * (bounds[1] - cnvsRect[1]) / relativeHeight * 10000) / 100 + "%";
             }
 
             if(model.decimalFractionValue === "fraction")
@@ -387,7 +387,7 @@ $.specctrPsSpacing = {
             if(!model.specInPrcntg) {
                 distanceValue = $.specctrPsCommon.pointsToUnitsString($.specctrPsCommon.getScaledValue(bounds[0] - cnvsRect[0]), startRulerUnits);
             } else {
-                 distanceValue = Math.round((bounds[0] - cnvsRect[0]) / relativeWidth * 10000) / 100 + "%";
+                 distanceValue = Math.round(1.0 * (bounds[0] - cnvsRect[0]) / relativeWidth * 10000) / 100 + "%";
              }
 
             if(model.decimalFractionValue === "fraction")
@@ -425,7 +425,7 @@ $.specctrPsSpacing = {
             if(!model.specInPrcntg) {
                 distanceValue =  $.specctrPsCommon.pointsToUnitsString($.specctrPsCommon.getScaledValue(cnvsRect[2] - bounds[2]), startRulerUnits);
             } else {
-                 distanceValue = Math.round((cnvsRect[2] - bounds[2]) / relativeWidth * 10000) / 100 + "%";
+                 distanceValue = Math.round(1.0 * (cnvsRect[2] - bounds[2]) / relativeWidth * 10000) / 100 + "%";
              }
 
             if(model.decimalFractionValue === "fraction")
@@ -462,7 +462,7 @@ $.specctrPsSpacing = {
             if(!model.specInPrcntg) {
                 distanceValue =  $.specctrPsCommon.pointsToUnitsString($.specctrPsCommon.getScaledValue(cnvsRect[3] - bounds[3]), startRulerUnits);
             } else {
-                 distanceValue = Math.round((cnvsRect[3] - bounds[3]) / relativeHeight * 10000) / 100 + "%";
+                 distanceValue = Math.round(1.0 * (cnvsRect[3] - bounds[3]) / relativeHeight * 10000) / 100 + "%";
              }
 
              if(model.decimalFractionValue === "fraction")
@@ -633,7 +633,7 @@ $.specctrPsSpacing = {
                     relativeWidth = model.relativeWidth;
                 else
                     relativeWidth = orgnlCanvas[2];
-                distance = Math.round(distance/relativeWidth*10000)/100 + "%";
+                distance = Math.round(1.0 * distance/relativeWidth*10000)/100 + "%";
             }
 
             if(model.decimalFractionValue === "fraction")
@@ -679,7 +679,7 @@ $.specctrPsSpacing = {
                     relativeHeight = model.relativeHeight;
                 else
                     relativeHeight = orgnlCanvas[3];
-                distance = Math.round(distance/relativeHeight*10000)/100 + "%";
+                distance = Math.round(1.0 * distance/relativeHeight*10000)/100 + "%";
             }
 
             if(model.decimalFractionValue === "fraction")
