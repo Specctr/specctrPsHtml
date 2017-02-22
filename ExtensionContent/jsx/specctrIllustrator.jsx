@@ -19,12 +19,19 @@ var propSpecUndo=({});
 Array.prototype.uniquePush = function (value){
     var temp = [];
     this.push(value);
-    this.sort();
     var arrayLength = this.length;
-    for(i=0;i<arrayLength;i++){
-        if(this[i]==this[i+1]) {continue}
+    var i = 0, bPresent = false;
+    
+    for(;i<arrayLength;i++){
+        
+        if(this[i] === value) {
+            if(bPresent) continue;
+            bPresent = true;
+        }
+    
         temp[temp.length]=this[i];
     }
+
     return temp;
 }
 
