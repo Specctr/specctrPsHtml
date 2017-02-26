@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 sudo rm -rf /Library/Application\ Support/Adobe/CEP/extensions/SpecctrMaster
 sudo rm -rf /Users/mityaWork/Library/Application\ Support/Adobe/CEP/extensions/SpecctrMaster
+sudo rm -rf /Applications/Adobe\ Photoshop\ CC\ 2015/Plug-ins/Generator/specctr-generator
+sudo rm -rf /Applications/Adobe\ Photoshop\ CC\ 2015.5/Plug-ins/Generator/specctr-generator
+sudo rm -rf /Applications/Adobe\ Photoshop\ CC\ 2017/Plug-ins/Generator/specctr-generator
