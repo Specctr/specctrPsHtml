@@ -19,12 +19,19 @@ var propSpecUndo=({});
 Array.prototype.uniquePush = function (value){
     var temp = [];
     this.push(value);
-    this.sort();
     var arrayLength = this.length;
-    for(i=0;i<arrayLength;i++){
-        if(this[i]==this[i+1]) {continue}
+    var i = 0, bPresent = false;
+    
+    for(;i<arrayLength;i++){
+        
+        if(this[i] === value) {
+            if(bPresent) continue;
+            bPresent = true;
+        }
+    
         temp[temp.length]=this[i];
     }
+
     return temp;
 }
 
@@ -480,8 +487,8 @@ $.specctrAi = {
                 else
                     relativeWidth = originalArtboardSize[2];
 
-                widthForSpec = Math.round(widthForSpec / relativeWidth * 100) + "%";
-                heightForSpec = Math.round(heightForSpec / relativeHeight * 100) + "%";
+                widthForSpec = Math.round(1.0 * widthForSpec / relativeWidth * 10000) / 100 + "%";
+                heightForSpec = Math.round(1.0 * heightForSpec / relativeHeight * 10000) / 100 + "%";
             }
         
             if(model.decimalFractionValue === "fraction") {
@@ -697,10 +704,10 @@ $.specctrAi = {
                 else
                     relativeLeft = originalArtboardSize[2];
 
-                top = Math.round(top / relativeTop * 100) + "%";
-                left = Math.round(left / relativeLeft * 100) + "%";
-                right = Math.round(right / relativeLeft * 100) + "%";
-                bottom = Math.round(bottom / relativeTop * 100) + "%";
+                top = Math.round(1.0 * top / relativeTop * 10000) / 100 + "%";
+                left = Math.round(1.0 * left / relativeLeft * 10000) / 100 + "%";
+                right = Math.round(1.0 * right / relativeLeft * 10000) / 100 + "%";
+                bottom = Math.round(1.0 * bottom / relativeTop * 10000) / 100 + "%";
             }
 
             var newColor = this.legendColor(model.legendColorSpacing);
@@ -849,7 +856,7 @@ $.specctrAi = {
                 else
                     relativeHeight = -originalArtboardSize[3];
 
-                ySpacing = Math.round(ySpacing / relativeHeight * 100) + " %";
+                ySpacing = Math.round(1.0 *  ySpacing / relativeHeight * 10000) / 100 + " %";
             }
         
             if(model.decimalFractionValue === "fraction")
@@ -909,7 +916,7 @@ $.specctrAi = {
                 else
                     relativeWidth = originalArtboardSize[2];
 
-                xSpacing = Math.round(xSpacing / relativeWidth * 100) + " %";
+                xSpacing = Math.round(1.0 * xSpacing / relativeWidth * 10000) / 100 + " %";
             }
         
             if(model.decimalFractionValue === "fraction")
@@ -1151,10 +1158,10 @@ $.specctrAi = {
                 else
                     relativeWidth = originalArtboardSize[2];
 
-                toLeft = Math.round(toLeft / relativeWidth * 100) + " %";
-                toTop = Math.round(toTop / relativeHeight * 100) + " %";
-                toRight = Math.round(toRight / relativeWidth * 100) + " %";
-                toBottom = Math.round(toBottom / relativeHeight * 100) + " %";
+                toLeft = Math.round(1.0 * toLeft / relativeWidth * 10000) / 100 + " %";
+                toTop = Math.round(1.0 * toTop / relativeHeight * 10000) / 100 + " %";
+                toRight = Math.round(1.0 * toRight / relativeWidth * 10000) / 100 + " %";
+                toBottom = Math.round(1.0 * toBottom / relativeHeight * 10000) / 100 + " %";
             }
         
             if(model.decimalFractionValue === "fraction") {

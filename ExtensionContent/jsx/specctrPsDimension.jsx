@@ -107,7 +107,7 @@ $.specctrPsDimension = {
              if(!model.specInPrcntg)
                 widthValue = $.specctrPsCommon.pointsToUnitsString($.specctrPsCommon.getScaledValue(width), startRulerUnits);
             else
-                widthValue = Math.round(width/relativeWidth*10000) /100+ "%";
+                widthValue = Math.round(1.0 * width/relativeWidth*10000) /100+ "%";
 
             if(model.decimalFractionValue === "fraction")
                 widthValue = $.specctrPsCommon.decimalToFraction(widthValue);
@@ -169,7 +169,7 @@ $.specctrPsDimension = {
             if(!model.specInPrcntg)
                 heightValue = $.specctrPsCommon.pointsToUnitsString($.specctrPsCommon.getScaledValue(height), startRulerUnits);
             else
-                heightValue = Math.round(height/relativeHeight*10000) /100+ "%";
+                heightValue = Math.round(1.0 * height/relativeHeight*10000) /100+ "%";
 
             if(model.decimalFractionValue === "fraction")
                 heightValue = $.specctrPsCommon.decimalToFraction(heightValue);
