@@ -94,7 +94,7 @@ var model = {
 
 	decimalFractionValue: 'decimal',
 	specOption: 'Bullet',
-	cloudOption: 'import',		//Download.
+	cloudOption: 'export',		//Download.
 };
 
 var filePermission = {

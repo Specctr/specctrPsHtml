@@ -276,8 +276,8 @@
                             <li id="liCloudUpload">
                                 <div class="button border " id="btnCloupUpload"
                                                             onclick="Specctr.buttonHandlers.specButtonsClickHandler(this)">
-                                    <img id="imgExportCss" alt="Upload Beta"/>
-                                    <label id="CloudBtnLbl">Download CSS</label>
+                                    <img id="imgExportCss" alt="Download CSS"/>
+                                    <label id="CloudBtnLbl">Upload Beta</label>
                                     <div class= "downArrowParentDiv"
                                            onclick="Specctr.buttonHandlers.buttonDropDownClickHandler(event, this)">
                                         <div id="imgCloupUploadDdlArrow" class="dropdownArrow"></div>
@@ -285,10 +285,10 @@
                                 </div>
 
                                 <div class="options" id="cloudUploadDropDown">
-                                    <div class="option importCssSelected" id="imgCloudUploadImportCSS"
+                                    <div class="option" id="imgCloudUploadImportCSS"
                                                                           onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'importCssSelected', 'import')"></div>
 
-                                    <div class="option" id="imgCloudUploadExportCSS"
+                                    <div class="option exportCssSelected" id="imgCloudUploadExportCSS"
                                                         onclick="Specctr.buttonHandlers.dropDownCellClickHandler(this.id, 'exportCssSelected', 'export')"></div>
                                 </div>
                             </li>
@@ -690,7 +690,7 @@
                 <div class="tabPageCheckBoxRow" id="specToEdgeCheckbox">
                     <input type="checkbox" class="adjustCBMargin" value="CanvasEdge" id="specToEdge"
                                                                                      onclick="Specctr.UI.checkBoxChangeHandler(this)" /> 
-                    <label class="settingPageLabel" for="specToEdge">Print Spec to Canvas Edge</label>
+                    <label class="settingPageLabel" for="specToEdge">Align specs to the canvas edge</label>
                 </div>
 
                 <div class="settingPageHeader">Properties</div>
