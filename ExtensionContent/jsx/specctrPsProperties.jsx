@@ -448,8 +448,13 @@ $.specctrPsProperties = {
                 tracking: "", alpha: "", underline:"", strike:"", bold:"", italic:"",
             };
 
-            this.getCharStyles(textObj);
-            this.getParaStyles(textObj);
+            try {
+                this.getCharStyles(textObj);
+            }catch (e){}
+            
+            try {
+                this.getParaStyles(textObj);
+            }catch(e){}
 
             var kDefaultLeadVal = 120.0, kDefaultFontVal='MyriadPro-Regular', kDefaultFontSize= 12;
             
