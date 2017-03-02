@@ -13,6 +13,25 @@ var model;
 var cssText = "";
 var cssBodyText = "";
 
+Array.prototype.uniquePush = function (value){
+    var temp = [];
+    this.push(value);
+    var arrayLength = this.length;
+    var i = 0, bPresent = false;
+    
+    for(;i<arrayLength;i++){
+        
+        if(this[i] === value) {
+            if(bPresent) continue;
+            bPresent = true;
+        }
+    
+        temp[temp.length]=this[i];
+    }
+
+    return temp;
+}
+
 $.specctrPsProperties = {
     
     propertyChecked : function (artItemType) {
@@ -444,23 +463,29 @@ $.specctrPsProperties = {
                 name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
                 
             var textObj = {
-                font: "", size: "", alignment: "", color: "", style: "", leading: "", 
-                tracking: "", alpha: "", underline:"", strike:"", bold:"", italic:"",
+                font: [], size: [], alignment: "", color: [], style: "", leading: [], 
+                tracking: [], underline: "", strike: "", bold: "", italic: "",
             };
 
             try {
                 this.getCharStyles(textObj);
             }catch (e){}
+            alert(textObj.font.join() + " " + textObj.size.join() + " " + textObj.leading.join() + " " + textObj.tracking.join());
             
             try {
                 this.getParaStyles(textObj);
             }catch(e){}
+            alert(textObj.font.join() + " " + textObj.size.join() + " " + textObj.leading.join() + " " + textObj.tracking.join());
 
             var kDefaultLeadVal = 120.0, kDefaultFontVal='MyriadPro-Regular', kDefaultFontSize= 12;
             
-            if(!textObj.font) textObj.font = kDefaultFontVal;
-            if(!textObj.size) textObj.size = kDefaultFontSize;
-                
+            if(textObj.font.length == 0) textObj.font.uniquePush(kDefaultFontVal);
+            if(textObj.size.length == 0) textObj.size.uniquePush(kDefaultFontSize);
+
+
+            //REWRITE THE WHOLE SECTION.
+            var arrayLen = 0;
+            
             //Get the font size if responsive option selected
             if(model.specInEM) {
                 if(model.baseFontSize != 0)
@@ -469,22 +494,36 @@ $.specctrPsProperties = {
                 if($.specctrPsCommon.getTypeUnits() == 'mm')
                     rltvFontSize = $.specctrPsCommon.pointsToUnitsString(rltvFontSize, Units.MM).toString().replace(' mm','');
                 
-                textObj.size = Math.round(textObj.size / rltvFontSize * 100) / 100 + " em";
+                arrayLen = textObj.size.length;
+                for(var i = 0; i < arrayLen; i++) {
+                    textObj.size[i] = Math.round(textObj.size[i] / rltvFontSize * 100) / 100 + " em";
+                }
+            
             } else {
-                textObj.size = Math.round(textObj.size * 100) / 100;
-                textObj.size = $.specctrPsCommon.getScaledValue(textObj.size) + " " + $.specctrPsCommon.getTypeUnits();
+                arrayLen = textObj.size.length;
+                for(var i = 0; i < arrayLen; i++) {
+                    textObj.size[i] = Math.round(textObj.size[i] * 100) / 100;
+                    textObj.size[i] = $.specctrPsCommon.getScaledValue(textObj.size[i]) + " " + $.specctrPsCommon.getTypeUnits();
+                }
             }
         
-            if(!textObj.color) 
-                textObj.color = this.getDefaultColor();
+            if(textObj.color.length == 0) 
+                textObj.color.uniquePush(this.getDefaultColor());
             
-            textObj.color = this.colorAsString(textObj.color);
+            var isColorFrmtChange = false;
             alpha = Math.round(pageItem.opacity)/100 ;
-            if(!alpha && textObj.color.indexOf("(") >= 0) {
-                textObj.color = this.convertColorIntoCss(textObj.color, alpha);
-                alpha = "";
+            arrayLen = textObj.color.length;
+            for (var i = 0; i < arrayLen; i++) {
+                textObj.color[i] = this.colorAsString(textObj.color[i]);
+                if(!alpha && textObj.color[i].indexOf("(") >= 0) {
+                    textObj.color[i] = this.convertColorIntoCss(textObj.color[i], alpha);
+                    isColorFrmtChange = true
+                }
             }
-
+            
+            if(isColorFrmtChange)
+                alpha = "";
+            
             // Get the style of the text item.
             var styleString = "normal", textDecorationStyle = "";
             if (textObj.bold == true) styleString = "bold";
@@ -504,11 +543,10 @@ $.specctrPsProperties = {
             }
             
             //Get text leading.
-            if(!textObj.leading)
-                textObj.leading =  textObj.size/100*Math.round(kDefaultLeadVal);
-                
-            textObj.leading = textObj.leading.toString().replace("px", "");
-                
+            if(textObj.leading.length == 0)
+                textObj.leading.uniquePush(textObj.size[0]/100*Math.round(kDefaultLeadVal));
+
+            arrayLen = textObj.leading.length;
             //Calculate the line height in 'em' units.
             if(model.specInEM) {
                 var rltvLineHeight = "";
@@ -520,36 +558,46 @@ $.specctrPsProperties = {
                  if($.specctrPsCommon.getTypeUnits() == 'mm')
                         rltvLineHeight = $.specctrPsCommon.pointsToUnitsString(rltvLineHeight, Units.MM).toString().replace(' mm','');
                 
-                textObj.leading = Math.round(textObj.leading / rltvLineHeight * 100) / 100 + " em";
-            } else {   
-                textObj.leading = Math.round(textObj.leading * 100) / 100 + " " + $.specctrPsCommon.getTypeUnits();
+                for (var i = 0; i < arrayLen; i++) {
+                    textObj.leading[i] = textObj.leading[i].toString().replace("px", "");
+                    textObj.leading[i] = Math.round(textObj.leading[i] / rltvLineHeight * 100) / 100 + " em";
+                }
+                
+            } else {
+                for (var i = 0; i < arrayLen; i++) {
+                    textObj.leading[i] = textObj.leading[i].toString().replace("px", "");
+                    textObj.leading[i] = Math.round(textObj.leading[i] * 100) / 100 + " " + $.specctrPsCommon.getTypeUnits();
+                }
+                
             }
 
             //Get tracking of the text item.
-            textObj.tracking = Math.round(textObj.tracking / 1000 * 100) / 100 + " em";
+            arrayLen = textObj.tracking.length;
+            for (var i = 0; i < arrayLen; i++) 
+                textObj.tracking[i] = Math.round(textObj.tracking[i] / 1000 * 100) / 100 + " em";
                 
             //Set css for the selected text item.
             cssText += "text_contents:" + textItem.contents +";";
-            cssText += "font-family:" + textObj.font+";";
-            cssText += "font-size:" + textObj.size+";";
-            cssText += "color:" + textObj.color.toLowerCase()+";";
+            cssText += "font-family:" + textObj.font.join()+";";
+            cssText += "font-size:" + textObj.size.join()+";";
+            cssText += "color:" + textObj.color.join()+";";
             cssText += "font-style:" + styleString+";";
                 
             if(textDecorationStyle != "") 
                 cssText += "text-decoration:" + textDecorationStyle+";";
             
             cssText += "text-align:" + textObj.alignment+";";
-            cssText += "line-height:" + textObj.leading+";";
-            cssText += "letter-spacing:" + textObj.tracking+";";
+            cssText += "line-height:" + textObj.leading.join()+";";
+            cssText += "letter-spacing:" + textObj.tracking.join()+";";
             
             if(alpha != "") 
                 cssText += "opacity:" + alpha+";";
 
             //Add properties which are enabled in details tab.
             if (model.textLayerName) infoText = "\r" + name;
-            if (model.textFont) infoText += "\rFont-Family: " + textObj.font;
-            if (model.textSize) infoText += "\rFont-Size: " + textObj.size;
-            if (model.textColor) infoText += "\rColor: " + textObj.color;
+            if (model.textFont) infoText += "\rFont-Family: " + textObj.font.join();
+            if (model.textSize) infoText += "\rFont-Size: " + textObj.size.join();
+            if (model.textColor) infoText += "\rColor: " + textObj.color.join();
 
             if (model.textStyle) {
                 infoText += "\rFont-Style: " + styleString;
@@ -558,8 +606,8 @@ $.specctrPsProperties = {
             }
 
             if (model.textAlignment) infoText += "\rText-Align: " + textObj.alignment;
-            if (model.textLeading) infoText += "\rLine-Height: " + textObj.leading;
-            if (model.textTracking) infoText += "\rLetter-Spacing: " + textObj.tracking;
+            if (model.textLeading) infoText += "\rLine-Height: " + textObj.leading.join();
+            if (model.textTracking) infoText += "\rLetter-Spacing: " + textObj.tracking.join();
             if (alpha != "") infoText += "\rOpacity: " + alpha;
         
             if (model.textEffects) {
@@ -630,16 +678,16 @@ $.specctrPsProperties = {
                         mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
                         size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                     }
-                    textObj.size = size;
+                    textObj.size.uniquePush(size);
                 }
             
                 //Font name
                 if(styleDesc.hasKey(fontPostScriptID))
-                    textObj.font =  styleDesc.getString(fontPostScriptID);
+                    textObj.font.uniquePush(styleDesc.getString(fontPostScriptID));
                 
                 //Tracking
                 if(styleDesc.hasKey(trackingID))
-                    textObj.tracking =  styleDesc.getString(trackingID);
+                    textObj.tracking.uniquePush(styleDesc.getString(trackingID));
                         
                 //Underline.
                 if(styleDesc.hasKey(underlineID))
@@ -661,16 +709,18 @@ $.specctrPsProperties = {
                 if(styleDesc.hasKey(autoLeadingID)) {
                     isAutoLeading = styleDesc.getBoolean(autoLeadingID);
                     if(isAutoLeading == false) {
-                         textObj.leading = styleDesc.getDouble(stringIDToTypeID("leading"));
+                        var leading = styleDesc.getDouble(stringIDToTypeID("leading"));
                          if(desc.hasKey(transformID)) {
                              mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
-                             textObj.leading = (textObj.leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+                             leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                          }
+                        textObj.leading.uniquePush(leading);
                     }
                 }
             
                  if(styleDesc.hasKey(colorID)) {
-                    textObj.color = this.getColor(styleDesc.getObjectValue(colorID));
+                     var color = this.getColor(styleDesc.getObjectValue(colorID));
+                     textObj.color.uniquePush(color);
                 }
             }
         }
@@ -719,22 +769,24 @@ $.specctrPsProperties = {
                 var styleDesc = paraStyle.getObjectValue( kdefaultStyleStr );
              
                 //Font size.
-                if(!textObj.size && styleDesc.hasKey(sizeID)) {
-                    textObj.size =  styleDesc.getDouble(sizeID);
+                if(styleDesc.hasKey(sizeID)) {
+                    var size = styleDesc.getDouble(sizeID);
                     
                     if(desc.hasKey(transformID)) {
                         mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
-                        textObj.size = (textObj.size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+                        size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                     }
+                
+                    textObj.size.uniquePush(size);
                 }
 
                 //Font name.
-                if(!textObj.font && styleDesc.hasKey(fontPostScriptID))
-                    textObj.font =  styleDesc.getString(fontPostScriptID);
+                if(styleDesc.hasKey(fontPostScriptID))
+                    textObj.font.uniquePush(styleDesc.getString(fontPostScriptID));
                     
                 //Tracking.
-                if(!textObj.tracking && styleDesc.hasKey(trackingID))
-                    textObj.tracking =  styleDesc.getString(trackingID);
+                if(styleDesc.hasKey(trackingID))
+                    textObj.tracking.uniquePush(styleDesc.getString(trackingID));
                 
                 //Underline.
                 if(!textObj.underline && styleDesc.hasKey(underlineID))
@@ -753,24 +805,27 @@ $.specctrPsProperties = {
                     textObj.italic = styleDesc.getBoolean(syntheticItalicID);
                     
                 //Leading.
-                if(!textObj.leading && styleDesc.hasKey(autoLeadingID)) {
+                if(styleDesc.hasKey(autoLeadingID)) {
                     isAutoLeading = styleDesc.getBoolean(autoLeadingID);
+                    
                     if(isAutoLeading == false) {
-                        textObj.leading = styleDesc.getDouble(stringIDToTypeID("leading"));
+                        var leading = styleDesc.getDouble(stringIDToTypeID("leading"));
+                        
                         if(desc.hasKey(transformID)) {
                             mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
-                            textObj.leading = (textObj.leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
+                            leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                         }
+                    
+                        textObj.leading.uniquePush(leading);
                     }
                 }
             }
             
             //Color
-            if(!textObj.color && styleDesc.hasKey(colorID)) {
-                textObj.color = this.getColor(styleDesc.getObjectValue(colorID));
+            if(styleDesc.hasKey(colorID)) {
+                var color = this.getColor(styleDesc.getObjectValue(colorID));
+                textObj.color.uniquePush(color);
             }
-                
-            
         }
     
     },
