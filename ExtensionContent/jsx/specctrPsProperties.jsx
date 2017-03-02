@@ -20,8 +20,8 @@ Array.prototype.uniquePush = function (value){
     var i = 0, bPresent = false;
     
     for(;i<arrayLength;i++){
-        
-        if(this[i] === value) {
+
+        if(this[i] == value) {
             if(bPresent) continue;
             bPresent = true;
         }
@@ -470,18 +470,22 @@ $.specctrPsProperties = {
             try {
                 this.getCharStyles(textObj);
             }catch (e){}
-            alert(textObj.font.join() + " " + textObj.size.join() + " " + textObj.leading.join() + " " + textObj.tracking.join());
+//~             alert(textObj.font.join() + " " + textObj.size.join() + " " + textObj.leading.join() + " " + textObj.tracking.join()
+//~             + " " + textObj.underline + " " + textObj.strike);
             
             try {
                 this.getParaStyles(textObj);
             }catch(e){}
-            alert(textObj.font.join() + " " + textObj.size.join() + " " + textObj.leading.join() + " " + textObj.tracking.join());
+//~             alert(textObj.font.join() + " " + textObj.size.join() + " " + textObj.leading.join() + " " + textObj.tracking.join()
+//~             + " " + textObj.underline + " " + textObj.strike);
 
             var kDefaultLeadVal = 120.0, kDefaultFontVal='MyriadPro-Regular', kDefaultFontSize= 12;
             
-            if(textObj.font.length == 0) textObj.font.uniquePush(kDefaultFontVal);
-            if(textObj.size.length == 0) textObj.size.uniquePush(kDefaultFontSize);
-
+            if(textObj.font.length == 0) 
+                textObj.font = textObj.font.uniquePush(kDefaultFontVal);
+                
+            if(textObj.size.length == 0) 
+                textObj.size = textObj.size.uniquePush(kDefaultFontSize);
 
             //REWRITE THE WHOLE SECTION.
             var arrayLen = 0;
@@ -528,9 +532,9 @@ $.specctrPsProperties = {
             var styleString = "normal", textDecorationStyle = "";
             if (textObj.bold == true) styleString = "bold";
             if (textObj.italic == true) styleString += "/ italic";
-            if (!textObj.underline && textObj.underline != "underlineOff" ) textDecorationStyle = "underline";
-            if (!textObj.strike && textObj.strike != "strikethroughOff") {
-                if(!textDecorationStyle) textDecorationStyle += "/ ";
+            if (textObj.underline && textObj.underline != "underlineOff" ) textDecorationStyle = "underline";
+            if (textObj.strike && textObj.strike != "strikethroughOff") {
+                if(textDecorationStyle) textDecorationStyle += "/ ";
                 textDecorationStyle += "strike-through";
             }
             
@@ -544,7 +548,7 @@ $.specctrPsProperties = {
             
             //Get text leading.
             if(textObj.leading.length == 0)
-                textObj.leading.uniquePush(textObj.size[0]/100*Math.round(kDefaultLeadVal));
+                textObj.leading = textObj.leading.uniquePush(textObj.size[0]/100*Math.round(kDefaultLeadVal));
 
             arrayLen = textObj.leading.length;
             //Calculate the line height in 'em' units.
@@ -678,16 +682,16 @@ $.specctrPsProperties = {
                         mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
                         size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                     }
-                    textObj.size.uniquePush(size);
+                    textObj.size = textObj.size.uniquePush(size);
                 }
             
                 //Font name
                 if(styleDesc.hasKey(fontPostScriptID))
-                    textObj.font.uniquePush(styleDesc.getString(fontPostScriptID));
+                    textObj.font = textObj.font.uniquePush(styleDesc.getString(fontPostScriptID));
                 
                 //Tracking
-                if(styleDesc.hasKey(trackingID))
-                    textObj.tracking.uniquePush(styleDesc.getString(trackingID));
+                if(styleDesc.hasKey(trackingID)) 
+                    textObj.tracking = textObj.tracking.uniquePush(styleDesc.getString(trackingID));
                         
                 //Underline.
                 if(styleDesc.hasKey(underlineID))
@@ -714,13 +718,13 @@ $.specctrPsProperties = {
                              mFactor = desc.getObjectValue(transformID).getUnitDoubleValue (yyID);
                              leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                          }
-                        textObj.leading.uniquePush(leading);
+                        textObj.leading = textObj.leading.uniquePush(leading);
                     }
                 }
             
                  if(styleDesc.hasKey(colorID)) {
                      var color = this.getColor(styleDesc.getObjectValue(colorID));
-                     textObj.color.uniquePush(color);
+                     textObj.color = textObj.color.uniquePush(color);
                 }
             }
         }
@@ -777,16 +781,17 @@ $.specctrPsProperties = {
                         size = (size* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                     }
                 
-                    textObj.size.uniquePush(size);
+                    textObj.size = textObj.size.uniquePush(size);
                 }
 
                 //Font name.
                 if(styleDesc.hasKey(fontPostScriptID))
-                    textObj.font.uniquePush(styleDesc.getString(fontPostScriptID));
+                    textObj.font = textObj.font.uniquePush(styleDesc.getString(fontPostScriptID));
                     
                 //Tracking.
-                if(styleDesc.hasKey(trackingID))
-                    textObj.tracking.uniquePush(styleDesc.getString(trackingID));
+                if(styleDesc.hasKey(trackingID)) 
+                    textObj.tracking = textObj.tracking.uniquePush(styleDesc.getString(trackingID));
+                
                 
                 //Underline.
                 if(!textObj.underline && styleDesc.hasKey(underlineID))
@@ -816,7 +821,7 @@ $.specctrPsProperties = {
                             leading = (leading* mFactor).toFixed(2).toString().replace(/0+$/g,'').replace(/\.$/,'');
                         }
                     
-                        textObj.leading.uniquePush(leading);
+                        textObj.leading = textObj.leading.uniquePush(leading);
                     }
                 }
             }
@@ -824,7 +829,7 @@ $.specctrPsProperties = {
             //Color
             if(styleDesc.hasKey(colorID)) {
                 var color = this.getColor(styleDesc.getObjectValue(colorID));
-                textObj.color.uniquePush(color);
+                textObj.color = textObj.color.uniquePush(color);
             }
         }
     
