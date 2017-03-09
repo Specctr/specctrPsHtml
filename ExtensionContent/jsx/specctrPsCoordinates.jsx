@@ -149,7 +149,7 @@ $.specctrPsCoordinates = {
 
             if(legendLayer === "") {
                 legendLayer = $.specctrPsCommon.legendSpecLayer("Coordinates", parent).layerSets.add();            //To create the layer group for coordinate layer.
-                legendLayer.name = "Specctr Coordinates Mark";
+                legendLayer.name = "spec_crd_"+$.specctrPsCommon.getLayerName(sourceItem);
             }
 
             var xLine = "", yLine = "", mark="", coordinateText = "";

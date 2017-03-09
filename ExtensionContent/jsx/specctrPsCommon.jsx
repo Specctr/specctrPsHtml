@@ -783,5 +783,27 @@ $.specctrPsCommon = {
         }catch (e) { return app.activeDocument;}
     },
 
+    getLayerName : function (artLayer) {
+        try {
+            var name = artLayer.name;
+            var maxWordAllowed = 5;
+            var maxCharAllowed = 20;
+            var nameArr = [];
+            name = name.split(/[ \(,.'?!;\)]+/);
+            
+            if(name.length > maxWordAllowed) {
+                for(var i = 0; i < maxWordAllowed; i++)
+                    nameArr[i] = name[i];
+            }
+        
+            nameArr = name;
+            name = nameArr.join("_").substring(0,maxCharAllowed).toLowerCase();
+        } catch (e) {
+            name = "art_item";
+        }
+    
+        return name;
+    },
+
 };
 

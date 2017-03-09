@@ -97,8 +97,9 @@ $.specctrPsAddNote = {
         }
     
         //Create spec text for art object.
+        var layerName = $.specctrPsCommon.getLayerName(artLayer);
         legendLayer = $.specctrPsCommon.legendSpecLayer("Add Note", parent).layerSets.add();
-        legendLayer.name = "Note Spec";
+        legendLayer.name = "spec_note_" + layerName;
         noteId = $.specctrPsCommon.getIDOfLayer();
         var spec = legendLayer.artLayers.add();
         spec.kind = LayerKind.TEXT;
