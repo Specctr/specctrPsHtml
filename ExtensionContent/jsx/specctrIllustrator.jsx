@@ -2883,14 +2883,13 @@ $.specctrAi = {
             var maxWordAllowed = 5;
             var maxCharAllowed = 20;
             var nameArr = [];
-            name = name.split(/[\( ,.'?!;:\r\)]+/);
+            name = name.split(/[ ,.'?!;:\r\)]+/);
             
             if(name.length > maxWordAllowed) {
                 for(var i = 0; i < maxWordAllowed; i++)
                     nameArr[i] = name[i];
             }
         
-            nameArr = name;
             name = nameArr.join("_").substring(0,maxCharAllowed).toLowerCase();
         } catch (e) {}
         

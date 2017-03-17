@@ -796,10 +796,9 @@ $.specctrPsCommon = {
                     nameArr[i] = name[i];
             }
         
-            nameArr = name;
             name = nameArr.join("_").substring(0,maxCharAllowed).toLowerCase();
         } catch (e) {
-            name = "art_item";
+            name = "artItem";
         }
     
         return name;
