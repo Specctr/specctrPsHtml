@@ -794,6 +794,8 @@ $.specctrPsCommon = {
             if(name.length > maxWordAllowed) {
                 for(var i = 0; i < maxWordAllowed; i++)
                     nameArr[i] = name[i];
+            } else {
+                nameArr = name;
             }
         
             name = nameArr.join("_").substring(0,maxCharAllowed).toLowerCase();

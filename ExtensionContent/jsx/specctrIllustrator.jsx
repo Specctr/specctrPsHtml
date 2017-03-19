@@ -1089,7 +1089,7 @@ $.specctrAi = {
              
             //Store the note to the spacing spec's group.
             itemsGroup.note = aSpecctrId + bSpecctrId;
-             var aName = this.getLayerName(aItem).substring(0,10);
+            var aName = this.getLayerName(aItem).substring(0,10);
             var bName = this.getLayerName(bItem).substring(0,10);
             itemsGroup.name = "spec_spc_"+aName+"_"+bName;
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);
@@ -2888,6 +2888,8 @@ $.specctrAi = {
             if(name.length > maxWordAllowed) {
                 for(var i = 0; i < maxWordAllowed; i++)
                     nameArr[i] = name[i];
+            } else {
+                nameArr = name;
             }
         
             name = nameArr.join("_").substring(0,maxCharAllowed).toLowerCase();
