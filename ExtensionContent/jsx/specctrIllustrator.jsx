@@ -6,6 +6,7 @@
 
 #target illustrator
 #include "json2.js"
+#include "specctrUtility.jsx"
 
 var model;
 var heightChoice = {"Left" : 1 , "Right" : 2, "Center" : 3};
@@ -1933,8 +1934,9 @@ $.specctrAi = {
                 spec.name = "noteSpec";
             }
 
-            if(noteText != "")
-                spec.contents = noteText;
+            if(noteText != "") {
+                spec.contents = $.specctrUtility.breakStringAtLength(noteText, 30);
+            }
 
             spec.textRange.characterAttributes.fillColor = newColor;
             spec.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);

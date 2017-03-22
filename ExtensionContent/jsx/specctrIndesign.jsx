@@ -1,6 +1,8 @@
 ﻿#target indesign
 
 #include "json2.js"
+#include "specctrUtility.jsx"
+
 var debug = false;
 var prevTime;
 var _specctr;
@@ -1355,7 +1357,7 @@ $.specctrId = {
             }
             
             legendLayer = this.legendNoteLayer();
-            var infoText = noteText;
+            var infoText = $.specctrUtility.breakStringAtLength(noteText, 30);;
             var pageItemBounds = this.itemCoords(pageItem);
             var currPage = this.getCurrentPage ();
             var currSpread = this.getCurrentSpread();
