@@ -1567,6 +1567,11 @@ $.specctrId = {
             var legendLayer;
             var newColor, specGroupName = "";
             
+            //Check if property layers present or not.
+            var bIsPropertyLayerPresent = this.IsLayerPresent("Specctr Text Properties");
+            if(!bIsPropertyLayerPresent) 
+                bIsPropertyLayerPresent = this.IsLayerPresent("Specctr Object Properties");
+                        
             if(itemType=="text") {
                 newColor = this.legendColorType();
                 legendLayer = this.legendTextPropertiesLayer();
@@ -1594,12 +1599,15 @@ $.specctrId = {
             }
         
             var specGroup = currSpread.findByTypeAndSourceId("specctrInfoGroup",pageItem.id);
-            var num;
+            var num, bIsUpdate = false;
             if(specGroup) {
                 num = specGroup.extractLabel("specNumber");
                 specGroup.ungroup();
+                
+                if(num)
+                    bIsUpdate = true;
             }
-            
+
             var spec = currSpread.findByTypeAndSourceId("specctrInfoSpec",pageItem.id);
             var arm = currSpread.findByTypeAndSourceId("specctrInfoArm",pageItem.id);
             var itemCircle = currSpread.findByTypeAndSourceId("specctrInfoCircle",pageItem.id);
@@ -1610,9 +1618,9 @@ $.specctrId = {
             if(!num)
              num = app.activeDocument.extractLabel("specNumber");
 
-            if(!num)
+            if(!num || !bIsPropertyLayerPresent)
                 num = 1;
-            
+
             if(arm) {
                 arm.remove();
                 arm = null;
@@ -1809,8 +1817,10 @@ $.specctrId = {
             
             if(model.specOption == "Bullet") {
                 specGroup.insertLabel("specNumber", num.toString());
-                var specNumber = parseInt(num) + 1;
-                app.activeDocument.insertLabel("specNumber", specNumber.toString());
+                if(!bIsUpdate) {
+                    var specNumber = parseInt(num) + 1;
+                    app.activeDocument.insertLabel("specNumber", specNumber.toString());
+                }
             }
              
             specGroup.insertLabel("specctrCoords",specGroup.geometricBounds.join("|"));
@@ -2621,7 +2631,10 @@ $.specctrId = {
                         var name = spec.parent.name;
                         if(!name)
                             name = "Specctr Properties Marks";
-                            
+                        
+                        if(firstBullet) firstBullet.remove();
+                        if(secondBullet) secondBullet.remove();
+                        
                         $.specctrId.updateSpecByType(source, spec, arm, itemCircle, legendLayer, 
                             newColor, itemType, name, "specctrInfoGroup", "specctrInfoArm", "specctrInfoCircle");
                      } else {
@@ -2929,7 +2942,17 @@ $.specctrId = {
     
         return name;
     },
-		
+
+    IsLayerPresent : function (layerName) {
+        try {
+            var newLayer = app.activeDocument.layers.itemByName(layerName);
+            newLayer.id;
+        } catch(e) {
+            return false;
+        }
+        return true;
+    }
+
 };
 
 
