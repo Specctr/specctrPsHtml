@@ -59,6 +59,12 @@ input[type="text"]:disabled {
 label {
 	cursor: inherit;
 }
+
+.ui-dialog .ui-dialog-titlebar{
+	display: block;
+	text-align: center;
+}
+	     
 /*-------------------------------------------------------------*/
 
 /*----Common styles used in entire panel in different block----*/
