@@ -256,7 +256,7 @@ $.specctrAi = {
     },
 
     //Export the specs into styles.
-    exportCss : function() {
+    exportCss : function(filePath) {
         var isExportedSuccessfully = false;
         try {
             var styleText = cssBodyText;            //Add the body text at the top of css file.
@@ -278,6 +278,7 @@ $.specctrAi = {
             };
 
             if(model.cloudOption == "export") {
+                this.exportToJPEG(filePath);
                 return JSON.stringify(cssInfo);
             } else {
                 //Create the file and export it.
@@ -2902,6 +2903,18 @@ $.specctrAi = {
     
         return name;
     },
+
+    //Export ai as jpg.
+    exportToJPEG : function (filePath) {
+        if ( app.documents.length > 0 ) {
+            var exportOptions = new ExportOptionsJPEG();
+            var type = ExportType.JPEG;
+            var fileSpec = new File(filePath);
+            exportOptions.antiAliasing = false;
+            exportOptions.qualitySetting = 40;
+            app.activeDocument.exportFile( fileSpec, type, exportOptions );
+        }
+    }
 };
 
 

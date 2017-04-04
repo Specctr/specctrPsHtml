@@ -123,6 +123,16 @@ pref.getConfigFilePath = function() {
 };
 
 /**
+ * Get the image file path which need to be exported from respective application.
+ * @return Path of the image file (with name).
+ */
+pref.getExportedFilePath = function() {
+	var filePath = this.getPrefernceDirectory().replace("file:///", "");
+	filePath += "/sTemp.jpg";
+	return filePath;
+};
+
+/**
  * Read the config file {name: specctrPhotoshopConfig.json}.
  * @return An object with the data or empty string.
  */

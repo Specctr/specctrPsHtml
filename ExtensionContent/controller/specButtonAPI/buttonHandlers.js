@@ -60,16 +60,18 @@ Specctr.buttonHandlers = {
 			return;
 		}
 		
+		//Get path where to export jpg file.
+		var filePath = pref.getExportedFilePath();
+		
 		setModel();
 		//$("#spinnerBlock").show();
 		$("#uploadBtnLabel").html("Uploading...");
 		$("#uploadingGif").show();
 		
 		// Upload specs to Specctr.
-		evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo) {
+		evalScript("$.specctr" + hostApplication + "." + "exportCss('"+filePath+"')", function(cssInfo) {
 			
 			try {
-				
 				
 				if(!cssInfo) {
 //					$("#spinnerBlock").hide();
