@@ -106,7 +106,7 @@ $.specctrPs = {
     },
 
     //Call create exportCss method from specctrPsExportCss jsx file.
-    exportCss : function() {
-        return $.specctrPsExportCss.exportCss();
-    }
+    exportCss : function(filePath) {
+        return $.specctrPsExportCss.exportCss(filePath);
+    },
 };

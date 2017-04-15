@@ -5,6 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 #include "specctrPsCommon.jsx"
+#include "specctrUtility.jsx"
 
 if(typeof($)=== 'undefined')
 	$={};
@@ -35,7 +36,7 @@ $.specctrPsAddNote = {
 
         model = $.specctrPsCommon.getModel();
         var doc = app.activeDocument;
-        var infoText = noteText;
+        var infoText = $.specctrUtility.breakStringAtLength(noteText, 30);
         var newColor;
         
         if(sourceItem.kind == LayerKind.TEXT)
@@ -82,7 +83,7 @@ $.specctrPsAddNote = {
          if(noteId != null) {
              legendLayer = $.specctrPsCommon.getLayerByID(noteId);
              if(legendLayer) {
-                this.updateNoteSpec(sourceItem, legendLayer, bounds, propertySpecBottom, noteText);
+                this.updateNoteSpec(sourceItem, legendLayer, bounds, propertySpecBottom, infoText);
                 $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);
                 return;
             }
@@ -97,8 +98,9 @@ $.specctrPsAddNote = {
         }
     
         //Create spec text for art object.
+        var layerName = $.specctrPsCommon.getLayerName(artLayer);
         legendLayer = $.specctrPsCommon.legendSpecLayer("Add Note", parent).layerSets.add();
-        legendLayer.name = "Note Spec";
+        legendLayer.name = "spec_note_" + layerName;
         noteId = $.specctrPsCommon.getIDOfLayer();
         var spec = legendLayer.artLayers.add();
         spec.kind = LayerKind.TEXT;

@@ -1,6 +1,8 @@
 ﻿#target indesign
 
 #include "json2.js"
+#include "specctrUtility.jsx"
+
 var debug = false;
 var prevTime;
 var _specctr;
@@ -12,7 +14,9 @@ Application.prototype.doUndoableScript = function(theFunction,undoName) {
 }
 
 Paragraph.prototype.lineWidth = function() {
-  return (this.characters.lastItem().horizontalOffset - this.characters.firstItem().horizontalOffset);
+    
+    return (this.characters.lastItem().horizontalOffset - this.characters.firstItem().horizontalOffset);
+    
 }
 
 MasterSpread.prototype.findItemByID = function(id) {
@@ -726,7 +730,7 @@ $.specctrId = {
         xText.move([xTextPos, yTextPos],undefined);
             
         var itemsGroup = currPage.groups.add([xText,yLine,xLine],legendLayer);
-        itemsGroup.name="Specctr Coordinates Mark";
+        itemsGroup.name="spec_crd_" + this.getLayerName(pageItem);
                 
         xText.insertLabel("specctrSourceId",pageItem.id.toString());
         xText.insertLabel("specctrType","specctrCoordsText");
@@ -942,7 +946,7 @@ $.specctrId = {
     
         if(items.length) {
             itemsGroup = currPage.groups.add(items,legendLayer);
-            itemsGroup.name="Specctr Dimension Mark";
+            itemsGroup.name="spec_wh_" + this.getLayerName(pageItem);
             itemsGroup.insertLabel("specctrSourceId",pageItem.id.toString());
             itemsGroup.insertLabel("specctrType","specctrDimensionsGroup");
            
@@ -1169,7 +1173,10 @@ $.specctrId = {
             items[1].insertLabel("specctrType","specctrSpacingDoubleLine");
 
             itemsGroup = currPage.groups.add(items,legendLayer);
-            itemsGroup.name="Specctr Spacing Mark";
+            
+            var aName = this.getLayerName(aItem).substring(0,10);
+            var bName = this.getLayerName(bItem).substring(0,10);
+            itemsGroup.name="spec_spc_"+aName+"_"+bName;
 
             itemsGroup.insertLabel("specctrSourceIds",sourceIds);
 
@@ -1304,7 +1311,7 @@ $.specctrId = {
             if(items.length)
             {
                 itemsGroup = currPage.groups.add(items,legendLayer);
-                itemsGroup.name="Specctr Spacing Mark";
+                itemsGroup.name="spec_spc_" + this.getLayerName(pageItem);;
 
                 itemsGroup.insertLabel("specctrSourceId",pageItem.id.toString());
                 itemsGroup.insertLabel("specctrType","specctrSpacingSingleGroup");
@@ -1350,7 +1357,7 @@ $.specctrId = {
             }
             
             legendLayer = this.legendNoteLayer();
-            var infoText = noteText;
+            var infoText = $.specctrUtility.breakStringAtLength(noteText, 30);;
             var pageItemBounds = this.itemCoords(pageItem);
             var currPage = this.getCurrentPage ();
             var currSpread = this.getCurrentSpread();
@@ -1418,6 +1425,7 @@ $.specctrId = {
             spec.fit(FitOptions.FRAME_TO_CONTENT);
 
             var maxWidth = allParas[0].lineWidth();
+            
             for(var i=1;i<allParas.length;i++) {
             maxWidth = Math.max(maxWidth,allParas[i].lineWidth());
             }
@@ -1527,7 +1535,7 @@ $.specctrId = {
             itemCircle.insertLabel("specctrCoords",itemCircle.geometricBounds.join("|"));
             spec.insertLabel("specctrCoords",spec.geometricBounds.join("|"));
             pageItem.insertLabel("specctrCoords",pageItem.geometricBounds.join("|"));
-            specGroup = currPage.groups.add([spec,itemCircle,arm],legendLayer,undefined,undefined,{name:"Specctr Add Notes"});
+            specGroup = currPage.groups.add([spec,itemCircle,arm],legendLayer,undefined,undefined,{name: "spec_note_"+this.getLayerName(pageItem)});
             specGroup.insertLabel("specctrSourceId",pageItem.id.toString());
             specGroup.insertLabel("specctrType","noteGroup");
 
@@ -1557,16 +1565,24 @@ $.specctrId = {
             var spacing = 10;
             var itemType = this.pageItemType(pageItem);
             var legendLayer;
-            var newColor;
+            var newColor, specGroupName = "";
             
+            //Check if property layers present or not.
+            var bIsPropertyLayerPresent = this.IsLayerPresent("Specctr Text Properties");
+            if(!bIsPropertyLayerPresent) 
+                bIsPropertyLayerPresent = this.IsLayerPresent("Specctr Object Properties");
+                        
             if(itemType=="text") {
                 newColor = this.legendColorType();
                 legendLayer = this.legendTextPropertiesLayer();
+                specGroupName = "spec_txt_";
              } else {
                 newColor = this.legendColorObject();
                 legendLayer = this.legendObjectPropertiesLayer();
+                specGroupName = "spec_shp_";
             }
-             
+            
+            specGroupName += this.getLayerName(pageItem);
             var infoText = "";
             var pageItemBounds = this.itemCoords(pageItem);
             var currPage = this.getCurrentPage ();
@@ -1583,12 +1599,15 @@ $.specctrId = {
             }
         
             var specGroup = currSpread.findByTypeAndSourceId("specctrInfoGroup",pageItem.id);
-            var num;
+            var num, bIsUpdate = false;
             if(specGroup) {
                 num = specGroup.extractLabel("specNumber");
                 specGroup.ungroup();
+                
+                if(num)
+                    bIsUpdate = true;
             }
-            
+
             var spec = currSpread.findByTypeAndSourceId("specctrInfoSpec",pageItem.id);
             var arm = currSpread.findByTypeAndSourceId("specctrInfoArm",pageItem.id);
             var itemCircle = currSpread.findByTypeAndSourceId("specctrInfoCircle",pageItem.id);
@@ -1599,9 +1618,9 @@ $.specctrId = {
             if(!num)
              num = app.activeDocument.extractLabel("specNumber");
 
-            if(!num)
+            if(!num || !bIsPropertyLayerPresent)
                 num = 1;
-            
+
             if(arm) {
                 arm.remove();
                 arm = null;
@@ -1624,14 +1643,14 @@ $.specctrId = {
 
             var gb = pageItem.visibleBounds;
             gb[1] = gb[3]+spacing;
-            gb[3] = gb[1]+100;
+            gb[3] = gb[1]+500;
 
             var specExisted = true;
             if(!spec) {
                 spec = currPage.textFrames.add(legendLayer,undefined,undefined,{geometricBounds:gb});
                 specExisted = false;
             }
-            
+        
             spec.parentStory.contents = infoText;
             spec.parentStory.alignToBaseline = false;
             spec.parentStory.fillColor = newColor;
@@ -1640,6 +1659,7 @@ $.specctrId = {
             spec.fit(FitOptions.FRAME_TO_CONTENT);
             spec.recompose();
             spec.fit(FitOptions.FRAME_TO_CONTENT);
+
             var allParas = spec.paragraphs;
 
             //make all paras 1 line
@@ -1653,7 +1673,7 @@ $.specctrId = {
                     i=-1;
                 }
             }
-        
+
             spec.fit(FitOptions.FRAME_TO_CONTENT);
             spec.recompose();
             spec.fit(FitOptions.FRAME_TO_CONTENT);
@@ -1783,13 +1803,11 @@ $.specctrId = {
             if(model.specOption == "Line") {
                 arm.insertLabel("specctrCoords",arm.geometricBounds.join("|"));
                 itemCircle.insertLabel("specctrCoords",itemCircle.geometricBounds.join("|"));
-                specGroup = currPage.groups.add([spec,itemCircle,arm],legendLayer,undefined,undefined,{name:"Specctr Properties Mark"});
-
+                specGroup = currPage.groups.add([spec,itemCircle,arm],legendLayer,undefined,undefined,{name:specGroupName});
             } else {
                 firstbullet.insertLabel("specctrFirstBullet", firstbullet.geometricBounds.join("|"));
                 secbullet.insertLabel("specctrSecondBullet", secbullet.geometricBounds.join("|"));
-                specGroup = currPage.groups.add([spec,secbullet,firstbullet],legendLayer,undefined,undefined,{name:"Specctr Properties Mark"});
-
+                specGroup = currPage.groups.add([spec,secbullet,firstbullet],legendLayer,undefined,undefined,{name:specGroupName});
             }
 
             spec.insertLabel("specctrCoords",spec.geometricBounds.join("|"));
@@ -1799,8 +1817,10 @@ $.specctrId = {
             
             if(model.specOption == "Bullet") {
                 specGroup.insertLabel("specNumber", num.toString());
-                var specNumber = parseInt(num) + 1;
-                app.activeDocument.insertLabel("specNumber", specNumber.toString());
+                if(!bIsUpdate) {
+                    var specNumber = parseInt(num) + 1;
+                    app.activeDocument.insertLabel("specNumber", specNumber.toString());
+                }
             }
              
             specGroup.insertLabel("specctrCoords",specGroup.geometricBounds.join("|"));
@@ -1898,10 +1918,10 @@ $.specctrId = {
         var newLayer;
 
         try {
-            newLayer = app.activeDocument.layers.itemByName("Add Notes");
+            newLayer = app.activeDocument.layers.itemByName("Specctr Notes");
             newLayer.id;
         } catch(e) {
-            newLayer=app.activeDocument.layers.add({name:"Add Notes"});
+            newLayer=app.activeDocument.layers.add({name:"Specctr Notes"});
             newLayer.move(LocationOptions.AT_BEGINNING);
         }
         //newLayer.locked=false;
@@ -1987,7 +2007,7 @@ $.specctrId = {
                 break;
             }
             
-            return result;
+        return result;
     },
 
     typeUnits : function() {
@@ -1998,95 +2018,87 @@ $.specctrId = {
     },
 
     colorAsString : function(c,tint) {
-
-        if(tint==-1 || tint==undefined) tint = 100;
+        if(tint==-1 || tint==undefined) 
+            tint = 100;
     
-    
-			var result="";
-                    
-			var color = c;
-            if(c.constructor.name=="Gradient") 
-            {
-                result="Gradient ";
-                if(c.type==GradientType.LINEAR) result+="linear";
-                else result+="radial";
-                for(var i=0;i<c.gradientStops.length;i++)
-                try{
-                 result+="\r"+this.colorAsString(c.gradientStops[i].stopColor,tint);   
-                 }catch(e){}
-                 return result;
-            }
+        var result="";
+        var color = c;
         
-			var newColor;
-			
-			var sourceSpace = c.space;
-			var targetSpace;
-			var colorComponents = c.colorValue;
-			
-             
-			
-				
-			switch(model.legendColorMode)
-				{
-					case "LAB": targetSpace = ColorSpace.LAB; break;
-					case "CMYK":
-						targetSpace=ColorSpace.CMYK; break;
-					case "RGB":	
-					default:
-						targetSpace=ColorSpace.RGB; break;
-				}
-				
-            if(targetSpace!=sourceSpace)
-		{	newColor = c.duplicate();
-            newColor.space = targetSpace;
-           }
-        else newColor = c;
-		  	
-			color = newColor;
+        if(c.constructor.name=="Gradient") {
+            result="Gradient ";
             
-			switch(color.space)
-			{
+            if(c.type==GradientType.LINEAR) 
+                result+="linear";
+            else 
+                result+="radial";
+            
+            for(var i=0;i<c.gradientStops.length;i++)
+            try{
+                result+="\r"+this.colorAsString(c.gradientStops[i].stopColor,tint);   
+             }catch(e){}
+             
+             return result;
+        }
+        
+        var newColor;
+        var sourceSpace = c.space;
+        var targetSpace;
+        var colorComponents = c.colorValue;
 				
+        switch(model.legendColorMode) {
+            case "LAB": targetSpace = ColorSpace.LAB; break;
+            case "CMYK":
+                targetSpace=ColorSpace.CMYK; break;
+            case "RGB":	
+            default:
+                targetSpace=ColorSpace.RGB; break;
+        }
+
+        if(targetSpace!=sourceSpace) {	
+            newColor = c.duplicate();
+            newColor.space = targetSpace;
+        } else {
+            newColor = c;
+        }
+		  	
+        color = newColor;
+            
+        switch(color.space) {
+            case ColorSpace.CMYK:
+                result="C"+Math.round(color.colorValue[0]*tint/100)+" M"+Math.round(color.colorValue[1]*tint/100)+" Y"+Math.round(color.colorValue[2]*tint/100)+" K"+Math.round(color.colorValue[3]*tint/100);
+                break;
 				
-				case ColorSpace.CMYK:
-				result="C"+Math.round(color.colorValue[0]*tint/100)+" M"+Math.round(color.colorValue[1]*tint/100)+" Y"+Math.round(color.colorValue[2]*tint/100)+" K"+Math.round(color.colorValue[3]*tint/100);
-				break;
-				
-				case ColorSpace.LAB:
-				result="L"+this.lightnessTint(color.colorValue[0],tint)+" a"+Math.round(color.colorValue[1])+" b"+Math.round(color.colorValue[2]);
-				break;
+            case ColorSpace.LAB:
+                result="L"+this.lightnessTint(color.colorValue[0],tint)+" a"+Math.round(color.colorValue[1])+" b"+Math.round(color.colorValue[2]);
+                break;
                 
-                case ColorSpace.RGB:
-                default:
-					switch(model.legendColorMode)
-					{
-					case "HSB":
-						result = this.rgbToHsv(color.colorValue,tint);
-					break;
+            case ColorSpace.RGB:
+            default:
+                switch(model.legendColorMode) {
+                    case "HSB":
+                        result = this.rgbToHsv(color.colorValue,tint);
+                        break;
 				
-					case "HSL":
-						result = this.rgbToHsl(color.colorValue,tint);
-					break;
+                    case "HSL":
+                        result = this.rgbToHsl(color.colorValue,tint);
+                        break;
 				
-					case "RGB":
-					default:
-					if(model.useHexColor)
-					{
-						var red=this.rgbTint(color.colorValue[0],tint).toString(16);
-						if (red.length==1) red="0"+red;
-						var green=this.rgbTint(color.colorValue[1],tint).toString(16);
-						if (green.length==1) green="0"+green;
-						var blue=this.rgbTint(color.colorValue[2],tint).toString(16);
-						if (blue.length==1) blue="0"+blue;
-					
-						result = "#"+red+green+blue;
-					}
-					
-					else	
-						result="R"+this.rgbTint(color.colorValue[0],tint)+" G"+this.rgbTint(color.colorValue[1],tint)+" B"+this.rgbTint(color.colorValue[2],tint);
-					}
-				break;
-				
+                    case "RGB":
+                    default:
+                        if(model.useHexColor) {
+                            var red=this.rgbTint(color.colorValue[0],tint).toString(16);
+                            if (red.length==1) red="0"+red;
+                            var green=this.rgbTint(color.colorValue[1],tint).toString(16);
+                            if (green.length==1) green="0"+green;
+                            var blue=this.rgbTint(color.colorValue[2],tint).toString(16);
+                            if (blue.length==1) blue="0"+blue;
+                        
+                            result = "#"+red+green+blue;
+                        } else {
+                            result="R"+this.rgbTint(color.colorValue[0],tint)+" G"+this.rgbTint(color.colorValue[1],tint)+" B"+this.rgbTint(color.colorValue[2],tint);
+                        }
+                }
+                break;
 			}
 			
 			if (c.model == ColorModel.SPOT || c.name.toLowerCase().indexOf("pantone")!=-1)
@@ -2098,35 +2110,34 @@ $.specctrId = {
 			return result;
 		},
 		
- rgbToHsl : function(rgb,tint)
-		{
-            if(tint==-1) tint =100;
-			var r = rgb[0];
-			var g = rgb[1];
-			var b = rgb[2];
-			r = rgbTint(r,tint)/255, g = rgbTint(g,tint)/255, b = rgbTint(b,tint)/255;
-			
-             //recalc with tint
-            
-			var max = Math.max(r, g, b);
-			var min = Math.min(r, g, b);
-			var h, s, l = (max + min) / 2;
-			
-			if(max == min){
-				h = s = 0; // achromatic
-			}else{
-				var d = max - min;
-				s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-				switch(max){
-					case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-					case g: h = (b - r) / d + 2; break;
-					case b: h = (r - g) / d + 4; break;
-				}
-				h /= 6;
-			}
-			
-			return "H"+Math.round(h*360)+" S"+Math.round(s*100)+" L"+Math.round(l*100);
-		},
+    rgbToHsl : function(rgb,tint) {
+        if(tint==-1) tint =100;
+        var r = rgb[0];
+        var g = rgb[1];
+        var b = rgb[2];
+        r = rgbTint(r,tint)/255, g = rgbTint(g,tint)/255, b = rgbTint(b,tint)/255;
+        
+         //recalc with tint
+        
+        var max = Math.max(r, g, b);
+        var min = Math.min(r, g, b);
+        var h, s, l = (max + min) / 2;
+        
+        if(max == min){
+            h = s = 0; // achromatic
+        }else{
+            var d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch(max){
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+            h /= 6;
+        }
+        
+        return "H"+Math.round(h*360)+" S"+Math.round(s*100)+" L"+Math.round(l*100);
+    },
 		
  rgbToHsv : function(rgb,tint)
 		{
@@ -2161,276 +2172,246 @@ $.specctrId = {
 			return "H"+Math.round(h*360)+" S"+Math.round(s*100)+" B"+Math.round(v*100);
 		},
 
-rgbTint : function(val,tint)
-{
-    tint = 100-tint;
+    rgbTint : function(val,tint) {
+        tint = 100-tint;
         return Math.round(Math.min(255,Math.max(0,val+(255-val)*tint/100)));
-},
+    },
 
-lightnessTint : function(val,tint)
-{
-    tint = 100-tint;
+    lightnessTint : function(val,tint) {
+        tint = 100-tint;
         return Math.round(Math.min(100,Math.max(0,val+(100-val)*tint/100)));
-},
+    },
 
-getSpecsInfoForItem : function(pageItem,itemType)
-				{
-
-					var infoText="";
-                      if(pageItem.name) infoText=pageItem.name+"\r"; //make it bold
-                      
-                      var cssText = "";  //"." ???
-                      /*
-                      
-                      
-                      if(pageItem.name) cssText+=pageItem.name.toLowerCase();
-                      else cssText+=pageItem.constructor.name.toLowerCase();
-                      
-                      cssText+= " {\r\t" + pageItem.constructor.name.toLowerCase() + ";";   //?
-                      */
-                      if(itemType=="shape" || itemType=="mixed") //shape properties
-                      {
-
-                         if(model.shapeFillStyle || model.shapeFillColor) 
-						try{
-    
-							infoText+="Background: ";
-                              cssText += "\tfill: ";
-                              
-							if(model.shapeFillStyle)
-							{
-								if (pageItem.fillColor.name=="None")
-                                    {
-									infoText+="None";
-                                     cssText += "none;";
-                                     }
-                                     else
-                                     cssText += "solid;";
-							}
-
-							if(model.shapeFillColor && pageItem.fillColor.name!="None")
-                            {
-                                 var color = this.colorAsString(pageItem.fillColor,pageItem.fillTint);
-								infoText+=color;
-                                    cssText += "\r\tcolor: "+color.toLowerCase()+";";
-                                }
-                            //tint?
-                              infoText+="\r";
-
-						}catch(e){};
-
-
-					if (model.shapeStrokeStyle || model.shapeStrokeColor || model.shapeStrokeSize) 
-						try{
-							if (pageItem.strokeWeight!=0) infoText+="Border: ";
-                            
-                            
-                            if(model.shapeStrokeSize && pageItem.strokeWeight!=0)
-                            {
-                                    var strokeWidth = this.pointsToUnitsString(pageItem.strokeWeight,null);
-                                    infoText+=  strokeWidth;
-                                    cssText += "\r\tstroke-width: " + strokeWidth + ";";
-                              }
-                          
-                            if(model.shapeStrokeColor && pageItem.strokeWeight!=0)
-                            {
-                                 var strokeColor = this.colorAsString(pageItem.strokeColor,pageItem.strokeTint);
-                                infoText+=", "+strokeColor; 
-                                cssText += "\r\tstroke-color: " + strokeColor.toLowerCase() + ";";
-                
-								   
-                              }  
-
-							if(model.shapeStrokeStyle)
-                                {
-                                    cssText += "\r\tstroke-style: ";
-								 if (pageItem.strokeWeight!=0) 
-                                    {
-                                        infoText+=", "+pageItem.strokeType.name.toLowerCase();
-                                    cssText += pageItem.strokeType.name.toLowerCase()+";";
-                                    }
-                                    else cssText += "none;";
-                                 }   
-                              
-                                if (pageItem.strokeWeight!=0) infoText+="\r";
-
-						}catch(e){};
-                        
-                        
-                        if(model.shapeBorderRadius)
-                        try{
-                                //check if we have radius on any corner
-                                 if(pageItem.topRightCornerOption!=CornerOptions.NONE || pageItem.topLeftCornerOption!=CornerOptions.NONE || pageItem.bottomRightCornerOption!=CornerOptions.NONE || pageItem.bottomLeftCornerOption!=CornerOptions.NONE)
-                                {
-                                    var myRadius = Math.max(pageItem.topRightCornerRadius,pageItem.topLeftCornerRadius,
-                                    pageItem.bottomRightCornerRadius,pageItem.bottomLeftCornerRadius);
-                                    if(myRadius!=0)
-                                    {
-                                    infoText+="Border radius: ";
-                                    var roundCornerValue = this.pointsToUnitsString(myRadius,null);
-                                    infoText+= roundCornerValue;
-                                     infoText+="\r";
-                                     cssText += "\r\tborder-radius: " + roundCornerValue + ";";
-                                     }
-                                }
-                            }catch(e){}
-                        
-                        if(model.shapeAlpha)
-                        {
-                            var alpha = Math.round(pageItem.transparencySettings.blendingSettings.opacity)+"%"; 
-                            infoText+="Opacity: "+  alpha + "\r";      
-                            cssText += "\r\topacity: " + alpha + ";";
-                        }
-                       
-                      }
-                      
-                    
-                      if(itemType=="text" || itemType=="mixed") //text properties
-                      {
-
-                         var fontSize, leading;
-
-                        if(model.specInEM)
-                        {
-                        var rltvFontSize = 16, rltvLineHeight = undefined;
+    getSpecsInfoForItem : function(pageItem,itemType) {
+        var infoText="";
+        
+        if(pageItem.name) 
+            infoText=pageItem.name+"\r"; 
             
-                        if(model.baseFontSize != 0 && !isNaN(model.baseFontSize))
-                            rltvFontSize = parseFloat(model.baseFontSize);
-             
-                        if(model.baseLineHeight != 0 && !isNaN(model.baseLineHeight))
-                            rltvLineHeight = parseFloat(model.baseLineHeight);
-                        else
-                                rltvLineHeight = rltvFontSize * 1.4;
-                        }
-    
+        var cssText = "";
+        /*if(pageItem.name) cssText+=pageItem.name.toLowerCase();
+                else cssText+=pageItem.constructor.name.toLowerCase();
+              cssText+= " {\r\t" + pageItem.constructor.name.toLowerCase() + ";";   //? */
 
-                         var styleRanges = pageItem.texts[0].textStyleRanges.everyItem().getElements().slice(0);
-                         var prevStyleRangeSpec = "";
-                         var cssRanges = [];
-                         
-                         for(var i=0;i<styleRanges.length;i++)
-                        try{
-                        var textItem = styleRanges[i].characters[0];
-                        var currStyleRangeSpec = "";
-                        var currCssRange = "";
-						if(model.textFont)
-							try{
-                                currStyleRangeSpec+="Font-Family: "+textItem.appliedFont.fullName;
-                                currStyleRangeSpec+="\r";
-                                currCssRange += "\r\tfont-family: " + textItem.appliedFont.fullName + ";";
-                                }catch(e){}
+        //shape properties
+        if(itemType=="shape" || itemType=="mixed") {
 
-						if(model.textSize)
-                         try{
-                             var fontSize;
-                             if(model.specInEM)
-                             fontSize = Math.round(textItem.pointSize / rltvFontSize *100)/100+" em";
-                             else
-                             fontSize = Math.round(textItem.pointSize*10)/10+" "+this.typeUnits();
-                             
-                             currStyleRangeSpec+="Font-Size: "+ fontSize;
-                                currStyleRangeSpec+="\r";
-                                
-                                currCssRange += "\r\tfont-size: " + fontSize + ";";
-                                }catch(e){}
-                            
-                            if(model.textColor)
-                             try{
-                                 var textColor = this.colorAsString(textItem.fillColor,textItem.fillTint);
-							currStyleRangeSpec+="Color: "+textColor;
-                            currStyleRangeSpec+="\r";
-                            currCssRange += "\r\tcolor: " + textColor.toLowerCase() + ";";
-                             }catch(e){}
-
-						if(model.textAlignment)
-						try{
-                            currStyleRangeSpec+="Text-Align: ";
-							var s = textItem.justification;	
-                            var currAlign;
-                            if(s==Justification.CENTER_ALIGN || s==Justification.CENTER_JUSTIFIED)
-							currAlign="center";
-                            if(s==Justification.LEFT_ALIGN || s==Justification.LEFT_JUSTIFIED)      
-							currAlign="left";
-                            if(s==Justification.RIGHT_ALIGN || s==Justification.RIGHT_JUSTIFIED)      
-                            currAlign = "right";
-							currStyleRangeSpec+=currAlign+" align";
-                            currStyleRangeSpec+="\r";
-                            
-                             currCssRange+= "\r\ttext-align: " + currAlign + ";";
-						}catch(e){}
-    
-						if(model.textLeading)
-                         try{
-                             var leading = textItem.leading;
-                             if (leading==Leading.AUTO) 
-                             leading = textItem.autoLeading/100*textItem.pointSize;
+            //Shape fill and color style.
+            if(model.shapeFillStyle || model.shapeFillColor) 
+            try{
+                infoText+="Background: ";
+                cssText += "\tfill: ";
                               
-                              if(model.specInEM)
-                           leading=Math.round(leading / rltvLineHeight*100)/100+" em";
-                           else
-						leading = Math.round(leading*10)/10+" "+this.typeUnits();
-                        
-                          
-						currStyleRangeSpec+="Line-Height: "+leading;
-                        
-                        currStyleRangeSpec+="\r";
-                        currCssRange+= "\r\tline-height: " + leading + ";";
-                        }catch(e){}
-
-						if(model.textTracking)
-                        try{
-                            var tracking = Math.round(textItem.tracking/1000*100)/100+" em";
-							currStyleRangeSpec+="Letter-Spacing: "+ tracking;
-                            currStyleRangeSpec+="\r";
-                            currCssRange+= "\r\tletter-spacing: " + tracking + ";";
-                            }catch(e){}
-
-						if(model.textStyle)
-						try{
-							var styleString;
-
-							if (textItem.capitalization==Capitalization.ALL_CAPS) styleString="All Caps";
-							if (textItem.capitalization==Capitalization.CAP_TO_SMALL_CAP) styleString="OpenType Small Caps";
-							if (textItem.capitalization==Capitalization.SMALL_CAPS) styleString="Small Caps";
-							if (textItem.capitalization==Capitalization.NORMAL) styleString="Normal";
-
-							if(textItem.position==Position.SUBSCRIPT) styleString+=" subscript";
-							if(textItem.position==Position.SUPERSCRIPT) styleString+=" superscript";
-							if (textItem.underline) styleString+=" underline";
-							if (textItem.strikeThru) styleString+=" strikethrough";
-
-
-							currStyleRangeSpec+="Font-Style: "+styleString;
-                           currStyleRangeSpec+="\r";
-                           currCssRange += "\r\tfont-style: " + styleString.toLowerCase() + ";";
-						}catch(e){}
-
-                    if(currStyleRangeSpec!=prevStyleRangeSpec)
-                    {
-                            infoText+=currStyleRangeSpec;
-                            prevStyleRangeSpec = currStyleRangeSpec;
-                            cssRanges.push(currCssRange);
+                if(model.shapeFillStyle) {
+                    if(pageItem.fillColor.name=="None") {
+                        infoText+="None";
+                        cssText += "none;";
+                    } else {
+                        cssText += "solid;";
                     }
+                }
 
-                    }catch(e){}//end for
-                
-                if(cssRanges.length)
-                    pageItem.insertLabel("css_ranges",cssRanges.toSource());
-                
-                     if(itemType=="text" && model.shapeAlpha)
-                     try{
-                         var alpha = Math.round(pageItem.transparencySettings.blendingSettings.opacity)+"%"; 
-						infoText+="Opacity: "+  alpha + "\r";                  
-                        cssText += "\r\topacity: " + alpha + ";";
-                            }catch(e){}
+                if(model.shapeFillColor && pageItem.fillColor.name!="None") {
+                    var color = this.colorAsString(pageItem.fillColor,pageItem.fillTint);
+                    infoText+=color;
+                    cssText += "\r\tcolor: "+color.toLowerCase()+";";
+                }
+
+                infoText+="\r";
+
+            }catch(e){};
+
+            //Shape stroke properties.
+            if(model.shapeStrokeStyle || model.shapeStrokeColor || model.shapeStrokeSize) 
+            try{
+                if(pageItem.strokeWeight!=0) infoText+="Border: ";
                             
-                    }//end text
-	
+                if(model.shapeStrokeSize && pageItem.strokeWeight!=0) {
+                    var strokeWidth = this.pointsToUnitsString(pageItem.strokeWeight,null);
+                    infoText+=  strokeWidth;
+                    cssText += "\r\tstroke-width: " + strokeWidth + ";";
+                }
+                          
+                if(model.shapeStrokeColor && pageItem.strokeWeight!=0) {
+                    var strokeColor = this.colorAsString(pageItem.strokeColor,pageItem.strokeTint);
+                    infoText+=", "+strokeColor; 
+                    cssText += "\r\tstroke-color: " + strokeColor.toLowerCase() + ";";
+                }  
 
-                       pageItem.insertLabel("css_main",cssText);
-                       
-					return infoText;
-				},
+                if(model.shapeStrokeStyle) {
+                    cssText += "\r\tstroke-style: ";
+                    if(pageItem.strokeWeight!=0) {
+                        infoText+=", "+pageItem.strokeType.name.toLowerCase();
+                        cssText += pageItem.strokeType.name.toLowerCase()+";";
+                    } else { 
+                        cssText += "none;";
+                    }
+                }   
+                
+                if (pageItem.strokeWeight!=0) infoText+="\r";
+
+            }catch(e){};
+                        
+            if(model.shapeBorderRadius)
+            try{
+                //check if we have radius on any corner
+                if(pageItem.topRightCornerOption!=CornerOptions.NONE || pageItem.topLeftCornerOption!=CornerOptions.NONE || 
+                    pageItem.bottomRightCornerOption!=CornerOptions.NONE || pageItem.bottomLeftCornerOption!=CornerOptions.NONE) {
+
+                    var myRadius = Math.max(pageItem.topRightCornerRadius,pageItem.topLeftCornerRadius,
+                    pageItem.bottomRightCornerRadius,pageItem.bottomLeftCornerRadius);
+                            
+                    if(myRadius!=0) {
+                        infoText+="Border radius: ";
+                        var roundCornerValue = this.pointsToUnitsString(myRadius,null);
+                        infoText+= roundCornerValue;
+                        infoText+="\r";
+                        cssText += "\r\tborder-radius: " + roundCornerValue + ";";
+                    }
+                }
+            }catch(e){}
+                        
+            if(model.shapeAlpha) {
+                var alpha = Math.round(pageItem.transparencySettings.blendingSettings.opacity)+"%"; 
+                infoText+="Opacity: "+  alpha + "\r";      
+                cssText += "\r\topacity: " + alpha + ";";
+            }
+        }
+        
+        //text properties.
+        if(itemType=="text" || itemType=="mixed") {
+            var fontSize, leading;
+            if(model.specInEM) {
+                var rltvFontSize = 16, rltvLineHeight = undefined;
+                
+                if(model.baseFontSize != 0 && !isNaN(model.baseFontSize))
+                    rltvFontSize = parseFloat(model.baseFontSize);
+             
+                if(model.baseLineHeight != 0 && !isNaN(model.baseLineHeight))
+                    rltvLineHeight = parseFloat(model.baseLineHeight);
+                else
+                    rltvLineHeight = rltvFontSize * 1.4;
+            }
+    
+            var styleRanges = pageItem.texts[0].textStyleRanges.everyItem().getElements().slice(0);
+            var prevStyleRangeSpec = "";
+            var cssRanges = [];
+                         
+            for(var i=0;i<styleRanges.length;i++)
+            try{
+                var textItem = styleRanges[i].characters[0];
+                var currStyleRangeSpec = "";
+                var currCssRange = "";
+                if(model.textFont)
+                try{
+                    currStyleRangeSpec+="Font-Family: "+textItem.appliedFont.fullName;
+                    currStyleRangeSpec+="\r";
+                    currCssRange += "\r\tfont-family: " + textItem.appliedFont.fullName + ";";
+                }catch(e){}
+
+                if(model.textSize)
+                try{
+                    var fontSize;
+                    if(model.specInEM)
+                        fontSize = Math.round(textItem.pointSize / rltvFontSize *100)/100+" em";
+                    else
+                        fontSize = Math.round(textItem.pointSize*10)/10+" "+this.typeUnits();
+                             
+                    currStyleRangeSpec+="Font-Size: "+ fontSize;
+                    currStyleRangeSpec+="\r";
+                    currCssRange += "\r\tfont-size: " + fontSize + ";";
+                }catch(e){}
+                            
+                if(model.textColor)
+                try{
+                    var textColor = this.colorAsString(textItem.fillColor,textItem.fillTint);
+                    currStyleRangeSpec+="Color: "+textColor;
+                    currStyleRangeSpec+="\r";
+                    currCssRange += "\r\tcolor: " + textColor.toLowerCase() + ";";
+                 }catch(e){}
+
+                if(model.textAlignment)
+                try{
+                    currStyleRangeSpec+="Text-Align: ";
+                    var s = textItem.justification;	
+                    var currAlign;
+                    if(s==Justification.CENTER_ALIGN || s==Justification.CENTER_JUSTIFIED)
+                        currAlign="center";
+                    if(s==Justification.LEFT_ALIGN || s==Justification.LEFT_JUSTIFIED)      
+                        currAlign="left";
+                    if(s==Justification.RIGHT_ALIGN || s==Justification.RIGHT_JUSTIFIED)      
+                        currAlign = "right";
+                    currStyleRangeSpec+=currAlign+" align";
+                    currStyleRangeSpec+="\r";
+                    currCssRange+= "\r\ttext-align: " + currAlign + ";";
+                }catch(e){}
+    
+                if(model.textLeading)
+                try{
+                    var leading = textItem.leading;
+                    if(leading==Leading.AUTO) 
+                        leading = textItem.autoLeading/100*textItem.pointSize;
+                          
+                    if(model.specInEM)
+                        leading=Math.round(leading / rltvLineHeight*100)/100+" em";
+                   else
+                        leading = Math.round(leading*10)/10+" "+this.typeUnits();
+                          
+                    currStyleRangeSpec+="Line-Height: "+leading;
+                    currStyleRangeSpec+="\r";
+                    currCssRange+= "\r\tline-height: " + leading + ";";
+                }catch(e){}
+
+                if(model.textTracking)
+                try{
+                    var tracking = Math.round(textItem.tracking/1000*100)/100+" em";
+                    currStyleRangeSpec+="Letter-Spacing: "+ tracking;
+                    currStyleRangeSpec+="\r";
+                    currCssRange+= "\r\tletter-spacing: " + tracking + ";";
+                }catch(e){}
+
+                if(model.textStyle)
+                try{
+                    var styleString;
+
+                    if (textItem.capitalization==Capitalization.ALL_CAPS) styleString="All Caps";
+                    if (textItem.capitalization==Capitalization.CAP_TO_SMALL_CAP) styleString="OpenType Small Caps";
+                    if (textItem.capitalization==Capitalization.SMALL_CAPS) styleString="Small Caps";
+                    if (textItem.capitalization==Capitalization.NORMAL) styleString="Normal";
+
+                    if(textItem.position==Position.SUBSCRIPT) styleString+=" subscript";
+                    if(textItem.position==Position.SUPERSCRIPT) styleString+=" superscript";
+                    if (textItem.underline) styleString+=" underline";
+                    if (textItem.strikeThru) styleString+=" strikethrough";
+
+                    currStyleRangeSpec+="Font-Style: "+styleString;
+                    currStyleRangeSpec+="\r";
+                    currCssRange += "\r\tfont-style: " + styleString.toLowerCase() + ";";
+                }catch(e){}
+
+                if(currStyleRangeSpec!=prevStyleRangeSpec) {
+                    infoText+=currStyleRangeSpec + "\r";
+                    prevStyleRangeSpec = currStyleRangeSpec;
+                    cssRanges.push(currCssRange);
+                }
+
+            }catch(e){}//end for
+                
+            if(cssRanges.length)
+                pageItem.insertLabel("css_ranges",cssRanges.toSource());
+                
+            if(itemType=="text" && model.shapeAlpha)
+            try{
+                var alpha = Math.round(pageItem.transparencySettings.blendingSettings.opacity)+"%"; 
+                infoText+="Opacity: "+  alpha;
+                cssText += "\r\topacity: " + alpha + ";";
+            }catch(e){}
+                            
+        }//end text
+	
+        pageItem.insertLabel("css_main",cssText);
+        return infoText;
+    },
 
     addIfNotExists : function(colorArray) {                
         var result;
@@ -2646,11 +2627,19 @@ getSpecsInfoForItem : function(pageItem,itemType)
                             legendLayer = $.specctrId.legendObjectPropertiesLayer();
                         }
             
-                    if(model.specOption == "Line")
+                    if(model.specOption == "Line") {
+                        var name = spec.parent.name;
+                        if(!name)
+                            name = "Specctr Properties Marks";
+                        
+                        if(firstBullet) firstBullet.remove();
+                        if(secondBullet) secondBullet.remove();
+                        
                         $.specctrId.updateSpecByType(source, spec, arm, itemCircle, legendLayer, 
-                            newColor, itemType, "Specctr Properties Mark", "specctrInfoGroup", "specctrInfoArm", "specctrInfoCircle");
-                     else 
+                            newColor, itemType, name, "specctrInfoGroup", "specctrInfoArm", "specctrInfoCircle");
+                     } else {
                         $.specctrId.createPropertySpecsForItem(source);
+                    }
                     } catch (e) {}
                 }
 
@@ -2658,8 +2647,12 @@ getSpecsInfoForItem : function(pageItem,itemType)
               if(source && noteSpec) {
                   try{
                         var noteLegendLayer = $.specctrId.legendNoteLayer();
+                        var name = noteSpec.parent.name;
+                        if(!name)
+                            name = "Specctr Add Notes";
+                            
                         $.specctrId.updateSpecByType(source, noteSpec, noteArm, noteItemCircle, noteLegendLayer, 
-                            newColor, itemType, "Specctr Add Notes", "noteGroup", "noteArm", "noteItemCircle");
+                            newColor, itemType, name, "noteGroup", "noteArm", "noteItemCircle");
                     } catch (e) {}
                 }
             }//for id end
@@ -2919,8 +2912,47 @@ getSpecsInfoForItem : function(pageItem,itemType)
         denominator /= factor;
         numerator /= factor;
         return numerator + "/" + denominator + postUnit;
+    },
+
+    getLayerName : function (artLayer) {
+        try {
+            var name = artLayer.name;
+            if (!name && this.pageItemType(artLayer) == "text")
+                name = artLayer.contents;
+            
+            var maxWordAllowed = 5;
+            var maxCharAllowed = 20;
+            var nameArr = [];
+            name = name.split(/[\( ,.'?!;:\r\)]+/);
+            
+            if(name.length > maxWordAllowed) {
+                for(var i = 0; i < maxWordAllowed; i++)
+                    nameArr[i] = name[i];
+            } else {
+                nameArr = name;
+            }
+
+            name = nameArr.join("_").substring(0,maxCharAllowed).toLowerCase();
+        } catch (e) {}
+        
+        if(!name) {
+            name = artLayer.toString().split(/[ \] ]+/);   //Format will be like "[Object PathItem]". We need PathItem which will be on 2nd index.
+            name = name[1].toLowerCase();
+        }
+    
+        return name;
+    },
+
+    IsLayerPresent : function (layerName) {
+        try {
+            var newLayer = app.activeDocument.layers.itemByName(layerName);
+            newLayer.id;
+        } catch(e) {
+            return false;
+        }
+        return true;
     }
-		
+
 };
 
 

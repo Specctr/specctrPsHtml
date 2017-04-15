@@ -182,7 +182,9 @@ $.specctrPsSpacing = {
     
         if(legendLayer === "") {
             legendLayer = $.specctrPsCommon.legendSpecLayer("Spacing", parent).layerSets.add();
-            legendLayer.name = "Specctr Spacing Mark";
+            var aName = $.specctrPsCommon.getLayerName(artLayer1).substring(0,10);
+            var bName = $.specctrPsCommon.getLayerName(artLayer2).substring(0,10);
+            legendLayer.name = "spec_spc_"+aName+"_"+bName;
         }
     
         var spec = legendLayer.layerSets.add();
@@ -341,7 +343,7 @@ $.specctrPsSpacing = {
 
         if(legendLayer === "") {
             legendLayer = $.specctrPsCommon.legendSpecLayer("Spacing", parent).layerSets.add();
-            legendLayer.name = "Specctr Spacing Mark";
+            legendLayer.name = "spec_spc_"+$.specctrPsCommon.getLayerName(artLayer);
         }
 
         var specItemsGroup = legendLayer.layerSets.add();

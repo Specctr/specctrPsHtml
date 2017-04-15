@@ -170,18 +170,26 @@ Specctr.cloudAPI = {
 		var css = JSON.parse(cssInfo);
 		var cssJson = CSSJSON.toJSON(css.text);
         cssJson.children = Specctr.cloudAPI.moveTextContent(cssJson.children);
+        
+        
+      //Get image base 64 data.
+        var filePath = pref.getExportedFilePath();
+        var imageBase64Data = window.cep.fs.readFile(filePath, window.cep.encoding.Base64).data;
+        pref.deleteFile(filePath);
 
         //$("#spinnerBlock").show();
         var timestamp = Math.floor(Date.now() / 1000);
-
+       
 		var data = JSON.stringify({
             timestamp: timestamp,
 			api_key: api_key,
 			machine_id: machine_id,
 			document_name: css.document_name,
+			document_image: imageBase64Data,
 			css_items: cssJson.children,
 			project_id: response.project_id,
             application: hostApplication
+            
 		});
 
 		$.ajax({

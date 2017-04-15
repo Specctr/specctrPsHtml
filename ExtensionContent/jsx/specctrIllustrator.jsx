@@ -6,6 +6,7 @@
 
 #target illustrator
 #include "json2.js"
+#include "specctrUtility.jsx"
 
 var model;
 var heightChoice = {"Left" : 1 , "Right" : 2, "Center" : 3};
@@ -255,7 +256,7 @@ $.specctrAi = {
     },
 
     //Export the specs into styles.
-    exportCss : function() {
+    exportCss : function(filePath) {
         var isExportedSuccessfully = false;
         try {
             var styleText = cssBodyText;            //Add the body text at the top of css file.
@@ -277,6 +278,7 @@ $.specctrAi = {
             };
 
             if(model.cloudOption == "export") {
+                this.exportToJPEG(filePath);
                 return JSON.stringify(cssInfo);
             } else {
                 //Create the file and export it.
@@ -625,7 +627,7 @@ $.specctrAi = {
                 specctrId = this.setUniqueIDToItem(pageItem);
 
             itemsGroup.note = specctrId;
-            itemsGroup.name = "Specctr Dimension Mark";
+            itemsGroup.name = "spec_wh_"+this.getLayerName(pageItem);
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);
          
         } catch(e) {
@@ -817,7 +819,7 @@ $.specctrAi = {
             verticalLineMain.strokeWidth = model.armWeight;
             verticalLineMain.strokeColor = newColor;
             verticalLine.move(itemsGroup, ElementPlacement.INSIDE);
-            itemsGroup.name = "Specctr Coordinates Mark";
+            itemsGroup.name = "spec_crd_"+this.getLayerName(pageItem);
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);  //Moving 'Coordinates' group into 'Specctr' layer group.
         
            //Set the id to the page item if no id is assigned to that item.
@@ -1089,7 +1091,9 @@ $.specctrAi = {
              
             //Store the note to the spacing spec's group.
             itemsGroup.note = aSpecctrId + bSpecctrId;
-            itemsGroup.name = "Specctr Spacing Mark";
+            var aName = this.getLayerName(aItem).substring(0,10);
+            var bName = this.getLayerName(bItem).substring(0,10);
+            itemsGroup.name = "spec_spc_"+aName+"_"+bName;
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);
             
         } catch(e) {
@@ -1350,7 +1354,7 @@ $.specctrAi = {
                 
             //Store the unique IDs to the spacing spec's group.
             itemsGroup.note = specctrId;
-            itemsGroup.name = "Specctr Spacing Mark";
+            itemsGroup.name = "spec_spc_" + this.getLayerName(pageItem);
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);
             
         } catch(e) {
@@ -1783,7 +1787,12 @@ $.specctrAi = {
             if (specctrId == "")
                 specctrId = this.setUniqueIDToItem(pageItem);
 
-            group.name = "Specctr Properties Mark";
+            if(pageItem.typename == "TextFrame")
+                group.name = "spec_txt_";
+            else
+                group.name = "spec_shp_";
+
+            group.name += this.getLayerName(pageItem);
             group.move(legendLayer, ElementPlacement.INSIDE);
             group.note = '{"type":"property","specctrId":"' + specctrId + '"}';
             
@@ -1926,8 +1935,9 @@ $.specctrAi = {
                 spec.name = "noteSpec";
             }
 
-            if(noteText != "")
-                spec.contents = noteText;
+            if(noteText != "") {
+                spec.contents = $.specctrUtility.breakStringAtLength(noteText, 30);
+            }
 
             spec.textRange.characterAttributes.fillColor = newColor;
             spec.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
@@ -2022,7 +2032,7 @@ $.specctrAi = {
             if (specctrId == "")
                 specctrId = this.setUniqueIDToItem(pageItem);
 
-            group.name = "Specctr Add Notes";
+            group.name = "spec_note_"+this.getLayerName(pageItem);
             group.note =  '{"type":"note","specctrId":"' + specctrId + '"}';
             group.move(legendLayer, ElementPlacement.INSIDE);
             
@@ -2865,6 +2875,45 @@ $.specctrAi = {
         denominator /= factor;
         numerator /= factor;
         return numerator + "/" + denominator + postUnit;
+    },
+
+    getLayerName : function (artLayer) {
+        try {
+            var name = artLayer.name;
+            if (!name && artLayer.typename == "TextFrame")
+                name = artLayer.contents;
+                
+            var maxWordAllowed = 5;
+            var maxCharAllowed = 20;
+            var nameArr = [];
+            name = name.split(/[ ,.'?!;:\r\)]+/);
+            
+            if(name.length > maxWordAllowed) {
+                for(var i = 0; i < maxWordAllowed; i++)
+                    nameArr[i] = name[i];
+            } else {
+                nameArr = name;
+            }
+        
+            name = nameArr.join("_").substring(0,maxCharAllowed).toLowerCase();
+        } catch (e) {}
+        
+        if(!name)
+            name =  artLayer.typename.toLowerCase();
+    
+        return name;
+    },
+
+    //Export ai as jpg.
+    exportToJPEG : function (filePath) {
+        if ( app.documents.length > 0 ) {
+            var exportOptions = new ExportOptionsJPEG();
+            var type = ExportType.JPEG;
+            var fileSpec = new File(filePath);
+            exportOptions.antiAliasing = false;
+            exportOptions.qualitySetting = 40;
+            app.activeDocument.exportFile( fileSpec, type, exportOptions );
+        }
     }
 };
 

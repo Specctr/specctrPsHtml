@@ -12,6 +12,13 @@ Specctr.buttonHandlers = {
 	expandCanvas : Specctr.Utility.tryCatchLog(function(){
 		analytics.trackFeature('expand_canvas');
 		buttonController.closeAllDropDown();
+		
+		//Pop up a dialog message showing message and open the dropdown for input.
+		if ($("#canvasExpandSize").val() <= 0) {
+			specctrDialog.showAlert(" <br> <br>VALUE SHOULD BE GREATER THAN 0.");
+			buttonController.openDropDown("btnExpand");
+		}
+		
 		setModel();
 		evalScript("$.specctr" + hostApplication + "." + "createCanvasBorder()");
 		pref.writeAppPrefs();
@@ -53,16 +60,18 @@ Specctr.buttonHandlers = {
 			return;
 		}
 		
+		//Get path where to export jpg file.
+		var filePath = pref.getExportedFilePath();
+		
 		setModel();
 		//$("#spinnerBlock").show();
 		$("#uploadBtnLabel").html("Uploading...");
 		$("#uploadingGif").show();
 		
 		// Upload specs to Specctr.
-		evalScript("$.specctr" + hostApplication + "." + "exportCss()", function(cssInfo) {
+		evalScript("$.specctr" + hostApplication + "." + "exportCss('"+filePath+"')", function(cssInfo) {
 			
 			try {
-				
 				
 				if(!cssInfo) {
 //					$("#spinnerBlock").hide();

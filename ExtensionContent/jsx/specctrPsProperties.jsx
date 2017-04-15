@@ -179,7 +179,7 @@ $.specctrPsProperties = {
                     infoText  = this.getSpecsInfoForTextItem(sourceItem);
                     newColor = $.specctrPsCommon.legendColor(model.legendColorType);
                     legendLayer = this.legendPropertiesLayer("Text Specs", parent).layerSets.add();
-                    legendLayer.name = "Text Spec ";
+                    legendLayer.name = "spec_txt_"+$.specctrPsCommon.getLayerName(artLayer);
                     
                     if(!model.textLayerName) nameLength = 0;
                     
@@ -189,7 +189,7 @@ $.specctrPsProperties = {
                 case LayerKind.SOLIDFILL: 
                     infoText = this.getSpecsInfoForPathItem(sourceItem, cssBounds);
                     legendLayer = this.legendPropertiesLayer("Object Specs", parent).layerSets.add();
-                    legendLayer.name = "Object Spec ";
+                    legendLayer.name = "spec_shp_"+$.specctrPsCommon.getLayerName(artLayer);
                     
                     if(!model.shapeLayerName) nameLength = 0;
                     
@@ -198,7 +198,7 @@ $.specctrPsProperties = {
                 default: 
                     infoText = this.getSpecsInfoForGeneralItem(sourceItem, cssBounds); 
                     legendLayer = this.legendPropertiesLayer("Object Specs", parent).layerSets.add();
-                    legendLayer.name = "Object Spec ";
+                    legendLayer.name = "spec_shp_"+$.specctrPsCommon.getLayerName(artLayer);
                     
                     if(!model.shapeLayerName) nameLength = 0;
                     
