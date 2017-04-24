@@ -128,7 +128,6 @@ pref.getConfigFilePath = function() {
  */
 pref.getExportedFilePath = function() {
 	var filePath = this.getPrefernceDirectory().replace("file:///", "");
-	filePath += "/sTemp.jpg";
 	return filePath;
 };
 

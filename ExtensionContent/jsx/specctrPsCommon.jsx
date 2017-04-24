@@ -770,6 +770,25 @@ $.specctrPsCommon = {
         return null;
     },
 
+    //Get artboard bounds,
+    artBoardBounds : function () {
+         var ref = new ActionReference();
+        ref.putEnumerated( charIDToTypeID( "Lyr " ), charIDToTypeID( "Ordn" ), charIDToTypeID( "Trgt" ) );
+        var isThisArtBoard = executeActionGet(ref).getBoolean(stringIDToTypeID("artboardEnabled"));
+        if(!isThisArtBoard) 
+            return null;
+        
+        // get artboard dimensions
+        var artBoardRect = executeActionGet(ref).getObjectValue(stringIDToTypeID("artboard")).getObjectValue(stringIDToTypeID("artboardRect"));
+        var bounds = [];
+        bounds[0] = new UnitValue (artBoardRect.getDouble(stringIDToTypeID("left")), "px");
+        bounds[1] = new UnitValue (artBoardRect.getDouble(stringIDToTypeID("top")), "px");
+        bounds[2] = new UnitValue (artBoardRect.getDouble(stringIDToTypeID("right")), "px");
+        bounds[3] = new UnitValue (artBoardRect.getDouble(stringIDToTypeID("bottom")), "px");
+         
+         return bounds;
+    },
+
     getArtBoard : function (artLayer) {
          try {
             var parent = artLayer.parent;
