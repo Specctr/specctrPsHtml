@@ -88,8 +88,10 @@ $.specctrPsExportCss = {
         var model = $.specctrPsCommon.getModel();
  
         if(model.cloudOption == "export") {
-            //Export the active document as jpg.
-            this.exportToJPEG(filePath);
+            //Set data for each artboard and export each artboard individually otherwise eport the doc.
+            var docImageArray = [];
+            this.SetDocumentImgDetails(docImageArray, filePath);
+            cssInfo.document_images = docImageArray;
             return JSON.stringify(cssInfo);
         } else {
             //Create the file and export it.
@@ -211,6 +213,104 @@ $.specctrPsExportCss = {
             jpegOptions.matte = MatteType.NONE;  
             app.activeDocument.saveAs(new File(filePath), jpegOptions, true); 
         }
+    },
+
+    SetDocumentImgDetails : function (docImageArray, filePath) {
+        try {
+            var pref = app.preferences;
+            var startRulerUnits = pref.rulerUnits; 
+            pref.rulerUnits = Units.PIXELS;
+            
+            //Get list of artboards.
+            var abList = this.getAllArtboards();
+            var abCount = abList[0];
+            
+            if(abCount < 1) {
+                var doc = app.activeDocument;
+                var obj = {};
+                obj.image_data = "";
+                obj.name = app.activeDocument.name.toLowerCase().replace(".psd", "");
+                obj.width = doc.width + "";
+                obj.height = doc.height + "";
+                obj.is_artboard = false;
+                obj.is_LayerId = "";
+                obj.ext = "jpg";
+                docImageArray.push(obj);
+                pref.rulerUnits = startRulerUnits;
+                
+                //Export the active document as jpg.
+                this.exportToJPEG(filePath + "/" + obj.name + "." + obj.ext);
+                
+                return;
+            }
+        
+            //Make all invisible.
+            for (var i = 0; i < abCount; i++) {
+                this.selectLayerByIndex(abList[1][i]);
+                app.activeDocument.activeLayer.visible = false;
+            }
+
+            for (i = 0; i < abCount; i++) {
+                this.selectLayerByIndex(abList[1][i]);
+                var artLayer = app.activeDocument.activeLayer;
+                artLayer.visible = true;
+                var bounds = $.specctrPsCommon.artBoardBounds();
+                var obj = {};
+                obj.image_data = "";
+                obj.name = artLayer.name;
+                obj.width = (bounds[2]-bounds[0]) + "";
+                obj.height = (bounds[3]-bounds[1]) + "";
+                obj.top = bounds[1] + "";
+                obj.bottom = bounds[3] + "";
+                obj.left = bounds[0] + "";
+                obj.right = bounds[2] + "";
+                obj.is_artboard = true;
+                obj.is_LayerId = i+1;
+                obj.ext = "jpg";
+                docImageArray.push(obj);
+                this.exportToJPEG(filePath +"/"+obj.name+"."+obj.ext);
+                artLayer.visible = false;
+            }
+            
+            //Make all layer visible.
+            for (i = 0; i < abCount; i++) {
+                this.selectLayerByIndex(abList[1][i]);
+                app.activeDocument.activeLayer.visible = true;
+            }
+        
+        } catch (e) {alert(e);}
+        pref.rulerUnits = startRulerUnits;
+    },
+
+    getAllArtboards : function () {
+        try {
+            var ab = [];
+            var theRef = new ActionReference();
+            theRef.putProperty(charIDToTypeID('Prpr'), stringIDToTypeID("artboards"));
+            theRef.putEnumerated(charIDToTypeID('Dcmn'), charIDToTypeID('Ordn'), charIDToTypeID('Trgt'));
+            var getDescriptor = new ActionDescriptor();
+            getDescriptor.putReference(stringIDToTypeID("null"), theRef);
+            var abDesc = executeAction(charIDToTypeID("getd"), getDescriptor, DialogModes.NO).getObjectValue(stringIDToTypeID("artboards"));
+            var abCount = abDesc.getList(stringIDToTypeID('list')).count;
+            if (abCount > 0) {
+                for (var i = 0; i < abCount; ++i) {
+                    var abObj = abDesc.getList(stringIDToTypeID('list')).getObjectValue(i);
+                    var abTopIndex = abObj.getInteger(stringIDToTypeID("top"));
+                    ab.push(abTopIndex);
+
+                }
+            }
+            return [abCount, ab];
+        } catch (e) { alert(e); }
+    },
+
+    selectLayerByIndex : function (index) {
+        var ref = new ActionReference();
+        ref.putIndex(charIDToTypeID("Lyr "), index + 1);
+        var desc = new ActionDescriptor();
+        desc.putReference(charIDToTypeID("null"), ref);
+        desc.putBoolean(charIDToTypeID("MkVs"), false);
+        executeAction(charIDToTypeID("slct"), desc, DialogModes.NO);
     }
 
 };

@@ -170,13 +170,19 @@ Specctr.cloudAPI = {
 		var css = JSON.parse(cssInfo);
 		var cssJson = CSSJSON.toJSON(css.text);
         cssJson.children = Specctr.cloudAPI.moveTextContent(cssJson.children);
-        
-        
-      //Get image base 64 data.
+         
+        var docImageArr = css.document_images;
+        console.log(cssInfo);
+                
+        //Get image base 64 data.
         var filePath = pref.getExportedFilePath();
-        var imageBase64Data = window.cep.fs.readFile(filePath, window.cep.encoding.Base64).data;
-        pref.deleteFile(filePath);
-
+        var arrSize = docImageArr.length;
+        for (var i = 0; i < arrSize; i++) {
+        	var path = filePath +"/"+docImageArr[i].name+"."+docImageArr[i].ext;
+        	docImageArr[i].image_data = window.cep.fs.readFile(path, window.cep.encoding.Base64).data;
+        	pref.deleteFile(path);
+        }
+        
         //$("#spinnerBlock").show();
         var timestamp = Math.floor(Date.now() / 1000);
        
@@ -185,12 +191,14 @@ Specctr.cloudAPI = {
 			api_key: api_key,
 			machine_id: machine_id,
 			document_name: css.document_name,
-			document_image: imageBase64Data,
+			document_images: docImageArr,
 			css_items: cssJson.children,
 			project_id: response.project_id,
             application: hostApplication
             
 		});
+		
+		console.log(data);
 
 		$.ajax({
 			url: getApi() + "/documents/" + response.document_id,
