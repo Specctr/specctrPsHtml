@@ -233,7 +233,7 @@ $.specctrPsExportCss = {
                 obj.width = doc.width + "";
                 obj.height = doc.height + "";
                 obj.is_artboard = false;
-                obj.is_LayerId = "";
+                obj.layer_id = "";
                 obj.ext = "jpg";
                 docImageArray.push(obj);
                 pref.rulerUnits = startRulerUnits;
@@ -265,7 +265,7 @@ $.specctrPsExportCss = {
                 obj.left = bounds[0] + "";
                 obj.right = bounds[2] + "";
                 obj.is_artboard = true;
-                obj.is_LayerId = i+1;
+                obj.layer_id = i+1;
                 obj.ext = "jpg";
                 docImageArray.push(obj);
                 this.exportToJPEG(filePath +"/"+obj.name+"."+obj.ext);

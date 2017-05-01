@@ -3,7 +3,8 @@ File-Name: cloudUploadWS.js
 Description: Consist all the ajax call methods for uploading css to servers.
  */
 
-if (Specctr.Utility.getHostApp() == "Ps") {
+//if (Specctr.Utility.getHostApp() == "Ps") {
+if (false) {
     var WebSocket = require('ws');
     var Q =  require('q');
     var wsConnect;
@@ -237,7 +238,8 @@ Specctr.cloudAPI = {
 					$("#successUploadBlock").show();
 				}
 
-                if (hostApplication == "Ps") {
+                //if (hostApplication == "Ps") {
+                if (false) {
                     wsConnect.done(function() {
                         var params = {
                             message: 'specctr_upload',
