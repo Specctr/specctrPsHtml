@@ -82,7 +82,7 @@ $.specctrPsDimension = {
 
         if(legendLayer === "") {
             legendLayer = $.specctrPsCommon.legendSpecLayer("Dimensions", parent).layerSets.add();
-            legendLayer.name = "spec_wh_"+$.specctrPsCommon.getLayerName(artLayer); 
+            legendLayer.name = "SPEC_wh_"+$.specctrPsCommon.getLayerName(artLayer); 
         }
 
         var widthValue = '', heightValue = '';

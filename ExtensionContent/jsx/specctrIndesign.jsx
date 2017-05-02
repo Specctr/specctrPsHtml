@@ -730,7 +730,7 @@ $.specctrId = {
         xText.move([xTextPos, yTextPos],undefined);
             
         var itemsGroup = currPage.groups.add([xText,yLine,xLine],legendLayer);
-        itemsGroup.name="spec_crd_" + this.getLayerName(pageItem);
+        itemsGroup.name="SPEC_crd_" + this.getLayerName(pageItem);
                 
         xText.insertLabel("specctrSourceId",pageItem.id.toString());
         xText.insertLabel("specctrType","specctrCoordsText");
@@ -946,7 +946,7 @@ $.specctrId = {
     
         if(items.length) {
             itemsGroup = currPage.groups.add(items,legendLayer);
-            itemsGroup.name="spec_wh_" + this.getLayerName(pageItem);
+            itemsGroup.name="SPEC_wh_" + this.getLayerName(pageItem);
             itemsGroup.insertLabel("specctrSourceId",pageItem.id.toString());
             itemsGroup.insertLabel("specctrType","specctrDimensionsGroup");
            
@@ -1176,7 +1176,7 @@ $.specctrId = {
             
             var aName = this.getLayerName(aItem).substring(0,10);
             var bName = this.getLayerName(bItem).substring(0,10);
-            itemsGroup.name="spec_spc_"+aName+"_"+bName;
+            itemsGroup.name="SPEC_spc_"+aName+"_"+bName;
 
             itemsGroup.insertLabel("specctrSourceIds",sourceIds);
 
@@ -1311,7 +1311,7 @@ $.specctrId = {
             if(items.length)
             {
                 itemsGroup = currPage.groups.add(items,legendLayer);
-                itemsGroup.name="spec_spc_" + this.getLayerName(pageItem);;
+                itemsGroup.name="SPEC_spc_" + this.getLayerName(pageItem);;
 
                 itemsGroup.insertLabel("specctrSourceId",pageItem.id.toString());
                 itemsGroup.insertLabel("specctrType","specctrSpacingSingleGroup");
@@ -1535,7 +1535,7 @@ $.specctrId = {
             itemCircle.insertLabel("specctrCoords",itemCircle.geometricBounds.join("|"));
             spec.insertLabel("specctrCoords",spec.geometricBounds.join("|"));
             pageItem.insertLabel("specctrCoords",pageItem.geometricBounds.join("|"));
-            specGroup = currPage.groups.add([spec,itemCircle,arm],legendLayer,undefined,undefined,{name: "spec_note_"+this.getLayerName(pageItem)});
+            specGroup = currPage.groups.add([spec,itemCircle,arm],legendLayer,undefined,undefined,{name: "SPEC_note_"+this.getLayerName(pageItem)});
             specGroup.insertLabel("specctrSourceId",pageItem.id.toString());
             specGroup.insertLabel("specctrType","noteGroup");
 
@@ -1575,11 +1575,11 @@ $.specctrId = {
             if(itemType=="text") {
                 newColor = this.legendColorType();
                 legendLayer = this.legendTextPropertiesLayer();
-                specGroupName = "spec_txt_";
+                specGroupName = "SPEC_txt_";
              } else {
                 newColor = this.legendColorObject();
                 legendLayer = this.legendObjectPropertiesLayer();
-                specGroupName = "spec_shp_";
+                specGroupName = "SPEC_shp_";
             }
             
             specGroupName += this.getLayerName(pageItem);
