@@ -208,7 +208,7 @@ $.specctrPsExportCss = {
     exportToJPEG : function (filePath) {
         if (app.documents.length > 0  && filePath) {  
             var jpegOptions = new JPEGSaveOptions();  
-            jpegOptions.quality = 1;            //Quality is less in order to keep the size minimum. 
+            jpegOptions.quality = 9;            
             jpegOptions.embedColorProfile = true;  
             jpegOptions.matte = MatteType.NONE;  
             app.activeDocument.saveAs(new File(filePath), jpegOptions, true); 
