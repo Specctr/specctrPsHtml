@@ -21,6 +21,12 @@ To view our tutorials and for support visit the Specctr Help Center: https://spe
 -------
 CHANGES
 -------
+v.3.2.1
+- Mark spec layers more clearly.
+
+v.3.2.0
+- Spec paragraph styles.
+
 v.3.1.33
 - Reduce analytics prefix.
 

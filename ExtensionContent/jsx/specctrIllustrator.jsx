@@ -627,7 +627,7 @@ $.specctrAi = {
                 specctrId = this.setUniqueIDToItem(pageItem);
 
             itemsGroup.note = specctrId;
-            itemsGroup.name = "spec_wh_"+this.getLayerName(pageItem);
+            itemsGroup.name = "SPEC_wh_"+this.getLayerName(pageItem);
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);
          
         } catch(e) {
@@ -819,7 +819,7 @@ $.specctrAi = {
             verticalLineMain.strokeWidth = model.armWeight;
             verticalLineMain.strokeColor = newColor;
             verticalLine.move(itemsGroup, ElementPlacement.INSIDE);
-            itemsGroup.name = "spec_crd_"+this.getLayerName(pageItem);
+            itemsGroup.name = "SPEC_crd_"+this.getLayerName(pageItem);
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);  //Moving 'Coordinates' group into 'Specctr' layer group.
         
            //Set the id to the page item if no id is assigned to that item.
@@ -1093,7 +1093,7 @@ $.specctrAi = {
             itemsGroup.note = aSpecctrId + bSpecctrId;
             var aName = this.getLayerName(aItem).substring(0,10);
             var bName = this.getLayerName(bItem).substring(0,10);
-            itemsGroup.name = "spec_spc_"+aName+"_"+bName;
+            itemsGroup.name = "SPEC_spc_"+aName+"_"+bName;
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);
             
         } catch(e) {
@@ -1354,7 +1354,7 @@ $.specctrAi = {
                 
             //Store the unique IDs to the spacing spec's group.
             itemsGroup.note = specctrId;
-            itemsGroup.name = "spec_spc_" + this.getLayerName(pageItem);
+            itemsGroup.name = "SPEC_spc_" + this.getLayerName(pageItem);
             itemsGroup.move(legendLayer, ElementPlacement.INSIDE);
             
         } catch(e) {
@@ -1788,9 +1788,9 @@ $.specctrAi = {
                 specctrId = this.setUniqueIDToItem(pageItem);
 
             if(pageItem.typename == "TextFrame")
-                group.name = "spec_txt_";
+                group.name = "SPEC_txt_";
             else
-                group.name = "spec_shp_";
+                group.name = "SPEC_shp_";
 
             group.name += this.getLayerName(pageItem);
             group.move(legendLayer, ElementPlacement.INSIDE);
@@ -2032,7 +2032,7 @@ $.specctrAi = {
             if (specctrId == "")
                 specctrId = this.setUniqueIDToItem(pageItem);
 
-            group.name = "spec_note_"+this.getLayerName(pageItem);
+            group.name = "SPEC_note_"+this.getLayerName(pageItem);
             group.note =  '{"type":"note","specctrId":"' + specctrId + '"}';
             group.move(legendLayer, ElementPlacement.INSIDE);
             
