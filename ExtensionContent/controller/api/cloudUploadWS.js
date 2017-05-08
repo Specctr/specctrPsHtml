@@ -53,8 +53,6 @@ Specctr.cloudAPI = {
 	 */
 	getProjectList: Specctr.Utility.tryCatchLog(function(data, projectId) {
 		
-	//	$("#spinnerBlock").show();
-		
 		$.ajax({
 			url: getApi() + "/projects/list",
 			type: "GET",
@@ -63,7 +61,6 @@ Specctr.cloudAPI = {
 			dataType: "json",
 			success: function(response, xhr) {
 				pref.log(JSON.stringify(response));
-		//		$("#spinnerBlock").hide();
 				$("#tabContainer").hide();
 				$("#dvCloudContainer").show();
 
@@ -100,7 +97,6 @@ Specctr.cloudAPI = {
 				}
 			},
 			error: function(xhr) {
-				//$("#spinnerBlock").hide();
 				$("#uploadBtnLabel").html("Upload");
 				$("#uploadingGif").hide();
 				specctrDialog.showAlert('error');
@@ -116,7 +112,6 @@ Specctr.cloudAPI = {
 		var css = JSON.parse(cssInfo);
 		var cssJson = CSSJSON.toJSON(css.text);
 		
-//		$("#spinnerBlock").show();
 		var data = JSON.stringify({
 			api_key: api_key,
 			machine_id: machine_id,
@@ -134,11 +129,9 @@ Specctr.cloudAPI = {
 			data: data,
 			success: function(response, xhr) {
 				pref.log('Synced css for document: ' + JSON.stringify(response));
-	//			$("#spinnerBlock").hide();
 				Specctr.cloudAPI.uploadCss(cssInfo, response, true);
 			},
 			error: function(xhr) {
-				//$("#spinnerBlock").hide();
 				$("#uploadBtnLabel").html("Upload");
 				$("#uploadingGif").hide();
 				specctrDialog.showAlert('error');
@@ -174,7 +167,7 @@ Specctr.cloudAPI = {
          
         var docImageArr = css.document_images;
         console.log(cssInfo);
-                
+        
         //Get image base 64 data.
         var filePath = pref.getExportedFilePath();
         var arrSize = docImageArr.length;
@@ -183,8 +176,7 @@ Specctr.cloudAPI = {
         	docImageArr[i].image_data = window.cep.fs.readFile(path, window.cep.encoding.Base64).data;
         	pref.deleteFile(path);
         }
-        
-        //$("#spinnerBlock").show();
+
         var timestamp = Math.floor(Date.now() / 1000);
        
 		var data = JSON.stringify({

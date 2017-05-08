@@ -278,7 +278,10 @@ $.specctrAi = {
             };
 
             if(model.cloudOption == "export") {
-                this.exportToJPEG(filePath);
+                //Set data for each artboard and export each artboard individually otherwise eport the doc.
+                var docImageArray = [];
+                this.SetDocumentImgDetails(docImageArray, filePath);
+                cssInfo.document_images = docImageArray;
                 return JSON.stringify(cssInfo);
             } else {
                 //Create the file and export it.
@@ -2877,6 +2880,7 @@ $.specctrAi = {
         return numerator + "/" + denominator + postUnit;
     },
 
+    //Get layer name after applying some filter i.e. only 20 chars allowed and max 5 words.
     getLayerName : function (artLayer) {
         try {
             var name = artLayer.name;
@@ -2904,7 +2908,7 @@ $.specctrAi = {
         return name;
     },
 
-    //Export ai as jpg.
+    //Export  each artboard as jpg.
     exportToJPEG : function (filePath) {
         if ( app.documents.length > 0 ) {
             var exportOptions = new ExportOptionsJPEG();
@@ -2912,13 +2916,41 @@ $.specctrAi = {
             var fileSpec = new File(filePath);
             exportOptions.antiAliasing = false;
             exportOptions.qualitySetting = 40;
+            exportOptions.artBoardClipping = true;
             app.activeDocument.exportFile( fileSpec, type, exportOptions );
         }
-    }
-};
+    },
 
-
-		
-
+    //Get the details of each artboard and export each one as jpeg.
+    SetDocumentImgDetails : function (docImageArray, filePath) {
+        try {
+            var doc = app.activeDocument;
+            var abLength = doc.artboards.length;
+            var activeAbIndex = doc.artboards.getActiveArtboardIndex();
+            
+            for (i = 0; i < abLength; i++) {
+                doc.artboards.setActiveArtboardIndex(i);
+                var obj = {};
+                this.setImageDataIntoObject(obj, doc.artboards[i], i);
+                docImageArray.push(obj);
+                this.exportToJPEG(filePath +"/"+obj.name+"."+obj.ext);
+           }
+       
+            doc.artboards.setActiveArtboardIndex(activeAbIndex);
+        } catch (e) {
+            alert(e);
+        }
+    },
     
-
+    //Create object of the artboard info.
+    setImageDataIntoObject : function (obj, artboard, index) {
+        var bounds = artboard.artboardRect;
+        obj.image_data = "";
+        obj.name = artboard.name;
+        obj.width = (bounds[2]-bounds[0]) + "";
+        obj.height = (bounds[1]-bounds[3]) + "";
+        obj.is_artboard = true;
+        obj.layer_id = index+1;
+        obj.ext = "jpg";
+    },
+};
