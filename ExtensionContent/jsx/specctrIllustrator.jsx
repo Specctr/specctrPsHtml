@@ -2915,7 +2915,7 @@ $.specctrAi = {
             var type = ExportType.JPEG;
             var fileSpec = new File(filePath);
             exportOptions.antiAliasing = false;
-            exportOptions.qualitySetting = 40;
+            exportOptions.qualitySetting = 80;
             exportOptions.artBoardClipping = true;
             app.activeDocument.exportFile( fileSpec, type, exportOptions );
         }
@@ -2944,9 +2944,13 @@ $.specctrAi = {
     
     //Create object of the artboard info.
     setImageDataIntoObject : function (obj, artboard, index) {
+        var abName = artboard.name;
+        var arr = abName.split(/[ ,-.'?!;:\r\)]+/);
+        abName = arr.join('_');
+
         var bounds = artboard.artboardRect;
         obj.image_data = "";
-        obj.name = artboard.name;
+        obj.name = abName;
         obj.width = (bounds[2]-bounds[0]) + "";
         obj.height = (bounds[1]-bounds[3]) + "";
         obj.is_artboard = true;
