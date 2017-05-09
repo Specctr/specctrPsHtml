@@ -345,9 +345,55 @@ $.specctrId = {
         app.doUndoableScript (this.createCanvas(), "Create Canvas Border");
     },
 
-    //Export the specs into styles.
-    exportCss : function() {
+    //Export  the document as jpg.
+    exportToJPEG : function (filePath) {
+        if ( app.documents.length > 0 ) {
+            var fileSpec = new File(filePath);
+            app.activeDocument.exportFile(ExportFormat.jpg, fileSpec);
+        }
+    },
 
+    //Get the details of each page and export each one as jpeg.
+    SetDocumentImgDetails : function (docImageArray, filePath) {
+        try {
+            var doc = app.activeDocument;
+            var abLength = doc.pages.length;
+            
+            for (i = 0; i < abLength; i++) {
+                var obj = {};
+                this.setImageDataIntoObject(obj, doc, doc.pages[i], i);
+                docImageArray.push(obj);
+           }
+        
+            //Exports each page individually by default.
+           this.exportToJPEG(filePath +"/"+doc.name.toLowerCase().replace(".indd",'')+"."+obj.ext);
+
+        } catch (e) {
+            alert(e);
+        }
+    },
+    
+    //Create object of the page info.
+    setImageDataIntoObject : function (obj, doc, page, index) {
+        var abName = page.name;
+        
+        if(index == 0)
+            abName = doc.name.toLowerCase().replace(".indd",'');
+        else 
+            abName = doc.name.toLowerCase().replace(".indd",'')+ page.name;
+
+        var bounds = page.bounds;
+        obj.image_data = "";
+        obj.name = abName;
+        obj.width = (bounds[2]-bounds[0]) + "";
+        obj.height = (bounds[3]-bounds[1]) + "";
+        obj.is_artboard = true;
+        obj.layer_id = index+1;
+        obj.ext = "jpg";
+    },
+
+    //Export the specs into styles.
+    exportCss : function(filePath) {
         //css specs easily get unsynced, it would be better to create them on exporting
         var isExportedSuccessfully = false;
         var rltvFontSize = 16;
@@ -356,21 +402,17 @@ $.specctrId = {
         
         if(model.specInEM)
             cssBodyText = "body {\r\tfont-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;\r}\r\r";
-            /*
-            The reason that some aren’t exported with a “.” is that we figured that most of the text elements should be global <html> tags not classes. For example <h1> <h2> or <body> tags. (http://www.w3schools.com/tags/tag_hn.asp)
-            Maybe you can help us write the logic for a system that works like this: if the title of the layer is : h1, h2, h3, h4, h5, h6 , or body then don’t add the  “.” to make it into a global tag. All other layer titles should be exported as classes with a “.”
-        */
-        try
-        {
         
+        /*The reason that some aren’t exported with a “.” is that we figured that most of the text elements should be global <html> tags not classes. For example <h1> <h2> or <body> tags. (http://www.w3schools.com/tags/tag_hn.asp)
+            Maybe you can help us write the logic for a system that works like this: if the title of the layer is : h1, h2, h3, h4, h5, h6 , or body then don’t add the  “.” to make it into a global tag. All other layer titles should be exported as classes with a “.” */
+        
+        try {
             var styleText = cssBodyText;            //Add the body text at the top of css file.
-              //texts, then shapes, then the rest (?)
-             var docRef = app.activeDocument;
-             
+            var docRef = app.activeDocument;
             var allItems =  docRef.allPageItems;
             var cssItems = ({textItems:[],shapeItems:[],otherItems:[]});
-            for(var i=0;i<allItems.length;i++)
-            {
+            
+            for(var i=0;i<allItems.length;i++) {
                 var currItem = allItems[i];
                 if(!(currItem.extractLabel("css_ranges") || 
                 currItem.extractLabel("css_coords") ||
@@ -378,16 +420,15 @@ $.specctrId = {
                 currItem.extractLabel("css_main")))
                 continue;
                 
-                try{currItem.parentStory; 
+                try{
+                    currItem.parentStory; 
                     cssItems.textItems.push(currItem);
-                    }catch(e){cssItems.shapeItems.push(currItem);}
-                
+                }catch(e){cssItems.shapeItems.push(currItem);}
             }
-        
+
             allItems = cssItems.textItems.concat(cssItems.shapeItems);
         
-            for(var i=0;i<allItems.length;i++)
-            {
+            for(var i=0;i<allItems.length;i++) {
                 var currItem = allItems[i];
                 var currName = currItem.name;
                 if(!currName) currName = currItem.constructor.name.toLowerCase();
@@ -405,7 +446,7 @@ $.specctrId = {
                 try{
                     if(cssRanges) cssRanges = eval(cssRanges)[0];
                     styleText+=cssRanges+"\r";
-                    }catch(e){}
+                }catch(e){}
                 
                 if(cssMain) styleText+=cssMain+"\r";
                 if(cssDims) styleText+=cssDims+"\r";
@@ -413,8 +454,7 @@ $.specctrId = {
                 styleText+="}\r";
             }
         
-            if(styleText == "")
-            {
+            if(styleText == "") {
                 alert("Unable to export the specs!");
                 return isExportedSuccessfully;
             }
@@ -429,6 +469,10 @@ $.specctrId = {
             };
             
             if(model.cloudOption == "export") {
+                 //Set data for each artboard and export each artboard individually otherwise eport the doc.
+                var docImageArray = [];
+                this.SetDocumentImgDetails(docImageArray, filePath);
+                cssInfo.document_images = docImageArray;
                 return JSON.stringify(cssInfo);
             } else {
                 //Create the file and export it.
