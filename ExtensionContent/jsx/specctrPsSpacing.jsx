@@ -273,15 +273,26 @@ $.specctrPsSpacing = {
          }
 
         doc.activeLayer = spec;
-        spec = $.specctrPsCommon.createSmartObject();
         uniqueIdOfSpec = $.specctrPsCommon.getIDOfLayer();
         var xmpData = [{layerHandler : spec,
-                                        properties : [{name : "SpeccedObject", value : "true"}, 
-                                                            {name : "firstLayer", value : uniqueIdOfFirstLayer},
-                                                            {name : "secondLayer", value : uniqueIdOfSecondLayer}]
-                                    }
+                                   properties : [{name : "SpeccedObject", value : "true"}, 
+                                                      {name : "firstLayer", value : uniqueIdOfFirstLayer},
+                                                      {name : "secondLayer", value : uniqueIdOfSecondLayer}]}
                                 ];
 
+        var specArtLayersLength = spec.artLayers.length;
+        
+        //Select all child layers and link them.
+        for(var i = 0; i < specArtLayersLength-1; ++i) {
+            spec.artLayers[i].link(spec.artLayers[i+1]);
+            var data = {layerHandler : spec.artLayers[i], properties : [{name : "SpeccedObject", value : "true"}]};
+            xmpData.push(data);
+        }
+        
+        spec.artLayers[i].link(spec);
+        data = {layerHandler : spec.artLayers[i], properties : [{name : "SpeccedObject", value : "true"}]};
+        xmpData.push(data);
+        
         $.specctrPsCommon.setXmpDataOfLayer(xmpData);
 
         $.specctrPsCommon.selectLayers(artLayer1.name, artLayer2.name);
@@ -500,7 +511,6 @@ $.specctrPsSpacing = {
 
         //Converting selected layers into single smart object.
         doc.activeLayer = specItemsGroup;
-        specItemsGroup = $.specctrPsCommon.createSmartObject();
         idSpacingSpec = $.specctrPsCommon.getIDOfLayer();
 
         //Shifting 'Specctr' to upper layer.
@@ -520,6 +530,19 @@ $.specctrPsSpacing = {
                                         properties : [{name : "SpeccedObject", value :"true"}]
                                     }
                                 ];
+                                
+        var specArtLayersLength = specItemsGroup.artLayers.length;
+        
+        //Select all child layers and link them.
+        for(var i = 0; i < specArtLayersLength-1; ++i) {
+            specItemsGroup.artLayers[i].link(specItemsGroup.artLayers[i+1]);
+            var data = {layerHandler : specItemsGroup.artLayers[i], properties : [{name : "SpeccedObject", value : "true"}]};
+            xmpData.push(data);
+        }
+        
+        specItemsGroup.artLayers[i].link(specItemsGroup);
+        data = {layerHandler : specItemsGroup.artLayers[i], properties : [{name : "SpeccedObject", value : "true"}]};
+        xmpData.push(data);
 
         $.specctrPsCommon.setXmpDataOfLayer(xmpData);
         $.specctrPsCommon.setPreferences(startRulerUnits, startTypeUnits, originalDPI);      //Setting the original preferences of the document.

@@ -197,21 +197,28 @@ $.specctrPsCoordinates = {
             }
 
             doc.activeLayer = spec;
-            spec = $.specctrPsCommon.createSmartObject();
             idCoordinateSpec = $.specctrPsCommon.getIDOfLayer();
             doc.activeLayer = sourceItem;
             var idLayer = $.specctrPsCommon.getIDOfLayer();
-            
-            var xmpData = [{layerHandler : sourceItem, 
-                                        properties : [{name : "idCoordinateSpec", value : idCoordinateSpec}]
-                                    }, 
-                                    {layerHandler : spec,
-                                        properties : [{name : "SpeccedObject", value : "true"}, 
-                                                            {name : "idLayer", value : idLayer}]
-                                    }
-                                ];
-            $.specctrPsCommon.setXmpDataOfLayer(xmpData);
+            var xmpData = [{layerHandler : sourceItem, properties : [{name : "idCoordinateSpec", value : idCoordinateSpec}]}, 
+                                      {layerHandler : spec, properties : [{name : "SpeccedObject", value : "true"}, 
+                                                                                        {name : "idLayer", value : idLayer}]}];
+
+            var specArtLayersLength = spec.artLayers.length;
         
+            //Select all child layers and link them.
+            for (var i = 0; i < specArtLayersLength-1; ++i) {
+                spec.artLayers[i].link(spec.artLayers[i+1]);
+                var data = {layerHandler : spec.artLayers[i], properties : [{name : "SpeccedObject", value : "true"}]};
+                xmpData.push(data);
+            }
+        
+            spec.artLayers[i].link(spec);
+            data = {layerHandler : spec.artLayers[i], properties : [{name : "SpeccedObject", value : "true"}]};
+            xmpData.push(data);
+
+            $.specctrPsCommon.setXmpDataOfLayer(xmpData);
+            doc.activeLayer = sourceItem;
         } catch(e) {
             doc.activeLayer = sourceItem;
         }

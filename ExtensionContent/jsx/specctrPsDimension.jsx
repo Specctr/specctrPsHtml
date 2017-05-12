@@ -228,23 +228,29 @@ $.specctrPsDimension = {
         }
 
         doc.activeLayer = spec;
-        spec = $.specctrPsCommon.createSmartObject();
         idDimensionSpec = $.specctrPsCommon.getIDOfLayer();
-        doc.activeLayer = artLayer;
-
-        var xmpData = [{layerHandler : artLayer, 
-                                        properties : [{name : "idDimensionSpec", value : idDimensionSpec}]
-                                    }, 
-                                    {layerHandler : spec,
-                                        properties : [{name : "SpeccedObject", value : "true"}]
-                                    }
+        var xmpData = [{layerHandler : artLayer, properties : [{name : "idDimensionSpec", value : idDimensionSpec}]}, 
+                                {layerHandler : spec, properties : [{name : "SpeccedObject", value : "true"}]}
                                 ];
+
+        var specArtLayersLength = spec.artLayers.length;
+        
+        //Select all child layers and link them.
+        for(var i = 0; i < specArtLayersLength-1; ++i) {
+            spec.artLayers[i].link(spec.artLayers[i+1]);
+            var data = {layerHandler : spec.artLayers[i], properties : [{name : "SpeccedObject", value : "true"}]};
+            xmpData.push(data);
+        }
+        
+        spec.artLayers[i].link(spec);
+        data = {layerHandler : spec.artLayers[i], properties : [{name : "SpeccedObject", value : "true"}]};
+        xmpData.push(data);
+
+        doc.activeLayer = artLayer;
 
         if(artLayer.kind != LayerKind.TEXT) {
             var idLayer = $.specctrPsCommon.getIDOfLayer();
-            var specData = {layerHandler : spec,
-                                        properties : [{name : "idLayer", value : idLayer}]
-                                    };
+            var specData = {layerHandler : spec, properties : [{name : "idLayer", value : idLayer}]};
             xmpData.push(specData);
         }
 
