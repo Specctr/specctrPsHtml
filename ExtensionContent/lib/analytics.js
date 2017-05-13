@@ -74,9 +74,9 @@ analytics.trackFeature = function(feature) {
 	};
 };
 
-analytics.trackEvent = function(status) {
+analytics.trackEvent = function(name) {
 	try {
-		var stat = this.prefix() + '.events.' + status + '.count';
+		var stat = this.prefix() + '.events.' + name + '.count';
 		this.send(stat, 1);
 	}catch(e){
 		console.log(e);
