@@ -97,6 +97,7 @@ Specctr.Auth = {
 			pref.addFileToPreferenceFolder('.license', JSON.stringify(activation));
 			Specctr.Views.CloudTab.renderPlan(activation);
 			Specctr.UI.enableAllTabs();
+
             version = activation.localVersion;
             var notify = function(newVersion){
                 specctrDialog.showAlert("Please download and install the latest version: <span id='panel-download-link'>" + newVersion + "</span>.");
