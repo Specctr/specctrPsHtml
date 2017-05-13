@@ -71,9 +71,9 @@ Specctr.Init.init = Specctr.Utility.tryCatchLog(function() {
     this.setModelToResponsive();
     this.setVersionAtBottom(function(version) { 
         analytics.trackEvent('panel.initialized');
-    });
- 
-    Specctr.Auth.checkStatus(Specctr.Activation);
+        Specctr.Activation.localVersion = version;
+        Specctr.Auth.checkStatus(Specctr.Activation);
+    }); 
 });
 
 Specctr.Init.setModelToButtons = function() {
