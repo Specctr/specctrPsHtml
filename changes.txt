@@ -21,6 +21,9 @@ To view our tutorials and for support visit the Specctr Help Center: https://spe
 -------
 CHANGES
 -------
+v.3.2.2
+- Ungroup smart objects for easier editing.
+
 v.3.2.1
 - Mark spec layers more clearly.
 
