@@ -48,14 +48,12 @@ $.specctrPsDimension = {
         if(ExternalObject.AdobeXMPScript == null)
             ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
 
-        var dimensionSpec = "", legendLayer = "";
+        var dimensionSpec = "";
         var idDimensionSpec = $.specctrPsCommon.getXMPData(artLayer, "idDimensionSpec");
         if(idDimensionSpec) {
             dimensionSpec = $.specctrPsCommon.getLayerByID(idDimensionSpec);
-            if(dimensionSpec) {
-                legendLayer = dimensionSpec.parent;
+            if(dimensionSpec) 
                 dimensionSpec.remove();
-            }
         }
 
         //Create the specs.
@@ -80,10 +78,8 @@ $.specctrPsDimension = {
             parent = $.specctrPsCommon.getArtBoard(artLayer);
         }
 
-        if(legendLayer === "") {
-            legendLayer = $.specctrPsCommon.legendSpecLayer("Dimensions", parent).layerSets.add();
-            legendLayer.name = "SPEC_wh_"+$.specctrPsCommon.getLayerName(artLayer); 
-        }
+        var legendLayer = $.specctrPsCommon.legendSpecLayer("Dimensions", parent).layerSets.add();
+        legendLayer.name = "SPEC_wh_"+$.specctrPsCommon.getLayerName(artLayer); 
 
         var widthValue = '', heightValue = '';
         var relativeHeight='', relativeWidth='';
@@ -100,8 +96,7 @@ $.specctrPsDimension = {
                 relativeWidth = orgnlCanvas[2];
         }
 
-        var spec = legendLayer.layerSets.add();
-        spec.name = "DimensionSpec"; 
+        var spec = legendLayer; 
         
         if(model.widthPos > 0) {
              if(!model.specInPrcntg)
