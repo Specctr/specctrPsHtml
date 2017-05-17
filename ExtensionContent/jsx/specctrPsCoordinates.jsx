@@ -72,14 +72,12 @@ $.specctrPsCoordinates = {
             if(ExternalObject.AdobeXMPScript == null)
                 ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
         
-            var coordinateSpec = "", legendLayer = "";
+            var coordinateSpec = "";
             var idCoordinateSpec = $.specctrPsCommon.getXMPData(sourceItem, "idCoordinateSpec");
             if(idCoordinateSpec) {
                 coordinateSpec = $.specctrPsCommon.getLayerByID(idCoordinateSpec);
-                if(coordinateSpec) {
-                    legendLayer = coordinateSpec.parent;
+                if(coordinateSpec) 
                     coordinateSpec.remove();
-                }
             }
 
             //Save the current preferences
@@ -146,15 +144,12 @@ $.specctrPsCoordinates = {
             var textBottomMargin = bounds[3] - margin;
             var leftJustification = Justification.LEFT;
             var rightJustification = Justification.RIGHT;
-
-            if(legendLayer === "") {
-                legendLayer = $.specctrPsCommon.legendSpecLayer("Coordinates", parent).layerSets.add();            //To create the layer group for coordinate layer.
-                legendLayer.name = "SPEC_crd_"+$.specctrPsCommon.getLayerName(sourceItem);
-            }
+                
+            var legendLayer = $.specctrPsCommon.legendSpecLayer("Coordinates", parent).layerSets.add();            //To create the layer group for coordinate layer.
+            legendLayer.name = "SPEC_crd_"+$.specctrPsCommon.getLayerName(sourceItem);
 
             var xLine = "", yLine = "", mark="", coordinateText = "";
-            var spec = legendLayer.layerSets.add();
-            spec.name = "CoordinatesSpec";
+            var spec = legendLayer;
 
             //Coordinate specs for left top.
             var content;

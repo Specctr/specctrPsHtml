@@ -143,14 +143,13 @@ $.specctrPsSpacing = {
         var uniqueIdOfSecondLayer = $.specctrPsCommon.getIDOfLayer();
 
         //Code for updating the specs.
-        var spacingSpec = "", legendLayer = "";
+        var spacingSpec = "";
         var indexOfSpecInFirstLayerXMPArray = "";
         var indexOfSpecInSecondLayerXMPArray = "";
         var idSpacingSpec = this.getXMPDataForSpacingSpec(artLayer1, uniqueIdOfSecondLayer, "idSpacingSpec");
         if(idSpacingSpec) {
             spacingSpec = $.specctrPsCommon.getLayerByID(idSpacingSpec);
             if(spacingSpec) {
-                legendLayer = spacingSpec.parent;
                 spacingSpec.remove();
                 indexOfSpecInFirstLayerXMPArray = this.getIndexFromXmpArray(artLayer1, idSpacingSpec, "idSpacingSpec");
                 indexOfSpecInSecondLayerXMPArray = this.getIndexFromXmpArray(artLayer2, idSpacingSpec, "idSpacingSpec");
@@ -180,15 +179,12 @@ $.specctrPsSpacing = {
             parent = $.specctrPsCommon.getArtBoard(artLayer1);
         }
     
-        if(legendLayer === "") {
-            legendLayer = $.specctrPsCommon.legendSpecLayer("Spacing", parent).layerSets.add();
-            var aName = $.specctrPsCommon.getLayerName(artLayer1).substring(0,10);
-            var bName = $.specctrPsCommon.getLayerName(artLayer2).substring(0,10);
-            legendLayer.name = "SPEC_spc_"+aName+"_"+bName;
-        }
+        var legendLayer = $.specctrPsCommon.legendSpecLayer("Spacing", parent).layerSets.add();
+        var aName = $.specctrPsCommon.getLayerName(artLayer1).substring(0,10);
+        var bName = $.specctrPsCommon.getLayerName(artLayer2).substring(0,10);
+        legendLayer.name = "SPEC_spc_"+aName+"_"+bName;
     
-        var spec = legendLayer.layerSets.add();
-        spec.name = "SpacingSpec";
+        var spec = legendLayer;
 
         // Check if there's vertical perpendicular
         if (bounds1[0]<bounds2[2] && bounds1[2]>bounds2[0]) {
@@ -306,14 +302,12 @@ $.specctrPsSpacing = {
          if(ExternalObject.AdobeXMPScript == null)
             ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
 
-        var spacingSpec = "", legendLayer = "";
+        var spacingSpec = "";
         var idSpacingSpec = $.specctrPsCommon.getXMPData(artLayer, "idSingleSpacingSpec");
         if(idSpacingSpec) {
             spacingSpec = $.specctrPsCommon.getLayerByID(idSpacingSpec);
-            if(spacingSpec) {
-                legendLayer = spacingSpec.parent;
+            if(spacingSpec) 
                 spacingSpec.remove();
-            }
         }
 
         //Save the current preferences
@@ -352,13 +346,10 @@ $.specctrPsSpacing = {
                 relativeWidth = cnvsRect[2];
         }
 
-        if(legendLayer === "") {
-            legendLayer = $.specctrPsCommon.legendSpecLayer("Spacing", parent).layerSets.add();
-            legendLayer.name = "SPEC_spc_"+$.specctrPsCommon.getLayerName(artLayer);
-        }
+        var legendLayer = $.specctrPsCommon.legendSpecLayer("Spacing", parent).layerSets.add();
+        legendLayer.name = "SPEC_spc_"+$.specctrPsCommon.getLayerName(artLayer);
 
-        var specItemsGroup = legendLayer.layerSets.add();
-        specItemsGroup.name = "SpacingSpec";
+        var specItemsGroup = legendLayer;
         
         var lines = "", specText = "", textLayer = "";
         var distanceValue = "";
