@@ -221,9 +221,11 @@ $.specctrPsProperties = {
             //Create spec text for art object.
             legendLayer.visible = false;
             spec.move(legendLayer, ElementPlacement.INSIDE)
+            doc.activeLayer = spec;
             specText.contents = infoText;
-            if(nameLength != 0)
-                this.applyBold(1, nameLength + 1);
+            if(nameLength != 0) 
+                 this.applyBold(1, nameLength+1);
+            
             specText.color.rgb = newColor;
             specText.font = font;
             specText.size = model.legendFontSize;
