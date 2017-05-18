@@ -103,7 +103,7 @@ $.specctrPsProperties = {
         //Check artboard is present or not and make changes in bounds accordingly.
         var parent = doc;
 
-        cssText = "{";
+        cssText = "{\n";
         
         var cnvsRect = $.specctrPsCommon.getArtBoardBounds(artLayer);
         if(cnvsRect == null) {
@@ -111,9 +111,9 @@ $.specctrPsProperties = {
         } else {
             parent = $.specctrPsCommon.getArtBoard(artLayer);
             doc.activeLayer = parent;
-            cssText += "artboard_name:" + parent.name+";";
-            cssText += "artboard_index:" + this.getIndexOfSelectedLayer()+";";
-            cssText += "artboard_id:" + $.specctrPsCommon.getIDOfLayer()+";";
+            cssText += "artboard_name:" + parent.name+";\n";
+            cssText += "artboard_index:" + this.getIndexOfSelectedLayer()+";\n";
+            cssText += "artboard_id:" + $.specctrPsCommon.getIDOfLayer()+";\n";
         }
     
         var activeLayerParent = artLayer.parent;
@@ -121,14 +121,14 @@ $.specctrPsProperties = {
         //Meaning activeLayerParent is neither doc nor artboard, it is actually group under doc or artboard,.
         if(activeLayerParent != parent) {
             doc.activeLayer = activeLayerParent;
-            cssText += "parent_layer_name:" + activeLayerParent.name+";";
-            cssText += "parent_layer_index:" + this.getIndexOfSelectedLayer()+";";
-            cssText += "parent_layer_id:" + $.specctrPsCommon.getIDOfLayer()+";";
+            cssText += "parent_layer_name:" + activeLayerParent.name+";\n";
+            cssText += "parent_layer_index:" + this.getIndexOfSelectedLayer()+";\n";
+            cssText += "parent_layer_id:" + $.specctrPsCommon.getIDOfLayer()+";\n";
         }
  
-        cssText += "layer_name:" + artLayer.name+";";
-        cssText += "layer_id:" + idLayer+";";
-        cssText += "layer_index:" + index+";";
+        cssText += "layer_name:" + artLayer.name+";\n";
+        cssText += "layer_id:" + idLayer+";\n";
+        cssText += "layer_index:" + index+";\n";
 
         if(ExternalObject.AdobeXMPScript == null)
             ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
@@ -169,14 +169,15 @@ $.specctrPsProperties = {
             var cssBounds = [artLayerBounds[0]-cnvsRect[0], artLayerBounds[1]-cnvsRect[1], 
                                         artLayerBounds[2]-cnvsRect[0], artLayerBounds[3]-cnvsRect[1]] ;
             
-            cssText += "xCoord:" + cssBounds[0].toString()+";";
-            cssText += "yCoord:" + cssBounds[1].toString()+";";
+            cssText += "xCoord:" + cssBounds[0].toString()+";\n";
+            cssText += "yCoord:" + cssBounds[1].toString()+";\n";
             var cssObjectName = "." + name;
+            var nameProp = {length:nameLength};
 
             switch(sourceItem.kind) {
                 case LayerKind.TEXT:
                     cssObjectName = name;
-                    infoText  = this.getSpecsInfoForTextItem(sourceItem);
+                    infoText  = this.getSpecsInfoForTextItem(sourceItem, nameProp);
                     newColor = $.specctrPsCommon.legendColor(model.legendColorType);
                     legendLayer = this.legendPropertiesLayer("Text Specs", parent).layerSets.add();
                     legendLayer.name = "SPEC_txt_"+$.specctrPsCommon.getLayerName(artLayer);
@@ -221,9 +222,12 @@ $.specctrPsProperties = {
             //Create spec text for art object.
             legendLayer.visible = false;
             spec.move(legendLayer, ElementPlacement.INSIDE)
+            doc.activeLayer = spec;
             specText.contents = infoText;
-            if(nameLength != 0)
-                this.applyBold(1, nameLength + 1);
+            
+            if(nameProp.length != 0) 
+                 this.applyBold(1, nameProp.length+1);
+            
             specText.color.rgb = newColor;
             specText.font = font;
             specText.size = model.legendFontSize;
@@ -263,7 +267,7 @@ $.specctrPsProperties = {
                 spec.link(arm);
             }
         
-            var css = cssObjectName + cssText + "}";
+            var css = cssObjectName + cssText + "}\n";
             
             var xmpData = [{layerHandler : legendLayer, 
                                     properties : [{name : "idLayer", value : idLayer}, 
@@ -309,15 +313,17 @@ $.specctrPsProperties = {
         var cssBounds = [artLayerBounds[0]-cnvsRect[0], artLayerBounds[1]-cnvsRect[1], 
                                         artLayerBounds[2]-cnvsRect[0], artLayerBounds[3]-cnvsRect[1]] ;
         
-        cssText += "xCoord:" + cssBounds[0].toString() + ";";
-        cssText += "yCoord:" + cssBounds[1].toString()+ ";";
+        cssText += "xCoord:" + cssBounds[0].toString() + ";\n";
+        cssText += "yCoord:" + cssBounds[1].toString()+ ";\n";
         var cssObjectName = "." + name;
 
         try {
+            var nameProp = {length:nameLength};
+            
             switch(artLayer.kind) {
                 case LayerKind.TEXT:
                     cssObjectName = name;
-                    infoText   = this.getSpecsInfoForTextItem(artLayer);
+                    infoText   = this.getSpecsInfoForTextItem(artLayer, nameProp);
                     newColor = $.specctrPsCommon.legendColor(model.legendColorType);
                     
                     if(!model.textLayerName) nameLength = 0;
@@ -358,8 +364,10 @@ $.specctrPsProperties = {
             }
 
             specText.contents = infoText;
-            if(nameLength != 0)
-                this.applyBold(1, nameLength+1);
+
+            if(nameProp.length != 0)
+                this.applyBold(1, nameProp.length+1);
+                
             specText.color.rgb = newColor;
             specText.font = font;
             specText.size = model.legendFontSize;
@@ -431,7 +439,7 @@ $.specctrPsProperties = {
     },
 
     //Get the properties of the text item.
-    getSpecsInfoForTextItem : function(pageItem) {
+    getSpecsInfoForTextItem : function(pageItem, nameProp) {
         var textItem = pageItem.textItem;
         var infoText = "";
         var rltvFontSize = 16;
@@ -442,7 +450,9 @@ $.specctrPsProperties = {
             var wordsArray = name.split(" ");
             if(wordsArray.length > 2)
                 name = wordsArray[0] + " " + wordsArray[1] + " " + wordsArray[2];
-                
+            
+            nameProp.length = name.length;
+            
             var textObj = {
                 font: "", size: "", alignment: "", color: "", style: "", leading: "", 
                 tracking: "", alpha: "", underline:"", strike:"", bold:"", italic:"",
@@ -530,21 +540,21 @@ $.specctrPsProperties = {
             textObj.tracking = Math.round(textObj.tracking / 1000 * 100) / 100 + " em";
                 
             //Set css for the selected text item.
-            cssText += "text_contents:" + textItem.contents +";";
-            cssText += "font-family:" + textObj.font+";";
-            cssText += "font-size:" + textObj.size+";";
-            cssText += "color:" + textObj.color.toLowerCase()+";";
-            cssText += "font-style:" + styleString+";";
+            cssText += "text_contents:" + textItem.contents +";\n";
+            cssText += "font-family:" + textObj.font+";\n";
+            cssText += "font-size:" + textObj.size+";\n";
+            cssText += "color:" + textObj.color.toLowerCase()+";\n";
+            cssText += "font-style:" + styleString+";\n";
                 
             if(textDecorationStyle != "") 
-                cssText += "text-decoration:" + textDecorationStyle+";";
+                cssText += "text-decoration:" + textDecorationStyle+";\n";
             
-            cssText += "text-align:" + textObj.alignment+";";
-            cssText += "line-height:" + textObj.leading+";";
-            cssText += "letter-spacing:" + textObj.tracking+";";
+            cssText += "text-align:" + textObj.alignment+";\n";
+            cssText += "line-height:" + textObj.leading+";\n";
+            cssText += "letter-spacing:" + textObj.tracking+";\n";
             
             if(alpha != "") 
-                cssText += "opacity:" + alpha+";";
+                cssText += "opacity:" + alpha+";\n";
 
             //Add properties which are enabled in details tab.
             if (model.textLayerName) infoText = "\r" + name;
@@ -574,7 +584,7 @@ $.specctrPsProperties = {
         } catch(e) {alert(e);}
 
         if(model.specInEM) {
-            cssBodyText = "body {font-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;}";
+            cssBodyText = "body {font-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;}\n";
             $.specctrPsCommon.setCssBodyText(cssBodyText);
         }
             
@@ -855,15 +865,15 @@ $.specctrPsProperties = {
         strokeVal = this.getStrokeValOfLayer(pageItem);
         
         //Set css for selected shape item.
-        cssText += "background:" + shapeFillVal+";";
-        cssText += "border:" + strokeVal+";";
+        cssText += "background:" + shapeFillVal+";\n";
+        cssText += "border:" + strokeVal+";\n";
         
         if(alpha != "") 
-            cssText += "opacity:" + alpha+";";
+            cssText += "opacity:" + alpha+";\n";
             
-        cssText += "border-radius:" + borderRadius.toString()+";";
-        cssText += "height:" +  (cssBounds[3]-cssBounds[1]).toString()+";";
-        cssText += "width:" + (cssBounds[2]-cssBounds[0]).toString()+";";
+        cssText += "border-radius:" + borderRadius.toString()+";\n";
+        cssText += "height:" +  (cssBounds[3]-cssBounds[1]).toString()+";\n";
+        cssText += "width:" + (cssBounds[2]-cssBounds[0]).toString()+";\n";
 
         
         //Add properties which are enabled in details tab.
@@ -1335,10 +1345,10 @@ $.specctrPsProperties = {
         var type = pageItem.kind.toString().replace ("LayerKind.", "").toLowerCase();
         var alpha = Math.round(pageItem.opacity) / 100;
         
-        cssText += "type:" + type+";";
-        cssText += "opacity:" + alpha+";";
-        cssText += "height:" + (cssBounds[3]-cssBounds[1]).toString()+";";
-        cssText += "width:" + (cssBounds[2]-cssBounds[0]).toString()+";";
+        cssText += "type:" + type+";\n";
+        cssText += "opacity:" + alpha+";\n";
+        cssText += "height:" + (cssBounds[3]-cssBounds[1]).toString()+";\n";
+        cssText += "width:" + (cssBounds[2]-cssBounds[0]).toString()+";\n";
 
         var infoText = "";
         if(model.shapeLayerName) infoText = "\r"+name+"\r"+type;

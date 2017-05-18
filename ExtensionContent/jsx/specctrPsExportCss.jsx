@@ -7,6 +7,10 @@
 if(typeof($)=== 'undefined')
 	$={};
 
+String.prototype.replaceAll = function(search, replacement) {
+    return this.replace(new RegExp(search, 'g'), replacement);
+};
+
 $.specctrPsExportCss = {
 	//Generate css string for specs.
 	getCss : function() {
@@ -92,6 +96,7 @@ $.specctrPsExportCss = {
             var docImageArray = [];
             this.SetDocumentImgDetails(docImageArray, filePath);
             cssInfo.document_images = docImageArray;
+            cssInfo.text = cssInfo.text.replaceAll("\n","");
             return JSON.stringify(cssInfo);
         } else {
             //Create the file and export it.
@@ -118,6 +123,7 @@ $.specctrPsExportCss = {
             }
                 
             if(cssFile) {
+                
                 cssFile.open("w");
                 cssFile.write(cssInfo.text);
                 cssFile.close;
