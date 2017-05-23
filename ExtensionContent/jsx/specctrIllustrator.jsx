@@ -36,6 +36,10 @@ Array.prototype.uniquePush = function (value){
     return temp;
 }
 
+String.prototype.replaceAll = function(search, replacement) {
+    return this.replace(new RegExp(search, 'g'), replacement);
+};
+
 $.specctrAi = {
     //Get the application font's name and font's family.
     getFontList : function() {
@@ -190,16 +194,23 @@ $.specctrAi = {
                     for (var i = 0; i < textFrameLen; i++) {
                         var textFrame = spec.textFrames[i];
                         text = textFrame.note;
-
+                        
                         if (text) {       //Get the css style text from the  property specs text item.
-                            var jsonResponse = JSON.parse(text);
-                            text = jsonResponse.css;
+                            try {
+                                var jsonResponse = JSON.parse(text);
+                                text = jsonResponse.css;
+                            } catch (e) {
+                                //In case parsing got failed.
+                                jsonResponse = text.split('"css":"');
+                                text = jsonResponse[1].split('","specctrId":');
+                                text = text[0];
+                            }
                         }
                     }
                 
-                    if (text != "") styleText += text;
+                    if (text != "") styleText += text + "\n";
                     
-                } catch(e) {}
+                } catch(e) {alert(e);}
                 
                 noOfGroups = noOfGroups - 1;
             }
@@ -237,12 +248,19 @@ $.specctrAi = {
                         text = textFrame.note;
 
                         if (text) {           //Get the css style text from the specs text item.
+                            try {
                             var jsonResponse = JSON.parse(text);
                             text = jsonResponse.css;
+                            } catch (e) {
+                                //In case parsing got failed.
+                                jsonResponse = text.split('"css":"');
+                                text = jsonResponse[1].split('","specctrId":');
+                                text = text[0];
+                            }
                         }
                     }
                 
-                    if (text != "") styleText += text;
+                    if (text != "") styleText += text + "\n";
                     
                 } catch(e) {}
                 
@@ -282,6 +300,7 @@ $.specctrAi = {
                 var docImageArray = [];
                 this.SetDocumentImgDetails(docImageArray, filePath);
                 cssInfo.document_images = docImageArray;
+                cssInfo.text = cssInfo.text.replaceAll("\n","");
                 return JSON.stringify(cssInfo);
             } else {
                 //Create the file and export it.
@@ -1798,9 +1817,7 @@ $.specctrAi = {
             group.name += this.getLayerName(pageItem);
             group.move(legendLayer, ElementPlacement.INSIDE);
             group.note = '{"type":"property","specctrId":"' + specctrId + '"}';
-            
             spec.note = '{"bulletNo":"' + noOfSpecs + '","css":"'+cssText+'","specctrId":"'+specctrId+'"}';
-            
         } catch(e) {
             alert(e);
             return false;
@@ -2531,21 +2548,21 @@ $.specctrAi = {
         var artboardIndex = app.activeDocument.artboards.getActiveArtboardIndex();
         var currentArtboard = app.activeDocument.artboards[artboardIndex];
         
-        cssText = name.toLowerCase() + " {type: " + infoText.toLowerCase() + ";";
-        cssText += "artboard_name: " + currentArtboard.name + ";";
-        cssText += "artboard_id: " + artboardIndex + ";";
-        cssText += "artboard_index: " + artboardIndex + ";";
-        cssText += "parent_layer_name: " + pageItem.parent.name + ";";
-        cssText += "parent_layer_id: " + parentOrderPosition + ";";
-        cssText += "parent_layer_index: " + parentOrderPosition + ";";
-        cssText += "layer_name: " + name.toLowerCase() + ";";
-        cssText += "layer_id: " + layerIndex.toString() + ";";
-        cssText += "layer_index: " + layerIndex.toString() + ";";
-        cssText += "opacity: " + alpha + ";";
-        cssText += "height: " + (cssBounds[1]-cssBounds[3]) + ";";
-        cssText += "width: " + (cssBounds[2]-cssBounds[0]) + ";";
-        cssText += "xCoord: " + cssBounds[0] + ";";
-        cssText += "yCoord: " + -cssBounds[1] + ";";
+        cssText = name.toLowerCase() + " {\ntype: " + infoText.toLowerCase() + ";\n";
+        cssText += "artboard_name: " + currentArtboard.name + ";\n";
+        cssText += "artboard_id: " + artboardIndex + ";\n";
+        cssText += "artboard_index: " + artboardIndex + ";\n";
+        cssText += "parent_layer_name: " + pageItem.parent.name + ";\n";
+        cssText += "parent_layer_id: " + parentOrderPosition + ";\n";
+        cssText += "parent_layer_index: " + parentOrderPosition + ";\n";
+        cssText += "layer_name: " + name.toLowerCase() + ";\n";
+        cssText += "layer_id: " + layerIndex.toString() + ";\n";
+        cssText += "layer_index: " + layerIndex.toString() + ";\n";
+        cssText += "opacity: " + alpha + ";\n";
+        cssText += "height: " + (cssBounds[1]-cssBounds[3]) + ";\n";
+        cssText += "width: " + (cssBounds[2]-cssBounds[0]) + ";\n";
+        cssText += "xCoord: " + cssBounds[0] + ";\n";
+        cssText += "yCoord: " + -cssBounds[1] + ";\n";
         cssText += "}";
         
         if(model.shapeLayerName) infoText = name + "\r";
@@ -2595,27 +2612,27 @@ $.specctrAi = {
         var currentArtboard = app.activeDocument.artboards[artboardIndex];
 
         //Set css for selected pathitem.
-        cssText = "." + name.toLowerCase() + " {";
-        cssText += "artboard_name: " + currentArtboard.name + ";";
-        cssText += "artboard_id: " + artboardIndex + ";";
-        cssText += "artboard_index: " + artboardIndex + ";";
-        cssText += "parent_layer_name: " + pageItem.parent.name + ";";
-        cssText += "parent_layer_id: " + parentOrderPosition + ";";
-        cssText += "parent_layer_index: " + parentOrderPosition + ";";
-        cssText += "layer_name: " + name.toLowerCase() + ";";
-        cssText += "layer_id: " + layerIndex.toString() + ";";
-        cssText += "layer_index: " + layerIndex.toString() + ";";
-        cssText += "fill: " + fillStyle.toLowerCase() + ";";
-        if(color != "") cssText += "background: " + color.toLowerCase()+";";
-        cssText += "stroke-style: " + strokeStyle.toLowerCase() + ";";
-        if(strokeWidth != "") cssText += "stroke-width: " + strokeWidth+ ";";
-        if(strokeColor != "") cssText += "stroke-color: " + strokeColor.toLowerCase() + ";";
-        cssText += "opacity: " + opacity + ";";
-        if(roundCornerValue != "") cssText += "border-radius: " + roundCornerValue + ";";
-        cssText += "height: " + (cssBounds[1]-cssBounds[3]) + " " + this.typeUnits() + ";";
-        cssText += "width: " + (cssBounds[2]-cssBounds[0]) + " " + this.typeUnits() + ";";
-        cssText += "xCoord: " + cssBounds[0] + " " + this.typeUnits() + ";";
-        cssText += "yCoord: " + -cssBounds[1] + " " + this.typeUnits() + ";";
+        cssText = "." + name.toLowerCase() + " {\n";
+        cssText += "artboard_name: " + currentArtboard.name + ";\n";
+        cssText += "artboard_id: " + artboardIndex + ";\n";
+        cssText += "artboard_index: " + artboardIndex + ";\n";
+        cssText += "parent_layer_name: " + pageItem.parent.name + ";\n";
+        cssText += "parent_layer_id: " + parentOrderPosition + ";\n";
+        cssText += "parent_layer_index: " + parentOrderPosition + ";\n";
+        cssText += "layer_name: " + name.toLowerCase() + ";\n";
+        cssText += "layer_id: " + layerIndex.toString() + ";\n";
+        cssText += "layer_index: " + layerIndex.toString() + ";\n";
+        cssText += "fill: " + fillStyle.toLowerCase() + ";\n";
+        if(color != "") cssText += "background: " + color.toLowerCase()+";\n";
+        cssText += "stroke-style: " + strokeStyle.toLowerCase() + ";\n";
+        if(strokeWidth != "") cssText += "stroke-width: " + strokeWidth+ ";\n";
+        if(strokeColor != "") cssText += "stroke-color: " + strokeColor.toLowerCase() + ";\n";
+        cssText += "opacity: " + opacity + ";\n";
+        if(roundCornerValue != "") cssText += "border-radius: " + roundCornerValue + ";\n";
+        cssText += "height: " + (cssBounds[1]-cssBounds[3]) + " " + this.typeUnits() + ";\n";
+        cssText += "width: " + (cssBounds[2]-cssBounds[0]) + " " + this.typeUnits() + ";\n";
+        cssText += "xCoord: " + cssBounds[0] + " " + this.typeUnits() + ";\n";
+        cssText += "yCoord: " + -cssBounds[1] + " " + this.typeUnits() + ";\n";
         cssText += "}";
 
         //Add properties which are enabled in details tab.
@@ -2775,28 +2792,28 @@ $.specctrAi = {
             var currentArtboard = app.activeDocument.artboards[artboardIndex];
 
             //Set css for the selected text item.
-            cssText = name.toLowerCase() + " {";
-            cssText += "text_contents: " + textItem.contents + ";";
-            cssText += "artboard_name: " + currentArtboard.name + ";";
-            cssText += "artboard_id: " + artboardIndex + ";";
-            cssText += "artboard_index: " + artboardIndex + ";";
-            cssText += "parent_layer_name: " + pageItem.parent.name + ";";
-            cssText += "parent_layer_id: " + parentOrderPosition + ";";
-            cssText += "parent_layer_index: " + parentOrderPosition + ";";
-            cssText += "layer_name: " + name.toLowerCase() + ";";
-            cssText += "layer_id: " + layerIndex.toString() + ";";
-            cssText += "layer_index: " + layerIndex.toString() + ";";
-            cssText += "font-family: " + fontFamily+ ";" ;
-            cssText += "font-size: " + fontSize +  ";";
-            cssText += "color: " + textColor + ";";
-            cssText += "font-style: " + fontStyle + ";";
-            if (textDecoration != "") cssText += "text-decoration: " +  textDecoration + ";";
-            cssText += "text-align: " + alignment + ";";
-            cssText += "line-height: " + leading + ";";
-            cssText += "letter-spacing: " + tracking + ";";
-            cssText += "opacity: " + opacity + ";";
-            cssText += "xCoord: " + cssBounds[0] + " " + this.typeUnits() + ";";
-            cssText += "yCoord: " + -cssBounds[1] + " " + this.typeUnits() + ";";
+            cssText = name.toLowerCase() + " {\n";
+            cssText += "text_contents: " + textItem.contents + ";\n";
+            cssText += "artboard_name: " + currentArtboard.name + ";\n";
+            cssText += "artboard_id: " + artboardIndex + ";\n";
+            cssText += "artboard_index: " + artboardIndex + ";\n";
+            cssText += "parent_layer_name: " + pageItem.parent.name + ";\n";
+            cssText += "parent_layer_id: " + parentOrderPosition + ";\n";
+            cssText += "parent_layer_index: " + parentOrderPosition + ";\n";
+            cssText += "layer_name: " + name.toLowerCase() + ";\n";
+            cssText += "layer_id: " + layerIndex.toString() + ";\n";
+            cssText += "layer_index: " + layerIndex.toString() + ";\n";
+            cssText += "font-family: " + fontFamily+ ";\n" ;
+            cssText += "font-size: " + fontSize +  ";\n";
+            cssText += "color: " + textColor + ";\n";
+            cssText += "font-style: " + fontStyle + ";\n";
+            if (textDecoration != "") cssText += "text-decoration: " +  textDecoration + ";\n";
+            cssText += "text-align: " + alignment + ";\n";
+            cssText += "line-height: " + leading + ";\n";
+            cssText += "letter-spacing: " + tracking + ";\n";
+            cssText += "opacity: " + opacity + ";\n";
+            cssText += "xCoord: " + cssBounds[0] + " " + this.typeUnits() + ";\n";
+            cssText += "yCoord: " + -cssBounds[1] + " " + this.typeUnits() + ";\n";
             cssText += "}";
             
             //Add properties which are enabled in details tab.
@@ -2818,7 +2835,7 @@ $.specctrAi = {
         } catch(e) {alert(e);};
         
         if (model.specInEM)
-            cssBodyText = "body {font-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;}";
+            cssBodyText = "body {font-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;}\n";
         
         return infoText;
     },
