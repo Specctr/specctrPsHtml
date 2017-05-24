@@ -102,36 +102,43 @@ $.specctrPsExportCss = {
             //Create the file and export it.
             var cssFile = "";
             var cssFilePath = "";
+            var doc = app.activeDocument;
             
             try {
-                var documentPath = app.activeDocument.path;
+                var documentPath = doc.path;
             } catch(e) {
                 documentPath = "";
             }
             
+            try {
+                var name = doc.name.toLowerCase().replace(".psd", "");
+            } catch (e) {
+                name = "Styles";
+            }
+                
             if(documentPath)
-                cssFilePath = documentPath + "/Styles.css";
+                cssFilePath = documentPath + "/"+name+".css";
             else
-                cssFilePath = "~/desktop/Styles.css";
+                cssFilePath = "~/desktop/"+name+".css";
 
             cssFile = File(cssFilePath);
 
             if(cssFile.exists) {
-                var replaceFileFlag = confirm("Styles.css already exists in this location.\rDo you want to replace it?", true, "Specctr");
+                var replaceFileFlag = confirm("File already exists in this location.\rDo you want to replace it?", true, "Specctr");
                 if(!replaceFileFlag)
                     return;
             }
                 
             if(cssFile) {
-                
                 cssFile.open("w");
                 cssFile.write(cssInfo.text);
                 cssFile.close;
                 
                 if(replaceFileFlag)
-                    alert("Styles.css is exported.");
+                    alert("CSS exported successfully.");
                 else 
-                    alert("Styles.css is exported to " + cssFilePath);
+                    alert("CSS exported to " + cssFilePath);
+                    
             } else {
                 alert("Unable to export!");
                 return;

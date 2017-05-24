@@ -308,16 +308,17 @@ $.specctrAi = {
                 var cssFilePath = "";
                 var doc = app.activeDocument;
                 var documentPath = doc.path;        //Get the path of the current ai file.
-                cssFilePath = "~/desktop/Styles.css";
+                var name = doc.name.toLowerCase().replace(".ai","");
+                cssFilePath = "~/desktop/"+name+".css";
             
                 if(documentPath != "")                          //If source file's path exist then change the path of css file to the location of that file.
-                    cssFilePath = documentPath + "/Styles.css";
+                    cssFilePath = documentPath + "/"+name+".css";
             
                 cssFile = File(cssFilePath);
             
                 if(cssFile.exists)
                 {
-                    var replaceFileFlag = confirm("Styles.css already exists in this location.\rDo you want to replace it?", true, "Specctr");
+                    var replaceFileFlag = confirm("File already exists in this location.\rDo you want to replace it?", true, "Specctr");
                     if(!replaceFileFlag)
                         return true;
                 }
@@ -329,12 +330,12 @@ $.specctrAi = {
                     cssFile.close;
                 
                     if(replaceFileFlag)
-                        alert("Styles.css is exported.");
+                        alert("CSS exported successfully.");
                     else 
-                        alert("Styles.css is exported to " + cssFilePath);
+                        alert("CSS exported to " + cssFilePath);
                         
                 } else {
-                    alert("Unable to export the specs!");
+                    alert("Unable to export!");
                     return isExportedSuccessfully;
                 }
     
