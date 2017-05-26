@@ -21,6 +21,9 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	//Get the host application name.
 	hostApplication = Specctr.Utility.getHostApp();
 	loadJSX(); // Load the jsx files present in \jsx folder.
+	
+	// Adding interface event change handler..
+	var csInterface = new CSInterface();
 
 	if (hostApplication === '') {
 		//$("#spinnerBlock").hide();
@@ -42,7 +45,6 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
         */
 		
 	} else if (hostApplication === illustrator) {
-		var csInterface = new CSInterface();
 		var appInfo = csInterface.getHostEnvironment();
 		
 		//For AI CC 2017, app version = 21.0.0. These values will set for
@@ -54,6 +56,14 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 		}
 		
 		//addApplicationEventListener();
+	} else if (hostApplication === indesign) {
+		if(csInterface.getHostEnvironment().appVersion >= IdCC17Version &&
+				csInterface.getOSInformation().indexOf("Mac") > -1) {
+			lightThemeColorValue = idLightThemeColorValue;
+			extraLightThemeColorValue = idExtraLightThemeColorValue;
+			extraDarkThemeColorValue = idExtraDarkThemeColorValue;
+		}
+		
 	}
 	
 	appPrefs = pref.readAppPrefs();	//Read the config file and look for the isLicensed value.
@@ -63,9 +73,6 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 		Specctr.Init.setModelValueFromPreferences();
 	}
 
-	// Adding interface event change handler..
-	var csInterface = new CSInterface();
-	
 	//Find the OS type.
 	if(csInterface.getOSInformation().indexOf("Windows") > -1) {
 		$(".tabPage2PropertiesHeader").css("margin-bottom", "0");
@@ -206,7 +213,7 @@ function updateThemeWithAppSkinInfo(appSkinInfo) {
     var hexValue = Specctr.Utility.rgbToHex(color);
     document.body.bgColor = hexValue;
     var decimalValue = Specctr.Utility.hexToDecimal(hexValue);
-    
+
     if(decimalValue <= lightThemeColorValue) {		//Dark theme. 
     	$(".button label").css("color", "#ffffff");					//value to be applied on all text.
     	$('.tabTitle').css('color', "#ffffff");
