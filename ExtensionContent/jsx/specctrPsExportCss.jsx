@@ -4,12 +4,10 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 #include "specctrPsCommon.jsx"
+#include "specctrUtility.jsx"
+
 if(typeof($)=== 'undefined')
 	$={};
-
-String.prototype.replaceAll = function(search, replacement) {
-    return this.replace(new RegExp(search, 'g'), replacement);
-};
 
 $.specctrPsExportCss = {
 	//Generate css string for specs.
@@ -96,7 +94,6 @@ $.specctrPsExportCss = {
             var docImageArray = [];
             this.SetDocumentImgDetails(docImageArray, filePath);
             cssInfo.document_images = docImageArray;
-            cssInfo.text = cssInfo.text.replaceAll("\n","");
             return JSON.stringify(cssInfo);
         } else {
             //Create the file and export it.
@@ -115,7 +112,10 @@ $.specctrPsExportCss = {
             } catch (e) {
                 name = "Styles";
             }
-                
+        
+            //Format css
+            var cssStr = $.specctrUtility.getFormattedCss(cssInfo.text);
+
             if(documentPath)
                 cssFilePath = documentPath + "/"+name+".css";
             else
@@ -124,14 +124,14 @@ $.specctrPsExportCss = {
             cssFile = File(cssFilePath);
 
             if(cssFile.exists) {
-                var replaceFileFlag = confirm("File already exists in this location.\rDo you want to replace it?", true, "Specctr");
+                var replaceFileFlag = confirm("File already existed at "+cssFilePath+".\rDo you want to replace it?", true, "Specctr");
                 if(!replaceFileFlag)
                     return;
             }
                 
             if(cssFile) {
                 cssFile.open("w");
-                cssFile.write(cssInfo.text);
+                cssFile.write(cssStr);
                 cssFile.close;
                 
                 if(replaceFileFlag)

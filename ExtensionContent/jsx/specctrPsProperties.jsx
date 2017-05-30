@@ -103,7 +103,7 @@ $.specctrPsProperties = {
         //Check artboard is present or not and make changes in bounds accordingly.
         var parent = doc;
 
-        cssText = "{\n";
+        cssText = "{";
         
         var cnvsRect = $.specctrPsCommon.getArtBoardBounds(artLayer);
         if(cnvsRect == null) {
@@ -111,9 +111,9 @@ $.specctrPsProperties = {
         } else {
             parent = $.specctrPsCommon.getArtBoard(artLayer);
             doc.activeLayer = parent;
-            cssText += "artboard_name:" + parent.name+";\n";
-            cssText += "artboard_index:" + this.getIndexOfSelectedLayer()+";\n";
-            cssText += "artboard_id:" + $.specctrPsCommon.getIDOfLayer()+";\n";
+            cssText += "artboard_name:" + parent.name+";";
+            cssText += "artboard_index:" + this.getIndexOfSelectedLayer()+";";
+            cssText += "artboard_id:" + $.specctrPsCommon.getIDOfLayer()+";";
         }
     
         var activeLayerParent = artLayer.parent;
@@ -121,14 +121,14 @@ $.specctrPsProperties = {
         //Meaning activeLayerParent is neither doc nor artboard, it is actually group under doc or artboard,.
         if(activeLayerParent != parent) {
             doc.activeLayer = activeLayerParent;
-            cssText += "parent_layer_name:" + activeLayerParent.name+";\n";
-            cssText += "parent_layer_index:" + this.getIndexOfSelectedLayer()+";\n";
-            cssText += "parent_layer_id:" + $.specctrPsCommon.getIDOfLayer()+";\n";
+            cssText += "parent_layer_name:" + activeLayerParent.name+";";
+            cssText += "parent_layer_index:" + this.getIndexOfSelectedLayer()+";";
+            cssText += "parent_layer_id:" + $.specctrPsCommon.getIDOfLayer()+";";
         }
  
-        cssText += "layer_name:" + artLayer.name+";\n";
-        cssText += "layer_id:" + idLayer+";\n";
-        cssText += "layer_index:" + index+";\n";
+        cssText += "layer_name:" + artLayer.name+";";
+        cssText += "layer_id:" + idLayer+";";
+        cssText += "layer_index:" + index+";";
 
         if(ExternalObject.AdobeXMPScript == null)
             ExternalObject.AdobeXMPScript = new ExternalObject('lib:AdobeXMPScript');		//Load the XMP Script library to access XMPMetadata info of layers.
@@ -169,8 +169,8 @@ $.specctrPsProperties = {
             var cssBounds = [artLayerBounds[0]-cnvsRect[0], artLayerBounds[1]-cnvsRect[1], 
                                         artLayerBounds[2]-cnvsRect[0], artLayerBounds[3]-cnvsRect[1]] ;
             
-            cssText += "xCoord:" + cssBounds[0].toString()+";\n";
-            cssText += "yCoord:" + cssBounds[1].toString()+";\n";
+            cssText += "xCoord:" + cssBounds[0].toString()+";";
+            cssText += "yCoord:" + cssBounds[1].toString()+";";
             var cssObjectName = "." + name;
             var nameProp = {length:nameLength};
 
@@ -267,7 +267,7 @@ $.specctrPsProperties = {
                 spec.link(arm);
             }
         
-            var css = cssObjectName + cssText + "}\n";
+            var css = cssObjectName + cssText + "}";
             
             var xmpData = [{layerHandler : legendLayer, 
                                     properties : [{name : "idLayer", value : idLayer}, 
@@ -313,8 +313,8 @@ $.specctrPsProperties = {
         var cssBounds = [artLayerBounds[0]-cnvsRect[0], artLayerBounds[1]-cnvsRect[1], 
                                         artLayerBounds[2]-cnvsRect[0], artLayerBounds[3]-cnvsRect[1]] ;
         
-        cssText += "xCoord:" + cssBounds[0].toString() + ";\n";
-        cssText += "yCoord:" + cssBounds[1].toString()+ ";\n";
+        cssText += "xCoord:" + cssBounds[0].toString() + ";";
+        cssText += "yCoord:" + cssBounds[1].toString()+ ";";
         var cssObjectName = "." + name;
 
         try {
@@ -540,21 +540,21 @@ $.specctrPsProperties = {
             textObj.tracking = Math.round(textObj.tracking / 1000 * 100) / 100 + " em";
                 
             //Set css for the selected text item.
-            cssText += "text_contents:" + textItem.contents +";\n";
-            cssText += "font-family:" + textObj.font+";\n";
-            cssText += "font-size:" + textObj.size+";\n";
-            cssText += "color:" + textObj.color.toLowerCase()+";\n";
-            cssText += "font-style:" + styleString+";\n";
+            cssText += "text_contents:" + textItem.contents +";";
+            cssText += "font-family:" + textObj.font+";";
+            cssText += "font-size:" + textObj.size+";";
+            cssText += "color:" + textObj.color.toLowerCase()+";";
+            cssText += "font-style:" + styleString+";";
                 
             if(textDecorationStyle != "") 
-                cssText += "text-decoration:" + textDecorationStyle+";\n";
+                cssText += "text-decoration:" + textDecorationStyle+";";
             
-            cssText += "text-align:" + textObj.alignment+";\n";
-            cssText += "line-height:" + textObj.leading+";\n";
-            cssText += "letter-spacing:" + textObj.tracking+";\n";
+            cssText += "text-align:" + textObj.alignment+";";
+            cssText += "line-height:" + textObj.leading+";";
+            cssText += "letter-spacing:" + textObj.tracking+";";
             
             if(alpha != "") 
-                cssText += "opacity:" + alpha+";\n";
+                cssText += "opacity:" + alpha+";";
 
             //Add properties which are enabled in details tab.
             if (model.textLayerName) infoText = "\r" + name;
@@ -584,7 +584,7 @@ $.specctrPsProperties = {
         } catch(e) {alert(e);}
 
         if(model.specInEM) {
-            cssBodyText = "body {font-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;}\n";
+            cssBodyText = "body {font-size: " + Math.round(10000 / 16 * rltvFontSize) / 100 + "%;}";
             $.specctrPsCommon.setCssBodyText(cssBodyText);
         }
             
@@ -865,15 +865,15 @@ $.specctrPsProperties = {
         strokeVal = this.getStrokeValOfLayer(pageItem);
         
         //Set css for selected shape item.
-        cssText += "background:" + shapeFillVal+";\n";
-        cssText += "border:" + strokeVal+";\n";
+        cssText += "background:" + shapeFillVal+";";
+        cssText += "border:" + strokeVal+";";
         
         if(alpha != "") 
-            cssText += "opacity:" + alpha+";\n";
+            cssText += "opacity:" + alpha+";";
             
-        cssText += "border-radius:" + borderRadius.toString()+";\n";
-        cssText += "height:" +  (cssBounds[3]-cssBounds[1]).toString()+";\n";
-        cssText += "width:" + (cssBounds[2]-cssBounds[0]).toString()+";\n";
+        cssText += "border-radius:" + borderRadius.toString()+";";
+        cssText += "height:" +  (cssBounds[3]-cssBounds[1]).toString()+";";
+        cssText += "width:" + (cssBounds[2]-cssBounds[0]).toString()+";";
 
         
         //Add properties which are enabled in details tab.
@@ -1345,10 +1345,10 @@ $.specctrPsProperties = {
         var type = pageItem.kind.toString().replace ("LayerKind.", "").toLowerCase();
         var alpha = Math.round(pageItem.opacity) / 100;
         
-        cssText += "type:" + type+";\n";
-        cssText += "opacity:" + alpha+";\n";
-        cssText += "height:" + (cssBounds[3]-cssBounds[1]).toString()+";\n";
-        cssText += "width:" + (cssBounds[2]-cssBounds[0]).toString()+";\n";
+        cssText += "type:" + type+";";
+        cssText += "opacity:" + alpha+";";
+        cssText += "height:" + (cssBounds[3]-cssBounds[1]).toString()+";";
+        cssText += "width:" + (cssBounds[2]-cssBounds[0]).toString()+";";
 
         var infoText = "";
         if(model.shapeLayerName) infoText = "\r"+name+"\r"+type;
