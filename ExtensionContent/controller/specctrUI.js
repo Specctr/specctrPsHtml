@@ -405,7 +405,7 @@ Specctr.UI = {
 			
 			//Add data to table.
 			var table = document.getElementById("projectTable");
-			var row = table.insertRow(-1);
+			var row = table.insertRow(0);
 			var name = row.insertCell(0);
 			name.innerHTML = text;
 			$("#cloudText").val("");

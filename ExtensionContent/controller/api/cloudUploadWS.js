@@ -3,48 +3,11 @@ File-Name: cloudUploadWS.js
 Description: Consist all the ajax call methods for uploading css to servers.
  */
 
-//if (Specctr.Utility.getHostApp() == "Ps") {
-if (false) {
-    var WebSocket = require('ws');
-    var Q =  require('q');
-    var wsConnect;
-    var wsDef = Q.defer();
-    var ws;
-    var connErrorLogged = false;
-
-    var seekingConnect = setInterval(Specctr.Utility.tryCatchLog(function() {
-        if (!connErrorLogged) logger.info("[cloudUploadWS] Attempting to connect via WebSockets.");
-
-        ws = new WebSocket('ws://127.0.0.1:63421');// + Specctr.Generator.PORT);
-        ws.on('error', function(err) {
-            if (!connErrorLogged) {
-                analytics.trackEvent("generator.connection.fail");
-                console.log(err);
-				logger.error(err);
-                connErrorLogged = true;
-            }
-        });
-        ws.on('open', function() {
-            logger.info("[cloudUploadWS] WebSockets open.");
-            analytics.trackEvent("generator.connection.success");
-            wsDef.resolve();
-            clearInterval(seekingConnect);
-        });
-    
-        wsConnect = wsDef.promise;
-        wsConnect.done(function() {
-            $("#uploadButton").removeClass("disabled");
-            $("#uploadBtnLabel").html("Upload");
-            $("#uploadingGif").hide();
-        });
-    }), 2000);
-}else{
-    $(document).ready(function() {
-        $("#uploadButton").removeClass("disabled");
-        $("#uploadBtnLabel").html("Upload");
-        $("#uploadingGif").hide();
-    });
-}
+$(document).ready(function() {
+    $("#uploadButton").removeClass("disabled");
+    $("#uploadBtnLabel").html("Upload");
+    $("#uploadingGif").hide();
+});
 
 Specctr.cloudAPI = {
 	
@@ -229,32 +192,6 @@ Specctr.cloudAPI = {
 					$("#mainUploadBlock").hide();
 					$("#successUploadBlock").show();
 				}
-
-                //if (hostApplication == "Ps") {
-                if (false) {
-                    wsConnect.done(function() {
-                        var params = {
-                            message: 'specctr_upload',
-                            timestamp: timestamp, 
-                            api_key: api_key,
-                            machine_id: machine_id,
-                            document_id: response.document_id,
-                            project_id: response.project_id,
-                            host: getHost()
-                        };
-                        ws.send(JSON.stringify(params));
-
-                        _.each(cssJson.children, function(cssSpec, name) {
-                            if (cssSpec.layer_index && cssSpec.layer_id) {
-                                ws.send(JSON.stringify(_.extend(params, {
-                                    message: 'specctr_upload_layer',
-                                    layer_id: cssSpec.layer_id,
-                                    layer_index: cssSpec.layer_index
-                                })));
-                            }
-                        });
-                    });
-                }
 			},
 			error: function(xhr) {
 				//$("#spinnerBlock").hide();
