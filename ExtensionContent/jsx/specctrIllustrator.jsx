@@ -302,7 +302,12 @@ $.specctrAi = {
                 var cssFile = "";
                 var cssFilePath = "";
                 var doc = app.activeDocument;
-                var documentPath = doc.path;        //Get the path of the current ai file.
+                
+                try {
+                    var documentPath = decodeURI(doc.path);        //Get the path of the current ai file.
+                } catch (e) {
+                    documentPath = "~/desktop";
+                }
                 
                 try {
                     var name = doc.name.toLowerCase().replace(".ai","");
@@ -312,12 +317,7 @@ $.specctrAi = {
                 
                 //Format css
                 var cssStr = $.specctrUtility.getFormattedCss(cssInfo.text);
-            
-                if(documentPath != "")                          //If source file's path exist then change the path of css file to the location of that file.
-                    cssFilePath = documentPath + "/"+name+".css";
-                else
-                    cssFilePath = "~/desktop/"+name+".css";
-            
+                cssFilePath = documentPath + "/"+name+".css";
                 cssFile = File(cssFilePath);
             
                 if(cssFile.exists) {

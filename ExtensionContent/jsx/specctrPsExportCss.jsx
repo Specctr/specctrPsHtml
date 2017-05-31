@@ -102,9 +102,9 @@ $.specctrPsExportCss = {
             var doc = app.activeDocument;
             
             try {
-                var documentPath = doc.path;
+                var documentPath = decodeURI(doc.path);
             } catch(e) {
-                documentPath = "";
+                documentPath = "~/desktop";
             }
             
             try {
@@ -115,12 +115,7 @@ $.specctrPsExportCss = {
         
             //Format css
             var cssStr = $.specctrUtility.getFormattedCss(cssInfo.text);
-
-            if(documentPath)
-                cssFilePath = documentPath + "/"+name+".css";
-            else
-                cssFilePath = "~/desktop/"+name+".css";
-
+            cssFilePath = documentPath + "/"+name+".css";
             cssFile = File(cssFilePath);
 
             if(cssFile.exists) {
