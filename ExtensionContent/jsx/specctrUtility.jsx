@@ -55,7 +55,7 @@ $.specctrUtility = {
                             var fStr = cssItems[j].substring(0, cssItems[j].indexOf(":"));
                             var sStr = cssItems[j].substring(cssItems[j].indexOf(":"));
                         
-                            if(fStr && sStr != 'undefined' && !(fStr.search("artboard_") > -1 || fStr.search("layer_") > -1)) 
+                            if(fStr && sStr != 'undefined' && !(fStr.search("artboard_") > -1 || fStr.search("layer_") > -1 || fStr.search("text_") > -1)) 
                                 cssStr += "    " + fStr + sStr + ";\n";
                         } catch (e) {}
                     
