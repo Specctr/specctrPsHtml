@@ -59,8 +59,18 @@ $.specctrUtility = {
                             var fStr = cssItems[j].substring(0, cssItems[j].indexOf(":"));
                             var sStr = cssItems[j].substring(cssItems[j].indexOf(":") + 1).trim();
                         
-                            if(fStr && sStr != 'undefined' && !(fStr.search("artboard_") > -1 || fStr.search("layer_") > -1 || fStr.search("text_") > -1)) 
+                            if(fStr && sStr != 'undefined' && !(fStr.search("artboard_") > -1 || fStr.search("layer_") > -1 || fStr.search("text_") > -1)) {
+                                //remove spaces between value and unit. i.e. "8 px" will become "8px"
+                                try {
+                                    var propArr = sStr.split(" ");
+                                    if(propArr.length == 2 && !isNaN(propArr[0])) {
+                                        var num = Math.round(propArr[0] * 100) / 100;
+                                        sStr = num + propArr[1];
+                                    }
+                                } catch (e) {}
+                                
                                 cssStr += "    " + fStr + ": " + sStr + ";\n";
+                            }
                         } catch (e) {}
                     
                     cssStr += "}\n";
