@@ -10,6 +10,10 @@ String.prototype.replaceAll = function(search, replacement) {
     return this.replace(new RegExp(search, 'g'), replacement);
 };
 
+String.prototype.trim = function () {
+    return this.replace(/^\s+/, '').replace(/\s+$/, '');
+};
+
 $.specctrUtility = {
     //Get the updated value of UI's component from html file.
     breakStringAtLength : function (str, index) {
@@ -53,10 +57,10 @@ $.specctrUtility = {
                     for (var j = 0; j < arrLen; j++) 
                         try {
                             var fStr = cssItems[j].substring(0, cssItems[j].indexOf(":"));
-                            var sStr = cssItems[j].substring(cssItems[j].indexOf(":"));
+                            var sStr = cssItems[j].substring(cssItems[j].indexOf(":") + 1).trim();
                         
                             if(fStr && sStr != 'undefined' && !(fStr.search("artboard_") > -1 || fStr.search("layer_") > -1 || fStr.search("text_") > -1)) 
-                                cssStr += "    " + fStr + sStr + ";\n";
+                                cssStr += "    " + fStr + ": " + sStr + ";\n";
                         } catch (e) {}
                     
                     cssStr += "}\n";
