@@ -739,10 +739,24 @@
                                                                                    maxlength="4" onchange="Specctr.UI.txtScaleByChangeHandler()" />(e.g. x2 or /2)
                     </div>
                 </div>
+                
+                <div class="settingPageHeader">Units</div>
+                <div class="settinglineWithBtmMargin0"></div>
+                <label class="width200px h5">Set to px, in, mm, point etc in general preferences.</label>
+                <form class="width200px" style="margin-top:5px;"
+                      onclick="Specctr.UI.radioButtonClickHandler(event, 'pixelDpValue')">
+                    <input type="radio"  name="pxDpOptions" id="pixelRadioButton" value="pixel">
+                    <label class="radioLabel" for="pixelRadioButton">Pixels(px)</label>
+                    <div class="floatRight">
+                        <input type="radio" name="pxDpOptions" id="dpRadioButton" value="dp">
+                        <label class="radioLabel" for="dpRadioButton">Density Pixel(dp)</label>
+                    </div>
+                </form>
+                
             </div>
 
             <div id="settingBlock"> 
-                <div id="settingBlokChildDiv">
+                <div id="settingBlokChildDiv" style="padding-top: 10px;">
                     <label id="specctrVersion" class="floatLeft"><!-- this gets set in appModel.js --></label>
                     <img id="settingIcon" class="floatRight"
                                           src="../assets/images/Icon_prefs.png" width="32" height="24"

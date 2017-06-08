@@ -149,7 +149,7 @@ Specctr.Init.setModelValueFromPreferences = function() {
 	}
 
 	var dropDownIds = ["legendColorObject", "legendColorType", "legendColorSpacing",
-	                   "legendColorMode", "decimalFractionValue", "legendFont"];
+	                   "legendColorMode", "decimalFractionValue", "pixelDpValue", "legendFont"];
 	arrayLength = dropDownIds.length;
 	for (i = 0; i < arrayLength; i++) {
 		if (appPrefs.hasOwnProperty(dropDownIds[i]))
@@ -208,7 +208,7 @@ Specctr.Init.setModelToUIComponents = function() {
 	Specctr.Utility.createDropForColorPicker("colSpacing", 5, 0, model.legendColorSpacing);
 
 	//Set radio buttons values.
-	var radioButtonIds = [model.decimalFractionValue];
+	var radioButtonIds = [model.decimalFractionValue, model.pixelDpValue];
 	arrayLength = radioButtonIds.length;
 	for (var i = 0; i < arrayLength; i++) {
 		$("#" + radioButtonIds[i] + "RadioButton").prop("checked", true);

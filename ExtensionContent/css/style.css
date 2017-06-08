@@ -261,6 +261,10 @@ label {
 	width: 150px !important;
 }
 
+.width200px {
+	width: 200px !important;
+}
+
 .h4 {
 	font-family: aauxProBla;
 	font-size: 13px;
@@ -326,7 +330,7 @@ label {
 .tabscontent {
 	padding-top: 10px;
 	padding-bottom: 15px;
-	height: 495px;
+	height: 565px;
 }
 
 .tabTitle {
@@ -679,7 +683,7 @@ label {
 /*--------------Style applied on setting page----------------*/
 #settingPage {
 	padding-left: 6px !important;
-	height: 568px !important;
+	height: 638px !important;
 	background-color: #ECECEC;
 	border: 1px solid #C9CBCC;
 	border-right-width: 3px;
@@ -712,6 +716,14 @@ label {
 	border-bottom: none;
 	margin-top: 5px;
 	margin-bottom: 13px;
+	width: 216px;
+}
+
+.settinglineWithBtmMargin0 {
+	border: 1px solid #666766;
+	border-bottom: none;
+	margin-top: 5px;
+	margin-bottom: 0px;
 	width: 216px;
 }
 
@@ -878,10 +890,10 @@ label {
 
 .radioLabel {
 	margin-left: -2px !important;
-	font-family: Arial;
-	font-size: 12px;
+	font-family: aauxProBol;
+	font-size: 13px;
 	font-weight: normal;
-	color: #707070;
+	color: #666666;
 	cursor: default;
 }
 
@@ -939,7 +951,6 @@ label {
 	font-size: 14px;
 	font-style: normal;
 	color: #6d6d6d;
-	margin-top: 3px; 
 	cursor: default;
 }
 
@@ -948,7 +959,6 @@ label {
     font-size: 14px;
     font-style: normal;
     color: #ff5050;
-    margin-top: 3px;
     cursor: default;
 }
 

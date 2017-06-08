@@ -93,6 +93,7 @@ var model = {
 	scaleValue: 'x1',
 
 	decimalFractionValue: 'decimal',
+	pixelDpValue: 'pixel',  
 	specOption: 'Bullet',
 	cloudOption: 'export',		//Download.
 };
