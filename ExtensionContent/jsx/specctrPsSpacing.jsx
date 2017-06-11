@@ -5,6 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 #include"specctrPsCommon.jsx";
+#include"specctrUtility.jsx";
 if(typeof($)=== 'undefined')
 	$={};
 
@@ -374,7 +375,7 @@ $.specctrPsSpacing = {
             specText.color.rgb = newColor;
             specText.font = font;
             specText.size = model.legendFontSize;
-            specText.contents = distanceValue;
+            specText.contents = distanceValue.unitPreference(model.pixelDpValue);
             specText.position = [aPos - armWidth, (bounds[1] + cnvsRect[1]) / 2.0];
             textLayer.move(specItemsGroup, ElementPlacement.INSIDE);
             
@@ -412,7 +413,7 @@ $.specctrPsSpacing = {
 
             cPos = bounds[3] - height / 2 - spacing;
             specText.justification = Justification.CENTER;
-            specText.contents = distanceValue;
+            specText.contents = distanceValue.unitPreference(model.pixelDpValue);
             specText.position = [(bounds[0] + cnvsRect[0]) / 2.0, cPos - armWidth];
             textLayer.move(specItemsGroup, ElementPlacement.INSIDE);
             
@@ -449,7 +450,7 @@ $.specctrPsSpacing = {
             }
             cPos = bounds[3] - height / 2 - spacing;
             specText.justification = Justification.CENTER;
-            specText.contents = distanceValue;
+            specText.contents = distanceValue.unitPreference(model.pixelDpValue);
             specText.position = [(bounds[2] + cnvsRect[2]) / 2.0, cPos - armWidth];
             textLayer.move(specItemsGroup, ElementPlacement.INSIDE);
             
@@ -487,7 +488,7 @@ $.specctrPsSpacing = {
 
             aPos = bounds[0] + width / 2 - spacing;
             specText.justification = Justification.RIGHT;
-            specText.contents = distanceValue;
+            specText.contents = distanceValue.unitPreference(model.pixelDpValue);
             specText.position = [aPos - armWidth, (bounds[3]+cnvsRect[3])/2.0];
             textLayer.move(specItemsGroup, ElementPlacement.INSIDE);
 
@@ -663,7 +664,7 @@ $.specctrPsSpacing = {
             specText.color.rgb = newColor;
             specText.font = model.legendFont;
             specText.size = model.legendFontSize;
-            specText.contents = distance;
+            specText.contents = distance.unitPreference(model.pixelDpValue);
             specText.position = [(x1+x2)/2.0, y1-spacing-armWidth];
             textLayer.move(legendLayer, ElementPlacement.INSIDE);
             
@@ -709,7 +710,7 @@ $.specctrPsSpacing = {
             specText.color.rgb = newColor;
             specText.font = model.legendFont;
             specText.size = model.legendFontSize;
-            specText.contents = distance;
+            specText.contents = distance.unitPreference(model.pixelDpValue);
             specText.position = [x1-spacing-armWidth, (y1+y2)/2.0];
             textLayer.move(legendLayer, ElementPlacement.INSIDE);
             

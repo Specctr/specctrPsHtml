@@ -5,6 +5,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////*/
 
 #include"specctrPsCommon.jsx";
+#include"specctrUtility.jsx";
 if(typeof($)=== 'undefined')
 	$={};
 
@@ -115,7 +116,7 @@ $.specctrPsDimension = {
             specText.color.rgb = newColor;
             specText.font = model.legendFont;
             specText.size = model.legendFontSize;
-            specText.contents = widthValue;
+            specText.contents = widthValue.unitPreference(model.pixelDpValue);
             text.move(spec, ElementPlacement.INSIDE);
         }
 
@@ -177,7 +178,7 @@ $.specctrPsDimension = {
             specText.color.rgb = newColor;
             specText.font = model.legendFont;
             specText.size = model.legendFontSize;
-            specText.contents = heightValue;
+            specText.contents = heightValue.unitPreference(model.pixelDpValue);
             text.move(spec, ElementPlacement.INSIDE);
         }
 

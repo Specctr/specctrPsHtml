@@ -1,5 +1,5 @@
 ﻿/*//////////////////////////////////////////////////////////////////////////////
- * File Name: specctrPsCommon.jsx
+ * File Name: specctrPsUtility.jsx
  * Description: Includes all the common methods which is used in the creation of all other specs.
 //////////////////////////////////////////////////////////////////////////////*/
 
@@ -12,6 +12,13 @@ String.prototype.replaceAll = function(search, replacement) {
 
 String.prototype.trim = function () {
     return this.replace(/^\s+/, '').replace(/\s+$/, '');
+};
+
+String.prototype.unitPreference = function(unit) {
+    if(unit == "dp")
+        return this.replace("px", "dp");
+
+    return this.valueOf();
 };
 
 $.specctrUtility = {

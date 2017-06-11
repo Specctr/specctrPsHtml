@@ -6,6 +6,8 @@
 
 #include "specctrPsCommon.jsx"
 #include "specctrPsSwatches.jsx"
+#include "specctrUtility.jsx"
+
 if(typeof($)=== 'undefined')
 	$={};
 
@@ -559,7 +561,7 @@ $.specctrPsProperties = {
             //Add properties which are enabled in details tab.
             if (model.textLayerName) infoText = "\r" + name;
             if (model.textFont) infoText += "\rFont-Family: " + textObj.font;
-            if (model.textSize) infoText += "\rFont-Size: " + textObj.size;
+            if (model.textSize) infoText += "\rFont-Size: " + textObj.size.unitPreference(model.pixelDpValue);
             if (model.textColor) infoText += "\rColor: " + textObj.color;
 
             if (model.textStyle) {
@@ -569,13 +571,13 @@ $.specctrPsProperties = {
             }
 
             if (model.textAlignment) infoText += "\rText-Align: " + textObj.alignment;
-            if (model.textLeading) infoText += "\rLine-Height: " + textObj.leading;
+            if (model.textLeading) infoText += "\rLine-Height: " + textObj.leading.unitPreference(model.pixelDpValue);
             if (model.textTracking) infoText += "\rLetter-Spacing: " + textObj.tracking;
             if (alpha != "") infoText += "\rOpacity: " + alpha;
         
             if (model.textEffects) {
                 var strokeVal = this.getStrokeValOfLayer(pageItem);
-                if(strokeVal != "none" && strokeVal != "") infoText += "\rBorder: " + strokeVal;
+                if(strokeVal != "none" && strokeVal != "") infoText += "\rBorder: " + strokeVal.unitPreference(model.pixelDpValue);
                 
                 app.activeDocument.activeLayer = pageItem;
                 var effectValue = this.getEffectsOfLayer();
@@ -888,7 +890,7 @@ $.specctrPsProperties = {
             infoText += "\rBackground: " + shapeFillVal;
         }
         
-        if(model.shapeStroke) infoText += "\rBorder: " + strokeVal;
+        if(model.shapeStroke) infoText += "\rBorder: " + strokeVal.unitPreference(model.pixelDpValue);
         if(model.shapeAlpha && alpha != "") infoText += "\rOpacity: "+alpha;
         
         if(model.shapeEffects) {
@@ -897,7 +899,7 @@ $.specctrPsProperties = {
             infoText += effectValue;
         }
         
-        if(model.shapeBorderRadius) infoText += "\rBorder-radius: " + borderRadius;
+        if(model.shapeBorderRadius) infoText += "\rBorder-radius: " + borderRadius.unitPreference(model.pixelDpValue);
         
         doc.activeLayer = pageItem;
         return infoText;
