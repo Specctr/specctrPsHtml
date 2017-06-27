@@ -551,7 +551,7 @@ $.specctrAi = {
                 }
             
                 var widthText = app.activeDocument.textFrames.pointText([pageItemBounds[0] + width / 2, textY], TextOrientation.HORIZONTAL);
-                widthText.contents = widthForSpec;
+                widthText.contents = widthForSpec.unitPreference(model.pixelDpValue);
                 widthText.textRange.paragraphAttributes.justification = Justification.CENTER;			
                 widthText.textRange.characterAttributes.fillColor = newColor;			
                 widthText.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
@@ -610,7 +610,7 @@ $.specctrAi = {
                 }
                     
                 var heightText = app.activeDocument.textFrames.pointText([textX, pageItemBounds[3] + height / 2], TextOrientation.HORIZONTAL);
-                heightText.contents = heightForSpec;
+                heightText.contents = heightForSpec.unitPreference(model.pixelDpValue);
                 heightText.textRange.paragraphAttributes.justification = Justification.CENTER;
                 heightText.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
                 heightText.textRange.characterAttributes.size = model.legendFontSize;
@@ -753,7 +753,7 @@ $.specctrAi = {
                 
                 coordinateText = app.activeDocument.textFrames.pointText([pageItemBounds[0] - 0.5 * spacing, 
                                             pageItemBounds[1] + 0.5 * spacing], TextOrientation.HORIZONTAL);
-                coordinateText.contents = "x: " + left + " y: " + top;
+                coordinateText.contents = "x: " + left.unitPreference(model.pixelDpValue) + " y: " + top.unitPreference(model.pixelDpValue);
                 coordinateText.textRange.paragraphAttributes.justification = Justification.RIGHT;
 
                 horizontalLine = app.activeDocument.compoundPathItems.add();
@@ -773,7 +773,7 @@ $.specctrAi = {
                 
                 coordinateText = app.activeDocument.textFrames.pointText([pageItemBounds[2] + 0.5 * spacing, 
                                             pageItemBounds[1] + 0.5 * spacing], TextOrientation.HORIZONTAL);
-                coordinateText.contents = "x: " + right + " y: " + top;
+                coordinateText.contents = "x: " + right.unitPreference(model.pixelDpValue) + " y: " + top.unitPreference(model.pixelDpValue);
                 coordinateText.textRange.paragraphAttributes.justification = Justification.LEFT;
                 
                 horizontalLine = app.activeDocument.compoundPathItems.add();
@@ -793,7 +793,7 @@ $.specctrAi = {
                 
                 coordinateText = app.activeDocument.textFrames.pointText([pageItemBounds[2] + 0.5 * spacing, 
                                             pageItemBounds[3] - spacing  - armWeight], TextOrientation.HORIZONTAL);
-                coordinateText.contents = "x: " + right + " y: " + bottom;
+                coordinateText.contents = "x: " + right.unitPreference(model.pixelDpValue) + " y: " + bottom.unitPreference(model.pixelDpValue);
                 coordinateText.textRange.paragraphAttributes.justification = Justification.LEFT;
             
                 horizontalLine = app.activeDocument.compoundPathItems.add();
@@ -813,7 +813,7 @@ $.specctrAi = {
                 
                 coordinateText = app.activeDocument.textFrames.pointText([pageItemBounds[0] - 0.5 * spacing, 
                                             pageItemBounds[3] - spacing - armWeight], TextOrientation.HORIZONTAL);
-                coordinateText.contents = "x: " + left + " y: " + bottom;
+                coordinateText.contents = "x: " + left.unitPreference(model.pixelDpValue) + " y: " + bottom.unitPreference(model.pixelDpValue);
                 coordinateText.textRange.paragraphAttributes.justification = Justification.RIGHT;
             
                 horizontalLine = app.activeDocument.compoundPathItems.add();
@@ -910,7 +910,7 @@ $.specctrAi = {
             verticalLine.move(itemsGroup, ElementPlacement.INSIDE);
                     
             var yText = app.activeDocument.textFrames.pointText([x, (y1 + y2) / 2], TextOrientation.HORIZONTAL);
-            yText.contents = ySpacing;
+            yText.contents = ySpacing.unitPreference(model.pixelDpValue);
             yText.textRange.paragraphAttributes.justification = Justification.CENTER;
             yText.textRange.characterAttributes.fillColor = newColor;
             yText.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
@@ -971,7 +971,7 @@ $.specctrAi = {
         
             var xText = app.activeDocument.textFrames.pointText([(x2 + x1) / 2, y + spacing * 0.3 + model.armWeight / 2], 
                                                                                                 TextOrientation.HORIZONTAL);
-            xText.contents = xSpacing;
+            xText.contents = xSpacing.unitPreference(model.pixelDpValue);
             xText.textRange.paragraphAttributes.justification = Justification.CENTER;			
             xText.textRange.characterAttributes.fillColor = newColor;	
             xText.move(legendLayer, ElementPlacement.INSIDE);
@@ -1210,7 +1210,7 @@ $.specctrAi = {
                 var topText = app.activeDocument.textFrames.pointText([pageItemBounds[0] + width / 2, 
                                                                                                         (pageItemBounds[1] + artRect[1]) / 2],
                                                                                                             TextOrientation.HORIZONTAL);
-                topText.contents = toTop;
+                topText.contents = toTop.unitPreference(model.pixelDpValue);
                 topText.textRange.paragraphAttributes.justification = Justification.CENTER;			
                 topText.textRange.characterAttributes.fillColor = newColor;	
                 topText.textRange.characterAttributes.textFont = app.textFonts.getByName(model.legendFont);
@@ -1252,7 +1252,7 @@ $.specctrAi = {
                 var bottomText = app.activeDocument.textFrames.pointText([pageItemBounds[0] + width / 2,
                                                                                                             (pageItemBounds[3] + artRect[3]) / 2],
                                                                                                                 TextOrientation.HORIZONTAL);
-                bottomText.contents = toBottom;
+                bottomText.contents = toBottom.unitPreference(model.pixelDpValue);
                 bottomText.textRange.paragraphAttributes.justification = Justification.CENTER;			
                 bottomText.textRange.characterAttributes.fillColor = newColor;	
                 
@@ -1296,7 +1296,7 @@ $.specctrAi = {
                 var leftText = app.activeDocument.textFrames.pointText([(pageItemBounds[0] + artRect[0]) / 2,
                                                                                                         pageItemBounds[3] + height / 2 + spacing * 0.3 + model.armWeight / 2],
                                                                                                             TextOrientation.HORIZONTAL);
-                leftText.contents = toLeft;
+                leftText.contents = toLeft.unitPreference(model.pixelDpValue);
                 leftText.textRange.paragraphAttributes.justification = Justification.CENTER;
                 leftText.textRange.characterAttributes.fillColor = newColor;
                 leftText.move(legendLayer,ElementPlacement.INSIDE);
@@ -1337,7 +1337,7 @@ $.specctrAi = {
                 var rightText = app.activeDocument.textFrames.pointText([(pageItemBounds[2] + artRect[2]) / 2,
                                                                                                         pageItemBounds[3] + height / 2 + spacing * 0.3 + model.armWeight / 2],
                                                                                                             TextOrientation.HORIZONTAL);
-                rightText.contents = toRight;
+                rightText.contents = toRight.unitPreference(model.pixelDpValue);
                 rightText.textRange.paragraphAttributes.justification = Justification.CENTER;
                 rightText.textRange.characterAttributes.fillColor = newColor;
                 rightText.move(legendLayer, ElementPlacement.INSIDE);
@@ -1766,18 +1766,19 @@ $.specctrAi = {
              if(model.specOption == "Bullet") {
                 var specctrLayer = this.legendLayer();
                 var updatedSpecWithNoBullet = false;
-                
+
                 if(!noOfSpecs) {
                     noOfSpecs = specctrLayer.note;
                     updatedSpecWithNoBullet = true;
                 }
-
+            
                 if(!noOfSpecs) 
                     noOfSpecs = 1;
 
                 //Either new spec created or nothing is assigned to speectrLayer note.
-                if(isSpecCreated == true || !specctrLayer.note || updatedSpecWithNoBullet == true) 
-                    specctrLayer.note = noOfSpecs + 1;
+                if(isSpecCreated == true || !specctrLayer.note || updatedSpecWithNoBullet == true)  {
+                    specctrLayer.note = parseInt(noOfSpecs) + 1;
+                }
 
                  //Create text at given font size, font value, font color.
                 var textColor = new RGBColor();
@@ -2652,7 +2653,7 @@ $.specctrAi = {
             
             infoText += "Stroke:";
             if (model.shapeStrokeStyle) infoText += "\r" + strokeStyle
-            if (model.shapeStrokeSize  && strokeWidth != "") infoText += "\r" + strokeWidth;
+            if (model.shapeStrokeSize  && strokeWidth != "") infoText += "\r" + strokeWidth.unitPreference(model.pixelDpValue);
             if (model.shapeStrokeColor  && strokeColor != "") infoText += "\r" + strokeColor;
         }
     
@@ -2662,10 +2663,10 @@ $.specctrAi = {
             infoText += "Opacity:\r" + opacity;
         }
     
-        if (model.shapeBorderRadius) {
+        if (model.shapeBorderRadius && parseInt(roundCornerValue) >= 0) {
             if (infoText != "") infoText += "\r\r";
             
-            infoText += "Border-radius:\r" + roundCornerValue;
+            infoText += "Border-radius:\r" + roundCornerValue.unitPreference(model.pixelDpValue);
         }
     
         return infoText;
@@ -2823,7 +2824,7 @@ $.specctrAi = {
             //Add properties which are enabled in details tab.
             if(model.textLayerName) infoText = name;
             if (model.textFont) infoText += "\rFont-Family: " + fontFamily;
-            if (model.textSize) infoText += "\rFont-Size: " + fontSize;
+            if (model.textSize) infoText += "\rFont-Size: " + fontSize.unitPreference(model.pixelDpValue);
             if (model.textColor) infoText += "\rColor: " + textColor;
 
             if (model.textStyle) {
@@ -2832,7 +2833,7 @@ $.specctrAi = {
             }
         
             if (model.textAlignment) infoText += "\rText-Align: " + alignment;
-            if (model.textLeading) infoText += "\rLine-Height: " + leading;
+            if (model.textLeading) infoText += "\rLine-Height: " + leading.unitPreference(model.pixelDpValue);
             if (model.textTracking) infoText += "\rLetter-Spacing: " + tracking;
             if (alpha != "") infoText += "\rOpacity: " + opacity;
 

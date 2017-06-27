@@ -6,6 +6,7 @@
 
 #include"specctrPsCommon.jsx";
 #include"specctrUtility.jsx";
+
 if(typeof($)=== 'undefined')
 	$={};
 
