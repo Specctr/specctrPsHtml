@@ -330,7 +330,7 @@ label {
 .tabscontent {
 	padding-top: 10px;
 	padding-bottom: 15px;
-	height: 565px;
+	height: 495px;
 }
 
 .tabTitle {
@@ -683,7 +683,7 @@ label {
 /*--------------Style applied on setting page----------------*/
 #settingPage {
 	padding-left: 6px !important;
-	height: 638px !important;
+	height: 568px !important;
 	background-color: #ECECEC;
 	border: 1px solid #C9CBCC;
 	border-right-width: 3px;
@@ -715,15 +715,7 @@ label {
 	border: 1px solid #666766;
 	border-bottom: none;
 	margin-top: 5px;
-	margin-bottom: 13px;
-	width: 216px;
-}
-
-.settinglineWithBtmMargin0 {
-	border: 1px solid #666766;
-	border-bottom: none;
-	margin-top: 5px;
-	margin-bottom: 0px;
+	margin-bottom: 3px;
 	width: 216px;
 }
 
@@ -731,7 +723,7 @@ label {
 	font-family: aauxProBla;
 	font-size: 13px;
 	text-align: left;
-	padding-top: 13px;
+	padding-top: 1px;
 	color: #666666;
 }
 
@@ -819,7 +811,7 @@ label {
 	border: 1px solid #666666;
 	border-radius: 4px;
 	height: 28px;
-	margin-top: 9px;
+	margin-top: 3px;
 	outline: 0 none;
 	overflow: hidden;
 	padding-left: 5px;
@@ -859,7 +851,7 @@ label {
 	border: 1px solid #666666;
 	border-radius: 4px;
 	height: 26px;
-	margin-top: 9px;
+	margin-top: 3px;
 	outline: 0 none;
 	overflow: hidden;
 	padding-left: 5px;
@@ -885,7 +877,7 @@ label {
 	font-size: 11px;
 	width: 140px;
 	display: table-cell;
-	height: 63px;
+	height: 55px;
 }
 
 .radioLabel {
@@ -919,7 +911,7 @@ label {
 }
 
 #includeStrokeCheckbox {
-	margin: 13px 0px 14px 0px;
+	margin: 8px 0px 8px 0px;
 	cursor: default;
 }
 

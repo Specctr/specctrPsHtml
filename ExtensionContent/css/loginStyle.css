@@ -5,14 +5,14 @@ Description: Includes styling code related to login page.
 
 #loginContainer {
 	border: none;
-	height: 680px;
+	height: 610px;
 	width: 244px;
 	background-color: #4990E2;
 }
 
 #dvLoginContainer {
     width: 244px;
-	height: 605px;
+	height: 535px;
 }
 
 #dvLoginContainer ul {
