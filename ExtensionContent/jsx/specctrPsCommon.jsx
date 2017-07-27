@@ -576,7 +576,8 @@ $.specctrPsCommon = {
     createBullet : function (legendLayer, number, font, artLayerBounds, newColor) {
         var txt = this.createNumber(legendLayer, number, font);
         txt.name = "___Number";
-        var dia = txt.bounds[3] - txt.bounds[1] + 12;
+        
+        var dia = txt.bounds[3] - txt.bounds[1] + parseInt(model.legendFontSize) * 0.25;
         var circle = this.createCircle(artLayerBounds[1], artLayerBounds[0] - dia, 
                                                         artLayerBounds[1] + dia, artLayerBounds[0], newColor);
         circle.move(txt, ElementPlacement.PLACEAFTER);
