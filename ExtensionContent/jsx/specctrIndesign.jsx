@@ -1786,7 +1786,7 @@ $.specctrId = {
            }
 
             if(model.specOption == "Bullet") {
-                var dia =  model.legendFontSize + 8;
+                var dia =  model.legendFontSize;
                 
                 //create a text with number.
                 var firstbullet = currPage.textFrames.add(legendLayer,undefined,undefined);
@@ -1795,11 +1795,12 @@ $.specctrId = {
                 firstbullet.parentStory.fillColor = this.addIfNotExists ([255,255,255]);
                 firstbullet.parentStory.appliedFont = model.legendFont;
                 firstbullet.parentStory.pointSize = model.legendFontSize;
-                firstbullet.parentStory.baselineShift = -5;
+                firstbullet.parentStory.baselineShift = 0;
                 firstbullet.convertShape(ConvertShapeOptions.CONVERT_TO_OVAL);
                 firstbullet.fit(FitOptions.CENTER_CONTENT);
                 firstbullet.fillColor = newColor;
-                firstbullet.visibleBounds = [pageItemBounds.y1, pageItemBounds.x1-dia-1, pageItemBounds.y1 + dia, pageItemBounds.x1-1];
+                firstbullet.visibleBounds = [pageItemBounds.y1, pageItemBounds.x1-dia, pageItemBounds.y1 + dia, pageItemBounds.x1];
+                firstbullet.parentStory.justification = Justification.CENTER_ALIGN;
                 firstbullet.move([pageItemBounds.x1-dia, pageItemBounds.y1]);
                 firstbullet.fit(FitOptions.CENTER_CONTENT);
             
