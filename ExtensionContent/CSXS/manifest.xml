@@ -170,6 +170,7 @@ each party and (ii) in a written contract signed by both parties.]]>
                     <ScriptPath>./loadFilesOfJsxFolder.jsx</ScriptPath>
                     <CEFCommandLine>
                       <Parameter>--enable-nodejs</Parameter>
+                      <Parameter>--mixed-context</Parameter>
                     </CEFCommandLine>
 				</Resources>
 				<Lifecycle>
