@@ -1796,7 +1796,7 @@ $.specctrAi = {
                 number.textRange.characterAttributes.textFont = app.textFonts.getByName(newFontName);
                 number.textRange.characterAttributes.size = model.legendFontSize;
                 
-                 var dia = Math.abs(number.visibleBounds[3] - number.visibleBounds[1]) + 8;
+                 var dia = Math.abs(number.visibleBounds[3] - number.visibleBounds[1]);
                  firstBullet = this.createBullet(newColor, number, dia,
                                            spec.visibleBounds[1], spec.visibleBounds[0]);
                                            
@@ -1836,6 +1836,7 @@ $.specctrAi = {
             var group = app.activeDocument.groupItems.add();
             var numberHeight = number.visibleBounds[3] - number.visibleBounds[1];
             var numberWidth = number.visibleBounds[2] - number.visibleBounds[0];
+            var toShift = (Math.abs(numberHeight) - parseInt(model.legendFontSize))/2.0;    //Shift the number to centre of circle to create uniform bullet.
 
             //top, left should be the spec's coordinates.
             var itemCircle = app.activeDocument.pathItems.ellipse(specTop, specLeft - dia - 1, dia, dia);
@@ -1844,8 +1845,9 @@ $.specctrAi = {
             itemCircle.stroked = false;
             itemCircle.move(group, ElementPlacement.INSIDE);
 
-            number.translate(itemCircle.visibleBounds[0] - number.visibleBounds[0] + dia / 2.0 - numberWidth/2.0, 
-                                        itemCircle.visibleBounds[1] - number.visibleBounds[1] - dia / 2.0 - numberHeight/2.0);
+            number.translate(itemCircle.visibleBounds[0] - number.visibleBounds[0] + dia/2.0 - numberWidth/2.0, 
+                                        itemCircle.visibleBounds[1] - number.visibleBounds[1] - dia/2.0 - numberHeight/2.0 - toShift);
+                                        
             number.move(group, ElementPlacement.INSIDE);
             
             return group;
