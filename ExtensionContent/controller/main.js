@@ -109,7 +109,7 @@ onLoaded = Specctr.Utility.tryCatchLog(function() {
 	
 	analytics.trackEvent('panel.loaded');
 	analytics.trackEvent('panel.' + hostApplication);
-	if (isLicensed)
+	if (true)
 		Specctr.Init.init();
 	
 	//$("#spinnerBlock").hide();
